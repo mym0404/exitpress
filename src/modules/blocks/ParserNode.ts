@@ -31,12 +31,3 @@ export type ParserBlockConvertContext = ParserBlockContext & {
   outputSelection?: BlockOutputSelection
   matchNode: (node: AnyNode, path: string) => AstBlock[]
 }
-
-export type ParserBlockResult =
-    | {
-        status: "handled"
-        blocks: AstBlock[]
-      }
-    | {
-        status: "skip"
-      }

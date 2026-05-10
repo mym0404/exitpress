@@ -2,7 +2,7 @@ import { linkCardOutputOptions } from "../../../shared/BlockOutputOptions.js"
 import type { UnknownRecord } from "../../../shared/Types.js"
 import { compactText } from "../../../shared/Utils.js"
 import { LeafBlock } from "../BaseBlock.js"
-import type { ParserBlockContext, ParserBlockResult } from "../ParserNode.js"
+import type { ParserBlockContext } from "../ParserNode.js"
 
 export class NaverSe4FileBlock extends LeafBlock {
   override readonly id = "linkCard"
@@ -13,7 +13,7 @@ export class NaverSe4FileBlock extends LeafBlock {
     return moduleType === "v2_file" || $node.hasClass("se-file")
   }
 
-  override convert({ $node, moduleData }: Parameters<LeafBlock["convert"]>[0]): ParserBlockResult {
+  override convert({ $node, moduleData }: Parameters<LeafBlock["convert"]>[0]) {
     const data = ((moduleData ?? {}).data ?? {}) as UnknownRecord & {
       link?: string
     }
@@ -28,19 +28,16 @@ export class NaverSe4FileBlock extends LeafBlock {
       compactText($node.find(".se-file-extension").text()),
     ].join("")
 
-    return {
-      status: "handled",
-      blocks: [
-        {
-          type: "linkCard",
-          card: {
-            title: title || url,
-            description: "",
-            url,
-            imageUrl: null,
-          },
+    return [
+      {
+        type: "linkCard" as const,
+        card: {
+          title: title || url,
+          description: "",
+          url,
+          imageUrl: null,
         },
-      ],
-    }
+      },
+    ]
   }
 }

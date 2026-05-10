@@ -108,20 +108,17 @@ export class NaverSe4FormulaBlock extends LeafBlock {
       throw new Error("SE4 formula block parsing failed.")
     }
 
-    return {
-      status: "handled" as const,
-      blocks: [
-        {
-          type: "formula" as const,
-          formula,
-          display:
-            !(data.display === false) &&
-            data.inline !== true &&
-            data.isInline !== true &&
-            !$node.hasClass("se-inline-math") &&
-            !$node.hasClass("se-math-inline"),
-        },
-      ],
-    }
+    return [
+      {
+        type: "formula" as const,
+        formula,
+        display:
+          !(data.display === false) &&
+          data.inline !== true &&
+          data.isInline !== true &&
+          !$node.hasClass("se-inline-math") &&
+          !$node.hasClass("se-math-inline"),
+      },
+    ]
   }
 }

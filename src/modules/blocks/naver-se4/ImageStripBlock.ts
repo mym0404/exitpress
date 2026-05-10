@@ -1,6 +1,6 @@
 import type { ImageData, OutputOption } from "../../../shared/Types.js"
 import { LeafBlock } from "../BaseBlock.js"
-import type { ParserBlockContext, ParserBlockResult } from "../ParserNode.js"
+import type { ParserBlockContext } from "../ParserNode.js"
 import { parseImageLink, se4ImageLinkSelector } from "./ImageLink.js"
 
 export class NaverSe4ImageStripBlock extends LeafBlock {
@@ -38,7 +38,7 @@ export class NaverSe4ImageStripBlock extends LeafBlock {
     return $node.hasClass("se-imageStrip")
   }
 
-  override convert({ $node }: Parameters<LeafBlock["convert"]>[0]): ParserBlockResult {
+  override convert({ $node }: Parameters<LeafBlock["convert"]>[0]) {
     const images = $node
       .find(se4ImageLinkSelector)
       .toArray()
@@ -49,9 +49,6 @@ export class NaverSe4ImageStripBlock extends LeafBlock {
       throw new Error("SE4 image strip block parsing failed.")
     }
 
-    return {
-      status: "handled",
-      blocks: [{ type: "imageGroup", images }],
-    }
+    return [{ type: "imageGroup" as const, images }]
   }
 }

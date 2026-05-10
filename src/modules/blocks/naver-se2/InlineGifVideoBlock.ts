@@ -3,7 +3,7 @@ import type { CheerioAPI } from "cheerio"
 import { compactText, normalizeAssetUrl } from "../../../shared/Utils.js"
 import type { ImageData } from "../../../shared/Types.js"
 import { LeafBlock } from "../BaseBlock.js"
-import type { ParserBlockContext, ParserBlockResult } from "../ParserNode.js"
+import type { ParserBlockContext } from "../ParserNode.js"
 
 const getInlineGifVideoImage = ({ $node }: { $node: ReturnType<CheerioAPI> }): ImageData | null => {
   if (!$node.is("p, div, span")) {
@@ -59,17 +59,14 @@ export class NaverSe2InlineGifVideoBlock extends LeafBlock {
     return node.type === "tag" && getInlineGifVideoImage({ $node }) !== null
   }
 
-  override convert({ $node }: Parameters<LeafBlock["convert"]>[0]): ParserBlockResult {
+  override convert({ $node }: Parameters<LeafBlock["convert"]>[0]) {
     const image = getInlineGifVideoImage({ $node })
 
     /* v8 ignore next 3 */
     if (!image) {
-      return { status: "skip" }
+      return []
     }
 
-    return {
-      status: "handled",
-      blocks: [{ type: "image", image }],
-    }
+    return [{ type: "image" as const, image }]
   }
 }

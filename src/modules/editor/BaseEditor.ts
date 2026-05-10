@@ -10,9 +10,6 @@ import type {
   UnknownRecord,
 } from "@shared/Types.js"
 import { resolveBlockOutputSelection } from "@shared/BlockRegistry.js"
-import {
-  createBodyNodesFromStructuredBlocks,
-} from "../blocks/BodyNodeUtils.js"
 import type {
   ParserBlockContext,
   ParserBlockConvertContext,
@@ -315,13 +312,7 @@ export abstract class BaseEditor {
         matchNode,
       } satisfies ParserBlockConvertContext
 
-      const result = block.convert(convertContext)
-
-      if (result.status === "skip") {
-        return []
-      }
-
-      return result.blocks.map((parsedBlock) => {
+      return block.convert(convertContext).map((parsedBlock) => {
         const blockWithSelection = applyOutputSelection({
           parsedBlock,
           parserBlock: block,
@@ -343,7 +334,10 @@ export abstract class BaseEditor {
 
     return {
       blocks,
-      body: createBodyNodesFromStructuredBlocks(blocks),
+      body: blocks.map((block) => ({
+        kind: "block" as const,
+        block,
+      })),
     }
   }
 }

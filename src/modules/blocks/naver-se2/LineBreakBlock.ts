@@ -1,5 +1,5 @@
 import { LeafBlock } from "../BaseBlock.js"
-import type { ParserBlockContext, ParserBlockResult } from "../ParserNode.js"
+import type { ParserBlockContext } from "../ParserNode.js"
 
 export class NaverSe2LineBreakBlock extends LeafBlock {
   override readonly id = "lineBreak"
@@ -9,7 +9,7 @@ export class NaverSe2LineBreakBlock extends LeafBlock {
     return node.type === "tag" && node.tagName.toLowerCase() === "br"
   }
 
-  override convert(): ParserBlockResult {
-    return { status: "skip" }
+  override convert() {
+    return []
   }
 }

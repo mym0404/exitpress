@@ -1,7 +1,6 @@
 import type { CheerioAPI } from "cheerio"
 
 import { LeafBlock } from "../BaseBlock.js"
-import type { ParserBlockResult } from "../ParserNode.js"
 import type { ParserBlockContext } from "../ParserNode.js"
 import { parseSingleColumnTableAsParagraphs } from "../common/Table.js"
 import type { AstBlock, OutputOption } from "../../../shared/Types.js"
@@ -81,28 +80,22 @@ export class NaverSe2TableBlock extends LeafBlock {
     )
   }
 
-  override convert({ $, $node, options }: Parameters<LeafBlock["convert"]>[0]): ParserBlockResult {
+  override convert({ $, $node, options }: Parameters<LeafBlock["convert"]>[0]) {
     const colorScripterCodeBlock = parseColorScripterCodeBlock({
       $,
       element: $node,
     })
 
     if (colorScripterCodeBlock) {
-      return {
-        status: "handled",
-        blocks: [colorScripterCodeBlock],
-      }
+      return [colorScripterCodeBlock]
     }
 
     if ($node.hasClass("colorscripter-code-table") && compactText($node.text()) === "") {
-      return {
-        status: "handled",
-        blocks: [],
-      }
+      return []
     }
 
     if (!$node.is("table")) {
-      return { status: "skip" }
+      return []
     }
 
     const parsedTable = parseHtmlTable({ $, table: $node })
@@ -112,22 +105,16 @@ export class NaverSe2TableBlock extends LeafBlock {
     })
 
     if (flattenedTable) {
-      return {
-        status: "handled",
-        blocks: flattenedTable,
-      }
+      return flattenedTable
     }
 
-    return {
-      status: "handled",
-      blocks: [
-        {
-          type: "table",
-          rows: parsedTable.rows,
-          html: parsedTable.html,
-          complex: parsedTable.complex,
-        },
-      ],
-    }
+    return [
+      {
+        type: "table" as const,
+        rows: parsedTable.rows,
+        html: parsedTable.html,
+        complex: parsedTable.complex,
+      },
+    ]
   }
 }

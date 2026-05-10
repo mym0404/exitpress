@@ -1,7 +1,7 @@
 import { linkCardOutputOptions } from "../../../shared/BlockOutputOptions.js"
 import { compactText } from "../../../shared/Utils.js"
 import { LeafBlock } from "../BaseBlock.js"
-import type { ParserBlockContext, ParserBlockResult } from "../ParserNode.js"
+import type { ParserBlockContext } from "../ParserNode.js"
 import { parseJsonAttribute } from "./JsonAttribute.js"
 
 const buildNaverMapSearchUrl = (query: string) =>
@@ -16,7 +16,7 @@ export class NaverSe4MapBlock extends LeafBlock {
     return moduleType === "v2_map" || $node.hasClass("se-placesMap")
   }
 
-  override convert({ $node, moduleData }: Parameters<LeafBlock["convert"]>[0]): ParserBlockResult {
+  override convert({ $node, moduleData }: Parameters<LeafBlock["convert"]>[0]) {
     const data = (moduleData?.data ?? {}) as {
       places?: Array<{
         placeId?: string
@@ -53,10 +53,7 @@ export class NaverSe4MapBlock extends LeafBlock {
     })
 
     if (placesFromModule.length > 0) {
-      return {
-        status: "handled",
-        blocks: placesFromModule,
-      }
+      return placesFromModule
     }
 
     const blocks = $node
@@ -91,9 +88,6 @@ export class NaverSe4MapBlock extends LeafBlock {
         ]
       })
 
-    return {
-      status: "handled",
-      blocks,
-    }
+    return blocks
   }
 }

@@ -1,5 +1,5 @@
 import { LeafBlock } from "../BaseBlock.js"
-import type { ParserBlockContext, ParserBlockResult } from "../ParserNode.js"
+import type { ParserBlockContext } from "../ParserNode.js"
 import { parseBookWidgetBlocks } from "./BookWidget.js"
 
 export class NaverSe2BookWidgetBlock extends LeafBlock {
@@ -10,7 +10,7 @@ export class NaverSe2BookWidgetBlock extends LeafBlock {
     return node.type === "tag" && $node.is('[s_type="db"][s_subtype="book"]')
   }
 
-  override convert({ $node, options }: Parameters<LeafBlock["convert"]>[0]): ParserBlockResult {
+  override convert({ $node, options }: Parameters<LeafBlock["convert"]>[0]) {
     const blocks = parseBookWidgetBlocks({
       element: $node,
       resolveLinkUrl: options.resolveLinkUrl,
@@ -20,6 +20,6 @@ export class NaverSe2BookWidgetBlock extends LeafBlock {
       throw new Error("SE2 book widget block parsing failed.")
     }
 
-    return { status: "handled", blocks }
+    return blocks
   }
 }

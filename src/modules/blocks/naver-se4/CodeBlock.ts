@@ -41,18 +41,15 @@ export class NaverSe4CodeBlock extends LeafBlock {
     const code = sourceNode.text().trimEnd()
 
     if (!code) {
-      return { status: "handled" as const, blocks: [] }
+      return []
     }
 
-    return {
-      status: "handled" as const,
-      blocks: [
-        {
-          type: "code" as const,
-          language: languageMatch?.[1] ?? null,
-          code,
-        },
-      ],
-    }
+    return [
+      {
+        type: "code" as const,
+        language: languageMatch?.[1] ?? null,
+        code,
+      },
+    ]
   }
 }

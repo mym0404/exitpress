@@ -31,9 +31,6 @@ export class NaverSe4QuoteBlock extends LeafBlock {
       resolveLinkUrl: options.resolveLinkUrl,
     })
 
-    return {
-      status: "handled" as const,
-      blocks: quoteMarkdown ? [{ type: "quote" as const, text: quoteMarkdown }] : [],
-    }
+    return quoteMarkdown ? [{ type: "quote" as const, text: quoteMarkdown }] : []
   }
 }

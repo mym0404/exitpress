@@ -1,7 +1,7 @@
 import { linkCardOutputOptions } from "../../../shared/BlockOutputOptions.js"
 import { compactText, normalizeAssetUrl } from "../../../shared/Utils.js"
 import { LeafBlock } from "../BaseBlock.js"
-import type { ParserBlockContext, ParserBlockResult } from "../ParserNode.js"
+import type { ParserBlockContext } from "../ParserNode.js"
 
 const getLinkDataUrl = (value?: string) => {
   if (!value) {
@@ -26,7 +26,7 @@ export class NaverSe3LinkCardBlock extends LeafBlock {
     return $node.hasClass("se_oglink")
   }
 
-  override convert({ $node }: Parameters<LeafBlock["convert"]>[0]): ParserBlockResult {
+  override convert({ $node }: Parameters<LeafBlock["convert"]>[0]) {
     const linkNode = $node.find("a.se_og_box").first()
     const url = linkNode.attr("href") ?? getLinkDataUrl(linkNode.attr("data-linkdata"))
 
@@ -38,19 +38,16 @@ export class NaverSe3LinkCardBlock extends LeafBlock {
       $node.find(".se_og_thumb img").first().attr("data-lazy-src") ??
       $node.find(".se_og_thumb img").first().attr("src")
 
-    return {
-      status: "handled",
-      blocks: [
-        {
-          type: "linkCard",
-          card: {
-            title: compactText($node.find(".se_og_tit").first().text()) || url,
-            description: compactText($node.find(".se_og_desc").first().text()),
-            url,
-            imageUrl: thumbnailSource ? normalizeAssetUrl(thumbnailSource) : null,
-          },
+    return [
+      {
+        type: "linkCard" as const,
+        card: {
+          title: compactText($node.find(".se_og_tit").first().text()) || url,
+          description: compactText($node.find(".se_og_desc").first().text()),
+          url,
+          imageUrl: thumbnailSource ? normalizeAssetUrl(thumbnailSource) : null,
         },
-      ],
-    }
+      },
+    ]
   }
 }

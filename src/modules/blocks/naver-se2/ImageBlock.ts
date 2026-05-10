@@ -1,7 +1,6 @@
 import type { CheerioAPI } from "cheerio"
 
 import { LeafBlock } from "../BaseBlock.js"
-import type { ParserBlockResult } from "../ParserNode.js"
 import type { ParserBlockContext } from "../ParserNode.js"
 import type { ImageData, OutputOption } from "../../../shared/Types.js"
 import { compactText, normalizeAssetUrl } from "../../../shared/Utils.js"
@@ -104,19 +103,13 @@ export class NaverSe2ImageBlock extends LeafBlock {
     return node.type === "tag" && getStandaloneImages({ $, element: $node }).length > 0
   }
 
-  override convert({ $, $node }: Parameters<LeafBlock["convert"]>[0]): ParserBlockResult {
+  override convert({ $, $node }: Parameters<LeafBlock["convert"]>[0]) {
     const standaloneImages = getStandaloneImages({ $, element: $node })
 
     if (standaloneImages.length === 1) {
-      return {
-        status: "handled",
-        blocks: [{ type: "image", image: standaloneImages[0]! }],
-      }
+      return [{ type: "image" as const, image: standaloneImages[0]! }]
     }
 
-    return {
-      status: "handled",
-      blocks: [{ type: "imageGroup", images: standaloneImages }],
-    }
+    return [{ type: "imageGroup" as const, images: standaloneImages }]
   }
 }

@@ -47,18 +47,12 @@ export class NaverSe4HeadingBlock extends LeafBlock {
 
     if (!title) {
       if (hasTextModule) {
-        return {
-          status: "handled" as const,
-          blocks: [],
-        }
+        return []
       }
 
       throw new Error("SE4 heading block parsing failed.")
     }
 
-    return {
-      status: "handled" as const,
-      blocks: [{ type: "heading" as const, level: 2 as const, text: title }],
-    }
+    return [{ type: "heading" as const, level: 2 as const, text: title }]
   }
 }

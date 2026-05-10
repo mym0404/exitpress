@@ -51,16 +51,13 @@ export class NaverSe4TableBlock extends LeafBlock {
 
     const parsedTable = parseHtmlTable({ $, table })
 
-    return {
-      status: "handled" as const,
-      blocks: [
-        {
-          type: "table" as const,
-          rows: parsedTable.rows,
-          html: parsedTable.html,
-          complex: parsedTable.complex,
-        },
-      ],
-    }
+    return [
+      {
+        type: "table" as const,
+        rows: parsedTable.rows,
+        html: parsedTable.html,
+        complex: parsedTable.complex,
+      },
+    ]
   }
 }

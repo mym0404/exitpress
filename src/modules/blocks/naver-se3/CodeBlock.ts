@@ -1,6 +1,5 @@
 import { LeafBlock } from "../BaseBlock.js"
 import type { OutputOption } from "../../../shared/Types.js"
-import type { ParserBlockResult } from "../ParserNode.js"
 import type { ParserBlockContext } from "../ParserNode.js"
 
 export class NaverSe3CodeBlock extends LeafBlock {
@@ -34,16 +33,13 @@ export class NaverSe3CodeBlock extends LeafBlock {
     return $node.find("pre").first().length > 0
   }
 
-  override convert({ $node }: Parameters<LeafBlock["convert"]>[0]): ParserBlockResult {
+  override convert({ $node }: Parameters<LeafBlock["convert"]>[0]) {
     const code = $node.find("pre").first().text().trimEnd()
 
     if (!code) {
-      return { status: "handled" as const, blocks: [] }
+      return []
     }
 
-    return {
-      status: "handled" as const,
-      blocks: [{ type: "code" as const, language: null, code }],
-    }
+    return [{ type: "code" as const, language: null, code }]
   }
 }

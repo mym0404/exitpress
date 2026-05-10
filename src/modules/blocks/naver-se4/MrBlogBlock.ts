@@ -1,6 +1,6 @@
 import { compactText } from "../../../shared/Utils.js"
 import { LeafBlock } from "../BaseBlock.js"
-import type { ParserBlockContext, ParserBlockResult } from "../ParserNode.js"
+import type { ParserBlockContext } from "../ParserNode.js"
 
 export class NaverSe4MrBlogBlock extends LeafBlock {
   override readonly id = "mrBlog"
@@ -10,7 +10,7 @@ export class NaverSe4MrBlogBlock extends LeafBlock {
     return $node.hasClass("se-mrBlog")
   }
 
-  override convert({ $node }: Parameters<LeafBlock["convert"]>[0]): ParserBlockResult {
+  override convert({ $node }: Parameters<LeafBlock["convert"]>[0]) {
     const from = compactText($node.find(".se-mrBlog-from").text())
     const question = compactText($node.find(".se-mrBlog-question").text())
     const text = [from, question].filter(Boolean).join("\n\n")
@@ -19,9 +19,6 @@ export class NaverSe4MrBlogBlock extends LeafBlock {
       throw new Error("SE4 mrBlog block parsing failed.")
     }
 
-    return {
-      status: "handled",
-      blocks: [{ type: "quote", text }],
-    }
+    return [{ type: "quote" as const, text }]
   }
 }

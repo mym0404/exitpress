@@ -43,23 +43,20 @@ export class NaverSe4VideoBlock extends LeafBlock {
       height?: string
     }
 
-    return {
-      status: "handled" as const,
-      blocks: [
-        {
-          type: "video" as const,
-          video: {
-            title: data.mediaMeta?.title?.trim() || "Video",
-            thumbnailUrl: data.thumbnail ? normalizeAssetUrl(data.thumbnail) : null,
-            /* v8 ignore next */
-            sourceUrl: sourceUrl ?? "",
-            vid: data.vid ?? null,
-            inkey: data.inkey ?? null,
-            width: data.width ? Number(data.width) : null,
-            height: data.height ? Number(data.height) : null,
-          },
+    return [
+      {
+        type: "video" as const,
+        video: {
+          title: data.mediaMeta?.title?.trim() || "Video",
+          thumbnailUrl: data.thumbnail ? normalizeAssetUrl(data.thumbnail) : null,
+          /* v8 ignore next */
+          sourceUrl: sourceUrl ?? "",
+          vid: data.vid ?? null,
+          inkey: data.inkey ?? null,
+          width: data.width ? Number(data.width) : null,
+          height: data.height ? Number(data.height) : null,
         },
-      ],
-    }
+      },
+    ]
   }
 }

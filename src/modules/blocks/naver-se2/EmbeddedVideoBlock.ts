@@ -3,7 +3,7 @@ import type { CheerioAPI } from "cheerio"
 import { normalizeAssetUrl, compactText } from "../../../shared/Utils.js"
 import type { OutputOption } from "../../../shared/Types.js"
 import { LeafBlock } from "../BaseBlock.js"
-import type { ParserBlockContext, ParserBlockResult } from "../ParserNode.js"
+import type { ParserBlockContext } from "../ParserNode.js"
 
 const parseDimension = (value: string | undefined) => {
   const parsed = Number(value)
@@ -87,17 +87,14 @@ export class NaverSe2EmbeddedVideoBlock extends LeafBlock {
     return node.type === "tag" && getEmbeddedVideo({ $node }) !== null
   }
 
-  override convert({ $node }: Parameters<LeafBlock["convert"]>[0]): ParserBlockResult {
+  override convert({ $node }: Parameters<LeafBlock["convert"]>[0]) {
     const video = getEmbeddedVideo({ $node })
 
     /* v8 ignore next 3 */
     if (!video) {
-      return { status: "skip" }
+      return []
     }
 
-    return {
-      status: "handled",
-      blocks: [{ type: "video", video }],
-    }
+    return [{ type: "video" as const, video }]
   }
 }

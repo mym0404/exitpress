@@ -32,20 +32,17 @@ export class NaverSe4MaterialBlock extends LeafBlock {
         .filter(Boolean)
         .join(" / ")
 
-      return {
-        status: "handled" as const,
-        blocks: [
-          {
-            type: "linkCard" as const,
-            card: {
-              title: compactText(customCard.find(".title").text()) || url,
-              description,
-              url,
-              imageUrl: thumbnailSource ? normalizeAssetUrl(thumbnailSource) : null,
-            },
+      return [
+        {
+          type: "linkCard" as const,
+          card: {
+            title: compactText(customCard.find(".title").text()) || url,
+            description,
+            url,
+            imageUrl: thumbnailSource ? normalizeAssetUrl(thumbnailSource) : null,
           },
-        ],
-      }
+        },
+      ]
     }
 
     const materialLink = $node.find("a.se-module-material").first()
@@ -100,22 +97,19 @@ export class NaverSe4MaterialBlock extends LeafBlock {
       materialLink.find(".se-material-thumbnail-resource").attr("src") ??
       (typeof linkData?.thumbnail === "string" ? linkData.thumbnail : null)
 
-    return {
-      status: "handled" as const,
-      blocks: [
-        {
-          type: "linkCard" as const,
-          card: {
-            title:
-              compactText(materialLink.find(".se-material-title").text()) ||
-              (typeof linkData?.title === "string" ? compactText(linkData.title) : "") ||
-              url,
-            description,
+    return [
+      {
+        type: "linkCard" as const,
+        card: {
+          title:
+            compactText(materialLink.find(".se-material-title").text()) ||
+            (typeof linkData?.title === "string" ? compactText(linkData.title) : "") ||
             url,
-            imageUrl: thumbnailSource ? normalizeAssetUrl(thumbnailSource) : null,
-          },
+          description,
+          url,
+          imageUrl: thumbnailSource ? normalizeAssetUrl(thumbnailSource) : null,
         },
-      ],
-    }
+      },
+    ]
   }
 }

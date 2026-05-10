@@ -3,7 +3,6 @@ import type { CheerioAPI } from "cheerio"
 import type { ImageData, OutputOption } from "../../../shared/Types.js"
 import { compactText, normalizeAssetUrl } from "../../../shared/Utils.js"
 import { LeafBlock } from "../BaseBlock.js"
-import type { ParserBlockResult } from "../ParserNode.js"
 import type { ParserBlockContext } from "../ParserNode.js"
 
 const standaloneImageSelector = "img, video._gifmp4.se_mediaImage[data-gif-url]"
@@ -110,19 +109,13 @@ export class NaverSe3ImageBlock extends LeafBlock {
     return getStandaloneImages({ $, $component: $node }).length > 0
   }
 
-  override convert({ $, $node }: Parameters<LeafBlock["convert"]>[0]): ParserBlockResult {
+  override convert({ $, $node }: Parameters<LeafBlock["convert"]>[0]) {
     const standaloneImages = getStandaloneImages({ $, $component: $node })
 
     if (standaloneImages.length === 1) {
-      return {
-        status: "handled" as const,
-        blocks: [{ type: "image" as const, image: standaloneImages[0]! }],
-      }
+      return [{ type: "image" as const, image: standaloneImages[0]! }]
     }
 
-    return {
-      status: "handled" as const,
-      blocks: [{ type: "imageGroup" as const, images: standaloneImages }],
-    }
+    return [{ type: "imageGroup" as const, images: standaloneImages }]
   }
 }

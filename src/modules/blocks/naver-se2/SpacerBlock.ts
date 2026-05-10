@@ -1,5 +1,5 @@
 import { LeafBlock } from "../BaseBlock.js"
-import type { ParserBlockContext, ParserBlockResult } from "../ParserNode.js"
+import type { ParserBlockContext } from "../ParserNode.js"
 import { isSpacerBlock } from "./ContainerBlock.js"
 
 export class NaverSe2SpacerBlock extends LeafBlock {
@@ -16,7 +16,7 @@ export class NaverSe2SpacerBlock extends LeafBlock {
     )
   }
 
-  override convert(): ParserBlockResult {
-    return { status: "skip" }
+  override convert() {
+    return []
   }
 }

@@ -180,9 +180,6 @@ export class NaverSe4TextBlock extends LeafBlock {
   }
 
   override convert({ $node, options, outputSelection }: Parameters<LeafBlock["convert"]>[0]) {
-    return {
-      status: "handled" as const,
-      blocks: parseTextBlocks({ $node, options, outputSelection }),
-    }
+    return parseTextBlocks({ $node, options, outputSelection })
   }
 }

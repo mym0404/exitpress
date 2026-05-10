@@ -1,9 +1,8 @@
 import type {
   ParserBlockContext,
   ParserBlockConvertContext,
-  ParserBlockResult,
 } from "./ParserNode.js"
-import type { OutputOption } from "../../shared/Types.js"
+import type { AstBlock, OutputOption } from "../../shared/Types.js"
 
 export abstract class BaseBlock {
   abstract readonly id: string
@@ -12,18 +11,15 @@ export abstract class BaseBlock {
 
   abstract match(context: ParserBlockContext): boolean
 
-  abstract convert(context: ParserBlockConvertContext): ParserBlockResult
+  abstract convert(context: ParserBlockConvertContext): AstBlock[]
 }
 
 export abstract class ContainerBlock extends BaseBlock {
-  override convert({ $node, matchNode, path }: ParserBlockConvertContext): ParserBlockResult {
-    return {
-      status: "handled",
-      blocks: $node
-        .contents()
-        .toArray()
-        .flatMap((node, index) => matchNode(node, `${path}.${index}`)),
-    }
+  override convert({ $node, matchNode, path }: ParserBlockConvertContext) {
+    return $node
+      .contents()
+      .toArray()
+      .flatMap((node, index) => matchNode(node, `${path}.${index}`))
   }
 }
 

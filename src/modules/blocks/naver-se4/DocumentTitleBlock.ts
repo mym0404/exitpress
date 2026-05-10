@@ -1,5 +1,5 @@
 import { LeafBlock } from "../BaseBlock.js"
-import type { ParserBlockContext, ParserBlockResult } from "../ParserNode.js"
+import type { ParserBlockContext } from "../ParserNode.js"
 
 export class NaverSe4DocumentTitleBlock extends LeafBlock {
   override readonly id = "documentTitle"
@@ -9,7 +9,7 @@ export class NaverSe4DocumentTitleBlock extends LeafBlock {
     return $node.hasClass("se-documentTitle")
   }
 
-  override convert(): ParserBlockResult {
-    return { status: "skip" }
+  override convert() {
+    return []
   }
 }

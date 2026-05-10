@@ -4,7 +4,7 @@ import { linkCardOutputOptions } from "../../../shared/BlockOutputOptions.js"
 import type { UnknownRecord } from "../../../shared/Types.js"
 import { compactText, normalizeAssetUrl } from "../../../shared/Utils.js"
 import { LeafBlock } from "../BaseBlock.js"
-import type { ParserBlockContext, ParserBlockResult } from "../ParserNode.js"
+import type { ParserBlockContext } from "../ParserNode.js"
 
 export class NaverSe4OembedBlock extends LeafBlock {
   override readonly id = "linkCard"
@@ -15,7 +15,7 @@ export class NaverSe4OembedBlock extends LeafBlock {
     return moduleType === "v2_oembed" || $node.hasClass("se-oembed")
   }
 
-  override convert({ moduleData }: Parameters<LeafBlock["convert"]>[0]): ParserBlockResult {
+  override convert({ moduleData }: Parameters<LeafBlock["convert"]>[0]) {
     const data = ((moduleData ?? {}).data ?? {}) as UnknownRecord & {
       html?: string
       inputUrl?: string
@@ -34,20 +34,17 @@ export class NaverSe4OembedBlock extends LeafBlock {
       throw new Error("SE4 oEmbed block parsing failed.")
     }
 
-    return {
-      status: "handled",
-      blocks: [
-        {
-          type: "linkCard",
-          card: {
-            title: compactText(data.title ?? "") || url,
-            description: compactText(data.description ?? ""),
-            url,
-            imageUrl:
-              typeof data.thumbnailUrl === "string" ? normalizeAssetUrl(data.thumbnailUrl) : null,
-          },
+    return [
+      {
+        type: "linkCard" as const,
+        card: {
+          title: compactText(data.title ?? "") || url,
+          description: compactText(data.description ?? ""),
+          url,
+          imageUrl:
+            typeof data.thumbnailUrl === "string" ? normalizeAssetUrl(data.thumbnailUrl) : null,
         },
-      ],
-    }
+      },
+    ]
   }
 }

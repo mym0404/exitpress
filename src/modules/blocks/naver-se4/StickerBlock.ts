@@ -1,6 +1,6 @@
 import { normalizeAssetUrl } from "../../../shared/Utils.js"
 import { LeafBlock } from "../BaseBlock.js"
-import type { ParserBlockContext, ParserBlockResult } from "../ParserNode.js"
+import type { ParserBlockContext } from "../ParserNode.js"
 import { parseJsonAttribute } from "./JsonAttribute.js"
 
 export class NaverSe4StickerBlock extends LeafBlock {
@@ -11,7 +11,7 @@ export class NaverSe4StickerBlock extends LeafBlock {
     return $node.hasClass("se-sticker")
   }
 
-  override convert({ $node }: Parameters<LeafBlock["convert"]>[0]): ParserBlockResult {
+  override convert({ $node }: Parameters<LeafBlock["convert"]>[0]) {
     const stickerLink = $node.find("a.__se_sticker_link").first()
     const linkData = parseJsonAttribute(stickerLink.attr("data-linkdata"))
     const previewSourceUrl = $node.find("img.se-sticker-image").attr("src")?.trim() ?? null
@@ -24,20 +24,17 @@ export class NaverSe4StickerBlock extends LeafBlock {
       throw new Error("SE4 sticker block parsing failed.")
     }
 
-    return {
-      status: "handled",
-      blocks: [
-        {
-          type: "image",
-          image: {
-            sourceUrl: normalizeAssetUrl(sourceUrl),
-            originalSourceUrl: originalSourceUrl ? normalizeAssetUrl(originalSourceUrl) : null,
-            alt: "",
-            caption: null,
-            mediaKind: "sticker",
-          },
+    return [
+      {
+        type: "image" as const,
+        image: {
+          sourceUrl: normalizeAssetUrl(sourceUrl),
+          originalSourceUrl: originalSourceUrl ? normalizeAssetUrl(originalSourceUrl) : null,
+          alt: "",
+          caption: null,
+          mediaKind: "sticker" as const,
         },
-      ],
-    }
+      },
+    ]
   }
 }

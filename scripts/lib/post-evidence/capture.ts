@@ -4,7 +4,6 @@ import path from "node:path"
 
 import { chromium, type Browser } from "playwright"
 
-import { createBodyNodesFromStructuredBlocks } from "../../../src/modules/blocks/BodyNodeUtils.js"
 import { NaverBlog } from "../../../src/modules/blog/NaverBlog.js"
 import { renderMarkdownPost } from "../../../src/modules/converter/MarkdownRenderer.js"
 import { AssetStore } from "../../../src/modules/exporter/AssetStore.js"
@@ -103,7 +102,10 @@ const createFragmentParsedPost = ({
 }): ParsedPost => ({
   tags: parsedPost.tags,
   blocks,
-  body: createBodyNodesFromStructuredBlocks(blocks),
+  body: blocks.map((block) => ({
+    kind: "block" as const,
+    block,
+  })),
   videos: blocks
     .filter((block): block is Extract<AstBlock, { type: "video" }> => block.type === "video")
     .map((block) => block.video),

@@ -1,6 +1,6 @@
 import { LeafBlock } from "../BaseBlock.js"
 import type { OutputOption } from "../../../shared/Types.js"
-import type { ParserBlockContext, ParserBlockResult } from "../ParserNode.js"
+import type { ParserBlockContext } from "../ParserNode.js"
 import { parseImageLink, se4ImageLinkSelector } from "./ImageLink.js"
 
 export class NaverSe4ImageBlock extends LeafBlock {
@@ -59,16 +59,13 @@ export class NaverSe4ImageBlock extends LeafBlock {
     return $node.hasClass("se-image")
   }
 
-  override convert({ $node }: Parameters<LeafBlock["convert"]>[0]): ParserBlockResult {
+  override convert({ $node }: Parameters<LeafBlock["convert"]>[0]) {
     const image = parseImageLink($node.find(se4ImageLinkSelector).first())
 
     if (!image) {
       throw new Error("SE4 image block parsing failed.")
     }
 
-    return {
-      status: "handled",
-      blocks: [{ type: "image", image }],
-    }
+    return [{ type: "image" as const, image }]
   }
 }

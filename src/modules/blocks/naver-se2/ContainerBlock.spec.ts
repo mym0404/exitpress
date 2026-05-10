@@ -18,10 +18,7 @@ class CustomSectionLeafBlock extends LeafBlock {
   }
 
   override convert({ $node }: Parameters<LeafBlock["convert"]>[0]) {
-    return {
-      status: "handled" as const,
-      blocks: [{ type: "paragraph" as const, text: `custom:${$node.text().trim()}` }],
-    }
+    return [{ type: "paragraph" as const, text: `custom:${$node.text().trim()}` }]
   }
 }
 

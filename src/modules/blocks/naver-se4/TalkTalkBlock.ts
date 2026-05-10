@@ -1,7 +1,7 @@
 import { linkCardOutputOptions } from "../../../shared/BlockOutputOptions.js"
 import { compactText } from "../../../shared/Utils.js"
 import { LeafBlock } from "../BaseBlock.js"
-import type { ParserBlockContext, ParserBlockResult } from "../ParserNode.js"
+import type { ParserBlockContext } from "../ParserNode.js"
 
 export class NaverSe4TalkTalkBlock extends LeafBlock {
   override readonly id = "linkCard"
@@ -12,7 +12,7 @@ export class NaverSe4TalkTalkBlock extends LeafBlock {
     return $node.hasClass("se-talktalk")
   }
 
-  override convert({ $node }: Parameters<LeafBlock["convert"]>[0]): ParserBlockResult {
+  override convert({ $node }: Parameters<LeafBlock["convert"]>[0]) {
     const talkTalkLink = $node.find("a.se-module-talktalk").first()
     const url = talkTalkLink.attr("href") ?? ""
 
@@ -20,19 +20,16 @@ export class NaverSe4TalkTalkBlock extends LeafBlock {
       throw new Error("SE4 TalkTalk block parsing failed.")
     }
 
-    return {
-      status: "handled",
-      blocks: [
-        {
-          type: "linkCard",
-          card: {
-            title: compactText($node.find(".se-talktalk-banner-text").text()) || url,
-            description: "",
-            url,
-            imageUrl: null,
-          },
+    return [
+      {
+        type: "linkCard" as const,
+        card: {
+          title: compactText($node.find(".se-talktalk-banner-text").text()) || url,
+          description: "",
+          url,
+          imageUrl: null,
         },
-      ],
-    }
+      },
+    ]
   }
 }

@@ -7,7 +7,7 @@ import {
   getMarkdownLinkStyleFromSelection,
   paragraphOutputOptions,
 } from "../../../shared/BlockOutputOptions.js"
-import type { ParserBlockContext, ParserBlockResult } from "../ParserNode.js"
+import type { ParserBlockContext } from "../ParserNode.js"
 
 const parseTextBlocks = ({
   $,
@@ -49,13 +49,13 @@ export class NaverSe3TextBlock extends LeafBlock {
     return $node.find(".se_textarea").length > 0
   }
 
-  override convert({ $, $node, options, outputSelection }: Parameters<LeafBlock["convert"]>[0]): ParserBlockResult {
+  override convert({ $, $node, options, outputSelection }: Parameters<LeafBlock["convert"]>[0]) {
     const blocks = parseTextBlocks({ $, $component: $node, options, outputSelection })
 
     if (blocks.length === 0) {
-      return { status: "skip" }
+      return []
     }
 
-    return { status: "handled", blocks }
+    return blocks
   }
 }

@@ -1,7 +1,6 @@
 import { parseHtmlTable } from "../../parser/TableParser.js"
 import type { OutputOption } from "../../../shared/Types.js"
 import { LeafBlock } from "../BaseBlock.js"
-import type { ParserBlockResult } from "../ParserNode.js"
 import type { ParserBlockContext } from "../ParserNode.js"
 
 export class NaverSe3TableBlock extends LeafBlock {
@@ -43,19 +42,16 @@ export class NaverSe3TableBlock extends LeafBlock {
     return $node.find("table").first().length > 0
   }
 
-  override convert({ $, $node }: Parameters<LeafBlock["convert"]>[0]): ParserBlockResult {
+  override convert({ $, $node }: Parameters<LeafBlock["convert"]>[0]) {
     const parsedTable = parseHtmlTable({ $, table: $node.find("table").first() })
 
-    return {
-      status: "handled" as const,
-      blocks: [
-        {
-          type: "table" as const,
-          rows: parsedTable.rows,
-          html: parsedTable.html,
-          complex: parsedTable.complex,
-        },
-      ],
-    }
+    return [
+      {
+        type: "table" as const,
+        rows: parsedTable.rows,
+        html: parsedTable.html,
+        complex: parsedTable.complex,
+      },
+    ]
   }
 }

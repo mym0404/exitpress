@@ -1,6 +1,6 @@
 import { LeafBlock } from "../BaseBlock.js"
 import type { OutputOption } from "../../../shared/Types.js"
-import type { ParserBlockContext, ParserBlockResult } from "../ParserNode.js"
+import type { ParserBlockContext } from "../ParserNode.js"
 
 export class NaverSe2DividerBlock extends LeafBlock {
   override readonly id = "divider"
@@ -29,10 +29,7 @@ export class NaverSe2DividerBlock extends LeafBlock {
     return node.type === "tag" && node.tagName.toLowerCase() === "hr"
   }
 
-  override convert(): ParserBlockResult {
-    return {
-      status: "handled",
-      blocks: [{ type: "divider" }],
-    }
+  override convert() {
+    return [{ type: "divider" as const }]
   }
 }
