@@ -30,7 +30,6 @@ describe("post-parser routing", () => {
     })
     expect(parsed.tags).toEqual(["algo", "math"])
     expect(parsed.blocks).toEqual([{ type: "paragraph", text: "SE4 text" }])
-    expect(parsed.body).toEqual([{ type: "paragraph", text: "SE4 text" }])
   })
 
   it("rewrites same-blog links before paragraph markdown is finalized", () => {

@@ -38,7 +38,7 @@ class CustomSe2Editor extends BaseEditor {
 
   override parse(): ParsedPost {
     const $ = load(customLeafFixture)
-    const { blocks, body } = this.runBlocks({
+    const blocks = this.runBlocks({
       $,
       nodes: $("#viewTypeSelector").contents().toArray(),
       tags: [],
@@ -49,7 +49,6 @@ class CustomSe2Editor extends BaseEditor {
 
     return {
       tags: [],
-      body,
       blocks,
       videos: [],
     }

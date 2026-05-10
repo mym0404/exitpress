@@ -1,12 +1,10 @@
 import type { CheerioAPI } from "cheerio"
 
 import { convertHtmlToMarkdown } from "../../converter/HtmlFragmentConverter.js"
+import { getMarkdownLinkStyleFromSelection } from "../../../shared/BlockMarkdown.js"
+import type { OutputOption } from "../../../shared/Types.js"
 import { compactMarkdownText } from "../../../shared/Utils.js"
 import {LeafBlock, type ParserBlockContext} from "../BaseBlock.js"
-import {
-  getMarkdownLinkStyleFromSelection,
-  paragraphOutputOptions,
-} from "../../../shared/BlockOutputOptions.js"
 
 const parseTextBlocks = ({
   $,
@@ -42,7 +40,27 @@ const parseTextBlocks = ({
 export class NaverSe3TextBlock extends LeafBlock {
   override readonly id = "paragraph"
   override readonly label = "문단"
-  override readonly outputOptions = paragraphOutputOptions
+  override readonly outputOptions = [
+    {
+      id: "inline-links",
+      label: "inline links",
+      description: "문단 안 링크를 inline 형식으로 출력합니다.",
+      preview: {
+        type: "paragraph",
+        text: "일반 링크: [example](https://example.com)",
+      },
+      isDefault: true,
+    },
+    {
+      id: "reference-links",
+      label: "reference links",
+      description: "문단 안 링크를 reference 형식으로 분리합니다.",
+      preview: {
+        type: "paragraph",
+        text: "일반 링크: [example][ref-1]\n\n[ref-1]: https://example.com",
+      },
+    },
+  ] satisfies OutputOption<"paragraph">[]
 
   override match({ $node }: ParserBlockContext) {
     return $node.find(".se_textarea").length > 0

@@ -3,12 +3,12 @@ import type {
   BlockOutputSelection,
   ExportOptions,
 } from "./Types.js"
-import { getMarkdownLinkStyleFromSelection } from "./BlockOutputOptions.js"
 import {
   composeSnippetWithReferences,
   createLinkFormatter,
   getDividerMarker,
   getHeadingLevelOffset,
+  getMarkdownLinkStyleFromSelection,
   renderCodeBlock,
   renderFormula,
   renderGfmTable,

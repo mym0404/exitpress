@@ -139,7 +139,7 @@ export const exportSinglePost = async ({
     post,
     markdown: rendered.markdown,
     markdownFilePath,
-    blockTypes: parsedPost.body.map((block) => block.type),
+    blockTypes: parsedPost.blocks.map((block) => block.type),
     assetPaths: rendered.assetRecords
       .map((asset) => asset.relativePath)
       .filter((assetPath): assetPath is string => Boolean(assetPath)),

@@ -332,11 +332,6 @@ export abstract class BaseEditor {
       })
     }
 
-    const blocks = nodes.flatMap((node, index) => matchNode(node, String(index)))
-
-    return {
-      blocks,
-      body: blocks,
-    }
+    return nodes.flatMap((node, index) => matchNode(node, String(index)))
   }
 }

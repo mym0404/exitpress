@@ -74,7 +74,7 @@ export class NaverBlogSE4Editor extends BaseEditor {
   }
 
   override parse({ $, sourceUrl = "", tags, options, captureBlockEvidence }: BaseEditorParseInput): ParsedPost {
-    const { blocks, body } = this.runBlocks({
+    const blocks = this.runBlocks({
       $,
       nodes: $("#viewTypeSelector .se-component").toArray(),
       sourceUrl,
@@ -102,7 +102,6 @@ export class NaverBlogSE4Editor extends BaseEditor {
 
     return {
       tags: unique(tags),
-      body,
       blocks,
       videos,
     } satisfies ParsedPost

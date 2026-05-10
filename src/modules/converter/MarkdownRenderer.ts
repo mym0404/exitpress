@@ -15,12 +15,12 @@ import type {
   AstBlock,
 } from "../../shared/Types.js"
 import { resolveBlockOutputSelection } from "../../shared/BlockRegistry.js"
-import { getMarkdownLinkStyleFromSelection } from "../../shared/BlockOutputOptions.js"
 import {
   createLinkFormatter,
   getDividerMarker,
   getHeadingLevelOffset,
   getHtmlConversionOptions,
+  getMarkdownLinkStyleFromSelection,
   renderCodeBlock,
   renderFormula,
   renderGfmTable,
@@ -89,7 +89,7 @@ export const renderMarkdownPost = async ({
   }) => Promise<AssetRecord>
   resolveLinkUrl?: (url: string) => string
 }) => {
-  const bodyBlocks = parsedPost.body
+  const bodyBlocks = parsedPost.blocks
   const assetRecords: AssetRecord[] = []
   const sections: string[] = []
   const inlineLinkFormatter = createLinkFormatter({

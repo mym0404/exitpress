@@ -79,6 +79,11 @@ export const createLinkFormatter = ({
   }
 }
 
+export const getMarkdownLinkStyleFromSelection = (selection?: BlockOutputSelection): MarkdownLinkStyle =>
+  selection?.variant === "reference-links" || selection?.variant === "reference-link"
+    ? "referenced"
+    : "inlined"
+
 const isDegenerateMarkdownLine = (line: string) => /^[*_~`]+$/.test(line.trim())
 
 const normalizeMarkdownText = (text: string) =>

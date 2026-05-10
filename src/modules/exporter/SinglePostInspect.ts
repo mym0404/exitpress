@@ -85,7 +85,7 @@ export const inspectPostHtml = ({
 
     parseResult = {
       status: "success",
-      blockTypes: parsedPost.body.map((block) => block.type),
+      blockTypes: parsedPost.blocks.map((block) => block.type),
     }
   } catch (error) {
     parseResult = {

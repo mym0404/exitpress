@@ -1,10 +1,4 @@
-import type {
-  BlockOutputSelection,
-  BlockOutputParamValue,
-  BlockType,
-  ExportOptions,
-  OutputOption,
-} from "./Types.js"
+import type {BlockOutputSelection, BlockOutputParamValue, BlockType, ExportOptions, OutputOption,} from "./Types.js"
 
 const fallbackBlockOutputSelections: Record<BlockType, BlockOutputSelection> = {
   paragraph: { variant: "inline-links" },
@@ -92,10 +86,8 @@ export const resolveBlockOutputSelection = ({
     ? createSelectionFromOutputOption(defaultOption)
     : fallbackBlockOutputSelections[blockType]
 
-  const selection = mergeBlockOutputSelection({
+  return mergeBlockOutputSelection({
     baseSelection,
     nextSelection,
   })
-
-  return selection
 }

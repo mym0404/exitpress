@@ -33,7 +33,7 @@ export class NaverBlogSE3Editor extends BaseEditor {
 
   override parse({ $, tags, options, captureBlockEvidence }: BaseEditorParseInput): ParsedPost {
     const container = $("#viewTypeSelector .se_component_wrap.sect_dsc").first()
-    const { blocks, body } = this.runBlocks({
+    const blocks = this.runBlocks({
       $,
       nodes: container.children(".se_component").toArray(),
       tags,
@@ -43,7 +43,6 @@ export class NaverBlogSE3Editor extends BaseEditor {
 
     return {
       tags: unique(tags),
-      body,
       blocks,
       videos: [],
     } satisfies ParsedPost

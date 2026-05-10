@@ -150,17 +150,12 @@ const parsedPost: ParsedPost = {
     },
   ],
   blocks: parsedPostBlocks,
-  body: parsedPostBlocks,
 }
 
 const createParsedPost = (overrides: Partial<ParsedPost>): ParsedPost => {
-  const blocks = overrides.blocks ?? parsedPost.blocks
-
   return {
     ...parsedPost,
     ...overrides,
-    blocks,
-    body: overrides.body ?? blocks,
   }
 }
 
@@ -324,18 +319,6 @@ describe("renderMarkdownPost", () => {
             },
           },
         ],
-        body: [
-          {
-            type: "image",
-            image: {
-              sourceUrl: "https://example.com/sticker-preview.png",
-              originalSourceUrl: "https://example.com/sticker-original.gif",
-              alt: "",
-              caption: null,
-              mediaKind: "sticker",
-            },
-          },
-        ],
       },
       markdownFilePath: testMarkdownFilePath,
       options: defaultExportOptions(),
@@ -464,66 +447,6 @@ describe("renderMarkdownPost", () => {
       parsedPost: {
         ...parsedPost,
         blocks: [
-          {
-            type: "divider",
-            outputSelectionKey: "naver-se4:divider",
-            outputSelection: {
-              variant: "asterisk-rule",
-            },
-          },
-          {
-            type: "code",
-            language: null,
-            code: "plain",
-            outputSelectionKey: "naver-se4:code",
-            outputSelection: {
-              variant: "tilde-fence",
-            },
-          },
-          {
-            type: "formula",
-            formula: "x+y",
-            display: true,
-            outputSelectionKey: "naver-se4:formula",
-            outputSelection: {
-              variant: "math-fence",
-              params: {
-                inlineWrapper: "$",
-              },
-            },
-          },
-          {
-            type: "imageGroup",
-            images: [
-              {
-                sourceUrl: "https://example.com/group.png",
-                originalSourceUrl: null,
-                alt: "group",
-                caption: null,
-                mediaKind: "image",
-              },
-            ],
-          },
-          {
-            type: "video",
-            video: {
-              title: "HTML Demo",
-              thumbnailUrl: "https://example.com/video-thumb.png",
-              sourceUrl: "https://example.com/watch-html",
-              vid: null,
-              inkey: null,
-              width: null,
-              height: null,
-            },
-          },
-          {
-            type: "table",
-            complex: true,
-            html: "<table><tr><td>cell</td></tr></table>",
-            rows: [],
-          },
-        ],
-        body: [
           {
             type: "divider",
             outputSelectionKey: "naver-se4:divider",
