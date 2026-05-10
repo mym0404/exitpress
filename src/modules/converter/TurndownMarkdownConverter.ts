@@ -2,27 +2,16 @@ import TurndownService, { type Node as TurndownNode } from "turndown"
 import { gfm } from "turndown-plugin-gfm"
 import { JSDOM } from "jsdom"
 
-import type { MarkdownLinkStyle } from "../blocks/Types.js"
-
 const createDocument = (html: string) => new JSDOM(`<body>${html}</body>`).window.document
 
-type HtmlFragmentConversionOptions = {
-  linkStyle?: MarkdownLinkStyle
-  dividerMarker?: "---" | "***"
-}
-
-const createService = ({
-  options,
-}: {
-  options: HtmlFragmentConversionOptions
-}) => {
+const createTurndownService = () => {
   const service = new TurndownService({
     bulletListMarker: "-",
     codeBlockStyle: "fenced",
     emDelimiter: "_",
     headingStyle: "atx",
-    hr: options.dividerMarker ?? "---",
-    linkStyle: options.linkStyle ?? "inlined",
+    hr: "---",
+    linkStyle: "inlined",
   })
 
   service.use(gfm)
@@ -58,11 +47,9 @@ const sanitizeHtmlFragment = (html: string) => {
 
 export const convertHtmlToMarkdown = ({
   html,
-  options,
   resolveLinkUrl,
 }: {
   html: string
-  options: HtmlFragmentConversionOptions
   resolveLinkUrl?: (url: string) => string
 }) => {
   const sanitized = sanitizeHtmlFragment(html)
@@ -80,9 +67,7 @@ export const convertHtmlToMarkdown = ({
     })
   }
 
-  const turndownService = createService({
-    options,
-  })
+  const turndownService = createTurndownService()
   const markdown = turndownService.turndown(document.body)
 
   return markdown.trim().replace(/\n{3,}/g, "\n\n")

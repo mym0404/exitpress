@@ -1,10 +1,10 @@
-import { randomUUID } from "node:crypto"
+import {randomUUID} from "node:crypto"
 import * as fs from "node:fs/promises"
 import path from "node:path"
 
-import { UPLOAD_STATUSES } from "./ExportJobState.js"
-import type { ExportJobItem, ExportManifest, PostManifestEntry } from "./Types.js"
-import type { ImageUploadResult } from "./ImageUploadPhase.js"
+import {UPLOAD_STATUSES} from "./ExportJobState.js"
+import type {ExportJobItem, ExportManifest, PostManifestEntry} from "./Types.js"
+import type {ImageUploadResult} from "./ImageUploadPhase.js"
 
 type FileOps = Pick<typeof fs, "readFile" | "writeFile" | "rename" | "rm">
 
@@ -97,8 +97,7 @@ export const rewriteImageUploadPost = async ({
     uploadResults.map((result) => [result.candidate.localPath, result]),
   )
   const markdownPath = path.join(outputDir, post.outputPath)
-  const markdown = await fileOps.readFile(markdownPath, "utf8")
-  let rewrittenMarkdown = markdown
+  let rewrittenMarkdown = await fileOps.readFile(markdownPath, "utf8")
   const resultByReference = new Map<string, string>()
   const uploadedUrls: string[] = []
 

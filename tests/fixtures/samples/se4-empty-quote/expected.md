@@ -7,7 +7,6 @@ publishedAt: 2024-06-02T22:14:53+09:00
 category: 리뷰로그
 categoryPath:
   - 리뷰로그
-visibility: public
 thumbnail: https://mblogthumb-phinf.pstatic.net/MjAyNDA2MDJfMTcy/MDAxNzE3MzI3MjAyMDEx.wT8l1x2qZYw6my4ukQX3So0ggo1lT5O-yd3erbhSwWAg.iCMUXnYDL-WZ4bfy_ytaohmWeaDwxbfW6StNZJpEoBEg.JPEG/1.jpg?type=w800
 ---
 

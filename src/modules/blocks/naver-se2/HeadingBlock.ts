@@ -1,4 +1,4 @@
-import { convertHtmlToMarkdown } from "../../converter/HtmlFragmentConverter.js"
+import { convertHtmlToMarkdown } from "../../converter/TurndownMarkdownConverter.js"
 import {LeafBlock, type ParserBlockContext} from "../BaseBlock.js"
 import type { OutputOption } from "../Types.js"
 import { compactText } from "../../common/TextUtils.js"
@@ -44,7 +44,6 @@ export class NaverSe2HeadingBlock extends LeafBlock {
       convertHtmlToMarkdown({
         /* v8 ignore next */
         html: $node.html() ?? "",
-        options: {},
         resolveLinkUrl: options.resolveLinkUrl,
       }),
     )

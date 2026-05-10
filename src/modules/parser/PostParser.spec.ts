@@ -74,7 +74,7 @@ describe("post-parser routing", () => {
     expect(parsed.blocks).toEqual([{ type: "paragraph", text: "SE3 text" }])
   })
 
-  it("resolves same block output selections by editor", () => {
+  it("ignores stale code output selections", () => {
     const options = defaultExportOptions()
     options.blockOutputs.defaults["naver-se4:code"] = {
       variant: "tilde-fence",
@@ -116,21 +116,19 @@ describe("post-parser routing", () => {
 
     expect(se4Parsed.blocks[0]).toMatchObject({
       type: "code",
-      outputSelectionKey: "naver-se4:code",
-      outputSelection: {
-        variant: "tilde-fence",
-      },
+      language: "typescript",
+      code: "const se4 = true",
     })
     expect(se3Parsed.blocks[0]).toMatchObject({
       type: "code",
-      outputSelectionKey: "naver-se3:code",
-      outputSelection: {
-        variant: "backtick-fence",
-      },
+      language: null,
+      code: "const se3 = true",
     })
+    expect(se4Parsed.blocks[0]).not.toHaveProperty("outputSelectionKey")
+    expect(se3Parsed.blocks[0]).not.toHaveProperty("outputSelectionKey")
   })
 
-  it("applies editor paragraph link output selections before markdown is finalized", () => {
+  it("renders paragraph links inline when stale reference link selections are present", () => {
     const options = defaultExportOptions()
     options.blockOutputs.defaults["naver-se4:paragraph"] = {
       variant: "reference-links",
@@ -152,13 +150,9 @@ describe("post-parser routing", () => {
       },
     })
 
-    expect(parsed.blocks[0]).toMatchObject({
+    expect(parsed.blocks[0]).toEqual({
       type: "paragraph",
-      text: "See [docs][1]\n\n[1]: https://example.com",
-      outputSelectionKey: "naver-se4:paragraph",
-      outputSelection: {
-        variant: "reference-links",
-      },
+      text: "See [docs](https://example.com)",
     })
   })
 

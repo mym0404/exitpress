@@ -19,10 +19,8 @@ export type FrontmatterFieldName =
   | "publishedAt"
   | "category"
   | "categoryPath"
-  | "visibility"
   | "tags"
   | "thumbnail"
-  | "video"
   | "exportedAt"
   | "assetPaths"
 

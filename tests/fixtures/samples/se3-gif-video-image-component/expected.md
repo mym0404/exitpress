@@ -8,7 +8,6 @@ category: 명문이노시티 신축
 categoryPath:
   - My  Record
   - 명문이노시티 신축
-visibility: public
 thumbnail: https://mblogthumb-phinf.pstatic.net/20160129_195/anglekim3708_14540404659779sLEH_GIF/%B7%A3%B4%F5%B8%B5.gif?type=w800
 ---
 

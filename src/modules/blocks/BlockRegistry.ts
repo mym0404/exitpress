@@ -1,8 +1,7 @@
 import type { BlockOutputSelection, BlockOutputParamValue, BlockType, OutputOption } from "./Types.js"
 import type { ExportOptions } from "../exporter/Types.js"
 
-const fallbackBlockOutputSelections: Record<BlockType, BlockOutputSelection> = {
-  paragraph: { variant: "inline-links" },
+const fallbackBlockOutputSelections: Partial<Record<BlockType, BlockOutputSelection>> = {
   heading: {
     variant: "markdown-heading",
     params: {
@@ -10,8 +9,6 @@ const fallbackBlockOutputSelections: Record<BlockType, BlockOutputSelection> = {
     },
   },
   quote: { variant: "blockquote" },
-  divider: { variant: "dash-rule" },
-  code: { variant: "backtick-fence" },
   formula: {
     variant: "wrapper",
     params: {
@@ -22,7 +19,6 @@ const fallbackBlockOutputSelections: Record<BlockType, BlockOutputSelection> = {
   image: { variant: "markdown-image" },
   imageGroup: { variant: "split-images" },
   video: { variant: "source-link" },
-  linkCard: { variant: "title-link" },
   table: { variant: "gfm-or-html" },
 }
 
@@ -86,6 +82,10 @@ export const resolveBlockOutputSelection = ({
   const baseSelection = defaultOption
     ? createSelectionFromOutputOption(defaultOption)
     : fallbackBlockOutputSelections[blockType]
+
+  if (!baseSelection) {
+    throw new Error(`No default output selection for ${blockType}.`)
+  }
 
   return mergeBlockOutputSelection({
     baseSelection,

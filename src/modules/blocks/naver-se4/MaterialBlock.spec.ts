@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 
-import { expectEveryBlockOutputOption, parseSe4Blocks, parseSe4BlocksWithOptions } from "../../../../tests/helpers/parser-test-utils.js"
+import { parseSe4Blocks } from "../../../../tests/helpers/parser-test-utils.js"
 
 describe("NaverSe4MaterialBlock", () => {
   it("parses material components into link cards", () => {
@@ -159,23 +159,4 @@ describe("NaverSe4MaterialBlock", () => {
     ).toThrow("SE4 material block parsing failed.")
   })
 
-  it("applies every output option", () => {
-    expectEveryBlockOutputOption({
-      editorType: "naver-se4",
-      blockId: "linkCard",
-      parse: (blockOutputs) =>
-        parseSe4BlocksWithOptions({
-          blockOutputs,
-          components: [
-            `
-              <div class="se-component se-material">
-                <a class="se-module-material" href="https://example.com/material">
-                  <strong class="se-material-title">Reference card</strong>
-                </a>
-              </div>
-            `,
-          ],
-        }),
-    })
-  })
 })

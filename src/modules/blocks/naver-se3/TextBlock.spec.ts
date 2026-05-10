@@ -1,10 +1,6 @@
 import { describe, expect, it } from "vitest"
 
-import {
-  expectEveryBlockOutputOption,
-  parseSe3Blocks,
-  parseSe3BlocksWithOptions,
-} from "../../../../tests/helpers/parser-test-utils.js"
+import { parseSe3Blocks } from "../../../../tests/helpers/parser-test-utils.js"
 
 describe("NaverSe3TextBlock", () => {
   it("parses text components into paragraph blocks", () => {
@@ -52,21 +48,13 @@ describe("NaverSe3TextBlock", () => {
     expect(parsed.blocks).toEqual([])
   })
 
-  it("applies every output option", () => {
-    expectEveryBlockOutputOption({
-      editorType: "naver-se3",
-      blockId: "paragraph",
-      parse: (blockOutputs) =>
-        parseSe3BlocksWithOptions({
-          blockOutputs,
-          components: [
-            `
-              <div class="se_component se_text">
-                <div class="se_textarea">Alpha <a href="https://example.com">link</a></div>
-              </div>
-            `,
-          ],
-        }),
-    })
+  it("renders links inline", () => {
+    const parsed = parseSe3Blocks(`
+      <div class="se_component se_text">
+        <div class="se_textarea">Alpha <a href="https://example.com">link</a></div>
+      </div>
+    `)
+
+    expect(parsed.blocks).toEqual([{ type: "paragraph", text: "Alpha [link](https://example.com)" }])
   })
 })

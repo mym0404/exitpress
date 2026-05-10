@@ -1,6 +1,7 @@
-import { convertHtmlToMarkdown } from "../../converter/HtmlFragmentConverter.js"
+import { convertHtmlToMarkdown } from "../../converter/TurndownMarkdownConverter.js"
 import type { AstBlock } from "../Types.js"
-import { parseHtmlTable } from "../../parser/TableParser.js"
+
+import {parseHtmlTable} from "../../parser/util/parseHtmlTable.js";
 
 export const parseSingleColumnTableAsParagraphs = ({
   parsedTable,
@@ -27,7 +28,6 @@ export const parseSingleColumnTableAsParagraphs = ({
       convertHtmlToMarkdown({
         /* v8 ignore next */
         html: row[0]?.html ?? "",
-        options: {},
         resolveLinkUrl: options.resolveLinkUrl,
       }),
     )

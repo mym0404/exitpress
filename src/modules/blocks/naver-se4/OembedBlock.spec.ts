@@ -2,9 +2,7 @@ import { describe, expect, it } from "vitest"
 
 import {
   createSe4ModuleScript,
-  expectEveryBlockOutputOption,
   parseSe4Blocks,
-  parseSe4BlocksWithOptions,
 } from "../../../../tests/helpers/parser-test-utils.js"
 
 describe("NaverSe4OembedBlock", () => {
@@ -101,27 +99,4 @@ describe("NaverSe4OembedBlock", () => {
     ).toThrow("SE4 oEmbed block parsing failed.")
   })
 
-  it("applies every output option", () => {
-    expectEveryBlockOutputOption({
-      editorType: "naver-se4",
-      blockId: "linkCard",
-      parse: (blockOutputs) =>
-        parseSe4BlocksWithOptions({
-          blockOutputs,
-          components: [
-            `
-              <div class="se-component se-oembed">
-                ${createSe4ModuleScript({
-                  type: "v2_oembed",
-                  data: {
-                    title: "Video embed",
-                    inputUrl: "https://youtu.be/demo",
-                  },
-                })}
-              </div>
-            `,
-          ],
-        }),
-    })
-  })
 })

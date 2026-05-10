@@ -29,13 +29,12 @@
 - 현재 Container 계열은 legacy wrapper를 풀어 실제 content leaf로 넘기는 용도에 가깝다.
 
 ## Output Options
-- Parser block의 `outputOptions`는 같은 AST를 다른 Markdown 형식으로 렌더링할 수 있게 하는 metadata다.
+- Parser block의 `outputOptions`는 사용자가 선택할 수 있는 Markdown 형식 차이가 남아 있는 block의 metadata다.
 - UI에 노출되는 selection key는 `editorType:blockId` 형식이다.
 - Output option이 2개 이상인 block만 `BaseEditor.getBlockOutputDefinitions()`에 노출된다.
 - 같은 editor 안에서 같은 `blockId`가 반복되면 첫 definition만 노출되고, 같은 key를 공유한다.
 - 여러 concrete block이 같은 output family를 공유하면 같은 `blockId`와 output selection을 공유할 수 있다.
 - Parser는 render-time metadata가 필요한 AST block에 `outputSelectionKey`와 `outputSelection`을 붙인다.
-- Paragraph link style은 renderer 단계의 전역 옵션이 아니라 paragraph parser block이 HTML-to-Markdown 변환 전에 선택한다.
 - 정확한 selectable key 목록과 노출 순서는 `BaseBlog`에서 파생되는 output definition과 관련 tests가 source of truth다.
 
 ## Failure And Inspection

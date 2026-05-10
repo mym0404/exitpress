@@ -13,29 +13,15 @@ describe("parser block catalog", () => {
     expect(blog.editors.map((editor) => editor.type)).toEqual(["naver-se4", "naver-se3", "naver-se2"])
     expect(outputDefinitions.map((definition) => definition.key)).toEqual([
       "naver-se4:formula",
-      "naver-se4:code",
-      "naver-se4:linkCard",
       "naver-se4:table",
       "naver-se4:image",
-      "naver-se4:divider",
-      "naver-se4:paragraph",
       "naver-se3:table",
-      "naver-se3:code",
-      "naver-se3:linkCard",
       "naver-se3:image",
-      "naver-se3:paragraph",
       "naver-se2:table",
-      "naver-se2:divider",
-      "naver-se2:code",
       "naver-se2:image",
-      "naver-se2:paragraph",
     ])
     expect(outputDefinitions.every((definition) => definition.options.length >= 2)).toBe(true)
     expect(outputDefinitions.some((definition) => String(definition.key) === getDefaultOption(definition)?.preview.type)).toBe(false)
-    expect(outputDefinitions.filter((definition) => getDefaultOption(definition)?.preview.type === "code").map((definition) => definition.key)).toEqual([
-      "naver-se4:code",
-      "naver-se3:code",
-      "naver-se2:code",
-    ])
+    expect(outputDefinitions.filter((definition) => getDefaultOption(definition)?.preview.type === "code").map((definition) => definition.key)).toEqual([])
   })
 })

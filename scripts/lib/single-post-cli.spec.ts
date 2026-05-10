@@ -189,8 +189,8 @@ describe("single-post cli", () => {
       JSON.stringify({
         blockOutputs: {
           defaults: {
-            "naver-se4:code": {
-              variant: "tilde-fence",
+            "naver-se4:image": {
+              variant: "linked-image",
             },
           },
         },
@@ -248,7 +248,7 @@ describe("single-post cli", () => {
       })
 
       expect(exportSinglePost).toHaveBeenCalledTimes(1)
-      expect(exportSinglePost.mock.calls[0][0].options.blockOutputs.defaults["naver-se4:code"]?.variant).toBe("tilde-fence")
+      expect(exportSinglePost.mock.calls[0][0].options.blockOutputs.defaults["naver-se4:image"]?.variant).toBe("linked-image")
       expect(Object.hasOwn(exportSinglePost.mock.calls[0][0].options, "unsupportedBlockCases")).toBe(false)
       expect(stdoutWrite).not.toHaveBeenCalled()
       expect(stderrWrite).toHaveBeenCalledWith(
@@ -461,8 +461,8 @@ describe("single-post cli", () => {
       JSON.stringify({
         blockOutputs: {
           defaults: {
-            code: {
-              variant: "tilde-fence",
+            image: {
+              variant: "linked-image",
             },
           },
         },
@@ -489,7 +489,7 @@ describe("single-post cli", () => {
           stdoutWrite: vi.fn(),
           stderrWrite: vi.fn(),
         }),
-      ).rejects.toThrow("blockOutputs.defaults contains unsupported keys: code")
+      ).rejects.toThrow("blockOutputs.defaults contains unsupported keys: image")
 
       expect(exportSinglePost).not.toHaveBeenCalled()
     } finally {

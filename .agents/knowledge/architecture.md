@@ -10,7 +10,7 @@
 - Blog scan and post HTML fetch start in `src/modules/fetcher/NaverBlogFetcher.ts`.
 - `src/modules/parser/PostParser.ts` builds a `src/modules/blog/NaverBlog.ts` instance and lets its editor instances choose the matching parser through `canParse`.
 - Editor classes own block ordering, output-option visibility order, and source-level context. Block-specific `match` and `convert` logic stays in `src/modules/blocks/*`.
-- `src/modules/converter/MarkdownRenderer.ts` renders AST blocks, frontmatter, image references, tables, and callouts into Markdown.
+- `src/modules/converter/MarkdownRenderer.ts` assembles frontmatter and final Markdown output, `AstMarkdownRenderer.ts` renders common AST blocks, and `TurndownMarkdownConverter.ts` handles HTML fragment conversion through Turndown.
 - `src/modules/exporter/ExportPaths.ts`, `AssetStore.ts`, `PostLinkRewriter.ts`, and `ExportJobManifest.ts` handle output paths, deduped assets, post links, and `manifest.json`.
 
 ## Module Boundaries
@@ -18,7 +18,7 @@
 - `src/modules/parser`: SE2, SE3, SE4 HTML structures to common AST.
 - `src/modules/blocks`: parser block base classes, block output registry, AST/block types, editor-specific parser blocks.
 - `src/modules/common`: cross-runtime utility helpers and base object types.
-- `src/modules/converter`: AST to Markdown and frontmatter.
+- `src/modules/converter`: AST to Markdown, Turndown-based HTML fragment conversion, and frontmatter assembly.
 - `src/modules/exporter`: export orchestration, asset persistence, upload/rewrite phase, single-post export.
 - `src/server`: local HTTP server, job store, local state/cache, upload provider catalog.
 - `src/ui`: React wizard, scan/options/results/resume surfaces, shadcn primitives, API client.

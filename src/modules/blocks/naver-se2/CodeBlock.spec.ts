@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 
-import { expectEveryBlockOutputOption, parseSe2Blocks } from "../../../../tests/helpers/parser-test-utils.js"
+import { parseSe2Blocks } from "../../../../tests/helpers/parser-test-utils.js"
 
 describe("NaverSe2CodeBlock", () => {
   it("parses pre tags into code blocks", () => {
@@ -13,10 +13,6 @@ console.log(oldSchool)
         type: "code",
         language: null,
         code: "const oldSchool = true\nconsole.log(oldSchool)",
-        outputSelectionKey: "naver-se2:code",
-        outputSelection: {
-          variant: "backtick-fence",
-        },
       },
     ])
   })
@@ -27,11 +23,4 @@ console.log(oldSchool)
     expect(parsed.blocks).toEqual([])
   })
 
-  it("applies every output option", () => {
-    expectEveryBlockOutputOption({
-      editorType: "naver-se2",
-      blockId: "code",
-      parse: (blockOutputs) => parseSe2Blocks("<pre>const value = 1</pre>", { blockOutputs }),
-    })
-  })
 })

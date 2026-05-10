@@ -8,7 +8,6 @@ category: 학습 내용
 categoryPath:
   - 게시판
   - 학습 내용
-visibility: public
 thumbnail: https://mblogthumb-phinf.pstatic.net/MjAyNTAzMDdfNTIg/MDAxNzQxMzM1NjY1MTQz.qppGMZ1RinjHGcAXcn9gL7eAKN3mmW83D3OJGIcLPRgg.606p08T0EblKZl-A2P1kB-vjQviZQLVV2HySnsk0uusg.PNG/%EB%A0%88%EB%B2%A8%EC%97%85_%EA%B0%95%EC%9D%98_%ED%8F%AC%EC%8A%A4%ED%84%B0_(12).png?type=w800
 ---
 

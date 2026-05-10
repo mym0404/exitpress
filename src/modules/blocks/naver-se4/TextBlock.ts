@@ -1,8 +1,6 @@
 import type { AnyNode, Element } from "domhandler"
 
-import { convertHtmlToMarkdown } from "../../converter/HtmlFragmentConverter.js"
-import { getMarkdownLinkStyleFromSelection } from "../../converter/BlockMarkdown.js"
-import type { OutputOption } from "../Types.js"
+import { convertHtmlToMarkdown } from "../../converter/TurndownMarkdownConverter.js"
 import { compactMarkdownText } from "../../common/TextUtils.js"
 import {LeafBlock, type ParserBlockContext} from "../BaseBlock.js"
 
@@ -79,20 +77,15 @@ const parseRecommendationTextBlocks = (texts: string[]) => {
 export const parseTextBlocks = ({
   $node,
   options,
-  outputSelection,
 }: {
   $node: Parameters<LeafBlock["convert"]>[0]["$node"]
   options: ParserBlockContext["options"]
-  outputSelection?: Parameters<LeafBlock["convert"]>[0]["outputSelection"]
 }) => {
   const convertParagraph = (paragraph: Element) =>
     compactMarkdownText(
       convertHtmlToMarkdown({
         /* v8 ignore next */
         html: $node.find(paragraph).html() ?? "",
-        options: {
-          linkStyle: getMarkdownLinkStyleFromSelection(outputSelection),
-        },
         resolveLinkUrl: options.resolveLinkUrl,
       }),
     )
@@ -170,33 +163,12 @@ export const parseTextBlocks = ({
 export class NaverSe4TextBlock extends LeafBlock {
   override readonly id = "paragraph"
   override readonly label = "문단"
-  override readonly outputOptions = [
-    {
-      id: "inline-links",
-      label: "inline links",
-      description: "문단 안 링크를 inline 형식으로 출력합니다.",
-      preview: {
-        type: "paragraph",
-        text: "일반 링크: [example](https://example.com)",
-      },
-      isDefault: true,
-    },
-    {
-      id: "reference-links",
-      label: "reference links",
-      description: "문단 안 링크를 reference 형식으로 분리합니다.",
-      preview: {
-        type: "paragraph",
-        text: "일반 링크: [example][ref-1]\n\n[ref-1]: https://example.com",
-      },
-    },
-  ] satisfies OutputOption<"paragraph">[]
 
   override match({ $node, moduleType }: ParserBlockContext) {
     return moduleType === "v2_text" || $node.hasClass("se-text")
   }
 
-  override convert({ $node, options, outputSelection }: Parameters<LeafBlock["convert"]>[0]) {
-    return parseTextBlocks({ $node, options, outputSelection })
+  override convert({ $node, options }: Parameters<LeafBlock["convert"]>[0]) {
+    return parseTextBlocks({ $node, options })
   }
 }

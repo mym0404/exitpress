@@ -77,21 +77,11 @@ const wrappedLeafBlocks: AstBlock[] = [
   { type: "paragraph", text: "첫 문단" },
   { type: "heading", level: 2, text: "둘째 제목" },
   { type: "quote", text: "셋째 인용" },
-  {
-    type: "divider",
-    outputSelectionKey: "naver-se2:divider",
-    outputSelection: {
-      variant: "dash-rule",
-    },
-  },
+  { type: "divider" },
   {
     type: "code",
     language: null,
     code: "const nested = true",
-    outputSelectionKey: "naver-se2:code",
-    outputSelection: {
-      variant: "backtick-fence",
-    },
   },
 ]
 

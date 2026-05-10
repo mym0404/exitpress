@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 
-import { expectEveryBlockOutputOption, parseSe2Blocks } from "../../../../tests/helpers/parser-test-utils.js"
+import { parseSe2Blocks } from "../../../../tests/helpers/parser-test-utils.js"
 
 describe("NaverSe2DividerBlock", () => {
   it("parses hr tags into divider blocks", () => {
@@ -9,19 +9,7 @@ describe("NaverSe2DividerBlock", () => {
     expect(parsed.blocks).toEqual([
       {
         type: "divider",
-        outputSelectionKey: "naver-se2:divider",
-        outputSelection: {
-          variant: "dash-rule",
-        },
       },
     ])
-  })
-
-  it("applies every output option", () => {
-    expectEveryBlockOutputOption({
-      editorType: "naver-se2",
-      blockId: "divider",
-      parse: (blockOutputs) => parseSe2Blocks("<hr />", { blockOutputs }),
-    })
   })
 })

@@ -1,10 +1,6 @@
 import { describe, expect, it } from "vitest"
 
-import {
-  expectEveryBlockOutputOption,
-  parseSe3Blocks,
-  parseSe3BlocksWithOptions,
-} from "../../../../tests/helpers/parser-test-utils.js"
+import { parseSe3Blocks } from "../../../../tests/helpers/parser-test-utils.js"
 
 describe("NaverSe3CodeBlock", () => {
   it("parses code components into code blocks", () => {
@@ -21,10 +17,6 @@ console.log(legacy)
         type: "code",
         language: null,
         code: "const legacy = true\nconsole.log(legacy)",
-        outputSelectionKey: "naver-se3:code",
-        outputSelection: {
-          variant: "backtick-fence",
-        },
       },
     ])
   })
@@ -39,21 +31,4 @@ console.log(legacy)
     expect(parsed.blocks).toEqual([])
   })
 
-  it("applies every output option", () => {
-    expectEveryBlockOutputOption({
-      editorType: "naver-se3",
-      blockId: "code",
-      parse: (blockOutputs) =>
-        parseSe3BlocksWithOptions({
-          blockOutputs,
-          components: [
-            `
-              <div class="se_component se_code">
-                <pre>const value = 1</pre>
-              </div>
-            `,
-          ],
-        }),
-    })
-  })
 })

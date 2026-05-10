@@ -241,13 +241,6 @@ export abstract class BaseEditor {
 
       const selectionKey = this.createBlockOutputSelectionKey(parserBlock.id)
 
-      if (
-        (parserBlock.id === "paragraph" || parserBlock.id === "linkCard") &&
-        !options.blockOutputs.defaults?.[selectionKey]
-      ) {
-        return parsedBlock
-      }
-
       return {
         ...parsedBlock,
         outputSelectionKey: selectionKey,

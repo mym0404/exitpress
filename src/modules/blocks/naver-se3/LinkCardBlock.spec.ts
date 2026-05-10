@@ -1,10 +1,6 @@
 import { describe, expect, it } from "vitest"
 
-import {
-  expectEveryBlockOutputOption,
-  parseSe3Blocks,
-  parseSe3BlocksWithOptions,
-} from "../../../../tests/helpers/parser-test-utils.js"
+import { parseSe3Blocks } from "../../../../tests/helpers/parser-test-utils.js"
 
 describe("NaverSe3LinkCardBlock", () => {
   it("parses oglink components into link cards", () => {
@@ -92,25 +88,4 @@ describe("NaverSe3LinkCardBlock", () => {
     ).toThrow("SE3 link card block parsing failed.")
   })
 
-  it("applies every output option", () => {
-    expectEveryBlockOutputOption({
-      editorType: "naver-se3",
-      blockId: "linkCard",
-      parse: (blockOutputs) =>
-        parseSe3BlocksWithOptions({
-          blockOutputs,
-          components: [
-            `
-              <div class="se_component se_oglink default ">
-                <a class="se_og_box" href="https://example.com/article">
-                  <div class="se_og_txt">
-                    <div class="se_og_tit">External article</div>
-                  </div>
-                </a>
-              </div>
-            `,
-          ],
-        }),
-    })
-  })
 })

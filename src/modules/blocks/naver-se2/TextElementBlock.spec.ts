@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 
-import { expectEveryBlockOutputOption, parseSe2Blocks } from "../../../../tests/helpers/parser-test-utils.js"
+import { parseSe2Blocks } from "../../../../tests/helpers/parser-test-utils.js"
 
 describe("NaverSe2TextElementBlock", () => {
   it("falls back to markdown paragraphs for convertible html", () => {
@@ -27,14 +27,9 @@ describe("NaverSe2TextElementBlock", () => {
     )
   })
 
-  it("applies every output option", () => {
-    expectEveryBlockOutputOption({
-      editorType: "naver-se2",
-      blockId: "paragraph",
-      parse: (blockOutputs) =>
-        parseSe2Blocks(`<div>Legacy <a href="https://example.com">link</a></div>`, {
-          blockOutputs,
-        }),
-    })
+  it("renders links inline", () => {
+    const parsed = parseSe2Blocks(`<div>Legacy <a href="https://example.com">link</a></div>`)
+
+    expect(parsed.blocks).toEqual([{ type: "paragraph", text: "Legacy [link](https://example.com)" }])
   })
 })

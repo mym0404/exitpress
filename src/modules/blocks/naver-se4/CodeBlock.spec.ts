@@ -2,9 +2,7 @@ import { describe, expect, it } from "vitest"
 
 import {
   createSe4ModuleScript,
-  expectEveryBlockOutputOption,
   parseSe4Blocks,
-  parseSe4BlocksWithOptions,
 } from "../../../../tests/helpers/parser-test-utils.js"
 
 describe("NaverSe4CodeBlock", () => {
@@ -23,10 +21,6 @@ console.log(value)
         type: "code",
         language: "typescript",
         code: "const value = 1\nconsole.log(value)",
-        outputSelectionKey: "naver-se4:code",
-        outputSelection: {
-          variant: "backtick-fence",
-        },
       },
     ])
   })
@@ -57,22 +51,4 @@ console.log(value)
     })
   })
 
-  it("applies every output option", () => {
-    expectEveryBlockOutputOption({
-      editorType: "naver-se4",
-      blockId: "code",
-      parse: (blockOutputs) =>
-        parseSe4BlocksWithOptions({
-          blockOutputs,
-          components: [
-            `
-              <div class="se-component se-code">
-                ${createSe4ModuleScript({ type: "v2_code" })}
-                <pre class="__se_code_view">const value = 1</pre>
-              </div>
-            `,
-          ],
-        }),
-    })
-  })
 })

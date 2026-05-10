@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 
-import { expectEveryBlockOutputOption, parseSe4Blocks, parseSe4BlocksWithOptions } from "../../../../tests/helpers/parser-test-utils.js"
+import { parseSe4Blocks } from "../../../../tests/helpers/parser-test-utils.js"
 
 describe("NaverSe4MapBlock", () => {
   it("parses places map components into place link cards", () => {
@@ -155,24 +155,4 @@ describe("NaverSe4MapBlock", () => {
     ])
   })
 
-  it("applies every output option", () => {
-    expectEveryBlockOutputOption({
-      editorType: "naver-se4",
-      blockId: "linkCard",
-      parse: (blockOutputs) =>
-        parseSe4BlocksWithOptions({
-          blockOutputs,
-          components: [
-            `
-              <div class="se-component se-placesMap">
-                <a class="se-map-info">
-                  <strong class="se-map-title">지도 장소</strong>
-                  <p class="se-map-address">서울</p>
-                </a>
-              </div>
-            `,
-          ],
-        }),
-    })
-  })
 })

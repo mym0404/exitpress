@@ -30,6 +30,10 @@ describe("export options", () => {
     expect(options.frontmatter.aliases.title).toBe("postTitle")
     expect(options.frontmatter.aliases.source).toBe("")
     expect(options.frontmatter.fields.title).toBe(true)
+    expect(Object.hasOwn(options.frontmatter.fields, "visibility")).toBe(false)
+    expect(Object.hasOwn(options.frontmatter.fields, "video")).toBe(false)
+    expect(Object.hasOwn(options.frontmatter.aliases, "visibility")).toBe(false)
+    expect(Object.hasOwn(options.frontmatter.aliases, "video")).toBe(false)
     expect(options.assets.stickerAssetMode).toBe("ignore")
     expect(options.assets.imageHandlingMode).toBe("download-and-upload")
     expect(options.assets.compressionEnabled).toBe(true)
@@ -74,6 +78,9 @@ describe("export options", () => {
           "naver-se4:code": {
             variant: "tilde-fence",
           },
+          "naver-se4:image": {
+            variant: "linked-image",
+          },
           "naver-se4:formula": {
             variant: "wrapper",
             params: {
@@ -85,13 +92,14 @@ describe("export options", () => {
       },
     })
 
-    expect(options.blockOutputs.defaults["naver-se4:code"]?.variant).toBe("tilde-fence")
+    expect(options.blockOutputs.defaults["naver-se4:code"]).toBeUndefined()
+    expect(options.blockOutputs.defaults["naver-se4:image"]?.variant).toBe("linked-image")
     expect(options.blockOutputs.defaults["naver-se4:formula"]?.variant).toBe("wrapper")
     expect(options.blockOutputs.defaults["naver-se4:formula"]?.params?.inlineWrapper).toBe("\\(...\\)")
     expect(options.blockOutputs.defaults["naver-se4:formula"]?.params?.blockWrapper).toBe("\\[...\\]")
   })
 
-  it("drops block-type-only output defaults from persisted options", () => {
+  it("drops block-type-only and removed output defaults from persisted options", () => {
     const sanitized = sanitizePersistedExportOptions(
       JSON.parse(`{
         "blockOutputs": {
@@ -101,6 +109,9 @@ describe("export options", () => {
             },
             "naver-se4:code": {
               "variant": "tilde-fence"
+            },
+            "naver-se4:image": {
+              "variant": "linked-image"
             }
           }
         }
@@ -108,8 +119,8 @@ describe("export options", () => {
     )
 
     expect(sanitized.blockOutputs?.defaults).toEqual({
-      "naver-se4:code": {
-        variant: "tilde-fence",
+      "naver-se4:image": {
+        variant: "linked-image",
       },
     })
   })
@@ -120,10 +131,14 @@ describe("export options", () => {
         "frontmatter": {
           "fields": {
             "title": false,
+            "visibility": true,
+            "video": true,
             "removedField": true
           },
           "aliases": {
             "title": "postTitle",
+            "visibility": "visible",
+            "video": "videos",
             "removedField": "removed"
           }
         }
@@ -305,10 +320,8 @@ describe("export options", () => {
         publishedAt: false,
         category: false,
         categoryPath: false,
-        visibility: false,
         tags: false,
         thumbnail: false,
-        video: false,
         exportedAt: false,
         assetPaths: false,
       },
@@ -320,10 +333,8 @@ describe("export options", () => {
         publishedAt: "",
         category: "",
         categoryPath: "",
-        visibility: "",
         tags: "",
         thumbnail: "",
-        video: "",
         exportedAt: "",
         assetPaths: "dup",
       },

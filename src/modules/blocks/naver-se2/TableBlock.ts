@@ -4,7 +4,8 @@ import {LeafBlock, type ParserBlockContext} from "../BaseBlock.js"
 import { parseSingleColumnTableAsParagraphs } from "../common/Table.js"
 import type { AstBlock, OutputOption } from "../Types.js"
 import { compactText } from "../../common/TextUtils.js"
-import { parseHtmlTable } from "../../parser/TableParser.js"
+
+import {parseHtmlTable} from "../../parser/util/parseHtmlTable.js";
 
 const parseColorScripterCodeBlock = ({
   $,

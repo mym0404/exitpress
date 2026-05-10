@@ -1,4 +1,4 @@
-import type { AstBlock, BlockOutputSelection, ImageData, MarkdownLinkStyle } from "../blocks/Types.js"
+import type { AstBlock, BlockOutputSelection, ImageData } from "../blocks/Types.js"
 import { splitFormulaWrapper } from "./FormulaWrapper.js"
 
 const markdownLineWhitespacePattern = /[^\S\n]+/g
@@ -21,37 +21,10 @@ const escapeTableCell = (value: string) =>
   value.replace(/\|/g, "\\|").replace(/\n+/g, "<br>").trim() || " "
 
 export const createLinkFormatter = ({
-  style,
   resolveLinkUrl,
 }: {
-  style: MarkdownLinkStyle
   resolveLinkUrl?: (url: string) => string
 }) => {
-  const references: string[] = []
-  const referenceMap = new Map<string, string>()
-
-  const getReferenceId = ({
-    label,
-    url,
-  }: {
-    label: string
-    url: string
-  }) => {
-    const key = `${label}\u0000${url}`
-    const existing = referenceMap.get(key)
-
-    if (existing) {
-      return existing
-    }
-
-    const nextId = `ref-${referenceMap.size + 1}`
-
-    referenceMap.set(key, nextId)
-    references.push(`[${nextId}]: ${url}`)
-
-    return nextId
-  }
-
   const formatLink = ({
     label,
     url,
@@ -61,23 +34,13 @@ export const createLinkFormatter = ({
   }) => {
     const resolvedUrl = resolveLinkUrl ? resolveLinkUrl(url) : url
 
-    if (style === "inlined") {
-      return `[${label}](${resolvedUrl})`
-    }
-
-    return `[${label}][${getReferenceId({ label, url: resolvedUrl })}]`
+    return `[${label}](${resolvedUrl})`
   }
 
   return {
     formatLink,
-    renderReferenceSection: () => (references.length > 0 ? references.join("\n") : ""),
   }
 }
-
-export const getMarkdownLinkStyleFromSelection = (selection?: BlockOutputSelection): MarkdownLinkStyle =>
-  selection?.variant === "reference-links" || selection?.variant === "reference-link"
-    ? "referenced"
-    : "inlined"
 
 const isDegenerateMarkdownLine = (line: string) => /^[*_~`]+$/.test(line.trim())
 
@@ -99,16 +62,10 @@ export const renderQuote = (text: string) =>
 export const renderCodeBlock = ({
   language,
   code,
-  variant,
 }: {
   language: string | null
   code: string
-  variant: string
-}) => {
-  const fence = variant === "tilde-fence" ? "~~~" : "```"
-
-  return `${fence}${language ?? ""}\n${code}\n${fence}`
-}
+}) => `\`\`\`${language ?? ""}\n${code}\n\`\`\``
 
 const renderWrappedFormula = ({
   formula,
@@ -209,9 +166,6 @@ export const renderLinkCardBlock = ({
   return [formatLink({ label: title, url: block.card.url }), description].filter(Boolean).join("\n\n")
 }
 
-export const getDividerMarker = (selection: BlockOutputSelection) =>
-  selection.variant === "asterisk-rule" ? "***" : "---"
-
 export const getHeadingLevelOffset = (selection: BlockOutputSelection) =>
   Number(selection.params?.levelOffset ?? 0)
 
@@ -278,25 +232,3 @@ export const renderImageBlockMarkdown = ({
 
   return lines.join("\n\n")
 }
-
-export const composeSnippetWithReferences = ({
-  body,
-  linkFormatter,
-}: {
-  body: string
-  linkFormatter: Pick<ReturnType<typeof createLinkFormatter>, "renderReferenceSection">
-}) => {
-  const referenceSection = linkFormatter.renderReferenceSection()
-
-  return [body, referenceSection].filter(Boolean).join("\n\n")
-}
-
-export const getHtmlConversionOptions = ({
-  dividerSelection,
-}: {
-  dividerSelection: BlockOutputSelection
-}) =>
-  ({
-    linkStyle: "inlined",
-    dividerMarker: getDividerMarker(dividerSelection),
-  }) as const

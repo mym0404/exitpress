@@ -190,6 +190,8 @@ describe("renderMarkdownPost", () => {
     expect(rendered.markdown).toContain("[External article](https://example.com/article)")
     expect(rendered.markdown).toContain("[Demo](https://blog.naver.com/mym0404/223034929697)")
     expect(rendered.markdown).not.toContain("**Video:** Demo")
+    expect(rendered.markdown).not.toContain("\nvisibility:")
+    expect(rendered.markdown).not.toContain("\nvideo:")
     expect(rendered.markdown).not.toContain("preview text")
     expect(rendered.assetRecords).toHaveLength(2)
   })
@@ -236,7 +238,7 @@ describe("renderMarkdownPost", () => {
     expect(rendered.assetRecords.every((asset) => asset.storageMode === "relative")).toBe(true)
   })
 
-  it("renders same block types from editor-specific output selections independently", async () => {
+  it("ignores stale code output selections and renders backtick fences", async () => {
     const options = defaultExportOptions()
     options.blockOutputs.defaults["naver-se4:code"] = {
       variant: "tilde-fence",
@@ -279,8 +281,9 @@ describe("renderMarkdownPost", () => {
         }),
     })
 
-    expect(rendered.markdown).toContain("~~~ts\nconst se4 = true\n~~~")
+    expect(rendered.markdown).toContain("```ts\nconst se4 = true\n```")
     expect(rendered.markdown).toContain("```ts\nconst se3 = true\n```")
+    expect(rendered.markdown).not.toContain("~~~")
   })
 
   it("preserves hard breaks inside paragraph markdown", async () => {
@@ -363,7 +366,7 @@ describe("renderMarkdownPost", () => {
     expect(rendered.markdown).not.toContain("\nsource: https://blog.naver.com/mym0404/223034929697")
   })
 
-  it("renders per-block referenced link cards and inline media links without frontmatter", async () => {
+  it("renders link cards and media links inline without frontmatter", async () => {
     const options = defaultExportOptions()
 
     options.frontmatter.enabled = false
@@ -419,8 +422,8 @@ describe("renderMarkdownPost", () => {
     expect(rendered.markdown).toContain("> 인용문")
     expect(rendered.markdown).toContain("> 둘째 줄")
     expect(rendered.markdown).toContain(`[source only](${publicImagePath})`)
-    expect(rendered.markdown).toContain("[Reference Demo][ref-1]")
-    expect(rendered.markdown).toContain("[ref-1]: https://example.com/watch")
+    expect(rendered.markdown).toContain("[Reference Demo](https://example.com/watch)")
+    expect(rendered.markdown).not.toContain("[ref-1]: https://example.com/watch")
     expect(rendered.markdown).not.toContain("---\n")
   })
 
@@ -523,8 +526,10 @@ describe("renderMarkdownPost", () => {
         }),
     })
 
-    expect(rendered.markdown).toContain("***")
-    expect(rendered.markdown).toContain("~~~")
+    expect(rendered.markdown).toContain("---")
+    expect(rendered.markdown).toContain("```html\n<main></main>\n```")
+    expect(rendered.markdown).not.toContain("***")
+    expect(rendered.markdown).not.toContain("~~~")
     expect(rendered.markdown).toContain("```math\nx+y\n```")
     expect(rendered.markdown).toContain("[HTML Demo](https://example.com/watch-html)")
     expect(rendered.markdown).not.toContain("![HTML Demo]")

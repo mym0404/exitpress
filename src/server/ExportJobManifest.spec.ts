@@ -8,8 +8,8 @@ import { createTestPath } from "../../tests/helpers/test-paths.js"
 
 const testOutputDir = createTestPath("export-job-manifest", "output")
 const jobOptions = defaultExportOptions()
-jobOptions.blockOutputs.defaults["naver-se4:code"] = {
-  variant: "tilde-fence",
+jobOptions.blockOutputs.defaults["naver-se4:image"] = {
+  variant: "linked-image",
 }
 
 const scanResult: ScanResult = {
@@ -129,8 +129,8 @@ describe("buildResumableExportManifest", () => {
       blogId: scanResult.blogId,
       totalPostCount: scanResult.totalPostCount,
     })
-    expect(manifest.options.blockOutputs.defaults["naver-se4:code"]).toMatchObject({
-      variant: "tilde-fence",
+    expect(manifest.options.blockOutputs.defaults["naver-se4:image"]).toMatchObject({
+      variant: "linked-image",
     })
     expect(manifest.job?.request.options.blockOutputs.defaults).not.toHaveProperty("code")
   })

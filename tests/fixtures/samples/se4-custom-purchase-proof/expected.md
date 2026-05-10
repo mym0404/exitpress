@@ -8,7 +8,6 @@ category: +소스, 팁
 categoryPath:
   - Yoon's Kitchen
   - +소스, 팁
-visibility: public
 thumbnail: https://mblogthumb-phinf.pstatic.net/MjAyNTAxMDhfMjgx/MDAxNzM2MzQxMDE3Mzk2.SI2ZMmvMS0DXcdO-M11mL8gr8fOaMhEPWgMFmzM5RHYg.ScIHEE1G8sjD6QzKCYSsA20mEHjQz57kCRX6VD9Jqakg.JPEG/DSC00663.JPG?type=w800
 ---
 

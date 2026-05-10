@@ -1,6 +1,7 @@
 import type { OutputOption } from "../Types.js"
 import {LeafBlock, type ParserBlockContext} from "../BaseBlock.js"
-import { parseHtmlTable } from "../../parser/TableParser.js"
+
+import {parseHtmlTable} from "../../parser/util/parseHtmlTable.js";
 
 export class NaverSe4TableBlock extends LeafBlock {
   override readonly id = "table"

@@ -1,7 +1,5 @@
 import type { ExportOptions } from "../exporter/Types.js"
 
-export type MarkdownLinkStyle = "inlined" | "referenced"
-
 export type BlockOutputParamValue = string | number | boolean
 
 export type BlockOutputSelection = {

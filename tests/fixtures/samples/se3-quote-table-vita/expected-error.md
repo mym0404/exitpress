@@ -8,7 +8,6 @@ category: Review PS Vita
 categoryPath:
   - PS Vita
   - Review PS Vita
-visibility: public
 thumbnail: https://mblogthumb-phinf.pstatic.net/MjAxODA2MDNfMjI1/MDAxNTI4MDM0NTQwNTg5.ERq5Wa-BGkly6OymiT-ruEFUigr43NXjjd25J1hXNxkg.yrCSnvvU0niyVKTC8_BINfqjLWi0g4QZoDashAlpHVgg.JPEG.is02019/2017-11-18-210621.jpg?type=w800
 error: '파싱 가능한 naver-se3 block이 없습니다: div class="se_component se_horizontalLine default"'
 ---

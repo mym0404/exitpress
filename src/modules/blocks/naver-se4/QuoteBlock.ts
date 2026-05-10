@@ -1,4 +1,4 @@
-import { convertHtmlToMarkdown } from "../../converter/HtmlFragmentConverter.js"
+import { convertHtmlToMarkdown } from "../../converter/TurndownMarkdownConverter.js"
 import type { OutputOption } from "../Types.js"
 import {LeafBlock, type ParserBlockContext} from "../BaseBlock.js"
 
@@ -26,7 +26,6 @@ export class NaverSe4QuoteBlock extends LeafBlock {
     const quoteMarkdown = convertHtmlToMarkdown({
       /* v8 ignore next */
       html: $node.find("blockquote.se-quotation-container").html() ?? "",
-      options: {},
       resolveLinkUrl: options.resolveLinkUrl,
     })
 

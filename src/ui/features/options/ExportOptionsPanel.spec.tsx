@@ -156,7 +156,6 @@ describe("ExportOptionsPanel", () => {
       />,
     )
 
-    await selectOption({ user, trigger: "#blockOutputs-defaults-naver-se4-paragraph-variant", value: "reference-links" })
     fireEvent.change(query<HTMLInputElement>("#blockOutputs-defaults-naver-se4-formula-inlineWrapper"), {
       target: {
         value: "\\(...\\)",
@@ -168,8 +167,6 @@ describe("ExportOptionsPanel", () => {
       },
     })
     await selectOption({ user, trigger: "#blockOutputs-defaults-naver-se4-image-variant", value: "linked-image" })
-    await selectOption({ user, trigger: "#blockOutputs-defaults-naver-se4-divider-variant", value: "asterisk-rule" })
-    await selectOption({ user, trigger: "#blockOutputs-defaults-naver-se4-code-variant", value: "tilde-fence" })
     await selectOption({ user, trigger: "#blockOutputs-defaults-naver-se4-formula-variant", value: "math-fence" })
     cleanup()
 
@@ -268,12 +265,12 @@ describe("ExportOptionsPanel", () => {
     expect(latestOptions.frontmatter.enabled).toBe(false)
     expect(latestOptions.frontmatter.fields.title).toBe(false)
     expect(latestOptions.frontmatter.aliases.title).toBe("headline")
-    expect(latestOptions.blockOutputs.defaults["naver-se4:paragraph"]?.variant).toBe("reference-links")
+    expect(latestOptions.blockOutputs.defaults["naver-se4:paragraph"]).toBeUndefined()
     expect(latestOptions.blockOutputs.defaults["naver-se4:formula"]?.params?.inlineWrapper).toBe("\\(...\\)")
     expect(latestOptions.blockOutputs.defaults["naver-se4:formula"]?.params?.blockWrapper).toBe("\\[...\\]")
     expect(latestOptions.blockOutputs.defaults["naver-se4:image"]?.variant).toBe("linked-image")
-    expect(latestOptions.blockOutputs.defaults["naver-se4:divider"]?.variant).toBe("asterisk-rule")
-    expect(latestOptions.blockOutputs.defaults["naver-se4:code"]?.variant).toBe("tilde-fence")
+    expect(latestOptions.blockOutputs.defaults["naver-se4:divider"]).toBeUndefined()
+    expect(latestOptions.blockOutputs.defaults["naver-se4:code"]).toBeUndefined()
     expect(latestOptions.blockOutputs.defaults["naver-se4:formula"]?.variant).toBe("math-fence")
     expect(latestOptions.assets.imageHandlingMode).toBe("remote")
     expect(latestOptions.assets.compressionEnabled).toBe(false)
@@ -391,7 +388,7 @@ describe("ExportOptionsPanel", () => {
     )
   })
 
-  it("does not render removed link card and video controls while showing block cards", () => {
+  it("does not render removed link, divider, code controls while showing remaining block cards", () => {
     render(
       <ExportOptionsPanel
         step="markdown"
@@ -410,6 +407,10 @@ describe("ExportOptionsPanel", () => {
     expect(screen.queryByLabelText("Video Style")).not.toBeInTheDocument()
     expect(document.querySelector("#markdown-linkCardStyle")).toBeNull()
     expect(document.querySelector("#markdown-videoStyle")).toBeNull()
+    expect(document.querySelector('[data-block-output-card="naver-se4:code"]')).toBeNull()
+    expect(document.querySelector('[data-block-output-card="naver-se4:linkCard"]')).toBeNull()
+    expect(document.querySelector('[data-block-output-card="naver-se4:divider"]')).toBeNull()
+    expect(document.querySelector('[data-block-output-card="naver-se4:paragraph"]')).toBeNull()
     expect(document.querySelector('[data-block-output-card="naver-se4:formula"]')).not.toBeNull()
   })
 
@@ -444,22 +445,12 @@ describe("ExportOptionsPanel", () => {
     expect(screen.getByText("SmartEditor 2")).toBeInTheDocument()
     expect(Array.from(document.querySelectorAll("[data-block-output-card]")).map((card) => card.getAttribute("data-block-output-card"))).toEqual([
       "naver-se4:formula",
-      "naver-se4:code",
-      "naver-se4:linkCard",
       "naver-se4:table",
       "naver-se4:image",
-      "naver-se4:divider",
-      "naver-se4:paragraph",
       "naver-se3:table",
-      "naver-se3:code",
-      "naver-se3:linkCard",
       "naver-se3:image",
-      "naver-se3:paragraph",
       "naver-se2:table",
-      "naver-se2:divider",
-      "naver-se2:code",
       "naver-se2:image",
-      "naver-se2:paragraph",
     ])
   })
 
@@ -483,12 +474,12 @@ describe("ExportOptionsPanel", () => {
       />,
     )
 
-    expect(query<HTMLElement>('[data-block-output-card="naver-se4:code"] pre').textContent).toContain("```ts")
+    expect(query<HTMLElement>('[data-block-output-card="naver-se4:image"] pre').textContent).toContain("![diagram]")
 
-    await selectOption({ user, trigger: "#blockOutputs-defaults-naver-se4-code-variant", value: "tilde-fence" })
+    await selectOption({ user, trigger: "#blockOutputs-defaults-naver-se4-image-variant", value: "linked-image" })
 
-    expect(latestOptions.blockOutputs.defaults["naver-se4:code"]?.variant).toBe("tilde-fence")
-    expect(latestOptions.blockOutputs.defaults["naver-se3:code"]).toBeUndefined()
+    expect(latestOptions.blockOutputs.defaults["naver-se4:image"]?.variant).toBe("linked-image")
+    expect(latestOptions.blockOutputs.defaults["naver-se3:image"]).toBeUndefined()
 
     cleanup()
 
@@ -508,7 +499,7 @@ describe("ExportOptionsPanel", () => {
       />,
     )
 
-    expect(query<HTMLElement>('[data-block-output-card="naver-se4:code"] pre').textContent).toContain("~~~ts")
+    expect(query<HTMLElement>('[data-block-output-card="naver-se4:image"] pre').textContent).toContain("[![diagram]")
   })
 
   it("keeps block output controls top-aligned next to the preview", () => {

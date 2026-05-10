@@ -1210,11 +1210,6 @@ const run = async () => {
       throw new Error("block output cards should appear in the markdown step")
     }
 
-    await chooseSelectOption({
-      page,
-      trigger: "#blockOutputs-defaults-naver-se4-paragraph-variant",
-      value: "reference-links",
-    })
     const blockOutputSettingsSavePromise = waitForBlockOutputSettingsSave({
       page,
       baseUrl,

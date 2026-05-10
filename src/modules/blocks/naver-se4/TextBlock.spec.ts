@@ -2,9 +2,7 @@ import { describe, expect, it } from "vitest"
 
 import {
   createSe4ModuleScript,
-  expectEveryBlockOutputOption,
   parseSe4Blocks,
-  parseSe4BlocksWithOptions,
 } from "../../../../tests/helpers/parser-test-utils.js"
 
 describe("NaverSe4TextBlock", () => {
@@ -131,22 +129,14 @@ describe("NaverSe4TextBlock", () => {
     ])
   })
 
-  it("applies every output option", () => {
-    expectEveryBlockOutputOption({
-      editorType: "naver-se4",
-      blockId: "paragraph",
-      parse: (blockOutputs) =>
-        parseSe4BlocksWithOptions({
-          blockOutputs,
-          components: [
-            `
-              <div class="se-component se-text">
-                ${createSe4ModuleScript({ type: "v2_text" })}
-                <p class="se-text-paragraph">Alpha <a href="https://example.com">link</a></p>
-              </div>
-            `,
-          ],
-        }),
-    })
+  it("renders links inline", () => {
+    const parsed = parseSe4Blocks(`
+      <div class="se-component se-text">
+        ${createSe4ModuleScript({ type: "v2_text" })}
+        <p class="se-text-paragraph">Alpha <a href="https://example.com">link</a></p>
+      </div>
+    `)
+
+    expect(parsed.blocks).toEqual([{ type: "paragraph", text: "Alpha [link](https://example.com)" }])
   })
 })

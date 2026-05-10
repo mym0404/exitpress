@@ -26,10 +26,11 @@
 - Naver link-like blocks render through the link-card Markdown path when no richer Markdown form exists; this includes SE4 link cards, material/oEmbed links, videos, and file attachments.
 - SE4 Blog씨 question widgets render as quote blocks.
 - SE2 inline GIF video wrappers render as image blocks when the wrapper contains only one `_gifmp4` video and no other media.
-- SE2 standalone embedded videos render as video links and are included in video frontmatter.
+- SE2 standalone embedded videos render as video links and remain in parsed video metadata.
 - Simple tables render as GFM tables; complex parsed tables can render as HTML fragments.
 - Parsing fails when a content node is unsupported or cannot be converted.
-- Markdown output differences, including paragraph link style, are selected through Editor+ParserBlock keys in `ExportOptions.blockOutputs.defaults`; `manifest.json.options` preserves those keys.
+- Markdown links render inline, dividers render as `---`, and code blocks render with backtick fences.
+- Remaining Markdown output differences, such as formula, image, and table forms, are selected through Editor+ParserBlock keys in `ExportOptions.blockOutputs.defaults`; `manifest.json.options` preserves those keys.
 
 ## Frontmatter Rules
 - `category` is a display string.

@@ -30,10 +30,8 @@ const allowedFrontmatterFieldKeys = [
   "publishedAt",
   "category",
   "categoryPath",
-  "visibility",
   "tags",
   "thumbnail",
-  "video",
   "exportedAt",
   "assetPaths",
 ] as const

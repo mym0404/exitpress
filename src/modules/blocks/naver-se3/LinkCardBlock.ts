@@ -1,4 +1,3 @@
-import type { OutputOption } from "../Types.js"
 import { compactText } from "../../common/TextUtils.js"
 import { normalizeAssetUrl } from "../../common/NaverUrlUtils.js"
 import {LeafBlock, type ParserBlockContext} from "../BaseBlock.js"
@@ -20,37 +19,6 @@ const getLinkDataUrl = (value?: string) => {
 export class NaverSe3LinkCardBlock extends LeafBlock {
   override readonly id = "linkCard"
   override readonly label = "링크 카드"
-  override readonly outputOptions = [
-    {
-      id: "title-link",
-      label: "title link",
-      description: "카드 제목을 inline 링크로 출력합니다.",
-      preview: {
-        type: "linkCard",
-        card: {
-          title: "External article",
-          description: "preview text",
-          url: "https://example.com/article",
-          imageUrl: "https://example.com/cover.png",
-        },
-      },
-      isDefault: true,
-    },
-    {
-      id: "reference-link",
-      label: "reference link",
-      description: "카드 제목 링크를 reference 형식으로 분리합니다.",
-      preview: {
-        type: "linkCard",
-        card: {
-          title: "External article",
-          description: "preview text",
-          url: "https://example.com/article",
-          imageUrl: "https://example.com/cover.png",
-        },
-      },
-    },
-  ] satisfies OutputOption<"linkCard">[]
 
   override match({ $node }: ParserBlockContext) {
     return $node.hasClass("se_oglink")

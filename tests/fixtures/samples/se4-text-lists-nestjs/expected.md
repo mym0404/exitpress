@@ -7,7 +7,6 @@ publishedAt: 2023-01-21T02:38:27+09:00
 category: NestJS
 categoryPath:
   - NestJS
-visibility: public
 thumbnail: https://mblogthumb-phinf.pstatic.net/MjAyMzAxMjFfMTcw/MDAxNjc0MjM1Nzk4NzM3.j9xBOnc9ZEYJEjD181utsKj5wRIponNfcL93vCNx204g.c1mi5mJ6YAtuirjyqmyMnDXvwFCcc9IDVIx4MEuEkT0g.JPEG.mym0404/nestjs.jpeg?type=w800
 ---
 

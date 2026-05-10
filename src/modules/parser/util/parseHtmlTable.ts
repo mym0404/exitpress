@@ -1,12 +1,11 @@
-import type { CheerioAPI } from "cheerio"
-
-import type { TableRow } from "../blocks/Types.js"
-import { compactText } from "../common/TextUtils.js"
+import {compactText} from "../../common/TextUtils.js";
+import type {TableRow} from "../../blocks/Types.js";
+import type {CheerioAPI} from "cheerio";
 
 export const parseHtmlTable = ({
-  $,
-  table,
-}: {
+                                 $,
+                                 table,
+                               }: {
   $: CheerioAPI
   table: ReturnType<CheerioAPI>
 }) => {
