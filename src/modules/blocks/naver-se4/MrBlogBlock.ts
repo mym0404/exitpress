@@ -1,6 +1,5 @@
 import { compactText } from "../../../shared/Utils.js"
-import { LeafBlock } from "../BaseBlock.js"
-import type { ParserBlockContext } from "../ParserNode.js"
+import {LeafBlock, type ParserBlockContext} from "../BaseBlock.js"
 
 export class NaverSe4MrBlogBlock extends LeafBlock {
   override readonly id = "mrBlog"

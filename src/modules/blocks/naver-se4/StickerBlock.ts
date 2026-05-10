@@ -1,6 +1,5 @@
 import { normalizeAssetUrl } from "../../../shared/Utils.js"
-import { LeafBlock } from "../BaseBlock.js"
-import type { ParserBlockContext } from "../ParserNode.js"
+import {LeafBlock, type ParserBlockContext} from "../BaseBlock.js"
 import { parseJsonAttribute } from "./JsonAttribute.js"
 
 export class NaverSe4StickerBlock extends LeafBlock {

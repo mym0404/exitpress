@@ -1,7 +1,6 @@
 import { linkCardOutputOptions } from "../../../shared/BlockOutputOptions.js"
 import { compactText } from "../../../shared/Utils.js"
-import { LeafBlock } from "../BaseBlock.js"
-import type { ParserBlockContext } from "../ParserNode.js"
+import {LeafBlock, type ParserBlockContext} from "../BaseBlock.js"
 
 export class NaverSe4TalkTalkBlock extends LeafBlock {
   override readonly id = "linkCard"

@@ -4,8 +4,7 @@ import {
   paragraphOutputOptions,
 } from "../../../shared/BlockOutputOptions.js"
 import { compactText } from "../../../shared/Utils.js"
-import { LeafBlock } from "../BaseBlock.js"
-import type { ParserBlockContext } from "../ParserNode.js"
+import {LeafBlock, type ParserBlockContext} from "../BaseBlock.js"
 
 export class NaverSe2TextElementBlock extends LeafBlock {
   override readonly id = "paragraph"

@@ -7,15 +7,17 @@ import type {
   EditorBlockOutputDefinition,
   ExportOptions,
   ParsedPost,
+  ParserBlockOptions,
   UnknownRecord,
 } from "@shared/Types.js"
 import { resolveBlockOutputSelection } from "@shared/BlockRegistry.js"
-import type {
-  ParserBlockContext,
-  ParserBlockConvertContext,
-  ParserBlockOptions,
-} from "../blocks/ParserNode.js"
-import { ContainerBlock, LeafBlock, type BaseBlock } from "../blocks/BaseBlock.js"
+import {
+  ContainerBlock,
+  LeafBlock,
+  type BaseBlock,
+  type ParserBlockConvertContext,
+  type ParserBlockContext
+} from "../blocks/BaseBlock.js"
 import { compactText } from "../../shared/Utils.js"
 
 const inspectTextMaxLength = 200
@@ -334,10 +336,7 @@ export abstract class BaseEditor {
 
     return {
       blocks,
-      body: blocks.map((block) => ({
-        kind: "block" as const,
-        block,
-      })),
+      body: blocks,
     }
   }
 }

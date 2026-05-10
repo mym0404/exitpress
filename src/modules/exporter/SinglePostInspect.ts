@@ -3,7 +3,6 @@ import { load } from "cheerio"
 import { cloneExportOptions } from "../../shared/ExportOptions.js"
 import type { AstBlock, ExportOptions } from "../../shared/Types.js"
 import { extractBlogId, getSourceUrl, toErrorMessage } from "../../shared/Utils.js"
-import { getStructuredBodyBlocks } from "../blocks/BodyNodeUtils.js"
 import type { ParserBlockInspection } from "../editor/BaseEditor.js"
 import { NaverBlogFetcher } from "../fetcher/NaverBlogFetcher.js"
 import { NaverBlog } from "../blog/NaverBlog.js"
@@ -86,7 +85,7 @@ export const inspectPostHtml = ({
 
     parseResult = {
       status: "success",
-      blockTypes: getStructuredBodyBlocks(parsedPost).map((block) => block.type),
+      blockTypes: parsedPost.body.map((block) => block.type),
     }
   } catch (error) {
     parseResult = {

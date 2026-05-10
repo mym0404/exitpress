@@ -1,5 +1,4 @@
-import { LeafBlock } from "../BaseBlock.js"
-import type { ParserBlockContext } from "../ParserNode.js"
+import {LeafBlock, type ParserBlockContext} from "../BaseBlock.js"
 import { parseImageLink, se4ImageLinkSelector } from "./ImageLink.js"
 import { parseTextBlocks } from "./TextBlock.js"
 

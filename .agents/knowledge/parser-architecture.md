@@ -28,7 +28,7 @@
 - 공용 AST 타입 문자열은 `src/shared/Types.ts`의 `AstBlock` union이 기준이다.
 - 현재 AST block은 `paragraph`, `heading`, `quote`, `divider`, `code`, `formula`, `image`, `imageGroup`, `video`, `linkCard`, `table`이다.
 - `ParsedPost`는 `tags`, `blocks`, `body`, `videos`를 반환한다.
-- `body`는 현재 `blocks`를 `kind: "block"` 구조로 감싼 값이며, Markdown 렌더링은 `src/modules/converter/MarkdownRenderer.ts`가 맡는다.
+- `body`는 Markdown 렌더링 순서를 나타내는 `AstBlock[]`이며, Markdown 렌더링은 `src/modules/converter/MarkdownRenderer.ts`가 맡는다.
 - Inspect/evidence 도구가 source path를 필요로 할 때는 별도 parser helper가 block evidence를 함께 반환한다. 이 값은 디버깅과 리포트용이며 export manifest나 Markdown 도메인 모델에 저장하지 않는다.
 
 ## File Structure Rules

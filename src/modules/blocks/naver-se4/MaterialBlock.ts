@@ -1,7 +1,6 @@
 import { linkCardOutputOptions } from "../../../shared/BlockOutputOptions.js"
 import { compactText, normalizeAssetUrl } from "../../../shared/Utils.js"
-import { LeafBlock } from "../BaseBlock.js"
-import type { ParserBlockContext } from "../ParserNode.js"
+import {LeafBlock, type ParserBlockContext} from "../BaseBlock.js"
 import { parseJsonAttribute } from "./JsonAttribute.js"
 
 const parseCssUrl = (value: string | undefined) => value?.match(/url\((['"]?)(.*?)\1\)/)?.[2]

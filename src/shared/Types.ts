@@ -301,21 +301,19 @@ export type AstBlock =
   | ({ type: "linkCard"; card: LinkCardData } & AstBlockOutputSelection)
   | ({ type: "table"; rows: TableRow[]; html: string; complex: boolean } & AstBlockOutputSelection)
 
-export type ParsedPostStructuredBodyNode = {
-  kind: "block"
-  block: AstBlock
-}
-
-export type ParsedPostBodyNode = ParsedPostStructuredBodyNode
-
 export type BlockType = AstBlock["type"]
 
 export type ParsedPost = {
   tags: string[]
-  body: ParsedPostBodyNode[]
+  body: AstBlock[]
   blocks: AstBlock[]
   videos: VideoData[]
 }
+
+export type ParserBlockOptions = Pick<ExportOptions, "blockOutputs"> &
+  {
+    resolveLinkUrl?: (url: string) => string
+  }
 
 export type AssetRecord = {
   kind: "image" | "thumbnail"

@@ -1,5 +1,4 @@
-import { LeafBlock } from "../BaseBlock.js"
-import type { ParserBlockContext } from "../ParserNode.js"
+import {LeafBlock, type ParserBlockContext} from "../BaseBlock.js"
 
 export class NaverSe4DocumentTitleBlock extends LeafBlock {
   override readonly id = "documentTitle"

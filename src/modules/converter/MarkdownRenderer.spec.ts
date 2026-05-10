@@ -150,7 +150,7 @@ const parsedPost: ParsedPost = {
     },
   ],
   blocks: parsedPostBlocks,
-  body: parsedPostBlocks.map((block) => ({ kind: "block", block })),
+  body: parsedPostBlocks,
 }
 
 const createParsedPost = (overrides: Partial<ParsedPost>): ParsedPost => {
@@ -160,7 +160,7 @@ const createParsedPost = (overrides: Partial<ParsedPost>): ParsedPost => {
     ...parsedPost,
     ...overrides,
     blocks,
-    body: overrides.body ?? blocks.map((block) => ({ kind: "block", block })),
+    body: overrides.body ?? blocks,
   }
 }
 
@@ -326,16 +326,13 @@ describe("renderMarkdownPost", () => {
         ],
         body: [
           {
-            kind: "block",
-            block: {
-              type: "image",
-              image: {
-                sourceUrl: "https://example.com/sticker-preview.png",
-                originalSourceUrl: "https://example.com/sticker-original.gif",
-                alt: "",
-                caption: null,
-                mediaKind: "sticker",
-              },
+            type: "image",
+            image: {
+              sourceUrl: "https://example.com/sticker-preview.png",
+              originalSourceUrl: "https://example.com/sticker-original.gif",
+              alt: "",
+              caption: null,
+              mediaKind: "sticker",
             },
           },
         ],
@@ -528,83 +525,65 @@ describe("renderMarkdownPost", () => {
         ],
         body: [
           {
-            kind: "block",
-            block: {
-              type: "divider",
-              outputSelectionKey: "naver-se4:divider",
-              outputSelection: {
-                variant: "asterisk-rule",
+            type: "divider",
+            outputSelectionKey: "naver-se4:divider",
+            outputSelection: {
+              variant: "asterisk-rule",
+            },
+          },
+          {
+            type: "code",
+            language: "html",
+            code: "<main></main>",
+            outputSelectionKey: "naver-se4:code",
+            outputSelection: {
+              variant: "tilde-fence",
+            },
+          },
+          {
+            type: "formula",
+            formula: "x+y",
+            display: true,
+            outputSelectionKey: "naver-se4:formula",
+            outputSelection: {
+              variant: "math-fence",
+              params: {
+                inlineWrapper: "$",
               },
             },
           },
           {
-            kind: "block",
-            block: {
-              type: "code",
-              language: "html",
-              code: "<main></main>",
-              outputSelectionKey: "naver-se4:code",
-              outputSelection: {
-                variant: "tilde-fence",
+            type: "imageGroup",
+            images: [
+              {
+                sourceUrl: "https://example.com/group.png",
+                originalSourceUrl: null,
+                alt: "group",
+                caption: null,
+                mediaKind: "image",
               },
+            ],
+          },
+          {
+            type: "video",
+            video: {
+              title: "HTML Demo",
+              thumbnailUrl: "https://example.com/video-thumb.png",
+              sourceUrl: "https://example.com/watch-html",
+              vid: null,
+              inkey: null,
+              width: null,
+              height: null,
             },
           },
           {
-            kind: "block",
-            block: {
-              type: "formula",
-              formula: "x+y",
-              display: true,
-              outputSelectionKey: "naver-se4:formula",
-              outputSelection: {
-                variant: "math-fence",
-                params: {
-                  inlineWrapper: "$",
-                },
-              },
-            },
-          },
-          {
-            kind: "block",
-            block: {
-              type: "imageGroup",
-              images: [
-                {
-                  sourceUrl: "https://example.com/group.png",
-                  originalSourceUrl: null,
-                  alt: "group",
-                  caption: null,
-                  mediaKind: "image",
-                },
-              ],
-            },
-          },
-          {
-            kind: "block",
-            block: {
-              type: "video",
-              video: {
-                title: "HTML Demo",
-                thumbnailUrl: "https://example.com/video-thumb.png",
-                sourceUrl: "https://example.com/watch-html",
-                vid: null,
-                inkey: null,
-                width: null,
-                height: null,
-              },
-            },
-          },
-          {
-            kind: "block",
-            block: {
-              type: "table",
-              complex: true,
-              html: "<table><tr><td>cell</td></tr></table>",
-              rows: [],
-              outputSelectionKey: "naver-se4:table",
-              outputSelection: {
-                variant: "html-only",
-              },
+            type: "table",
+            complex: true,
+            html: "<table><tr><td>cell</td></tr></table>",
+            rows: [],
+            outputSelectionKey: "naver-se4:table",
+            outputSelection: {
+              variant: "html-only",
             },
           },
         ],

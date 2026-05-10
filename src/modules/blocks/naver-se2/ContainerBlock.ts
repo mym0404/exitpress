@@ -1,7 +1,6 @@
 import type { CheerioAPI } from "cheerio"
 
-import { ContainerBlock } from "../BaseBlock.js"
-import type { ParserBlockContext } from "../ParserNode.js"
+import {ContainerBlock, type ParserBlockContext} from "../BaseBlock.js"
 import { compactText } from "../../../shared/Utils.js"
 
 const nestedBlockContainerTags = new Set(["div", "span", "font"])

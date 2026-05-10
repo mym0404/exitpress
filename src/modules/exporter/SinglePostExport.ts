@@ -17,7 +17,6 @@ import { parsePostHtml } from "../parser/PostParser.js"
 import { AssetStore } from "./AssetStore.js"
 import { buildMarkdownFilePath, getCategoryForPost } from "./ExportPaths.js"
 import { buildPostLinkTargets, createSameBlogPostLinkResolver } from "./PostLinkRewriter.js"
-import { getStructuredBodyBlocks } from "../blocks/BodyNodeUtils.js"
 
 export type SinglePostFetcher = {
   scanBlog: () => Promise<ScanResult>
@@ -140,7 +139,7 @@ export const exportSinglePost = async ({
     post,
     markdown: rendered.markdown,
     markdownFilePath,
-    blockTypes: getStructuredBodyBlocks(parsedPost).map((block) => block.type),
+    blockTypes: parsedPost.body.map((block) => block.type),
     assetPaths: rendered.assetRecords
       .map((asset) => asset.relativePath)
       .filter((assetPath): assetPath is string => Boolean(assetPath)),

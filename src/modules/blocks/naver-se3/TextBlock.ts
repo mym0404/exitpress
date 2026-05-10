@@ -2,12 +2,11 @@ import type { CheerioAPI } from "cheerio"
 
 import { convertHtmlToMarkdown } from "../../converter/HtmlFragmentConverter.js"
 import { compactMarkdownText } from "../../../shared/Utils.js"
-import { LeafBlock } from "../BaseBlock.js"
+import {LeafBlock, type ParserBlockContext} from "../BaseBlock.js"
 import {
   getMarkdownLinkStyleFromSelection,
   paragraphOutputOptions,
 } from "../../../shared/BlockOutputOptions.js"
-import type { ParserBlockContext } from "../ParserNode.js"
 
 const parseTextBlocks = ({
   $,

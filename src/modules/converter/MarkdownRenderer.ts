@@ -30,7 +30,6 @@ import {
   renderQuote,
 } from "../../shared/BlockMarkdown.js"
 import { getFrontmatterExportKey } from "../../shared/ExportOptions.js"
-import { getParsedPostBodyNodes } from "../blocks/BodyNodeUtils.js"
 
 const buildFrontmatter = ({
   fields,
@@ -90,7 +89,7 @@ export const renderMarkdownPost = async ({
   }) => Promise<AssetRecord>
   resolveLinkUrl?: (url: string) => string
 }) => {
-  const bodyNodes = getParsedPostBodyNodes(parsedPost)
+  const bodyBlocks = parsedPost.body
   const assetRecords: AssetRecord[] = []
   const sections: string[] = []
   const inlineLinkFormatter = createLinkFormatter({
@@ -248,9 +247,7 @@ export const renderMarkdownPost = async ({
     })
   }
 
-  for (const bodyNode of bodyNodes) {
-    const block = bodyNode.block
-
+  for (const block of bodyBlocks) {
     if (block.type === "paragraph") {
       sections.push(renderParagraph(block.text))
       continue

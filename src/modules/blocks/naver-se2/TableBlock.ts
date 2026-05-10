@@ -1,7 +1,6 @@
 import type { CheerioAPI } from "cheerio"
 
-import { LeafBlock } from "../BaseBlock.js"
-import type { ParserBlockContext } from "../ParserNode.js"
+import {LeafBlock, type ParserBlockContext} from "../BaseBlock.js"
 import { parseSingleColumnTableAsParagraphs } from "../common/Table.js"
 import type { AstBlock, OutputOption } from "../../../shared/Types.js"
 import { compactText } from "../../../shared/Utils.js"

@@ -6,8 +6,7 @@ import {
   paragraphOutputOptions,
 } from "../../../shared/BlockOutputOptions.js"
 import { compactMarkdownText } from "../../../shared/Utils.js"
-import { LeafBlock } from "../BaseBlock.js"
-import type { ParserBlockContext } from "../ParserNode.js"
+import {LeafBlock, type ParserBlockContext} from "../BaseBlock.js"
 
 type TextBlock = { type: "paragraph"; text: string }
 

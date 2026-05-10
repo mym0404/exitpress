@@ -2,8 +2,7 @@ import type { CheerioAPI } from "cheerio"
 
 import { compactText, normalizeAssetUrl } from "../../../shared/Utils.js"
 import type { ImageData } from "../../../shared/Types.js"
-import { LeafBlock } from "../BaseBlock.js"
-import type { ParserBlockContext } from "../ParserNode.js"
+import {LeafBlock, type ParserBlockContext} from "../BaseBlock.js"
 
 const getInlineGifVideoImage = ({ $node }: { $node: ReturnType<CheerioAPI> }): ImageData | null => {
   if (!$node.is("p, div, span")) {

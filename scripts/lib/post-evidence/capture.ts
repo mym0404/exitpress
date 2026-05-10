@@ -102,10 +102,7 @@ const createFragmentParsedPost = ({
 }): ParsedPost => ({
   tags: parsedPost.tags,
   blocks,
-  body: blocks.map((block) => ({
-    kind: "block" as const,
-    block,
-  })),
+  body: blocks,
   videos: blocks
     .filter((block): block is Extract<AstBlock, { type: "video" }> => block.type === "video")
     .map((block) => block.video),

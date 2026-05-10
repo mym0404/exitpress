@@ -1,6 +1,5 @@
 import type { OutputOption } from "../../../shared/Types.js"
-import { LeafBlock } from "../BaseBlock.js"
-import type { ParserBlockContext } from "../ParserNode.js"
+import {LeafBlock, type ParserBlockContext} from "../BaseBlock.js"
 import { parseHtmlTable } from "../../parser/TableParser.js"
 
 export class NaverSe4TableBlock extends LeafBlock {

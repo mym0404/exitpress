@@ -1,8 +1,30 @@
 import type {
-  ParserBlockContext,
-  ParserBlockConvertContext,
-} from "./ParserNode.js"
-import type { AstBlock, OutputOption } from "../../shared/Types.js"
+  AstBlock,
+  OutputOption,
+  ParserBlockOptions,
+  UnknownRecord,
+  BlockOutputSelection,
+} from "../../shared/Types.js"
+import {type CheerioAPI, Cheerio} from "cheerio";
+import type {AnyNode} from "domhandler";
+
+export type ParserBlockContext = {
+  $: CheerioAPI
+  $node: Cheerio<AnyNode>
+  node: AnyNode
+  sourceUrl?: string
+  tags: string[]
+  options: ParserBlockOptions
+  moduleData?: UnknownRecord | null
+  moduleType?: string | null
+  hasQuote?: boolean
+  matchLeafNode: (node: AnyNode) => boolean
+}
+export type ParserBlockConvertContext = ParserBlockContext & {
+  path: string
+  outputSelection?: BlockOutputSelection
+  matchNode: (node: AnyNode, path: string) => AstBlock[]
+}
 
 export abstract class BaseBlock {
   abstract readonly id: string

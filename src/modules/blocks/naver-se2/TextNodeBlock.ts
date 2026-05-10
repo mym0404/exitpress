@@ -1,7 +1,6 @@
 import type { OutputOption } from "../../../shared/Types.js"
 import { compactText } from "../../../shared/Utils.js"
-import { LeafBlock } from "../BaseBlock.js"
-import type { ParserBlockContext } from "../ParserNode.js"
+import {LeafBlock, type ParserBlockContext} from "../BaseBlock.js"
 
 export class NaverSe2TextNodeBlock extends LeafBlock {
   override readonly id = "paragraph"

@@ -1,5 +1,4 @@
-import { LeafBlock } from "../BaseBlock.js"
-import type { ParserBlockContext } from "../ParserNode.js"
+import {LeafBlock, type ParserBlockContext} from "../BaseBlock.js"
 import { parseBookWidgetBlocks } from "./BookWidget.js"
 
 export class NaverSe2BookWidgetBlock extends LeafBlock {

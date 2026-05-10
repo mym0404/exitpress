@@ -2,8 +2,7 @@ import type { CheerioAPI } from "cheerio"
 
 import { normalizeAssetUrl, compactText } from "../../../shared/Utils.js"
 import type { OutputOption } from "../../../shared/Types.js"
-import { LeafBlock } from "../BaseBlock.js"
-import type { ParserBlockContext } from "../ParserNode.js"
+import {LeafBlock, type ParserBlockContext} from "../BaseBlock.js"
 
 const parseDimension = (value: string | undefined) => {
   const parsed = Number(value)
