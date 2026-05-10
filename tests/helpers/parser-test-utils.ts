@@ -4,15 +4,9 @@ import { expect } from "vitest"
 import { NaverBlogSE2Editor } from "../../src/modules/editor/NaverBlogSe2Editor.js"
 import { NaverBlogSE3Editor } from "../../src/modules/editor/NaverBlogSe3Editor.js"
 import { NaverBlogSE4Editor } from "../../src/modules/editor/NaverBlogSe4Editor.js"
-import { defaultExportOptions } from "../../src/shared/ExportOptions.js"
-import type {
-  BlockOutputParamValue,
-  BlockOutputSelection,
-  EditorBlockOutputDefinition,
-  ExportOptions,
-  OutputOption,
-  ParsedPost,
-} from "../../src/shared/Types.js"
+import { defaultExportOptions } from "../../src/modules/exporter/ExportOptions.js"
+import type { BlockOutputParamValue, BlockOutputSelection, EditorBlockOutputDefinition, OutputOption, ParsedPost } from "../../src/modules/blocks/Types.js"
+import type { ExportOptions } from "../../src/modules/exporter/Types.js"
 
 const testOptions = defaultExportOptions()
 

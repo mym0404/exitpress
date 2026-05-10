@@ -1,8 +1,10 @@
 import { load } from "cheerio"
 
-import { cloneExportOptions } from "../../shared/ExportOptions.js"
-import type { AstBlock, ExportOptions } from "../../shared/Types.js"
-import { extractBlogId, getSourceUrl, toErrorMessage } from "../../shared/Utils.js"
+import { cloneExportOptions } from "./ExportOptions.js"
+import type { AstBlock } from "../blocks/Types.js"
+import type { ExportOptions } from "./Types.js"
+import { extractBlogId, getSourceUrl } from "../common/NaverUrlUtils.js"
+import { toErrorMessage } from "../common/ErrorUtils.js"
 import type { ParserBlockInspection } from "../editor/BaseEditor.js"
 import { NaverBlogFetcher } from "../fetcher/NaverBlogFetcher.js"
 import { NaverBlog } from "../blog/NaverBlog.js"

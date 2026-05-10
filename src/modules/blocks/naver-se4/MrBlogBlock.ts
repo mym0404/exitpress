@@ -1,4 +1,4 @@
-import { compactText } from "../../../shared/Utils.js"
+import { compactText } from "../../common/TextUtils.js"
 import {LeafBlock, type ParserBlockContext} from "../BaseBlock.js"
 
 export class NaverSe4MrBlogBlock extends LeafBlock {

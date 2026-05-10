@@ -1,5 +1,5 @@
-import type { AstBlock, ParsedPost } from "@shared/Types.js"
-import { unique } from "@shared/Utils.js"
+import type { AstBlock, ParsedPost } from "../blocks/Types.js"
+import { unique } from "../common/CollectionUtils.js"
 import { NaverSe2BookWidgetBlock } from "../blocks/naver-se2/BookWidgetBlock.js"
 import { NaverSe2CodeBlock } from "../blocks/naver-se2/CodeBlock.js"
 import { NaverSe2CommentBlock } from "../blocks/naver-se2/CommentBlock.js"

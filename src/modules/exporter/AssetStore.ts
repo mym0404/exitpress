@@ -2,8 +2,9 @@ import { createHash } from "node:crypto"
 import path from "node:path"
 import { writeFile } from "node:fs/promises"
 
-import type { AssetRecord, ExportOptions } from "../../shared/Types.js"
-import { ensureDir, normalizeAssetUrl, relativePathFrom } from "../../shared/Utils.js"
+import type { AssetRecord, ExportOptions } from "./Types.js"
+import { ensureDir, relativePathFrom } from "../common/FilePathUtils.js"
+import { normalizeAssetUrl } from "../common/NaverUrlUtils.js"
 
 type AssetBinary = {
   bytes: Buffer

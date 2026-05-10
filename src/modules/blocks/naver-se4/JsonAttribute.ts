@@ -1,4 +1,4 @@
-import type { UnknownRecord } from "../../../shared/Types.js"
+import type { UnknownRecord } from "../../common/Types.js"
 
 export const parseJsonAttribute = (value: string | undefined) => {
   if (!value) {

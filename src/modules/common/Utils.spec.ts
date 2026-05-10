@@ -3,52 +3,23 @@ import { fileURLToPath } from "node:url"
 
 import { describe, expect, it } from "vitest"
 
-import {
-  delay,
-  extractBlogId,
-  formatTitleSegment,
-  getProjectTempPath,
-  mapConcurrent,
-  normalizeAssetUrl,
-  resolveRepoPath,
-  sanitizePathSegment,
-  slugifyTitle,
-  toErrorMessage,
-} from "./Utils.js"
-import { createTestPath } from "../../tests/helpers/test-paths.js"
+import { delay, mapConcurrent } from "./AsyncUtils.js"
+import { extractBlogId, normalizeAssetUrl } from "./NaverUrlUtils.js"
+import { getProjectTempPath, resolveRepoPath } from "./FilePathUtils.js"
+import { toErrorMessage } from "./ErrorUtils.js"
+import { createTestPath } from "../../../tests/helpers/test-paths.js"
 
-const repoRoot = fileURLToPath(new URL("../..", import.meta.url))
+const repoRoot = fileURLToPath(new URL("../../..", import.meta.url))
 const relativeTempOutputDir = path.relative(repoRoot, createTestPath("utils", "output"))
 const relativeTempClientDir = path.relative(repoRoot, createTestPath("utils", "dist", "client"))
 const absoluteTempExportDir = createTestPath("utils", "export")
 
-describe("shared utils", () => {
+describe("common utils", () => {
   it("extracts blog ids from supported inputs and rejects blank values", () => {
     expect(extractBlogId("https://blog.naver.com/mym0404")).toBe("mym0404")
     expect(extractBlogId("PostList.naver?blogId=query-blog&categoryNo=1")).toBe("query-blog")
     expect(extractBlogId("  plain-blog-id  ")).toBe("plain-blog-id")
     expect(() => extractBlogId("   ")).toThrow("blogId 또는 blog URL을 입력해야 합니다.")
-  })
-
-  it("sanitizes path segments and falls back for empty slugs", () => {
-    expect(sanitizePathSegment('- invalid:/\\\\name?*  ')).toBe("invalid name")
-    expect(sanitizePathSegment(":::")).toBe("untitled")
-    expect(slugifyTitle("Hello   World")).toBe("hello-world")
-    expect(slugifyTitle(":::")).toBe("untitled")
-    expect(
-      formatTitleSegment({
-        value: "Hello   World",
-        slugStyle: "snake",
-        slugWhitespace: "underscore",
-      }),
-    ).toBe("hello_world")
-    expect(
-      formatTitleSegment({
-        value: "Hello   World",
-        slugStyle: "keep-title",
-        slugWhitespace: "keep-space",
-      }),
-    ).toBe("Hello World")
   })
 
   it("normalizes asset urls and preserves invalid inputs", () => {

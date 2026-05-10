@@ -1,7 +1,7 @@
 import path from "node:path"
 import { readFile } from "node:fs/promises"
 import type { IncomingMessage, ServerResponse } from "node:http"
-import type { UnknownRecord } from "../shared/Types.js"
+import type { UnknownRecord } from "../modules/common/Types.js"
 
 const contentTypes: Record<string, string> = {
   ".css": "text/css; charset=utf-8",

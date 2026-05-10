@@ -1,4 +1,5 @@
-import type {BlockOutputSelection, BlockOutputParamValue, BlockType, ExportOptions, OutputOption,} from "./Types.js"
+import type { BlockOutputSelection, BlockOutputParamValue, BlockType, OutputOption } from "./Types.js"
+import type { ExportOptions } from "../exporter/Types.js"
 
 const fallbackBlockOutputSelections: Record<BlockType, BlockOutputSelection> = {
   paragraph: { variant: "inline-links" },

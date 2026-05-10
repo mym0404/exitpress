@@ -1,7 +1,8 @@
 import type { CheerioAPI } from "cheerio"
 
-import { normalizeAssetUrl, compactText } from "../../../shared/Utils.js"
-import type { OutputOption } from "../../../shared/Types.js"
+import { normalizeAssetUrl } from "../../common/NaverUrlUtils.js"
+import { compactText } from "../../common/TextUtils.js"
+import type { OutputOption } from "../Types.js"
 import {LeafBlock, type ParserBlockContext} from "../BaseBlock.js"
 
 const parseDimension = (value: string | undefined) => {

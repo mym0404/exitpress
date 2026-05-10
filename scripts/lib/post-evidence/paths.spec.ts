@@ -2,7 +2,7 @@ import path from "node:path"
 
 import { describe, expect, it } from "vitest"
 
-import { resolveRepoPath } from "../../../src/shared/Utils.js"
+import { resolveRepoPath } from "../../../src/modules/common/FilePathUtils.js"
 import { toMarkdownAssetPath } from "./paths.js"
 
 describe("toMarkdownAssetPath", () => {

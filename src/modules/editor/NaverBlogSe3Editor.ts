@@ -1,5 +1,5 @@
-import type { ParsedPost } from "@shared/Types.js"
-import { unique } from "@shared/Utils.js"
+import type { ParsedPost } from "../blocks/Types.js"
+import { unique } from "../common/CollectionUtils.js"
 import { NaverSe3CodeBlock } from "../blocks/naver-se3/CodeBlock.js"
 import { NaverSe3DocumentTitleBlock } from "../blocks/naver-se3/DocumentTitleBlock.js"
 import { NaverSe3ImageBlock } from "../blocks/naver-se3/ImageBlock.js"

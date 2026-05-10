@@ -5,8 +5,10 @@ import {
   cloneExportOptions,
   sanitizePersistedExportOptions,
   type PartialExportOptions,
-} from "../shared/ExportOptions.js"
-import type { EditorBlockOutputDefinition, ScanCacheMap, ThemePreference } from "../shared/Types.js"
+} from "../modules/exporter/ExportOptions.js"
+import type { EditorBlockOutputDefinition } from "../modules/blocks/Types.js"
+import type { ScanCacheMap } from "../modules/blog/Types.js"
+import type { ThemePreference } from "../ui/features/common/Types.js"
 
 const readFileWithFallback = async ({
   filePath,

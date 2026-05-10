@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest"
 
-import { NaverBlog } from "../modules/blog/NaverBlog.js"
-import { resolveBlockOutputSelection } from "./BlockRegistry.js"
+import { NaverBlog } from "../blog/NaverBlog.js"
+import { resolveBlockOutputSelection } from "../blocks/BlockRegistry.js"
 import {
   cloneExportOptions as cloneExportOptionsRaw,
   frontmatterFieldMeta,

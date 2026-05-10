@@ -1,4 +1,4 @@
-import type { ImageData, OutputOption } from "../../../shared/Types.js"
+import type { ImageData, OutputOption } from "../Types.js"
 import {LeafBlock, type ParserBlockContext} from "../BaseBlock.js"
 import { parseImageLink, se4ImageLinkSelector } from "./ImageLink.js"
 

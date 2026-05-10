@@ -6,7 +6,7 @@ import { renderMarkdownPost } from "../../src/modules/converter/MarkdownRenderer
 import { NaverBlogFetcher } from "../../src/modules/fetcher/NaverBlogFetcher.js"
 import type { NaverBlogFetcherCache } from "../../src/modules/fetcher/NaverBlogFetcher.js"
 import { parsePostHtml } from "../../src/modules/parser/PostParser.js"
-import { defaultExportOptions } from "../../src/shared/ExportOptions.js"
+import { defaultExportOptions } from "../../src/modules/exporter/ExportOptions.js"
 import { ensureHarnessDir, pathExists, readUtf8, repoPath, writeUtf8 } from "../e2e/lib/paths.js"
 
 type SampleFixtureEntry = {

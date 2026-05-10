@@ -1,9 +1,10 @@
-import type { CategoryInfo, ExportOptions, PostSummary } from "../../shared/Types.js"
+import type { CategoryInfo, PostSummary } from "../blog/Types.js"
+import type { ExportOptions } from "./Types.js"
 import {
-  applySameBlogPostCustomUrlTemplate,
-  buildSameBlogPostTemplateValues,
-} from "../../shared/SameBlogPostLinkTemplate.js"
-import { relativePathFrom } from "../../shared/Utils.js"
+  applyPostTemplate as applySameBlogPostCustomUrlTemplate,
+  buildPostTemplateValues as buildSameBlogPostTemplateValues,
+} from "./PostPathTemplate.js"
+import { relativePathFrom } from "../common/FilePathUtils.js"
 import { buildMarkdownFilePath, getCategoryForPost } from "./ExportPaths.js"
 
 const naverBlogHosts = new Set(["blog.naver.com", "m.blog.naver.com"])

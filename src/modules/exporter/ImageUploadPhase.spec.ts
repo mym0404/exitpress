@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest"
 
-import type { UploadCandidate } from "../../shared/Types.js"
+import type { UploadCandidate } from "./Types.js"
 import {
   ImageUploadPhaseError,
   runImageUploadPhase,

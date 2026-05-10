@@ -1,7 +1,8 @@
 import type { CheerioAPI } from "cheerio"
 
-import type { ImageData } from "../../../shared/Types.js"
-import { compactText, normalizeAssetUrl } from "../../../shared/Utils.js"
+import type { ImageData } from "../Types.js"
+import { compactText } from "../../common/TextUtils.js"
+import { normalizeAssetUrl } from "../../common/NaverUrlUtils.js"
 import { parseJsonAttribute } from "./JsonAttribute.js"
 
 export const se4ImageLinkSelector = "a.se-module-image-link, a.__se_image_link"

@@ -29,31 +29,20 @@ import {
   optionDescriptions,
   sanitizePersistedExportOptions,
   type PartialExportOptions,
-} from "../shared/ExportOptions.js"
-import { DEFAULT_OUTPUT_DIR } from "../shared/ExportDefaults.js"
-import { isUploadActionableJob, JOB_STATUSES, UPLOAD_STATUSES } from "../shared/ExportJobState.js"
-import { UPLOAD_PROVIDER_KEYS } from "../shared/UploadProviderKeys.js"
-import type {
-  ExportJobItem,
-  ExportJobState,
-  ExportManifest,
-  ExportManifestScanResult,
-  ExportRequest,
-  ScanCacheMap,
-  ScanResult,
-  ThemePreference,
-  UploadProviderFields,
-  UnknownRecord,
-} from "../shared/Types.js"
-import {
-  extractBlogId,
-  isAbortOperationError,
-  recreateDir,
-  resolveRepoPath,
-  throwIfAborted,
-  toErrorMessage,
-} from "../shared/Utils.js"
-import { runWithLogSink } from "../shared/Logger.js"
+} from "../modules/exporter/ExportOptions.js"
+import { DEFAULT_OUTPUT_DIR } from "../modules/exporter/ExportDefaults.js"
+import { isUploadActionableJob, JOB_STATUSES, UPLOAD_STATUSES } from "../modules/exporter/ExportJobState.js"
+import { UPLOAD_PROVIDER_KEYS } from "./UploadProviderKeys.js"
+import type { ExportJobItem, ExportJobState, ExportManifest, ExportManifestScanResult, ExportRequest } from "../modules/exporter/Types.js"
+import type { ScanCacheMap, ScanResult } from "../modules/blog/Types.js"
+import type { ThemePreference } from "../ui/features/common/Types.js"
+import type { UploadProviderFields } from "./Types.js"
+import type { UnknownRecord } from "../modules/common/Types.js"
+import { extractBlogId } from "../modules/common/NaverUrlUtils.js"
+import { isAbortOperationError, throwIfAborted } from "../modules/common/AbortOperation.js"
+import { recreateDir, resolveRepoPath } from "../modules/common/FilePathUtils.js"
+import { toErrorMessage } from "../modules/common/ErrorUtils.js"
+import { runWithLogSink } from "../modules/runtime/Logger.js"
 import {
   buildResumableExportManifest,
   readExportManifest,

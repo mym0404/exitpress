@@ -1,7 +1,9 @@
 import path from "node:path"
 
-import type { UploadCandidate, UnknownRecord } from "../../shared/Types.js"
-import { ensureDir, getProjectTempPath, throwIfAborted } from "../../shared/Utils.js"
+import type { UploadCandidate } from "./Types.js"
+import type { UnknownRecord } from "../common/Types.js"
+import { ensureDir, getProjectTempPath } from "../common/FilePathUtils.js"
+import { throwIfAborted } from "../common/AbortOperation.js"
 import { dedupeUploadCandidatesByLocalPath } from "./UploadCandidateUtils.js"
 
 type RuntimeUploadResponse = {

@@ -3,8 +3,9 @@ import { readFile, rm } from "node:fs/promises"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
 
-import { defaultExportOptions } from "../../src/shared/ExportOptions.js"
-import type { ExportJobState, ExportManifest, ExportOptions, ScanResult } from "../../src/shared/Types.js"
+import { defaultExportOptions } from "../../src/modules/exporter/ExportOptions.js"
+import type { ExportJobState, ExportManifest, ExportOptions } from "../../src/modules/exporter/Types.js"
+import type { ScanResult } from "../../src/modules/blog/Types.js"
 import { createTestTempDir } from "../helpers/test-paths.js"
 
 const repoRoot = fileURLToPath(new URL("../../", import.meta.url))

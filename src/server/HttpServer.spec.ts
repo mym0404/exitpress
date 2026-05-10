@@ -5,16 +5,11 @@ import { afterEach, describe, expect, it, vi } from "vitest"
 import { NaverBlogFetcher } from "../modules/fetcher/NaverBlogFetcher.js"
 import { NaverBlogExporter } from "../modules/exporter/NaverBlogExporter.js"
 import { buildMarkdownViewerShareUrl } from "../modules/exporter/MarkdownViewerShareUrl.js"
-import { defaultExportOptions } from "../shared/ExportOptions.js"
-import type {
-  ExportManifest,
-  ExportJobState,
-  ScanResult,
-  UploadCandidate,
-  UploadProviderCatalogResponse,
-  UploadProviderValue,
-} from "../shared/Types.js"
-import { AbortOperationError } from "../shared/Utils.js"
+import { defaultExportOptions } from "../modules/exporter/ExportOptions.js"
+import type { ExportManifest, ExportJobState, UploadCandidate } from "../modules/exporter/Types.js"
+import type { ScanResult } from "../modules/blog/Types.js"
+import type { UploadProviderCatalogResponse, UploadProviderValue } from "./Types.js"
+import { AbortOperationError } from "../modules/common/AbortOperation.js"
 import { createHttpServer } from "./HttpServer.js"
 import { createTestPath, createTestTempDir } from "../../tests/helpers/test-paths.js"
 

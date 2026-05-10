@@ -1,7 +1,9 @@
 import { writeFile } from "node:fs/promises"
 import path from "node:path"
 
-import { delay, ensureDir, normalizeAssetUrl } from "../../../shared/Utils.js"
+import { delay } from "../../common/AsyncUtils.js"
+import { ensureDir } from "../../common/FilePathUtils.js"
+import { normalizeAssetUrl } from "../../common/NaverUrlUtils.js"
 
 type RetryHttpOptions = {
   headers: Record<string, string>

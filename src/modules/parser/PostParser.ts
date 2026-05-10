@@ -1,7 +1,7 @@
 import { load } from "cheerio"
 
-import type { ExportOptions } from "../../shared/Types.js"
-import { unique } from "../../shared/Utils.js"
+import type { ExportOptions } from "../exporter/Types.js"
+import { unique } from "../common/CollectionUtils.js"
 import { NaverBlog } from "../blog/NaverBlog.js"
 import type { ParserBlockSourceEvidence } from "../editor/BaseEditor.js"
 

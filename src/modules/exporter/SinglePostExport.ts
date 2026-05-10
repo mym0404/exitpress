@@ -1,15 +1,13 @@
 import path from "node:path"
 import { writeFile } from "node:fs/promises"
 
-import { cloneExportOptions } from "../../shared/ExportOptions.js"
-import { isPostWithinScope } from "../../shared/ExportScope.js"
-import type {
-  ExportOptions,
-  PostSummary,
-  ScanResult,
-  AstBlock,
-} from "../../shared/Types.js"
-import { ensureDir, extractBlogId, recreateDir, resolveRepoPath } from "../../shared/Utils.js"
+import { cloneExportOptions } from "./ExportOptions.js"
+import { isPostWithinScope } from "./ExportScope.js"
+import type { ExportOptions } from "./Types.js"
+import type { PostSummary, ScanResult } from "../blog/Types.js"
+import type { AstBlock } from "../blocks/Types.js"
+import { ensureDir, recreateDir, resolveRepoPath } from "../common/FilePathUtils.js"
+import { extractBlogId } from "../common/NaverUrlUtils.js"
 import { NaverBlog } from "../blog/NaverBlog.js"
 import { NaverBlogFetcher } from "../fetcher/NaverBlogFetcher.js"
 import { renderMarkdownPost } from "../converter/MarkdownRenderer.js"

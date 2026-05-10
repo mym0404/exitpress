@@ -5,7 +5,7 @@ import path from "node:path"
 import { describe, expect, it } from "vitest"
 
 import { exportSinglePost } from "./SinglePostExport.js"
-import { defaultExportOptions } from "../../shared/ExportOptions.js"
+import { defaultExportOptions } from "./ExportOptions.js"
 import { createTestTempDir } from "../../../tests/helpers/test-paths.js"
 
 const blogId = "mym0404"

@@ -1,9 +1,4 @@
-import type {
-  AstBlock,
-  BlockOutputSelection,
-  ImageData,
-  MarkdownLinkStyle,
-} from "./Types.js"
+import type { AstBlock, BlockOutputSelection, ImageData, MarkdownLinkStyle } from "../blocks/Types.js"
 import { splitFormulaWrapper } from "./FormulaWrapper.js"
 
 const markdownLineWhitespacePattern = /[^\S\n]+/g

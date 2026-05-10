@@ -8,14 +8,11 @@ import {
   optionDescriptions,
   sanitizePersistedExportOptions,
   validateFrontmatterAliases,
-} from "../shared/ExportOptions.js"
-import { filterPostsByScope } from "../shared/ExportScope.js"
-import type {
-  ExportOptions,
-  ScanCacheMap,
-  ScanResult,
-  ThemePreference,
-} from "../shared/Types.js"
+} from "../modules/exporter/ExportOptions.js"
+import { filterPostsByScope } from "../modules/exporter/ExportScope.js"
+import type { ExportOptions } from "../modules/exporter/Types.js"
+import type { ScanCacheMap, ScanResult } from "../modules/blog/Types.js"
+import type { ThemePreference } from "./features/common/Types.js"
 import { Card, CardContent } from "./components/ui/Card.js"
 import { Toaster } from "./components/ui/Sonner.js"
 import { BlogInputPanel } from "./features/scan/BlogInputPanel.js"

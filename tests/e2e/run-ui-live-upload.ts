@@ -5,7 +5,8 @@ import path from "node:path"
 import { chromium } from "playwright"
 
 import { createHttpServer } from "../../src/server/HttpServer.js"
-import type { ExportJobState, PostManifestEntry, ScanResult } from "../../src/shared/Types.js"
+import type { ExportJobState, PostManifestEntry } from "../../src/modules/exporter/Types.js"
+import type { ScanResult } from "../../src/modules/blog/Types.js"
 import { createTestTempDir } from "../helpers/test-paths.js"
 
 const blogId = "mym0404"

@@ -13,7 +13,7 @@
 ## TypeScript
 - The repo is strict TypeScript with NodeNext ESM.
 - Use `.js` extensions in TS imports where NodeNext runtime imports require them.
-- Reuse shared types from `src/shared/*` when crossing module or server/UI boundaries.
+- Keep types with the domain that owns the shape, such as `src/modules/blocks/Types.ts`, `src/modules/blog/Types.ts`, `src/modules/exporter/Types.ts`, `src/server/Types.ts`, and `src/ui/features/common/Types.ts`.
 - Keep parser block output behavior aligned across `BaseBlock.outputOptions` arrays, editor `supportedBlocks` arrays, and `src/modules/blog/BaseBlog.ts`.
 - This project does not preserve local schema backward compatibility unless explicitly requested. When an option/state contract changes, prefer the current schema and remove stale aliases or migration paths.
 - Prefer `type` aliases for object shapes, unions, and inferred helper types; do not introduce `interface` unless an external API requires it.
@@ -36,11 +36,11 @@
 ## Date And Time
 - Store manifest, job, and export timestamps as ISO strings from `new Date().toISOString()`.
 - Use `Date.now()` only for elapsed-time checks, polling loops, temporary ids, or harness output paths.
-- Keep display-only date formatting in shared formatting helpers instead of duplicating formatter setup.
+- Keep display-only date formatting in focused common helpers instead of duplicating formatter setup.
 
 ## UI Code
 - `src/ui/components/ui/*` is the shadcn primitive layer. Prefer feature composition, tokens, or helper classes before changing primitives.
-- Use `@shared/*` and `@/*` aliases configured in `vite.config.ts` and `tsconfig.json`.
+- Use the `@/*` UI alias configured in `vite.config.ts` and `tsconfig.json`.
 - UI tests should prefer user behavior, accessibility state, API contract, and visible text over className or computed-style assertions.
 - Do not add native `<select>` for new dropdowns; use the existing shadcn `Select`.
 - Do not mix icon sets; use `@remixicon/react`.

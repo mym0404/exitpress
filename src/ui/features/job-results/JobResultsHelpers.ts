@@ -1,13 +1,9 @@
-import type {
-  ExportJobState,
-  UploadProviderCatalogResponse,
-  UploadProviderDefinition,
-  UploadProviderFields,
-} from "../../../shared/Types.js"
+import type { ExportJobState } from "../../../modules/exporter/Types.js"
+import type { UploadProviderCatalogResponse, UploadProviderDefinition, UploadProviderFields } from "../../../server/Types.js"
 import {
   DEFAULT_UPLOAD_PROVIDER_KEY,
   UPLOAD_PROVIDER_KEYS,
-} from "../../../shared/UploadProviderKeys.js"
+} from "../../../server/UploadProviderKeys.js"
 
 const INDEX_MARKDOWN_FILE = "index.md"
 

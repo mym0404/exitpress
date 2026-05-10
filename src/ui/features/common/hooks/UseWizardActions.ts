@@ -1,11 +1,9 @@
 import { useCallback } from "react"
 
-import { sanitizePersistedExportOptions } from "../../../../shared/ExportOptions.js"
-import type {
-  ExportOptions,
-  ScanResult,
-  UploadProviderFields,
-} from "../../../../shared/Types.js"
+import { sanitizePersistedExportOptions } from "../../../../modules/exporter/ExportOptions.js"
+import type { ExportOptions } from "../../../../modules/exporter/Types.js"
+import type { ScanResult } from "../../../../modules/blog/Types.js"
+import type { UploadProviderFields } from "../../../../server/Types.js"
 import type { ExportBootstrapResponse, ExportResumeLookupResponse } from "../../../lib/Api.js"
 import { postJson } from "../../../lib/Api.js"
 import { toast } from "../../../components/ui/Sonner.js"

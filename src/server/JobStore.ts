@@ -1,12 +1,7 @@
 import { randomUUID } from "node:crypto"
 
-import type {
-  ExportJobItem,
-  ExportJobState,
-  ExportManifest,
-  ExportRequest,
-} from "../shared/Types.js"
-import { JOB_STATUSES, UPLOAD_STATUSES } from "../shared/ExportJobState.js"
+import type { ExportJobItem, ExportJobState, ExportManifest, ExportRequest } from "../modules/exporter/Types.js"
+import { JOB_STATUSES, UPLOAD_STATUSES } from "../modules/exporter/ExportJobState.js"
 
 const getJobItemId = ({
   outputPath,

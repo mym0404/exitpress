@@ -5,8 +5,8 @@ import { NaverSe2ContainerBlock } from "./ContainerBlock.js"
 import { NaverSe2TextNodeBlock } from "./TextNodeBlock.js"
 import { LeafBlock } from "../BaseBlock.js"
 import { BaseEditor } from "../../editor/BaseEditor.js"
-import { defaultExportOptions } from "../../../shared/ExportOptions.js"
-import type { AstBlock, ParsedPost } from "../../../shared/Types.js"
+import { defaultExportOptions } from "../../exporter/ExportOptions.js"
+import type { AstBlock, ParsedPost } from "../Types.js"
 import { parseSe2Blocks } from "../../../../tests/helpers/parser-test-utils.js"
 
 class CustomSectionLeafBlock extends LeafBlock {

@@ -17,4 +17,3 @@ export const UPLOAD_PROVIDER_KEYS = {
 } as const
 
 export const DEFAULT_UPLOAD_PROVIDER_KEY = UPLOAD_PROVIDER_KEYS.GITHUB
-export const EMPTY_SELECT_VALUE = "__none__"

@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest"
 
 import { parsePostHtml } from "./PostParser.js"
-import { defaultExportOptions } from "../../shared/ExportOptions.js"
+import { defaultExportOptions } from "../exporter/ExportOptions.js"
 
 const testOptions = defaultExportOptions()
 const parserOptions = {

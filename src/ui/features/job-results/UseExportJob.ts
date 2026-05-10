@@ -1,13 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 
-import type {
-  ExportJobPollingConfig,
-  ExportJobState,
-  ExportOptions,
-  ScanResult,
-  UploadProviderFields,
-} from "../../../shared/Types.js"
-import { isTerminalJobStatus, JOB_STATUSES, UPLOAD_STATUSES } from "../../../shared/ExportJobState.js"
+import type { ExportJobPollingConfig, ExportJobState, ExportOptions } from "../../../modules/exporter/Types.js"
+import type { ScanResult } from "../../../modules/blog/Types.js"
+import type { UploadProviderFields } from "../../../server/Types.js"
+import { isTerminalJobStatus, JOB_STATUSES, UPLOAD_STATUSES } from "../../../modules/exporter/ExportJobState.js"
 import { fetchJson, postJson, postUploadJson } from "../../lib/Api.js"
 
 type UploadProviderInput = {

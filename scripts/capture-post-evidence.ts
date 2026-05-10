@@ -2,7 +2,7 @@
 
 import { capturePostEvidenceUsage, parseCapturePostEvidenceArgs } from "./lib/post-evidence/cases.js"
 import { capturePostEvidence } from "./lib/post-evidence/capture.js"
-import { toErrorMessage } from "../src/shared/Utils.js"
+import { toErrorMessage } from "../src/modules/common/ErrorUtils.js"
 
 const run = async () => {
   const args = await parseCapturePostEvidenceArgs(process.argv.slice(2))

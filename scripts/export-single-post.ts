@@ -4,7 +4,7 @@ import { mkdir, readFile, writeFile } from "node:fs/promises"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
 
-import { cloneExportOptions } from "../src/shared/ExportOptions.js"
+import { cloneExportOptions } from "../src/modules/exporter/ExportOptions.js"
 import { NaverBlog } from "../src/modules/blog/NaverBlog.js"
 import { exportSinglePost } from "../src/modules/exporter/SinglePostExport.js"
 import { inspectSinglePost } from "../src/modules/exporter/SinglePostInspect.js"

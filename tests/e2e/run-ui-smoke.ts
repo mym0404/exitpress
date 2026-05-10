@@ -10,13 +10,9 @@ import {
   frontmatterFieldMeta,
   frontmatterFieldOrder,
   optionDescriptions,
-} from "../../src/shared/ExportOptions.js"
-import type {
-  ExportOptions,
-  ExportJobPollingConfig,
-  UploadProviderCatalogResponse,
-  UploadProviderValue,
-} from "../../src/shared/Types.js"
+} from "../../src/modules/exporter/ExportOptions.js"
+import type { ExportOptions, ExportJobPollingConfig } from "../../src/modules/exporter/Types.js"
+import type { UploadProviderCatalogResponse, UploadProviderValue } from "../../src/server/Types.js"
 import { createTestPath, createTestTempDir } from "../helpers/test-paths.js"
 
 const responseTimeoutMs = 90_000

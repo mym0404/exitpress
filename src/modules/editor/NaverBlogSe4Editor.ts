@@ -1,7 +1,8 @@
 import type { AnyNode } from "domhandler"
 
-import type { AstBlock, ParsedPost, UnknownRecord } from "@shared/Types.js"
-import { unique } from "@shared/Utils.js"
+import type { AstBlock, ParsedPost } from "../blocks/Types.js"
+import type { UnknownRecord } from "../common/Types.js"
+import { unique } from "../common/CollectionUtils.js"
 import { NaverSe4CodeBlock } from "../blocks/naver-se4/CodeBlock.js"
 import { NaverSe4DividerBlock } from "../blocks/naver-se4/DividerBlock.js"
 import { NaverSe4DocumentTitleBlock } from "../blocks/naver-se4/DocumentTitleBlock.js"

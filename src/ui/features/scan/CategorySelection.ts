@@ -1,4 +1,4 @@
-import type { CategoryInfo } from "../../../shared/Types.js"
+import type { CategoryInfo } from "../../../modules/blog/Types.js"
 
 const buildCategoryRelations = (categories: CategoryInfo[]) => {
   const categoryMap = new Map(categories.map((category) => [category.id, category]))

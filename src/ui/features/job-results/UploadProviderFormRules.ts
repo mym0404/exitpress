@@ -1,10 +1,5 @@
-import type {
-  UploadProviderDefinition,
-  UploadProviderFieldDefinition,
-  UploadProviderFields,
-  UploadProviderValue,
-} from "../../../shared/Types.js"
-import { UPLOAD_PROVIDER_KEYS } from "../../../shared/UploadProviderKeys.js"
+import type { UploadProviderDefinition, UploadProviderFieldDefinition, UploadProviderFields, UploadProviderValue } from "../../../server/Types.js"
+import { UPLOAD_PROVIDER_KEYS } from "../../../server/UploadProviderKeys.js"
 
 export type ProviderUiState = {
   alistAuthMode: "token" | "account"

@@ -1,13 +1,10 @@
 import { RiExternalLinkLine, RiFileTextLine, RiFolderOpenLine } from "@remixicon/react"
 import { useEffect, useRef, useState } from "react"
 
-import type {
-  ExportJobState,
-  UploadProviderCatalogResponse,
-  UploadProviderFields,
-} from "../../../shared/Types.js"
-import { EMPTY_SELECT_VALUE, UPLOAD_PROVIDER_KEYS } from "../../../shared/UploadProviderKeys.js"
-import { isUploadActionableJob, JOB_STATUSES } from "../../../shared/ExportJobState.js"
+import type { ExportJobState } from "../../../modules/exporter/Types.js"
+import type { UploadProviderCatalogResponse, UploadProviderFields } from "../../../server/Types.js"
+import { UPLOAD_PROVIDER_KEYS } from "../../../server/UploadProviderKeys.js"
+import { isUploadActionableJob, JOB_STATUSES } from "../../../modules/exporter/ExportJobState.js"
 
 import { Badge } from "../../components/ui/Badge.js"
 import { Button, buttonVariants } from "../../components/ui/Button.js"
@@ -71,6 +68,8 @@ import {
 } from "./JobResultsHelpers.js"
 import { useUploadProviderForm } from "./UseUploadProviderForm.js"
 import { getStatusPillClassName } from "../common/status/StatusPill.js"
+
+const EMPTY_SELECT_VALUE = "__none__"
 
 const CompactMetrics = ({
   items,

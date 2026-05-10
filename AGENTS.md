@@ -25,9 +25,9 @@
 |   |   |-- blog/                     # editor routing and output definitions
 |   |   |-- editor/                   # SE2, SE3, SE4 parser orchestration
 |   |   |-- blocks/                   # editor-specific parser blocks
+|   |   |-- common/                   # cross-runtime utility helpers and base types
 |   |   |-- converter/                # common AST to Markdown
 |   |   `-- exporter/                 # export, assets, upload/rewrite, manifest
-|   |-- shared/                       # cross-boundary types, options, templates
 |   `-- ui/                           # React wizard, feature panels, primitives, tokens
 |-- scripts/                          # shared project CLIs and helpers
 |-- tests/
@@ -42,7 +42,7 @@
 ## Runtime And Architecture
 - 서버 시작점은 `src/Server.ts`, HTTP API는 `src/server/HttpServer.ts`다.
 - export 파이프라인은 `src/modules/exporter/NaverBlogExporter.ts`에서 `fetch -> parse -> review -> render -> write -> manifest` 순서로 따라간다.
-- parser seam은 `src/modules/parser/PostParser.ts`, `src/modules/blog/*`, `src/modules/editor/*`, `src/modules/blocks/*`, `src/shared/BlockRegistry.ts`다.
+- parser seam은 `src/modules/parser/PostParser.ts`, `src/modules/blog/*`, `src/modules/editor/*`, `src/modules/blocks/*`, `src/modules/blocks/BlockRegistry.ts`다.
 - UI 셸은 `src/ui/App.tsx`, 공용 shell/hook/status는 `src/ui/features/common/*`, 전역 토큰은 `src/ui/styles/globals.css`다.
 
 ## Design System

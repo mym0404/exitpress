@@ -1,7 +1,7 @@
 import type { CheerioAPI } from "cheerio"
 
-import type { TableRow } from "../../shared/Types.js"
-import { compactText } from "../../shared/Utils.js"
+import type { TableRow } from "../blocks/Types.js"
+import { compactText } from "../common/TextUtils.js"
 
 export const parseHtmlTable = ({
   $,

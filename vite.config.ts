@@ -5,7 +5,7 @@ import tailwindcss from "@tailwindcss/vite"
 import react from "@vitejs/plugin-react"
 import { defineConfig } from "vite"
 
-import { ignoredRuntimeOutputGlobs } from "./src/shared/RuntimeOutputWatchGlobs.js"
+import { ignoredRuntimeOutputGlobs } from "./src/ui/config/RuntimeOutputWatchGlobs.js"
 
 const rootDir = fileURLToPath(new URL(".", import.meta.url))
 
@@ -19,7 +19,6 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.join(rootDir, "src/ui"),
-      "@shared": path.join(rootDir, "src/shared"),
     },
   },
   build: {

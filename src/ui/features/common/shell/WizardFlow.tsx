@@ -1,9 +1,10 @@
 import { RiArrowRightLine, RiDownload2Line, RiLoader4Line, RiRadarLine } from "@remixicon/react"
 
-import type { ExportJobState, ExportOptions, ScanResult } from "../../../../shared/Types.js"
-import { JOB_STATUSES } from "../../../../shared/ExportJobState.js"
-import type { PartialExportOptions } from "../../../../shared/ExportOptions.js"
-import { sanitizePersistedExportOptions } from "../../../../shared/ExportOptions.js"
+import type { ExportJobState, ExportOptions } from "../../../../modules/exporter/Types.js"
+import type { ScanResult } from "../../../../modules/blog/Types.js"
+import { JOB_STATUSES } from "../../../../modules/exporter/ExportJobState.js"
+import type { PartialExportOptions } from "../../../../modules/exporter/ExportOptions.js"
+import { sanitizePersistedExportOptions } from "../../../../modules/exporter/ExportOptions.js"
 import { exportOptionsStepMeta, type ExportOptionsStep } from "../../options/ExportOptionsSteps.js"
 
 export const setupSteps = [

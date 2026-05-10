@@ -1,16 +1,9 @@
 import path from "node:path"
 
-import type {
-  UnknownRecord,
-  UploadProviderCatalogResponse,
-  UploadProviderDefinition,
-  UploadProviderFieldDefinition,
-  UploadProviderFields,
-  UploadProviderOptionValue,
-  UploadProviderValue,
-} from "../shared/Types.js"
-import { DEFAULT_UPLOAD_PROVIDER_KEY, UPLOAD_PROVIDER_KEYS } from "../shared/UploadProviderKeys.js"
-import { ensureDir, getProjectTempPath } from "../shared/Utils.js"
+import type { UnknownRecord } from "../modules/common/Types.js"
+import type { UploadProviderCatalogResponse, UploadProviderDefinition, UploadProviderFieldDefinition, UploadProviderFields, UploadProviderOptionValue, UploadProviderValue } from "./Types.js"
+import { DEFAULT_UPLOAD_PROVIDER_KEY, UPLOAD_PROVIDER_KEYS } from "./UploadProviderKeys.js"
+import { ensureDir, getProjectTempPath } from "../modules/common/FilePathUtils.js"
 
 const providerLabelMap: Record<string, string> = {
   [UPLOAD_PROVIDER_KEYS.ADVANCED]: "Advanced Custom",

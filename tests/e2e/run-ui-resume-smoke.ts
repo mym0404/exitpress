@@ -10,16 +10,11 @@ import {
   frontmatterFieldMeta,
   frontmatterFieldOrder,
   optionDescriptions,
-} from "../../src/shared/ExportOptions.js"
-import { mapConcurrent } from "../../src/shared/Utils.js"
-import type {
-  ExportJobPollingConfig,
-  ExportJobItem,
-  ExportJobState,
-  ExportResumeSummary,
-  ScanResult,
-  UploadProviderCatalogResponse,
-} from "../../src/shared/Types.js"
+} from "../../src/modules/exporter/ExportOptions.js"
+import { mapConcurrent } from "../../src/modules/common/AsyncUtils.js"
+import type { ExportJobPollingConfig, ExportJobItem, ExportJobState, ExportResumeSummary } from "../../src/modules/exporter/Types.js"
+import type { ScanResult } from "../../src/modules/blog/Types.js"
+import type { UploadProviderCatalogResponse } from "../../src/server/Types.js"
 import { createTestTempDir } from "../helpers/test-paths.js"
 
 const desktopViewport = {

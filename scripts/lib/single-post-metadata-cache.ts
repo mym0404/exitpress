@@ -3,8 +3,8 @@ import path from "node:path"
 
 import { NaverBlogFetcher } from "../../src/modules/fetcher/NaverBlogFetcher.js"
 import type { SinglePostFetcher } from "../../src/modules/exporter/SinglePostExport.js"
-import { log } from "../../src/shared/Logger.js"
-import type { PostSummary, ScanResult } from "../../src/shared/Types.js"
+import { log } from "../../src/modules/runtime/Logger.js"
+import type { PostSummary, ScanResult } from "../../src/modules/blog/Types.js"
 
 type SinglePostMetadataCacheFile = {
   blogId: string

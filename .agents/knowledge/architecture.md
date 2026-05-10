@@ -4,7 +4,7 @@
 - Runtime entrypoint is `src/Server.ts`.
 - HTTP API, Vite middleware, job lifecycle, upload trigger/polling, and bootstrap recovery live in `src/server/HttpServer.ts`.
 - The export pipeline lives in `src/modules/exporter/NaverBlogExporter.ts` and keeps fetch, parse, review, render, write, upload, rewrite, and manifest concerns separated.
-- UI calls HTTP APIs only. It does not import server, exporter, parser, or editor internals.
+- UI uses HTTP APIs for runtime actions and may import pure domain contracts or option helpers. It does not import parser/editor runtime internals.
 
 ## Main Flow
 - Blog scan and post HTML fetch start in `src/modules/fetcher/NaverBlogFetcher.ts`.
@@ -16,10 +16,11 @@
 ## Module Boundaries
 - `src/modules/fetcher`: Naver mobile API, post HTML fetch, and fetcher HTTP utilities.
 - `src/modules/parser`: SE2, SE3, SE4 HTML structures to common AST.
+- `src/modules/blocks`: parser block base classes, block output registry, AST/block types, editor-specific parser blocks.
+- `src/modules/common`: cross-runtime utility helpers and base object types.
 - `src/modules/converter`: AST to Markdown and frontmatter.
 - `src/modules/exporter`: export orchestration, asset persistence, upload/rewrite phase, single-post export.
 - `src/server`: local HTTP server, job store, local state/cache, upload provider catalog.
-- `src/shared`: cross-boundary types, export options, block output selection resolution, path templates, UI/job state.
 - `src/ui`: React wizard, scan/options/results/resume surfaces, shadcn primitives, API client.
 
 ## Parser Block Contract

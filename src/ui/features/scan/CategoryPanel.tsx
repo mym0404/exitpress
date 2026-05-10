@@ -1,6 +1,6 @@
 import { RiCheckDoubleLine, RiEraserLine } from "@remixicon/react"
 import { getCategoryCheckboxState, orderCategoriesHierarchically } from "./CategorySelection.js"
-import type { ScanResult } from "../../../shared/Types.js"
+import type { ScanResult } from "../../../modules/blog/Types.js"
 
 import { Badge } from "../../components/ui/Badge.js"
 import { Button } from "../../components/ui/Button.js"

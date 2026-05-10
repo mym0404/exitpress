@@ -1,6 +1,6 @@
 import path from "node:path"
 
-import { ensureDir, resolveRepoPath } from "../../../src/shared/Utils.js"
+import { ensureDir, resolveRepoPath } from "../../../src/modules/common/FilePathUtils.js"
 
 export type EvidenceAssetProfile = "readme" | "figure" | "tmp"
 

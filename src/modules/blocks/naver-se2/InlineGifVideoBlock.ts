@@ -1,7 +1,8 @@
 import type { CheerioAPI } from "cheerio"
 
-import { compactText, normalizeAssetUrl } from "../../../shared/Utils.js"
-import type { ImageData } from "../../../shared/Types.js"
+import { compactText } from "../../common/TextUtils.js"
+import { normalizeAssetUrl } from "../../common/NaverUrlUtils.js"
+import type { ImageData } from "../Types.js"
 import {LeafBlock, type ParserBlockContext} from "../BaseBlock.js"
 
 const getInlineGifVideoImage = ({ $node }: { $node: ReturnType<CheerioAPI> }): ImageData | null => {

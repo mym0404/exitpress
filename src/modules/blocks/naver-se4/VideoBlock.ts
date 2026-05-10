@@ -1,5 +1,6 @@
-import type { OutputOption, UnknownRecord } from "../../../shared/Types.js"
-import { normalizeAssetUrl } from "../../../shared/Utils.js"
+import type { OutputOption } from "../Types.js"
+import type { UnknownRecord } from "../../common/Types.js"
+import { normalizeAssetUrl } from "../../common/NaverUrlUtils.js"
 import {LeafBlock, type ParserBlockContext} from "../BaseBlock.js"
 
 export class NaverSe4VideoBlock extends LeafBlock {

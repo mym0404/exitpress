@@ -1,7 +1,8 @@
 import type { CheerioAPI } from "cheerio"
 
-import type { ImageData, AstBlock } from "../../../shared/Types.js"
-import { compactText, normalizeAssetUrl } from "../../../shared/Utils.js"
+import type { ImageData, AstBlock } from "../Types.js"
+import { compactText } from "../../common/TextUtils.js"
+import { normalizeAssetUrl } from "../../common/NaverUrlUtils.js"
 
 export const parseBookWidgetBlocks = ({
   element,

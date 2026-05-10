@@ -1,7 +1,8 @@
 import { load } from "cheerio"
 
-import type { OutputOption, UnknownRecord } from "../../../shared/Types.js"
-import { compactText } from "../../../shared/Utils.js"
+import type { OutputOption } from "../Types.js"
+import type { UnknownRecord } from "../../common/Types.js"
+import { compactText } from "../../common/TextUtils.js"
 import {LeafBlock, type ParserBlockContext} from "../BaseBlock.js"
 
 export class NaverSe4FormulaBlock extends LeafBlock {

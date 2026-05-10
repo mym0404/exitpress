@@ -2,7 +2,7 @@ import TurndownService, { type Node as TurndownNode } from "turndown"
 import { gfm } from "turndown-plugin-gfm"
 import { JSDOM } from "jsdom"
 
-import type { MarkdownLinkStyle } from "../../shared/Types.js"
+import type { MarkdownLinkStyle } from "../blocks/Types.js"
 
 const createDocument = (html: string) => new JSDOM(`<body>${html}</body>`).window.document
 

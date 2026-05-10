@@ -1,7 +1,7 @@
 import { useEffect, type MutableRefObject } from "react"
 
-import { JOB_STATUSES } from "../../../shared/ExportJobState.js"
-import type { ExportJobState } from "../../../shared/Types.js"
+import { JOB_STATUSES } from "../../../modules/exporter/ExportJobState.js"
+import type { ExportJobState } from "../../../modules/exporter/Types.js"
 import { toast } from "../../components/ui/Sonner.js"
 
 export const useJobNotifications = ({

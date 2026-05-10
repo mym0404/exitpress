@@ -11,9 +11,9 @@ import {
   frontmatterFieldMeta,
   frontmatterFieldOrder,
   optionDescriptions,
-} from "../../../shared/ExportOptions.js"
+} from "../../../modules/exporter/ExportOptions.js"
 import { NaverBlog } from "../../../modules/blog/NaverBlog.js"
-import type { ExportOptions } from "../../../shared/Types.js"
+import type { ExportOptions } from "../../../modules/exporter/Types.js"
 import { ExportOptionsPanel } from "./ExportOptionsPanel.js"
 import { createTestPath } from "../../../../tests/helpers/test-paths.js"
 

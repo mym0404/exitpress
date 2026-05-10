@@ -3,8 +3,9 @@
 import { act, renderHook, waitFor } from "@testing-library/react"
 import { afterEach, describe, expect, it, vi } from "vitest"
 
-import { defaultExportOptions } from "../../../shared/ExportOptions.js"
-import type { ExportJobState, ScanResult } from "../../../shared/Types.js"
+import { defaultExportOptions } from "../../../modules/exporter/ExportOptions.js"
+import type { ExportJobState } from "../../../modules/exporter/Types.js"
+import type { ScanResult } from "../../../modules/blog/Types.js"
 import { useExportJob } from "./UseExportJob.js"
 import { fetchJson, postJson, postUploadJson } from "../../lib/Api.js"
 import { createTestPath } from "../../../../tests/helpers/test-paths.js"

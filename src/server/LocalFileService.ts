@@ -2,7 +2,7 @@ import { execFile } from "node:child_process"
 import path from "node:path"
 import type { IncomingMessage } from "node:http"
 
-import { resolveRepoPath } from "../shared/Utils.js"
+import { resolveRepoPath } from "../modules/common/FilePathUtils.js"
 
 const TEMP_OUTPUT_ROOTS = ["/tmp", "/private/tmp"] as const
 

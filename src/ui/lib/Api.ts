@@ -1,15 +1,7 @@
-import type {
-  ExportJobPollingConfig,
-  ExportJobState,
-  ExportOptions,
-  ExportResumeSummary,
-  FrontmatterFieldMeta,
-  FrontmatterFieldName,
-  EditorBlockOutputDefinition,
-  OptionDescriptionMap,
-  ScanResult,
-  ThemePreference,
-} from "../../shared/Types.js"
+import type { ExportJobPollingConfig, ExportJobState, ExportOptions, ExportResumeSummary, FrontmatterFieldMeta, FrontmatterFieldName, OptionDescriptionMap } from "../../modules/exporter/Types.js"
+import type { EditorBlockOutputDefinition } from "../../modules/blocks/Types.js"
+import type { ScanResult } from "../../modules/blog/Types.js"
+import type { ThemePreference } from "../features/common/Types.js"
 
 export type ExportBootstrapResponse = {
   profile: "gfm"

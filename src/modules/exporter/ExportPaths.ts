@@ -1,11 +1,9 @@
 import path from "node:path"
 
-import type { CategoryInfo, ExportOptions, PostSummary } from "../../shared/Types.js"
-import { buildPostFolderName } from "../../shared/PostPathTemplate.js"
-import {
-  formatCategorySegment,
-  sanitizeCategoryName,
-} from "../../shared/Utils.js"
+import type { CategoryInfo, PostSummary } from "../blog/Types.js"
+import type { ExportOptions } from "./Types.js"
+import { buildPostFolderName } from "./PostPathTemplate.js"
+import { formatCategorySegment, sanitizeCategoryName } from "./PathFormat.js"
 
 export const getCategoryForPost = ({
   categories,

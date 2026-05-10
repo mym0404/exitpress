@@ -5,8 +5,8 @@ import {
   createSameBlogPostLinkResolver,
   extractNaverBlogPostIdentity,
 } from "./PostLinkRewriter.js"
-import { defaultExportOptions } from "../../shared/ExportOptions.js"
-import type { CategoryInfo, PostSummary } from "../../shared/Types.js"
+import { defaultExportOptions } from "./ExportOptions.js"
+import type { CategoryInfo, PostSummary } from "../blog/Types.js"
 import { createTestPath } from "../../../tests/helpers/test-paths.js"
 
 const testExportDir = createTestPath("post-link-rewriter", "export")

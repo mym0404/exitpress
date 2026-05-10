@@ -1,7 +1,7 @@
 import { useEffect, type MutableRefObject } from "react"
 
-import type { ThemePreference } from "../../../../shared/Types.js"
-import type { PartialExportOptions } from "../../../../shared/ExportOptions.js"
+import type { ThemePreference } from "../Types.js"
+import type { PartialExportOptions } from "../../../../modules/exporter/ExportOptions.js"
 import { postJsonNoContent } from "../../../lib/Api.js"
 import { getPersistedUiStateSignature } from "../shell/WizardFlow.js"
 

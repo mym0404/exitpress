@@ -4,7 +4,7 @@ import path from "node:path"
 import { describe, expect, it } from "vitest"
 
 import { findLatestReusableIngestOutput, loadReusableIngestOutput } from "./ingest-output.js"
-import type { ExportManifest } from "../../../src/shared/Types.js"
+import type { ExportManifest } from "../../../src/modules/exporter/Types.js"
 import { createTestTempDir } from "../../../tests/helpers/test-paths.js"
 
 const createManifest = (overrides: Partial<ExportManifest> = {}): ExportManifest => ({

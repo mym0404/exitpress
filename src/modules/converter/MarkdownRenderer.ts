@@ -2,19 +2,11 @@ import YAML from "yaml"
 
 import { convertHtmlToMarkdown } from "./HtmlFragmentConverter.js"
 
-import type {
-  AssetRecord,
-  BlockOutputSelection,
-  CategoryInfo,
-  ExportOptions,
-  FrontmatterFieldName,
-  ImageData,
-  UnknownRecord,
-  ParsedPost,
-  PostSummary,
-  AstBlock,
-} from "../../shared/Types.js"
-import { resolveBlockOutputSelection } from "../../shared/BlockRegistry.js"
+import type { AssetRecord, ExportOptions, FrontmatterFieldName } from "../exporter/Types.js"
+import type { BlockOutputSelection, ImageData, ParsedPost, AstBlock } from "../blocks/Types.js"
+import type { CategoryInfo, PostSummary } from "../blog/Types.js"
+import type { UnknownRecord } from "../common/Types.js"
+import { resolveBlockOutputSelection } from "../blocks/BlockRegistry.js"
 import {
   createLinkFormatter,
   getDividerMarker,
@@ -28,8 +20,8 @@ import {
   renderLinkCardBlock,
   renderParagraph,
   renderQuote,
-} from "../../shared/BlockMarkdown.js"
-import { getFrontmatterExportKey } from "../../shared/ExportOptions.js"
+} from "./BlockMarkdown.js"
+import { getFrontmatterExportKey } from "../exporter/ExportOptions.js"
 
 const buildFrontmatter = ({
   fields,

@@ -1,16 +1,10 @@
 import type { CheerioAPI } from "cheerio"
 import type { AnyNode } from "domhandler"
 
-import type {
-  AstBlock,
-  BlockOutputSelection,
-  EditorBlockOutputDefinition,
-  ExportOptions,
-  ParsedPost,
-  ParserBlockOptions,
-  UnknownRecord,
-} from "@shared/Types.js"
-import { resolveBlockOutputSelection } from "@shared/BlockRegistry.js"
+import type { AstBlock, BlockOutputSelection, EditorBlockOutputDefinition, ParsedPost, ParserBlockOptions } from "../blocks/Types.js"
+import type { ExportOptions } from "../exporter/Types.js"
+import type { UnknownRecord } from "../common/Types.js"
+import { resolveBlockOutputSelection } from "../blocks/BlockRegistry.js"
 import {
   ContainerBlock,
   LeafBlock,
@@ -18,7 +12,7 @@ import {
   type ParserBlockConvertContext,
   type ParserBlockContext
 } from "../blocks/BaseBlock.js"
-import { compactText } from "../../shared/Utils.js"
+import { compactText } from "../common/TextUtils.js"
 
 const inspectTextMaxLength = 200
 const inspectHtmlMaxLength = 700

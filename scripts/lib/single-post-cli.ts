@@ -1,12 +1,10 @@
-import { resolveBlockOutputSelection } from "../../src/shared/BlockRegistry.js"
-import { defaultExportOptions } from "../../src/shared/ExportOptions.js"
+import { resolveBlockOutputSelection } from "../../src/modules/blocks/BlockRegistry.js"
+import { defaultExportOptions } from "../../src/modules/exporter/ExportOptions.js"
 import { NaverBlog } from "../../src/modules/blog/NaverBlog.js"
 import type { ParserBlockInspection } from "../../src/modules/editor/BaseEditor.js"
 import type { SinglePostInspectDiagnostics } from "../../src/modules/exporter/SinglePostInspect.js"
-import type {
-  BlockOutputSelection,
-  ExportOptions,
-} from "../../src/shared/Types.js"
+import type { BlockOutputSelection } from "../../src/modules/blocks/Types.js"
+import type { ExportOptions } from "../../src/modules/exporter/Types.js"
 
 const entrypoint = "bun scripts/export-single-post.ts"
 

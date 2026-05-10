@@ -5,7 +5,7 @@ export type EvidenceMarkdownSection = {
   markdown: string | null
 }
 
-export type EvidenceMarkdownRenderOptions = {
+type EvidenceMarkdownRenderOptions = {
   includeSourceLink?: boolean
 }
 

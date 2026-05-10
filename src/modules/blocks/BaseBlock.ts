@@ -1,10 +1,5 @@
-import type {
-  AstBlock,
-  OutputOption,
-  ParserBlockOptions,
-  UnknownRecord,
-  BlockOutputSelection,
-} from "../../shared/Types.js"
+import type { AstBlock, OutputOption, ParserBlockOptions, BlockOutputSelection } from "./Types.js"
+import type { UnknownRecord } from "../common/Types.js"
 import {type CheerioAPI, Cheerio} from "cheerio";
 import type {AnyNode} from "domhandler";
 

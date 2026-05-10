@@ -1,25 +1,20 @@
 import type { ReactNode, SVGProps } from "react"
 
-import type {
-  EditorBlockOutputDefinition,
-  ExportOptions,
-  FrontmatterFieldMeta,
-  FrontmatterFieldName,
-  OptionDescriptionMap,
-  PostSummary,
-} from "../../../shared/Types.js"
-import { resolveBlockOutputSelection } from "../../../shared/BlockRegistry.js"
-import { renderBlockOutputPreview } from "../../../shared/BlockOutputPreview.js"
-import { formatCategorySegment } from "../../../shared/PathFormat.js"
+import type { EditorBlockOutputDefinition } from "../../../modules/blocks/Types.js"
+import type { ExportOptions, FrontmatterFieldMeta, FrontmatterFieldName, OptionDescriptionMap } from "../../../modules/exporter/Types.js"
+import type { PostSummary } from "../../../modules/blog/Types.js"
+import { resolveBlockOutputSelection } from "../../../modules/blocks/BlockRegistry.js"
+import { renderBlockOutputPreview } from "./BlockOutputPreview.js"
+import { formatCategorySegment } from "../../../modules/exporter/PathFormat.js"
 import {
   getDefaultSlugWhitespace,
-} from "../../../shared/ExportOptions.js"
+} from "../../../modules/exporter/ExportOptions.js"
 import {
   applyPostTemplate,
   buildPostFolderName,
   buildPostTemplateValues,
   postTemplateKeys,
-} from "../../../shared/PostPathTemplate.js"
+} from "../../../modules/exporter/PostPathTemplate.js"
 
 import { Alert, AlertDescription, AlertTitle } from "../../components/ui/Alert.js"
 import { Badge } from "../../components/ui/Badge.js"

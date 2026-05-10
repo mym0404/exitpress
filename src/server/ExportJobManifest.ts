@@ -2,16 +2,11 @@ import { randomUUID } from "node:crypto"
 import { mkdir, readFile, rename, rm, writeFile } from "node:fs/promises"
 import path from "node:path"
 
-import type {
-  ExportJobItem,
-  ExportJobState,
-  ExportManifest,
-  ExportManifestScanResult,
-  PostManifestEntry,
-  ScanResult,
-} from "../shared/Types.js"
-import { resolveExportResumePhase } from "../shared/ExportJobState.js"
-import { extractBlogId, resolveRepoPath } from "../shared/Utils.js"
+import type { ExportJobItem, ExportJobState, ExportManifest, ExportManifestScanResult, PostManifestEntry } from "../modules/exporter/Types.js"
+import type { ScanResult } from "../modules/blog/Types.js"
+import { resolveExportResumePhase } from "../modules/exporter/ExportJobState.js"
+import { extractBlogId } from "../modules/common/NaverUrlUtils.js"
+import { resolveRepoPath } from "../modules/common/FilePathUtils.js"
 
 const manifestFileName = "manifest.json"
 

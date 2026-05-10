@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 
-import type { CategoryInfo } from "../../../shared/Types.js"
+import type { CategoryInfo } from "../../../modules/blog/Types.js"
 import {
   getCategoryCheckboxState,
   orderCategoriesHierarchically,

@@ -1,8 +1,10 @@
 import { describe, expect, it } from "vitest"
 
 import { renderMarkdownPost } from "./MarkdownRenderer.js"
-import { defaultExportOptions } from "../../shared/ExportOptions.js"
-import type { AssetRecord, CategoryInfo, ParsedPost, PostSummary } from "../../shared/Types.js"
+import { defaultExportOptions } from "../exporter/ExportOptions.js"
+import type { AssetRecord } from "../exporter/Types.js"
+import type { CategoryInfo, PostSummary } from "../blog/Types.js"
+import type { ParsedPost } from "../blocks/Types.js"
 import { createTestPath } from "../../../tests/helpers/test-paths.js"
 
 const testMarkdownFilePath = createTestPath("markdown-renderer", "output", "posts", "Algorithm", "test.md")

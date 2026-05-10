@@ -1,6 +1,6 @@
 import { convertHtmlToMarkdown } from "../../converter/HtmlFragmentConverter.js"
-import type { OutputOption } from "../../../shared/Types.js"
-import { compactText } from "../../../shared/Utils.js"
+import type { OutputOption } from "../Types.js"
+import { compactText } from "../../common/TextUtils.js"
 import {LeafBlock, type ParserBlockContext} from "../BaseBlock.js"
 
 export class NaverSe4HeadingBlock extends LeafBlock {

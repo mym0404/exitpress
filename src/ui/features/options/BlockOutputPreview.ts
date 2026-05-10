@@ -1,8 +1,5 @@
-import type {
-  AstBlock,
-  BlockOutputSelection,
-  ExportOptions,
-} from "./Types.js"
+import type { AstBlock, BlockOutputSelection } from "../../../modules/blocks/Types.js"
+import type { ExportOptions } from "../../../modules/exporter/Types.js"
 import {
   composeSnippetWithReferences,
   createLinkFormatter,
@@ -16,7 +13,7 @@ import {
   renderLinkCardBlock,
   renderParagraph,
   renderQuote,
-} from "./BlockMarkdown.js"
+} from "../../../modules/converter/BlockMarkdown.js"
 
 const toPreviewAssetPath = (sourceUrl: string) => {
   const pathname = (() => {

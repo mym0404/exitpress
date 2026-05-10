@@ -1,6 +1,6 @@
 import { RiMoonClearLine, RiSunLine } from "@remixicon/react"
 
-import type { ThemePreference } from "../../../../shared/Types.js"
+import type { ThemePreference } from "../Types.js"
 import { Badge } from "../../../components/ui/Badge.js"
 import { Card, CardContent } from "../../../components/ui/Card.js"
 import { ToggleGroup, ToggleGroupItem } from "../../../components/ui/ToggleGroup.js"

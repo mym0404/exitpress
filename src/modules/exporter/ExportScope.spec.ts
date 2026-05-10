@@ -1,12 +1,12 @@
 import { describe, expect, it } from "vitest"
 
-import { cloneExportOptions } from "../../shared/ExportOptions.js"
+import { cloneExportOptions } from "./ExportOptions.js"
 import {
   filterPostsByScope,
   isPostWithinScope,
   resolveSelectedCategoryIds,
 } from "./ExportScope.js"
-import type { CategoryInfo, PostSummary } from "../../shared/Types.js"
+import type { CategoryInfo, PostSummary } from "../blog/Types.js"
 
 const categories: CategoryInfo[] = [
   {

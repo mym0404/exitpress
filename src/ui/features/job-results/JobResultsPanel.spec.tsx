@@ -6,12 +6,9 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
 import "@testing-library/jest-dom/vitest"
 
-import { defaultExportOptions } from "../../../shared/ExportOptions.js"
-import type {
-  ExportJobState,
-  UploadProviderCatalogResponse,
-  UploadProviderValue,
-} from "../../../shared/Types.js"
+import { defaultExportOptions } from "../../../modules/exporter/ExportOptions.js"
+import type { ExportJobState } from "../../../modules/exporter/Types.js"
+import type { UploadProviderCatalogResponse, UploadProviderValue } from "../../../server/Types.js"
 import { JobResultsPanel } from "./JobResultsPanel.js"
 import { createTestPath } from "../../../../tests/helpers/test-paths.js"
 

@@ -1,6 +1,6 @@
 import { convertHtmlToMarkdown } from "../../converter/HtmlFragmentConverter.js"
 import {LeafBlock, type ParserBlockContext} from "../BaseBlock.js"
-import type { OutputOption } from "../../../shared/Types.js"
+import type { OutputOption } from "../Types.js"
 
 export class NaverSe2QuoteBlock extends LeafBlock {
   override readonly id = "quote"

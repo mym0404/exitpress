@@ -8,8 +8,8 @@ import { afterEach, describe, expect, it, vi } from "vitest"
 import { NaverBlogFetcher } from "../fetcher/NaverBlogFetcher.js"
 import { NaverBlogExporter } from "./NaverBlogExporter.js"
 import { rewriteUploadedAssets } from "./ImageUploadRewriter.js"
-import { defaultExportOptions } from "../../shared/ExportOptions.js"
-import { runWithLogSink } from "../../shared/Logger.js"
+import { defaultExportOptions } from "./ExportOptions.js"
+import { runWithLogSink } from "../runtime/Logger.js"
 import { createTestTempDir } from "../../../tests/helpers/test-paths.js"
 
 const scanResult = {

@@ -1,8 +1,9 @@
 import type { CheerioAPI } from "cheerio"
 
 import {LeafBlock, type ParserBlockContext} from "../BaseBlock.js"
-import type { ImageData, OutputOption } from "../../../shared/Types.js"
-import { compactText, normalizeAssetUrl } from "../../../shared/Utils.js"
+import type { ImageData, OutputOption } from "../Types.js"
+import { compactText } from "../../common/TextUtils.js"
+import { normalizeAssetUrl } from "../../common/NaverUrlUtils.js"
 
 const standaloneImageSelector = "img, [thumburl]"
 

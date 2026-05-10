@@ -1,6 +1,7 @@
 import type { CheerioAPI } from "cheerio"
 
-import type { EditorBlockOutputDefinition, ExportOptions, ParsedPost } from "../../shared/Types.js"
+import type { EditorBlockOutputDefinition, ParsedPost } from "../blocks/Types.js"
+import type { ExportOptions } from "../exporter/Types.js"
 import type { BaseEditor, ParserBlockSourceEvidence } from "../editor/BaseEditor.js"
 
 type BlogPostParseInput = {

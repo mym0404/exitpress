@@ -1,5 +1,6 @@
-import type { OutputOption } from "../../../shared/Types.js"
-import { compactText, normalizeAssetUrl } from "../../../shared/Utils.js"
+import type { OutputOption } from "../Types.js"
+import { compactText } from "../../common/TextUtils.js"
+import { normalizeAssetUrl } from "../../common/NaverUrlUtils.js"
 import {LeafBlock, type ParserBlockContext} from "../BaseBlock.js"
 
 const getLinkDataUrl = (value?: string) => {

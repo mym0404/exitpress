@@ -1,5 +1,5 @@
 import {LeafBlock, type ParserBlockContext} from "../BaseBlock.js"
-import type { OutputOption } from "../../../shared/Types.js"
+import type { OutputOption } from "../Types.js"
 
 export class NaverSe2DividerBlock extends LeafBlock {
   override readonly id = "divider"

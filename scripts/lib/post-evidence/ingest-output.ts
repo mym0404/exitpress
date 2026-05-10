@@ -1,8 +1,9 @@
 import { readFile, readdir } from "node:fs/promises"
 import path from "node:path"
 
-import type { ExportManifest, PostManifestEntry } from "../../../src/shared/Types.js"
-import { extractBlogId, resolveRepoPath } from "../../../src/shared/Utils.js"
+import type { ExportManifest, PostManifestEntry } from "../../../src/modules/exporter/Types.js"
+import { extractBlogId } from "../../../src/modules/common/NaverUrlUtils.js"
+import { resolveRepoPath } from "../../../src/modules/common/FilePathUtils.js"
 
 export type ReusableIngestOutput = {
   outputDir: string

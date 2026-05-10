@@ -1,11 +1,6 @@
-import type {
-  EditorBlockOutputDefinition,
-  ExportOptions,
-  FrontmatterFieldMeta,
-  FrontmatterFieldName,
-  OptionDescriptionMap,
-} from "./Types.js"
-import { resolveBlockOutputSelection } from "./BlockRegistry.js"
+import type { EditorBlockOutputDefinition } from "../blocks/Types.js"
+import type { ExportOptions, FrontmatterFieldMeta, FrontmatterFieldName, OptionDescriptionMap } from "./Types.js"
+import { resolveBlockOutputSelection } from "../blocks/BlockRegistry.js"
 
 type ExportOptionsDefinitionContext = {
   blockOutputDefinitions?: EditorBlockOutputDefinition[]

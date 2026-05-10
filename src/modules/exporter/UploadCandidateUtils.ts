@@ -1,4 +1,4 @@
-import type { UploadCandidate } from "../../shared/Types.js"
+import type { UploadCandidate } from "./Types.js"
 
 export const dedupeUploadCandidatesByLocalPath = (candidates: UploadCandidate[]) => {
   const uniqueCandidates = new Map<string, UploadCandidate>()

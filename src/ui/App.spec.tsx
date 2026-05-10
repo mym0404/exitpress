@@ -11,8 +11,10 @@ import {
   frontmatterFieldMeta,
   frontmatterFieldOrder,
   optionDescriptions,
-} from "../shared/ExportOptions.js"
-import type { ExportJobState, ScanResult, UploadProviderCatalogResponse } from "../shared/Types.js"
+} from "../modules/exporter/ExportOptions.js"
+import type { ExportJobState } from "../modules/exporter/Types.js"
+import type { ScanResult } from "../modules/blog/Types.js"
+import type { UploadProviderCatalogResponse } from "../server/Types.js"
 import { App } from "./App.js"
 import { createTestPath } from "../../tests/helpers/test-paths.js"
 

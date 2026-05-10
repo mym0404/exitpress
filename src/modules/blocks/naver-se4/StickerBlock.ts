@@ -1,4 +1,4 @@
-import { normalizeAssetUrl } from "../../../shared/Utils.js"
+import { normalizeAssetUrl } from "../../common/NaverUrlUtils.js"
 import {LeafBlock, type ParserBlockContext} from "../BaseBlock.js"
 import { parseJsonAttribute } from "./JsonAttribute.js"
 
