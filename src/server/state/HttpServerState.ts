@@ -1,0 +1,232 @@
+import type { EditorBlockOutputDefinition } from "../../domain/ast/Types.js"
+import type { ScanCacheMap, ScanResult } from "../../domain/blog/Types.js"
+import type { ExportManifest } from "../../domain/export-job/Types.js"
+import type { PartialExportOptions } from "../../domain/export-options/PersistedExportOptions.js"
+import type { ThemePreference } from "../../domain/preferences/ThemePreference.js"
+import type { JobStore } from "../jobs/JobStore.js"
+import {
+  cloneExportOptions,
+  frontmatterFieldMeta,
+  frontmatterFieldOrder,
+  optionDescriptions,
+} from "../../domain/export-options/ExportOptions.js"
+import { readExportManifest } from "../jobs/ExportJobManifest.js"
+import { isTemporaryResumeOutputDir } from "../routes/LocalFileService.js"
+import {
+  readPersistedUiState,
+  readScanCacheFile,
+  writePersistedUiState,
+  writeScanCacheFile,
+} from "./LocalStateRepository.js"
+import {
+  getJobActivityTimestamp,
+  getManifestJobTimestamp,
+  resolveResumedScanResult,
+} from "./ResumeStateResolver.js"
+
+export type HttpServerState = ReturnType<typeof createHttpServerState>
+
+export const createHttpServerState = ({
+  jobStore,
+  scanCachePath,
+  legacyScanCachePath,
+  settingsPath,
+  legacySettingsPath,
+  defaultOutputDir,
+  defaultThemePreference,
+  blockOutputDefinitions,
+}: {
+  jobStore: JobStore
+  scanCachePath: string
+  legacyScanCachePath?: string
+  settingsPath: string
+  legacySettingsPath?: string
+  defaultOutputDir: string
+  defaultThemePreference: ThemePreference
+  blockOutputDefinitions: EditorBlockOutputDefinition[]
+}) => {
+  let scanCachePromise: Promise<ScanCacheMap> | null = null
+  const jobScanResults = new Map<string, ScanResult | null>()
+
+  const ensureScanCache = () => {
+    if (!scanCachePromise) {
+      scanCachePromise = readScanCacheFile({
+        scanCachePath,
+        legacyScanCachePath,
+      })
+    }
+
+    return scanCachePromise
+  }
+
+  const updateScanCache = async ({
+    blogId,
+    scanResult,
+  }: {
+    blogId: string
+    scanResult: ScanResult
+  }) => {
+    const current = await ensureScanCache()
+    const next = {
+      ...current,
+      [blogId]: scanResult,
+    }
+
+    await writeScanCacheFile({
+      scanCachePath,
+      scans: next,
+    })
+    scanCachePromise = Promise.resolve(next)
+  }
+
+  const hydrateJobFromManifest = ({
+    manifest,
+    scanResult,
+  }: {
+    manifest: ExportManifest
+    scanResult: ScanResult | null
+  }) => {
+    if (!manifest.job) {
+      return null
+    }
+
+    const existingJob = jobStore.get(manifest.job.id)
+
+    if (
+      existingJob &&
+      getJobActivityTimestamp(existingJob) >= getManifestJobTimestamp(manifest.job.updatedAt)
+    ) {
+      return existingJob
+    }
+
+    jobScanResults.set(manifest.job.id, scanResult)
+    return jobStore.hydrate(manifest)
+  }
+
+  const loadResumedJob = async ({
+    outputDir,
+    cachedScans,
+  }: {
+    outputDir: string
+    cachedScans: ScanCacheMap
+  }) => {
+    if (isTemporaryResumeOutputDir(outputDir)) {
+      return null
+    }
+
+    const manifest = await readExportManifest(outputDir)
+
+    if (!manifest?.job) {
+      return null
+    }
+
+    const resumedScanResult = resolveResumedScanResult({
+      manifestBlogId: manifest.blogId,
+      manifestCategories: manifest.categories,
+      manifestTotalPosts: manifest.totalPosts,
+      manifestScanResult: manifest.job.scanResult,
+      cachedScans,
+    })
+    const resumedJob = hydrateJobFromManifest({
+      manifest,
+      scanResult: resumedScanResult,
+    })
+
+    if (!resumedJob) {
+      return null
+    }
+
+    return {
+      job: resumedJob,
+      summary: manifest.job.summary,
+      scanResult: resumedScanResult,
+    }
+  }
+
+  const buildBootstrapResponse = async () => {
+    const persistedUiState = await readPersistedUiState({
+      settingsPath,
+      legacySettingsPath,
+      defaultOutputDir,
+      defaultThemePreference,
+      blockOutputDefinitions,
+    })
+    const cachedScans = await ensureScanCache()
+    const resumed = await loadResumedJob({
+      outputDir: persistedUiState.lastOutputDir,
+      cachedScans,
+    })
+
+    return {
+      profile: "gfm" as const,
+      options: persistedUiState.options,
+      lastOutputDir: persistedUiState.lastOutputDir,
+      themePreference: persistedUiState.themePreference,
+      resumedJob: resumed?.job ?? null,
+      resumeSummary: resumed?.summary ?? null,
+      resumedScanResult: resumed?.scanResult ?? null,
+      frontmatterFieldOrder,
+      frontmatterFieldMeta,
+      optionDescriptions,
+      blockOutputDefinitions,
+    }
+  }
+
+  const buildResumeLookupResponse = async ({
+    outputDir,
+    persistLastOutputDir = false,
+  }: {
+    outputDir: string
+    persistLastOutputDir?: boolean
+  }) => {
+    const cachedScans = await ensureScanCache()
+    const resumed = await loadResumedJob({
+      outputDir,
+      cachedScans,
+    })
+
+    if (persistLastOutputDir && resumed?.job) {
+      await writeLastOutputDir(outputDir)
+    }
+
+    return {
+      resumedJob: resumed?.job ?? null,
+      resumeSummary: resumed?.summary ?? null,
+      resumedScanResult: resumed?.scanResult ?? null,
+    }
+  }
+
+  const writeLastOutputDir = (lastOutputDir: string) =>
+    writePersistedUiState({
+      settingsPath,
+      input: {
+        lastOutputDir,
+      },
+      legacySettingsPath,
+      defaultOutputDir,
+      defaultThemePreference,
+      blockOutputDefinitions,
+    })
+
+  return {
+    buildBootstrapResponse,
+    buildResumeLookupResponse,
+    blockOutputDefinitions,
+    cloneOptions: (options: PartialExportOptions | undefined) =>
+      cloneExportOptions(options, { blockOutputDefinitions }),
+    defaultOutputDir,
+    ensureScanCache,
+    jobScanResults,
+    updateScanCache,
+    writeLastOutputDir,
+    writeUiState: (input: Parameters<typeof writePersistedUiState>[0]["input"]) =>
+      writePersistedUiState({
+        settingsPath,
+        input,
+        legacySettingsPath,
+        defaultOutputDir,
+        defaultThemePreference,
+        blockOutputDefinitions,
+      }),
+  }
+}

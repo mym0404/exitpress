@@ -1,10 +1,12 @@
-import { JOB_STATUSES } from "../../../../shared/ExportJobState.js"
+import { JOB_STATUSES } from "../../../../domain/export-job/ExportJobState.js"
 import { cn } from "../../../lib/Cn.js"
 
 export const getStatusPillClassName = (status: string | undefined) =>
   cn(
     "status-pill rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em]",
-    status === JOB_STATUSES.COMPLETED || status === JOB_STATUSES.UPLOAD_COMPLETED || status === "ready"
+    status === JOB_STATUSES.COMPLETED ||
+      status === JOB_STATUSES.UPLOAD_COMPLETED ||
+      status === "ready"
       ? "status-pill--success"
       : status === JOB_STATUSES.UPLOAD_READY
         ? "status-pill--ready"

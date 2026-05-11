@@ -1,6 +1,6 @@
 ---
 name: ingest-blog
-description: Ingest a public Naver Blog by blogId to improve this repository's parser coverage. Use when Codex needs to export every public post without downloading images, summarize parse failures, implement or extend parser blocks for failed HTML, add representative sample fixtures, update related project knowledge, and create Korean ready PRs.
+description: Ingest a public Naver Blog by blogId to improve this repository's parser coverage. Use when Codex needs to export every public post without downloading images, summarize parse failures, implement or extend parser blocks for failed HTML, add representative sample fixtures, and create Korean ready PRs.
 ---
 
 # Ingest Blog
@@ -9,11 +9,10 @@ Use this skill to raise Naver Blog parser coverage from real public posts. Treat
 
 ## Required Outcome
 
-When parse errors are found, group failures into parser support units and process every discovered `supportUnitKey` before ending the turn. Each PR must contain exactly one focused support unit, and each fixed support unit must include all three outputs:
+When parse errors are found, group failures into parser support units and process every discovered `supportUnitKey` before ending the turn. Each PR must contain exactly one focused support unit, and each fixed support unit must include both required outputs:
 
 - Add a new parser block or extend the existing block that owns the failed HTML.
 - Add a representative sample fixture for the fixed failure type.
-- Update related knowledge documents when responsibilities, behavior, fixture rules, or verification expectations changed.
 
 Do not treat an unresolved or deferred support unit as complete. If a failure cannot be safely fixed in the current pass, leave code and fixtures unchanged for that unit, report the blocker with representative `logNo` and inspect evidence, and do not end the turn as complete.
 Other support units from the same blog stay out of the focused PR body, but they are not completion backlog; they must each get their own focused PR before the turn can end.
@@ -72,7 +71,7 @@ bun .agents/skills/ingest-blog/scripts/write-sample-fixture.ts \
 Create evidence for a source post or inspect path:
 
 ```bash
-bun scripts/capture-post-evidence.ts \
+bun scripts/post-evidence/capture-post-evidence.ts \
   --blogId <blogId> \
   --logNo <logNo> \
   --target inspect-path \
@@ -102,9 +101,9 @@ Use `--assetProfile tmp` for local smoke output, `--assetProfile readme` for REA
 11. Implement the smallest parser block addition or extension that handles that DOM shape.
 12. Add or extend the focused parser block spec beside the block implementation.
 13. Add one representative sample fixture for the focused support unit with `write-sample-fixture.ts`.
-14. Update knowledge documents only where a durable rule changed.
+14. Do not update knowledge documents for routine parser support. Use the Knowledge Boundary below only when the focused diff changes a cross-cutting repository contract.
 15. Run the development verification commands listed below for the changed parser/block area.
-16. Regenerate the report with `--reuseOutputDir <absolute-output-dir> --rerunFailures --focusSupportUnit <key>` so it reflects only the focused unit, fixtures, knowledge updates, verification results, and evidence.
+16. Regenerate the report with `--reuseOutputDir <absolute-output-dir> --rerunFailures --focusSupportUnit <key>` so it reflects only the focused unit, fixtures, verification results, and evidence.
 17. Run the Local PR Gate listed below.
 18. Commit, push, and create the ready PR for that focused support unit. With `gh pr create`, do not pass `--draft`.
 19. After PR creation, run `gh pr update-branch <number>` once when the command is available. If GitHub refuses, the branch is already current, or the command fails, report the result and continue; update-branch failure does not block completion.
@@ -146,20 +145,19 @@ The report must include:
 - failed-post rerun results
 - parser support added or extended
 - fixtures added
-- knowledge documents updated
 - verification commands and results
-- evidence generated through `scripts/capture-post-evidence.ts` helpers
+- evidence generated through `scripts/post-evidence/capture-post-evidence.ts` helpers
 - unresolved focused failures and the reason each one is deferred
 
 Keep evidence metadata as a short human note, such as the parser block behavior being demonstrated. Do not fill it with routine run state like blog id, log number, title, or status unless that value is the useful note for the section.
 
-Use `--changesPath <json>` when rerunning the collector after code changes. The JSON may contain `parserChanges`, `fixtures`, `knowledge`, `verification`, and `unresolved` arrays.
+Use `--changesPath <json>` when rerunning the collector after code changes. The JSON may contain `parserChanges`, `fixtures`, `verification`, and `unresolved` arrays.
 If unresolved focused failures remain, include one deferred reason per representative failure group in `unresolved`.
 Treat non-zero evidence capture errors as an incomplete report and fix the evidence generation issue before using the report.
 
 ## PR Flow
 
-An `ingest-blog` invocation is PR creation intent. After code, fixtures, knowledge updates, verification, focused reports, and the Local PR Gate are ready, create a ready PR for each discovered support unit without asking for confirmation.
+An `ingest-blog` invocation is PR creation intent. After code, fixtures, verification, focused reports, and the Local PR Gate are ready, create a ready PR for each discovered support unit without asking for confirmation.
 Do not offer `pr=ask`, `pr=none`, or other PR modes.
 If there are no code or fixture changes for a focused support unit because it is safely deferred, do not create an empty PR; report the blocker and do not mark the ingest turn complete.
 
@@ -215,14 +213,15 @@ For a focused support-unit PR:
 - Prefer extending an existing block when the DOM is the same content family.
 - Add a new block only when the HTML has a distinct responsibility.
 - Register a new block directly in the editor `supportedBlocks` list.
+- When adding a new block, add `outputOptions` if the block leaves a user-selectable Markdown output format choice.
 - Do not add a registry, compatibility re-export, broad fallback parser, or catch-all block.
 - Do not change renderer or AST types unless the failed content cannot fit an existing AST block.
-- If a new AST block type is unavoidable, update shared types, renderer, exporter behavior, focused tests, fixtures, and knowledge together.
+- If a new AST block type is unavoidable, update shared types, renderer, exporter behavior, focused tests, fixtures, and cross-cutting knowledge together.
 - Keep the PR file shape predictable from the chosen strategy:
-  - Existing-block edit: touch the owning block file, its adjacent spec, one representative sample fixture, and durable knowledge only if the contract changed.
-  - New-block addition: add the new block file, its adjacent spec, the owning editor registration, one representative sample fixture, and durable knowledge only if the contract changed.
+  - Existing-block edit: touch the owning block file, its adjacent spec, and one representative sample fixture.
+  - New-block addition: add the new block file, its adjacent spec, the owning editor registration, and one representative sample fixture.
   - Evidence assets may be included when the report or PR body needs committed `figure` images.
-- Do not touch renderer, exporter, shared AST types, UI, workflow, broad helpers, or unrelated knowledge unless the focused failed HTML cannot be represented through existing contracts.
+- Do not touch renderer, exporter, shared AST types, UI, workflow, broad helpers, or knowledge unless the focused failed HTML cannot be represented through existing contracts.
 - If the necessary diff does not match the expected file shape, keep the wider change directly tied to the focused failure and document the reason in the report.
 
 ## Fixture Rules
@@ -234,20 +233,19 @@ For a focused support-unit PR:
 - Do not store source HTML in the fixture directory.
 - Keep live HTML input through the existing sample fixture harness and cache.
 
-## Knowledge Updates
+## Knowledge Boundary
 
-Update these files when their durable contract changes:
+Do not edit root `AGENTS.md` or `.agents/knowledge/*.md` documents for ordinary parser support units.
+Keep specific parser block behavior in the block implementation, adjacent spec, representative fixture, focused report, and PR evidence.
 
-- `.agents/knowledge/parser-blocks.md`: parser block responsibility, failure policy, container/leaf behavior, or output option contract.
-- `.agents/knowledge/parser-architecture.md`: routing, file placement, AST boundary, or editor/block ownership.
-- `.agents/knowledge/editor-se2.md`: SE2 parsing strategy or supported behavior category.
-- `.agents/knowledge/editor-se3.md`: SE3 parsing strategy or supported behavior category.
-- `.agents/knowledge/editor-se4.md`: SE4 module-context handling, fallback strategy, or supported behavior category.
-- `.agents/knowledge/fixtures.md`: fixture rules, expected output policy, or sample harness behavior.
-- `.agents/knowledge/verification.md`: required commands or parser change verification rules.
-- `.agents/knowledge/domain.md`: Markdown, frontmatter, asset, or output domain rules.
+Do not update knowledge to record:
 
-Do not update knowledge only to list a new fixture id, exact block key, selector, or sample inventory item.
+- a new parser block's exact parsing method
+- selectors, module type strings, block keys, or DOM recipes
+- fixture ids, sample inventory items, support unit findings, or source-post details
+- behavior that is already captured by the focused code, spec, and fixture
+
+Update knowledge only when the focused change alters a cross-cutting repository contract, such as shared AST shape, renderer/exporter output behavior, parser dispatch semantics, fixture harness policy, verification commands, or project ownership boundaries. Keep those updates at category or contract level and do not describe the specific block parsing method.
 
 ## Verification
 
@@ -258,7 +256,7 @@ python3 /Users/mj/.codex/skills/.system/skill-creator/scripts/quick_validate.py 
 bun .agents/skills/ingest-blog/scripts/collect-blog-errors.ts --help
 bun .agents/skills/ingest-blog/scripts/write-sample-fixture.ts --help
 bun .agents/skills/ingest-blog/scripts/check-support-unit-prs.ts --help
-bun scripts/capture-post-evidence.ts --help
+bun scripts/post-evidence/capture-post-evidence.ts --help
 ```
 
 For parser/block changes:

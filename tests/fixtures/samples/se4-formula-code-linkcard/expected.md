@@ -8,7 +8,6 @@ category: BOJ
 categoryPath:
   - Algorithm
   - BOJ
-visibility: public
 thumbnail: https://mblogthumb-phinf.pstatic.net/MjAyMzAzMDRfNTMg/MDAxNjc3OTM2NTg2NDU2.e5y0ziI9pO5MQMvTUNcVWLysAejftoYV5O83vFQAk3sg.aLBO_S1K-b4pQU0tOZ3ipv_r4uGR3BPXr8-gaT42riYg.PNG.mym0404/bg.png?type=w800
 ---
 

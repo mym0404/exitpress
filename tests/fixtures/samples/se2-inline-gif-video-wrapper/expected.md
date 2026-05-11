@@ -8,7 +8,6 @@ category: Tip
 categoryPath:
   - Android
   - Tip
-visibility: public
 thumbnail: https://mblogthumb-phinf.pstatic.net/MjAxODA4MjFfODMg/MDAxNTM0ODU2NTYxOTEy.Q3jKlJ6uudo9HZPYicqBADHAQQCQXLLrV9Q1GX446VYg.ZPw_cxlRzqpXK9QGFklOYstG4GHfo3Pkxqe-ou5krnEg.GIF.mym0404/doubleBuffering.gif?type=w800
 ---
 

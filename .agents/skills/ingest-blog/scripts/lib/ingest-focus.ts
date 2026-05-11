@@ -79,16 +79,23 @@ export const selectFocusedSupportUnit = <Group extends SupportUnitFailureGroup>(
     }
   }
 
-  const reportFailureGroups = failureGroups.filter((group) => group.supportUnitKey === focusSupportUnit)
-  const remainingBacklogGroups = failureGroups.filter((group) => group.supportUnitKey !== focusSupportUnit)
-  const previousFocusedGroups = previousFailureGroups.filter((group) => group.supportUnitKey === focusSupportUnit)
+  const reportFailureGroups = failureGroups.filter(
+    (group) => group.supportUnitKey === focusSupportUnit,
+  )
+  const remainingBacklogGroups = failureGroups.filter(
+    (group) => group.supportUnitKey !== focusSupportUnit,
+  )
+  const previousFocusedGroups = previousFailureGroups.filter(
+    (group) => group.supportUnitKey === focusSupportUnit,
+  )
   const previousFocusedLogNos = previousFailureGroups
     .filter((group) => group.supportUnitKey === focusSupportUnit)
     .flatMap((group) => group.logNos)
   const focusedSupportUnitKnown = reportFailureGroups.length > 0 || previousFocusedLogNos.length > 0
   const focusedFailureBlockHash =
     reportFailureGroups.find((group) => group.failureBlockHash)?.failureBlockHash ??
-    previousFailureGroups.find((group) => group.supportUnitKey === focusSupportUnit)?.failureBlockHash
+    previousFailureGroups.find((group) => group.supportUnitKey === focusSupportUnit)
+      ?.failureBlockHash
 
   return {
     reportFailureGroups,

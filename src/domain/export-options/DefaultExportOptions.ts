@@ -1,0 +1,65 @@
+import type { ExportOptions } from "./Types.js"
+
+export const defaultExportOptions = (): ExportOptions => ({
+  scope: {
+    categoryIds: [],
+    categoryMode: "selected-and-descendants",
+    dateFrom: null,
+    dateTo: null,
+  },
+  structure: {
+    groupByCategory: true,
+    includeDateInPostFolderName: true,
+    includeLogNoInPostFolderName: false,
+    slugStyle: "snake",
+    slugWhitespace: "underscore",
+    postFolderNameMode: "preset",
+    postFolderNameCustomTemplate: "",
+  },
+  frontmatter: {
+    enabled: true,
+    fields: {
+      title: true,
+      source: true,
+      blogId: true,
+      logNo: true,
+      publishedAt: true,
+      category: true,
+      categoryPath: true,
+      tags: true,
+      thumbnail: true,
+      exportedAt: true,
+      assetPaths: false,
+    },
+    aliases: {
+      title: "",
+      source: "",
+      blogId: "",
+      logNo: "",
+      publishedAt: "",
+      category: "",
+      categoryPath: "",
+      tags: "",
+      thumbnail: "",
+      exportedAt: "",
+      assetPaths: "",
+    },
+  },
+  blockOutputs: {
+    defaults: {},
+  },
+  assets: {
+    imageHandlingMode: "download-and-upload",
+    compressionEnabled: true,
+    downloadFailureMode: "fail",
+    stickerAssetMode: "ignore",
+    downloadImages: true,
+    downloadThumbnails: true,
+    includeImageCaptions: false,
+    thumbnailSource: "post-list-first",
+  },
+  links: {
+    sameBlogPostMode: "keep-source",
+    sameBlogPostCustomUrlTemplate: "",
+  },
+})

@@ -7,7 +7,7 @@
 
 ## CLI
 ```bash
-bun scripts/capture-post-evidence.ts \
+bun scripts/post-evidence/capture-post-evidence.ts \
   --blogId <blogId> \
   --logNo <logNo> \
   --target post \
@@ -15,7 +15,7 @@ bun scripts/capture-post-evidence.ts \
 ```
 
 ```bash
-bun scripts/capture-post-evidence.ts \
+bun scripts/post-evidence/capture-post-evidence.ts \
   --blogId <blogId> \
   --logNo <logNo> \
   --target inspect-path \
@@ -24,7 +24,7 @@ bun scripts/capture-post-evidence.ts \
 ```
 
 ```bash
-bun scripts/capture-post-evidence.ts \
+bun scripts/post-evidence/capture-post-evidence.ts \
   --case tmp/harness/post-evidence/cases.json \
   --metadataCachePath tmp/harness/post-evidence/metadata-cache.json \
   --outputDir tmp/harness/post-evidence/run
@@ -34,7 +34,7 @@ bun scripts/capture-post-evidence.ts \
 - `--target post` captures the full mobile Naver post body and renders the full converted Markdown with frontmatter.
 - `--target inspect-path` captures the node selected by a single-post inspect path and renders only the corresponding parsed block fragment.
 - Inspect-path Markdown omits frontmatter and does not include post-level thumbnail frontmatter behavior.
-- Use `bun scripts/export-single-post.ts --inspect` when a parser failure report does not already provide the inspect path.
+- Use `bun scripts/single-post/export-single-post.ts --inspect` when a parser failure report does not already provide the inspect path.
 
 ## Export Options
 - `--optionsPath` accepts the same JSON option shape used by single-post export helpers.
@@ -78,7 +78,7 @@ bun scripts/capture-post-evidence.ts \
 
 ## Ingest Reports
 - `.agents/skills/ingest-blog/scripts/collect-blog-errors.ts` uses post evidence helpers when writing ingest reports.
-- Post evidence helpers stay under `scripts/lib/post-evidence` because both the manual evidence CLI and ingest reports use them.
+- Post evidence helpers stay under `scripts/post-evidence` because both the manual evidence CLI and ingest reports use them.
 - Completed ingest outputs may be reused; when a reusable manifest exists, rerun only failed posts unless `--forceFull` is requested.
 - Ingest reports include `report.md`, `report.json`, `evidence.md`, and committed figure images under `.agents/knowledge/reference/assets/figure`.
 - Ingest evidence Markdown omits source-post links, and committed figure asset filenames stay anonymous.
@@ -86,7 +86,7 @@ bun scripts/capture-post-evidence.ts \
 - PR bodies may include the focused report summary and evidence sections only after the user explicitly asks for PR creation or invokes the skill with that intent.
 
 ## Verification
-- Run `bun scripts/capture-post-evidence.ts --help` after changing the CLI surface.
+- Run `bun scripts/post-evidence/capture-post-evidence.ts --help` after changing the CLI surface.
 - Run at least one full-post smoke and one inspect-path smoke after changing capture behavior.
 - Check `report.json.errorCount` before using generated evidence.
 - Use `identify <asset>.png` or a visual image check when screenshot framing or target node capture behavior changes.

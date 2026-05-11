@@ -4,15 +4,15 @@
 - Parser block은 에디터별 HTML node를 공용 `AstBlock`으로 바꾸는 가장 작은 책임 단위다.
 - 모든 parser block은 공통 base contract를 따르고 `match()`와 `convert()`를 가진다.
 - `match()`는 현재 node가 자기 책임인지 판단한다.
-- `convert()`는 `{ status: "handled", blocks }` 또는 `{ status: "skip" }`를 반환한다.
+- `convert()`는 변환된 `AstBlock[]`를 반환하고, 의도적으로 버릴 node는 빈 배열을 반환한다.
 
 ## Managed By Editors
 - Editor는 `supportedBlocks` 배열에 `BaseBlock` instance를 직접 들고 있다.
 - `supportedBlocks`는 ordered first-match list다.
 - 첫 번째로 match된 block만 convert를 실행한다.
 - match되는 block이 없으면 parser는 실패한다.
-- `skip`은 document title, spacer, top-level line break, inline style tag, 빈 editor component처럼 의도적으로 버리는 node에만 사용한다.
-- 알려진 component가 파싱 후 의미 있는 출력이 없으면 `handled`와 빈 `blocks`를 반환할 수 있다.
+- 빈 배열 반환은 document title, spacer, top-level line break, HTML 주석, 빈 editor component처럼 의도적으로 버리는 node에만 사용한다.
+- 알려진 component가 파싱 후 의미 있는 출력이 없으면 빈 배열을 반환할 수 있다.
 - 내용이 있는 node를 match했는데 변환할 수 없으면 block이 throw한다.
 
 ## Context
@@ -29,13 +29,14 @@
 - 현재 Container 계열은 legacy wrapper를 풀어 실제 content leaf로 넘기는 용도에 가깝다.
 
 ## Output Options
-- Parser block의 `outputOptions`는 같은 AST를 다른 Markdown 형식으로 렌더링할 수 있게 하는 metadata다.
+- Parser block의 `outputOptions`는 사용자가 선택할 수 있는 Markdown 형식 차이가 남아 있는 block의 metadata다.
 - UI에 노출되는 selection key는 `editorType:blockId` 형식이다.
 - Output option이 2개 이상인 block만 `BaseEditor.getBlockOutputDefinitions()`에 노출된다.
 - 같은 editor 안에서 같은 `blockId`가 반복되면 첫 definition만 노출되고, 같은 key를 공유한다.
 - 여러 concrete block이 같은 output family를 공유하면 같은 `blockId`와 output selection을 공유할 수 있다.
+- `outputOptions`와 그 params는 concrete parser block 파일이 직접 소유한다.
+- Block별 output metadata를 `core`, `shared`, 공용 helper로 분리하지 않는다.
 - Parser는 render-time metadata가 필요한 AST block에 `outputSelectionKey`와 `outputSelection`을 붙인다.
-- Paragraph link style은 renderer 단계의 전역 옵션이 아니라 paragraph parser block이 HTML-to-Markdown 변환 전에 선택한다.
 - 정확한 selectable key 목록과 노출 순서는 `BaseBlog`에서 파생되는 output definition과 관련 tests가 source of truth다.
 
 ## Failure And Inspection

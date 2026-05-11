@@ -8,7 +8,6 @@ category: 행복여행
 categoryPath:
   - 좋은정보
   - 행복여행
-visibility: public
 thumbnail: https://mblogthumb-phinf.pstatic.net/MjAxODA2MTdfNzUg/MDAxNTI5MjQzNzIwMDk2.-6F0jadFNKjGQ08WAd_Qgm-W95v7BOO4-JWgriFcJdQg.wwTgCRX80OH-ocR6qo7gGWJzaTK4vFbuVfNFf-zmh1Ag.PNG.cuk1026/%C1%A6%BA%CE%B5%B5%B1%E6.png?type=w800
 ---
 

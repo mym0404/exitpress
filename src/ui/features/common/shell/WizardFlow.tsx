@@ -1,10 +1,11 @@
 import { RiArrowRightLine, RiDownload2Line, RiLoader4Line, RiRadarLine } from "@remixicon/react"
-
-import type { ExportJobState, ExportOptions, ScanResult } from "../../../../shared/Types.js"
-import { JOB_STATUSES } from "../../../../shared/ExportJobState.js"
-import type { PartialExportOptions } from "../../../../shared/ExportOptions.js"
-import { sanitizePersistedExportOptions } from "../../../../shared/ExportOptions.js"
-import { exportOptionsStepMeta, type ExportOptionsStep } from "../../options/ExportOptionsSteps.js"
+import type { ScanResult } from "../../../../domain/blog/Types.js"
+import type { ExportJobState } from "../../../../domain/export-job/Types.js"
+import type { PartialExportOptions } from "../../../../domain/export-options/ExportOptions.js"
+import type { ExportOptions } from "../../../../domain/export-options/Types.js"
+import { JOB_STATUSES } from "../../../../domain/export-job/ExportJobState.js"
+import { sanitizePersistedExportOptions } from "../../../../domain/export-options/ExportOptions.js"
+import { exportOptionsStepMeta } from "../../options/ExportOptionsSteps.js"
 
 export const setupSteps = [
   "blog-input",
@@ -51,15 +52,6 @@ export const NextActionIcon = ({
   }
 
   return <RiArrowRightLine className="size-4" aria-hidden="true" />
-}
-
-export const optionStepMap: Record<Extract<SetupStep, `${string}-options`>, ExportOptionsStep> = {
-  "structure-options": "structure",
-  "frontmatter-options": "frontmatter",
-  "markdown-options": "markdown",
-  "assets-options": "assets",
-  "links-options": "links",
-  "diagnostics-options": "diagnostics",
 }
 
 export const stepMeta: Record<WizardStep, { title: string; description: string }> = {

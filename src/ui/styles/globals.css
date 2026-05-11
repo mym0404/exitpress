@@ -80,15 +80,13 @@
   --panel-shadow-border: 0 0 0 1px rgba(23, 23, 23, 0.08);
   --panel-shadow-soft: 0 18px 50px rgba(23, 23, 23, 0.08);
   --panel-shadow-elevated:
-    0 0 0 1px rgba(23, 23, 23, 0.08),
-    0 12px 28px rgba(23, 23, 23, 0.08),
-    0 32px 80px rgba(23, 23, 23, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.95);
+    0 0 0 1px rgba(23, 23, 23, 0.08), 0 12px 28px rgba(23, 23, 23, 0.08),
+    0 32px 80px rgba(23, 23, 23, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.95);
   --panel-shadow-floating:
-    0 0 0 1px rgba(23, 23, 23, 0.08),
-    0 24px 70px rgba(23, 23, 23, 0.14),
+    0 0 0 1px rgba(23, 23, 23, 0.08), 0 24px 70px rgba(23, 23, 23, 0.14),
     inset 0 1px 0 rgba(255, 255, 255, 0.9);
-  --focus-ring: 0 0 0 1px color-mix(in srgb, var(--ring) 42%, transparent),
+  --focus-ring:
+    0 0 0 1px color-mix(in srgb, var(--ring) 42%, transparent),
     0 0 0 4px color-mix(in srgb, var(--ring) 18%, transparent);
   --radius-sm: 0.625rem;
   --radius-md: 0.875rem;
@@ -146,15 +144,13 @@
   --panel-shadow-border: 0 0 0 1px rgba(255, 255, 255, 0.08);
   --panel-shadow-soft: 0 18px 50px rgba(0, 0, 0, 0.38);
   --panel-shadow-elevated:
-    0 0 0 1px rgba(255, 255, 255, 0.08),
-    0 12px 32px rgba(0, 0, 0, 0.4),
-    0 32px 96px rgba(0, 0, 0, 0.48),
-    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    0 0 0 1px rgba(255, 255, 255, 0.08), 0 12px 32px rgba(0, 0, 0, 0.4),
+    0 32px 96px rgba(0, 0, 0, 0.48), inset 0 1px 0 rgba(255, 255, 255, 0.04);
   --panel-shadow-floating:
-    0 0 0 1px rgba(255, 255, 255, 0.08),
-    0 24px 70px rgba(0, 0, 0, 0.54),
+    0 0 0 1px rgba(255, 255, 255, 0.08), 0 24px 70px rgba(0, 0, 0, 0.54),
     inset 0 1px 0 rgba(255, 255, 255, 0.05);
-  --focus-ring: 0 0 0 1px color-mix(in srgb, var(--ring) 48%, transparent),
+  --focus-ring:
+    0 0 0 1px color-mix(in srgb, var(--ring) 48%, transparent),
     0 0 0 4px color-mix(in srgb, var(--ring) 18%, transparent);
   --status-idle-bg: rgba(255, 255, 255, 0.08);
   --status-idle-fg: #a1a1aa;
@@ -204,7 +200,9 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
-  font-feature-settings: "liga" 1, "calt" 1;
+  font-feature-settings:
+    "liga" 1,
+    "calt" 1;
   font-size: 16px;
   overflow-x: clip;
 }
@@ -290,7 +288,10 @@ pre,
 .font-mono,
 .mono-value {
   font-family: var(--font-mono);
-  font-feature-settings: "liga" 1, "calt" 1, "tnum" 1;
+  font-feature-settings:
+    "liga" 1,
+    "calt" 1,
+    "tnum" 1;
 }
 
 .shell-backdrop {
@@ -403,7 +404,9 @@ pre,
 .theme-toggle-item[data-state="on"] {
   background: var(--card);
   color: var(--foreground);
-  box-shadow: var(--panel-shadow-border), 0 6px 18px rgba(0, 0, 0, 0.12);
+  box-shadow:
+    var(--panel-shadow-border),
+    0 6px 18px rgba(0, 0, 0, 0.12);
 }
 
 @media (max-width: 640px) {

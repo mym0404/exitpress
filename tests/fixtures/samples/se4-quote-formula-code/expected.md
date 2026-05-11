@@ -8,7 +8,6 @@ category: PS 알고리즘, 팁
 categoryPath:
   - Algorithm
   - PS 알고리즘, 팁
-visibility: public
 thumbnail: https://mblogthumb-phinf.pstatic.net/MjAyMjAxMTFfMzAw/MDAxNjQxOTAxMTY4NDI2.8akcjgeR4eBygaw-Aos4qS9Cl4K__Ms3xswjHEAWggAg.01-4GR4fCm4rUK_ywMmkcYx0mpoZMbdA_ooLeMIuxPEg.PNG.mym0404/bg.png?type=w800
 ---
 

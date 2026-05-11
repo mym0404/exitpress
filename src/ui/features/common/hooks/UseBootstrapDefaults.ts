@@ -1,8 +1,7 @@
 import { useEffect } from "react"
-
-import type { ThemePreference } from "../../../../shared/Types.js"
-import { sanitizePersistedExportOptions } from "../../../../shared/ExportOptions.js"
+import type { ThemePreference } from "../../../../domain/preferences/ThemePreference.js"
 import type { ExportBootstrapResponse } from "../../../lib/Api.js"
+import { sanitizePersistedExportOptions } from "../../../../domain/export-options/ExportOptions.js"
 import { fetchJson } from "../../../lib/Api.js"
 import { getPersistedUiStateSignature } from "../shell/WizardFlow.js"
 

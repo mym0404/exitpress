@@ -3,13 +3,13 @@
 ## Identity
 - Editor type은 `naver-se3`, label은 `SmartEditor 3`다.
 - SE3는 component wrapper 기반의 legacy SmartEditor parser다.
-- Parser block 구현은 `src/modules/blocks/naver-se3/*`에 둔다.
+- Parser block 구현은 `src/parsing/naver-blog/se3/blocks/*`에 둔다.
 
 ## Block Families
 - Document chrome 계열은 본문 output이 아닌 제목 wrapper를 버린다.
 - Text 계열은 SE3 textarea HTML을 Markdown paragraph로 만들고, 비어 있는 textarea component는 버린다.
 - Media 계열은 component 안의 standalone images와 GIF video images를 image 또는 imageGroup AST로 만든다.
-- Link card 계열은 SE3 oglink preview component를 linkCard AST로 만든다.
+- Link card 계열은 SE3 oglink preview component를 Markdown link paragraph로 만든다.
 - Table, quote, code 계열은 component 안의 대표 semantic child를 공용 AST로 만든다.
 
 ## Characteristics

@@ -1,13 +1,13 @@
+import type { ExportJobState } from "../../../domain/export-job/Types.js"
 import type {
-  ExportJobState,
   UploadProviderCatalogResponse,
   UploadProviderDefinition,
   UploadProviderFields,
-} from "../../../shared/Types.js"
+} from "../../../domain/upload/UploadProviderTypes.js"
 import {
   DEFAULT_UPLOAD_PROVIDER_KEY,
   UPLOAD_PROVIDER_KEYS,
-} from "../../../shared/UploadProviderKeys.js"
+} from "../../../domain/upload/UploadProviderKeys.js"
 
 const INDEX_MARKDOWN_FILE = "index.md"
 
@@ -47,7 +47,9 @@ export const getPreferredDefaultProviderKey = (catalog: UploadProviderCatalogRes
   catalog.providers[0]?.key ??
   ""
 
-export const buildInitialProviderFields = (provider: UploadProviderDefinition | null): UploadProviderFields =>
+export const buildInitialProviderFields = (
+  provider: UploadProviderDefinition | null,
+): UploadProviderFields =>
   Object.fromEntries(
     (provider?.fields ?? []).map((field) => {
       if (field.inputType === "checkbox") {
@@ -128,8 +130,7 @@ export const buildJobItemPathMeta = (
   }
 }
 
-const normalizeLocalPath = (value: string) =>
-  value.replace(/\\/g, "/").replace(/\/{2,}/g, "/")
+const normalizeLocalPath = (value: string) => value.replace(/\\/g, "/").replace(/\/{2,}/g, "/")
 
 export const buildLocalOutputPath = ({
   outputDir,

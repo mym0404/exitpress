@@ -1,45 +1,36 @@
 #!/usr/bin/env bun
 
-import { readFile, readdir, writeFile } from "node:fs/promises"
-import path from "node:path"
-
-import { NaverBlogExporter } from "../../../../src/modules/exporter/NaverBlogExporter.js"
-import { NaverBlogFetcher } from "../../../../src/modules/fetcher/NaverBlogFetcher.js"
-import {
-  inspectSinglePost,
-  type SinglePostInspectDiagnostics,
-} from "../../../../src/modules/exporter/SinglePostInspect.js"
-import { defaultExportOptions } from "../../../../src/shared/ExportOptions.js"
-import { runWithLogSink } from "../../../../src/shared/Logger.js"
+import type { EvidenceCase } from "../../../../scripts/post-evidence/cases.js"
+import type { ReusableIngestOutput } from "../../../../scripts/post-evidence/ingest-output.js"
+import type { ScanResult } from "../../../../src/domain/blog/Types.js"
 import type {
   ExportJobItem,
   ExportManifest,
   PostManifestEntry,
-  ScanResult,
-} from "../../../../src/shared/Types.js"
-import {
-  ensureDir,
-  extractBlogId,
-  resolveRepoPath,
-  toErrorMessage,
-} from "../../../../src/shared/Utils.js"
+} from "../../../../src/domain/export-job/Types.js"
+import type { SinglePostInspectDiagnostics } from "../../../../src/exporting/post/SinglePostInspect.js"
+import type { SupportUnitFailureGroup } from "./lib/ingest-focus.js"
 import {
   capturePostEvidence,
   createEvidenceMarkdownSections,
-} from "../../../../scripts/lib/post-evidence/capture.js"
-import type { EvidenceCase } from "../../../../scripts/lib/post-evidence/cases.js"
+} from "../../../../scripts/post-evidence/capture.js"
+import { renderEvidenceMarkdownSections } from "../../../../scripts/post-evidence/evidence.js"
 import {
   findLatestReusableIngestOutput,
   loadReusableIngestOutput,
-  type ReusableIngestOutput,
-} from "../../../../scripts/lib/post-evidence/ingest-output.js"
-import { renderEvidenceMarkdownSections } from "../../../../scripts/lib/post-evidence/evidence.js"
+} from "../../../../scripts/post-evidence/ingest-output.js"
+import { extractBlogId } from "../../../../src/domain/blog/NaverUrl.js"
+import { defaultExportOptions } from "../../../../src/domain/export-options/ExportOptions.js"
+import { inspectSinglePost } from "../../../../src/exporting/post/SinglePostInspect.js"
+import { NaverBlogExporter } from "../../../../src/exporting/workflow/NaverBlogExporter.js"
+import { ensureDir, resolveRepoPath } from "../../../../src/infra/node/FilePathUtils.js"
+import { runWithLogSink } from "../../../../src/infra/runtime/Logger.js"
+import { NaverBlogFetcher } from "../../../../src/integrations/naver-blog/NaverBlogFetcher.js"
+import { toErrorMessage } from "../../../../src/shared/error/ErrorUtils.js"
+import { mergeSupportUnitFailureGroups, selectFocusedSupportUnit } from "./lib/ingest-focus.js"
 import { createSupportUnit } from "./lib/ingest-support-units.js"
-import {
-  mergeSupportUnitFailureGroups,
-  selectFocusedSupportUnit,
-  type SupportUnitFailureGroup,
-} from "./lib/ingest-focus.js"
+import { readdir, readFile, writeFile } from "node:fs/promises"
+import path from "node:path"
 
 type CollectArgs = {
   blogId: string
@@ -54,7 +45,6 @@ type CollectArgs = {
 type CollectChanges = {
   parserChanges: string[]
   fixtures: string[]
-  knowledge: string[]
   verification: Array<{
     command: string
     result: string
@@ -72,16 +62,14 @@ type FailedPostReport = {
   editor: SinglePostInspectDiagnostics["editor"] | null
   parse: SinglePostInspectDiagnostics["parse"] | null
   unsupportedCount: number
-  firstUnsupported:
-    | {
-        path: string
-        tagName: string
-        className?: string
-        moduleType?: string
-        text: string
-        html: string
-      }
-    | null
+  firstUnsupported: {
+    path: string
+    tagName: string
+    className?: string
+    moduleType?: string
+    text: string
+    html: string
+  } | null
 }
 
 type FailureGroup = {
@@ -115,7 +103,7 @@ Options:
   --forceFull            Ignore reusable output and run a full ingest.
   --focusSupportUnit <key>
                          Report and exit against one parser support unit.
-  --changesPath <json>   Include parser/fixture/knowledge/verification changes in report.
+  --changesPath <json>   Include parser/fixture/verification changes in report.
 
 Exports public posts with remote asset references, reuses completed outputs when possible, inspects failures, and writes report.md/report.json/evidence.md.`
 
@@ -267,7 +255,6 @@ const writeJson = async ({ targetPath, value }: { targetPath: string; value: unk
 const emptyChanges = (): CollectChanges => ({
   parserChanges: [],
   fixtures: [],
-  knowledge: [],
   verification: [],
   unresolved: [],
 })
@@ -281,7 +268,9 @@ const readChanges = async (changesPath: string | undefined) => {
   const readStringArray = (key: string) => {
     const items = value[key]
 
-    return Array.isArray(items) ? items.filter((item): item is string => typeof item === "string") : []
+    return Array.isArray(items)
+      ? items.filter((item): item is string => typeof item === "string")
+      : []
   }
   const verification = Array.isArray(value.verification)
     ? value.verification.flatMap((item) => {
@@ -305,7 +294,6 @@ const readChanges = async (changesPath: string | undefined) => {
   return {
     parserChanges: readStringArray("parserChanges"),
     fixtures: readStringArray("fixtures"),
-    knowledge: readStringArray("knowledge"),
     verification,
     unresolved: readStringArray("unresolved"),
   } satisfies CollectChanges
@@ -362,7 +350,9 @@ const readPreviousRepresentative = (value: unknown): SupportUnitFailureGroup["re
 
 const readPreviousFailureGroups = async (outputDir: string): Promise<SupportUnitFailureGroup[]> => {
   try {
-    const parsed = JSON.parse(await readFile(path.join(outputDir, "failure-summary.json"), "utf8")) as Record<string, unknown>
+    const parsed = JSON.parse(
+      await readFile(path.join(outputDir, "failure-summary.json"), "utf8"),
+    ) as Record<string, unknown>
     const value = Array.isArray(parsed.discoveredSupportUnits)
       ? parsed.discoveredSupportUnits
       : Array.isArray(parsed.allFailureGroups)
@@ -559,7 +549,9 @@ const runExporter = async ({
       : undefined,
     cachedScanResult,
     onProgress: ({ total, completed, failed }) => {
-      console.error(`progress: ${completed + failed}/${total} completed=${completed} failed=${failed}`)
+      console.error(
+        `progress: ${completed + failed}/${total} completed=${completed} failed=${failed}`,
+      )
     },
     onItem: (item) => {
       if (item.status === "failed") {
@@ -702,10 +694,6 @@ const renderIngestReportMarkdown = ({
     "## Fixtures",
     "",
     renderList(changes.fixtures),
-    "",
-    "## Knowledge",
-    "",
-    renderList(changes.knowledge),
     "",
     "## Verification",
     "",
@@ -880,39 +868,35 @@ const createEvidenceCases = ({
 
   const focusedLogNoSet = new Set(focusedLogNos)
   const successfulLogNoSet = new Set(
-    rerunResults
-      .filter((result) => result.status === "success")
-      .map((result) => result.logNo),
+    rerunResults.filter((result) => result.status === "success").map((result) => result.logNo),
   )
-  const previousFocusedCases = previousFocusedGroups
-    .flatMap((group): EvidenceCase[] => {
-      const representativeLogNo = group.representative?.logNo
-      const logNo =
-        representativeLogNo && successfulLogNoSet.has(representativeLogNo)
-          ? representativeLogNo
-          : group.logNos.find((candidate) => successfulLogNoSet.has(candidate)) ??
-            group.logNos[0]
+  const previousFocusedCases = previousFocusedGroups.flatMap((group): EvidenceCase[] => {
+    const representativeLogNo = group.representative?.logNo
+    const logNo =
+      representativeLogNo && successfulLogNoSet.has(representativeLogNo)
+        ? representativeLogNo
+        : (group.logNos.find((candidate) => successfulLogNoSet.has(candidate)) ?? group.logNos[0])
 
-      if (!logNo || !successfulLogNoSet.has(logNo)) {
-        return []
-      }
+    if (!logNo || !successfulLogNoSet.has(logNo)) {
+      return []
+    }
 
-      return [
-        {
-          blogId,
-          logNo,
-          metadata: `fixed parse example: ${group.editorType ?? "unknown-editor"} / ${group.firstUnsupportedTag ?? "unknown-tag"}`,
-          target: group.firstUnsupportedPath
-            ? {
-                kind: "inspect-path",
-                path: group.firstUnsupportedPath,
-              }
-            : {
-                kind: "post",
-              },
-        },
-      ]
-    })
+    return [
+      {
+        blogId,
+        logNo,
+        metadata: `fixed parse example: ${group.editorType ?? "unknown-editor"} / ${group.firstUnsupportedTag ?? "unknown-tag"}`,
+        target: group.firstUnsupportedPath
+          ? {
+              kind: "inspect-path",
+              path: group.firstUnsupportedPath,
+            }
+          : {
+              kind: "post",
+            },
+      },
+    ]
+  })
 
   if (previousFocusedCases.length > 0) {
     return previousFocusedCases.slice(0, 5)
@@ -950,17 +934,16 @@ const run = async () => {
   const logs: string[] = []
   const options = createIngestOptions()
   const explicitReuseOutputDir = parsedArgs.reuseOutputDir ?? parsedArgs.outputDir
-  const reusableOutput =
-    parsedArgs.forceFull
-      ? null
-      : explicitReuseOutputDir
-        ? await loadReusableIngestOutput({
-            blogId,
-            outputDir: explicitReuseOutputDir,
-          })
-        : await findLatestReusableIngestOutput({
-            blogId,
-          })
+  const reusableOutput = parsedArgs.forceFull
+    ? null
+    : explicitReuseOutputDir
+      ? await loadReusableIngestOutput({
+          blogId,
+          outputDir: explicitReuseOutputDir,
+        })
+      : await findLatestReusableIngestOutput({
+          blogId,
+        })
 
   if (parsedArgs.rerunFailures && !reusableOutput) {
     throw new Error(`재사용 가능한 완료 output을 찾지 못했습니다: ${blogId}`)
@@ -1029,9 +1012,7 @@ const run = async () => {
     focusSupportUnit: parsedArgs.focusSupportUnit,
   })
   const failureGroups = focusedSelection.reportFailureGroups
-  const focusedLogNos = parsedArgs.focusSupportUnit
-    ? focusedSelection.previousFocusedLogNos
-    : []
+  const focusedLogNos = parsedArgs.focusSupportUnit ? focusedSelection.previousFocusedLogNos : []
   const focusedLogNoSet = new Set(focusedLogNos)
   const reportRerunResults = parsedArgs.focusSupportUnit
     ? rerunResults.filter((result) => focusedLogNoSet.has(result.logNo))

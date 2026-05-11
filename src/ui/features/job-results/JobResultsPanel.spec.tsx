@@ -6,14 +6,14 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
 import "@testing-library/jest-dom/vitest"
 
-import { defaultExportOptions } from "../../../shared/ExportOptions.js"
+import type { ExportJobState } from "../../../domain/export-job/Types.js"
 import type {
-  ExportJobState,
   UploadProviderCatalogResponse,
   UploadProviderValue,
-} from "../../../shared/Types.js"
+} from "../../../domain/upload/UploadProviderTypes.js"
+import { createTestPath } from "../../../../tests/support/test-paths.js"
+import { defaultExportOptions } from "../../../domain/export-options/ExportOptions.js"
 import { JobResultsPanel } from "./JobResultsPanel.js"
-import { createTestPath } from "../../../../tests/helpers/test-paths.js"
 
 const testOutputDir = createTestPath("ui-job-results-panel", "output")
 
@@ -62,10 +62,14 @@ const selectOption = async ({
   await user.click(trigger)
 
   await waitFor(() => {
-    expect(document.querySelector(`[data-slot="select-item"][data-value="${value}"]`)).not.toBeNull()
+    expect(
+      document.querySelector(`[data-slot="select-item"][data-value="${value}"]`),
+    ).not.toBeNull()
   })
 
-  await user.click(document.querySelector(`[data-slot="select-item"][data-value="${value}"]`) as HTMLElement)
+  await user.click(
+    document.querySelector(`[data-slot="select-item"][data-value="${value}"]`) as HTMLElement,
+  )
 }
 
 const uploadProviderCatalog: UploadProviderCatalogResponse = {
@@ -414,20 +418,24 @@ describe("JobResultsPanel upload provider UX", () => {
 
     expect(within(resultsTable).getByRole("columnheader", { name: "카테고리" })).toBeInTheDocument()
     expect(within(resultsTable).getByRole("columnheader", { name: "파일" })).toBeInTheDocument()
-    expect(within(resultsTable).getByRole("columnheader", { name: "업로드 상태" })).toBeInTheDocument()
+    expect(
+      within(resultsTable).getByRole("columnheader", { name: "업로드 상태" }),
+    ).toBeInTheDocument()
     expect(within(resultsTable).getByRole("columnheader", { name: "상태" })).toBeInTheDocument()
     expect(within(resultsTable).getByRole("columnheader", { name: "액션" })).toBeInTheDocument()
     expect(screen.getByRole("button", { name: "전체 1" })).toBeInTheDocument()
     expect(screen.getByRole("button", { name: "성공 1" })).toBeInTheDocument()
     expect(screen.getByRole("button", { name: "실패 0" })).toBeInTheDocument()
-    expect(within(resultsTable).queryByRole("columnheader", { name: "경로" })).not.toBeInTheDocument()
+    expect(
+      within(resultsTable).queryByRole("columnheader", { name: "경로" }),
+    ).not.toBeInTheDocument()
     expect(within(resultsTable).getByText("NestJS")).toBeInTheDocument()
     expect(within(resultsTable).getByText("first")).toBeInTheDocument()
     expect(within(resultsTable).queryByText("posts/first/index.md")).not.toBeInTheDocument()
     expect(
-      document.querySelector('#job-file-tree [data-upload-row-id="posts/first/index.md"]')?.getAttribute(
-        "data-upload-row-status",
-      ),
+      document
+        .querySelector('#job-file-tree [data-upload-row-id="posts/first/index.md"]')
+        ?.getAttribute("data-upload-row-status"),
     ).toBe("pending")
   })
 
@@ -538,12 +546,15 @@ describe("JobResultsPanel upload provider UX", () => {
     const user = userEvent.setup()
     const fetchMock = vi.fn<typeof fetch>(async (input) => {
       if (input === "/api/local-file/preview-link") {
-        return new Response(JSON.stringify({ previewUrl: "https://markdownviewer.pages.dev/#share=test" }), {
-          status: 200,
-          headers: {
-            "content-type": "application/json",
+        return new Response(
+          JSON.stringify({ previewUrl: "https://markdownviewer.pages.dev/#share=test" }),
+          {
+            status: 200,
+            headers: {
+              "content-type": "application/json",
+            },
           },
-        })
+        )
       }
 
       return new Response(null, { status: 204 })
@@ -563,11 +574,15 @@ describe("JobResultsPanel upload provider UX", () => {
         name: "첫 글 마크다운 미리보기",
       }),
     ).toHaveAttribute("data-job-item-preview-link")
-    expect(screen.getByRole("button", { name: "첫 글 파일 열기" }).className).toContain("text-muted-foreground")
+    expect(screen.getByRole("button", { name: "첫 글 파일 열기" }).className).toContain(
+      "text-muted-foreground",
+    )
 
     await user.hover(screen.getByText("first"))
 
-    expect((await screen.findAllByText(`${testOutputDir}/posts/first/index.md`)).length).toBeGreaterThan(0)
+    expect(
+      (await screen.findAllByText(`${testOutputDir}/posts/first/index.md`)).length,
+    ).toBeGreaterThan(0)
 
     await user.click(screen.getByRole("button", { name: "첫 글 네이버 원문 보기" }))
 
@@ -643,7 +658,9 @@ describe("JobResultsPanel upload provider UX", () => {
 
     expect(screen.getByLabelText("Custom URL")).toBeDisabled()
     expect(screen.getByLabelText("Custom URL")).toHaveValue("https://raw.example.com")
-    expect(screen.getByLabelText("자동 Custom URL")).toHaveValue("https://cdn.jsdelivr.net/gh/owner/name@main")
+    expect(screen.getByLabelText("자동 Custom URL")).toHaveValue(
+      "https://cdn.jsdelivr.net/gh/owner/name@main",
+    )
 
     await user.click(screen.getByRole("button", { name: "업로드 시작" }))
 
@@ -717,7 +734,9 @@ describe("JobResultsPanel upload provider UX", () => {
       value: "aws-s3-plist",
     })
     expect(screen.getByLabelText("Hide Bucket Prefix In URL")).toBeDisabled()
-    expect(screen.getByText("Path Style Access를 켜야 이 옵션을 사용할 수 있습니다.")).toBeInTheDocument()
+    expect(
+      screen.getByText("Path Style Access를 켜야 이 옵션을 사용할 수 있습니다."),
+    ).toBeInTheDocument()
     await user.click(screen.getByLabelText("Path Style Access"))
     expect(screen.getByLabelText("Hide Bucket Prefix In URL")).toBeEnabled()
 
@@ -727,7 +746,9 @@ describe("JobResultsPanel upload provider UX", () => {
       value: "lskyplist",
     })
     expect(screen.getByLabelText("Album ID")).toBeDisabled()
-    expect(screen.getByText("Lsky Pro V2를 선택한 경우에만 Album ID를 사용할 수 있습니다.")).toBeInTheDocument()
+    expect(
+      screen.getByText("Lsky Pro V2를 선택한 경우에만 Album ID를 사용할 수 있습니다."),
+    ).toBeInTheDocument()
     await selectOption({
       user,
       trigger: screen.getByLabelText("Version"),
@@ -741,7 +762,9 @@ describe("JobResultsPanel upload provider UX", () => {
       value: "sftpplist",
     })
     expect(screen.getByLabelText("Passphrase")).toBeDisabled()
-    expect(screen.getByText("Private Key를 입력하면 Passphrase를 사용할 수 있습니다.")).toBeInTheDocument()
+    expect(
+      screen.getByText("Private Key를 입력하면 Passphrase를 사용할 수 있습니다."),
+    ).toBeInTheDocument()
     await user.type(screen.getByLabelText("Private Key"), "/Users/name/.ssh/id_rsa")
     expect(screen.getByLabelText("Passphrase")).toBeEnabled()
   })

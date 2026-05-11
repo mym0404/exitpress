@@ -1,6 +1,6 @@
+import type { VariantProps } from "class-variance-authority"
+import { cva } from "class-variance-authority"
 import * as React from "react"
-import { cva, type VariantProps } from "class-variance-authority"
-
 import { cn } from "../../lib/Cn.js"
 
 const cardVariants = cva("rounded-[var(--radius-xl)] text-card-foreground", {
@@ -21,11 +21,7 @@ const Card = React.forwardRef<
   HTMLDivElement,
   React.ComponentProps<"div"> & VariantProps<typeof cardVariants>
 >(({ className, variant, ...props }, ref) => (
-    <div
-      ref={ref}
-      className={cn(cardVariants({ variant }), className)}
-      {...props}
-    />
+  <div ref={ref} className={cn(cardVariants({ variant }), className)} {...props} />
 ))
 Card.displayName = "Card"
 
@@ -55,8 +51,10 @@ const CardDescription = React.forwardRef<HTMLParagraphElement, React.ComponentPr
 CardDescription.displayName = "CardDescription"
 
 const CardContent = React.forwardRef<HTMLDivElement, React.ComponentProps<"div">>(
-  ({ className, ...props }, ref) => <div ref={ref} className={cn("p-6 pt-0", className)} {...props} />,
+  ({ className, ...props }, ref) => (
+    <div ref={ref} className={cn("p-6 pt-0", className)} {...props} />
+  ),
 )
 CardContent.displayName = "CardContent"
 
-export { Card, CardHeader, CardTitle, CardDescription, CardContent }
+export { Card, CardContent, CardDescription, CardHeader, CardTitle }

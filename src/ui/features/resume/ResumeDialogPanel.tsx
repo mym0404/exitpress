@@ -1,3 +1,4 @@
+import type { ResumeDialogState } from "./ResumeState.js"
 import { Alert, AlertDescription, AlertTitle } from "../../components/ui/Alert.js"
 import { Button } from "../../components/ui/Button.js"
 import {
@@ -8,7 +9,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "../../components/ui/Dialog.js"
-import type { ResumeDialogState } from "./ResumeState.js"
 
 export const ResumeDialogPanel = ({
   resumeDialog,
@@ -32,7 +32,9 @@ export const ResumeDialogPanel = ({
     >
       <DialogHeader>
         <DialogTitle>
-          {resumeDialog?.source === "before-scan" ? "진행 중인 작업이 있습니다." : "이전 작업을 다시 불러왔습니다."}
+          {resumeDialog?.source === "before-scan"
+            ? "진행 중인 작업이 있습니다."
+            : "이전 작업을 다시 불러왔습니다."}
         </DialogTitle>
         <DialogDescription>
           {resumeDialog?.source === "before-scan"
@@ -44,22 +46,30 @@ export const ResumeDialogPanel = ({
         <div className="grid gap-3">
           <div className="subtle-panel grid gap-2 rounded-[var(--radius-lg)] px-4 py-4 text-sm text-foreground">
             <p>
-              <strong className="font-semibold text-foreground">상태</strong> {resumeDialog.resumeSummary.status}
+              <strong className="font-semibold text-foreground">상태</strong>{" "}
+              {resumeDialog.resumeSummary.status}
             </p>
             <p>
-              <strong className="font-semibold text-foreground">출력 경로</strong> {resumeDialog.resumeSummary.outputDir}
+              <strong className="font-semibold text-foreground">출력 경로</strong>{" "}
+              {resumeDialog.resumeSummary.outputDir}
             </p>
             <p>
-              <strong className="font-semibold text-foreground">진행</strong> 총 {resumeDialog.resumeSummary.totalPosts} / 완료 {resumeDialog.resumeSummary.completedCount} / 실패 {resumeDialog.resumeSummary.failedCount}
+              <strong className="font-semibold text-foreground">진행</strong> 총{" "}
+              {resumeDialog.resumeSummary.totalPosts} / 완료{" "}
+              {resumeDialog.resumeSummary.completedCount} / 실패{" "}
+              {resumeDialog.resumeSummary.failedCount}
             </p>
             <p>
-              <strong className="font-semibold text-foreground">업로드</strong> {resumeDialog.resumeSummary.uploadedCount} / {resumeDialog.resumeSummary.uploadCandidateCount}
+              <strong className="font-semibold text-foreground">업로드</strong>{" "}
+              {resumeDialog.resumeSummary.uploadedCount} /{" "}
+              {resumeDialog.resumeSummary.uploadCandidateCount}
             </p>
           </div>
           <Alert variant="destructive">
             <AlertTitle>초기화 주의</AlertTitle>
             <AlertDescription>
-              작업 초기화를 실행하면 <strong>{resumeDialog.resumeSummary.outputDir}</strong> 경로의 작업내역과 output 파일을 함께 삭제합니다.
+              작업 초기화를 실행하면 <strong>{resumeDialog.resumeSummary.outputDir}</strong> 경로의
+              작업내역과 output 파일을 함께 삭제합니다.
             </AlertDescription>
           </Alert>
         </div>

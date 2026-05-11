@@ -1,6 +1,5 @@
 import { useEffect } from "react"
-
-import type { ThemePreference } from "../../../../shared/Types.js"
+import type { ThemePreference } from "../../../../domain/preferences/ThemePreference.js"
 
 export const useThemePreference = (themePreference: ThemePreference) => {
   useEffect(() => {

@@ -7,7 +7,6 @@ publishedAt: 2022-02-23T10:40:44+09:00
 category: Git
 categoryPath:
   - Git
-visibility: public
 thumbnail: https://mblogthumb-phinf.pstatic.net/MjAyMjAyMjNfNzYg/MDAxNjQ1NTgwMzE2MDI5.oJyEBMxUlAGWuGkqzpi-EhgzGl3JwP6PDVwtYWFQkXwg.nabRe79Ha2W67YDX5hfxPkcYZlzdZnh2jk1j2msPFPIg.JPEG.mym0404/git.jpeg?type=w800
 ---
 

@@ -1,10 +1,9 @@
 // @vitest-environment jsdom
 
 import "@testing-library/jest-dom/vitest"
-import { afterEach, describe, expect, it, vi } from "vitest"
 import { cleanup, fireEvent, render } from "@testing-library/react"
-
-import type { ScanResult } from "../../../shared/Types.js"
+import { afterEach, describe, expect, it, vi } from "vitest"
+import type { ScanResult } from "../../../domain/blog/Types.js"
 import { CategoryPanel } from "./CategoryPanel.js"
 
 afterEach(() => {

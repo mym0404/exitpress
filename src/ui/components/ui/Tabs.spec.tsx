@@ -1,9 +1,8 @@
 // @vitest-environment jsdom
 
 import "@testing-library/jest-dom/vitest"
-import { afterEach, describe, expect, it } from "vitest"
 import { cleanup, render, screen } from "@testing-library/react"
-
+import { afterEach, describe, expect, it } from "vitest"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./Tabs.js"
 
 afterEach(() => {
@@ -24,8 +23,6 @@ describe("Tabs", () => {
     )
 
     expect(screen.getByRole("tablist")).toHaveAttribute("data-variant", "line")
-    expect(screen.getByRole("tabpanel", { name: "Preview" })).toHaveTextContent(
-      "Preview panel",
-    )
+    expect(screen.getByRole("tabpanel", { name: "Preview" })).toHaveTextContent("Preview panel")
   })
 })

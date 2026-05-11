@@ -34,7 +34,7 @@
 - New icons must come from `@remixicon/react`.
 
 ## Feature Contracts
-- The wizard step model stays in `src/ui/App.tsx` and common shell files.
+- The wizard step model stays in `src/ui/app/App.tsx` and common shell files.
 - The top wizard header should show stage context without duplicating long instructions inside each step.
 - Feature files should own layout and composition; primitives and tokens own repeated visual language.
 - `running`, `upload`, and `result` stages share the result table surface.

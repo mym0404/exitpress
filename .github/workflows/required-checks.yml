@@ -57,6 +57,9 @@ jobs:
       - name: Install Playwright browsers
         run: pnpm exec playwright install --with-deps --only-shell chromium
 
+      - name: Run Biome check
+        run: pnpm check:biome
+
       - name: Run typecheck
         run: pnpm typecheck
 

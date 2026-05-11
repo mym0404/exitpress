@@ -8,7 +8,6 @@ category: Tip
 categoryPath:
   - iOS
   - Tip
-visibility: public
 thumbnail: https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fcdn-images-1.medium.com%2Fmax%2F1200%2F0*WZM2cHocLncEgg1F.png%22&type=f560_336
 ---
 

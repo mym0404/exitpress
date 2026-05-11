@@ -7,7 +7,6 @@ publishedAt: 2018-12-22T21:34:56+09:00
 category: Blender
 categoryPath:
   - Blender
-visibility: public
 thumbnail: https://mblogthumb-phinf.pstatic.net/MjAxODEyMjJfODcg/MDAxNTQ1NDgyMDg4NDY0.Dh6dlA-1uJ3KLQ15Iq4IjlOYhVtQNzPsBRRku6MU05Ug.bU9cS-HO872lQuf7Uj1rdUXgJWJl-UyphJTMdOlGeJgg.PNG.mym0404/double_moderator.png?type=w800
 ---
 

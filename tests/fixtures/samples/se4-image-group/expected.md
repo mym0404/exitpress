@@ -7,7 +7,6 @@ publishedAt: 2025-10-28T18:55:34+09:00
 category: Daily
 categoryPath:
   - Daily
-visibility: public
 thumbnail: https://mblogthumb-phinf.pstatic.net/MjAyNTEwMjhfMTAz/MDAxNzYxNjQ0NTc5Njc1.43EtjBHKBUENMLfYb279kooGwuikoeVTe_QMDNqMaoAg.96pBh3AVwoO8cdvS5KkkGMuXTSRnhgHjwmXShQ2wKP8g.PNG/ko-1.png?type=w800
 ---
 

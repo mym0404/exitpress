@@ -1,4 +1,5 @@
-import { Toaster as Sonner, toast, type ToasterProps } from "sonner"
+import type { ToasterProps } from "sonner"
+import { Toaster as Sonner, toast } from "sonner"
 
 export const Toaster = ({ theme = "dark", ...props }: ToasterProps) => (
   <Sonner
@@ -9,7 +10,8 @@ export const Toaster = ({ theme = "dark", ...props }: ToasterProps) => (
     theme={theme}
     toastOptions={{
       classNames: {
-        toast: "rounded-[var(--radius-xl)] border border-border bg-popover text-popover-foreground shadow-[var(--panel-shadow-floating)]",
+        toast:
+          "rounded-[var(--radius-xl)] border border-border bg-popover text-popover-foreground shadow-[var(--panel-shadow-floating)]",
         title: "text-sm font-semibold",
         description: "text-sm text-muted-foreground",
         actionButton: "rounded-[var(--radius-md)]",

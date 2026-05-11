@@ -8,7 +8,6 @@ category: Review IT
 categoryPath:
   - IT
   - Review IT
-visibility: public
 thumbnail: https://mblogthumb-phinf.pstatic.net/MjAxODExMDZfNDUg/MDAxNTQxNDMyNDQ5NzMw.2pAP0hFxoYYl_Gutq5AhIqL3N5Z9-2AhOSEwK9-JdqYg.q2XelVfpsNJzliMBeV-mvzh9ffWUWt-5LQywlvG8pckg.JPEG.is02019/20181104_114001.jpg?type=w800
 ---
 

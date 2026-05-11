@@ -1,4 +1,5 @@
-import type { ExportJobState, ExportResumeSummary, ScanResult } from "../../../shared/Types.js"
+import type { ScanResult } from "../../../domain/blog/Types.js"
+import type { ExportJobState, ExportResumeSummary } from "../../../domain/export-job/Types.js"
 
 export type ResumeDialogState = {
   source: "bootstrap" | "before-scan"

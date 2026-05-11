@@ -1,7 +1,6 @@
+import { defineConfig } from "vitest/config"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
-
-import { defineConfig } from "vitest/config"
 
 const rootDir = fileURLToPath(new URL(".", import.meta.url))
 
@@ -9,23 +8,21 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.join(rootDir, "src/ui"),
-      "@shared": path.join(rootDir, "src/shared"),
     },
   },
   test: {
     include: [
-      "src/modules/blocks/naver-se2/**/*.spec.ts",
-      "src/modules/blocks/naver-se3/**/*.spec.ts",
-      "src/modules/blocks/naver-se4/**/*.spec.ts",
+      "src/parsing/naver-blog/se2/**/*.spec.ts",
+      "src/parsing/naver-blog/se3/**/*.spec.ts",
+      "src/parsing/naver-blog/se4/**/*.spec.ts",
     ],
     coverage: {
       provider: "v8",
       reporter: ["text", "json-summary", "lcov"],
       include: [
-        "src/modules/blocks/common/**/*.ts",
-        "src/modules/blocks/naver-se2/**/*.ts",
-        "src/modules/blocks/naver-se3/**/*.ts",
-        "src/modules/blocks/naver-se4/**/*.ts",
+        "src/parsing/naver-blog/se2/blocks/**/*.ts",
+        "src/parsing/naver-blog/se3/blocks/**/*.ts",
+        "src/parsing/naver-blog/se4/blocks/**/*.ts",
       ],
       thresholds: {
         lines: 100,

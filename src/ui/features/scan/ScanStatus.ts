@@ -1,5 +1,5 @@
-import type { ScanResult } from "../../../shared/Types.js"
-import { DEFAULT_OUTPUT_DIR } from "../../../shared/ExportDefaults.js"
+import type { ScanResult } from "../../../domain/blog/Types.js"
+import { DEFAULT_OUTPUT_DIR } from "../../../domain/export-options/ExportDefaults.js"
 
 export const defaultOutputDir = DEFAULT_OUTPUT_DIR
 export const defaultScanStatus = "블로그를 아직 스캔하지 않았습니다."

@@ -8,7 +8,6 @@ category: 학교 도입사례∙후기
 categoryPath:
   - 수학대왕 클래스
   - 학교 도입사례∙후기
-visibility: public
 thumbnail: https://mblogthumb-phinf.pstatic.net/MjAyNDExMjdfMjkw/MDAxNzMyNjg3MzA3MTUx.DkImcCZrHD38qWUjPHrynhEmHDf-a4Rte1M708cbX-gg.2lH7kJcuhydIrm19HrO0idDTQWv9oiXifHdAd_-swM8g.PNG/0-%BD%E6%B3%D7%C0%CF.png?type=w800
 ---
 

@@ -3,12 +3,12 @@
 ## Source Of Truth
 - Sample fixture directories live under `tests/fixtures/samples/*`.
 - Each sample must contain either `expected.md` or `expected-error.md`.
-- `tests/helpers/sample-fixtures.spec.ts` discovers directories dynamically.
-- `tests/helpers/sample-fixtures.ts` parses expected frontmatter, fetches the live Naver post HTML from `blogId` and `logNo`, and renders it with fixture export options.
+- `tests/support/sample-fixtures.spec.ts` discovers directories dynamically.
+- `tests/support/sample-fixtures.ts` parses expected frontmatter, fetches the live Naver post HTML from `blogId` and `logNo`, and renders it with fixture export options.
 - Live sample HTML is cached under `tmp/harness/sample-post-html-cache` through the optional `NaverBlogFetcher` cache interface outside CI.
 - CI fixture runs bypass the sample HTML cache and fetch live HTML directly.
 - Sample fixtures do not store source HTML files; update `blogId`, `logNo`, and expected Markdown from the live post.
-- Sample fixture rendering normalizes volatile Naver attachment download URLs inside `tests/helpers/sample-fixtures.ts` so expected Markdown does not depend on request-specific download tokens.
+- Sample fixture rendering normalizes volatile Naver attachment download URLs inside `tests/support/sample-fixtures.ts` so expected Markdown does not depend on request-specific download tokens.
 
 ## Fixture Options
 - Sample fixture rendering uses `defaultExportOptions()`.
@@ -19,7 +19,7 @@
 ## Sample Inventory
 - The fixture directory tree is the source of truth for the current sample list.
 - Do not mirror every fixture id in knowledge.
-- Use `rg --files tests/fixtures/samples` or `tests/helpers/sample-fixtures.spec.ts` discovery behavior when the exact current set matters.
+- Use `rg --files tests/fixtures/samples` or `tests/support/sample-fixtures.spec.ts` discovery behavior when the exact current set matters.
 
 ## Operating Rules
 - Add or update the expected output file for each sample.

@@ -8,7 +8,6 @@ category: 평범한 일상
 categoryPath:
   - Life Style
   - 평범한 일상
-visibility: public
 thumbnail: https://mblogthumb-phinf.pstatic.net/MjAxOTA3MTRfNzMg/MDAxNTYzMDc4MjIyMzg5.QZJXcOHYxLdf2-bryT3PhKVzdy90vENvdYFNUXvpeGkg.Pi_ZFNdlk-rurwfGAlFaFTMwq0d_Jc8iBhAScYi_sQgg.JPEG.anglekim3708/20190710_210112.jpg?type=w800
 ---
 

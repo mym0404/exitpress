@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react"
-
-import type { UploadProviderCatalogResponse } from "../../../shared/Types.js"
+import type { UploadProviderCatalogResponse } from "../../../domain/upload/UploadProviderTypes.js"
 import { fetchJson } from "../../lib/Api.js"
 
 const emptyUploadProviders: UploadProviderCatalogResponse = {

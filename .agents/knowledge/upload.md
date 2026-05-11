@@ -17,14 +17,14 @@
 - If no upload candidates exist, `download-and-upload` closes as completed with skipped upload semantics instead of entering upload.
 
 ## Resume Source Of Truth
-- `src/server/ExportJobManifest.ts` reads and writes `manifest.json` as the recovery source.
+- `src/server/jobs/ExportJobManifest.ts` reads and writes `manifest.json` as the recovery source.
 - `manifest.json.job` carries request, status, phase, progress, upload snapshot, scan result, summary, timestamps, and optional error.
-- `src/server/HttpServer.ts` hydrates bootstrap state from the last output directory's `manifest.json`.
-- `src/server/JobStore.ts` keeps upload counters, item-level upload counters, and rewrite status in polling payloads.
+- `src/server/http/HttpServer.ts` hydrates bootstrap state from the last output directory's `manifest.json`.
+- `src/server/jobs/JobStore.ts` keeps upload counters, item-level upload counters, and rewrite status in polling payloads.
 
 ## Current Risk Seam
 - Fast live upload can finish before 1-second polling observes intermediate `uploading` state.
-- `src/server/JobStore.ts` and `src/ui/features/job-results/JobResultsPanel.tsx` preserve the last upload snapshot so the result stage still shows progress evidence after completion.
+- `src/server/jobs/JobStore.ts` and `src/ui/features/job-results/JobResultsPanel.tsx` preserve the last upload snapshot so the result stage still shows progress evidence after completion.
 - `tests/e2e/run-ui-live-upload.ts` uses run-unique GitHub paths so live upload evidence is not hidden by a reused path.
 
 ## Verification

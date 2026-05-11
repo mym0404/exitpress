@@ -5,7 +5,7 @@
 
 ## Export Command
 ```bash
-bun scripts/export-single-post.ts \
+bun scripts/single-post/export-single-post.ts \
   --blogId my-blog \
   --logNo 123456789012 \
   --outputDir tmp/manual-audit/123456789012/output \
@@ -16,7 +16,7 @@ bun scripts/export-single-post.ts \
 
 ## Inspect Command
 ```bash
-bun scripts/export-single-post.ts \
+bun scripts/single-post/export-single-post.ts \
   --inspect \
   --blogId my-blog \
   --logNo 123456789012 \
@@ -37,12 +37,14 @@ bun scripts/export-single-post.ts \
 - Record whether the result is `as-expected`, `mismatch`, `error`, or `not-checked`.
 
 ## Evidence
-- Use `scripts/capture-post-evidence.ts` when the comparison needs Markdown evidence with source capture and converted Markdown.
+- Use `scripts/post-evidence/capture-post-evidence.ts` when the comparison needs Markdown evidence with source capture and converted Markdown.
 - Use `--target post` for full-post evidence and `--target inspect-path --inspectPath <path>` for block-level evidence.
 - Post evidence section rules live in `.agents/knowledge/post-evidence.md`.
 
 ## Code Anchors
-- `scripts/export-single-post.ts`
-- `scripts/lib/single-post-cli.ts`
-- `src/modules/exporter/SinglePostInspect.ts`
-- `src/modules/exporter/SinglePostExport.ts`
+- `scripts/single-post/export-single-post.ts`
+- `scripts/single-post/SinglePostArgs.ts`
+- `scripts/single-post/SinglePostOptions.ts`
+- `scripts/single-post/SinglePostSummary.ts`
+- `src/exporting/post/SinglePostInspect.ts`
+- `src/exporting/post/SinglePostExport.ts`

@@ -1,5 +1,4 @@
 import type { ReactNode } from "react"
-
 import { Button } from "../../../components/ui/Button.js"
 
 export const WizardDock = ({
@@ -40,7 +39,12 @@ export const WizardDock = ({
       <div className="mx-auto flex w-full max-w-6xl justify-center">
         <div className="floating-dock flex min-h-16 w-full max-w-fit flex-wrap items-center justify-end gap-2.5 rounded-[1.4rem] px-3 py-3">
           {setupStepIndex > 0 ? (
-            <Button type="button" variant="surface" className="h-10 rounded-xl px-4" onClick={onPrevious}>
+            <Button
+              type="button"
+              variant="surface"
+              className="h-10 rounded-xl px-4"
+              onClick={onPrevious}
+            >
               이전
             </Button>
           ) : null}
@@ -52,9 +56,9 @@ export const WizardDock = ({
               variant="surface"
               className="h-10 rounded-xl px-4"
               title="캐시 무효화"
-            disabled={!currentScanTarget || scanPending}
-            onClick={onForceScan}
-          >
+              disabled={!currentScanTarget || scanPending}
+              onClick={onForceScan}
+            >
               강제로 불러오기
             </Button>
           ) : null}

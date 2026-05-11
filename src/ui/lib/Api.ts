@@ -1,15 +1,17 @@
+import type { EditorBlockOutputDefinition } from "../../domain/ast/Types.js"
+import type { ScanResult } from "../../domain/blog/Types.js"
 import type {
   ExportJobPollingConfig,
   ExportJobState,
-  ExportOptions,
   ExportResumeSummary,
+} from "../../domain/export-job/Types.js"
+import type {
+  ExportOptions,
   FrontmatterFieldMeta,
   FrontmatterFieldName,
-  EditorBlockOutputDefinition,
   OptionDescriptionMap,
-  ScanResult,
-  ThemePreference,
-} from "../../shared/Types.js"
+} from "../../domain/export-options/Types.js"
+import type { ThemePreference } from "../../domain/preferences/ThemePreference.js"
 
 export type ExportBootstrapResponse = {
   profile: "gfm"
@@ -95,7 +97,10 @@ export const postSameOriginJsonNoContent = async (input: RequestInfo | URL, body
   }
 }
 
-export const postSameOriginJson = async <T>(input: RequestInfo | URL, body: unknown): Promise<T> => {
+export const postSameOriginJson = async <T>(
+  input: RequestInfo | URL,
+  body: unknown,
+): Promise<T> => {
   const response = await fetch(input, {
     method: "POST",
     headers: {

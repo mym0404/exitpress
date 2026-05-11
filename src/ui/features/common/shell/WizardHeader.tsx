@@ -1,6 +1,5 @@
 import { RiMoonClearLine, RiSunLine } from "@remixicon/react"
-
-import type { ThemePreference } from "../../../../shared/Types.js"
+import type { ThemePreference } from "../../../../domain/preferences/ThemePreference.js"
 import { Badge } from "../../../components/ui/Badge.js"
 import { Card, CardContent } from "../../../components/ui/Card.js"
 import { ToggleGroup, ToggleGroupItem } from "../../../components/ui/ToggleGroup.js"
@@ -37,16 +36,30 @@ export const WizardHeader = ({
               }
             }}
           >
-            <ToggleGroupItem aria-label="다크" className="theme-toggle-item size-8 p-0" title="다크" value="dark">
+            <ToggleGroupItem
+              aria-label="다크"
+              className="theme-toggle-item size-8 p-0"
+              title="다크"
+              value="dark"
+            >
               <RiMoonClearLine data-theme-icon aria-hidden="true" />
               <span className="sr-only">다크</span>
             </ToggleGroupItem>
-            <ToggleGroupItem aria-label="라이트" className="theme-toggle-item size-8 p-0" title="라이트" value="light">
+            <ToggleGroupItem
+              aria-label="라이트"
+              className="theme-toggle-item size-8 p-0"
+              title="라이트"
+              value="light"
+            >
               <RiSunLine data-theme-icon aria-hidden="true" />
               <span className="sr-only">라이트</span>
             </ToggleGroupItem>
           </ToggleGroup>
-          <Badge id="status-text" className={getStatusPillClassName(headerStatus)} data-status={headerStatus}>
+          <Badge
+            id="status-text"
+            className={getStatusPillClassName(headerStatus)}
+            data-status={headerStatus}
+          >
             {headerStatus}
           </Badge>
         </div>
