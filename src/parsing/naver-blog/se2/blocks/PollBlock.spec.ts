@@ -36,6 +36,26 @@ describe("NaverSe2PollBlock", () => {
     ])
   })
 
+  it("ignores style tags beside div-wrapped poll iframes", () => {
+    const parsed = parseSe2Blocks(`
+      <div>
+        <style>.poll_iframe { width: 100%; }</style>
+        <iframe
+          class="poll_iframe"
+          src="https://m.blog.naver.com/Poll.naver?pollKey=abc"
+          title="포스트에 첨부된 투표"
+        ></iframe>
+      </div>
+    `)
+
+    expect(parsed.blocks).toEqual([
+      {
+        type: "paragraph",
+        text: "[포스트에 첨부된 투표](https://m.blog.naver.com/Poll.naver?pollKey=abc)",
+      },
+    ])
+  })
+
   it("does not parse div-wrapped poll iframes mixed with text", () => {
     const parsed = parseSe2Blocks(`
       <div>

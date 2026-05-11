@@ -15,7 +15,7 @@ const getPollLink = ({ $node }: Pick<ParserBlockContext, "$node">) => {
   }
 
   const cloneWithoutPoll = $node.clone()
-  cloneWithoutPoll.find("iframe.poll_iframe").remove()
+  cloneWithoutPoll.find("style, iframe.poll_iframe").remove()
 
   if (cloneWithoutPoll.find("img, iframe, video, table").length > 0) {
     return null
