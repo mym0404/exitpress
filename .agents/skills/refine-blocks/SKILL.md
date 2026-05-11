@@ -18,6 +18,8 @@ The skill is for repository workflow and parser block responsibility. Do not rec
 - Skip draft PRs unless the user explicitly asks to review drafts.
 - For each PR, inspect the body, diff, changed parser files, fixture changes, and review comments before deciding.
 - Identify the owning editor family and target block from the actual code diff, not from the PR title alone.
+- Do not ask the user whether to merge a PR. Follow this workflow and make the merge or close decision from the criteria below.
+- If multiple PRs are selected, process all of them. For each merge-worthy PR, verify, merge, and pull before moving to the next PR.
 
 ## Merge Or Close Decision
 
@@ -27,6 +29,7 @@ The skill is for repository workflow and parser block responsibility. Do not rec
 - Review the PR at the target block boundary: what input shape it claims, what AST it emits, where it sits in `supportedBlocks`, and which neighboring blocks might overlap.
 - Check whether the PR keeps first-match parser behavior coherent for the editor family.
 - If a PR has merge conflicts but should otherwise be merged, resolve every conflict, rerun required verification, and merge only after the branch is mergeable.
+- For every PR that will be merged, run the required verification before merging.
 
 Before merge or close, add a GitHub comment whose first line is exactly `[AI GENERATED]`.
 
@@ -56,15 +59,22 @@ Close reason:
 
 When merging, prefer a squash merge with branch deletion if GitHub allows it. If the repository only allows another merge method, use the allowed method and report it.
 
-## Pull And Refine
+## Merge, Pull, And Refine
 
-After a merge:
+For each merged PR:
 
 - Ensure the local worktree has no unrelated changes that would be overwritten.
 - Check out `main`.
 - Run `git pull --ff-only origin main`.
-- Create a refinement branch named `worktree/refine-blocks-<pr-number-or-support-unit>`.
-- Re-review the merged block in the context of the owning editor family.
+
+After all selected PRs have been merged or closed:
+
+- If no PR was merged, do not create a refinement branch.
+- Re-review the full merged local state once.
+- Create one refinement branch named `worktree/refine-blocks-<batch-or-pr-id>`.
+- If one PR was merged, use that PR number or support unit in the branch name.
+- If multiple PRs were merged, use `batch-<YYYYMMDD>` in the branch name.
+- Perform one comprehensive refinement pass across all affected editor families and blocks.
 
 Refinement criteria:
 
