@@ -181,6 +181,9 @@ describe("ExportOptionsPanel", () => {
       trigger: "#blockOutputs-defaults-naver-se4-image-variant",
       value: "linked-image",
     })
+    await user.click(
+      query<HTMLInputElement>("#blockOutputs-defaults-naver-se4-image-includeCaption"),
+    )
     await selectOption({
       user,
       trigger: "#blockOutputs-defaults-naver-se4-formula-variant",
@@ -206,7 +209,6 @@ describe("ExportOptionsPanel", () => {
     await user.click(query<HTMLInputElement>("#assets-compressionEnabled"))
     await selectOption({ user, trigger: "#assets-imageHandlingMode", value: "remote" })
     await selectOption({ user, trigger: "#assets-stickerAssetMode", value: "download-original" })
-    await user.click(query<HTMLInputElement>("#assets-includeImageCaptions"))
     await selectOption({ user, trigger: "#assets-thumbnailSource", value: "none" })
 
     cleanup()
@@ -291,6 +293,9 @@ describe("ExportOptionsPanel", () => {
       "\\[...\\]",
     )
     expect(latestOptions.blockOutputs.defaults["naver-se4:image"]?.variant).toBe("linked-image")
+    expect(latestOptions.blockOutputs.defaults["naver-se4:image"]?.params?.includeCaption).toBe(
+      true,
+    )
     expect(latestOptions.blockOutputs.defaults["naver-se4:divider"]).toBeUndefined()
     expect(latestOptions.blockOutputs.defaults["naver-se4:code"]).toBeUndefined()
     expect(latestOptions.blockOutputs.defaults["naver-se4:formula"]?.variant).toBe("math-fence")
@@ -509,6 +514,9 @@ describe("ExportOptionsPanel", () => {
     expect(
       query<HTMLElement>('[data-block-output-card="naver-se4:image"] pre').textContent,
     ).toContain("![diagram]")
+    expect(
+      query<HTMLElement>('[data-block-output-card="naver-se4:image"] pre').textContent,
+    ).not.toContain("_caption_")
 
     await selectOption({
       user,
@@ -518,6 +526,9 @@ describe("ExportOptionsPanel", () => {
 
     expect(latestOptions.blockOutputs.defaults["naver-se4:image"]?.variant).toBe("linked-image")
     expect(latestOptions.blockOutputs.defaults["naver-se3:image"]).toBeUndefined()
+    expect(latestOptions.blockOutputs.defaults["naver-se4:image"]?.params?.includeCaption).toBe(
+      false,
+    )
 
     cleanup()
 
@@ -540,6 +551,36 @@ describe("ExportOptionsPanel", () => {
     expect(
       query<HTMLElement>('[data-block-output-card="naver-se4:image"] pre').textContent,
     ).toContain("[![diagram]")
+
+    await user.click(
+      query<HTMLInputElement>("#blockOutputs-defaults-naver-se4-image-includeCaption"),
+    )
+
+    expect(latestOptions.blockOutputs.defaults["naver-se4:image"]?.params?.includeCaption).toBe(
+      true,
+    )
+
+    cleanup()
+
+    render(
+      <ExportOptionsPanel
+        step="markdown"
+        outputDir={testOutputDir}
+        options={latestOptions}
+        optionDescriptions={optionDescriptions}
+        blockOutputDefinitions={blockOutputDefinitions}
+        frontmatterFieldOrder={frontmatterFieldOrder}
+        frontmatterFieldMeta={frontmatterFieldMeta}
+        frontmatterValidationErrors={[]}
+        onOptionsChange={(updater) => {
+          latestOptions = updater(latestOptions)
+        }}
+      />,
+    )
+
+    expect(
+      query<HTMLElement>('[data-block-output-card="naver-se4:image"] pre').textContent,
+    ).toContain("_caption_")
   })
 
   it("keeps block output controls top-aligned next to the preview", () => {
@@ -660,9 +701,9 @@ describe("ExportOptionsPanel", () => {
     expect(query<HTMLInputElement>("#assets-downloadImages")).toBeDisabled()
     expect(query<HTMLInputElement>("#assets-downloadThumbnails")).toBeDisabled()
     expect(document.querySelector("#assets-imageContentMode")).toBeNull()
+    expect(document.querySelector("#assets-includeImageCaptions")).toBeNull()
     expect(query<HTMLElement>("#assets-imageHandlingMode")).toHaveAttribute("data-value", "remote")
     expect(query<HTMLElement>("#assets-stickerAssetMode")).not.toBeDisabled()
-    expect(query<HTMLInputElement>("#assets-includeImageCaptions")).not.toBeDisabled()
     expect(query<HTMLElement>("#assets-thumbnailSource")).not.toBeDisabled()
     expect(screen.queryByLabelText("uploaderKey")).not.toBeInTheDocument()
     expect(screen.queryByLabelText("uploaderConfigJson")).not.toBeInTheDocument()

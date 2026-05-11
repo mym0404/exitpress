@@ -186,13 +186,11 @@ export const renderImageBlockMarkdown = ({
   assetPath,
   selection,
   formatLink,
-  includeImageCaptions,
 }: {
   image: ImageData
   assetPath: string
   selection: BlockOutputSelection
   formatLink: (input: { label: string; url: string }) => string
-  includeImageCaptions: boolean
 }) => {
   const safeLabel = image.alt || image.caption || "Image"
   const lines: string[] = []
@@ -217,7 +215,7 @@ export const renderImageBlockMarkdown = ({
     lines.push(content)
   }
 
-  if (includeImageCaptions && image.caption) {
+  if (selection.params?.includeCaption === true && image.caption) {
     lines.push(`_${image.caption}_`)
   }
 

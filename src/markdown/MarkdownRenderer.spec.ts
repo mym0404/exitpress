@@ -191,6 +191,7 @@ describe("renderMarkdownPost", () => {
     expect(rendered.markdown).toContain("$$\nf(n)=n+1\n$$")
     expect(rendered.markdown).toContain("$g(n)=n-1$")
     expect(rendered.markdown).toContain(`![one](${publicImagePath})`)
+    expect(rendered.markdown).not.toContain("_caption_")
     expect(rendered.markdown).toContain("| col |")
     expect(rendered.markdown).toContain("[External article](https://example.com/article)")
     expect(rendered.markdown).toContain("[Demo](https://blog.naver.com/mym0404/223034929697)")
@@ -241,6 +242,49 @@ describe("renderMarkdownPost", () => {
     expect(rendered.markdown).toContain("\\(g(n)=n-1\\)")
     expect(rendered.markdown).toContain(`![one](${publicImagePath})`)
     expect(rendered.assetRecords.every((asset) => asset.storageMode === "relative")).toBe(true)
+  })
+
+  it("renders image captions when the image output option requests captions", async () => {
+    const options = defaultExportOptions()
+
+    options.blockOutputs.defaults["naver-se4:image"] = {
+      variant: "markdown-image",
+      params: {
+        includeCaption: true,
+      },
+    }
+
+    const rendered = await renderMarkdownPost({
+      post,
+      category,
+      parsedPost: createParsedPost({
+        blocks: [
+          {
+            type: "image",
+            image: {
+              sourceUrl: "https://example.com/captioned-image.png",
+              originalSourceUrl: null,
+              alt: "captioned",
+              caption: "caption",
+              mediaKind: "image",
+            },
+            outputSelectionKey: "naver-se4:image",
+            outputSelection: options.blockOutputs.defaults["naver-se4:image"],
+          },
+        ],
+      }),
+      markdownFilePath: testMarkdownFilePath,
+      options,
+      resolveAsset: async ({ kind, sourceUrl }) =>
+        createAssetRecord({
+          kind,
+          sourceUrl,
+          relativePath: publicImagePath,
+        }),
+    })
+
+    expect(rendered.markdown).toContain(`![captioned](${publicImagePath})`)
+    expect(rendered.markdown).toContain("_caption_")
   })
 
   it("ignores stale code output selections and renders backtick fences", async () => {

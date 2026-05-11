@@ -38,6 +38,7 @@
 - Keep small helpers that only support one concrete parser block's `match` or `convert` logic inside that parser block file.
 - Inline single-use helpers when they only pass caller context through or hide a short expression; keep helpers when they name reused logic, a public/exported boundary, a test fixture factory, or a substantial domain step.
 - Split parser helper files only when at least two parser blocks reuse them or when the parsing logic is large enough that a separate file is easier to read.
+- Keep parser block `outputOptions` and option params in the concrete parser block file, even when similar options appear in another editor family.
 
 ## Date And Time
 - Store manifest, job, and export timestamps as ISO strings from `new Date().toISOString()`.

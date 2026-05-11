@@ -130,23 +130,6 @@ export const AssetsOptionsStep = ({
       }
     />
 
-    <CheckField
-      inputId="assets-includeImageCaptions"
-      optionKey="assets-includeImageCaptions"
-      label="이미지 캡션 포함"
-      description={description("assets-includeImageCaptions")}
-      checked={options.assets.includeImageCaptions}
-      onChange={(checked) =>
-        onOptionsChange((current) => ({
-          ...current,
-          assets: {
-            ...current.assets,
-            includeImageCaptions: checked,
-          },
-        }))
-      }
-    />
-
     <OptionField
       optionKey="assets-thumbnailSource"
       labelFor="assets-thumbnailSource"

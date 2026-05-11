@@ -34,6 +34,8 @@
 - Output option이 2개 이상인 block만 `BaseEditor.getBlockOutputDefinitions()`에 노출된다.
 - 같은 editor 안에서 같은 `blockId`가 반복되면 첫 definition만 노출되고, 같은 key를 공유한다.
 - 여러 concrete block이 같은 output family를 공유하면 같은 `blockId`와 output selection을 공유할 수 있다.
+- `outputOptions`와 그 params는 concrete parser block 파일이 직접 소유한다.
+- Block별 output metadata를 `core`, `shared`, 공용 helper로 분리하지 않는다.
 - Parser는 render-time metadata가 필요한 AST block에 `outputSelectionKey`와 `outputSelection`을 붙인다.
 - 정확한 selectable key 목록과 노출 순서는 `BaseBlog`에서 파생되는 output definition과 관련 tests가 source of truth다.
 

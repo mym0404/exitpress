@@ -3,7 +3,12 @@ import type { ExportOptions } from "../../../domain/export-options/Types.js"
 import { resolveBlockOutputSelection } from "../../../domain/export-options/BlockOutputSelection.js"
 import { Input } from "../../components/ui/Input.js"
 import { renderBlockOutputPreview } from "./BlockOutputPreview.js"
-import { editorOutputCardClass, OptionField, OptionSelectField } from "./OptionControls.js"
+import {
+  CheckField,
+  editorOutputCardClass,
+  OptionField,
+  OptionSelectField,
+} from "./OptionControls.js"
 
 const blockOutputCardClass =
   "grid content-start gap-4 rounded-none border-0 bg-transparent p-0 shadow-none"
@@ -59,7 +64,6 @@ const BlockOutputCard = ({
   const previewSnippet = renderBlockOutputPreview({
     block: selectedOption.preview,
     selection,
-    includeImageCaptions: options.assets.includeImageCaptions,
     imageHandlingMode: options.assets.imageHandlingMode,
   })
   const optionKeyPrefix = `blockOutputs-defaults-${family.key.replace(/[^A-Za-z0-9_-]/g, "-")}`
@@ -127,33 +131,54 @@ const BlockOutputCard = ({
             </OptionField>
           ) : null}
 
-          {selectedOption.params?.map((param) => (
-            <OptionField
-              key={`${optionKeyPrefix}-${param.key}`}
-              optionKey={`${optionKeyPrefix}-${param.key}`}
-              label={param.label}
-              description={param.description}
-              surface="plain"
-            >
-              <Input
-                id={`${optionKeyPrefix}-${param.key}`}
-                type={param.input === "number" ? "number" : "text"}
-                value={String(selection.params?.[param.key] ?? "")}
-                onChange={(event) =>
+          {selectedOption.params?.map((param) =>
+            param.input === "boolean" ? (
+              <CheckField
+                key={`${optionKeyPrefix}-${param.key}`}
+                inputId={`${optionKeyPrefix}-${param.key}`}
+                optionKey={`${optionKeyPrefix}-${param.key}`}
+                label={param.label}
+                description={param.description}
+                compact
+                checked={selection.params?.[param.key] === true}
+                onChange={(checked) =>
                   updateSelection((current) => ({
                     ...current,
                     params: {
                       ...(current.params ?? {}),
-                      [param.key]:
-                        param.input === "number"
-                          ? Number(event.target.value || "0")
-                          : event.target.value,
+                      [param.key]: checked,
                     },
                   }))
                 }
               />
-            </OptionField>
-          ))}
+            ) : (
+              <OptionField
+                key={`${optionKeyPrefix}-${param.key}`}
+                optionKey={`${optionKeyPrefix}-${param.key}`}
+                label={param.label}
+                description={param.description}
+                surface="plain"
+              >
+                <Input
+                  id={`${optionKeyPrefix}-${param.key}`}
+                  type={param.input === "number" ? "number" : "text"}
+                  value={String(selection.params?.[param.key] ?? "")}
+                  onChange={(event) =>
+                    updateSelection((current) => ({
+                      ...current,
+                      params: {
+                        ...(current.params ?? {}),
+                        [param.key]:
+                          param.input === "number"
+                            ? Number(event.target.value || "0")
+                            : event.target.value,
+                      },
+                    }))
+                  }
+                />
+              </OptionField>
+            ),
+          )}
         </div>
 
         <div className="grid content-start gap-2 self-start">

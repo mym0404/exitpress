@@ -29,6 +29,9 @@ describe("NaverSe4ImageBlock", () => {
         outputSelectionKey: "naver-se4:image",
         outputSelection: {
           variant: "markdown-image",
+          params: {
+            includeCaption: false,
+          },
         },
       },
     ])
@@ -70,6 +73,9 @@ describe("NaverSe4ImageBlock", () => {
         outputSelectionKey: "naver-se4:image",
         outputSelection: {
           variant: "markdown-image",
+          params: {
+            includeCaption: false,
+          },
         },
       },
     ])

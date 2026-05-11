@@ -6,6 +6,15 @@ import { compactText } from "../../../../shared/text/TextUtils.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
 
 const standaloneImageSelector = "img, video._gifmp4.se_mediaImage[data-gif-url]"
+const imageOutputParams = [
+  {
+    key: "includeCaption",
+    label: "캡션 포함",
+    description: "이미지 아래에 캡션 텍스트를 함께 남깁니다.",
+    input: "boolean",
+    defaultValue: false,
+  },
+] satisfies NonNullable<OutputOption<"image">["params"]>
 
 const getStandaloneImages = ({
   $,
@@ -67,6 +76,7 @@ export class NaverSe3ImageBlock extends LeafBlock {
           mediaKind: "image",
         },
       },
+      params: imageOutputParams,
       isDefault: true,
     },
     {
@@ -83,6 +93,7 @@ export class NaverSe3ImageBlock extends LeafBlock {
           mediaKind: "image",
         },
       },
+      params: imageOutputParams,
     },
     {
       id: "source-only",
@@ -98,6 +109,7 @@ export class NaverSe3ImageBlock extends LeafBlock {
           mediaKind: "image",
         },
       },
+      params: imageOutputParams,
     },
   ] satisfies OutputOption<"image">[]
 

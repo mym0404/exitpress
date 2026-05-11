@@ -9,7 +9,7 @@ type OutputOptionParam = {
   key: string
   label: string
   description: string
-  input: "text" | "number"
+  input: "text" | "number" | "boolean"
   defaultValue?: BlockOutputParamValue
 }
 

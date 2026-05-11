@@ -55,7 +55,7 @@ export const defaultExportOptions = (): ExportOptions => ({
     stickerAssetMode: "ignore",
     downloadImages: true,
     downloadThumbnails: true,
-    includeImageCaptions: true,
+    includeImageCaptions: false,
     thumbnailSource: "post-list-first",
   },
   links: {

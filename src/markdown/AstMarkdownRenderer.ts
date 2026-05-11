@@ -96,7 +96,6 @@ export const renderAstMarkdown = async ({
       assetPath,
       selection,
       formatLink: inlineLinkFormatter.formatLink,
-      includeImageCaptions: options.assets.includeImageCaptions,
     })
   }
 

@@ -26,6 +26,9 @@ describe("NaverSe3ImageBlock", () => {
         outputSelectionKey: "naver-se3:image",
         outputSelection: {
           variant: "markdown-image",
+          params: {
+            includeCaption: false,
+          },
         },
       },
     ])
@@ -83,6 +86,9 @@ describe("NaverSe3ImageBlock", () => {
         outputSelectionKey: "naver-se3:image",
         outputSelection: {
           variant: "markdown-image",
+          params: {
+            includeCaption: false,
+          },
         },
       },
     ])
@@ -120,6 +126,9 @@ describe("NaverSe3ImageBlock", () => {
         outputSelectionKey: "naver-se3:image",
         outputSelection: {
           variant: "markdown-image",
+          params: {
+            includeCaption: false,
+          },
         },
       },
     ])
@@ -148,6 +157,9 @@ describe("NaverSe3ImageBlock", () => {
         outputSelectionKey: "naver-se3:image",
         outputSelection: {
           variant: "markdown-image",
+          params: {
+            includeCaption: false,
+          },
         },
       },
     ])

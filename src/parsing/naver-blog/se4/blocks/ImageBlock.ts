@@ -3,6 +3,16 @@ import type { ParserBlockContext } from "../../core/BaseBlock.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
 import { parseImageLink, se4ImageLinkSelector } from "./ImageLink.js"
 
+const imageOutputParams = [
+  {
+    key: "includeCaption",
+    label: "캡션 포함",
+    description: "이미지 아래에 캡션 텍스트를 함께 남깁니다.",
+    input: "boolean",
+    defaultValue: false,
+  },
+] satisfies NonNullable<OutputOption<"image">["params"]>
+
 export class NaverSe4ImageBlock extends LeafBlock {
   override readonly id = "image"
   override readonly label = "이미지"
@@ -21,6 +31,7 @@ export class NaverSe4ImageBlock extends LeafBlock {
           mediaKind: "image",
         },
       },
+      params: imageOutputParams,
       isDefault: true,
     },
     {
@@ -37,6 +48,7 @@ export class NaverSe4ImageBlock extends LeafBlock {
           mediaKind: "image",
         },
       },
+      params: imageOutputParams,
     },
     {
       id: "source-only",
@@ -52,6 +64,7 @@ export class NaverSe4ImageBlock extends LeafBlock {
           mediaKind: "image",
         },
       },
+      params: imageOutputParams,
     },
   ] satisfies OutputOption<"image">[]
 

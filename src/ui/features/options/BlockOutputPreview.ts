@@ -69,12 +69,10 @@ const getImagePreviewSelection = ({
 export const renderBlockOutputPreview = ({
   block,
   selection,
-  includeImageCaptions,
   imageHandlingMode,
 }: {
   block: AstBlock
   selection: BlockOutputSelection
-  includeImageCaptions: boolean
   imageHandlingMode: ExportOptions["assets"]["imageHandlingMode"]
 }) => {
   const linkFormatter = createLinkFormatter({})
@@ -124,7 +122,6 @@ export const renderBlockOutputPreview = ({
         fallbackSelection: selection,
       }),
       formatLink: linkFormatter.formatLink,
-      includeImageCaptions,
     })
   }
 
@@ -139,7 +136,6 @@ export const renderBlockOutputPreview = ({
           }),
           selection,
           formatLink: linkFormatter.formatLink,
-          includeImageCaptions,
         }),
       )
       .join("\n\n")

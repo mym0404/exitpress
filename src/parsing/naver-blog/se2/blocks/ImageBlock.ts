@@ -7,6 +7,15 @@ import { LeafBlock } from "../../core/BaseBlock.js"
 
 const standaloneImageSelector = "img, [thumburl]"
 const standaloneRootImageSelector = "img.fx, img._postImage, [thumburl]"
+const imageOutputParams = [
+  {
+    key: "includeCaption",
+    label: "캡션 포함",
+    description: "이미지 아래에 캡션 텍스트를 함께 남깁니다.",
+    input: "boolean",
+    defaultValue: false,
+  },
+] satisfies NonNullable<OutputOption<"image">["params"]>
 
 const getStandaloneImages = ({
   $,
@@ -62,6 +71,7 @@ export class NaverSe2ImageBlock extends LeafBlock {
           mediaKind: "image",
         },
       },
+      params: imageOutputParams,
       isDefault: true,
     },
     {
@@ -78,6 +88,7 @@ export class NaverSe2ImageBlock extends LeafBlock {
           mediaKind: "image",
         },
       },
+      params: imageOutputParams,
     },
     {
       id: "source-only",
@@ -93,6 +104,7 @@ export class NaverSe2ImageBlock extends LeafBlock {
           mediaKind: "image",
         },
       },
+      params: imageOutputParams,
     },
   ] satisfies OutputOption<"image">[]
 

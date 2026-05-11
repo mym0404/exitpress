@@ -38,11 +38,13 @@ describe("export options", () => {
     expect(options.assets.imageHandlingMode).toBe("download-and-upload")
     expect(options.assets.compressionEnabled).toBe(true)
     expect(options.assets.downloadFailureMode).toBe("fail")
+    expect(options.assets.includeImageCaptions).toBe(false)
     expect(options.links.sameBlogPostMode).toBe("keep-source")
     expect(options.links.sameBlogPostCustomUrlTemplate).toBe("")
     expect(Object.hasOwn(options, "markdown")).toBe(false)
     expect(options.blockOutputs.defaults["naver-se4:formula"]?.params?.inlineWrapper).toBe("$")
     expect(options.blockOutputs.defaults["naver-se4:formula"]?.params?.blockWrapper).toBe("$$")
+    expect(options.blockOutputs.defaults["naver-se4:image"]?.params?.includeCaption).toBe(false)
     expect(Object.hasOwn(options, "unsupportedBlockCases")).toBe(false)
     expect(options.structure.groupByCategory).toBe(true)
     expect(options.structure.includeDateInPostFolderName).toBe(true)
@@ -94,6 +96,7 @@ describe("export options", () => {
 
     expect(options.blockOutputs.defaults["naver-se4:code"]).toBeUndefined()
     expect(options.blockOutputs.defaults["naver-se4:image"]?.variant).toBe("linked-image")
+    expect(options.blockOutputs.defaults["naver-se4:image"]?.params?.includeCaption).toBe(false)
     expect(options.blockOutputs.defaults["naver-se4:formula"]?.variant).toBe("wrapper")
     expect(options.blockOutputs.defaults["naver-se4:formula"]?.params?.inlineWrapper).toBe(
       "\\(...\\)",
