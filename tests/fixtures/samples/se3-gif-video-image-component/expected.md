@@ -26,7 +26,7 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/20160129_195/anglekim3708_145404
 하여야 한다.  
 상가 설계의 핵심적인 요소로는 Core (코어 : 계단, 화장실, E/V, 복도) 잡기가 가장 어려운 작업이다.
 
-명문 이노시티 빌딩 랜더링
+[명문 이노시티 빌딩 랜더링](https://blog.naver.com/anglekim3708/220612289536)
 
 명문 INNO CITY 빌딩 설계 계획도면 (확정안 동영상)
 
