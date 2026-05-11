@@ -79,6 +79,31 @@ describe("NaverSe2InlineGifVideoBlock", () => {
     ])
   })
 
+  it("keeps original source empty when inline gif video has no mp4 source", () => {
+    const parsed = parseSe2Blocks(`
+      <p>
+        <video
+          class="fx _postImage _gifmp4"
+          data-gif-url="https://mblogthumb-phinf.pstatic.net/sample.gif?type=w210"
+          alt="sample gif"
+        ></video>
+      </p>
+    `)
+
+    expect(parsed.blocks).toEqual([
+      {
+        type: "image",
+        image: {
+          sourceUrl: "https://mblogthumb-phinf.pstatic.net/sample.gif?type=w210",
+          originalSourceUrl: null,
+          alt: "sample gif",
+          caption: null,
+          mediaKind: "image",
+        },
+      },
+    ])
+  })
+
   it("ignores inline gif videos mixed with text", () => {
     const parsed = parseSe2Blocks(`
       <p>

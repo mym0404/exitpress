@@ -45,7 +45,6 @@ type CollectArgs = {
 type CollectChanges = {
   parserChanges: string[]
   fixtures: string[]
-  knowledge: string[]
   verification: Array<{
     command: string
     result: string
@@ -104,7 +103,7 @@ Options:
   --forceFull            Ignore reusable output and run a full ingest.
   --focusSupportUnit <key>
                          Report and exit against one parser support unit.
-  --changesPath <json>   Include parser/fixture/knowledge/verification changes in report.
+  --changesPath <json>   Include parser/fixture/verification changes in report.
 
 Exports public posts with remote asset references, reuses completed outputs when possible, inspects failures, and writes report.md/report.json/evidence.md.`
 
@@ -256,7 +255,6 @@ const writeJson = async ({ targetPath, value }: { targetPath: string; value: unk
 const emptyChanges = (): CollectChanges => ({
   parserChanges: [],
   fixtures: [],
-  knowledge: [],
   verification: [],
   unresolved: [],
 })
@@ -296,7 +294,6 @@ const readChanges = async (changesPath: string | undefined) => {
   return {
     parserChanges: readStringArray("parserChanges"),
     fixtures: readStringArray("fixtures"),
-    knowledge: readStringArray("knowledge"),
     verification,
     unresolved: readStringArray("unresolved"),
   } satisfies CollectChanges
@@ -697,10 +694,6 @@ const renderIngestReportMarkdown = ({
     "## Fixtures",
     "",
     renderList(changes.fixtures),
-    "",
-    "## Knowledge",
-    "",
-    renderList(changes.knowledge),
     "",
     "## Verification",
     "",
