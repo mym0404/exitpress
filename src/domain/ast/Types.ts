@@ -36,13 +36,6 @@ type AstBlockOutputSelection = {
   outputSelection?: BlockOutputSelection
 }
 
-type LinkCardData = {
-  title: string
-  description: string
-  url: string
-  imageUrl: string | null
-}
-
 type VideoData = {
   title: string
   thumbnailUrl: string | null
@@ -83,7 +76,6 @@ export type AstBlock =
   | ({ type: "image"; image: ImageData } & AstBlockOutputSelection)
   | ({ type: "imageGroup"; images: ImageData[] } & AstBlockOutputSelection)
   | ({ type: "video"; video: VideoData } & AstBlockOutputSelection)
-  | ({ type: "linkCard"; card: LinkCardData } & AstBlockOutputSelection)
   | ({ type: "table"; rows: TableRow[]; html: string; complex: boolean } & AstBlockOutputSelection)
 
 export type BlockType = AstBlock["type"]

@@ -7,7 +7,6 @@ import {
   renderFormula,
   renderGfmTable,
   renderImageBlockMarkdown,
-  renderLinkCardBlock,
   renderParagraph,
   renderQuote,
 } from "../../../markdown/BlockMarkdown.js"
@@ -145,13 +144,6 @@ export const renderBlockOutputPreview = ({
     return linkFormatter.formatLink({
       label: block.video.title || block.video.sourceUrl,
       url: block.video.sourceUrl,
-    })
-  }
-
-  if (block.type === "linkCard") {
-    return renderLinkCardBlock({
-      block,
-      formatLink: linkFormatter.formatLink,
     })
   }
 

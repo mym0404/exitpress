@@ -1,6 +1,6 @@
 import type { ParserBlockContext } from "../../core/BaseBlock.js"
-import { normalizeAssetUrl } from "../../../../domain/blog/NaverUrl.js"
 import { compactText } from "../../../../shared/text/TextUtils.js"
+import { createLinkParagraphBlocks } from "../../common/LinkParagraph.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
 import { parseJsonAttribute } from "../../core/JsonAttribute.js"
 
@@ -14,7 +14,7 @@ export class NaverSe4MaterialBlock extends LeafBlock {
     return $node.hasClass("se-material") || $node.find(".not_sponsored_component").length > 0
   }
 
-  override convert({ $node }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ $node, options }: Parameters<LeafBlock["convert"]>[0]) {
     const customCard = $node.find(".not_sponsored_component").first()
 
     if (customCard.length > 0) {
@@ -31,17 +31,13 @@ export class NaverSe4MaterialBlock extends LeafBlock {
         .filter(Boolean)
         .join(" / ")
 
-      return [
-        {
-          type: "linkCard" as const,
-          card: {
-            title: compactText(customCard.find(".title").text()) || url,
-            description,
-            url,
-            imageUrl: thumbnailSource ? normalizeAssetUrl(thumbnailSource) : null,
-          },
-        },
-      ]
+      return createLinkParagraphBlocks({
+        title: compactText(customCard.find(".title").text()) || url,
+        description,
+        url,
+        hasThumbnail: Boolean(thumbnailSource),
+        resolveLinkUrl: options.resolveLinkUrl,
+      })
     }
 
     const materialLink = $node.find("a.se-module-material").first()
@@ -97,19 +93,15 @@ export class NaverSe4MaterialBlock extends LeafBlock {
       materialLink.find(".se-material-thumbnail-resource").attr("src") ??
       (typeof linkData?.thumbnail === "string" ? linkData.thumbnail : null)
 
-    return [
-      {
-        type: "linkCard" as const,
-        card: {
-          title:
-            compactText(materialLink.find(".se-material-title").text()) ||
-            (typeof linkData?.title === "string" ? compactText(linkData.title) : "") ||
-            url,
-          description,
-          url,
-          imageUrl: thumbnailSource ? normalizeAssetUrl(thumbnailSource) : null,
-        },
-      },
-    ]
+    return createLinkParagraphBlocks({
+      title:
+        compactText(materialLink.find(".se-material-title").text()) ||
+        (typeof linkData?.title === "string" ? compactText(linkData.title) : "") ||
+        url,
+      description,
+      url,
+      hasThumbnail: Boolean(thumbnailSource),
+      resolveLinkUrl: options.resolveLinkUrl,
+    })
   }
 }

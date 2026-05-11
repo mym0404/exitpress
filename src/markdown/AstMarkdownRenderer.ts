@@ -8,7 +8,6 @@ import {
   renderFormula,
   renderGfmTable,
   renderImageBlockMarkdown,
-  renderLinkCardBlock,
   renderParagraph,
   renderQuote,
 } from "./BlockMarkdown.js"
@@ -212,16 +211,6 @@ export const renderAstMarkdown = async ({
     if (block.type === "video") {
       sections.push(
         renderVideoBlock({
-          block,
-          formatLink: inlineLinkFormatter.formatLink,
-        }),
-      )
-      continue
-    }
-
-    if (block.type === "linkCard") {
-      sections.push(
-        renderLinkCardBlock({
           block,
           formatLink: inlineLinkFormatter.formatLink,
         }),

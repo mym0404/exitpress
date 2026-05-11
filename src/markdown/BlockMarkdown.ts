@@ -116,47 +116,6 @@ export const renderFormula = ({
   })
 }
 
-export const renderLinkCardBlock = ({
-  block,
-  formatLink,
-}: {
-  block: Extract<AstBlock, { type: "linkCard" }>
-  formatLink: (input: { label: string; url: string }) => string
-}) => {
-  const title = block.card.title || block.card.url
-  const description = normalizeMarkdownText(block.card.description)
-    .split("\n")
-    .filter((line) => {
-      const trimmed = line.trim()
-
-      if (!trimmed) {
-        return false
-      }
-
-      if (/^[()]+$/.test(trimmed)) {
-        return false
-      }
-
-      if (trimmed === block.card.url) {
-        return false
-      }
-
-      return true
-    })
-    .join("\n")
-
-  if (block.card.imageUrl) {
-    return formatLink({
-      label: title,
-      url: block.card.url,
-    })
-  }
-
-  return [formatLink({ label: title, url: block.card.url }), description]
-    .filter(Boolean)
-    .join("\n\n")
-}
-
 export const getHeadingLevelOffset = (selection: BlockOutputSelection) =>
   Number(selection.params?.levelOffset ?? 0)
 

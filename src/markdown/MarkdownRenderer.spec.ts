@@ -121,13 +121,8 @@ const parsedPostBlocks: ParsedPost["blocks"] = [
     ],
   },
   {
-    type: "linkCard",
-    card: {
-      title: "External article",
-      description: "preview text",
-      url: "https://example.com/article",
-      imageUrl: "https://example.com/cover.png",
-    },
+    type: "paragraph",
+    text: "[External article](https://example.com/article)",
   },
   {
     type: "video",
@@ -417,7 +412,7 @@ describe("renderMarkdownPost", () => {
     expect(rendered.markdown).not.toContain("\nsource: https://blog.naver.com/mym0404/223034929697")
   })
 
-  it("renders link cards and media links inline without frontmatter", async () => {
+  it("renders paragraph links and media links inline without frontmatter", async () => {
     const options = defaultExportOptions()
 
     options.frontmatter.enabled = false
@@ -446,17 +441,8 @@ describe("renderMarkdownPost", () => {
             },
           },
           {
-            type: "linkCard",
-            card: {
-              title: "Reference Demo",
-              description: "",
-              url: "https://example.com/watch",
-              imageUrl: null,
-            },
-            outputSelectionKey: "naver-se4:linkCard",
-            outputSelection: {
-              variant: "reference-link",
-            },
+            type: "paragraph",
+            text: "[Reference Demo](https://example.com/watch)",
           },
         ],
       }),
@@ -588,20 +574,19 @@ describe("renderMarkdownPost", () => {
     expect(rendered.markdown).toContain("<table><tr><td>cell</td></tr></table>")
   })
 
-  it("keeps description only for non-preview link cards without duplicating bare urls", async () => {
+  it("keeps link descriptions without duplicating bare urls", async () => {
     const rendered = await renderMarkdownPost({
       post,
       category,
       parsedPost: createParsedPost({
         blocks: [
           {
-            type: "linkCard",
-            card: {
-              title: "Docs",
-              description: "Useful reference\nhttps://example.com/docs",
-              url: "https://example.com/docs",
-              imageUrl: null,
-            },
+            type: "paragraph",
+            text: "[Docs](https://example.com/docs)",
+          },
+          {
+            type: "paragraph",
+            text: "Useful reference",
           },
         ],
       }),

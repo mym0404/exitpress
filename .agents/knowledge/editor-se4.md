@@ -16,12 +16,12 @@
 - Media 계열은 image, image group, image strip, sticker를 image 계열 AST로 만든다.
 - Media/Text mixed 계열은 right wrapping paragraph의 float image slot과 text slot을 기존 image/paragraph AST로 푼다.
 - Rich content 계열은 formula, code, video, table을 공용 semantic AST로 만든다.
-- Link-like 계열은 link card, file, map, oEmbed, material, custom purchase proof 같은 외부 참조형 module을 linkCard AST로 수렴한다.
+- Link-like 계열은 link card, file, map, oEmbed, material, custom purchase proof 같은 외부 참조형 module을 Markdown link paragraph로 만든다.
 - Quote/chrome 계열은 quotation, Blog씨 질문, divider, heading, document chrome을 처리한다.
 
 ## Characteristics
 - SE4는 module metadata와 class fallback을 함께 본다.
-- Link-like block은 모두 `linkCard` AST로 수렴한다.
+- Link-like block은 Markdown link paragraph로 출력된다.
 - Formula는 inline/block 여부를 metadata와 class로 판단한다.
 - Text block은 SE4 list를 Markdown list 문단으로 만들고, 추천 상품형 text 묶음은 하나의 list paragraph로 정리한다.
 - Heading block은 text가 있는 section title만 heading으로 만들고, 빈 section title placeholder는 출력하지 않는다.

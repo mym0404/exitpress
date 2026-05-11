@@ -1,5 +1,6 @@
 import type { ParserBlockContext } from "../../core/BaseBlock.js"
 import { compactText } from "../../../../shared/text/TextUtils.js"
+import { createLinkParagraphBlocks } from "../../common/LinkParagraph.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
 import { parseJsonAttribute } from "../../core/JsonAttribute.js"
 
@@ -14,7 +15,7 @@ export class NaverSe4MapBlock extends LeafBlock {
     return moduleType === "v2_map" || $node.hasClass("se-placesMap")
   }
 
-  override convert({ $node, moduleData }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ $node, moduleData, options }: Parameters<LeafBlock["convert"]>[0]) {
     const data = (moduleData?.data ?? {}) as {
       places?: Array<{
         placeId?: string
@@ -34,20 +35,16 @@ export class NaverSe4MapBlock extends LeafBlock {
         return []
       }
 
-      return [
-        {
-          type: "linkCard" as const,
-          card: {
-            title,
-            description,
-            url:
-              typeof place.bookingUrl === "string" && place.bookingUrl.trim()
-                ? place.bookingUrl.trim()
-                : buildNaverMapSearchUrl(title),
-            imageUrl: null,
-          },
-        },
-      ]
+      return createLinkParagraphBlocks({
+        title,
+        description,
+        url:
+          typeof place.bookingUrl === "string" && place.bookingUrl.trim()
+            ? place.bookingUrl.trim()
+            : buildNaverMapSearchUrl(title),
+        hasThumbnail: false,
+        resolveLinkUrl: options.resolveLinkUrl,
+      })
     })
 
     if (placesFromModule.length > 0) {
@@ -73,20 +70,16 @@ export class NaverSe4MapBlock extends LeafBlock {
           return []
         }
 
-        return [
-          {
-            type: "linkCard" as const,
-            card: {
-              title,
-              description,
-              url:
-                typeof linkData?.bookingUrl === "string" && linkData.bookingUrl.trim()
-                  ? linkData.bookingUrl.trim()
-                  : buildNaverMapSearchUrl(title),
-              imageUrl: null,
-            },
-          },
-        ]
+        return createLinkParagraphBlocks({
+          title,
+          description,
+          url:
+            typeof linkData?.bookingUrl === "string" && linkData.bookingUrl.trim()
+              ? linkData.bookingUrl.trim()
+              : buildNaverMapSearchUrl(title),
+          hasThumbnail: false,
+          resolveLinkUrl: options.resolveLinkUrl,
+        })
       })
 
     return blocks

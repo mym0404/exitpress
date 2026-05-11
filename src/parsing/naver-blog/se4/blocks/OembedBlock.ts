@@ -1,8 +1,8 @@
 import { load } from "cheerio"
 import type { UnknownRecord } from "../../../../shared/object/UnknownRecord.js"
 import type { ParserBlockContext } from "../../core/BaseBlock.js"
-import { normalizeAssetUrl } from "../../../../domain/blog/NaverUrl.js"
 import { compactText } from "../../../../shared/text/TextUtils.js"
+import { createLinkParagraphBlocks } from "../../common/LinkParagraph.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
 
 export class NaverSe4OembedBlock extends LeafBlock {
@@ -13,8 +13,8 @@ export class NaverSe4OembedBlock extends LeafBlock {
     return moduleType === "v2_oembed" || $node.hasClass("se-oembed")
   }
 
-  override convert({ moduleData }: Parameters<LeafBlock["convert"]>[0]) {
-    const data = ((moduleData ?? {}).data ?? {}) as UnknownRecord & {
+  override convert({ moduleData, options }: Parameters<LeafBlock["convert"]>[0]) {
+    const data = (moduleData?.data ?? {}) as UnknownRecord & {
       html?: string
       inputUrl?: string
       thumbnailUrl?: string
@@ -32,17 +32,12 @@ export class NaverSe4OembedBlock extends LeafBlock {
       throw new Error("SE4 oEmbed block parsing failed.")
     }
 
-    return [
-      {
-        type: "linkCard" as const,
-        card: {
-          title: compactText(data.title ?? "") || url,
-          description: compactText(data.description ?? ""),
-          url,
-          imageUrl:
-            typeof data.thumbnailUrl === "string" ? normalizeAssetUrl(data.thumbnailUrl) : null,
-        },
-      },
-    ]
+    return createLinkParagraphBlocks({
+      title: compactText(data.title ?? "") || url,
+      description: compactText(data.description ?? ""),
+      url,
+      hasThumbnail: typeof data.thumbnailUrl === "string" && data.thumbnailUrl !== "",
+      resolveLinkUrl: options.resolveLinkUrl,
+    })
   }
 }

@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest"
 import { parseSe4Blocks } from "../../../../../tests/support/parser-test-utils.js"
 
 describe("NaverSe4MaterialBlock", () => {
-  it("parses material components into link cards", () => {
+  it("parses material components into link paragraphs", () => {
     const parsed = parseSe4Blocks(`
       <div class="se-component se-material">
         <a
@@ -24,13 +24,8 @@ describe("NaverSe4MaterialBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "linkCard",
-        card: {
-          title: "Reference card",
-          description: "Author: mj / Type: note",
-          url: "https://example.com/material",
-          imageUrl: "https://example.com/material.png",
-        },
+        type: "paragraph",
+        text: "[Reference card](https://example.com/material)",
       },
     ])
   })
@@ -63,13 +58,8 @@ describe("NaverSe4MaterialBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "linkCard",
-        card: {
-          title: "Data title",
-          description: "loose detail",
-          url: "https://example.com/from-data",
-          imageUrl: "https://example.com/data.png",
-        },
+        type: "paragraph",
+        text: "[Data title](https://example.com/from-data)",
       },
     ])
   })
@@ -82,15 +72,12 @@ describe("NaverSe4MaterialBlock", () => {
     `)
 
     expect(parsed.blocks[0]).toMatchObject({
-      type: "linkCard",
-      card: {
-        title: "https://example.com/no-title",
-        imageUrl: null,
-      },
+      type: "paragraph",
+      text: "[https://example.com/no-title](https://example.com/no-title)",
     })
   })
 
-  it("parses custom purchase proof components into link cards", () => {
+  it("parses custom purchase proof components into link paragraphs", () => {
     const parsed = parseSe4Blocks(`
       <div class="se-component se-custom se-l-default">
         <div class="se-component-content">
@@ -115,13 +102,8 @@ describe("NaverSe4MaterialBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "linkCard",
-        card: {
-          title: "오쿠 저소음 두유제조기 900ml",
-          description: "내돈내산 인증 쇼핑 / 2024.12.구매확정",
-          url: "https://smartstore.naver.com/main/products/10843938836",
-          imageUrl: "https://example.com/product.jpg?type=f900_540_nanimated",
-        },
+        type: "paragraph",
+        text: "[오쿠 저소음 두유제조기 900ml](https://smartstore.naver.com/main/products/10843938836)",
       },
     ])
   })
@@ -137,13 +119,8 @@ describe("NaverSe4MaterialBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "linkCard",
-        card: {
-          title: "https://smartstore.naver.com/main/products/1",
-          description: "",
-          url: "https://smartstore.naver.com/main/products/1",
-          imageUrl: null,
-        },
+        type: "paragraph",
+        text: "[https://smartstore.naver.com/main/products/1](https://smartstore.naver.com/main/products/1)",
       },
     ])
   })

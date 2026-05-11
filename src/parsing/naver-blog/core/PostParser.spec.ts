@@ -55,6 +55,30 @@ describe("post-parser routing", () => {
     expect(parsed.blocks).toEqual([{ type: "paragraph", text: "[내부 글](../other/index.md)" }])
   })
 
+  it("rewrites same-blog link card urls when they become paragraphs", () => {
+    const parsed = parsePostHtml({
+      html: `
+        <script>var data = { smartEditorVersion: 4 }</script>
+        <div id="viewTypeSelector">
+          <div class="se-component se-oglink">
+            <a class="se-oglink-info" href="https://m.blog.naver.com/PostView.naver?blogId=mym0404&logNo=3"></a>
+            <strong class="se-oglink-title">내부 카드</strong>
+          </div>
+        </div>
+      `,
+      sourceUrl: "https://blog.naver.com/mym0404/1",
+      options: {
+        ...parserOptions,
+        resolveLinkUrl: (url) =>
+          url === "https://m.blog.naver.com/PostView.naver?blogId=mym0404&logNo=3"
+            ? "../card/index.md"
+            : url,
+      },
+    })
+
+    expect(parsed.blocks).toEqual([{ type: "paragraph", text: "[내부 카드](../card/index.md)" }])
+  })
+
   it("routes SE3 html to the SE3 parser", () => {
     const parsed = parsePostHtml({
       html: `

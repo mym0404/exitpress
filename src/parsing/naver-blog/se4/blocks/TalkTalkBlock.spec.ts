@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest"
 import { parseSe4Blocks } from "../../../../../tests/support/parser-test-utils.js"
 
 describe("NaverSe4TalkTalkBlock", () => {
-  it("parses TalkTalk components into link cards", () => {
+  it("parses TalkTalk components into link paragraphs", () => {
     const parsed = parseSe4Blocks(`
       <div class="se-component se-talktalk se-l-default">
         <a class="se-module se-module-talktalk" href="https://talk.naver.com/w42cwy?frm=mblog">
@@ -15,13 +15,8 @@ describe("NaverSe4TalkTalkBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "linkCard",
-        card: {
-          title: "궁금할 땐 네이버 톡톡하세요!",
-          description: "",
-          url: "https://talk.naver.com/w42cwy?frm=mblog",
-          imageUrl: null,
-        },
+        type: "paragraph",
+        text: "[궁금할 땐 네이버 톡톡하세요!](https://talk.naver.com/w42cwy?frm=mblog)",
       },
     ])
   })
@@ -35,13 +30,8 @@ describe("NaverSe4TalkTalkBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "linkCard",
-        card: {
-          title: "https://talk.naver.com/w42cwy?frm=mblog",
-          description: "",
-          url: "https://talk.naver.com/w42cwy?frm=mblog",
-          imageUrl: null,
-        },
+        type: "paragraph",
+        text: "[https://talk.naver.com/w42cwy?frm=mblog](https://talk.naver.com/w42cwy?frm=mblog)",
       },
     ])
   })

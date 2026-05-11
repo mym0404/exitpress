@@ -5,7 +5,7 @@ import {
 } from "../../../../../tests/support/parser-test-utils.js"
 
 describe("NaverSe4OembedBlock", () => {
-  it("parses oembed components into link cards", () => {
+  it("parses oembed components into link paragraphs", () => {
     const parsed = parseSe4Blocks(`
       <div class="se-component se-oembed">
         ${createSe4ModuleScript({
@@ -22,13 +22,8 @@ describe("NaverSe4OembedBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "linkCard",
-        card: {
-          title: "Video embed",
-          description: "embedded preview",
-          url: "https://youtu.be/demo",
-          imageUrl: "https://example.com/oembed.png",
-        },
+        type: "paragraph",
+        text: "[Video embed](https://youtu.be/demo)",
       },
     ])
   })
@@ -62,12 +57,12 @@ describe("NaverSe4OembedBlock", () => {
     `)
 
     expect(iframeParsed.blocks[0]).toMatchObject({
-      type: "linkCard",
-      card: { title: "https://player.example.com", url: "https://player.example.com" },
+      type: "paragraph",
+      text: "[https://player.example.com](https://player.example.com)",
     })
     expect(providerParsed.blocks[0]).toMatchObject({
-      type: "linkCard",
-      card: { title: "https://provider.example.com", url: "https://provider.example.com" },
+      type: "paragraph",
+      text: "[https://provider.example.com](https://provider.example.com)",
     })
   })
 
@@ -82,11 +77,8 @@ describe("NaverSe4OembedBlock", () => {
     `)
 
     expect(parsed.blocks[0]).toMatchObject({
-      type: "linkCard",
-      card: {
-        title: "https://provider-fallback.example.com",
-        url: "https://provider-fallback.example.com",
-      },
+      type: "paragraph",
+      text: "[https://provider-fallback.example.com](https://provider-fallback.example.com)",
     })
   })
 

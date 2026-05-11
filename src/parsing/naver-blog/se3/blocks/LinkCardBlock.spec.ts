@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest"
 import { parseSe3Blocks } from "../../../../../tests/support/parser-test-utils.js"
 
 describe("NaverSe3LinkCardBlock", () => {
-  it("parses oglink components into link cards", () => {
+  it("parses oglink components into link paragraphs", () => {
     const parsed = parseSe3Blocks(`
       <div class="se_component se_oglink default ">
         <div class="se_sectionArea se_align-center">
@@ -21,13 +21,12 @@ describe("NaverSe3LinkCardBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "linkCard",
-        card: {
-          title: "首页--汉语考试服务网",
-          description: "简体中文 | English | 한국어",
-          url: "http://www.chinesetest.cn/index.do",
-          imageUrl: null,
-        },
+        type: "paragraph",
+        text: "[首页--汉语考试服务网](http://www.chinesetest.cn/index.do)",
+      },
+      {
+        type: "paragraph",
+        text: "简体中文 | English | 한국어",
       },
     ])
   })
@@ -50,13 +49,8 @@ describe("NaverSe3LinkCardBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "linkCard",
-        card: {
-          title: "https://example.com/from-data",
-          description: "",
-          url: "https://example.com/from-data",
-          imageUrl: "https://dthumb-phinf.pstatic.net/sample.jpg?type=ff500_300",
-        },
+        type: "paragraph",
+        text: "[https://example.com/from-data](https://example.com/from-data)",
       },
     ])
   })

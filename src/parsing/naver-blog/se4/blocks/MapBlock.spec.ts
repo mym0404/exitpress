@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest"
 import { parseSe4Blocks } from "../../../../../tests/support/parser-test-utils.js"
 
 describe("NaverSe4MapBlock", () => {
-  it("parses places map components into place link cards", () => {
+  it("parses places map components into place link paragraphs", () => {
     const parsed = parseSe4Blocks(`
       <div class="se-component se-placesMap se-l-default">
         <div class="se-module se-module-map-image">
@@ -33,22 +33,20 @@ describe("NaverSe4MapBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "linkCard",
-        card: {
-          title: "첨성대",
-          description: "경상북도 경주시 인왕동 839-1",
-          url: "https://map.naver.com/p/search/%EC%B2%A8%EC%84%B1%EB%8C%80",
-          imageUrl: null,
-        },
+        type: "paragraph",
+        text: "[첨성대](https://map.naver.com/p/search/%EC%B2%A8%EC%84%B1%EB%8C%80)",
       },
       {
-        type: "linkCard",
-        card: {
-          title: "외가 황리단길본점",
-          description: "경상북도 경주시 사정로57번길 7 외가",
-          url: "https://booking.naver.com/booking/6/bizes/899193",
-          imageUrl: null,
-        },
+        type: "paragraph",
+        text: "경상북도 경주시 인왕동 839-1",
+      },
+      {
+        type: "paragraph",
+        text: "[외가 황리단길본점](https://booking.naver.com/booking/6/bizes/899193)",
+      },
+      {
+        type: "paragraph",
+        text: "경상북도 경주시 사정로57번길 7 외가",
       },
     ])
   })
@@ -65,13 +63,12 @@ describe("NaverSe4MapBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "linkCard",
-        card: {
-          title: "카페",
-          description: "서울",
-          url: "https://booking.example.com",
-          imageUrl: null,
-        },
+        type: "paragraph",
+        text: "[카페](https://booking.example.com)",
+      },
+      {
+        type: "paragraph",
+        text: "서울",
       },
     ])
   })
@@ -88,13 +85,12 @@ describe("NaverSe4MapBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "linkCard",
-        card: {
-          title: "공원",
-          description: "부산",
-          url: "https://map.naver.com/p/search/%EA%B3%B5%EC%9B%90",
-          imageUrl: null,
-        },
+        type: "paragraph",
+        text: "[공원](https://map.naver.com/p/search/%EA%B3%B5%EC%9B%90)",
+      },
+      {
+        type: "paragraph",
+        text: "부산",
       },
     ])
   })
@@ -111,13 +107,12 @@ describe("NaverSe4MapBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "linkCard",
-        card: {
-          title: "데이터 장소",
-          description: "데이터 주소",
-          url: "https://map.naver.com/p/search/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EC%9E%A5%EC%86%8C",
-          imageUrl: null,
-        },
+        type: "paragraph",
+        text: "[데이터 장소](https://map.naver.com/p/search/%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EC%9E%A5%EC%86%8C)",
+      },
+      {
+        type: "paragraph",
+        text: "데이터 주소",
       },
     ])
   })
@@ -143,13 +138,8 @@ describe("NaverSe4MapBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "linkCard",
-        card: {
-          title: "제목만 있음",
-          description: "",
-          url: "https://map.naver.com/p/search/%EC%A0%9C%EB%AA%A9%EB%A7%8C%20%EC%9E%88%EC%9D%8C",
-          imageUrl: null,
-        },
+        type: "paragraph",
+        text: "[제목만 있음](https://map.naver.com/p/search/%EC%A0%9C%EB%AA%A9%EB%A7%8C%20%EC%9E%88%EC%9D%8C)",
       },
     ])
   })
