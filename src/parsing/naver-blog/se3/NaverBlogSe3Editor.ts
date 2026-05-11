@@ -3,6 +3,7 @@ import type { BaseEditorParseInput } from "../core/BaseEditor.js"
 import { unique } from "../../../shared/collection/CollectionUtils.js"
 import { BaseEditor } from "../core/BaseEditor.js"
 import { NaverSe3CodeBlock } from "./blocks/CodeBlock.js"
+import { NaverSe3DividerBlock } from "./blocks/DividerBlock.js"
 import { NaverSe3DocumentTitleBlock } from "./blocks/DocumentTitleBlock.js"
 import { NaverSe3ImageBlock } from "./blocks/ImageBlock.js"
 import { NaverSe3LinkCardBlock } from "./blocks/LinkCardBlock.js"
@@ -17,6 +18,7 @@ export class NaverBlogSE3Editor extends BaseEditor {
 
   protected override readonly supportedBlocks = [
     new NaverSe3DocumentTitleBlock(),
+    new NaverSe3DividerBlock(),
     new NaverSe3TableBlock(),
     new NaverSe3QuoteBlock(),
     new NaverSe3CodeBlock(),
