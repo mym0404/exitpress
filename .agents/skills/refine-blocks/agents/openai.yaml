@@ -1,0 +1,4 @@
+interface:
+  display_name: "Refine Blocks"
+  short_description: "Review and refine parser block PRs"
+  default_prompt: "Use $refine-blocks to review ai-generated parser PRs, merge or close them, pull locally, and open parser boundary refinements."
