@@ -4,7 +4,7 @@
 - Editor type은 `naver-se4`, label은 `SmartEditor 4`다.
 - Product surface에서는 ONE(SE4)로 부를 수 있다.
 - SE4는 component와 module metadata를 함께 쓰는 SmartEditor parser다.
-- Parser block 구현은 `src/modules/blocks/naver-se4/*`에 둔다.
+- Parser block 구현은 `src/parsing/naver-blog/se4/blocks/*`에 둔다.
 
 ## Module Context
 - Editor는 component 안의 module JSON을 읽어 parser block에 metadata context를 전달한다.

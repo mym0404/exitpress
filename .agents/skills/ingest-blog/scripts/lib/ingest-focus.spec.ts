@@ -1,5 +1,4 @@
 import { describe, expect, it } from "vitest"
-
 import { mergeSupportUnitFailureGroups, selectFocusedSupportUnit } from "./ingest-focus.js"
 
 describe("selectFocusedSupportUnit", () => {
@@ -38,7 +37,9 @@ describe("selectFocusedSupportUnit", () => {
           logNos: ["1"],
         },
       ],
-      failureGroups: [{ supportUnitKey: "naver-se4:v2_map", failureBlockHash: "maphash", logNos: ["2"] }],
+      failureGroups: [
+        { supportUnitKey: "naver-se4:v2_map", failureBlockHash: "maphash", logNos: ["2"] },
+      ],
     })
 
     expect(result.reportFailureGroups).toEqual([])

@@ -1,5 +1,10 @@
-import type { UploadProviderDefinition, UploadProviderFieldDefinition, UploadProviderFields, UploadProviderValue } from "../../../server/Types.js"
-import { UPLOAD_PROVIDER_KEYS } from "../../../server/UploadProviderKeys.js"
+import type {
+  UploadProviderDefinition,
+  UploadProviderFieldDefinition,
+  UploadProviderFields,
+  UploadProviderValue,
+} from "../../../domain/upload/UploadProviderTypes.js"
+import { UPLOAD_PROVIDER_KEYS } from "../../../domain/upload/UploadProviderKeys.js"
 
 export type ProviderUiState = {
   alistAuthMode: "token" | "account"
@@ -100,11 +105,7 @@ export const getUploadProviderFieldRule = ({
     }
   }
 
-  if (
-    providerKey === UPLOAD_PROVIDER_KEYS.SFTP &&
-    field.key === "passphrase" &&
-    !hasPrivateKey
-  ) {
+  if (providerKey === UPLOAD_PROVIDER_KEYS.SFTP && field.key === "passphrase" && !hasPrivateKey) {
     return {
       ...baseRule,
       disabled: true,
@@ -151,57 +152,60 @@ export const trimProviderFieldsForSubmit = ({
   providerUiState: ProviderUiState
 }) =>
   Object.fromEntries(
-    (provider?.fields ?? []).reduce<Array<readonly [string, UploadProviderValue]>>((entries, field) => {
-      const rule = getUploadProviderFieldRule({
-        providerKey: provider?.key ?? "",
-        field,
-        providerFields,
-        providerUiState,
-      })
+    (provider?.fields ?? []).reduce<Array<readonly [string, UploadProviderValue]>>(
+      (entries, field) => {
+        const rule = getUploadProviderFieldRule({
+          providerKey: provider?.key ?? "",
+          field,
+          providerFields,
+          providerUiState,
+        })
 
-      if (rule.disabled) {
-        return entries
-      }
-
-      const rawValue = providerFields[field.key]
-
-      if (field.inputType === "checkbox") {
-        if (typeof rawValue === "boolean") {
-          entries.push([field.key, rawValue] as const)
+        if (rule.disabled) {
+          return entries
         }
 
-        return entries
-      }
+        const rawValue = providerFields[field.key]
 
-      const value =
-        typeof rawValue === "string"
-          ? rawValue.trim()
-          : rawValue === undefined || rawValue === null
-            ? ""
-            : String(rawValue).trim()
+        if (field.inputType === "checkbox") {
+          if (typeof rawValue === "boolean") {
+            entries.push([field.key, rawValue] as const)
+          }
 
-      if (!value) {
-        return entries
-      }
-
-      if (field.inputType === "number") {
-        const parsed = Number(value)
-
-        if (Number.isFinite(parsed)) {
-          entries.push([field.key, parsed] as const)
+          return entries
         }
 
+        const value =
+          typeof rawValue === "string"
+            ? rawValue.trim()
+            : rawValue === undefined || rawValue === null
+              ? ""
+              : String(rawValue).trim()
+
+        if (!value) {
+          return entries
+        }
+
+        if (field.inputType === "number") {
+          const parsed = Number(value)
+
+          if (Number.isFinite(parsed)) {
+            entries.push([field.key, parsed] as const)
+          }
+
+          return entries
+        }
+
+        if (field.inputType === "select") {
+          const selectedOption = field.options?.find((option) => String(option.value) === value)
+
+          entries.push([field.key, selectedOption?.value ?? value] as const)
+          return entries
+        }
+
+        entries.push([field.key, value] as const)
         return entries
-      }
-
-      if (field.inputType === "select") {
-        const selectedOption = field.options?.find((option) => String(option.value) === value)
-
-        entries.push([field.key, selectedOption?.value ?? value] as const)
-        return entries
-      }
-
-      entries.push([field.key, value] as const)
-      return entries
-    }, []),
+      },
+      [],
+    ),
   )

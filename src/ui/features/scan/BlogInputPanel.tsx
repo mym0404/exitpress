@@ -1,4 +1,10 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../components/ui/Card.js"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../../components/ui/Card.js"
 import { Input } from "../../components/ui/Input.js"
 import { cn } from "../../lib/Cn.js"
 
@@ -60,7 +66,10 @@ export const BlogInputPanel = ({
       </label>
       <p
         id="scan-status"
-        className={cn("scan-status-note text-sm leading-7", scanStatusTone === "error" && "danger-copy")}
+        className={cn(
+          "scan-status-note text-sm leading-7",
+          scanStatusTone === "error" && "danger-copy",
+        )}
       >
         {scanStatus}
       </p>

@@ -1,13 +1,12 @@
-import { RiExternalLinkLine, RiFileTextLine, RiFolderOpenLine } from "@remixicon/react"
 import { useEffect, useRef, useState } from "react"
-
-import type { ExportJobState } from "../../../modules/exporter/Types.js"
-import type { UploadProviderCatalogResponse, UploadProviderFields } from "../../../server/Types.js"
-import { UPLOAD_PROVIDER_KEYS } from "../../../server/UploadProviderKeys.js"
-import { isUploadActionableJob, JOB_STATUSES } from "../../../modules/exporter/ExportJobState.js"
-
+import type { ExportJobState } from "../../../domain/export-job/Types.js"
+import type {
+  UploadProviderCatalogResponse,
+  UploadProviderFields,
+} from "../../../domain/upload/UploadProviderTypes.js"
+import type { JobFilter, JobResultsMode } from "./JobResultsHelpers.js"
+import { isUploadActionableJob } from "../../../domain/export-job/ExportJobState.js"
 import { Badge } from "../../components/ui/Badge.js"
-import { Button, buttonVariants } from "../../components/ui/Button.js"
 import {
   Card,
   CardContent,
@@ -15,106 +14,15 @@ import {
   CardHeader,
   CardTitle,
 } from "../../components/ui/Card.js"
-import { Checkbox } from "../../components/ui/Checkbox.js"
-import { Input } from "../../components/ui/Input.js"
-import { Progress } from "../../components/ui/Progress.js"
-import { ScrollArea } from "../../components/ui/ScrollArea.js"
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../../components/ui/Select.js"
-import { Separator } from "../../components/ui/Separator.js"
 import { toast } from "../../components/ui/Sonner.js"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../../components/ui/Table.js"
-import { ToggleGroup, ToggleGroupItem } from "../../components/ui/ToggleGroup.js"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "../../components/ui/Tooltip.js"
-import { cn } from "../../lib/Cn.js"
+import { TooltipProvider } from "../../components/ui/Tooltip.js"
 import { postSameOriginJson, postSameOriginJsonNoContent } from "../../lib/Api.js"
-import {
-  getUploadProviderFieldRule,
-  hasMissingRequiredUploadProviderField,
-  trimProviderFieldsForSubmit,
-} from "./UploadProviderFormRules.js"
-import {
-  buildJobItemPathMeta,
-  buildJobItemSeverity,
-  buildLocalOutputPath,
-  buildUploadRowStatus,
-  buildUploadedLinkMeta,
-  getJobItems,
-  isAListProvider,
-  panelCopy,
-  severityMeta,
-  shouldShowUploadColumns,
-  toProgressValue,
-  type JobFilter,
-  type JobResultsMode,
-} from "./JobResultsHelpers.js"
-import { useUploadProviderForm } from "./UseUploadProviderForm.js"
 import { getStatusPillClassName } from "../common/status/StatusPill.js"
-
-const EMPTY_SELECT_VALUE = "__none__"
-
-const CompactMetrics = ({
-  items,
-  className,
-}: {
-  items: Array<{ label: string; value: string }>
-  className?: string
-}) => (
-  <div
-    className={cn(
-      "flex min-w-0 flex-wrap items-center gap-x-4 gap-y-1.5 text-sm leading-6 text-muted-foreground",
-      className,
-    )}
-  >
-    {items.map((item) => (
-      <span
-        key={item.label}
-        className="inline-flex min-w-0 max-w-full flex-wrap items-baseline gap-x-1.5 gap-y-0.5"
-      >
-        <span className="shrink-0 text-muted-foreground">{item.label}</span>
-        <strong className="metric-value min-w-0 break-all font-semibold">{item.value}</strong>
-      </span>
-    ))}
-  </div>
-)
-
-const uploadRowBadgeClass = (status: "pending" | "partial" | "complete" | "failed") =>
-  cn(
-    "rounded-full border px-2.5 py-0.5",
-    status === "pending"
-      ? "upload-badge--pending"
-      : status === "partial"
-        ? "upload-badge--partial"
-        : status === "complete"
-          ? "upload-badge--complete"
-          : "upload-badge--failed",
-  )
-
-const jobActionButtonClassName = cn(
-  buttonVariants({
-    variant: "ghost",
-    size: "icon",
-  }),
-  "size-8 rounded-full text-muted-foreground",
-)
+import { JobLogsPanel } from "./JobLogsPanel.js"
+import { panelCopy } from "./JobResultsHelpers.js"
+import { JobResultsTable } from "./JobResultsTable.js"
+import { ExportSummarySection, RunningProgressSection } from "./ProgressSections.js"
+import { UploadPanel } from "./UploadPanel.js"
 
 export const JobResultsPanel = ({
   mode,
@@ -144,62 +52,9 @@ export const JobResultsPanel = ({
 }) => {
   const logsScrollAreaRef = useRef<HTMLDivElement | null>(null)
   const [previewPendingIds, setPreviewPendingIds] = useState<string[]>([])
-  const {
-    providerKey,
-    activeProviderDefinition,
-    activeProviderFields,
-    activeProviderUiState,
-    githubUseJsDelivr,
-    githubJsDelivrUrl,
-    selectProvider,
-    updateProviderField,
-    updateProviderUiState,
-  } = useUploadProviderForm({
-    jobId: job?.id,
-    uploadProviders,
-  })
-  const allJobItems = getJobItems(job)
-  const jobFilterCounts = allJobItems.reduce(
-    (counts, item) => {
-      const severity = buildJobItemSeverity(item)
-
-      counts.all += 1
-
-      if (severity === "success") {
-        counts.success += 1
-      }
-
-      if (severity === "error") {
-        counts.failed += 1
-      }
-
-      return counts
-    },
-    {
-      all: 0,
-      success: 0,
-      failed: 0,
-    } satisfies Record<JobFilter, number>,
-  )
-  const jobItems = allJobItems.filter((item) => {
-    const severity = buildJobItemSeverity(item)
-
-    if (activeJobFilter === "success") {
-      return severity === "success"
-    }
-
-    if (activeJobFilter === "failed") {
-      return severity === "error"
-    }
-
-    return true
-  })
-  const showUploadColumns = shouldShowUploadColumns(job)
   const showUploadPanel =
     (mode === "upload" || mode === "result") && (job?.upload.candidateCount ?? 0) > 0
   const showUploadForm = mode === "upload" && isUploadActionableJob(job)
-  const showResumeExportButton =
-    mode === "running" && job?.status === JOB_STATUSES.RUNNING && job.resumeAvailable
   const showExportSummary = mode === "upload" || mode === "result"
   const showExportResults = mode === "running" || mode === "upload" || mode === "result"
   const latestLogSignature = (() => {
@@ -211,11 +66,6 @@ export const JobResultsPanel = ({
 
     return `${job?.logs.length ?? 0}:${lastEntry.timestamp}:${lastEntry.message}`
   })()
-  const runningProgressValue = toProgressValue(job?.progress.completed ?? 0, job?.progress.total ?? 0)
-  const uploadProgressValue = toProgressValue(
-    job?.upload.uploadedCount ?? 0,
-    job?.upload.candidateCount ?? 0,
-  )
 
   const handleOpenLocalFile = async ({
     outputPath,
@@ -265,16 +115,14 @@ export const JobResultsPanel = ({
     }
   }
 
-  const handleOpenSourceLink = ({
-    source,
-  }: {
-    source: string
-  }) => {
+  const handleOpenSourceLink = ({ source }: { source: string }) => {
     window.open(source, "_blank", "noopener,noreferrer")
   }
 
   useEffect(() => {
-    const viewport = logsScrollAreaRef.current?.querySelector<HTMLElement>('[data-slot="scroll-area-viewport"]')
+    const viewport = logsScrollAreaRef.current?.querySelector<HTMLElement>(
+      '[data-slot="scroll-area-viewport"]',
+    )
 
     if (!viewport) {
       return
@@ -285,805 +133,65 @@ export const JobResultsPanel = ({
 
   return (
     <TooltipProvider>
-      <Card
-        variant="panel"
-        className="board-card overflow-hidden"
-        id="status-panel"
-      >
-      <CardHeader className="panel-header gap-4 p-6 sm:flex sm:items-start sm:justify-between">
-        <div className="panel-heading space-y-2">
-          <CardTitle className="section-title text-2xl">
-            {panelCopy[mode].title}
-          </CardTitle>
-          {panelCopy[mode].description ? (
-            <CardDescription className="panel-description max-w-3xl text-sm leading-7">
-              {panelCopy[mode].description}
-            </CardDescription>
-          ) : null}
-        </div>
-                <Badge className={getStatusPillClassName(job?.status)} data-status={job?.status ?? "idle"}>
-                  {job?.status ?? "Idle"}
-                </Badge>
-      </CardHeader>
+      <Card variant="panel" className="board-card overflow-hidden" id="status-panel">
+        <CardHeader className="panel-header gap-4 p-6 sm:flex sm:items-start sm:justify-between">
+          <div className="panel-heading space-y-2">
+            <CardTitle className="section-title text-2xl">{panelCopy[mode].title}</CardTitle>
+            {panelCopy[mode].description ? (
+              <CardDescription className="panel-description max-w-3xl text-sm leading-7">
+                {panelCopy[mode].description}
+              </CardDescription>
+            ) : null}
+          </div>
+          <Badge
+            className={getStatusPillClassName(job?.status)}
+            data-status={job?.status ?? "idle"}
+          >
+            {job?.status ?? "Idle"}
+          </Badge>
+        </CardHeader>
 
         <CardContent className="status-layout grid gap-5 p-6">
-        {mode === "running" ? (
-          <section className="subtle-panel grid gap-4 rounded-[1.5rem] p-4">
-            <div className="field-card grid gap-2 rounded-2xl p-4">
-              <div className="flex items-center justify-between gap-3">
-                <strong className="text-sm font-semibold text-foreground">수집 진행률</strong>
-                <span className="text-sm text-muted-foreground">
-                  {job?.progress.completed ?? 0} / {job?.progress.total ?? 0}
-                </span>
-              </div>
-              <Progress
-                id="running-progress"
-                value={runningProgressValue}
-                indicatorClassName="bg-[var(--status-running-fg)]"
-              />
-            </div>
-            <CompactMetrics
-              items={[
-                { label: "총 글", value: String(job?.progress.total ?? 0) },
-                { label: "완료", value: String(job?.progress.completed ?? 0) },
-                { label: "실패", value: String(job?.progress.failed ?? 0) },
-              ]}
-              className="field-card rounded-2xl px-4 py-3"
+          {mode === "running" ? (
+            <RunningProgressSection
+              job={job}
+              resumeSubmitting={resumeSubmitting}
+              onResumeExport={onResumeExport}
             />
-            {showResumeExportButton ? (
-              <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[color-mix(in_srgb,var(--status-running-fg)_25%,transparent)] bg-[var(--status-running-bg)] px-4 py-3">
-                <p className="info-copy text-sm leading-6">
-                  이전 export 상태를 복구했습니다. 남은 글만 이어서 처리합니다.
-                </p>
-                <Button
-                  id="resume-export-submit"
-                  type="button"
-                  className="rounded-xl"
-                  disabled={resumeSubmitting}
-                  onClick={() => {
-                    void onResumeExport()
-                  }}
-                >
-                  {resumeSubmitting ? "재개 중..." : "남은 작업 계속"}
-                </Button>
-              </div>
-            ) : null}
-          </section>
-        ) : null}
+          ) : null}
 
-        {showUploadPanel ? (
-          <section className="upload-panel subtle-panel grid gap-4 rounded-[1.5rem] p-4">
-            <div className="grid gap-3 lg:flex lg:items-start lg:justify-between">
-              {panelCopy[mode].description ? (
-                <div>
-                  <CardDescription className="text-sm leading-7 text-muted-foreground">
-                    {panelCopy[mode].description}
-                  </CardDescription>
-                </div>
-              ) : null}
-              <CompactMetrics
-                items={[
-                  { label: "대상 글", value: String(job?.upload.eligiblePostCount ?? 0) },
-                  { label: "대상 자산", value: String(job?.upload.candidateCount ?? 0) },
-                  { label: "업로드 완료", value: String(job?.upload.uploadedCount ?? 0) },
-                  { label: "실패", value: String(job?.upload.failedCount ?? 0) },
-                ]}
-                className="field-card rounded-2xl px-4 py-3 lg:max-w-[32rem] lg:justify-end"
-              />
-            </div>
-
-            <div className="field-card grid gap-2 rounded-2xl p-4">
-              <div className="flex items-center justify-between gap-3">
-                <strong className="text-sm font-semibold text-foreground">업로드 진행률</strong>
-                <span className="text-sm text-muted-foreground">
-                  {job?.upload.uploadedCount ?? 0} / {job?.upload.candidateCount ?? 0}
-                </span>
-              </div>
-              <Progress
-                id="upload-progress"
-                value={uploadProgressValue}
-                indicatorClassName="bg-[var(--status-ready-fg)]"
-              />
-            </div>
-
-            {showUploadForm ? (
-              uploadProviderError ? (
-                <p className="danger-copy text-sm leading-7">{uploadProviderError}</p>
-              ) : uploadProviders.providers.length === 0 || !activeProviderDefinition ? (
-                <p className="text-sm leading-7 text-muted-foreground">업로드 설정을 불러오지 못했습니다.</p>
-              ) : (
-                <form
-                  id="upload-form"
-                  className="field-card grid gap-4 rounded-[1.5rem] p-4"
-                  onSubmit={async (event) => {
-                    event.preventDefault()
-                    const normalizedProviderFields = trimProviderFieldsForSubmit({
-                      provider: activeProviderDefinition,
-                      providerFields: activeProviderFields,
-                      providerUiState: activeProviderUiState,
-                    })
-
-                    await onUploadStart({
-                      providerKey,
-                      providerFields: {
-                        ...normalizedProviderFields,
-                        ...(providerKey === UPLOAD_PROVIDER_KEYS.GITHUB && githubUseJsDelivr
-                          ? {
-                              customUrl: githubJsDelivrUrl,
-                            }
-                          : {}),
-                      },
-                    })
-                  }}
-                >
-                  <div className="grid gap-4 xl:grid-cols-[minmax(16rem,0.8fr)_minmax(0,1.2fr)] xl:items-start">
-                    <div className="grid gap-2">
-                      <label
-                        htmlFor="upload-providerKey"
-                        className="text-sm font-semibold text-foreground"
-                      >
-                        Provider
-                      </label>
-                      <Select value={providerKey} onValueChange={selectProvider}>
-                        <SelectTrigger
-                          id="upload-providerKey"
-                          data-value={providerKey}
-                          aria-describedby="upload-providerKey-description"
-                        >
-                          <SelectValue placeholder="Provider 선택" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectGroup>
-                            {uploadProviders.providers.map((provider) => (
-                              <SelectItem key={provider.key} value={provider.key}>
-                                {provider.label}
-                              </SelectItem>
-                            ))}
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                      <p
-                        id="upload-providerKey-description"
-                        className="text-sm leading-6 text-muted-foreground"
-                      >
-                        {activeProviderDefinition.description}
-                      </p>
-                    </div>
-                    <div className="grid gap-3 sm:grid-cols-2">
-                      {isAListProvider(providerKey) ? (
-                        <div className="subtle-panel grid gap-2 rounded-2xl px-4 py-3 sm:col-span-2">
-                          <span className="text-sm font-semibold text-foreground">Authentication</span>
-                          <span className="text-sm leading-6 text-muted-foreground">
-                            AList는 Token 또는 계정 인증 중 하나만 사용합니다.
-                          </span>
-                          <ToggleGroup
-                            type="single"
-                            value={activeProviderUiState.alistAuthMode}
-                            aria-label="Authentication 방식"
-                            className="justify-start"
-                            onValueChange={(nextMode) => {
-                              if (!nextMode) {
-                                return
-                              }
-
-                              updateProviderUiState({
-                                alistAuthMode: nextMode as typeof activeProviderUiState.alistAuthMode,
-                              })
-                            }}
-                          >
-                            <ToggleGroupItem
-                              value="token"
-                              className="theme-toggle-item min-w-[6rem]"
-                              aria-label="Token"
-                            >
-                              Token
-                            </ToggleGroupItem>
-                            <ToggleGroupItem
-                              value="account"
-                              className="theme-toggle-item min-w-[10rem]"
-                              aria-label="Username + Password"
-                            >
-                              Username + Password
-                            </ToggleGroupItem>
-                          </ToggleGroup>
-                        </div>
-                      ) : null}
-                      {activeProviderDefinition.fields.map((field) => {
-                        const fieldInputId = `upload-providerField-${field.key}`
-                        const fieldDescriptionId = `${fieldInputId}-description`
-                        const fieldDisabledReasonId = `${fieldInputId}-disabled-reason`
-                        const rule = getUploadProviderFieldRule({
-                          providerKey,
-                          field,
-                          providerFields: activeProviderFields,
-                          providerUiState: activeProviderUiState,
-                        })
-                        const fieldDescribedBy = rule.disabledReason
-                          ? `${fieldDescriptionId} ${fieldDisabledReasonId}`
-                          : fieldDescriptionId
-
-                        if (field.inputType === "checkbox") {
-                          return (
-                            <div
-                              key={`${providerKey}:${field.key}`}
-                              className={`subtle-panel flex items-center gap-3 rounded-2xl px-4 py-3 sm:col-span-2 ${rule.disabled ? "opacity-70" : ""}`}
-                            >
-                              <Checkbox
-                                id={fieldInputId}
-                                checked={activeProviderFields[field.key] === true}
-                                disabled={rule.disabled}
-                                className="shrink-0"
-                                aria-describedby={fieldDescribedBy}
-                                onCheckedChange={(next) =>
-                                  updateProviderField(field.key, next === true)
-                                }
-                              />
-                              <span className="grid gap-1">
-                                <label
-                                  htmlFor={fieldInputId}
-                                  className="text-sm font-semibold text-foreground"
-                                >
-                                  {field.label}
-                                </label>
-                                <span
-                                  id={fieldDescriptionId}
-                                  className="text-sm leading-6 text-muted-foreground"
-                                >
-                                  {rule.description}
-                                </span>
-                                {rule.disabledReason ? (
-                                  <span
-                                    id={fieldDisabledReasonId}
-                                    className="notice-copy text-sm leading-6"
-                                  >
-                                    {rule.disabledReason}
-                                  </span>
-                                ) : field.placeholder ? (
-                                  <span className="text-sm leading-6 text-muted-foreground">
-                                    {field.placeholder}
-                                  </span>
-                                ) : null}
-                              </span>
-                            </div>
-                          )
-                        }
-
-                        if (field.inputType === "select") {
-                          return (
-                            <div key={`${providerKey}:${field.key}`} className="grid gap-2">
-                              <label htmlFor={fieldInputId} className="text-sm font-semibold text-foreground">
-                                {field.label}
-                              </label>
-                              <span id={fieldDescriptionId} className="text-sm leading-6 text-muted-foreground">
-                                {rule.description}
-                              </span>
-                              <Select
-                                value={
-                                  !field.required && String(activeProviderFields[field.key] ?? "") === ""
-                                    ? EMPTY_SELECT_VALUE
-                                    : String(activeProviderFields[field.key] ?? "")
-                                }
-                                disabled={rule.disabled}
-                                onValueChange={(nextValue) =>
-                                  updateProviderField(
-                                    field.key,
-                                    nextValue === EMPTY_SELECT_VALUE ? "" : nextValue,
-                                  )
-                                }
-                              >
-                                <SelectTrigger
-                                  id={fieldInputId}
-                                  data-value={String(activeProviderFields[field.key] ?? "")}
-                                  aria-describedby={fieldDescribedBy}
-                                >
-                                  <SelectValue placeholder={!field.required ? "선택 안 함" : "항목 선택"} />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  <SelectGroup>
-                                    {!field.required ? <SelectItem value={EMPTY_SELECT_VALUE}>선택 안 함</SelectItem> : null}
-                                    {(field.options ?? []).map((option) => (
-                                      <SelectItem key={`${field.key}:${option.value}`} value={String(option.value)}>
-                                        {option.label}
-                                      </SelectItem>
-                                    ))}
-                                  </SelectGroup>
-                                </SelectContent>
-                              </Select>
-                              {rule.disabledReason ? (
-                                <span
-                                  id={fieldDisabledReasonId}
-                                  className="notice-copy text-sm leading-6"
-                                >
-                                  {rule.disabledReason}
-                                </span>
-                              ) : null}
-                            </div>
-                          )
-                        }
-
-                        return (
-                          <div key={`${providerKey}:${field.key}`} className="grid gap-2">
-                            <label htmlFor={fieldInputId} className="text-sm font-semibold text-foreground">
-                              {field.label}
-                            </label>
-                            <span id={fieldDescriptionId} className="text-sm leading-6 text-muted-foreground">
-                              {rule.description}
-                            </span>
-                            <Input
-                              id={fieldInputId}
-                              type={field.inputType}
-                              value={String(activeProviderFields[field.key] ?? "")}
-                              disabled={rule.disabled}
-                              aria-describedby={fieldDescribedBy}
-                                onChange={(event) => updateProviderField(field.key, event.target.value)}
-                                placeholder={field.placeholder}
-                              />
-                            {rule.disabledReason ? (
-                              <span
-                                id={fieldDisabledReasonId}
-                                className="notice-copy text-sm leading-6"
-                              >
-                                {rule.disabledReason}
-                              </span>
-                            ) : null}
-                          </div>
-                        )
-                      })}
-                    </div>
-                  </div>
-                  {providerKey === UPLOAD_PROVIDER_KEYS.GITHUB ? (
-                    <div
-                      className="subtle-panel flex items-center gap-3 rounded-2xl px-4 py-3"
-                    >
-                      <Checkbox
-                        id="upload-github-use-jsdelivr"
-                        checked={githubUseJsDelivr}
-                        className="shrink-0"
-                        aria-describedby="upload-github-use-jsdelivr-description"
-                        onCheckedChange={(next) =>
-                          updateProviderUiState({
-                            githubUseJsDelivr: next === true,
-                          })
-                        }
-                      />
-                      <span className="grid gap-1">
-                        <label
-                          htmlFor="upload-github-use-jsdelivr"
-                          className="text-sm font-semibold text-foreground"
-                        >
-                          jsDelivr CDN 사용
-                        </label>
-                        <span
-                          id="upload-github-use-jsdelivr-description"
-                          className="text-sm leading-6 text-muted-foreground"
-                        >
-                          {githubUseJsDelivr
-                            ? githubJsDelivrUrl || "Repository를 입력하면 jsDelivr 주소를 만듭니다."
-                            : "기본 GitHub 업로드 URL을 사용합니다."}
-                        </span>
-                      </span>
-                    </div>
-                  ) : null}
-                  {providerKey === UPLOAD_PROVIDER_KEYS.GITHUB && githubUseJsDelivr ? (
-                    <div className="grid gap-2">
-                      <label
-                        htmlFor="upload-github-jsdelivr-preview"
-                        className="text-sm font-semibold text-foreground"
-                      >
-                        자동 Custom URL
-                      </label>
-                      <Input
-                        id="upload-github-jsdelivr-preview"
-                        value={githubJsDelivrUrl}
-                        readOnly
-                        aria-describedby="upload-github-jsdelivr-preview-description"
-                        placeholder="Repository와 Branch를 입력하면 미리보기가 보입니다."
-                      />
-                      <span
-                        id="upload-github-jsdelivr-preview-description"
-                        className="text-sm leading-6 text-muted-foreground"
-                      >
-                        jsDelivr 주소는 제출 시 Custom URL로 자동 적용됩니다.
-                      </span>
-                    </div>
-                  ) : null}
-                  <div className="flex justify-end">
-                    <Button
-                      id="upload-submit"
-                      type="submit"
-                      className="w-full rounded-xl sm:w-auto"
-                      disabled={
-                        uploadSubmitting ||
-                        hasMissingRequiredUploadProviderField({
-                          provider: activeProviderDefinition,
-                          providerFields: activeProviderFields,
-                          providerUiState: activeProviderUiState,
-                        })
-                      }
-                    >
-                      {uploadSubmitting
-                        ? "업로드 시작 중..."
-                        : job?.status === JOB_STATUSES.UPLOADING && job.resumeAvailable
-                          ? "남은 업로드 계속"
-                          : "업로드 시작"}
-                    </Button>
-                  </div>
-                </form>
-              )
-            ) : null}
-
-            {job?.upload.status === "skipped" ? (
-              <p className="text-sm leading-7 text-muted-foreground">
-                업로드할 로컬 이미지가 없어 내보내기만 완료되었습니다.
-              </p>
-            ) : null}
-
-            {job?.status === JOB_STATUSES.UPLOAD_FAILED && job.error ? (
-              <p className="danger-copy text-sm leading-7">{job.error}</p>
-            ) : null}
-          </section>
-        ) : null}
-
-        {showExportSummary ? (
-          <section className="subtle-panel grid gap-4 rounded-[1.5rem] p-4">
-            <CompactMetrics
-              items={[
-                { label: "총 글", value: String(job?.progress.total ?? 0) },
-                { label: "완료", value: String(job?.progress.completed ?? 0) },
-                { label: "실패", value: String(job?.progress.failed ?? 0) },
-                { label: "업로드", value: String(job?.upload.uploadedCount ?? 0) },
-              ]}
-              className="field-card rounded-2xl px-4 py-3"
+          {showUploadPanel ? (
+            <UploadPanel
+              mode={mode}
+              job={job}
+              showUploadForm={showUploadForm}
+              uploadSubmitting={uploadSubmitting}
+              uploadProviders={uploadProviders}
+              uploadProviderError={uploadProviderError}
+              onUploadStart={onUploadStart}
             />
+          ) : null}
 
-            {job?.status === JOB_STATUSES.FAILED && job.error ? (
-              <p className="danger-copy text-sm leading-7">{job.error}</p>
-            ) : null}
+          {showExportSummary ? <ExportSummarySection job={job} /> : null}
 
-            {job?.upload.status === "skipped" ? (
-              <p className="text-sm leading-7 text-muted-foreground">
-                업로드할 로컬 이미지가 없어 내보내기만 완료되었습니다.
-              </p>
-            ) : null}
-          </section>
-        ) : null}
+          {showExportResults ? (
+            <JobResultsTable
+              mode={mode}
+              job={job}
+              activeJobFilter={activeJobFilter}
+              previewPendingIds={previewPendingIds}
+              onFilterChange={onFilterChange}
+              onOpenLocalFile={(input) => {
+                void handleOpenLocalFile(input)
+              }}
+              onOpenPreviewLink={(input) => {
+                void handleOpenPreviewLink(input)
+              }}
+              onOpenSourceLink={handleOpenSourceLink}
+            />
+          ) : null}
 
-        {showExportResults ? (
-          <section className="job-results-panel subtle-panel grid gap-4 rounded-[1.5rem] p-4">
-            <div className="job-results-header grid gap-4 lg:flex lg:items-start lg:justify-between">
-              <div
-                className="job-filter-group flex flex-wrap items-center gap-2"
-                role="tablist"
-                aria-label="완료 리스트 필터"
-              >
-                {(["all", "success", "failed"] as const).map((filter) => (
-                  <Button
-                    key={filter}
-                    type="button"
-                    variant={activeJobFilter === filter ? "outline" : "ghost"}
-                    className={`job-filter-button min-w-16 rounded-full px-4 ${activeJobFilter === filter ? "is-active" : ""}`}
-                    data-job-filter={filter}
-                    onClick={() => onFilterChange(filter)}
-                  >
-                    {filter === "all" ? "전체" : filter === "success" ? "성공" : "실패"}{" "}
-                    {jobFilterCounts[filter]}
-                  </Button>
-                ))}
-              </div>
-            </div>
-
-            {jobItems.length === 0 ? (
-              <div
-                id="job-file-tree"
-                className="job-file-tree empty-state-surface grid min-h-28 place-items-center rounded-2xl px-4 py-6 text-center text-sm"
-              >
-                {activeJobFilter === "all"
-                  ? mode === "running"
-                    ? "완료된 결과가 아직 없습니다."
-                    : "완료된 결과가 여기에 표시됩니다."
-                  : "현재 필터에 맞는 결과가 없습니다."}
-              </div>
-            ) : (
-              <ScrollArea
-                id="job-file-tree"
-                className="job-file-tree job-file-tree-scroll section-card max-h-[min(32rem,62vh)] overflow-hidden rounded-[1.5rem]"
-              >
-                <Table
-                  className={cn(
-                    "w-full text-[11px] sm:text-xs",
-                    showUploadColumns ? "min-w-[50rem] table-fixed" : "table-fixed",
-                  )}
-                >
-                  <TableHeader className="sticky top-0 z-10">
-                    <TableRow className="hover:bg-transparent">
-                      <TableHead className="w-[7.5rem] text-[10px] sm:w-[8.5rem] sm:text-[11px]">
-                        카테고리
-                      </TableHead>
-                      <TableHead className="text-[10px] sm:text-[11px]">파일</TableHead>
-                      {showUploadColumns ? (
-                        <TableHead className="w-[7rem] text-center text-[10px] sm:w-[8rem] sm:text-[11px]">
-                          업로드
-                        </TableHead>
-                      ) : null}
-                      {showUploadColumns ? (
-                        <TableHead className="w-[7rem] text-center text-[10px] sm:w-[8rem] sm:text-[11px]">
-                          업로드 상태
-                        </TableHead>
-                      ) : null}
-                      <TableHead className="w-[6.5rem] text-center text-[10px] sm:w-[7.5rem] sm:text-[11px]">
-                        상태
-                      </TableHead>
-                      <TableHead className="w-[6.5rem] text-center text-[10px] sm:w-[7.5rem] sm:text-[11px]">
-                        액션
-                      </TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {jobItems.map((item) => {
-                      const severity = buildJobItemSeverity(item)
-                      const pathMeta = buildJobItemPathMeta(item)
-                      const meta = severityMeta[severity]
-                      const localOutputPath = buildLocalOutputPath({
-                        outputDir: job?.request.outputDir ?? "",
-                        outputPath: item.outputPath,
-                      })
-                      const previewPending = previewPendingIds.includes(item.id)
-                      const canOpenPreview = Boolean(item.outputPath)
-                      const hasUploadCandidate = item.upload.candidateCount > 0
-                      const uploadRowStatus =
-                        showUploadColumns && hasUploadCandidate
-                          ? buildUploadRowStatus({
-                              jobStatus: job?.status,
-                              item,
-                            })
-                          : null
-                      const uploadedLinks =
-                        showUploadColumns && hasUploadCandidate ? buildUploadedLinkMeta(item) : []
-
-                      return (
-                        <TableRow
-                          key={item.id}
-                          className={cn(
-                            "last:border-b-0",
-                            severity === "error"
-                                ? "bg-[var(--status-error-bg)]"
-                                : "",
-                          )}
-                          data-upload-row-id={showUploadColumns && hasUploadCandidate ? item.id : undefined}
-                          data-upload-row-status={uploadRowStatus?.key}
-                          data-severity={severity}
-                        >
-                          <TableCell className="align-top">
-                            <div className="flex min-h-[3.5rem] items-start">
-                              <Badge
-                                variant="outline"
-                                className="max-w-full rounded-full px-2.5 py-1 text-[10px] font-medium normal-case sm:text-[11px]"
-                                title={item.category.path.join(" / ")}
-                              >
-                                <span className="truncate">{item.category.name}</span>
-                              </Badge>
-                            </div>
-                          </TableCell>
-                          <TableCell className="min-w-0 align-top">
-                            <div
-                              className="job-results-row grid min-h-0 w-full min-w-0 whitespace-normal rounded-xl px-1.5 py-1 text-left"
-                              data-job-item-id={item.id}
-                              data-severity={severity}
-                            >
-                              <span className="grid min-w-0 gap-1">
-                                {localOutputPath ? (
-                                  <Tooltip>
-                                    <TooltipTrigger asChild>
-                                      <span className="w-fit max-w-full cursor-help outline-none" tabIndex={0}>
-                                        <strong className="break-words text-[11px] font-semibold leading-[1.45] text-foreground sm:text-[13px]">
-                                          {pathMeta.fileLabel}
-                                        </strong>
-                                      </span>
-                                    </TooltipTrigger>
-                                    <TooltipContent align="start" side="top" sideOffset={8}>
-                                      <span className="font-mono">{localOutputPath}</span>
-                                    </TooltipContent>
-                                  </Tooltip>
-                                ) : (
-                                  <strong className="break-words text-[11px] font-semibold leading-[1.45] text-foreground sm:text-[13px]">
-                                    {pathMeta.fileLabel}
-                                  </strong>
-                                )}
-                                <span className="whitespace-normal break-words text-[10px] leading-[1.45] text-muted-foreground sm:text-[11px]">
-                                  {item.title}
-                                </span>
-                              </span>
-                            </div>
-                          </TableCell>
-                          {showUploadColumns ? (
-                            <TableCell className="align-middle text-center text-[11px] text-foreground sm:text-xs">
-                              {hasUploadCandidate ? (
-                                <div className="grid justify-items-center gap-1">
-                                  <span>
-                                    {item.upload.uploadedCount} / {item.upload.candidateCount}
-                                  </span>
-                                  {uploadedLinks.length > 0 ? (
-                                    <div className="flex flex-wrap justify-center gap-1.5 text-[10px] sm:text-xs">
-                                      {uploadedLinks.map((link) => (
-                                        <a
-                                          key={`${item.id}:${link.label}`}
-                                          href={link.url}
-                                          target="_blank"
-                                          rel="noreferrer"
-                                          className="font-medium text-[var(--status-running-fg)] underline underline-offset-2"
-                                        >
-                                          {link.label}
-                                        </a>
-                                      ))}
-                                    </div>
-                                  ) : null}
-                                </div>
-                              ) : (
-                                <span className="text-muted-foreground/70">-</span>
-                              )}
-                            </TableCell>
-                          ) : null}
-                          {showUploadColumns ? (
-                            <TableCell className="align-middle text-center">
-                              {uploadRowStatus ? (
-                                <Badge
-                                  variant="outline"
-                                  className={cn(
-                                    "text-[10px] sm:text-[11px]",
-                                    uploadRowBadgeClass(uploadRowStatus.key),
-                                  )}
-                                  data-upload-row-status-badge={uploadRowStatus.key}
-                                >
-                                  {uploadRowStatus.label}
-                                </Badge>
-                              ) : (
-                                <span className="text-sm text-muted-foreground/70">-</span>
-                              )}
-                            </TableCell>
-                          ) : null}
-                          <TableCell className="align-middle text-center">
-                            <Badge
-                              className="min-w-14 justify-center rounded-full px-2 py-0.5 text-[10px] sm:min-w-16 sm:px-2.5 sm:text-[11px]"
-                              variant={severity === "success" ? "secondary" : meta.badge}
-                            >
-                              {meta.label}
-                            </Badge>
-                          </TableCell>
-                          <TableCell className="align-middle text-center">
-                            <div className="inline-flex items-center rounded-full border border-border bg-card p-1 shadow-[var(--panel-shadow-border)]">
-                              <Tooltip>
-                                <TooltipTrigger asChild>
-                                  <Button
-                                    type="button"
-                                    variant="ghost"
-                                    size="icon"
-                                    className={jobActionButtonClassName}
-                                    aria-label={`${item.title} 네이버 원문 보기`}
-                                    data-job-item-source-link
-                                    onClick={() => {
-                                      handleOpenSourceLink({
-                                        source: item.source,
-                                      })
-                                    }}
-                                  >
-                                    <RiExternalLinkLine data-icon="inline-start" aria-hidden="true" />
-                                  </Button>
-                                </TooltipTrigger>
-                                <TooltipContent side="top" sideOffset={8}>
-                                  네이버 원문 보기
-                                </TooltipContent>
-                              </Tooltip>
-                              <Tooltip>
-                                <TooltipTrigger asChild>
-                                  <Button
-                                    type="button"
-                                    variant="ghost"
-                                    size="icon"
-                                    className={jobActionButtonClassName}
-                                    aria-label={`${item.title} 마크다운 미리보기`}
-                                    data-job-item-preview-link
-                                    disabled={!canOpenPreview || previewPending}
-                                    onClick={() => {
-                                      if (!item.outputPath) {
-                                        return
-                                      }
-
-                                      void handleOpenPreviewLink({
-                                        itemId: item.id,
-                                        outputPath: item.outputPath,
-                                        title: item.title,
-                                      })
-                                    }}
-                                  >
-                                    <RiFileTextLine data-icon="inline-start" aria-hidden="true" />
-                                  </Button>
-                                </TooltipTrigger>
-                                <TooltipContent side="top" sideOffset={8}>
-                                  {previewPending
-                                    ? "미리보기 링크 생성 중"
-                                    : canOpenPreview
-                                      ? "마크다운 미리보기"
-                                      : "미리보기 없음"}
-                                </TooltipContent>
-                              </Tooltip>
-                              <Tooltip>
-                                <TooltipTrigger asChild>
-                                  <Button
-                                    type="button"
-                                    variant="ghost"
-                                    size="icon"
-                                    className={jobActionButtonClassName}
-                                    aria-label={`${item.title} 파일 열기`}
-                                    disabled={!item.outputPath}
-                                    onClick={() => {
-                                      if (!item.outputPath) {
-                                        return
-                                      }
-
-                                      void handleOpenLocalFile({
-                                        outputPath: item.outputPath,
-                                        title: item.title,
-                                      })
-                                    }}
-                                  >
-                                    <RiFolderOpenLine data-icon="inline-start" aria-hidden="true" />
-                                  </Button>
-                                </TooltipTrigger>
-                                <TooltipContent side="top" sideOffset={8}>
-                                  {item.outputPath ? "로컬 파일 열기" : "열 파일 없음"}
-                                </TooltipContent>
-                              </Tooltip>
-                            </div>
-                          </TableCell>
-                        </TableRow>
-                      )
-                    })}
-                  </TableBody>
-                </Table>
-              </ScrollArea>
-            )}
-          </section>
-        ) : null}
-
-        <section className="logs-panel subtle-panel grid gap-4 rounded-[1.5rem] p-4">
-          <div className="logs-header grid gap-3">
-            <div>
-              <CardDescription className="results-description text-sm leading-7">
-                작업 로그
-              </CardDescription>
-            </div>
-          </div>
-          <Separator />
-          <ScrollArea
-            id="logs"
-            ref={logsScrollAreaRef}
-            className="logs-scroll log-surface h-[min(28rem,56vh)] overflow-hidden rounded-[1.5rem]"
-            aria-live="polite"
-          >
-            <div className="logs grid min-h-full gap-1.5 px-4 py-4 font-mono text-[0.88rem] text-foreground">
-              {(job?.logs ?? []).map((entry, index) => (
-                <div
-                  key={`${entry.timestamp}-${index}`}
-                  className="log-line grid gap-0.5 pb-1.5 last:border-b-0 last:pb-0"
-                  data-job-log-entry
-                >
-                  <span
-                    className="log-meta text-[11px] leading-5"
-                    data-job-log-timestamp
-                  >
-                    {entry.timestamp}
-                  </span>
-                  <span
-                    className="whitespace-pre-wrap break-words text-sm leading-6 text-foreground"
-                    data-job-log-message
-                  >
-                    {entry.message}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </ScrollArea>
-        </section>
+          <JobLogsPanel job={job} logsScrollAreaRef={logsScrollAreaRef} />
         </CardContent>
       </Card>
     </TooltipProvider>

@@ -3,7 +3,7 @@
 ## Identity
 - Editor type은 `naver-se3`, label은 `SmartEditor 3`다.
 - SE3는 component wrapper 기반의 legacy SmartEditor parser다.
-- Parser block 구현은 `src/modules/blocks/naver-se3/*`에 둔다.
+- Parser block 구현은 `src/parsing/naver-blog/se3/blocks/*`에 둔다.
 
 ## Block Families
 - Document chrome 계열은 본문 output이 아닌 제목 wrapper를 버린다.

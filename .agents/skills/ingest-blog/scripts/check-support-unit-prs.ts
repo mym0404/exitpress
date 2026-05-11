@@ -1,16 +1,12 @@
 #!/usr/bin/env bun
 
+import type { SupportUnitClaimPullRequest } from "./lib/ingest-pr-check.js"
+import { resolveRepoPath } from "../../../../src/infra/node/FilePathUtils.js"
+import { createSupportUnitPrCheck, extractDiscoveredSupportUnits } from "./lib/ingest-pr-check.js"
 import { execFile } from "node:child_process"
 import { readFile } from "node:fs/promises"
 import path from "node:path"
 import { promisify } from "node:util"
-
-import {
-  createSupportUnitPrCheck,
-  extractDiscoveredSupportUnits,
-  type SupportUnitClaimPullRequest,
-} from "./lib/ingest-pr-check.js"
-import { resolveRepoPath } from "../../../../src/shared/Utils.js"
 
 type CheckArgs = {
   outputDir?: string
@@ -93,7 +89,9 @@ const parsePullRequests = (value: unknown): SupportUnitClaimPullRequest[] =>
           {
             ...(typeof record.number === "number" ? { number: record.number } : {}),
             ...(typeof record.title === "string" ? { title: record.title } : {}),
-            ...(typeof record.body === "string" || record.body === null ? { body: record.body } : {}),
+            ...(typeof record.body === "string" || record.body === null
+              ? { body: record.body }
+              : {}),
             ...(typeof record.headRefName === "string" ? { headRefName: record.headRefName } : {}),
             ...(typeof record.isDraft === "boolean" ? { isDraft: record.isDraft } : {}),
             ...(typeof record.url === "string" ? { url: record.url } : {}),

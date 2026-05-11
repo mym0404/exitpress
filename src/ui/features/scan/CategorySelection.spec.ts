@@ -1,6 +1,5 @@
 import { describe, expect, it } from "vitest"
-
-import type { CategoryInfo } from "../../../modules/blog/Types.js"
+import type { CategoryInfo } from "../../../domain/blog/Types.js"
 import {
   getCategoryCheckboxState,
   orderCategoriesHierarchically,
@@ -42,7 +41,9 @@ const categories: CategoryInfo[] = [
 
 describe("category selection", () => {
   it("orders parents before descendants for table rendering", () => {
-    expect(orderCategoriesHierarchically(categories).map((category) => category.id)).toEqual([1, 2, 3])
+    expect(orderCategoriesHierarchically(categories).map((category) => category.id)).toEqual([
+      1, 2, 3,
+    ])
   })
 
   it("cascades parent and child selection as a tree", () => {

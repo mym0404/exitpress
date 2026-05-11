@@ -19,7 +19,7 @@
 - Default output is GFM Markdown with YAML frontmatter.
 - Default post folder name is date plus snake_case slug; Markdown body file is `index.md`.
 - Category path can group output folders when enabled.
-- Custom post folder names use the path template code in `src/modules/exporter/PostPathTemplate.ts`.
+- Custom post folder names use the path template code in `src/exporting/paths/PostPathTemplate.ts`.
 - Downloaded assets are stored under `output/public/<sha256>.<ext>`.
 - Same bytes share one asset file even when source URLs differ.
 - `manifest.json` is both final result record and resume/bootstrap state.

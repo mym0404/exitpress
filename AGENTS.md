@@ -7,7 +7,8 @@
 ## Tech Stack
 - `pnpm` 단일 저장소에서 Node.js 24 LTS, Node.js ESM, TypeScript, Bun 기반 TS 실행을 사용한다.
 - 웹 UI는 React, Vite, Tailwind CSS v4, shadcn/Radix, Sonner로 구성된다.
-- 검증은 Vitest와 `tests/e2e/*` Playwright/Bun harness가 맡는다.
+- 포맷, import 정렬, 기본 lint는 Biome가 맡는다.
+- 검증은 Biome, Vitest, `tests/e2e/*` Playwright/Bun harness가 맡는다.
 
 ## Project Structure
 ```text
@@ -18,32 +19,33 @@
 |   `-- skills/ingest-blog/           # repo-local parser coverage workflow
 |-- src/
 |   |-- Server.ts                     # local server entrypoint
+|   |-- domain/                       # AST, blog, export option/job, upload contracts
+|   |-- shared/                       # runtime-neutral collection, text, date, error helpers
+|   |-- infra/                        # Node, HTTP, runtime adapters
+|   |-- integrations/naver-blog/      # Naver Blog API and HTML fetch boundary
+|   |-- parsing/naver-blog/           # parser core plus SE2, SE3, SE4 families
+|   |-- markdown/                     # common AST to Markdown renderer
+|   |-- exporting/                    # workflow, post, assets, paths, upload
 |   |-- server/                       # HTTP API, jobs, local state, upload catalog
-|   |-- modules/
-|   |   |-- fetcher/                  # Naver API and post HTML fetch
-|   |   |-- parser/                   # common parser entrypoints
-|   |   |-- blog/                     # editor routing and output definitions
-|   |   |-- editor/                   # SE2, SE3, SE4 parser orchestration
-|   |   |-- blocks/                   # editor-specific parser blocks
-|   |   |-- common/                   # cross-runtime utility helpers and base types
-|   |   |-- converter/                # common AST to Markdown
-|   |   `-- exporter/                 # export, assets, upload/rewrite, manifest
 |   `-- ui/                           # React wizard, feature panels, primitives, tokens
-|-- scripts/                          # shared project CLIs and helpers
+|-- scripts/
+|   |-- single-post/                  # single post export CLI
+|   |-- post-evidence/                # evidence capture/render helpers
+|   `-- maintenance/                  # repository maintenance CLIs
 |-- tests/
 |   |-- e2e/                          # Playwright/Bun UI and live harnesses
 |   |-- fixtures/samples/             # public sample expected outputs
-|   `-- helpers/                      # fixture and test-path helpers
+|   `-- support/                      # fixture, server, and test-path helpers
 |-- public/brand/                     # UI brand assets
 |-- .github/workflows/required-checks.yml
 `-- package.json                      # repo-native commands
 ```
 
 ## Runtime And Architecture
-- 서버 시작점은 `src/Server.ts`, HTTP API는 `src/server/HttpServer.ts`다.
-- export 파이프라인은 `src/modules/exporter/NaverBlogExporter.ts`에서 `fetch -> parse -> review -> render -> write -> manifest` 순서로 따라간다.
-- parser seam은 `src/modules/parser/PostParser.ts`, `src/modules/blog/*`, `src/modules/editor/*`, `src/modules/blocks/*`, `src/modules/blocks/BlockRegistry.ts`다.
-- UI 셸은 `src/ui/App.tsx`, 공용 shell/hook/status는 `src/ui/features/common/*`, 전역 토큰은 `src/ui/styles/globals.css`다.
+- 서버 시작점은 `src/Server.ts`, HTTP API는 `src/server/http/HttpServer.ts`다.
+- export 파이프라인은 `src/exporting/workflow/NaverBlogExporter.ts`에서 `fetch -> parse -> review -> render -> write -> manifest` 순서로 따라간다.
+- parser seam은 `src/parsing/naver-blog/core/PostParser.ts`, `src/parsing/naver-blog/NaverBlog.ts`, `src/parsing/naver-blog/core/*`, `src/parsing/naver-blog/se2|se3|se4/*`다.
+- UI 셸은 `src/ui/app/App.tsx`, 공용 shell/hook/status는 `src/ui/features/common/*`, 전역 토큰은 `src/ui/styles/globals.css`다.
 
 ## Design System
 - UI 기준은 `.agents/knowledge/DESIGN.md`다.
@@ -58,7 +60,9 @@
 - commit, push, PR 생성은 사용자가 명시적으로 요청한 경우에만 수행한다.
 
 ## Validation Routes
-- `pnpm check:local`: 저장소 파일 변경 뒤 기본 기준선이다. `typecheck`, `test:offline`을 실행한다. 샘플 fixture 테스트는 live Naver HTML을 캐시하며 필요 시 네트워크를 쓴다.
+- `pnpm format:biome`: Biome formatter를 적용한다. 구조 변경이나 대량 import 수정 중간에 실행한다.
+- `pnpm check:biome`: Biome formatting, import 정렬, lint 기준선이다.
+- `pnpm check:local`: 저장소 파일 변경 뒤 기본 기준선이다. `check:biome`, `typecheck`, `test:offline`을 실행한다. 샘플 fixture 테스트는 live Naver HTML을 캐시하며 필요 시 네트워크를 쓴다.
 - `pnpm check:unused`: source, test, script 코드의 dead code 기준선이다. `check:local`에는 포함되지 않는다.
 - `pnpm check:full`: `check:local`에 Playwright smoke UI를 더한 넓은 로컬 회귀다.
 - `pnpm smoke:ui`: mock 기반 UI 흐름과 복구 경로를 확인한다. 코어 사용자 흐름이나 상태 전이를 바꾼 뒤 실행한다.

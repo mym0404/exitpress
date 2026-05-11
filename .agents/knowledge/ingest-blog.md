@@ -110,6 +110,6 @@ bun .agents/skills/ingest-blog/scripts/write-sample-fixture.ts \
 ## Verification
 - Validate the skill with the skill-creator `quick_validate.py` script against `.agents/skills/ingest-blog`.
 - Check CLI surfaces with `bun .agents/skills/ingest-blog/scripts/collect-blog-errors.ts --help`, `bun .agents/skills/ingest-blog/scripts/write-sample-fixture.ts --help`, and `bun .agents/skills/ingest-blog/scripts/check-support-unit-prs.ts --help`.
-- Use `bun scripts/capture-post-evidence.ts --help` for evidence CLI changes.
+- Use `bun scripts/post-evidence/capture-post-evidence.ts --help` for evidence CLI changes.
 - Parser block changes need `pnpm test:parser-blocks` and `pnpm test:offline`.
 - Broader parser, renderer, exporter, or UI state changes may require `pnpm check:local` or `pnpm check:full` according to `.agents/knowledge/verification.md`.

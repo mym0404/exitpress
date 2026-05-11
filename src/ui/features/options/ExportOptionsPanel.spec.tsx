@@ -6,16 +6,16 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
 import "@testing-library/jest-dom/vitest"
 
+import type { ExportOptions } from "../../../domain/export-options/Types.js"
+import { createTestPath } from "../../../../tests/support/test-paths.js"
 import {
   defaultExportOptions,
   frontmatterFieldMeta,
   frontmatterFieldOrder,
   optionDescriptions,
-} from "../../../modules/exporter/ExportOptions.js"
-import { NaverBlog } from "../../../modules/blog/NaverBlog.js"
-import type { ExportOptions } from "../../../modules/exporter/Types.js"
+} from "../../../domain/export-options/ExportOptions.js"
+import { NaverBlog } from "../../../parsing/naver-blog/NaverBlog.js"
 import { ExportOptionsPanel } from "./ExportOptionsPanel.js"
-import { createTestPath } from "../../../../tests/helpers/test-paths.js"
 
 const testOutputDir = createTestPath("ui-export-options-panel", "output")
 const testExportDir = createTestPath("ui-export-options-panel", "export")
@@ -76,7 +76,9 @@ const selectOption = async ({
   await user.click(query<HTMLElement>(trigger))
 
   await waitFor(() => {
-    expect(document.querySelector(`[data-slot="select-item"][data-value="${value}"]`)).not.toBeNull()
+    expect(
+      document.querySelector(`[data-slot="select-item"][data-value="${value}"]`),
+    ).not.toBeNull()
   })
 
   await user.click(query<HTMLElement>(`[data-slot="select-item"][data-value="${value}"]`))
@@ -129,16 +131,18 @@ describe("ExportOptionsPanel", () => {
 
     await user.click(query<HTMLInputElement>("#frontmatter-enabled"))
     await user.click(query<HTMLElement>("#frontmatter-field-title"))
-    fireEvent.change(query<HTMLInputElement>('[data-frontmatter-field="title"] [data-alias-input="true"]'), {
-      target: {
-        value: "headline",
+    fireEvent.change(
+      query<HTMLInputElement>('[data-frontmatter-field="title"] [data-alias-input="true"]'),
+      {
+        target: {
+          value: "headline",
+        },
       },
-    })
-    expect(query<HTMLElement>("#frontmatter-status").textContent).toMatch(/같은 alias "shared"/)
-    expect(query<HTMLElement>('[data-frontmatter-field="title"] [data-alias-input="true"]')).toHaveAttribute(
-      "aria-invalid",
-      "true",
     )
+    expect(query<HTMLElement>("#frontmatter-status").textContent).toMatch(/같은 alias "shared"/)
+    expect(
+      query<HTMLElement>('[data-frontmatter-field="title"] [data-alias-input="true"]'),
+    ).toHaveAttribute("aria-invalid", "true")
 
     cleanup()
 
@@ -156,18 +160,32 @@ describe("ExportOptionsPanel", () => {
       />,
     )
 
-    fireEvent.change(query<HTMLInputElement>("#blockOutputs-defaults-naver-se4-formula-inlineWrapper"), {
-      target: {
-        value: "\\(...\\)",
+    fireEvent.change(
+      query<HTMLInputElement>("#blockOutputs-defaults-naver-se4-formula-inlineWrapper"),
+      {
+        target: {
+          value: "\\(...\\)",
+        },
       },
-    })
-    fireEvent.change(query<HTMLInputElement>("#blockOutputs-defaults-naver-se4-formula-blockWrapper"), {
-      target: {
-        value: "\\[...\\]",
+    )
+    fireEvent.change(
+      query<HTMLInputElement>("#blockOutputs-defaults-naver-se4-formula-blockWrapper"),
+      {
+        target: {
+          value: "\\[...\\]",
+        },
       },
+    )
+    await selectOption({
+      user,
+      trigger: "#blockOutputs-defaults-naver-se4-image-variant",
+      value: "linked-image",
     })
-    await selectOption({ user, trigger: "#blockOutputs-defaults-naver-se4-image-variant", value: "linked-image" })
-    await selectOption({ user, trigger: "#blockOutputs-defaults-naver-se4-formula-variant", value: "math-fence" })
+    await selectOption({
+      user,
+      trigger: "#blockOutputs-defaults-naver-se4-formula-variant",
+      value: "math-fence",
+    })
     cleanup()
 
     render(
@@ -266,8 +284,12 @@ describe("ExportOptionsPanel", () => {
     expect(latestOptions.frontmatter.fields.title).toBe(false)
     expect(latestOptions.frontmatter.aliases.title).toBe("headline")
     expect(latestOptions.blockOutputs.defaults["naver-se4:paragraph"]).toBeUndefined()
-    expect(latestOptions.blockOutputs.defaults["naver-se4:formula"]?.params?.inlineWrapper).toBe("\\(...\\)")
-    expect(latestOptions.blockOutputs.defaults["naver-se4:formula"]?.params?.blockWrapper).toBe("\\[...\\]")
+    expect(latestOptions.blockOutputs.defaults["naver-se4:formula"]?.params?.inlineWrapper).toBe(
+      "\\(...\\)",
+    )
+    expect(latestOptions.blockOutputs.defaults["naver-se4:formula"]?.params?.blockWrapper).toBe(
+      "\\[...\\]",
+    )
     expect(latestOptions.blockOutputs.defaults["naver-se4:image"]?.variant).toBe("linked-image")
     expect(latestOptions.blockOutputs.defaults["naver-se4:divider"]).toBeUndefined()
     expect(latestOptions.blockOutputs.defaults["naver-se4:code"]).toBeUndefined()
@@ -376,7 +398,9 @@ describe("ExportOptionsPanel", () => {
 
     expect(screen.getAllByText("{slug}").length).toBeGreaterThan(0)
     expect(screen.getByText("제목을 현재 slug 규칙에 맞춰 바꾼 값입니다.")).toBeInTheDocument()
-    expect(screen.getByText("카테고리 이름을 현재 slug 규칙에 맞춰 바꾼 값입니다.")).toBeInTheDocument()
+    expect(
+      screen.getByText("카테고리 이름을 현재 slug 규칙에 맞춰 바꾼 값입니다."),
+    ).toBeInTheDocument()
     expect(screen.getAllByText("{logNo}").length).toBeGreaterThan(0)
     expect(screen.getByText("네이버 글 번호를 그대로 넣습니다.")).toBeInTheDocument()
     expect(screen.getAllByText("{YYYY}").length).toBeGreaterThan(0)
@@ -432,18 +456,26 @@ describe("ExportOptionsPanel", () => {
     const editorGroups = Array.from(document.querySelectorAll("[data-block-output-editor-group]"))
 
     expect(screen.queryByText("Markdown 규칙")).not.toBeInTheDocument()
-    expect(screen.queryByText("링크 방식과 블록별 출력 결과를 정합니다. 아래 preview는 실제 export될 Markdown snippet 기준입니다.")).not.toBeInTheDocument()
-    expect(editorGroups.map((group) => group.getAttribute("data-block-output-editor-group"))).toEqual([
-      "naver-se4",
-      "naver-se3",
-      "naver-se2",
-    ])
+    expect(
+      screen.queryByText(
+        "링크 방식과 블록별 출력 결과를 정합니다. 아래 preview는 실제 export될 Markdown snippet 기준입니다.",
+      ),
+    ).not.toBeInTheDocument()
+    expect(
+      editorGroups.map((group) => group.getAttribute("data-block-output-editor-group")),
+    ).toEqual(["naver-se4", "naver-se3", "naver-se2"])
     expect(editorGroups.every((group) => group.classList.contains("field-card"))).toBe(true)
-    expect(query<HTMLElement>('[data-block-output-card="naver-se4:formula"]')).not.toHaveClass("field-card")
+    expect(query<HTMLElement>('[data-block-output-card="naver-se4:formula"]')).not.toHaveClass(
+      "field-card",
+    )
     expect(screen.getByText("SmartEditor 4")).toBeInTheDocument()
     expect(screen.getByText("SmartEditor 3")).toBeInTheDocument()
     expect(screen.getByText("SmartEditor 2")).toBeInTheDocument()
-    expect(Array.from(document.querySelectorAll("[data-block-output-card]")).map((card) => card.getAttribute("data-block-output-card"))).toEqual([
+    expect(
+      Array.from(document.querySelectorAll("[data-block-output-card]")).map((card) =>
+        card.getAttribute("data-block-output-card"),
+      ),
+    ).toEqual([
       "naver-se4:formula",
       "naver-se4:table",
       "naver-se4:image",
@@ -474,9 +506,15 @@ describe("ExportOptionsPanel", () => {
       />,
     )
 
-    expect(query<HTMLElement>('[data-block-output-card="naver-se4:image"] pre').textContent).toContain("![diagram]")
+    expect(
+      query<HTMLElement>('[data-block-output-card="naver-se4:image"] pre').textContent,
+    ).toContain("![diagram]")
 
-    await selectOption({ user, trigger: "#blockOutputs-defaults-naver-se4-image-variant", value: "linked-image" })
+    await selectOption({
+      user,
+      trigger: "#blockOutputs-defaults-naver-se4-image-variant",
+      value: "linked-image",
+    })
 
     expect(latestOptions.blockOutputs.defaults["naver-se4:image"]?.variant).toBe("linked-image")
     expect(latestOptions.blockOutputs.defaults["naver-se3:image"]).toBeUndefined()
@@ -499,7 +537,9 @@ describe("ExportOptionsPanel", () => {
       />,
     )
 
-    expect(query<HTMLElement>('[data-block-output-card="naver-se4:image"] pre').textContent).toContain("[![diagram]")
+    expect(
+      query<HTMLElement>('[data-block-output-card="naver-se4:image"] pre').textContent,
+    ).toContain("[![diagram]")
   })
 
   it("keeps block output controls top-aligned next to the preview", () => {
@@ -518,8 +558,12 @@ describe("ExportOptionsPanel", () => {
     )
 
     const blockCard = query<HTMLElement>('[data-block-output-card="naver-se4:formula"]')
-    const twoColumnLayout = blockCard.querySelector(".lg\\:grid-cols-\\[minmax\\(0\\,0\\.8fr\\)_minmax\\(0\\,1fr\\)\\]")
-    const optionField = blockCard.querySelector('[data-option-key="blockOutputs-defaults-naver-se4-formula-variant"]')
+    const twoColumnLayout = blockCard.querySelector(
+      ".lg\\:grid-cols-\\[minmax\\(0\\,0\\.8fr\\)_minmax\\(0\\,1fr\\)\\]",
+    )
+    const optionField = blockCard.querySelector(
+      '[data-option-key="blockOutputs-defaults-naver-se4-formula-variant"]',
+    )
     const preview = blockCard.querySelector("pre")
 
     expect(twoColumnLayout).toHaveClass("items-start")
@@ -545,7 +589,9 @@ describe("ExportOptionsPanel", () => {
       />,
     )
 
-    expect(query<HTMLElement>('[data-block-output-card="naver-se4:image"] pre').textContent).toContain("../../public/image.png")
+    expect(
+      query<HTMLElement>('[data-block-output-card="naver-se4:image"] pre').textContent,
+    ).toContain("../../public/image.png")
 
     cleanup()
 
@@ -565,7 +611,9 @@ describe("ExportOptionsPanel", () => {
       />,
     )
 
-    expect(query<HTMLElement>('[data-block-output-card="naver-se4:image"] pre').textContent).toContain("https://example.com/image.png")
+    expect(
+      query<HTMLElement>('[data-block-output-card="naver-se4:image"] pre').textContent,
+    ).toContain("https://example.com/image.png")
   })
 
   it("does not render raw html or unsupported representative controls", () => {
@@ -697,14 +745,17 @@ describe("ExportOptionsPanel", () => {
       />,
     )
 
-    expect(query<HTMLInputElement>("#links-sameBlogPostCustomUrlTemplate").placeholder).toBe("https://myblog/{slug}")
+    expect(query<HTMLInputElement>("#links-sameBlogPostCustomUrlTemplate").placeholder).toBe(
+      "https://myblog/{slug}",
+    )
   })
 
   it("shows supported variable descriptions and a live preview for custom templates", () => {
     const options = defaultExportOptions()
 
     options.links.sameBlogPostMode = "custom-url"
-    options.links.sameBlogPostCustomUrlTemplate = "https://myblog/{category}/{title}/{YYYY}/{MM}/{DD}/{YY}/{M}/{D}/{logNo}/{slug}"
+    options.links.sameBlogPostCustomUrlTemplate =
+      "https://myblog/{category}/{title}/{YYYY}/{MM}/{DD}/{YY}/{M}/{D}/{logNo}/{slug}"
 
     render(
       <ExportOptionsPanel
@@ -730,7 +781,9 @@ describe("ExportOptionsPanel", () => {
     expect(screen.getAllByText("{slug}").length).toBeGreaterThan(0)
     expect(screen.getByText("제목을 현재 slug 규칙에 맞춰 바꾼 값입니다.")).toBeInTheDocument()
     expect(screen.getAllByText("{category}").length).toBeGreaterThan(0)
-    expect(screen.getByText("카테고리 이름을 현재 slug 규칙에 맞춰 바꾼 값입니다.")).toBeInTheDocument()
+    expect(
+      screen.getByText("카테고리 이름을 현재 slug 규칙에 맞춰 바꾼 값입니다."),
+    ).toBeInTheDocument()
     expect(screen.getAllByText("{title}").length).toBeGreaterThan(0)
     expect(screen.getByText("제목만 path-safe 값으로 넣습니다.")).toBeInTheDocument()
     expect(screen.getAllByText("{date}").length).toBeGreaterThan(0)

@@ -72,7 +72,7 @@ bun .agents/skills/ingest-blog/scripts/write-sample-fixture.ts \
 Create evidence for a source post or inspect path:
 
 ```bash
-bun scripts/capture-post-evidence.ts \
+bun scripts/post-evidence/capture-post-evidence.ts \
   --blogId <blogId> \
   --logNo <logNo> \
   --target inspect-path \
@@ -148,7 +148,7 @@ The report must include:
 - fixtures added
 - knowledge documents updated
 - verification commands and results
-- evidence generated through `scripts/capture-post-evidence.ts` helpers
+- evidence generated through `scripts/post-evidence/capture-post-evidence.ts` helpers
 - unresolved focused failures and the reason each one is deferred
 
 Keep evidence metadata as a short human note, such as the parser block behavior being demonstrated. Do not fill it with routine run state like blog id, log number, title, or status unless that value is the useful note for the section.
@@ -258,7 +258,7 @@ python3 /Users/mj/.codex/skills/.system/skill-creator/scripts/quick_validate.py 
 bun .agents/skills/ingest-blog/scripts/collect-blog-errors.ts --help
 bun .agents/skills/ingest-blog/scripts/write-sample-fixture.ts --help
 bun .agents/skills/ingest-blog/scripts/check-support-unit-prs.ts --help
-bun scripts/capture-post-evidence.ts --help
+bun scripts/post-evidence/capture-post-evidence.ts --help
 ```
 
 For parser/block changes:

@@ -6,9 +6,7 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "src/ui/*"
-      ]
+      "@/*": ["src/ui/*"]
     },
     "strict": true,
     "esModuleInterop": true,
@@ -17,9 +15,7 @@
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
     "isolatedModules": true,
-    "types": [
-      "node"
-    ],
+    "types": ["node"],
     "outDir": "dist",
     "rootDir": "."
   },

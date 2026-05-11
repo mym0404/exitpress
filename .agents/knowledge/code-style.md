@@ -8,13 +8,19 @@
 
 ## GitHub Workflow
 - Package scripts that operate on GitHub use the `gh:` prefix.
-- `pnpm gh:update-branches` runs `scripts/update-open-pr-branches.ts` and calls `gh pr update-branch` for open PRs.
+- `pnpm gh:update-branches` runs `scripts/maintenance/update-open-pr-branches.ts` and calls `gh pr update-branch` for open PRs.
+
+## Formatting And Imports
+- Biome owns repository formatting, import organization, and baseline lint.
+- Run `pnpm format:biome` during multi-step edits when formatting may have drifted.
+- Run `pnpm check:biome` before or through `pnpm check:local`.
+- Use `pnpm check:biome:write` only when applying Biome safe fixes and import organization is part of the intended change.
 
 ## TypeScript
 - The repo is strict TypeScript with NodeNext ESM.
 - Use `.js` extensions in TS imports where NodeNext runtime imports require them.
-- Keep types with the domain that owns the shape, such as `src/modules/blocks/Types.ts`, `src/modules/blog/Types.ts`, `src/modules/exporter/Types.ts`, `src/server/Types.ts`, and `src/ui/features/common/Types.ts`.
-- Keep parser block output behavior aligned across `BaseBlock.outputOptions` arrays, editor `supportedBlocks` arrays, and `src/modules/blog/BaseBlog.ts`.
+- Keep types with the domain that owns the shape, such as `src/domain/ast/Types.ts`, `src/domain/blog/Types.ts`, `src/domain/export-options/Types.ts`, `src/domain/export-job/Types.ts`, and `src/domain/upload/UploadProviderTypes.ts`.
+- Keep parser block output behavior aligned across `BaseBlock.outputOptions` arrays, editor `supportedBlocks` arrays, and `src/parsing/naver-blog/core/BaseBlog.ts`.
 - This project does not preserve local schema backward compatibility unless explicitly requested. When an option/state contract changes, prefer the current schema and remove stale aliases or migration paths.
 - Prefer `type` aliases for object shapes, unions, and inferred helper types; do not introduce `interface` unless an external API requires it.
 - For finite runtime options, define `as const` arrays or objects and derive union types from them with `typeof`.
@@ -22,7 +28,7 @@
 - Use `Record<Union, Value>` when a map should stay exhaustive over a known union.
 
 ## Runtime Modules
-- Keep core runtime ownership under `src/modules/{domain}`; do not split module code by technical type first.
+- Keep runtime ownership under `src/domain`, `src/shared`, `src/infra`, `src/integrations`, `src/parsing`, `src/markdown`, `src/exporting`, `src/server`, and `src/ui`; choose the domain boundary before the technical file type.
 - Use classes for stateful services, editors, and parser blocks that own dependencies, caches, or shared behavior.
 - Use `readonly` fields for constructor dependencies and long-lived state that should not be reassigned.
 - Use `private` methods for internal multi-step class logic.
@@ -52,7 +58,7 @@
 - User `pnpm dev` owns the normal development server path.
 - Tests and harnesses should use isolated `GOODBYE_SETTINGS_PATH`, `GOODBYE_SCAN_CACHE_PATH`, and non-default `PORT` or `listen(0)`.
 - Ad-hoc server checks should not share `.cache/export-ui-settings.json` with the user's development session.
-- Repo-local temporary files belong under `tmp/`; tests and e2e harnesses should use `tests/helpers/test-paths.ts` instead of `os.tmpdir()`.
+- Repo-local temporary files belong under `tmp/`; tests and e2e harnesses should use `tests/support/test-paths.ts` instead of `os.tmpdir()`.
 - `.cache/` is persisted app state, not a scratch directory for tests, harnesses, or runtime upload config.
 - Helper scripts and specs that serve only one repo-local skill belong under that skill directory. Keep root `scripts/` for project-level CLIs and helpers shared by more than one workflow.
 

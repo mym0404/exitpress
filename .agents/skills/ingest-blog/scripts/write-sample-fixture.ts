@@ -1,21 +1,16 @@
 #!/usr/bin/env bun
 
+import type { AssetRecord } from "../../../../src/domain/export-job/Types.js"
+import { extractBlogId } from "../../../../src/domain/blog/NaverUrl.js"
+import { defaultExportOptions } from "../../../../src/domain/export-options/ExportOptions.js"
+import { getCategoryForPost } from "../../../../src/exporting/paths/ExportPaths.js"
+import { ensureDir, resolveRepoPath } from "../../../../src/infra/node/FilePathUtils.js"
+import { NaverBlogFetcher } from "../../../../src/integrations/naver-blog/NaverBlogFetcher.js"
+import { renderMarkdownPost } from "../../../../src/markdown/MarkdownRenderer.js"
+import { parsePostHtml } from "../../../../src/parsing/naver-blog/core/PostParser.js"
+import { toErrorMessage } from "../../../../src/shared/error/ErrorUtils.js"
 import { access, writeFile } from "node:fs/promises"
 import path from "node:path"
-
-import { getStructuredBodyBlocks } from "../../../../src/modules/blocks/BodyNodeUtils.js"
-import { renderMarkdownPost } from "../../../../src/modules/converter/MarkdownRenderer.js"
-import { NaverBlogFetcher } from "../../../../src/modules/fetcher/NaverBlogFetcher.js"
-import { parsePostHtml } from "../../../../src/modules/parser/PostParser.js"
-import { getCategoryForPost } from "../../../../src/modules/exporter/ExportPaths.js"
-import { defaultExportOptions } from "../../../../src/shared/ExportOptions.js"
-import type { AssetRecord } from "../../../../src/shared/Types.js"
-import {
-  ensureDir,
-  extractBlogId,
-  resolveRepoPath,
-  toErrorMessage,
-} from "../../../../src/shared/Utils.js"
 
 type FixtureArgs = {
   blogId: string
@@ -103,7 +98,8 @@ const createFixtureOptions = () => {
 }
 
 const resolveSampleFixtureLinkUrl = (url: string) => {
-  const volatileDownloadUrl = /^https:\/\/download\.blog\.naver\.com\/open\/.+\/([^/?#]+)([?#].*)?$/.exec(url)
+  const volatileDownloadUrl =
+    /^https:\/\/download\.blog\.naver\.com\/open\/.+\/([^/?#]+)([?#].*)?$/.exec(url)
 
   return volatileDownloadUrl
     ? `https://download.blog.naver.com/open/${volatileDownloadUrl[1]}`
@@ -160,8 +156,13 @@ const run = async () => {
   const expectedMarkdownPath = path.join(fixtureDir, "expected.md")
   const expectedErrorPath = path.join(fixtureDir, "expected-error.md")
 
-  if (!args.force && ((await pathExists(expectedMarkdownPath)) || (await pathExists(expectedErrorPath)))) {
-    throw new Error(`fixture already exists: ${fixtureDir}. Re-run with --force to overwrite expected.md.`)
+  if (
+    !args.force &&
+    ((await pathExists(expectedMarkdownPath)) || (await pathExists(expectedErrorPath)))
+  ) {
+    throw new Error(
+      `fixture already exists: ${fixtureDir}. Re-run with --force to overwrite expected.md.`,
+    )
   }
 
   const html = await fetcher.fetchPostHtml(post.logNo)
@@ -204,7 +205,7 @@ const run = async () => {
       `expectedMarkdownPath: ${expectedMarkdownPath}`,
       `blogId: ${blogId}`,
       `logNo: ${post.logNo}`,
-      `blockTypes: ${getStructuredBodyBlocks(parsedPost).map((block) => block.type).join(", ") || "(none)"}`,
+      `blockTypes: ${parsedPost.blocks.map((block) => block.type).join(", ") || "(none)"}`,
       `assetRecordCount: ${rendered.assetRecords.length}`,
       `downloadedAssetFileCount: 0`,
     ].join("\n"),

@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react"
-
-import type { UploadProviderCatalogResponse, UploadProviderFields } from "../../../server/Types.js"
-import { buildInitialProviderUiState, type ProviderUiState } from "./UploadProviderFormRules.js"
+import type {
+  UploadProviderCatalogResponse,
+  UploadProviderFields,
+} from "../../../domain/upload/UploadProviderTypes.js"
+import type { ProviderUiState } from "./UploadProviderFormRules.js"
 import {
   buildGitHubJsDelivrCustomUrl,
   buildInitialProviderFieldMap,
@@ -9,6 +11,7 @@ import {
   getPreferredDefaultProviderKey,
   isGitHubProvider,
 } from "./JobResultsHelpers.js"
+import { buildInitialProviderUiState } from "./UploadProviderFormRules.js"
 
 const buildInitialProviderUiStateMap = (catalog: UploadProviderCatalogResponse) =>
   Object.fromEntries(
@@ -22,12 +25,14 @@ export const useUploadProviderForm = ({
   jobId: string | undefined
   uploadProviders: UploadProviderCatalogResponse
 }) => {
-  const [providerKey, setProviderKey] = useState(() => getPreferredDefaultProviderKey(uploadProviders))
-  const [providerFieldMap, setProviderFieldMap] = useState<Record<string, UploadProviderFields>>(() =>
-    buildInitialProviderFieldMap(uploadProviders),
+  const [providerKey, setProviderKey] = useState(() =>
+    getPreferredDefaultProviderKey(uploadProviders),
   )
-  const [providerUiStateMap, setProviderUiStateMap] = useState<Record<string, ProviderUiState>>(() =>
-    buildInitialProviderUiStateMap(uploadProviders),
+  const [providerFieldMap, setProviderFieldMap] = useState<Record<string, UploadProviderFields>>(
+    () => buildInitialProviderFieldMap(uploadProviders),
+  )
+  const [providerUiStateMap, setProviderUiStateMap] = useState<Record<string, ProviderUiState>>(
+    () => buildInitialProviderUiStateMap(uploadProviders),
   )
 
   useEffect(() => {
@@ -44,8 +49,7 @@ export const useUploadProviderForm = ({
     uploadProviders.providers.find((provider) => provider.key === providerKey) ?? null
   const activeProviderFields =
     providerFieldMap[providerKey] ?? buildInitialProviderFields(activeProviderDefinition)
-  const activeProviderUiState =
-    providerUiStateMap[providerKey] ?? buildInitialProviderUiState()
+  const activeProviderUiState = providerUiStateMap[providerKey] ?? buildInitialProviderUiState()
   const githubUseJsDelivr = activeProviderUiState.githubUseJsDelivr
   const githubJsDelivrUrl = buildGitHubJsDelivrCustomUrl({
     repo: String(activeProviderFields.repo ?? ""),
@@ -80,7 +84,8 @@ export const useUploadProviderForm = ({
         : {
             ...current,
             [nextProviderKey]: buildInitialProviderFields(
-              uploadProviders.providers.find((provider) => provider.key === nextProviderKey) ?? null,
+              uploadProviders.providers.find((provider) => provider.key === nextProviderKey) ??
+                null,
             ),
           },
     )

@@ -13,9 +13,12 @@
     "build:ui": "vite build",
     "build:server": "tsc -p tsconfig.json",
     "build": "pnpm build:ui && pnpm build:server",
+    "format:biome": "biome format --write .",
+    "check:biome": "biome check .",
+    "check:biome:write": "biome check --write .",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "check:unused": "bun scripts/check-unused.ts",
-    "gh:update-branches": "bun scripts/update-open-pr-branches.ts",
+    "check:unused": "bun scripts/maintenance/check-unused.ts",
+    "gh:update-branches": "bun scripts/maintenance/update-open-pr-branches.ts",
     "test": "vitest run --configLoader runner --silent",
     "test:coverage": "vitest run --configLoader runner --silent --coverage",
     "test:parser-blocks": "vitest run --config vitest.parser-blocks.config.ts --silent --coverage",
@@ -25,7 +28,7 @@
     "test:network:resume-export:se2-table": "bun tests/e2e/run-ui-live-resume-export.ts --case se2-table",
     "test:network:upload": "pnpm build:ui && bun tests/e2e/run-ui-live-upload.ts",
     "smoke:ui": "pnpm build:ui && bun tests/e2e/run-ui-smoke-suite.ts",
-    "check:local": "pnpm typecheck && pnpm test:offline",
+    "check:local": "pnpm check:biome && pnpm typecheck && pnpm test:offline",
     "check:full": "pnpm check:local && pnpm smoke:ui"
   },
   "dependencies": {
@@ -48,6 +51,7 @@
     "yaml": "^2.8.1"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.4.15",
     "@tailwindcss/vite": "^4.2.2",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",

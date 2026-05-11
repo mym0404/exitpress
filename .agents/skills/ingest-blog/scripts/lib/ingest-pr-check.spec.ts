@@ -1,5 +1,4 @@
 import { describe, expect, it } from "vitest"
-
 import { createSupportUnitPrCheck, extractDiscoveredSupportUnits } from "./ingest-pr-check.js"
 import { createSupportUnitClaim } from "./ingest-pr-claims.js"
 
@@ -62,7 +61,9 @@ describe("createSupportUnitPrCheck", () => {
     })
 
     expect(check.complete).toBe(false)
-    expect(check.missingSupportUnits).toEqual([{ supportUnitKey: "naver-se4:v2_map", logNos: ["2"] }])
+    expect(check.missingSupportUnits).toEqual([
+      { supportUnitKey: "naver-se4:v2_map", logNos: ["2"] },
+    ])
   })
 
   it("does not treat draft PR claims as complete", () => {
@@ -75,11 +76,17 @@ describe("createSupportUnitPrCheck", () => {
 
     expect(check.complete).toBe(false)
     expect(check.claimedSupportUnitCount).toBe(0)
-    expect(check.missingSupportUnits).toEqual([{ supportUnitKey: "naver-se4:v2_poll", logNos: ["1"] }])
+    expect(check.missingSupportUnits).toEqual([
+      { supportUnitKey: "naver-se4:v2_poll", logNos: ["1"] },
+    ])
     expect(check.draftOnlyClaims).toEqual([
       {
         supportUnitKey: "naver-se4:v2_poll",
-        pullRequest: { number: 1, isDraft: true, body: createSupportUnitClaim("naver-se4:v2_poll") },
+        pullRequest: {
+          number: 1,
+          isDraft: true,
+          body: createSupportUnitClaim("naver-se4:v2_poll"),
+        },
       },
     ])
   })

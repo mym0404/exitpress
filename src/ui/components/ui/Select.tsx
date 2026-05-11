@@ -1,28 +1,17 @@
-import * as React from "react"
-import {
-  RiArrowDownSLine,
-  RiArrowUpSLine,
-  RiCheckLine,
-} from "@remixicon/react"
+import { RiArrowDownSLine, RiArrowUpSLine, RiCheckLine } from "@remixicon/react"
 import { Select as SelectPrimitive } from "radix-ui"
-
+import type * as React from "react"
 import { cn } from "../../lib/Cn.js"
 
-function Select({
-  ...props
-}: React.ComponentProps<typeof SelectPrimitive.Root>) {
+function Select({ ...props }: React.ComponentProps<typeof SelectPrimitive.Root>) {
   return <SelectPrimitive.Root data-slot="select" {...props} />
 }
 
-function SelectGroup({
-  ...props
-}: React.ComponentProps<typeof SelectPrimitive.Group>) {
+function SelectGroup({ ...props }: React.ComponentProps<typeof SelectPrimitive.Group>) {
   return <SelectPrimitive.Group data-slot="select-group" {...props} />
 }
 
-function SelectValue({
-  ...props
-}: React.ComponentProps<typeof SelectPrimitive.Value>) {
+function SelectValue({ ...props }: React.ComponentProps<typeof SelectPrimitive.Value>) {
   return <SelectPrimitive.Value data-slot="select-value" {...props} />
 }
 
@@ -84,8 +73,7 @@ function SelectContent({
         <SelectPrimitive.Viewport
           className={cn(
             "p-1",
-            position === "popper" &&
-              "w-full min-w-[var(--radix-select-trigger-width)] scroll-my-1",
+            position === "popper" && "w-full min-w-[var(--radix-select-trigger-width)] scroll-my-1",
           )}
         >
           {children}
@@ -159,11 +147,4 @@ function SelectScrollDownButton({
   )
 }
 
-export {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-}
+export { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue }

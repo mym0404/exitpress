@@ -3,7 +3,7 @@
 ## Identity
 - Editor type은 `naver-se2`, label은 `SmartEditor 2`다.
 - SE2는 legacy HTML fallback이다.
-- Parser block 구현은 `src/modules/blocks/naver-se2/*`에 둔다.
+- Parser block 구현은 `src/parsing/naver-blog/se2/blocks/*`에 둔다.
 
 ## Block Families
 - Text 계열은 direct text와 일반 HTML element를 Markdown paragraph로 정리한다.

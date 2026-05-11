@@ -1,4 +1,4 @@
-import type { CategoryInfo } from "../../../modules/blog/Types.js"
+import type { CategoryInfo } from "../../../domain/blog/Types.js"
 
 const buildCategoryRelations = (categories: CategoryInfo[]) => {
   const categoryMap = new Map(categories.map((category) => [category.id, category]))
@@ -6,9 +6,7 @@ const buildCategoryRelations = (categories: CategoryInfo[]) => {
 
   for (const category of categories) {
     const parentKey =
-      category.parentId !== null && categoryMap.has(category.parentId)
-        ? category.parentId
-        : null
+      category.parentId !== null && categoryMap.has(category.parentId) ? category.parentId : null
     const siblings = childrenByParent.get(parentKey) ?? []
     siblings.push(category)
     childrenByParent.set(parentKey, siblings)
@@ -95,8 +93,9 @@ export const getCategoryCheckboxState = ({
     return true
   }
 
-  const descendantIds =
-    (relations.subtreeIdsById.get(categoryId) ?? []).filter((id) => id !== categoryId)
+  const descendantIds = (relations.subtreeIdsById.get(categoryId) ?? []).filter(
+    (id) => id !== categoryId,
+  )
 
   return descendantIds.some((descendantId) => selectedSet.has(descendantId))
     ? "indeterminate"
@@ -120,19 +119,29 @@ export const toggleCategorySelection = ({
   const ancestorIds = relations.ancestorIdsById.get(categoryId) ?? []
 
   if (checked) {
-    subtreeIds.forEach((subtreeId) => nextSelectedIds.add(subtreeId))
+    subtreeIds.forEach((subtreeId) => {
+      nextSelectedIds.add(subtreeId)
+    })
 
     for (const ancestorId of ancestorIds) {
-      const descendantIds =
-        (relations.subtreeIdsById.get(ancestorId) ?? []).filter((id) => id !== ancestorId)
+      const descendantIds = (relations.subtreeIdsById.get(ancestorId) ?? []).filter(
+        (id) => id !== ancestorId,
+      )
 
-      if (descendantIds.length > 0 && descendantIds.every((descendantId) => nextSelectedIds.has(descendantId))) {
+      if (
+        descendantIds.length > 0 &&
+        descendantIds.every((descendantId) => nextSelectedIds.has(descendantId))
+      ) {
         nextSelectedIds.add(ancestorId)
       }
     }
   } else {
-    subtreeIds.forEach((subtreeId) => nextSelectedIds.delete(subtreeId))
-    ancestorIds.forEach((ancestorId) => nextSelectedIds.delete(ancestorId))
+    subtreeIds.forEach((subtreeId) => {
+      nextSelectedIds.delete(subtreeId)
+    })
+    ancestorIds.forEach((ancestorId) => {
+      nextSelectedIds.delete(ancestorId)
+    })
   }
 
   return relations.orderedCategories

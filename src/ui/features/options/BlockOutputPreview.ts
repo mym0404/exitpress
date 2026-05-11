@@ -1,5 +1,5 @@
-import type { AstBlock, BlockOutputSelection } from "../../../modules/blocks/Types.js"
-import type { ExportOptions } from "../../../modules/exporter/Types.js"
+import type { AstBlock, BlockOutputSelection } from "../../../domain/ast/Types.js"
+import type { ExportOptions } from "../../../domain/export-options/Types.js"
 import {
   createLinkFormatter,
   getHeadingLevelOffset,
@@ -10,7 +10,7 @@ import {
   renderLinkCardBlock,
   renderParagraph,
   renderQuote,
-} from "../../../modules/converter/BlockMarkdown.js"
+} from "../../../markdown/BlockMarkdown.js"
 
 const toPreviewAssetPath = (sourceUrl: string) => {
   const pathname = (() => {
@@ -84,10 +84,7 @@ export const renderBlockOutputPreview = ({
   }
 
   if (block.type === "heading") {
-    const adjustedLevel = Math.min(
-      Math.max(block.level + getHeadingLevelOffset(selection), 1),
-      6,
-    )
+    const adjustedLevel = Math.min(Math.max(block.level + getHeadingLevelOffset(selection), 1), 6)
 
     return `${"#".repeat(adjustedLevel)} ${block.text}`
   }

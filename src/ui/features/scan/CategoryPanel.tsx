@@ -1,7 +1,5 @@
 import { RiCheckDoubleLine, RiEraserLine } from "@remixicon/react"
-import { getCategoryCheckboxState, orderCategoriesHierarchically } from "./CategorySelection.js"
-import type { ScanResult } from "../../../modules/blog/Types.js"
-
+import type { ScanResult } from "../../../domain/blog/Types.js"
 import { Badge } from "../../components/ui/Badge.js"
 import { Button } from "../../components/ui/Button.js"
 import {
@@ -31,6 +29,7 @@ import {
   TableRow,
 } from "../../components/ui/Table.js"
 import { cn } from "../../lib/Cn.js"
+import { getCategoryCheckboxState, orderCategoriesHierarchically } from "./CategorySelection.js"
 
 export const CategoryPanel = ({
   scanResult,
@@ -82,18 +81,15 @@ export const CategoryPanel = ({
   })
 
   return (
-    <Card
-      variant="panel"
-      className="board-card overflow-hidden"
-      id="category-panel"
-    >
+    <Card variant="panel" className="board-card overflow-hidden" id="category-panel">
       <CardHeader className="panel-header gap-3 p-5 sm:flex sm:items-start sm:justify-between">
         <div className="panel-heading space-y-2">
-          <CardTitle className="section-title text-2xl">
-            카테고리 선택
-          </CardTitle>
+          <CardTitle className="section-title text-2xl">카테고리 선택</CardTitle>
         </div>
-        <CardDescription id="category-status" className="panel-description max-w-2xl text-sm leading-7">
+        <CardDescription
+          id="category-status"
+          className="panel-description max-w-2xl text-sm leading-7"
+        >
           {categoryStatus}
         </CardDescription>
       </CardHeader>
@@ -116,7 +112,9 @@ export const CategoryPanel = ({
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  <SelectItem value="selected-and-descendants">선택 카테고리 + 하위 카테고리</SelectItem>
+                  <SelectItem value="selected-and-descendants">
+                    선택 카테고리 + 하위 카테고리
+                  </SelectItem>
                   <SelectItem value="exact-selected">선택 카테고리만</SelectItem>
                 </SelectGroup>
               </SelectContent>
@@ -216,7 +214,10 @@ export const CategoryPanel = ({
             검색 결과가 없습니다.
           </div>
         ) : (
-          <div id="category-list" className="section-card category-list overflow-hidden rounded-2xl">
+          <div
+            id="category-list"
+            className="section-card category-list overflow-hidden rounded-2xl"
+          >
             <ScrollArea className="h-[min(28rem,52vh)] overflow-hidden">
               <Table className="min-w-[30rem]">
                 <TableHeader className="sticky top-0 z-10">
@@ -255,7 +256,9 @@ export const CategoryPanel = ({
                               aria-label={categoryPath}
                               className="flex-none"
                               onClick={(event) => event.stopPropagation()}
-                              onCheckedChange={(next) => onCategoryToggle(category.id, next === true)}
+                              onCheckedChange={(next) =>
+                                onCategoryToggle(category.id, next === true)
+                              }
                             />
                           </div>
                         </TableCell>
@@ -278,7 +281,10 @@ export const CategoryPanel = ({
                           </div>
                         </TableCell>
                         <TableCell>
-                          <Badge className="category-count min-w-10 justify-center rounded-full px-2.5 py-0.5" variant="idle">
+                          <Badge
+                            className="category-count min-w-10 justify-center rounded-full px-2.5 py-0.5"
+                            variant="idle"
+                          >
                             {category.postCount}
                           </Badge>
                         </TableCell>

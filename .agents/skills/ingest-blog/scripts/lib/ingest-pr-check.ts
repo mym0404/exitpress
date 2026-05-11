@@ -62,7 +62,8 @@ export const extractDiscoveredSupportUnits = (summary: unknown) => {
     const logNos = Array.isArray(record.logNos)
       ? record.logNos.filter((logNo): logNo is string => typeof logNo === "string")
       : []
-    const failureBlockHash = typeof record.failureBlockHash === "string" ? record.failureBlockHash : undefined
+    const failureBlockHash =
+      typeof record.failureBlockHash === "string" ? record.failureBlockHash : undefined
 
     units.set(supportUnitKey, {
       supportUnitKey,
