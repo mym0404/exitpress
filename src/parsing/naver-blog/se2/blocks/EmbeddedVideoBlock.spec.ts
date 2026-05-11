@@ -33,6 +33,47 @@ describe("NaverSe2EmbeddedVideoBlock", () => {
     expect(parsed.videos).toEqual([video])
   })
 
+  it("parses multiple outer video iframes from one legacy paragraph", () => {
+    const parsed = parseSe2Blocks(`
+      <p style="text-align: center;" align="center">
+        <style>@media all and (min-width:116px){#_video1 iframe{width:76px !important;height:90px !important}}</style>
+        <span id="_video1" class="_outerVideo">
+          <iframe src="https://example.com/embed-a" width="76" height="90"></iframe>
+        </span>
+        &nbsp;&nbsp;
+        <style>@media all and (min-width:116px){#_video2 iframe{width:76px !important;height:90px !important}}</style>
+        <span id="_video2" class="_outerVideo">
+          <iframe src="https://example.com/embed-b" width="76" height="90"></iframe>
+        </span>
+      </p>
+    `)
+
+    const firstVideo = {
+      title: "Video",
+      thumbnailUrl: null,
+      sourceUrl: "https://example.com/embed-a",
+      vid: null,
+      inkey: null,
+      width: 76,
+      height: 90,
+    }
+    const secondVideo = {
+      title: "Video",
+      thumbnailUrl: null,
+      sourceUrl: "https://example.com/embed-b",
+      vid: null,
+      inkey: null,
+      width: 76,
+      height: 90,
+    }
+
+    expect(parsed.blocks).toEqual([
+      { type: "video", video: firstVideo },
+      { type: "video", video: secondVideo },
+    ])
+    expect(parsed.videos).toEqual([firstVideo, secondVideo])
+  })
+
   it("does not parse outer video iframes mixed with text", () => {
     const parsed = parseSe2Blocks(`
       <p>
@@ -134,6 +175,18 @@ describe("NaverSe2EmbeddedVideoBlock", () => {
         <p>
           <span class="_outerVideo">
             <iframe src=""></iframe>
+          </span>
+        </p>
+      `),
+    ).toThrow("파싱 가능한 naver-se2 block이 없습니다: p")
+  })
+
+  it("does not parse outer video containers without a source iframe", () => {
+    expect(() =>
+      parseSe2Blocks(`
+        <p>
+          <span class="_outerVideo">
+            <iframe></iframe>
           </span>
         </p>
       `),

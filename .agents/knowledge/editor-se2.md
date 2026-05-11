@@ -8,7 +8,7 @@
 ## Block Families
 - Text 계열은 direct text와 일반 HTML element를 Markdown paragraph로 정리한다.
 - Structure 계열은 legacy wrapper를 풀거나 빈 spacer, 빈 legacy list, top-level line break, HTML 주석을 버린다.
-- Media 계열은 image, image group, inline GIF-like media, standalone embedded video를 공용 media AST로 수렴한다.
+- Media 계열은 image, image group, inline GIF-like media, standalone 또는 legacy grouped embedded video를 공용 media AST로 수렴한다.
 - Rich legacy widget 계열은 책 위젯처럼 블로그 고유 HTML을 image와 paragraph 조합으로 분해한다.
 - Table/code 계열은 일반 table, 단일 열 layout table, Color Scripter 같은 legacy code-table 변형을 처리한다.
 - Quote, heading, divider 계열은 legacy HTML tag 의미를 공용 AST로 보존한다.
@@ -18,7 +18,7 @@
 - Fallback text 처리 전에는 media, table, code, widget처럼 더 구체적인 block이 먼저 판단되어야 한다.
 - Wrapper를 풀 때 의미 있는 direct text가 있으면 일반 문단 처리와 충돌하지 않게 한다.
 - Inline GIF-like media는 image로 변환되므로 별도 video 목록으로 보지 않는다.
-- Standalone embedded video는 video block으로 변환하고 `videos` 목록에도 포함한다.
+- Standalone 또는 legacy grouped embedded video는 video block으로 변환하고 `videos` 목록에도 포함한다.
 
 ## Maintenance Boundary
 - 정확한 block class 목록, 순서, selector는 editor implementation과 focused specs를 본다.
