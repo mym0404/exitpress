@@ -15,6 +15,7 @@ export const parseHtmlTable = ({ $, table }: { $: CheerioAPI; table: ReturnType<
 
           return {
             text: compactText(cellNode.text()),
+            /* v8 ignore next -- Cheerio types allow null for empty selections, but cells come from an existing table child. */
             html: (cellNode.html() ?? "").trim(),
             colspan: Number(cellNode.attr("colspan") ?? "1"),
             rowspan: Number(cellNode.attr("rowspan") ?? "1"),

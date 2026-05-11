@@ -69,6 +69,27 @@ describe("NaverSe2EmbeddedVideoBlock", () => {
     expect(parsed.videos).toEqual([video])
   })
 
+  it("parses unwrapped outer video spans into video blocks", () => {
+    const parsed = parseSe2Blocks(`
+      <span class="_outerVideo">
+        <iframe src="https://example.com/embed" width="260" height="190"></iframe>
+      </span>
+    `)
+
+    const video = {
+      title: "Video",
+      thumbnailUrl: null,
+      sourceUrl: "https://example.com/embed",
+      vid: null,
+      inkey: null,
+      width: 260,
+      height: 190,
+    }
+
+    expect(parsed.blocks).toEqual([{ type: "video", video }])
+    expect(parsed.videos).toEqual([video])
+  })
+
   it("keeps invalid iframe source strings without video metadata", () => {
     const parsed = parseSe2Blocks(`
       <p>
