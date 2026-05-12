@@ -75,18 +75,18 @@ describe("single post inspect", () => {
       logNo: "123456789012",
       sourceUrl,
       options,
-      html: `<div id="viewTypeSelector"><div><p>Intro</p><div><video class="fx _postImage _gifmp4" data-gif-url="https://example.com/sample.gif"></video><iframe src="https://example.com/embed"></iframe></div></div></div>`,
+      html: `<div id="viewTypeSelector"><div><p>Intro</p><div><video class="fx _postImage _gifmp4" data-gif-url="https://example.com/sample.gif"></video><iframe src="https://example.com/embed"></iframe><object data="https://example.com/embed"></object></div></div></div>`,
     })
 
     expect(diagnostics.parse).toMatchObject({
       status: "failed",
-      error: "파싱 가능한 naver-se2 block이 없습니다: iframe",
+      error: "파싱 가능한 naver-se2 block이 없습니다: object",
     })
     expect(diagnostics.unsupportedNodes).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          path: "0.1.1",
-          tagName: "iframe",
+          path: "0.1.2",
+          tagName: "object",
           unsupported: true,
         }),
       ]),
