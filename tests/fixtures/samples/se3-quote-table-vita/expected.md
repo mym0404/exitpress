@@ -55,7 +55,7 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/MjAxODA2MDNfMjI1/MDAxNTI4MDM0NTQ
 두번째는 너무 작은 **텍스트** **크기** 입니다. PS4에 사용하던 UI를 그대로 가지고 온것인지 보여주는 텍스트의 크기가 너무 작아서 보기에 불편했습니다. 그래서 이런 불편함 때문에 저는 **PS TV**(Vita TV)로 자주 플레이 했습니다.  
 하지만 이런 적지 않은 단점이 있었지만 PS Vita의 성능을 한계를 보여준 그래픽과 나름 높은 퀄리티의 CG영상은 좋았다고 생각합니다.
 
-BACK-ON / Mirrors (Music Video)
+[BACK-ON / Mirrors (Music Video)](https://blog.naver.com/sekishin/221290869775)
 
 또 하나의 이 게임을 장점은 **BACK-ON**의 '**Mirrors**'입니다. 엔딩 곡으로 사용되었으며 과거에 BACK-ON이 테**일즈 오브 더 월드 레디안트 마이솔로지2, 3**과 건담 빌드 파이터즈 오프닝을 불렀습니다. 들어보시면 괜찮은 곡이상 정도는 한다는 것을 느낄 수 있으니 게임이 아니더라도 들어보시는 거도 좋은 듯합니다.
 
