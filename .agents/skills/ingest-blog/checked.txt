@@ -1,0 +1,3 @@
+naver_cafe
+naver_pay
+naver_sports
