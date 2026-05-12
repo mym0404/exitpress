@@ -3,7 +3,7 @@ import type { ParserBlockContext } from "../../core/BaseBlock.js"
 import { compactText } from "../../../../shared/text/TextUtils.js"
 import { ContainerBlock } from "../../core/BaseBlock.js"
 
-const nestedBlockContainerTags = new Set(["div", "span", "font"])
+const nestedBlockContainerTags = new Set(["div", "span", "font", "strong"])
 const spacerContainerTags = new Set([
   "p",
   "div",
