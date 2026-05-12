@@ -6,29 +6,34 @@ import { compactText } from "../../../../shared/text/TextUtils.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
 
 const getInlineGifVideoImage = ({ $node }: { $node: ReturnType<CheerioAPI> }): ImageData | null => {
-  if (!$node.is("p, div, span")) {
+  if (!$node.is("p, div, span, video")) {
     return null
   }
 
-  const videos = $node.find("video.fx._postImage._gifmp4[data-gif-url]")
+  const videos = $node.is("video.fx._postImage._gifmp4[data-gif-url]")
+    ? $node
+    : $node.find("video.fx._postImage._gifmp4[data-gif-url]")
 
   if (videos.length !== 1) {
     return null
   }
 
   const video = videos.first()
-  const cloneWithoutVideo = $node.clone()
 
-  cloneWithoutVideo.find("video.fx._postImage._gifmp4").remove()
+  if (!$node.is("video")) {
+    const cloneWithoutVideo = $node.clone()
 
-  if (cloneWithoutVideo.find("img, iframe, video, table").length > 0) {
-    return null
-  }
+    cloneWithoutVideo.find("video.fx._postImage._gifmp4").remove()
 
-  const textWithoutVideo = compactText(cloneWithoutVideo.text())
+    if (cloneWithoutVideo.find("img, iframe, video, table").length > 0) {
+      return null
+    }
 
-  if (textWithoutVideo) {
-    return null
+    const textWithoutVideo = compactText(cloneWithoutVideo.text())
+
+    if (textWithoutVideo) {
+      return null
+    }
   }
 
   /* v8 ignore next */
