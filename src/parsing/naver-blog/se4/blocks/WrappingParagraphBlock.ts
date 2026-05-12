@@ -7,6 +7,7 @@ const wrappingParagraphLayoutClasses = [
   "se-l-inner-big-left",
   "se-l-inner-big-right",
   "se-l-inner-left",
+  "se-l-inner-right",
 ]
 
 export class NaverSe4WrappingParagraphBlock extends LeafBlock {
