@@ -48,6 +48,20 @@ describe("NaverSe4WrappingParagraphBlock", () => {
     ])
   })
 
+  it("parses compact right wrapping paragraph components", () => {
+    const parsed = parseSe4Blocks(`
+      <div class="se-component se-wrappingParagraph se-l-inner-right">
+        <div class="se-component-slot">
+          <div class="se-module se-module-text">
+            <p class="se-text-paragraph"><span>작은 오른쪽 감싼 문단</span></p>
+          </div>
+        </div>
+      </div>
+    `)
+
+    expect(parsed.blocks).toEqual([{ type: "paragraph", text: "작은 오른쪽 감싼 문단" }])
+  })
+
   it("parses left wrapping paragraph components into image and paragraph blocks", () => {
     const parsed = parseSe4Blocks(`
       <div class="se-component se-wrappingParagraph se-l-inner-big-left">

@@ -3,7 +3,11 @@ import { LeafBlock } from "../../core/BaseBlock.js"
 import { parseImageLink, se4ImageLinkSelector } from "./ImageLink.js"
 import { parseTextBlocks } from "./TextBlock.js"
 
-const wrappingParagraphLayoutClasses = ["se-l-inner-big-left", "se-l-inner-big-right"]
+const wrappingParagraphLayoutClasses = [
+  "se-l-inner-big-left",
+  "se-l-inner-big-right",
+  "se-l-inner-right",
+]
 
 export class NaverSe4WrappingParagraphBlock extends LeafBlock {
   override readonly id = "wrappingParagraph"
