@@ -91,6 +91,28 @@ describe("NaverSe2ContainerBlock", () => {
     expect(parsed.blocks).toEqual(wrappedLeafBlocks)
   })
 
+  it("unwraps deeply nested font wrappers that only contain block nodes", () => {
+    const parsed = parseSe2Blocks(`
+      <font color="#464646">
+        <span>
+          <span>
+            <div>
+              <table>
+                <tbody>
+                  <tr>
+                    <td>연말결산</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </span>
+        </span>
+      </font>
+    `)
+
+    expect(parsed.blocks).toEqual([{ type: "paragraph", text: "연말결산" }])
+  })
+
   it("uses the current editor leaf blocks instead of a fixed child tag list", () => {
     const parsed = new CustomSe2Editor().parse()
 

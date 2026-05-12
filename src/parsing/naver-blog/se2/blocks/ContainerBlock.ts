@@ -18,10 +18,12 @@ const spacerContainerTags = new Set([
 ])
 
 const shouldUnwrapNestedBlocks = ({
+  $,
   element,
   matchLeafNode,
   tagName,
 }: {
+  $: CheerioAPI
   element: ReturnType<CheerioAPI>
   matchLeafNode: ParserBlockContext["matchLeafNode"]
   tagName: string
@@ -40,7 +42,21 @@ const shouldUnwrapNestedBlocks = ({
     return false
   }
 
-  return childNodes.some((node) => node.type === "tag" && matchLeafNode(node))
+  const hasNestedLeafNode = (candidate: ReturnType<CheerioAPI>): boolean =>
+    candidate.contents().toArray().some((node) => {
+      if (node.type !== "tag") {
+        return false
+      }
+
+      const childTagName = node.tagName.toLowerCase()
+
+      return (
+        matchLeafNode(node) ||
+        (nestedBlockContainerTags.has(childTagName) && hasNestedLeafNode($(node)))
+      )
+    })
+
+  return hasNestedLeafNode(element)
 }
 
 export const isSpacerBlock = ({
@@ -69,10 +85,11 @@ export class NaverSe2ContainerBlock extends ContainerBlock {
   override readonly id = "container"
   override readonly label = "중첩 컨테이너"
 
-  override match({ node, $node, matchLeafNode }: ParserBlockContext) {
+  override match({ $, node, $node, matchLeafNode }: ParserBlockContext) {
     return (
       node.type === "tag" &&
       shouldUnwrapNestedBlocks({
+        $,
         element: $node,
         matchLeafNode,
         tagName: node.tagName.toLowerCase(),
