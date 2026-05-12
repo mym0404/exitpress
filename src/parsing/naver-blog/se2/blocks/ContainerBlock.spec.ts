@@ -91,6 +91,28 @@ describe("NaverSe2ContainerBlock", () => {
     expect(parsed.blocks).toEqual(wrappedLeafBlocks)
   })
 
+  it("unwraps strong wrappers that only contain table blocks", () => {
+    const parsed = parseSe2Blocks(`
+      <strong>
+        <table>
+          <tbody>
+            <tr>
+              <td>행사명</td>
+              <td>DEVIEW</td>
+            </tr>
+          </tbody>
+        </table>
+      </strong>
+    `)
+
+    expect(parsed.blocks).toMatchObject([
+      {
+        type: "table",
+        rows: [[{ text: "행사명" }, { text: "DEVIEW" }]],
+      },
+    ])
+  })
+
   it("uses the current editor leaf blocks instead of a fixed child tag list", () => {
     const parsed = new CustomSe2Editor().parse()
 
