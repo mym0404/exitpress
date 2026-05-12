@@ -8,7 +8,7 @@ category: 네이버 피플
 categoryPath:
   - 네이버 인사이드
   - 네이버 피플
-thumbnail: https://blogthumb.pstatic.net/20120530_72/naver_diary_1338357747222Re5Fr_JPEG/new_IMG_0466.jpg?type=w2
+thumbnail: https://blogthumb.pstatic.net/20120530_72/naver_diary_1338357747222Re5Fr_JPEG/new_IMG_0466.jpg?type=w
 ---
 
 **네이버사전을 만드는 사람들 - 강영희 연세대 전 부총장**
@@ -20,33 +20,23 @@ thumbnail: https://blogthumb.pstatic.net/20120530_72/naver_diary_1338357747222Re
 **\>** **강영희 박사(1930년생·82세)  
 ** 연세대 생물학과 졸업, 연세대 부총장, 한국식물학회장, 한국생물과학협회부회장 등 역임. 생물학 관련 약 60여 권의 저서
 
-![](https://mblogthumb-phinf.pstatic.net/20120530_72/naver_diary_1338357747222Re5Fr_JPEG/new_IMG_0466.jpg?type=w800)
+![](https://mblogthumb-phinf.pstatic.net/20120530_72/naver_diary_1338357747222Re5Fr_JPEG/new_IMG_0466.jpg?type=w)
 
-![](https://mblogthumb-phinf.pstatic.net/20120530_72/naver_diary_1338357747222Re5Fr_JPEG/new_IMG_0466.jpg?type=w420)
-
-![](https://mblogthumb-phinf.pstatic.net/20120530_22/naver_diary_1338357748693x2lNB_PNG/%B0%AD%BF%B5%C8%F1_%C1%F6%BD%C4%BB%E7%C0%FC.png?type=w800)
-
-![](https://mblogthumb-phinf.pstatic.net/20120530_22/naver_diary_1338357748693x2lNB_PNG/%B0%AD%BF%B5%C8%F1_%C1%F6%BD%C4%BB%E7%C0%FC.png?type=w420)
+![](https://mblogthumb-phinf.pstatic.net/20120530_22/naver_diary_1338357748693x2lNB_PNG/%B0%AD%BF%B5%C8%F1_%C1%F6%BD%C4%BB%E7%C0%FC.png?type=w)
 
 <생명과학대사전 저자인 강영희 박사 /생명과학대사전 DB를 활용하고 있는 네이버지식사전 생명과학일반 항목에 있는 ['세균' 설명페이지](http://terms.naver.com/entry.nhn?docId=429036)\>
 
 네이버 지식사전의 생명체와 관련된 대부분 정보의 출처는 '생명과학대사전'입니다. 이 사전은 28,700 여 개의 용어를 담고 있고, 2,300여 쪽에 무게만 약 6Kg에 달합니다. 국내 생명과학 분야에서는 독보적 사전이고, 우리나라보다 수십 배 이상 연구 인력이 많은 일본의 사전보다 두 배 이상 방대한 정보를 담고 있습니다. 강영희 교수님은 이 책을 쓰셨고, 지금도 20,000여 개 용어가 추가된 증보판을 업데이트 중이십니다.
 
-![](https://mblogthumb-phinf.pstatic.net/20120530_225/naver_diary_1338359262223En7yB_PNG/k_01.png?type=w800)
+![](https://mblogthumb-phinf.pstatic.net/20120530_225/naver_diary_1338359262223En7yB_PNG/k_01.png?type=w)
 
-![](https://mblogthumb-phinf.pstatic.net/20120530_225/naver_diary_1338359262223En7yB_PNG/k_01.png?type=w420)
-
-![](https://mblogthumb-phinf.pstatic.net/20120530_130/naver_diary_1338359262574diLHu_PNG/k_02.png?type=w800)
-
-![](https://mblogthumb-phinf.pstatic.net/20120530_130/naver_diary_1338359262574diLHu_PNG/k_02.png?type=w420)
+![](https://mblogthumb-phinf.pstatic.net/20120530_130/naver_diary_1338359262574diLHu_PNG/k_02.png?type=w)
 
 <네이버 지식사전의 사전 DB로 제공하고 있는 생명과학대사전>
 
 1930년 생이신 강 교수님의 올해 연세는 82세. 개인 인맥을 통해 전세계의 학자들로부터 자료를 수집해 정리 분석하는 것부터 컴퓨터에 입력하는 작업까지 모두 강 교수님께서 직접 하십니다. 교수님의 기상 시간은 새벽 3시. 간단하게 몸을 풀고 5평짜리 서재로 들어 가십니다. 새벽 5시쯤 1시간 동안 운동. 6시쯤 아침 식사. 그리고 다시 7시쯤에는 작업 책상에 앉습니다. 가끔 몸을 풀기 위해 산책을 하는 것 외에는 11시 전후 잠자리에 들기 전까지 이렇게 하루를 보내십니다. 1998년 정년 퇴임 이후부터는 일체의 외부 활동을 줄이고 많으면 하루 17시간씩 사전 집필 작업에 집중하고 계십니다. 평생 하루 5시간 이상 잠을 잔 일도, 골프채는 손에 쥐어본 적도 없다는 강 교수님을 찾아 뵙고 '내가 사전을 만드는 이유'를 들었습니다.
 
-![](https://mblogthumb-phinf.pstatic.net/20120530_43/naver_diary_1338357746008O5US4_JPEG/new_IMG_0416.JPG?type=w800)
-
-![](https://mblogthumb-phinf.pstatic.net/20120530_43/naver_diary_1338357746008O5US4_JPEG/new_IMG_0416.JPG?type=w420)
+![](https://mblogthumb-phinf.pstatic.net/20120530_43/naver_diary_1338357746008O5US4_JPEG/new_IMG_0416.JPG?type=w)
 
 **\[네이버다이어리\] 이전에는 순수과학을 하기 더 어려운 환경 아니었나요?  
 ****\[강영희 교수\]** 네 그렇죠. 다들 먹고 살기 힘든 시절이었고요. 그 머리로 왜 돈 안 되는 공부 하려고 하느냐 하는 말도 들었고요. 하지만 후회 안 합니다. 이만하면 잘 살았다고 생각해요. 내가 연세대 생물학과 졸업생 1호에요. 지금은 내가 키운 제자가 3대에 걸쳐 있고, 그 제자들이 또 3대의 제자를 키우고 있어요. 우리나라 생물학, 생명공학도 엄청 발전했고 세계 곳곳에 제자들이 나가 있어요.
@@ -61,9 +51,7 @@ thumbnail: https://blogthumb.pstatic.net/20120530_72/naver_diary_1338357747222Re
 
 강 교수님이 졸업생 1호가 된 사연입니다.
 
-![](https://mblogthumb-phinf.pstatic.net/20120530_62/naver_diary_1338359929891d0FEF_JPEG/new_IMG_0434.jpg?type=w800)
-
-![](https://mblogthumb-phinf.pstatic.net/20120530_62/naver_diary_1338359929891d0FEF_JPEG/new_IMG_0434.jpg?type=w420)
+![](https://mblogthumb-phinf.pstatic.net/20120530_62/naver_diary_1338359929891d0FEF_JPEG/new_IMG_0434.jpg?type=w)
 
 대학 졸업과 군복무(공군)를 마친 강 교수님은 연구자의 길을 걷기 시작했습니다. 당시는 박사 학위를 가진 사람이 워낙 없던 시절이라 교수를 하면서 학위를 따는 경우가 더 많았다고 합니다. 강 교수님도 연세대 조교수 시절 일본정부 초청 국비유학생으로 유학을 떠나게 됐다고 합니다.
 
@@ -73,9 +61,7 @@ thumbnail: https://blogthumb.pstatic.net/20120530_72/naver_diary_1338357747222Re
 
 **\[강영희 교수\]** 당시 조선대학교 자연대학장(정현숙 교수)이 제가 가르쳤던 제자였어요. 선생님이 저에게 가르친 책을 제가 또 제 제자한테 준 거니까 3대에 걸친 기증이네요.
 
-![](https://mblogthumb-phinf.pstatic.net/20120530_232/naver_diary_13383577483890yhCq_JPEG/new_IMG_0551.jpg?type=w800)
-
-![](https://mblogthumb-phinf.pstatic.net/20120530_232/naver_diary_13383577483890yhCq_JPEG/new_IMG_0551.jpg?type=w420)
+![](https://mblogthumb-phinf.pstatic.net/20120530_232/naver_diary_13383577483890yhCq_JPEG/new_IMG_0551.jpg?type=w)
 
 **\[네이버다이어리\] 사전 작업은 어떻게 시작하신 건가요?**
 
@@ -84,10 +70,6 @@ thumbnail: https://blogthumb.pstatic.net/20120530_72/naver_diary_1338357747222Re
 강 교수님이 생명과학대사전을 출간한 건 2008년 2월, 78세 되던 해였습니다. '작은 아버지' 연배의 스승은 이미 돌아가신 후였지만 20년 만에 마음의 큰 짐을 내려 놓은 느낌이셨다고 합니다. "책 들고 선생님 묘소에 갔다 왔지. 헌화도 하고 책도 보여 드리고" 내내 침착하던 강 교수님도 감회에 젖은 얼굴을 하셨습니다.
 
 강 교수님이 사전에 매달린 이유는 순전히 대학 은사와의 약속 때문이었을까? 인터뷰를 하면서 '약속'은 이미 마음에 있던 계획을 끄집어 낸 작은 계기일 뿐이라는 생각이 들었습니다. 연세보다 훨씬 젊고 정정하시지만 사전을 만드는 일은 제 입장에서도 육체적·정신적으로 엄청난 스트레스를 주는 일로 보였습니다. 게다가 혼자 할 수 일로는 보이지 않았습니다. 도대체 무엇 때문에 저 연세에 스스로를 몰아 붙이고 계실까?
-
-![](https://mblogthumb-phinf.pstatic.net/20120530_267/naver_diary_1338357746293WnHbf_JPEG/new_IMG_0420.jpg?type=w800)
-
-![](https://mblogthumb-phinf.pstatic.net/20120530_267/naver_diary_1338357746293WnHbf_JPEG/new_IMG_0420.jpg?type=w420)
 
 \[네이버다이어리\] 힘들지 않으세요? 솔직히
 
@@ -101,9 +83,7 @@ thumbnail: https://blogthumb.pstatic.net/20120530_72/naver_diary_1338357747222Re
 
 **\[강영희 교수\]** 생명과학은 분야가 아주 방대해요. 살아 있는 것을 연구하는 모든 학문을 아우르는 말이니까요. 생물학은 그 중 일부고 곤충학, 기생충학, 농생물학, 면역학, 미생물학, 발생학, 병리학, 생태학, 생화학, 조직학, 영양학…… 가급적 다룰 수 있는 최대한의 영역을 다루려고 했어요. 이런 쪽에 관심이 있는 사람이라면 누구든지 보겠죠. 사전 그러니까 이런 인사이클로피디어(encyclopedia)는 단순한 뜻이 아니라 정보를 담은 책이에요. 이 책만 있으면 혼자서도 공부할 수 있는 책이죠. 저도 그랬고요. 그게 사전이 중요한 이유고 소위 선진국에서는 좋은 사전들이 계속 나오는 이유이기도 하고요.
 
-![](https://mblogthumb-phinf.pstatic.net/20120530_118/naver_diary_1338357746885v83qx_JPEG/new_IMG_0452.jpg?type=w800)
-
-![](https://mblogthumb-phinf.pstatic.net/20120530_118/naver_diary_1338357746885v83qx_JPEG/new_IMG_0452.jpg?type=w420)
+![](https://mblogthumb-phinf.pstatic.net/20120530_118/naver_diary_1338357746885v83qx_JPEG/new_IMG_0452.jpg?type=w)
 
 사전 서비스를 만들다 보면 가장 아쉬운 부분 중 하나가 바로 자연과학 분야 전문사전입니다. 우리나라에는 아직 이런 분야를 잘 정리한 사전이 많지 않습니다. 사전은 작업은 어려운데 돈은 안 되기 때문입니다. 그런 점에서 강영희 교수님의 사전은 저희 입장에서도 매우 귀중한 정보였고, 이용자 여러분들께 제공할 수 있게 되어 기쁘게 생각합니다. 마지막으로 강 교수님이 이용자 여러분께 드리는 말씀으로 정리합니다.
 
@@ -117,13 +97,13 @@ thumbnail: https://blogthumb.pstatic.net/20120530_72/naver_diary_1338357747222Re
 
 **\[네이버사전을 만드는 사람들 시리즈 포스트\]**
 
-![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2F20101014_115%2Fnaver_diary_1287040206375IGChE_gif%2Fbullet_link_s_naver_diary.gif%3Ftype%3Dw2%22&type=w1)[네이버어학사전 이렇게 만들고 있습니다](http://naver_diary.blog.me/150118343689)
+![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2F20101014_115%2Fnaver_diary_1287040206375IGChE_gif%2Fbullet_link_s_naver_diary.gif%3Ftype%3Dw2%22&type=w)[네이버어학사전 이렇게 만들고 있습니다](http://naver_diary.blog.me/150118343689)
 
-![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2F20101014_115%2Fnaver_diary_1287040206375IGChE_gif%2Fbullet_link_s_naver_diary.gif%3Ftype%3Dw2%22&type=w1)['네이버사전팀'이 베이징에도 있다고요?](http://naver_diary.blog.me/150123157685)
+![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2F20101014_115%2Fnaver_diary_1287040206375IGChE_gif%2Fbullet_link_s_naver_diary.gif%3Ftype%3Dw2%22&type=w)['네이버사전팀'이 베이징에도 있다고요?](http://naver_diary.blog.me/150123157685)
 
 \* 이 글을 네이버 다이어리 운영진 [미투데이](http://me2day.net/naver_diary)와 [트위터](http://twitter.com/naver_diary), [페이스북](http://facebook.com/naver.diary)을 통해서도 소개해드리고 있습니다.
 
 **작성** | 2012\. 05. 31 \_ 네이버 다이어리 **운영진**
 
 [  
-![](https://mblogthumb-phinf.pstatic.net/data42/2009/4/2/101/email_naver_blog.jpg?type=w420)](mailto:naver_diary@naver.com)
+![](https://mblogthumb-phinf.pstatic.net/data42/2009/4/2/101/email_naver_blog.jpg?type=w)](mailto:naver_diary@naver.com)

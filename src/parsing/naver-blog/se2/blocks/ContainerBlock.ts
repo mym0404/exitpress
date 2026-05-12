@@ -15,6 +15,7 @@ const spacerContainerTags = new Set([
   "em",
   "o:p",
   "u",
+  "strike",
   "ul",
   "a",
 ])
@@ -39,6 +40,13 @@ const shouldUnwrapNestedBlocks = ({
   )
 
   if (hasMeaningfulDirectText) {
+    return false
+  }
+
+  if (
+    tagName === "strong" &&
+    element.find("table,img,iframe,video,hr,blockquote,pre").length === 0
+  ) {
     return false
   }
 
