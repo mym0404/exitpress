@@ -76,10 +76,8 @@ export const unsupportedSe3Html = `
           <div class="se_hr"><hr></div>
         </div>
       </div>
-      <div class="se_component se_horizontalLine line5">
-        <div class="se_horizontalLineView">
-          <div class="se_hr"><hr></div>
-        </div>
+      <div class="se_component se_unknown default">
+        <div class="se_unknown_view">지원하지 않는 블록입니다.</div>
       </div>
       <div class="se_component se_oglink og_bSize ">
         <div class="se_viewArea se_og_wrap">

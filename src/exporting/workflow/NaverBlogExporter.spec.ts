@@ -23,6 +23,9 @@ import {
 } from "../../../tests/support/exporting/NaverBlogExporterHarness.js"
 import { Buffer } from "node:buffer"
 
+const unsupportedSe3Error =
+  '파싱 가능한 naver-se3 block이 없습니다: div class="se_component se_unknown default"'
+
 describe("NaverBlogExporter", () => {
   afterEach(() => {
     vi.restoreAllMocks()
@@ -182,8 +185,7 @@ describe("NaverBlogExporter", () => {
         logNo: se3Post.logNo,
         status: "failed",
         outputPath: null,
-        error:
-          '파싱 가능한 naver-se3 block이 없습니다: div class="se_component se_horizontalLine default"',
+        error: unsupportedSe3Error,
       })
       expect(onProgress).toHaveBeenCalledWith({
         total: 1,
@@ -194,8 +196,7 @@ describe("NaverBlogExporter", () => {
         expect.objectContaining({
           logNo: se3Post.logNo,
           status: "failed",
-          error:
-            '파싱 가능한 naver-se3 block이 없습니다: div class="se_component se_horizontalLine default"',
+          error: unsupportedSe3Error,
         }),
       )
     } finally {
@@ -248,9 +249,7 @@ describe("NaverBlogExporter", () => {
       expect(postManifest.assetPaths).toEqual([])
       expect(postManifest.upload.candidateCount).toBe(0)
       expect(postManifest.upload.candidates).toEqual([])
-      expect(postManifest.error).toBe(
-        '파싱 가능한 naver-se3 block이 없습니다: div class="se_component se_horizontalLine default"',
-      )
+      expect(postManifest.error).toBe(unsupportedSe3Error)
     } finally {
       await rm(outputDir, { recursive: true, force: true })
     }
