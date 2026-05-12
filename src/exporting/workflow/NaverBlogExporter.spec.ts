@@ -24,7 +24,7 @@ import {
 import { Buffer } from "node:buffer"
 
 const unsupportedSe3Error =
-  '파싱 가능한 naver-se3 block이 없습니다: div class="se_component se_horizontalLine line5"'
+  '파싱 가능한 naver-se3 block이 없습니다: div class="se_component se_unknown default"'
 
 describe("NaverBlogExporter", () => {
   afterEach(() => {
