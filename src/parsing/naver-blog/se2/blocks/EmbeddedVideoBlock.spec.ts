@@ -131,6 +131,30 @@ describe("NaverSe2EmbeddedVideoBlock", () => {
     expect(parsed.videos).toEqual([video])
   })
 
+  it("parses direct video iframes into video blocks", () => {
+    const parsed = parseSe2Blocks(`
+      <iframe
+        src="https://www.youtube-nocookie.com/embed/sample?__authenticIframe=true"
+        width="260"
+        height="190"
+        title="Sample video"
+      ></iframe>
+    `)
+
+    const video = {
+      title: "Sample video",
+      thumbnailUrl: null,
+      sourceUrl: "https://www.youtube-nocookie.com/embed/sample?__authenticIframe=true",
+      vid: null,
+      inkey: null,
+      width: 260,
+      height: 190,
+    }
+
+    expect(parsed.blocks).toEqual([{ type: "video", video }])
+    expect(parsed.videos).toEqual([video])
+  })
+
   it("keeps invalid iframe source strings without video metadata", () => {
     const parsed = parseSe2Blocks(`
       <p>

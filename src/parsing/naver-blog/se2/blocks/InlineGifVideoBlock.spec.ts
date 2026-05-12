@@ -79,6 +79,29 @@ describe("NaverSe2InlineGifVideoBlock", () => {
     ])
   })
 
+  it("parses top-level inline gif video blocks into image blocks", () => {
+    const parsed = parseSe2Blocks(`
+      <video
+        src="https://mblogvideo-phinf.pstatic.net/sample.gif?type=mp4w800"
+        class="fx _postImage _gifmp4"
+        data-gif-url="https://mblogthumb-phinf.pstatic.net/sample.gif?type=w210"
+      ></video>
+    `)
+
+    expect(parsed.blocks).toEqual([
+      {
+        type: "image",
+        image: {
+          sourceUrl: "https://mblogthumb-phinf.pstatic.net/sample.gif?type=w210",
+          originalSourceUrl: "https://mblogvideo-phinf.pstatic.net/sample.gif?type=mp4w800",
+          alt: "",
+          caption: null,
+          mediaKind: "image",
+        },
+      },
+    ])
+  })
+
   it("keeps original source empty when inline gif video has no mp4 source", () => {
     const parsed = parseSe2Blocks(`
       <p>

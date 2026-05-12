@@ -113,6 +113,36 @@ describe("NaverSe2ContainerBlock", () => {
     expect(parsed.blocks).toEqual([{ type: "paragraph", text: "연말결산" }])
   })
 
+  it("unwraps strong wrappers that only contain table blocks", () => {
+    const parsed = parseSe2Blocks(`
+      <strong>
+        <table>
+          <tbody>
+            <tr>
+              <td>행사명</td>
+              <td>DEVIEW</td>
+            </tr>
+          </tbody>
+        </table>
+      </strong>
+    `)
+
+    expect(parsed.blocks).toMatchObject([
+      {
+        type: "table",
+        rows: [[{ text: "행사명" }, { text: "DEVIEW" }]],
+      },
+    ])
+  })
+
+  it("keeps strong formatting when it wraps inline strike text", () => {
+    const parsed = parseSe2Blocks(`
+      <strong><strike><span>강조 문장</span></strike></strong>
+    `)
+
+    expect(parsed.blocks).toEqual([{ type: "paragraph", text: "**~강조 문장~**" }])
+  })
+
   it("uses the current editor leaf blocks instead of a fixed child tag list", () => {
     const parsed = new CustomSe2Editor().parse()
 

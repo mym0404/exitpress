@@ -19,7 +19,35 @@ const parseVideoId = (sourceUrl: string) => {
   }
 }
 
+const createEmbeddedVideo = ({ iframe }: { iframe: ReturnType<CheerioAPI> }) => {
+  const sourceUrl = normalizeAssetUrl(iframe.attr("src") ?? "")
+
+  if (!sourceUrl) {
+    return null
+  }
+
+  return {
+    title: compactText(iframe.attr("title") ?? "") || "Video",
+    thumbnailUrl: null,
+    sourceUrl,
+    vid: parseVideoId(sourceUrl),
+    inkey: null,
+    width: parseDimension(iframe.attr("width")),
+    height: parseDimension(iframe.attr("height")),
+  }
+}
+
 const getEmbeddedVideos = ({ $, $node }: { $: CheerioAPI; $node: ReturnType<CheerioAPI> }) => {
+  if ($node.is("iframe[src]")) {
+    if ($node.hasClass("poll_iframe")) {
+      return null
+    }
+
+    const video = createEmbeddedVideo({ iframe: $node })
+
+    return video ? [video] : null
+  }
+
   if (!$node.is("p, div, span")) {
     return null
   }
@@ -52,21 +80,13 @@ const getEmbeddedVideos = ({ $, $node }: { $: CheerioAPI; $node: ReturnType<Chee
       return null
     }
 
-    const sourceUrl = normalizeAssetUrl(iframe.attr("src")!)
+    const video = createEmbeddedVideo({ iframe })
 
-    if (!sourceUrl) {
+    if (!video) {
       return null
     }
 
-    videos.push({
-      title: "Video",
-      thumbnailUrl: null,
-      sourceUrl,
-      vid: parseVideoId(sourceUrl),
-      inkey: null,
-      width: parseDimension(iframe.attr("width")),
-      height: parseDimension(iframe.attr("height")),
-    })
+    videos.push(video)
   }
 
   return videos
