@@ -20,11 +20,12 @@ thumbnail: https://blogthumb.pstatic.net/20090825_8/naver_diary_1251166367893k3x
 |   |
 |   |
 
-![](https://mblogthumb-phinf.pstatic.net/data43/2009/4/6/24/bullet_1_naver_diary.jpg?type=w420) **건전한 국내 웹 환경 발전을 위해 NHN이 가진 정보 플랫폼 기술을 공개합니다.**
+![](https://mblogthumb-phinf.pstatic.net/data43/2009/4/6/24/bullet_1_naver_diary.jpg?type=w210) **건전한 국내 웹 환경 발전을 위해 NHN이 가진 정보 플랫폼 기술을 공개합니다.**
 
-****************![](https://mblogthumb-phinf.pstatic.net/20090825_8/naver_diary_1251166367893k3xKw_jpg/%B5%A5%BA%E4bi_naver_diary.jpg?type=w420)****************
+|   |
+| --- |
 
-![](https://mblogthumb-phinf.pstatic.net/data41/2009/3/19/33/slice_9_naver_blog.jpg?type=w420)  
+![](https://mblogthumb-phinf.pstatic.net/data41/2009/3/19/33/slice_9_naver_blog.jpg?type=w210)  
 <NHN DeView 2009 BI(Brand Identity)\>
 
 지난해에 이어 2회째를 맞는 NHN DeView2009 행사가 9월 17일 목요일 오전 11시 30분부터 오후 5시30분까지 코엑스 인터컨티넨탈 하모니볼룸에서 개최됩니다.
@@ -35,48 +36,52 @@ DeView는 Developer's View의 축약형으로서 '내일을 향한 개발자의 
 
 그런 ‘오픈’을 향한 의지에 걸맞게 행사 슬로건도 ‘눈을 열고, 가슴을 열고, 미래를 향해 열려라’라는 의미에서 ‘Open: your eyes, Open: your mind, Open: to the future’ 로 정했습니다.
 
-****************![](https://mblogthumb-phinf.pstatic.net/20090825_205/naver_diary_1251166430994NKLIQ_jpg/%BD%BD%B7%CE%B0%C7_naver_diary.jpg?type=w420)****************
+|   |
+| --- |
 
-![](https://mblogthumb-phinf.pstatic.net/data41/2009/3/19/33/slice_9_naver_blog.jpg?type=w420)  
+![](https://mblogthumb-phinf.pstatic.net/data41/2009/3/19/33/slice_9_naver_blog.jpg?type=w210)  
 <NHN DeView2009 행사 슬로건\>
 
 [프로그램](http://deview.naver.com/programs/courses)도 지난해보다 한층 다양해졌는데요, 총 4개 트랙으로 나누어 각각의 트랙에서 큰 주제로 ‘서비스 개방’, ‘게임 플랫폼’, ‘정보 플랫폼’에 대해 다루고 마지막으로 튜토리얼 트랙에서 혼자 실습할 수 있도록 안내할 예정입니다.
 
-****************![](https://mblogthumb-phinf.pstatic.net/20090825_118/naver_diary_1251166466471Xv582_jpg/%C7%C1%B7%CE%B1%D7%B7%A5%BD%C3%B0%A3%C7%A5_naver_diary.jpg?type=w420)****************
+|   |
+| --- |
 
-![](https://mblogthumb-phinf.pstatic.net/data41/2009/3/19/33/slice_9_naver_blog.jpg?type=w420)  
+![](https://mblogthumb-phinf.pstatic.net/data41/2009/3/19/33/slice_9_naver_blog.jpg?type=w210)  
 <[행사 프로그램 및 발표자](http://deview.naver.com/programs/courses)\>
 
 이번 행사에서 눈에 띄는 것 중에 한가지는 이날 행사 중 3개 트랙이 인터넷으로 생중계 될 예정이라는 점이에요^^ (튜토리얼 트랙은 개별 실습 위주로 진행되어 생중계에서 제외됩니다) 부득이하게 이날 참석이 어려우신 분들도 인터넷을 통해 현장에 있는 것 같은 생생한 중계를 접하실 수 있으니 너무 아쉬워하지 않으셔도 될 것 같아요~
 
 또 [미투데이](http://me2day.net/deview)에 Deview 집을 만들었는데요, 벌써부터 사전 등록을 하신 분들이 적잖게 미투에 댓글을 남겨주고 계시네요. 여러분들도 이번 기회에 미투에도 가입해 보시고 준비 과정부터 참여해보시는 건 어떨까요~
 
-****************![](https://mblogthumb-phinf.pstatic.net/20090825_243/naver_diary_1251166492850CLYUO_jpg/%B9%CC%C5%F5_naver_diary.jpg?type=w420)****************
+|   |
+| --- |
 
-![](https://mblogthumb-phinf.pstatic.net/data41/2009/3/19/33/slice_9_naver_blog.jpg?type=w420)  
+![](https://mblogthumb-phinf.pstatic.net/data41/2009/3/19/33/slice_9_naver_blog.jpg?type=w210)  
 <참가 신청자들이 [DeView 미투데이](http://me2day.net/deview)에 남긴 댓글 \>
 
 또 한가지 재미. 공식블로그에 와서 보시면 Deview 2009 사전등록 시 입력하신 미투데이, 블로그 주소, 관심사를 바탕으로 관계지수를 산출해서 참가자분들간의 [네트워크](http://deview.naver.com/network/index)를 시각화해서 보여주는 서비스를 제공하고 있습니다. 재미있죠? 나와 내 친구는 과연 몇 ‘다리’를 건너서 연결될까요? ^^ 관심사를 가진 사람들은 누구인지 알아보시고, 그 분의 미투데이나 블로그도 방문해 보세요~~
 
-****************![](https://mblogthumb-phinf.pstatic.net/20090825_32/naver_diary_1251166570956lFx1B_jpg/%C2%FC%B0%A1%C0%DA_%B3%D7%C6%AE%BF%F6%C5%A9_naver_diary.jpg?type=w420)****************
+|   |
+| --- |
 
-![](https://mblogthumb-phinf.pstatic.net/data41/2009/3/19/33/slice_9_naver_blog.jpg?type=w420)  
+![](https://mblogthumb-phinf.pstatic.net/data41/2009/3/19/33/slice_9_naver_blog.jpg?type=w210)  
 <[참가자 네트워크를](http://deview.naver.com/network/index) 시각화한 이미지\>
 
 참가를 원하세요? ^^ SW 개발자, 인터넷 서비스 제공자, IT 분야에 관심있는 대학생이나 일반인이면 누구나 신청 하실 수 있고요, 등록은 9월 15일까지 사전 등록하시는 분에 한해 선착순 1천명만 참석이 가능합니다. 그럼, 9월 17일에 뵐게요~!!
 
-****************[![](https://mblogthumb-phinf.pstatic.net/20090825_111/naver_diary_12511663130566xWxo_jpg/%C2%FC%B0%A1%BD%C5%C3%BB_naver_diary.jpg?type=w420)](http://deview.naver.com/registration/input)****************
+****************[](http://deview.naver.com/registration/input)****************
 
-![](https://mblogthumb-phinf.pstatic.net/data41/2009/3/19/33/slice_9_naver_blog.jpg?type=w420)  
+![](https://mblogthumb-phinf.pstatic.net/data41/2009/3/19/33/slice_9_naver_blog.jpg?type=w210)  
 <[사전등록하기](http://deview.naver.com/registration/input)\>
 
-![](https://mblogthumb-phinf.pstatic.net/data41/2009/3/17/83/bullet_3_naver_blog.jpg?type=w420) DeView2009 [공식사이트](http://deview.naver.com/home/main) 바로가기
+![](https://mblogthumb-phinf.pstatic.net/data41/2009/3/17/83/bullet_3_naver_blog.jpg?type=w210) DeView2009 [공식사이트](http://deview.naver.com/home/main) 바로가기
 
-![](https://mblogthumb-phinf.pstatic.net/data41/2009/3/17/83/bullet_3_naver_blog.jpg?type=w420) DeView2009 [공식블로그](http://blog.naver.com/deview_con/) 바로가기
+![](https://mblogthumb-phinf.pstatic.net/data41/2009/3/17/83/bullet_3_naver_blog.jpg?type=w210) DeView2009 [공식블로그](http://blog.naver.com/deview_con/) 바로가기
 
 **작성** | 2009년 08월 25일 화요일 \_ 기술혁신랩 **정유진**
 
-![](https://mblogthumb-phinf.pstatic.net/data42/2009/4/2/101/email_naver_blog.jpg?type=w420)
+![](https://mblogthumb-phinf.pstatic.net/data42/2009/4/2/101/email_naver_blog.jpg?type=w210)
 
 |   |
 | --- |

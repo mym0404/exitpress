@@ -131,7 +131,7 @@ thumbnail: https://blogthumb.pstatic.net/MjAxODEwMjZfNDUg/MDAxNTQwNTQwMDczMDE4.d
 **쫄면, 불쫄면,간쫄면, 차돌쫄면,냉쫄면,콩물졸면,어린이쫄면이 바로 일곱 가지의 쫄면의 주인공, 못 고르겠으면 물어보자!**  
 **네이버 푸드윈도를 통해 나드리의 쫄면을 어디서나 맛볼 수 있다.**
 
-![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2FMjAxODEwMjZfODcg%2FMDAxNTQwNTM4MzU1NzY0.TOXOkdXsL2vNomBWQUxWd5Dqdl-CRyc5IREUZ0R0Q1Ug.dkOBUTaIpc82e0nP2uRJUup_95f1hcgNovwG-Ti6LCUg.JPEG.shanti_prajna%2F%25EB%2582%2598%25EB%2593%259C%25EB%25A6%25AC%25EB%25B6%2584%25EC%258B%259D3_%25EC%25A0%2595%25ED%259D%25AC%25EC%259C%25A4_%25EB%258C%2580%25ED%2591%259C_%25EC%25A0%259C%25EA%25B3%25B5.jpg%3Ftype%3Dw773%22&type=w1)
+![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2FMjAxODEwMjZfODcg%2FMDAxNTQwNTM4MzU1NzY0.TOXOkdXsL2vNomBWQUxWd5Dqdl-CRyc5IREUZ0R0Q1Ug.dkOBUTaIpc82e0nP2uRJUup_95f1hcgNovwG-Ti6LCUg.JPEG.shanti_prajna%2F%25EB%2582%2598%25EB%2593%259C%25EB%25A6%25AC%25EB%25B6%2584%25EC%258B%259D3_%25EC%25A0%2595%25ED%259D%25AC%25EC%259C%25A4_%25EB%258C%2580%25ED%2591%259C_%25EC%25A0%259C%25EA%25B3%25B5.jpg%3Ftype%3Dw773%22&type=w2)
 
 ********ㅣ나드리 자세히 보기**  
 ****** [https://blog.naver.com/naver\_diary/221372376514](https://blog.naver.com/naver_diary/221372376514)  
