@@ -43,6 +43,13 @@ const shouldUnwrapNestedBlocks = ({
     return false
   }
 
+  if (
+    tagName === "strong" &&
+    element.find("table,img,iframe,video,hr,blockquote,pre").length === 0
+  ) {
+    return false
+  }
+
   return childNodes.some((node) => node.type === "tag" && matchLeafNode(node))
 }
 
