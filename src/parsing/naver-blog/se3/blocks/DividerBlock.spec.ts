@@ -23,4 +23,14 @@ describe("NaverSe3DividerBlock", () => {
       },
     ])
   })
+
+  it("parses line2 horizontal line components into divider blocks", () => {
+    const parsed = parseSe3Blocks(`
+      <div class="se_component se_horizontalLine line2">
+        <div class="se_horizontalLineView"></div>
+      </div>
+    `)
+
+    expect(parsed.blocks).toEqual([{ type: "divider" }])
+  })
 })
