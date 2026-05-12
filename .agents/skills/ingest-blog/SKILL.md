@@ -19,6 +19,10 @@ Other support units from the same blog stay out of the focused PR body, but they
 
 ## Quick Commands
 
+Use only ingest targets whose `blogId` is not already listed in `.agents/skills/ingest-blog/checked.txt` unless the user explicitly provides and confirms that exact already-checked id.
+Before running an ingest check, read `.agents/skills/ingest-blog/checked.txt`; it stores one `blogId` per line.
+After checking a `blogId`, append that exact id to `checked.txt` on its own line if it is not already present.
+
 Run ingest with remote asset references. If a completed output for the same `blogId` exists, reuse it and rerun only failed posts:
 
 ```bash
@@ -88,27 +92,29 @@ Use `--assetProfile tmp` for local smoke output, `--assetProfile readme` for REA
 
 ## Workflow
 
-1. Run `collect-blog-errors.ts --blogId <blogId>` unless the user explicitly asked for `--forceFull`.
-2. Record the absolute `outputDir` printed by the script.
-3. Read `failure-summary.json` and freeze the full `discoveredSupportUnits` list for this ingest turn.
-4. Run `check-support-unit-prs.ts --outputDir <absolute-output-dir>` to see which support units already have ready open PR claims.
-5. Process every missing `supportUnitKey` sequentially in the same working directory. Do not create git worktrees.
-6. For each unit, start from `origin/main` and create or switch to branch `worktree/ingest-blog-<safeSupportUnitKey>`, where `<safeSupportUnitKey>` replaces non-alphanumeric characters with `-`.
-7. Before editing that unit, run `git fetch origin main`.
-8. Skip the unit only when `origin/main` already supports it. A draft PR claim is not complete; convert it to ready or recreate it as ready before ending.
-9. Inspect the focused failed HTML and identify the owning editor/block boundary.
-10. Infer the expected PR file shape before editing. Use the owning editor/block boundary to decide whether this should be an existing-block edit or a new-block addition.
-11. Implement the smallest parser block addition or extension that handles that DOM shape.
-12. Add or extend the focused parser block spec beside the block implementation.
-13. Add one representative sample fixture for the focused support unit with `write-sample-fixture.ts`.
-14. Do not update knowledge documents for routine parser support. Use the Knowledge Boundary below only when the focused diff changes a cross-cutting repository contract.
-15. Run the development verification commands listed below for the changed parser/block area.
-16. Regenerate the report with `--reuseOutputDir <absolute-output-dir> --rerunFailures --focusSupportUnit <key>` so it reflects only the focused unit, fixtures, verification results, and evidence.
-17. Run the Local PR Gate listed below.
-18. Commit, push, and create the ready PR for that focused support unit. With `gh pr create`, do not pass `--draft`.
-19. After PR creation, run `gh pr update-branch <number>` once when the command is available. If GitHub refuses, the branch is already current, or the command fails, report the result and continue; update-branch failure does not block completion.
-20. Before moving to the next unit, run `git status --short`; tracked changes must be clean so code from different PRs cannot mix.
-21. Run `check-support-unit-prs.ts --outputDir <absolute-output-dir>` after each PR and continue until it exits `0`.
+1. Confirm `<blogId>` is absent from `.agents/skills/ingest-blog/checked.txt` before using it as the ingest target, unless the user explicitly confirmed rechecking an already listed id.
+2. Run `collect-blog-errors.ts --blogId <blogId>` unless the user explicitly asked for `--forceFull`.
+3. Append `<blogId>` to `.agents/skills/ingest-blog/checked.txt` on its own line if it is not already present.
+4. Record the absolute `outputDir` printed by the script.
+5. Read `failure-summary.json` and freeze the full `discoveredSupportUnits` list for this ingest turn.
+6. Run `check-support-unit-prs.ts --outputDir <absolute-output-dir>` to see which support units already have ready open PR claims.
+7. Process every missing `supportUnitKey` sequentially in the same working directory. Do not create git worktrees.
+8. For each unit, start from `origin/main` and create or switch to branch `worktree/ingest-blog-<safeSupportUnitKey>`, where `<safeSupportUnitKey>` replaces non-alphanumeric characters with `-`.
+9. Before editing that unit, run `git fetch origin main`.
+10. Skip the unit only when `origin/main` already supports it. A draft PR claim is not complete; convert it to ready or recreate it as ready before ending.
+11. Inspect the focused failed HTML and identify the owning editor/block boundary.
+12. Infer the expected PR file shape before editing. Use the owning editor/block boundary to decide whether this should be an existing-block edit or a new-block addition.
+13. Implement the smallest parser block addition or extension that handles that DOM shape.
+14. Add or extend the focused parser block spec beside the block implementation.
+15. Add one representative sample fixture for the focused support unit with `write-sample-fixture.ts`.
+16. Do not update knowledge documents for routine parser support. Use the Knowledge Boundary below only when the focused diff changes a cross-cutting repository contract.
+17. Run the development verification commands listed below for the changed parser/block area.
+18. Regenerate the report with `--reuseOutputDir <absolute-output-dir> --rerunFailures --focusSupportUnit <key>` so it reflects only the focused unit, fixtures, verification results, and evidence.
+19. Run the Local PR Gate listed below.
+20. Commit, push, and create the ready PR for that focused support unit. With `gh pr create`, do not pass `--draft`.
+21. After PR creation, run `gh pr update-branch <number>` once when the command is available. If GitHub refuses, the branch is already current, or the command fails, report the result and continue; update-branch failure does not block completion.
+22. Before moving to the next unit, run `git status --short`; tracked changes must be clean so code from different PRs cannot mix.
+23. Run `check-support-unit-prs.ts --outputDir <absolute-output-dir>` after each PR and continue until it exits `0`.
 
 Do not rerun the same blog as a full ingest after a completed output exists unless the user asked for `--forceFull` or the reusable manifest is invalid.
 Store shared ingest output and aggregate run state only under ignored `tmp/harness/ingest-blog/<runId>`. Do not use `.cache` for this workflow because it is reserved for app runtime state.
