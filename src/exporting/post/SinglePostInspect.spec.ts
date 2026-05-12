@@ -80,21 +80,14 @@ describe("single post inspect", () => {
 
     expect(diagnostics.parse).toMatchObject({
       status: "failed",
-      error: "파싱 가능한 naver-se2 block이 없습니다: div",
+      error: '파싱 가능한 naver-se2 block이 없습니다: video class="fx _postImage _gifmp4"',
     })
     expect(diagnostics.unsupportedNodes).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          path: "0.1",
-          tagName: "div",
+          path: "0.1.0",
+          tagName: "video",
           unsupported: true,
-          children: expect.arrayContaining([
-            expect.objectContaining({
-              path: "0.1.0",
-              tagName: "video",
-              unsupported: true,
-            }),
-          ]),
         }),
       ]),
     )
