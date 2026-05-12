@@ -18,6 +18,7 @@ describe("NaverSe2SpacerBlock", () => {
       <span style="" _foo="font-family: 나눔고딕, NanumGothic, sans-serif;"> </span>
       <span style="" _foo="font-family: 나눔고딕, NanumGothic, sans-serif;"><b> </b></span>
       <font><br /></font>
+      <o:p></o:p>
     `)
 
     expect(parsed.blocks).toEqual([])

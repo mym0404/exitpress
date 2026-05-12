@@ -13,6 +13,7 @@ const spacerContainerTags = new Set([
   "strong",
   "i",
   "em",
+  "o:p",
   "u",
   "ul",
 ])
