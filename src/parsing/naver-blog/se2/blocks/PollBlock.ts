@@ -4,7 +4,7 @@ import { compactText } from "../../../../shared/text/TextUtils.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
 
 const getPollLink = ({ $node }: Pick<ParserBlockContext, "$node">) => {
-  if (!$node.is("div")) {
+  if (!$node.is("div, p")) {
     return null
   }
 

@@ -3,7 +3,7 @@ import type { ParserBlockContext } from "../../core/BaseBlock.js"
 import { compactText } from "../../../../shared/text/TextUtils.js"
 import { ContainerBlock } from "../../core/BaseBlock.js"
 
-const nestedBlockContainerTags = new Set(["div", "span", "font"])
+const nestedBlockContainerTags = new Set(["div", "span", "font", "strong"])
 const spacerContainerTags = new Set([
   "p",
   "div",
@@ -13,8 +13,11 @@ const spacerContainerTags = new Set([
   "strong",
   "i",
   "em",
+  "o:p",
   "u",
+  "strike",
   "ul",
+  "a",
 ])
 
 const shouldUnwrapNestedBlocks = ({
@@ -37,6 +40,13 @@ const shouldUnwrapNestedBlocks = ({
   )
 
   if (hasMeaningfulDirectText) {
+    return false
+  }
+
+  if (
+    tagName === "strong" &&
+    element.find("table,img,iframe,video,hr,blockquote,pre").length === 0
+  ) {
     return false
   }
 

@@ -19,6 +19,7 @@ import { NaverSe4MaterialBlock } from "./blocks/MaterialBlock.js"
 import { NaverSe4MrBlogBlock } from "./blocks/MrBlogBlock.js"
 import { NaverSe4OembedBlock } from "./blocks/OembedBlock.js"
 import { NaverSe4QuoteBlock } from "./blocks/QuoteBlock.js"
+import { NaverSe4ScheduleBlock } from "./blocks/ScheduleBlock.js"
 import { NaverSe4StickerBlock } from "./blocks/StickerBlock.js"
 import { NaverSe4TableBlock } from "./blocks/TableBlock.js"
 import { NaverSe4TalkTalkBlock } from "./blocks/TalkTalkBlock.js"
@@ -39,6 +40,7 @@ export class NaverBlogSE4Editor extends BaseEditor {
     new NaverSe4VideoBlock(),
     new NaverSe4OembedBlock(),
     new NaverSe4MapBlock(),
+    new NaverSe4ScheduleBlock(),
     new NaverSe4TalkTalkBlock(),
     new NaverSe4TableBlock(),
     new NaverSe4ImageStripBlock(),

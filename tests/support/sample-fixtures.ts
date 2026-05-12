@@ -171,7 +171,10 @@ export const listSampleFixtures = async () => {
 }
 
 const normalizeMarkdownFixture = (markdown: string) =>
-  `${markdown.replace(/\r\n/g, "\n").replace(/\n+$/g, "")}\n`
+  `${markdown
+    .replace(/\r\n/g, "\n")
+    .replace(/([?&]type=)w\d+/g, "$1w")
+    .replace(/\n+$/g, "")}\n`
 
 const resolveSampleFixtureLinkUrl = (url: string) => {
   const volatileDownloadUrl =
