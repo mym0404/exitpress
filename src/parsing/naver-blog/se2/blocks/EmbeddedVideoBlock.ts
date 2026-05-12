@@ -19,11 +19,7 @@ const parseVideoId = (sourceUrl: string) => {
   }
 }
 
-const createEmbeddedVideo = ({
-  iframe,
-}: {
-  iframe: ReturnType<CheerioAPI>
-}) => {
+const createEmbeddedVideo = ({ iframe }: { iframe: ReturnType<CheerioAPI> }) => {
   const sourceUrl = normalizeAssetUrl(iframe.attr("src") ?? "")
 
   if (!sourceUrl) {
