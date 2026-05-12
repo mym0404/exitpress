@@ -85,7 +85,9 @@ export class NaverSe4ImageBlock extends LeafBlock {
     const image =
       parseImageLink($node.find(se4ImageLinkSelector).first()) ??
       (() => {
-        const sourceUrl = getBackgroundImageUrl($node.find(".se-360vr-preview").first().attr("style"))
+        const sourceUrl = getBackgroundImageUrl(
+          $node.find(".se-360vr-preview").first().attr("style"),
+        )
 
         if (!sourceUrl) {
           return null
