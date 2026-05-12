@@ -1,0 +1,30 @@
+import type { ParserBlockContext } from "../../core/BaseBlock.js"
+import { compactText } from "../../../../shared/text/TextUtils.js"
+import { createLinkParagraphBlocks } from "../../common/LinkParagraph.js"
+import { LeafBlock } from "../../core/BaseBlock.js"
+
+export class NaverSe3FileBlock extends LeafBlock {
+  override readonly id = "linkCard"
+  override readonly label = "첨부파일"
+
+  override match({ $node }: ParserBlockContext) {
+    return $node.hasClass("se_file") && $node.hasClass("default")
+  }
+
+  override convert({ $node, options }: Parameters<LeafBlock["convert"]>[0]) {
+    const link = $node.find("a.se_name_area[href]").first()
+    const url = link.attr("href") ?? ""
+
+    if (!url) {
+      throw new Error("SE3 file block parsing failed.")
+    }
+
+    return createLinkParagraphBlocks({
+      title: compactText(link.find(".se_name").text()) || url,
+      description: "",
+      url,
+      hasThumbnail: false,
+      resolveLinkUrl: options.resolveLinkUrl,
+    })
+  }
+}
