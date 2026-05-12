@@ -15,6 +15,7 @@ const spacerContainerTags = new Set([
   "em",
   "u",
   "ul",
+  "a",
 ])
 
 const shouldUnwrapNestedBlocks = ({
