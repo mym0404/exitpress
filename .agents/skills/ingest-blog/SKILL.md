@@ -199,7 +199,7 @@ For a focused support-unit PR:
 - Title must start with exactly `[📦 New Block Parser]` when adding and registering a new parser block.
 - Title must start with exactly `[🎉 Parser Improvement]` when extending or fixing an existing parser block.
 - Do not use any other `ingest-blog` PR title prefix.
-- Add or create the GitHub label `ai-generated`.
+- Add or create the GitHub labels `ai-generated` and `ingest-blog`.
 - Include only the summary and fixed three-section body above.
 - Include a hidden claim marker after the summary: `<!-- ingest-blog:supportUnitKey=<key> -->`.
 - Do not include visible blog names, blog ids, log numbers, source-post URLs, or source-post link labels in the PR body.
