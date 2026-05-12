@@ -6,6 +6,7 @@ import { parseTextBlocks } from "./TextBlock.js"
 const wrappingParagraphLayoutClasses = [
   "se-l-inner-big-left",
   "se-l-inner-big-right",
+  "se-l-inner-left",
   "se-l-inner-right",
 ]
 
