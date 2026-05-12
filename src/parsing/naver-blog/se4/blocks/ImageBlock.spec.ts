@@ -110,6 +110,31 @@ describe("NaverSe4ImageBlock", () => {
     })
   })
 
+  it("falls back to 360vr preview background images", () => {
+    const parsed = parseSe4Blocks(`
+      <div class="se-component se-image se-l-default">
+        <div class="se-module se-module-image se-module-image-360vr">
+          <div
+            class="se-360vr-preview"
+            style="background-image:url('https://example.com/vr.jpg?type=preview966_544');"
+          ></div>
+        </div>
+        <p class="se-image-caption">360 preview</p>
+      </div>
+    `)
+
+    expect(parsed.blocks[0]).toMatchObject({
+      type: "image",
+      image: {
+        sourceUrl: "https://example.com/vr.jpg?type=preview966_544",
+        originalSourceUrl: null,
+        alt: "",
+        caption: "360 preview",
+        mediaKind: "image",
+      },
+    })
+  })
+
   it("uses an empty alt when the image has no alt attribute", () => {
     const parsed = parseSe4Blocks(`
       <div class="se-component se-image">

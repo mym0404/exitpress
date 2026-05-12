@@ -8,6 +8,8 @@ import { NaverSe3DocumentTitleBlock } from "./blocks/DocumentTitleBlock.js"
 import { NaverSe3FileBlock } from "./blocks/FileBlock.js"
 import { NaverSe3ImageBlock } from "./blocks/ImageBlock.js"
 import { NaverSe3LinkCardBlock } from "./blocks/LinkCardBlock.js"
+import { NaverSe3MapBlock } from "./blocks/MapBlock.js"
+import { NaverSe3MapTextBlock } from "./blocks/MapTextBlock.js"
 import { NaverSe3QuoteBlock } from "./blocks/QuoteBlock.js"
 import { NaverSe3SubjectMatterBlock } from "./blocks/SubjectMatterBlock.js"
 import { NaverSe3TableBlock } from "./blocks/TableBlock.js"
@@ -25,6 +27,8 @@ export class NaverBlogSE3Editor extends BaseEditor {
     new NaverSe3QuoteBlock(),
     new NaverSe3CodeBlock(),
     new NaverSe3LinkCardBlock(),
+    new NaverSe3MapBlock(),
+    new NaverSe3MapTextBlock(),
     new NaverSe3VideoBlock(),
     new NaverSe3FileBlock(),
     new NaverSe3SubjectMatterBlock(),
