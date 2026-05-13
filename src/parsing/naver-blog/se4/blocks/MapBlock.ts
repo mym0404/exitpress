@@ -51,36 +51,36 @@ export class NaverSe4MapBlock extends LeafBlock {
       return placesFromModule
     }
 
-    const blocks = $node
-      .find("a.se-map-info")
-      .toArray()
-      .flatMap((node) => {
-        const $link = $node.find(node)
-        const linkData = parseJsonAttribute($link.attr("data-linkdata"))
-        const title =
-          compactText($link.find(".se-map-title").text()) ||
-          compactText(String(linkData?.name ?? ""))
-        /* v8 ignore next */
-        const description =
-          compactText($link.find(".se-map-address").text()) ||
-          compactText(String(linkData?.address ?? ""))
+    const mapLinks = $node.find("a.se-map-info")
+    const blocks = mapLinks.toArray().flatMap((node) => {
+      const $link = $node.find(node)
+      const linkData = parseJsonAttribute($link.attr("data-linkdata"))
+      const title =
+        compactText($link.find(".se-map-title").text()) || compactText(String(linkData?.name ?? ""))
+      /* v8 ignore next */
+      const description =
+        compactText($link.find(".se-map-address").text()) ||
+        compactText(String(linkData?.address ?? ""))
 
-        /* v8 ignore next 3 */
-        if (!title) {
-          return []
-        }
+      if (!title) {
+        return []
+      }
 
-        return createLinkParagraphBlocks({
-          title,
-          description,
-          url:
-            typeof linkData?.bookingUrl === "string" && linkData.bookingUrl.trim()
-              ? linkData.bookingUrl.trim()
-              : buildNaverMapSearchUrl(title),
-          hasThumbnail: false,
-          resolveLinkUrl: options.resolveLinkUrl,
-        })
+      return createLinkParagraphBlocks({
+        title,
+        description,
+        url:
+          typeof linkData?.bookingUrl === "string" && linkData.bookingUrl.trim()
+            ? linkData.bookingUrl.trim()
+            : buildNaverMapSearchUrl(title),
+        hasThumbnail: false,
+        resolveLinkUrl: options.resolveLinkUrl,
       })
+    })
+
+    if (blocks.length === 0 && (data.places?.length || mapLinks.length > 0)) {
+      throw new Error("SE4 map block parsing failed.")
+    }
 
     return blocks
   }

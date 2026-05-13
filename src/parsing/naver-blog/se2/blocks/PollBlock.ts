@@ -2,6 +2,7 @@ import type { ParserBlockContext } from "../../core/BaseBlock.js"
 import { normalizeAssetUrl } from "../../../../domain/blog/NaverUrl.js"
 import { compactText } from "../../../../shared/text/TextUtils.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
+import { hasOnlyTargetContent } from "./util/WrapperContent.js"
 
 const getPollLink = ({ $node }: Pick<ParserBlockContext, "$node">) => {
   if (!$node.is("div, p")) {
@@ -14,14 +15,12 @@ const getPollLink = ({ $node }: Pick<ParserBlockContext, "$node">) => {
     return null
   }
 
-  const cloneWithoutPoll = $node.clone()
-  cloneWithoutPoll.find("style, iframe.poll_iframe").remove()
-
-  if (cloneWithoutPoll.find("img, iframe, video, table").length > 0) {
-    return null
-  }
-
-  if (compactText(cloneWithoutPoll.text())) {
+  if (
+    !hasOnlyTargetContent({
+      element: $node,
+      targetSelector: "iframe.poll_iframe",
+    })
+  ) {
     return null
   }
 
@@ -48,9 +47,8 @@ export class NaverSe2PollBlock extends LeafBlock {
   override convert({ $node }: Parameters<LeafBlock["convert"]>[0]) {
     const poll = getPollLink({ $node })
 
-    /* v8 ignore next 3 */
     if (!poll) {
-      return []
+      throw new Error("SE2 poll block parsing failed.")
     }
 
     return [{ type: "paragraph" as const, text: `[${poll.title}](${poll.sourceUrl})` }]

@@ -1,9 +1,11 @@
+import type { AnyNode } from "domhandler"
 import type { OutputOption } from "../../../../domain/ast/Types.js"
 import type { UnknownRecord } from "../../../../shared/object/UnknownRecord.js"
 import type { ParserBlockContext } from "../../core/BaseBlock.js"
 import { compactText } from "../../../../shared/text/TextUtils.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
 import { parseJsonAttribute } from "../../core/JsonAttribute.js"
+import { findInComponentRoot } from "./util/ComponentBoundary.js"
 
 const parseDimension = (value: unknown) => {
   if (typeof value === "string" && !compactText(value)) {
@@ -18,17 +20,38 @@ const parseDimension = (value: unknown) => {
 const getRecord = (value: unknown) =>
   value && typeof value === "object" && !Array.isArray(value) ? (value as UnknownRecord) : {}
 
-const getVideoModuleData = ({ $node }: Pick<ParserBlockContext, "$node">) => {
-  const mediaId = $node.find(".se_mediaArea[id]").first().attr("id")
+const getAdjacentModuleScripts = ({ $, $node }: Pick<ParserBlockContext, "$" | "$node">) => {
+  const scripts: AnyNode[] = []
+  const siblings = $node.nextAll()
 
-  if (!mediaId) {
-    return parseJsonAttribute($node.nextAll("script.__se_module_data").first().attr("data-module"))
+  for (let index = 0; index < siblings.length; index += 1) {
+    const sibling = siblings[index]!
+    const $sibling = $(sibling)
+
+    if ($sibling.hasClass("se_component")) {
+      break
+    }
+
+    if ($sibling.is("script.__se_module_data")) {
+      scripts.push(sibling)
+    }
   }
 
-  const moduleScripts = $node.nextAll("script.__se_module_data")
+  return scripts
+}
+
+const getVideoModuleData = ({ $, $node }: Pick<ParserBlockContext, "$" | "$node">) => {
+  const mediaId = findInComponentRoot({ $, $component: $node, selector: ".se_mediaArea[id]" })
+    .first()
+    .attr("id")
+  const moduleScripts = getAdjacentModuleScripts({ $, $node })
+
+  if (!mediaId) {
+    return parseJsonAttribute($(moduleScripts[0]).attr("data-module"))
+  }
 
   for (let index = 0; index < moduleScripts.length; index += 1) {
-    const moduleData = parseJsonAttribute(moduleScripts.eq(index).attr("data-module"))
+    const moduleData = parseJsonAttribute($(moduleScripts[index]).attr("data-module"))
     const data = getRecord(moduleData?.data)
 
     if (moduleData?.id === mediaId || data.baseElId === mediaId) {
@@ -67,10 +90,17 @@ export class NaverSe3VideoBlock extends LeafBlock {
     return $node.hasClass("se_video") && $node.hasClass("default")
   }
 
-  override convert({ $node, sourceUrl = "" }: Parameters<LeafBlock["convert"]>[0]) {
-    const moduleData = getVideoModuleData({ $node })
+  override convert({ $, $node, sourceUrl = "" }: Parameters<LeafBlock["convert"]>[0]) {
+    const moduleData = getVideoModuleData({ $, $node })
     const data = getRecord(moduleData?.data)
-    const title = compactText($node.find(".se_mediaCaption .se_textarea").text()) || "Video"
+    const title =
+      compactText(
+        findInComponentRoot({
+          $,
+          $component: $node,
+          selector: ".se_mediaCaption .se_textarea",
+        }).text(),
+      ) || "Video"
 
     return [
       {

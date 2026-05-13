@@ -33,7 +33,7 @@ export class NaverSe4VideoBlock extends LeafBlock {
   }
 
   override convert({ moduleData, sourceUrl }: Parameters<LeafBlock["convert"]>[0]) {
-    const data = ((moduleData ?? {}).data ?? {}) as UnknownRecord & {
+    const data = (moduleData?.data ?? {}) as UnknownRecord & {
       thumbnail?: string
       vid?: string
       inkey?: string

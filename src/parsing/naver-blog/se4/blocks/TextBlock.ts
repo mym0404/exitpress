@@ -75,9 +75,11 @@ const parseRecommendationTextBlocks = (texts: string[]) => {
 }
 
 export const parseTextBlocks = ({
+  $,
   $node,
   options,
 }: {
+  $: Parameters<LeafBlock["convert"]>[0]["$"]
   $node: Parameters<LeafBlock["convert"]>[0]["$node"]
   options: ParserBlockContext["options"]
 }) => {
@@ -115,6 +117,24 @@ export const parseTextBlocks = ({
 
     return toParagraphBlock(lines.join("\n"))
   }
+  const parseLooseNode = (node: AnyNode) => {
+    if (!isElementNode(node)) {
+      return node.type === "text" ? toParagraphBlock(compactMarkdownText(node.data)) : []
+    }
+
+    if (node.type === "script" || node.type === "style") {
+      return []
+    }
+
+    return toParagraphBlock(
+      compactMarkdownText(
+        convertHtmlToMarkdown({
+          html: $.html(node) ?? $node.find(node).text(),
+          resolveLinkUrl: options.resolveLinkUrl,
+        }),
+      ),
+    )
+  }
   const parseContainer = (container: Element) =>
     $node
       .find(container)
@@ -122,7 +142,7 @@ export const parseTextBlocks = ({
       .toArray()
       .flatMap((child) => {
         if (!isElementNode(child)) {
-          return []
+          return parseLooseNode(child)
         }
 
         const $child = $node.find(child)
@@ -136,7 +156,7 @@ export const parseTextBlocks = ({
           return parseList(child)
         }
 
-        return []
+        return parseLooseNode(child)
       })
 
   const textModules = $node.find(".se-module-text").toArray()
@@ -165,7 +185,7 @@ export class NaverSe4TextBlock extends LeafBlock {
     return moduleType === "v2_text" || $node.hasClass("se-text")
   }
 
-  override convert({ $node, options }: Parameters<LeafBlock["convert"]>[0]) {
-    return parseTextBlocks({ $node, options })
+  override convert({ $, $node, options }: Parameters<LeafBlock["convert"]>[0]) {
+    return parseTextBlocks({ $, $node, options })
   }
 }

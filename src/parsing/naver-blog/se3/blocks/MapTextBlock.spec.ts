@@ -25,4 +25,14 @@ describe("NaverSe3MapTextBlock", () => {
       { type: "paragraph", text: "전라북도 부안군 진서면 청자로 1076 슬지제빵소" },
     ])
   })
+
+  it("throws instead of dropping matched text map components without a title", () => {
+    expect(() =>
+      parseSe3Blocks(`
+        <div class="se_component se_map map_text">
+          <div class="se_address">전라북도 부안군 진서면 청자로 1076 슬지제빵소</div>
+        </div>
+      `),
+    ).toThrow("SE3 map block parsing failed.")
+  })
 })

@@ -2,8 +2,8 @@ import type { CheerioAPI } from "cheerio"
 import type { ImageData } from "../../../../domain/ast/Types.js"
 import type { ParserBlockContext } from "../../core/BaseBlock.js"
 import { normalizeAssetUrl } from "../../../../domain/blog/NaverUrl.js"
-import { compactText } from "../../../../shared/text/TextUtils.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
+import { hasOnlyTargetContent } from "./util/WrapperContent.js"
 
 const getInlineGifVideoImage = ({ $node }: { $node: ReturnType<CheerioAPI> }): ImageData | null => {
   if (!$node.is("p, div, span, video")) {
@@ -21,17 +21,12 @@ const getInlineGifVideoImage = ({ $node }: { $node: ReturnType<CheerioAPI> }): I
   const video = videos.first()
 
   if (!$node.is("video")) {
-    const cloneWithoutVideo = $node.clone()
-
-    cloneWithoutVideo.find("video.fx._postImage._gifmp4").remove()
-
-    if (cloneWithoutVideo.find("img, iframe, video, table").length > 0) {
-      return null
-    }
-
-    const textWithoutVideo = compactText(cloneWithoutVideo.text())
-
-    if (textWithoutVideo) {
+    if (
+      !hasOnlyTargetContent({
+        element: $node,
+        targetSelector: "video.fx._postImage._gifmp4",
+      })
+    ) {
       return null
     }
   }
@@ -66,9 +61,8 @@ export class NaverSe2InlineGifVideoBlock extends LeafBlock {
   override convert({ $node }: Parameters<LeafBlock["convert"]>[0]) {
     const image = getInlineGifVideoImage({ $node })
 
-    /* v8 ignore next 3 */
     if (!image) {
-      return []
+      throw new Error("SE2 inline GIF video block parsing failed.")
     }
 
     return [{ type: "image" as const, image }]

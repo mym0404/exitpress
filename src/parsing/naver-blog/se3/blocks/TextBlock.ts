@@ -3,6 +3,9 @@ import type { ParserBlockContext } from "../../core/BaseBlock.js"
 import { convertHtmlToMarkdown } from "../../../../markdown/TurndownMarkdownConverter.js"
 import { compactMarkdownText } from "../../../../shared/text/TextUtils.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
+import { findInComponentRoot } from "./util/ComponentBoundary.js"
+
+const textComponentClasses = ["se_text", "se_paragraph", "se_sectionTitle"]
 
 const parseTextBlocks = ({
   $,
@@ -13,8 +16,7 @@ const parseTextBlocks = ({
   $component: ReturnType<CheerioAPI>
   options: ParserBlockContext["options"]
 }) =>
-  $component
-    .find(".se_textarea")
+  findInComponentRoot({ $, $component, selector: ".se_textarea" })
     .toArray()
     .map((node) =>
       convertHtmlToMarkdown({
@@ -34,8 +36,11 @@ export class NaverSe3TextBlock extends LeafBlock {
   override readonly id = "paragraph"
   override readonly label = "문단"
 
-  override match({ $node }: ParserBlockContext) {
-    return $node.find(".se_textarea").length > 0
+  override match({ $, $node }: ParserBlockContext) {
+    return (
+      textComponentClasses.some((className) => $node.hasClass(className)) &&
+      findInComponentRoot({ $, $component: $node, selector: ".se_textarea" }).length > 0
+    )
   }
 
   override convert({ $, $node, options }: Parameters<LeafBlock["convert"]>[0]) {

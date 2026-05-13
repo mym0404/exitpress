@@ -12,6 +12,16 @@ describe("NaverSe3QuoteBlock", () => {
     expect(parsed.blocks).toEqual([{ type: "quote", text: "Quoted **SE3**" }])
   })
 
+  it("parses legacy quotation components into quote blocks", () => {
+    const parsed = parseSe3Blocks(`
+      <div class="se_component se_quotation quotation_line">
+        <blockquote><p>Legacy quote</p></blockquote>
+      </div>
+    `)
+
+    expect(parsed.blocks).toEqual([{ type: "quote", text: "Legacy quote" }])
+  })
+
   it("throws when a quote has no markdown content", () => {
     expect(() =>
       parseSe3Blocks(`

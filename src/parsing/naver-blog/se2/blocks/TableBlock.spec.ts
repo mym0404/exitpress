@@ -226,12 +226,12 @@ describe("NaverSe2TableBlock", () => {
     })
   })
 
-  it("skips non-table Color Scripter wrappers without code", () => {
+  it("preserves non-table Color Scripter wrapper text without code", () => {
     const parsed = parseSe2Blocks(`
       <div class="colorscripter-code-table">not code</div>
     `)
 
-    expect(parsed.blocks).toEqual([])
+    expect(parsed.blocks).toEqual([{ type: "paragraph", text: "not code" }])
   })
 
   it("applies every output option", () => {

@@ -58,4 +58,32 @@ describe("NaverSe3TextBlock", () => {
       { type: "paragraph", text: "Alpha [link](https://example.com)" },
     ])
   })
+
+  it("parses legacy paragraph and section title text components", () => {
+    const parsed = parseSe3Blocks(`
+      <div class="se_component se_paragraph default">
+        <div class="se_textarea">Paragraph text</div>
+      </div>
+      <div class="se_component se_sectionTitle">
+        <div class="se_textarea">Section title text</div>
+      </div>
+    `)
+
+    expect(parsed.blocks).toEqual([
+      { type: "paragraph", text: "Paragraph text" },
+      { type: "paragraph", text: "Section title text" },
+    ])
+  })
+
+  it("does not absorb text areas from nested components", () => {
+    expect(() =>
+      parseSe3Blocks(`
+        <div class="se_component se_unknown">
+          <div class="se_component se_text">
+            <div class="se_textarea">Nested text</div>
+          </div>
+        </div>
+      `),
+    ).toThrow("파싱 가능한 naver-se3 block이 없습니다")
+  })
 })

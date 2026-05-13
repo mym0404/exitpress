@@ -3,6 +3,7 @@ import type { ParserBlockContext } from "../../core/BaseBlock.js"
 import { normalizeAssetUrl } from "../../../../domain/blog/NaverUrl.js"
 import { compactText } from "../../../../shared/text/TextUtils.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
+import { findInComponentRoot } from "./util/ComponentBoundary.js"
 
 export class NaverSe3SubjectMatterBlock extends LeafBlock {
   override readonly id = "subjectMatter"
@@ -12,9 +13,13 @@ export class NaverSe3SubjectMatterBlock extends LeafBlock {
     return $node.hasClass("se_subjectMatter") && $node.hasClass("subjectMatter_book")
   }
 
-  override convert({ $node, options }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ $, $node, options }: Parameters<LeafBlock["convert"]>[0]) {
     const blocks = []
-    const imageNode = $node.find(".subjectMatter_thumb img").first()
+    const imageNode = findInComponentRoot({
+      $,
+      $component: $node,
+      selector: ".subjectMatter_thumb img",
+    }).first()
     const imageSource = imageNode.attr("data-lazy-src") ?? imageNode.attr("src")
 
     if (imageSource?.trim()) {
@@ -30,12 +35,19 @@ export class NaverSe3SubjectMatterBlock extends LeafBlock {
       })
     }
 
-    const title = compactText($node.find(".subjectMatter_title_text").first().text())
-    const details = $node
-      .find(".subjectMatter_info_item")
+    const title = compactText(
+      findInComponentRoot({ $, $component: $node, selector: ".subjectMatter_title_text" })
+        .first()
+        .text(),
+    )
+    const details = findInComponentRoot({
+      $,
+      $component: $node,
+      selector: ".subjectMatter_info_item",
+    })
       .toArray()
       .map((node) => {
-        const detailNode = $node.find(node)
+        const detailNode = $(node)
         const label = compactText(detailNode.find(".subjectMatter_info_title").first().text())
         const value = compactText(detailNode.find(".subjectMatter_info_text").first().text())
 
@@ -55,7 +67,11 @@ export class NaverSe3SubjectMatterBlock extends LeafBlock {
       })
     }
 
-    const detailLink = $node.find("a.subjectMatter_item_link").first()
+    const detailLink = findInComponentRoot({
+      $,
+      $component: $node,
+      selector: "a.subjectMatter_item_link",
+    }).first()
     const detailUrl = detailLink.attr("href")?.trim()
 
     if (detailUrl) {

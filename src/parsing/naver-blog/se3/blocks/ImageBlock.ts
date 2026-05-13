@@ -1,9 +1,9 @@
 import type { CheerioAPI } from "cheerio"
-import type { ImageData, OutputOption } from "../../../../domain/ast/Types.js"
+import type { AstBlock, ImageData, OutputOption } from "../../../../domain/ast/Types.js"
 import type { ParserBlockContext } from "../../core/BaseBlock.js"
 import { normalizeAssetUrl } from "../../../../domain/blog/NaverUrl.js"
-import { compactText } from "../../../../shared/text/TextUtils.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
+import { findInComponentRoot, textOutsideNestedComponents } from "./util/ComponentBoundary.js"
 
 const standaloneImageSelector = "img, video._gifmp4.se_mediaImage[data-gif-url]"
 const imageOutputParams = [
@@ -16,15 +16,14 @@ const imageOutputParams = [
   },
 ] satisfies NonNullable<OutputOption<"image">["params"]>
 
-const getStandaloneImages = ({
+const getStandaloneImageContent = ({
   $,
   $component,
 }: {
   $: CheerioAPI
   $component: ReturnType<CheerioAPI>
 }) => {
-  const images = $component
-    .find(standaloneImageSelector)
+  const images = findInComponentRoot({ $, $component, selector: standaloneImageSelector })
     .toArray()
     .map((node): ImageData | null => {
       const $image = $(node)
@@ -51,11 +50,12 @@ const getStandaloneImages = ({
     })
     .filter((image): image is ImageData => image !== null)
 
-  const textWithoutImages = compactText(
-    $component.clone().find(standaloneImageSelector).remove().end().text(),
-  )
+  const text = textOutsideNestedComponents({
+    $component,
+    selector: standaloneImageSelector,
+  })
 
-  return textWithoutImages ? [] : images
+  return { images, text }
 }
 
 export class NaverSe3ImageBlock extends LeafBlock {
@@ -114,16 +114,25 @@ export class NaverSe3ImageBlock extends LeafBlock {
   ] satisfies OutputOption<"image">[]
 
   override match({ $, $node }: ParserBlockContext) {
-    return getStandaloneImages({ $, $component: $node }).length > 0
+    return (
+      ($node.hasClass("se_image") ||
+        $node.hasClass("se_sticker") ||
+        $node.hasClass("se_imageStrip")) &&
+      getStandaloneImageContent({ $, $component: $node }).images.length > 0
+    )
   }
 
   override convert({ $, $node }: Parameters<LeafBlock["convert"]>[0]) {
-    const standaloneImages = getStandaloneImages({ $, $component: $node })
+    const { images, text } = getStandaloneImageContent({ $, $component: $node })
+    const blocks: AstBlock[] =
+      images.length === 1
+        ? [{ type: "image" as const, image: images[0]! }]
+        : [{ type: "imageGroup" as const, images }]
 
-    if (standaloneImages.length === 1) {
-      return [{ type: "image" as const, image: standaloneImages[0]! }]
+    if (text) {
+      blocks.push({ type: "paragraph", text })
     }
 
-    return [{ type: "imageGroup" as const, images: standaloneImages }]
+    return blocks
   }
 }

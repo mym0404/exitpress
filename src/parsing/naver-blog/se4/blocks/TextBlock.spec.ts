@@ -86,13 +86,13 @@ describe("NaverSe4TextBlock", () => {
     ])
   })
 
-  it("keeps short recommendation-like text as paragraphs", () => {
+  it("preserves loose text-like children in text modules", () => {
     const parsed = parseSe4Blocks(`
       <div class="se-component se-text">
         ${createSe4ModuleScript({ type: "v2_text" })}
         <div class="se-module-text">
           text
-          <span>ignored child</span>
+          <span>loose child</span>
           <p class="se-text-paragraph">추천트렌드</p>
           <p class="se-text-paragraph">상품 하나</p>
         </div>
@@ -100,8 +100,55 @@ describe("NaverSe4TextBlock", () => {
     `)
 
     expect(parsed.blocks).toEqual([
+      { type: "paragraph", text: "text" },
+      { type: "paragraph", text: "loose child" },
       { type: "paragraph", text: "추천트렌드" },
       { type: "paragraph", text: "상품 하나" },
+    ])
+  })
+
+  it("preserves loose link children in text modules", () => {
+    const parsed = parseSe4Blocks(`
+      <div class="se-component se-text">
+        ${createSe4ModuleScript({ type: "v2_text" })}
+        <div class="se-module-text">
+          <a href="https://example.com">loose link</a>
+        </div>
+      </div>
+    `)
+
+    expect(parsed.blocks).toEqual([
+      { type: "paragraph", text: "[loose link](https://example.com)" },
+    ])
+  })
+
+  it("keeps short recommendation-like text as paragraphs", () => {
+    const parsed = parseSe4Blocks(`
+      <div class="se-component se-text">
+        ${createSe4ModuleScript({ type: "v2_text" })}
+        <p class="se-text-paragraph">추천트렌드</p>
+        <p class="se-text-paragraph">상품 하나</p>
+      </div>
+    `)
+
+    expect(parsed.blocks).toEqual([
+      { type: "paragraph", text: "추천트렌드" },
+      { type: "paragraph", text: "상품 하나" },
+    ])
+  })
+
+  it("lets earlier link-like blocks win over text class fallback", () => {
+    const parsed = parseSe4Blocks(`
+      <div class="se-component se-text se-oglink">
+        ${createSe4ModuleScript({ type: "v2_oglink" })}
+        <a class="se-oglink-info" href="https://example.com/article"></a>
+        <strong class="se-oglink-title">External article</strong>
+        <p class="se-text-paragraph">fallback text</p>
+      </div>
+    `)
+
+    expect(parsed.blocks).toEqual([
+      { type: "paragraph", text: "[External article](https://example.com/article)" },
     ])
   })
 

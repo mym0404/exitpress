@@ -24,4 +24,14 @@ describe("NaverSe3MapBlock", () => {
       { type: "paragraph", text: "경상남도 산청군 시천면 지리산대로 373" },
     ])
   })
+
+  it("throws instead of dropping matched map components without a title", () => {
+    expect(() =>
+      parseSe3Blocks(`
+        <div class="se_component se_map default">
+          <div class="se_address">경상남도 산청군 시천면 지리산대로 373</div>
+        </div>
+      `),
+    ).toThrow("SE3 map block parsing failed.")
+  })
 })

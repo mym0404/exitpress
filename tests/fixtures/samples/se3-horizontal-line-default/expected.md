@@ -138,6 +138,8 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/MjAxODExMTNfMjI3/MDAxNTQyMDcxNzE
 **2019타일트렌드**와 **2019인테리어트렌드**를 선도해보시는 건 어떨까요?  
 더많은 클라의 **디자인타일**과 만나고자 하신다면?
 
+![](https://mblogthumb-phinf.pstatic.net/MjAxODExMTNfMjE1/MDAxNTQyMDkxMzIzMjk5.JQEB6jTmOHpeejhqOcG_NPGb9PFT2Aqe_TY0mC52Ldgg.lU68PhQgh2Ap_BNtW-k6hJZeShTk_DTS44JkNGwHIYIg.JPEG.showeclatkorea/%EB%AC%B4%EC%A0%9C-1.jpg?type=w800)
+
 ▲click!
 
 ![스티커 이미지](https://storep-phinf.pstatic.net/linebiz21_01/original_10.png?type=p100_100)

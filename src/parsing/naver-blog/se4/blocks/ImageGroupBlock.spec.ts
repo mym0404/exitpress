@@ -42,6 +42,32 @@ describe("NaverSe4ImageGroupBlock", () => {
     ])
   })
 
+  it("lets image group module metadata win over image class fallback", () => {
+    const parsed = parseSe4Blocks(`
+      <div class="se-component se-image se-image-group">
+        ${createSe4ModuleScript({ type: "v2_imageGroup" })}
+        <a class="se-module-image-link" data-linkdata='{"src":"https://example.com/group.png"}'>
+          <img src="https://example.com/group.png" alt="group" />
+        </a>
+      </div>
+    `)
+
+    expect(parsed.blocks).toEqual([
+      {
+        type: "imageGroup",
+        images: [
+          {
+            sourceUrl: "https://example.com/group.png",
+            originalSourceUrl: "https://example.com/group.png",
+            alt: "group",
+            caption: null,
+            mediaKind: "image",
+          },
+        ],
+      },
+    ])
+  })
+
   it("throws when an image group has no parseable images", () => {
     expect(() =>
       parseSe4Blocks(`

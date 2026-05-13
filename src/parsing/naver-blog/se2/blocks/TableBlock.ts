@@ -1,6 +1,7 @@
 import type { CheerioAPI } from "cheerio"
 import type { AstBlock, OutputOption } from "../../../../domain/ast/Types.js"
 import type { ParserBlockContext } from "../../core/BaseBlock.js"
+import { convertHtmlToMarkdown } from "../../../../markdown/TurndownMarkdownConverter.js"
 import { compactText } from "../../../../shared/text/TextUtils.js"
 import { parseHtmlTable } from "../../common/parseHtmlTable.js"
 import { parseSingleColumnTableAsParagraphs } from "../../common/Table.js"
@@ -89,12 +90,25 @@ export class NaverSe2TableBlock extends LeafBlock {
       return [colorScripterCodeBlock]
     }
 
-    if ($node.hasClass("colorscripter-code-table") && compactText($node.text()) === "") {
-      return []
+    if ($node.hasClass("colorscripter-code-table")) {
+      const text = compactText($node.text())
+
+      if (!text) {
+        return []
+      }
+
+      if (!$node.is("table")) {
+        const markdown = convertHtmlToMarkdown({
+          html: $.html($node) ?? "",
+          resolveLinkUrl: options.resolveLinkUrl,
+        })
+
+        return [{ type: "paragraph" as const, text: markdown || text }]
+      }
     }
 
     if (!$node.is("table")) {
-      return []
+      throw new Error("SE2 table block parsing failed.")
     }
 
     const parsedTable = parseHtmlTable({ $, table: $node })

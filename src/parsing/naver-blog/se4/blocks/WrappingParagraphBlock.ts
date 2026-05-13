@@ -1,7 +1,7 @@
 import type { ParserBlockContext } from "../../core/BaseBlock.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
-import { parseImageLink, se4ImageLinkSelector } from "./ImageLink.js"
 import { parseTextBlocks } from "./TextBlock.js"
+import { parseImageLink, se4ImageLinkSelector } from "./util/ImageLink.js"
 
 const wrappingParagraphLayoutClasses = [
   "se-l-inner-big-left",
@@ -21,7 +21,7 @@ export class NaverSe4WrappingParagraphBlock extends LeafBlock {
     )
   }
 
-  override convert({ $node, options }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ $, $node, options }: Parameters<LeafBlock["convert"]>[0]) {
     const $imageSlot = $node.find(".se-component-slot-float").first()
     const imageBlocks = []
 
@@ -39,6 +39,7 @@ export class NaverSe4WrappingParagraphBlock extends LeafBlock {
     const textBlocks =
       $textSlot.length > 0
         ? parseTextBlocks({
+            $,
             $node: $textSlot,
             options,
           })

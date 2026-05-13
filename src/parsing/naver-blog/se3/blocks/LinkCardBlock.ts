@@ -3,6 +3,7 @@ import { compactText } from "../../../../shared/text/TextUtils.js"
 import { createLinkParagraphBlocks } from "../../common/LinkParagraph.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
 import { parseJsonAttribute } from "../../core/JsonAttribute.js"
+import { findInComponentRoot } from "./util/ComponentBoundary.js"
 
 export class NaverSe3LinkCardBlock extends LeafBlock {
   override readonly id = "linkCard"
@@ -12,8 +13,8 @@ export class NaverSe3LinkCardBlock extends LeafBlock {
     return $node.hasClass("se_oglink")
   }
 
-  override convert({ $node, options }: Parameters<LeafBlock["convert"]>[0]) {
-    const linkNode = $node.find("a.se_og_box").first()
+  override convert({ $, $node, options }: Parameters<LeafBlock["convert"]>[0]) {
+    const linkNode = findInComponentRoot({ $, $component: $node, selector: "a.se_og_box" }).first()
     const linkData = parseJsonAttribute(linkNode.attr("data-linkdata"))
     const url = linkNode.attr("href") ?? (typeof linkData?.link === "string" ? linkData.link : "")
 
@@ -21,15 +22,23 @@ export class NaverSe3LinkCardBlock extends LeafBlock {
       throw new Error("SE3 link card block parsing failed.")
     }
 
-    const thumbnailSource =
-      $node.find(".se_og_thumb img").first().attr("data-lazy-src") ??
-      $node.find(".se_og_thumb img").first().attr("src")
+    const thumbnail = findInComponentRoot({
+      $,
+      $component: $node,
+      selector: ".se_og_thumb img",
+    }).first()
+    const title = compactText(
+      findInComponentRoot({ $, $component: $node, selector: ".se_og_tit" }).first().text(),
+    )
+    const description = findInComponentRoot({ $, $component: $node, selector: ".se_og_desc" })
+      .first()
+      .text()
 
     return createLinkParagraphBlocks({
-      title: compactText($node.find(".se_og_tit").first().text()) || url,
-      description: $node.find(".se_og_desc").first().text(),
+      title: title || url,
+      description,
       url,
-      hasThumbnail: Boolean(thumbnailSource),
+      hasThumbnail: Boolean(thumbnail.attr("data-lazy-src") ?? thumbnail.attr("src")),
       resolveLinkUrl: options.resolveLinkUrl,
     })
   }

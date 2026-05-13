@@ -123,4 +123,34 @@ describe("NaverSe3VideoBlock", () => {
       },
     })
   })
+
+  it("does not use module data past the next component boundary", () => {
+    const parsed = parseSe3Blocks(
+      `
+        <div class="se_component se_video default">
+          <div class="se_viewArea">
+            <div id="video-target" class="se_mediaArea"></div>
+          </div>
+        </div>
+      `,
+      `
+        <div class="se_component se_text">
+          <div class="se_textarea">After video</div>
+        </div>
+        <script
+          type="text/data"
+          class="__se_module_data"
+          data-module='{"type":"v1_video","id":"video-target","data":{"baseElId":"video-target","vid":"leaked","inkey":"leaked"}}'
+        ></script>
+      `,
+    )
+
+    expect(parsed.blocks[0]).toMatchObject({
+      type: "video",
+      video: {
+        vid: null,
+        inkey: null,
+      },
+    })
+  })
 })

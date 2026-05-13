@@ -2,6 +2,7 @@ import type { OutputOption } from "../../../../domain/ast/Types.js"
 import type { ParserBlockContext } from "../../core/BaseBlock.js"
 import { parseHtmlTable } from "../../common/parseHtmlTable.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
+import { findInComponentRoot } from "./util/ComponentBoundary.js"
 
 export class NaverSe3TableBlock extends LeafBlock {
   override readonly id = "table"
@@ -38,12 +39,16 @@ export class NaverSe3TableBlock extends LeafBlock {
     },
   ] satisfies OutputOption<"table">[]
 
-  override match({ $node }: ParserBlockContext) {
-    return $node.find("table").first().length > 0
+  override match({ $, $node }: ParserBlockContext) {
+    return (
+      $node.hasClass("se_table") &&
+      findInComponentRoot({ $, $component: $node, selector: "table" }).first().length > 0
+    )
   }
 
   override convert({ $, $node }: Parameters<LeafBlock["convert"]>[0]) {
-    const parsedTable = parseHtmlTable({ $, table: $node.find("table").first() })
+    const table = findInComponentRoot({ $, $component: $node, selector: "table" }).first()
+    const parsedTable = parseHtmlTable({ $, table })
 
     return [
       {

@@ -4,6 +4,7 @@ import type { ParserBlockContext } from "../../core/BaseBlock.js"
 import { normalizeAssetUrl } from "../../../../domain/blog/NaverUrl.js"
 import { compactText } from "../../../../shared/text/TextUtils.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
+import { hasOnlyTargetContent } from "./util/WrapperContent.js"
 
 const parseDimension = (value: string | undefined) => {
   const parsed = Number(value)
@@ -62,14 +63,12 @@ const getEmbeddedVideos = ({ $, $node }: { $: CheerioAPI; $node: ReturnType<Chee
   }
 
   if (!isVideoContainer) {
-    const cloneWithoutVideo = $node.clone()
-    cloneWithoutVideo.find("style, span._outerVideo, span._naverVideo").remove()
-
-    if (cloneWithoutVideo.find("img, iframe, video, table").length > 0) {
-      return null
-    }
-
-    if (compactText(cloneWithoutVideo.text())) {
+    if (
+      !hasOnlyTargetContent({
+        element: $node,
+        targetSelector: "span._outerVideo, span._naverVideo",
+      })
+    ) {
       return null
     }
   }
@@ -126,9 +125,8 @@ export class NaverSe2EmbeddedVideoBlock extends LeafBlock {
   override convert({ $, $node }: Parameters<LeafBlock["convert"]>[0]) {
     const videos = getEmbeddedVideos({ $, $node })
 
-    /* v8 ignore next 3 */
     if (!videos) {
-      return []
+      throw new Error("SE2 embedded video block parsing failed.")
     }
 
     return videos.map((video) => ({ type: "video" as const, video }))

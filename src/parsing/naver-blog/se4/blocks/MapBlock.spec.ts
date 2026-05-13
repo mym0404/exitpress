@@ -117,14 +117,14 @@ describe("NaverSe4MapBlock", () => {
     ])
   })
 
-  it("skips DOM map links without a title", () => {
-    const parsed = parseSe4Blocks(`
-      <div class="se-component se-placesMap">
-        <a class="se-map-info" data-linkdata='{"address":"주소만 있음"}'></a>
-      </div>
-    `)
-
-    expect(parsed.blocks).toEqual([])
+  it("throws instead of dropping DOM map links without a title", () => {
+    expect(() =>
+      parseSe4Blocks(`
+        <div class="se-component se-placesMap">
+          <a class="se-map-info" data-linkdata='{"address":"주소만 있음"}'></a>
+        </div>
+      `),
+    ).toThrow("SE4 map block parsing failed.")
   })
 
   it("uses an empty description for DOM map links without an address", () => {

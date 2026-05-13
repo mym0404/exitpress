@@ -31,6 +31,10 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/MjAxODEwMDRfMTM2/MDAxNTM4NjUyNzU
 
 ![](https://mblogthumb-phinf.pstatic.net/MjAxODEwMDRfMTM2/MDAxNTM4NjUyNzU5MTU5.LI-VSqgG5fgxUJfbuIHBEDukKqcHVmNZK3F9wPC0c_Qg.on3vhcgPAWus0kbex4vTA6_AHflXAwA7N2bPblkuyTog.JPEG.naver_diary/%EC%B2%AD%EA%B0%95%EC%9B%90_%EB%B8%94%EB%A1%9C%EA%B7%B8.jpg?type=w800)
 
+![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2FMjAxODA5MzBfNzcg%2FMDAxNTM4MzA4ODA2MzU5.LYNIVhdl5k1iscaDjgi2iKirEp7-C15PKFw8xcSeruEg.8d2xXO0cbfgbCUpIJj34Oxbi2ybtWekVjQMW3YJ6lL0g.JPEG.shanti_prajna%2FDSC_9327.jpg%3Ftype%3Dw773%22&type=w2)
+
+![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2FMjAxODA5MzBfMjUz%2FMDAxNTM4MzA4ODA2MjIw.gJjwgn4pSCpADtkkHpT1ZFD7nRw8FZhpcgz4JrlsOmYg.Cxle9j0zN3obrigNdUTrP1H9_KmQHOKUbkX_93kSmXAg.JPEG.shanti_prajna%2FDSC_9310.jpg%3Ftype%3Dw773%22&type=w2)
+
 청강원은 지리산 청정 자연 속에 자리를 잡고 있다.
 
 **건강을 되찾아준 지리산 약초차**
@@ -40,9 +44,15 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/MjAxODEwMDRfMTM2/MDAxNTM4NjUyNzU
 
 ![](https://mblogthumb-phinf.pstatic.net/MjAxODEwMDRfMTcz/MDAxNTM4NjUyNzk3ODAx.TKWEYRGjgHe1a70VOcSG8YNCn4vsgbx3UElXAlWvSVcg.-qOcYLm-gvYXn-6IlLO_PawjpWq5hrHz18h6XUjDSgQg.JPEG.naver_diary/DSC_9362.jpg?type=w800)
 
+![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2FMjAxODA5MzBfMTgy%2FMDAxNTM4MzA5MDU2NTk2.tMtIjAQ_s-5OLeBqGgLcEyWe0u_-4pzqJ5EfIVEkx94g.WPLzGDClta5VW1qIXSV07DkF9uIkVnBdHS5DHF1nzJ8g.JPEG.shanti_prajna%2F%25EC%259C%25A4%25EA%25B2%25BD%25EC%2588%259C_%25EB%258C%2580%25ED%2591%259C_%25284%2529.jpg%3Ftype%3Dw773%22&type=w2)
+
+![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2FMjAxODA5MzBfOTIg%2FMDAxNTM4MzA5MDU2MjY5.8TufOmlney1ZFZHVgiJPNjmDVqQaTJG-XvliqwRxG3Yg.sRYcsD30n0dfsnt0Cec30LrTy8fUpXOE730q0pzbs24g.JPEG.shanti_prajna%2FDSC_9542.jpg%3Ftype%3Dw773%22&type=w2)
+
 청강원은 윤 대표가 건강을 되찾기 위한 노력을 하는 과정에서 만들어졌다.
 
 네덜란드에서 돌아와 청강원을 만들기로 결심했을 때 윤 대표는 지리산을 다시 떠올렸다. ‘어리석은 사람도 이곳에 머물면 지혜가 있는 사람이 된다’는 뜻을 가진 지리산처럼 약초차를 통해 지혜롭게 건강을 관리하는 사람이 되겠다는 마음으로 그녀는 지리산에 자리를 잡았다.
+
+![](https://mblogthumb-phinf.pstatic.net/MjAxODEwMDhfNTIg/MDAxNTM4OTYyMzkwMTcz.4BtwUUt6oNaJuC_VXYucmdvpUlJSsPsxk-IIQAv9c50g.pf0cnCtoVnovaWXDmdB_33YBHiUZY_TPHfIWg1_PXl0g.JPEG.naver_diary/%EC%B2%AD%EA%B0%95%EC%9B%90_%EC%B6%94%EA%B0%80%EC%82%AC%EC%A7%84.jpg?type=w800)
 
 딸 이유민씨는 어머니로부터 약초차에 대해 배우고 있다.
 
@@ -54,6 +64,10 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/MjAxODEwMDRfMTM2/MDAxNTM4NjUyNzU
 
 ![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2FMjAxODA5MzBfMTEx%2FMDAxNTM4MzA5MTkwNzY2.3thgihpuAR0TCLemR3Cqe3OITdJj96k_kK167PSw7w4g.wjw53AEVKYua_thcHMX7U1S5mfc9bbWZseqBsYyNRV4g.JPEG.shanti_prajna%2FDSC_9456.jpg%3Ftype%3Dw773%22&type=w2)
 
+![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2FMjAxODA5MzBfMjUx%2FMDAxNTM4MzA5Mzk1ODkx.ZoggfcSE298Ed5SGGq0E8X95JPSJoHxwfr6XGo4w7fcg.P5yFIVW9SoVJHvew6X9QAT1HTzEExoztNkxUlvlF9vcg.JPEG.shanti_prajna%2F%25EC%259C%25A4%25EA%25B2%25BD%25EC%2588%259C_%25EB%258C%2580%25ED%2591%259C_%252817%2529.jpg%3Ftype%3Dw773%22&type=w2)
+
+![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2FMjAxODA5MzBfMTkz%2FMDAxNTM4MzA5Mzk1NTk2.q_V4KYsHBZXDH2yZ7UD5GY1sm1bQl8D3IxFFWEH0u4Ug.v7fJz_zemaFUjAMzpSbbqKatgzfW-AbwaclUl_73vi0g.JPEG.shanti_prajna%2FDSC_9465.jpg%3Ftype%3Dw773%22&type=w2)
+
 청강원의 약초차는 오랜 시간을 들인 만큼 깊은 맛과 깔끔한 넘김을 자랑한다.
 
 **깊이 있는 연구를 통해**  
@@ -62,6 +76,10 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/MjAxODEwMDRfMTM2/MDAxNTM4NjUyNzU
 청강원은 수제 약초 차의 핵심 재료인 약초는 지리산 일대에서 재배하는 약초만 사용하는 걸 고집한다. 지리산의 좋은 자연을 차에 고스란히 담아내기 위함이다. 이를 위해 청강원에서는 지역 농가 10곳과의 협력 아래 유황으로 발효된 퇴비를 사용해 약초를 재배하는 수고로운 노력도 마다하지 않는다.  
 특히 청강원에서는 원료를 아홉 번씩 찌고 말린 뒤 발효시켜 약초 차를 만드는데, 맛은 진하게 우러나면서도 목 넘김은 맑고 깔끔하다. 모든 과정을 손수 직접 해내기 때문에 4개월이란 긴 시간이 걸리지만, 그만큼 품질이 훌륭하다.
 
+![](https://mblogthumb-phinf.pstatic.net/MjAxODEwMDRfMTE5/MDAxNTM4NjU0Mjk1MjU4.6RtuNkdgAlFqfLF9ZgHwPNcnibMl3mG0TGy3Q5jk_D0g.zzIF8QYbLyLvd5BY-i68FxtlPwvKoHk3jRtU7bIAN6Ig.JPEG.naver_diary/6.%ED%95%9C%EB%B0%A9_%ED%8B%B0%ED%85%8C%EB%9D%BC%ED%94%BC_%2826%29.jpg?type=w800)
+
+![](https://mblogthumb-phinf.pstatic.net/MjAxODEwMDRfMTMz/MDAxNTM4NjU0MzExNzc3.QOKzkcetNu4KxRBOKnXLr1oHt0UjWwIYZNFTw6dmm8Ug.NDbohyK8aT6ZWFpF-y_dV95mCpQtaDL3Jd_mKV4KnFog.JPEG.naver_diary/%EC%97%85%EC%B2%B4%EC%82%AC%EC%A7%843.jpg?type=w800)
+
 청강원의 약초차 테라피는 참가자의 체질을 파악하고 특성에 맞는 약초 차를 추천해준다.
 
 **내 몸에 필요한 약초차 테라피**
@@ -69,6 +87,10 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/MjAxODEwMDRfMTM2/MDAxNTM4NjUyNzU
 청강원에서는 산청 동의보감촌의 ‘힐링 아카데미 프로그램’ 중 하나로 약초차 명인과 함께 하는 티 테라피를 운영 중이다. 참가자는 먼저 청강원을 둘러보고, 이후 약초와 차에 대한 설명을 듣는다. 다음으로는 음양오행에 따른 참가자의 체질을 파악하는 과정이 이어지고, 개인 특성에 맞는 약초차를 추천한다. 기본적으로는 1인~4인 가족 단위로 신청을 받고 있으며, 사전 예약을 통해서 최대 10명 이내의 단체 손님을 받아 티 테라피를 진행하기도 한다.
 
 윤 대표는 “내년 초부터 공사를 시작해 2020년 완공을 목표로 힐링 센터를 만들기로 했다"라며 “현재는 소규모로 프로그램이 이루어지고 있지만, 센터가 완공되면 대중의 참여를 높일 수 있도록 정기적으로 체험 프로그램을 운영할 예정”이라고 밝혔다.
+
+![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2FMjAxODA5MzBfMjU3%2FMDAxNTM4MzEwMDczNjMx.QgsOWEjMdTPO86_41HCW0ra4QtWmJMoklBv5tEBOqnIg.8yP72goK-r1KkS6a0AgBbeswv16CHboHVRIF0wi2cBgg.JPEG.shanti_prajna%2FDSC_9308.jpg%3Ftype%3Dw773%22&type=w2)
+
+![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2FMjAxODA5MzBfOTYg%2FMDAxNTM4MzEwMDczNzQ5.InhtguL0C0vzm84aS5lSvt3YhoZL3HJMplT18GGy-Z0g.Hk5Vzb0iHhVEb-sD2CvpUN6neFuijEAdLBTFPKalhiIg.JPEG.shanti_prajna%2FDSC_9509.jpg%3Ftype%3Dw773%22&type=w2)
 
 청강원은 이제 약초차를 전 세계에 널리 알리기 위해 노력하고 있다.
 
