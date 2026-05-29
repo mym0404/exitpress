@@ -1,5 +1,7 @@
 naver_cafe
 naver_pay
 naver_sports
+applebyblog
+lazybit
 lhs01040_
 blogpeople
