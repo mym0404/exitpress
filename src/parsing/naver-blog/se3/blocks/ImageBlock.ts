@@ -5,7 +5,8 @@ import { normalizeAssetUrl } from "../../../../domain/blog/NaverUrl.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
 import { findInComponentRoot, textOutsideNestedComponents } from "./util/ComponentBoundary.js"
 
-const standaloneImageSelector = "img, video._gifmp4.se_mediaImage[data-gif-url]"
+const image360PreviewSelector = ".__se_360vr_preview"
+const standaloneImageSelector = `img, video._gifmp4.se_mediaImage[data-gif-url], ${image360PreviewSelector}`
 const imageOutputParams = [
   {
     key: "includeCaption",
@@ -15,6 +16,13 @@ const imageOutputParams = [
     defaultValue: false,
   },
 ] satisfies NonNullable<OutputOption<"image">["params"]>
+
+const getBackgroundImageUrl = (style: string | undefined) => {
+  const match = style?.match(/background-image\s*:\s*url\((['"]?)(.*?)\1\)/i)
+  const sourceUrl = match?.[2]?.trim()
+
+  return sourceUrl || null
+}
 
 const getStandaloneImageContent = ({
   $,
@@ -28,13 +36,15 @@ const getStandaloneImageContent = ({
     .map((node): ImageData | null => {
       const $image = $(node)
       const isGifVideoImage = $image.is("video")
-      const sourceUrl = isGifVideoImage
-        ? $image.attr("data-gif-url")!
-        : ($image.attr("data-lazy-src") ?? $image.attr("src") ?? "")
+      const sourceUrl = $image.is(image360PreviewSelector)
+        ? getBackgroundImageUrl($image.attr("style"))
+        : isGifVideoImage
+          ? $image.attr("data-gif-url")!
+          : ($image.attr("data-lazy-src") ?? $image.attr("src") ?? "")
       const originalSourceUrl = isGifVideoImage ? normalizeAssetUrl($image.attr("src") ?? "") : null
-      const normalizedSourceUrl = normalizeAssetUrl(sourceUrl)
+      const normalizedSourceUrl = normalizeAssetUrl(sourceUrl ?? "")
 
-      if (!sourceUrl.trim()) {
+      if (!sourceUrl?.trim()) {
         return null
       }
 
