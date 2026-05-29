@@ -9,12 +9,13 @@ export class NaverSe3CodeBlock extends LeafBlock {
   override match({ $, $node }: ParserBlockContext) {
     return (
       $node.hasClass("se_code") &&
-      findInComponentRoot({ $, $component: $node, selector: "pre" }).first().length > 0
+      findInComponentRoot({ $, $component: $node, selector: "pre, .__se_code_view" }).first()
+        .length > 0
     )
   }
 
   override convert({ $, $node }: Parameters<LeafBlock["convert"]>[0]) {
-    const code = findInComponentRoot({ $, $component: $node, selector: "pre" })
+    const code = findInComponentRoot({ $, $component: $node, selector: "pre, .__se_code_view" })
       .first()
       .text()
       .trimEnd()

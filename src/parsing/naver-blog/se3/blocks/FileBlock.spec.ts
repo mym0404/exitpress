@@ -49,4 +49,30 @@ describe("NaverSe3FileBlock", () => {
       },
     ])
   })
+
+  it("parses legacy file components with nested download links", () => {
+    const parsed = parseSe3Blocks(`
+      <div class="se_component se_file default">
+        <div class="se_viewArea se_file_wrap">
+          <div class="se_name_area">
+            <span class="se_name">seminar.hwp</span>
+            <a
+              href="https://download.example.com/seminar.hwp"
+              class="__se_toggle_fileList se_btn_openFileDown __se_link"
+              data-linktype="file"
+            >
+              파일 다운로드
+            </a>
+          </div>
+        </div>
+      </div>
+    `)
+
+    expect(parsed.blocks).toEqual([
+      {
+        type: "paragraph",
+        text: "[seminar.hwp](https://download.example.com/seminar.hwp)",
+      },
+    ])
+  })
 })

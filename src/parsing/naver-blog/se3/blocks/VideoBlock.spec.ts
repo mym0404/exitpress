@@ -60,6 +60,35 @@ describe("NaverSe3VideoBlock", () => {
     })
   })
 
+  it("parses legacy og_bSize video components", () => {
+    const parsed = parseSe3Blocks(`
+      <div class="se_component se_video og_bSize">
+        <div class="se_sectionArea se_align-left">
+          <div class="se_editArea">
+            <div class="se_viewArea">
+              <div id="legacy-video" data-attachment-id="attachment-id" class="se_mediaArea">
+                <div class="__se_video_frame is_invisible"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `)
+
+    expect(parsed.blocks[0]).toEqual({
+      type: "video",
+      video: {
+        title: "Video",
+        thumbnailUrl: null,
+        sourceUrl: "",
+        vid: null,
+        inkey: null,
+        width: null,
+        height: null,
+      },
+    })
+  })
+
   it("uses module data matching the video element id", () => {
     const parsed = parseSe3Blocks(
       `

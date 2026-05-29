@@ -13,11 +13,12 @@ export class NaverSe3FileBlock extends LeafBlock {
   }
 
   override convert({ $, $node, options }: Parameters<LeafBlock["convert"]>[0]) {
-    const link = findInComponentRoot({
+    const fileArea = findInComponentRoot({
       $,
       $component: $node,
-      selector: "a.se_name_area[href]",
+      selector: ".se_name_area",
     }).first()
+    const link = fileArea.is("a[href]") ? fileArea : fileArea.find("a[href]").first()
     const url = link.attr("href") ?? ""
 
     if (!url) {
@@ -25,7 +26,7 @@ export class NaverSe3FileBlock extends LeafBlock {
     }
 
     return createLinkParagraphBlocks({
-      title: compactText(link.find(".se_name").text()) || url,
+      title: compactText(fileArea.find(".se_name").text()) || compactText(link.text()) || url,
       description: "",
       url,
       hasThumbnail: false,

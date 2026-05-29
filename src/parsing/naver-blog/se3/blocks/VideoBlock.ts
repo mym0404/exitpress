@@ -87,7 +87,7 @@ export class NaverSe3VideoBlock extends LeafBlock {
   ] satisfies OutputOption<"video">[]
 
   override match({ $node }: ParserBlockContext) {
-    return $node.hasClass("se_video") && $node.hasClass("default")
+    return $node.hasClass("se_video") && ($node.hasClass("default") || $node.hasClass("og_bSize"))
   }
 
   override convert({ $, $node, sourceUrl = "" }: Parameters<LeafBlock["convert"]>[0]) {
