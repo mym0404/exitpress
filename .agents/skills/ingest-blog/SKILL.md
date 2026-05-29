@@ -9,10 +9,12 @@ Use this skill to raise Naver Blog parser coverage from real public posts. Treat
 
 ## Required Outcome
 
-When parse errors are found, group failures into parser support units and process every discovered `supportUnitKey` before ending the turn. Each PR must contain exactly one focused support unit, and each fixed support unit must include both required outputs:
+When parse errors are found, group failures into parser support units and process every discovered `supportUnitKey` before ending the turn. Each parser-support PR must contain exactly one focused support unit, and each fixed support unit must include both required outputs:
 
 - Add a new parser block or extend the existing block that owns the failed HTML.
 - Add a representative sample fixture for the fixed failure type.
+
+A completed ingest check must publish the `.agents/skills/ingest-blog/checked.txt` update. If parser-support PRs are created for the ingest target, include the `checked.txt` update in the first ready PR only. If no unsupported parser blocks are found, create a ready PR that contains the `checked.txt` update instead of ending with only a local change.
 
 Do not treat an unresolved or deferred support unit as complete. If a failure cannot be safely fixed in the current pass, leave code and fixtures unchanged for that unit, report the blocker with representative `logNo` and inspect evidence, and do not end the turn as complete.
 Other support units from the same blog stay out of the focused PR body, but they are not completion backlog; they must each get their own focused PR before the turn can end.
@@ -97,24 +99,26 @@ Use `--assetProfile tmp` for local smoke output, `--assetProfile readme` for REA
 3. Append `<blogId>` to `.agents/skills/ingest-blog/checked.txt` on its own line if it is not already present.
 4. Record the absolute `outputDir` printed by the script.
 5. Read `failure-summary.json` and freeze the full `discoveredSupportUnits` list for this ingest turn.
-6. Run `check-support-unit-prs.ts --outputDir <absolute-output-dir>` to see which support units already have ready open PR claims.
-7. Process every missing `supportUnitKey` sequentially in the same working directory. Do not create git worktrees.
-8. For each unit, start from `origin/main` and create or switch to branch `worktree/ingest-blog-<safeSupportUnitKey>`, where `<safeSupportUnitKey>` replaces non-alphanumeric characters with `-`.
-9. Before editing that unit, run `git fetch origin main`.
-10. Skip the unit only when `origin/main` already supports it. A draft PR claim is not complete; convert it to ready or recreate it as ready before ending.
-11. Inspect the focused failed HTML and identify the owning editor/block boundary.
-12. Infer the expected PR file shape before editing. Use the owning editor/block boundary to decide whether this should be an existing-block edit or a new-block addition.
-13. Implement the smallest parser block addition or extension that handles that DOM shape.
-14. Add or extend the focused parser block spec beside the block implementation.
-15. Add one representative sample fixture for the focused support unit with `write-sample-fixture.ts`.
-16. Do not update knowledge documents for routine parser support. Use the Knowledge Boundary below only when the focused diff changes a cross-cutting repository contract.
-17. Run the development verification commands listed below for the changed parser/block area.
-18. Regenerate the report with `--reuseOutputDir <absolute-output-dir> --rerunFailures --focusSupportUnit <key>` so it reflects only the focused unit, fixtures, verification results, and evidence.
-19. Run the Local PR Gate listed below.
-20. Commit, push, and create the ready PR for that focused support unit. With `gh pr create`, do not pass `--draft`.
-21. After PR creation, run `gh pr update-branch <number>` once when the command is available. If GitHub refuses, the branch is already current, or the command fails, report the result and continue; update-branch failure does not block completion.
-22. Before moving to the next unit, run `git status --short`; tracked changes must be clean so code from different PRs cannot mix.
-23. Run `check-support-unit-prs.ts --outputDir <absolute-output-dir>` after each PR and continue until it exits `0`.
+6. If no unsupported parser blocks were found, create a ready PR containing the `checked.txt` update and no parser code or fixture changes.
+7. Run `check-support-unit-prs.ts --outputDir <absolute-output-dir>` to see which support units already have ready open PR claims.
+8. Process every missing `supportUnitKey` sequentially in the same working directory. Do not create git worktrees.
+9. For each unit, start from `origin/main` and create or switch to branch `worktree/ingest-blog-<safeSupportUnitKey>`, where `<safeSupportUnitKey>` replaces non-alphanumeric characters with `-`.
+10. Before editing that unit, run `git fetch origin main`.
+11. Skip the unit only when `origin/main` already supports it. A draft PR claim is not complete; convert it to ready or recreate it as ready before ending.
+12. Inspect the focused failed HTML and identify the owning editor/block boundary.
+13. Infer the expected PR file shape before editing. Use the owning editor/block boundary to decide whether this should be an existing-block edit or a new-block addition.
+14. Implement the smallest parser block addition or extension that handles that DOM shape.
+15. Add or extend the focused parser block spec beside the block implementation.
+16. Add one representative sample fixture for the focused support unit with `write-sample-fixture.ts`.
+17. Include the `checked.txt` update in the first ready PR created for this ingest target if no earlier ready PR for the same target already includes it.
+18. Do not update knowledge documents for routine parser support. Use the Knowledge Boundary below only when the focused diff changes a cross-cutting repository contract.
+19. Run the development verification commands listed below for the changed parser/block area.
+20. Regenerate the report with `--reuseOutputDir <absolute-output-dir> --rerunFailures --focusSupportUnit <key>` so it reflects only the focused unit, fixtures, verification results, and evidence.
+21. Run the Local PR Gate listed below.
+22. Commit, push, and create the ready PR for that focused support unit. With `gh pr create`, do not pass `--draft`.
+23. After PR creation, run `gh pr update-branch <number>` once when the command is available. If GitHub refuses, the branch is already current, or the command fails, report the result and continue; update-branch failure does not block completion.
+24. Before moving to the next unit, run `git status --short`; tracked changes must be clean so code from different PRs cannot mix.
+25. Run `check-support-unit-prs.ts --outputDir <absolute-output-dir>` after each PR and continue until it exits `0`.
 
 Do not rerun the same blog as a full ingest after a completed output exists unless the user asked for `--forceFull` or the reusable manifest is invalid.
 Store shared ingest output and aggregate run state only under ignored `tmp/harness/ingest-blog/<runId>`. Do not use `.cache` for this workflow because it is reserved for app runtime state.
@@ -166,9 +170,10 @@ Treat non-zero evidence capture errors as an incomplete report and fix the evide
 An `ingest-blog` invocation is PR creation intent. After code, fixtures, verification, focused reports, and the Local PR Gate are ready, create a ready PR for each discovered support unit without asking for confirmation.
 Do not offer `pr=ask`, `pr=none`, or other PR modes.
 If there are no code or fixture changes for a focused support unit because it is safely deferred, do not create an empty PR; report the blocker and do not mark the ingest turn complete.
+If the ingest target has no unsupported parser blocks, create a ready PR that updates only `.agents/skills/ingest-blog/checked.txt`. Use a concise Korean PR body that states the blog was checked and no parser-support changes were needed.
 
-The PR body must start with one or two Korean summary lines that state what parser behavior changed. Keep the summary concrete and visible before the hidden claim marker and sections.
-After the summary and hidden claim marker, the visible PR body must use exactly these three top-level sections and no extra visible sections:
+For a parser-support PR, the PR body must start with one or two Korean summary lines that state what parser behavior changed. Keep the summary concrete and visible before the hidden claim marker and sections.
+After the parser-support summary and hidden claim marker, the visible PR body must use exactly these three top-level sections and no extra visible sections:
 
 ````markdown
 <Korean summary of what changed>
@@ -201,6 +206,7 @@ For a focused support-unit PR:
 - Do not use any other `ingest-blog` PR title prefix.
 - Add or create the GitHub labels `ai-generated` and `ingest-blog`.
 - Include only the summary and fixed three-section body above.
+- Include `.agents/skills/ingest-blog/checked.txt` in the first ready PR created for the ingest target.
 - Include a hidden claim marker after the summary: `<!-- ingest-blog:supportUnitKey=<key> -->`.
 - Do not include visible blog names, blog ids, log numbers, source-post URLs, or source-post link labels in the PR body.
 - Do not include source frontmatter fields such as `source`, `blogId`, `logNo`, `publishedAt`, `category`, `categoryPath`, or `thumbnail` in PR Markdown evidence.
