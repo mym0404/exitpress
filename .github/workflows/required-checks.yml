@@ -34,6 +34,12 @@ jobs:
           node-version: 24
           cache: pnpm
 
+      - name: Install CI tools
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends unzip
+          rm -rf /var/lib/apt/lists/*
+
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
         with:
