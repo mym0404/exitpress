@@ -53,6 +53,24 @@ const getEmbeddedVideos = ({ $, $node }: { $: CheerioAPI; $node: ReturnType<Chee
     return null
   }
 
+  const directIframes = $node.children("iframe[src]").toArray()
+
+  if (directIframes.length > 0) {
+    const clone = $node.clone()
+
+    clone.children("iframe[src], style").remove()
+
+    if (clone.find("img, iframe, video, table").length > 0 || compactText(clone.text())) {
+      return null
+    }
+
+    const videos = directIframes
+      .map((iframe) => createEmbeddedVideo({ iframe: $(iframe) }))
+      .filter((video) => video !== null)
+
+    return videos.length === directIframes.length ? videos : null
+  }
+
   const isVideoContainer = $node.is("span._outerVideo, span._naverVideo")
   const videoContainers = isVideoContainer
     ? $node

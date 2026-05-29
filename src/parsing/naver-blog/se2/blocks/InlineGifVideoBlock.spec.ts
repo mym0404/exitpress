@@ -79,6 +79,81 @@ describe("NaverSe2InlineGifVideoBlock", () => {
     ])
   })
 
+  it("parses linked inline gif video wrappers inside legacy paragraphs", () => {
+    const parsed = parseSe2Blocks(`
+      <p>
+        <span>
+          <strong>
+            <a href="https://example.com/source">
+              <video
+                src="https://mblogvideo-phinf.pstatic.net/sample.gif?type=mp4w800"
+                class="fx _postImage _gifmp4"
+                data-gif-url="https://mblogthumb-phinf.pstatic.net/sample.gif?type=w210"
+              ></video>
+            </a>
+          </strong>
+        </span>
+      </p>
+    `)
+
+    expect(parsed.blocks).toEqual([
+      {
+        type: "image",
+        image: {
+          sourceUrl: "https://mblogthumb-phinf.pstatic.net/sample.gif?type=w210",
+          originalSourceUrl: "https://mblogvideo-phinf.pstatic.net/sample.gif?type=mp4w800",
+          alt: "",
+          caption: null,
+          mediaKind: "image",
+        },
+      },
+    ])
+  })
+
+  it("parses multiple linked inline gif videos into image groups", () => {
+    const parsed = parseSe2Blocks(`
+      <p>
+        <a href="https://example.com/one">
+          <video
+            src="https://mblogvideo-phinf.pstatic.net/one.gif?type=mp4w800"
+            class="fx _postImage _gifmp4"
+            data-gif-url="https://mblogthumb-phinf.pstatic.net/one.gif?type=w210"
+          ></video>
+        </a>
+        <br />
+        <a href="https://example.com/two">
+          <video
+            src="https://mblogvideo-phinf.pstatic.net/two.gif?type=mp4w800"
+            class="fx _postImage _gifmp4"
+            data-gif-url="https://mblogthumb-phinf.pstatic.net/two.gif?type=w210"
+          ></video>
+        </a>
+      </p>
+    `)
+
+    expect(parsed.blocks).toEqual([
+      {
+        type: "imageGroup",
+        images: [
+          {
+            sourceUrl: "https://mblogthumb-phinf.pstatic.net/one.gif?type=w210",
+            originalSourceUrl: "https://mblogvideo-phinf.pstatic.net/one.gif?type=mp4w800",
+            alt: "",
+            caption: null,
+            mediaKind: "image",
+          },
+          {
+            sourceUrl: "https://mblogthumb-phinf.pstatic.net/two.gif?type=w210",
+            originalSourceUrl: "https://mblogvideo-phinf.pstatic.net/two.gif?type=mp4w800",
+            alt: "",
+            caption: null,
+            mediaKind: "image",
+          },
+        ],
+      },
+    ])
+  })
+
   it("parses top-level inline gif video blocks into image blocks", () => {
     const parsed = parseSe2Blocks(`
       <video
