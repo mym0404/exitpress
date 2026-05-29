@@ -110,6 +110,28 @@ describe("NaverSe2InlineGifVideoBlock", () => {
     ])
   })
 
+  it("does not claim linked inline gif video wrappers mixed with text", () => {
+    const parsed = parseSe2Blocks(`
+      <p>
+        caption
+        <a href="https://example.com/source">
+          <video
+            src="https://mblogvideo-phinf.pstatic.net/sample.gif?type=mp4w800"
+            class="fx _postImage _gifmp4"
+            data-gif-url="https://mblogthumb-phinf.pstatic.net/sample.gif?type=w210"
+          ></video>
+        </a>
+      </p>
+    `)
+
+    expect(parsed.blocks).toEqual([
+      {
+        type: "paragraph",
+        text: "caption[](https://example.com/source)",
+      },
+    ])
+  })
+
   it("parses multiple linked inline gif videos into image groups", () => {
     const parsed = parseSe2Blocks(`
       <p>

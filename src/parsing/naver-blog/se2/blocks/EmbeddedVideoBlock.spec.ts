@@ -212,6 +212,17 @@ describe("NaverSe2EmbeddedVideoBlock", () => {
     expect(parsed.videos).toEqual([video])
   })
 
+  it("does not parse direct video iframes mixed with text", () => {
+    const parsed = parseSe2Blocks(`
+      <p>
+        caption
+        <iframe src="https://example.com/embed" width="260" height="190"></iframe>
+      </p>
+    `)
+
+    expect(parsed.blocks).toEqual([{ type: "paragraph", text: "caption" }])
+  })
+
   it("keeps invalid iframe source strings without video metadata", () => {
     const parsed = parseSe2Blocks(`
       <p>
