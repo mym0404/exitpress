@@ -1,0 +1,4 @@
+allowBuilds:
+  esbuild: true
+  sharp: true
+  ssh2-no-cpu-features: true
