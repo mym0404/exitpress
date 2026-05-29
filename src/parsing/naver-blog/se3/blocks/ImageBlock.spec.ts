@@ -382,6 +382,37 @@ describe("NaverSe3ImageBlock", () => {
     ])
   })
 
+  it("does not pull 360vr preview images from nested components into the parent image block", () => {
+    const parsed = parseSe3Blocks(`
+      <div class="se_component se_image">
+        <img src="https://example.com/root.png" alt="root" />
+        <div class="se_component se_image se_360vr default">
+          <div class="se_mediaImage __se_360vr_preview" style="background-image:url('https://example.com/nested-vr.jpg');"></div>
+        </div>
+      </div>
+    `)
+
+    expect(parsed.blocks).toEqual([
+      {
+        type: "image",
+        image: {
+          sourceUrl: "https://example.com/root.png",
+          originalSourceUrl: null,
+          alt: "root",
+          caption: null,
+          mediaKind: "image",
+        },
+        outputSelectionKey: "naver-se3:image",
+        outputSelection: {
+          variant: "markdown-image",
+          params: {
+            includeCaption: false,
+          },
+        },
+      },
+    ])
+  })
+
   it("applies every output option", () => {
     expectEveryBlockOutputOption({
       editorType: "naver-se3",
