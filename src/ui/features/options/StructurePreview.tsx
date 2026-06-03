@@ -1,5 +1,7 @@
 import type { SVGProps } from "react"
+
 import type { ExportOptions } from "../../../domain/export-options/Types.js"
+
 import { formatCategorySegment } from "../../../exporting/paths/PathFormat.js"
 import { buildPostFolderName } from "../../../exporting/paths/PostPathTemplate.js"
 import { Collapsible, CollapsibleContent } from "../../components/ui/Collapsible.js"

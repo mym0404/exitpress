@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest"
+
 import { createLinkParagraphBlocks } from "./LinkParagraph.js"
 
 describe("createLinkParagraphBlocks", () => {

@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest"
+
 import { mergeSupportUnitFailureGroups, selectFocusedSupportUnit } from "./ingest-focus.js"
 
 describe("selectFocusedSupportUnit", () => {

@@ -1,9 +1,12 @@
+import path from "node:path"
+
 import type { CategoryInfo, PostSummary } from "../../domain/blog/Types.js"
 import type { ExportOptions } from "../../domain/export-options/Types.js"
+
 import { sanitizeCategoryName } from "../../domain/blog/CategoryName.js"
+
 import { formatCategorySegment } from "./PathFormat.js"
 import { buildPostFolderName } from "./PostPathTemplate.js"
-import path from "node:path"
 
 export const getCategoryForPost = ({
   categories,

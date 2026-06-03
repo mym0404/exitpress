@@ -1,4 +1,5 @@
 import type { SlugStyle, SlugWhitespace } from "../../domain/export-options/Types.js"
+
 import { sanitizeCategoryName } from "../../domain/blog/CategoryName.js"
 
 const invalidPathCharacterPattern = /[<>:"/\\|?*\u0000-\u001f]/g

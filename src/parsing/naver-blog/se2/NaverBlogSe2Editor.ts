@@ -1,7 +1,9 @@
 import type { AstBlock, ParsedPost } from "../../../domain/ast/Types.js"
 import type { BaseEditorParseInput } from "../core/BaseEditor.js"
+
 import { unique } from "../../../shared/collection/CollectionUtils.js"
 import { BaseEditor } from "../core/BaseEditor.js"
+
 import { NaverSe2BookWidgetBlock } from "./blocks/BookWidgetBlock.js"
 import { NaverSe2CodeBlock } from "./blocks/CodeBlock.js"
 import { NaverSe2CommentBlock } from "./blocks/CommentBlock.js"

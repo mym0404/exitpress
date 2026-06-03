@@ -1,7 +1,9 @@
 import type { EditorBlockOutputDefinition } from "../../../domain/ast/Types.js"
 import type { ExportOptions } from "../../../domain/export-options/Types.js"
+
 import { resolveBlockOutputSelection } from "../../../domain/export-options/BlockOutputSelection.js"
 import { Input } from "../../components/ui/Input.js"
+
 import { renderBlockOutputPreview } from "./BlockOutputPreview.js"
 import {
   CheckField,

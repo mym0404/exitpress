@@ -1,4 +1,5 @@
 import type { AstBlock } from "../../../domain/ast/Types.js"
+
 import { compactMarkdownText } from "../../../shared/text/TextUtils.js"
 
 const isDegenerateMarkdownLine = (line: string) => /^[*_~`]+$/.test(line.trim())

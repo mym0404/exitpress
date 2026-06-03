@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest"
+
 import type { CategoryInfo } from "../../../domain/blog/Types.js"
+
 import {
   getCategoryCheckboxState,
   orderCategoriesHierarchically,

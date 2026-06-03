@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest"
+
 import { createHttpServer } from "./HttpServer.js"
 
 describe("http server composition", () => {

@@ -1,17 +1,21 @@
+import path from "node:path"
+
 import type {
   UploadProviderCatalogResponse,
   UploadProviderDefinition,
   UploadProviderFieldDefinition,
 } from "../../domain/upload/UploadProviderTypes.js"
+
 import type { RuntimePluginField } from "./ImageUploadFieldDefinition.js"
+
 import { DEFAULT_UPLOAD_PROVIDER_KEY } from "../../domain/upload/UploadProviderKeys.js"
 import { ensureDir, getProjectTempPath } from "../../infra/node/FilePathUtils.js"
+
 import {
   getProviderDescription,
   normalizeFieldDefinition,
   normalizeProviderLabel,
 } from "./ImageUploadFieldDefinition.js"
-import path from "node:path"
 
 type RuntimeCatalogLike = {
   helper: {

@@ -1,5 +1,7 @@
 import type { CheerioAPI } from "cheerio"
+
 import type { ParserBlockContext } from "../../core/BaseBlock.js"
+
 import { compactText } from "../../../../shared/text/TextUtils.js"
 import { ContainerBlock } from "../../core/BaseBlock.js"
 

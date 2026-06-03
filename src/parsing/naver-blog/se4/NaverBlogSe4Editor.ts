@@ -1,9 +1,12 @@
 import type { AnyNode } from "domhandler"
+
 import type { AstBlock, ParsedPost } from "../../../domain/ast/Types.js"
 import type { BaseEditorParseInput } from "../core/BaseEditor.js"
+
 import { unique } from "../../../shared/collection/CollectionUtils.js"
 import { BaseEditor } from "../core/BaseEditor.js"
 import { parseJsonAttribute } from "../core/JsonAttribute.js"
+
 import { NaverSe4CodeBlock } from "./blocks/CodeBlock.js"
 import { NaverSe4DividerBlock } from "./blocks/DividerBlock.js"
 import { NaverSe4DocumentTitleBlock } from "./blocks/DocumentTitleBlock.js"

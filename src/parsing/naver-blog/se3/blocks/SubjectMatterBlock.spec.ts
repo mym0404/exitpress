@@ -1,7 +1,9 @@
 import { load } from "cheerio"
 import { describe, expect, it } from "vitest"
+
 import { parseSe3Blocks } from "../../../../../tests/support/parser-test-utils.js"
 import { NaverBlogSE3Editor } from "../NaverBlogSe3Editor.js"
+
 import { NaverSe3SubjectMatterBlock } from "./SubjectMatterBlock.js"
 
 describe("NaverSe3SubjectMatterBlock", () => {

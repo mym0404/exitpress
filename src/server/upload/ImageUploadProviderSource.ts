@@ -2,6 +2,7 @@ import type {
   UploadProviderCatalogResponse,
   UploadProviderFields,
 } from "../../domain/upload/UploadProviderTypes.js"
+
 import { createCatalogFromRuntime, createRuntimeInstance } from "./ImageUploadRuntimeCatalog.js"
 import { normalizeProviderFieldsFromCatalog } from "./UploadProviderFieldNormalization.js"
 

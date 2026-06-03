@@ -1,4 +1,5 @@
 import type { CheerioAPI } from "cheerio"
+
 import { compactText } from "../../../../../shared/text/TextUtils.js"
 
 const blockMediaSelector = "img, iframe, video, table"

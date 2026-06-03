@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest"
+
 import { NaverBlog } from "./NaverBlog.js"
 
 describe("parser block catalog", () => {

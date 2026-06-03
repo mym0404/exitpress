@@ -1,5 +1,6 @@
-import type * as fs from "node:fs/promises"
 import { randomUUID } from "node:crypto"
+
+import type * as fs from "node:fs/promises"
 
 export type FileOps = Pick<typeof fs, "readFile" | "writeFile" | "rename" | "rm">
 

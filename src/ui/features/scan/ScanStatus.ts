@@ -1,4 +1,5 @@
 import type { ScanResult } from "../../../domain/blog/Types.js"
+
 import { DEFAULT_OUTPUT_DIR } from "../../../domain/export-options/ExportDefaults.js"
 
 export const defaultOutputDir = DEFAULT_OUTPUT_DIR

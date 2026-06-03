@@ -1,5 +1,7 @@
 import { RiCheckDoubleLine, RiEraserLine } from "@remixicon/react"
+
 import type { ScanResult } from "../../../domain/blog/Types.js"
+
 import { Badge } from "../../components/ui/Badge.js"
 import { Button } from "../../components/ui/Button.js"
 import {
@@ -29,6 +31,7 @@ import {
   TableRow,
 } from "../../components/ui/Table.js"
 import { cn } from "../../lib/Cn.js"
+
 import { getCategoryCheckboxState, orderCategoriesHierarchically } from "./CategorySelection.js"
 
 export const CategoryPanel = ({

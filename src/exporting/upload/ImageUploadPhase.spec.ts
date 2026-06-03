@@ -1,7 +1,11 @@
 import { describe, expect, it, vi } from "vitest"
+
 import type { UploadCandidate } from "../../domain/export-job/Types.js"
+
 import type { ImageUploadProgress } from "./ImageUploadPhase.js"
+
 import { createTestPath } from "../../../tests/support/test-paths.js"
+
 import { ImageUploadPhaseError, runImageUploadPhase } from "./ImageUploadPhase.js"
 
 const testExportDir = createTestPath("image-upload-phase", "export")

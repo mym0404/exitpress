@@ -1,4 +1,5 @@
 import type { ParserBlockContext } from "../../core/BaseBlock.js"
+
 import { LeafBlock } from "../../core/BaseBlock.js"
 
 export class NaverSe4DividerBlock extends LeafBlock {

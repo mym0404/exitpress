@@ -4,6 +4,7 @@ import type {
   BlockType,
   OutputOption,
 } from "../ast/Types.js"
+
 import type { ExportOptions } from "./Types.js"
 
 const fallbackBlockOutputSelections: Partial<Record<BlockType, BlockOutputSelection>> = {

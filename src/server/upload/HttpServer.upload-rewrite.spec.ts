@@ -1,6 +1,8 @@
 import { afterEach, describe, expect, it, vi } from "vitest"
+
 import type { ScanResult } from "../../domain/blog/Types.js"
 import type { ExportJobState, UploadCandidate } from "../../domain/export-job/Types.js"
+
 import {
   baseScanResult,
   cleanupTestServerRoots,

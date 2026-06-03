@@ -1,5 +1,7 @@
 import type { postTemplateKeys } from "../../../exporting/paths/PostPathTemplate.js"
+
 import { Badge } from "../../components/ui/Badge.js"
+
 import { optionEmbeddedTileClass } from "./OptionControls.js"
 
 const linkTemplateVariableMeta: Record<

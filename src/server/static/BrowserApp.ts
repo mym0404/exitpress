@@ -1,9 +1,12 @@
-import type { ViteDevServer } from "vite"
-import type { Server as HttpServer, IncomingMessage, ServerResponse } from "node:http"
-import { sendFile, sendText } from "../http/HttpResponse.js"
-import { builtClientRoot, devIndexPath } from "../http/ServerPaths.js"
 import { access, readFile } from "node:fs/promises"
 import path from "node:path"
+
+import type { Server as HttpServer, IncomingMessage, ServerResponse } from "node:http"
+
+import type { ViteDevServer } from "vite"
+
+import { sendFile, sendText } from "../http/HttpResponse.js"
+import { builtClientRoot, devIndexPath } from "../http/ServerPaths.js"
 
 const fileExists = async (filePath: string) => {
   try {

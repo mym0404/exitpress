@@ -1,6 +1,8 @@
 import { load } from "cheerio"
+
 import type { UnknownRecord } from "../../../../shared/object/UnknownRecord.js"
 import type { ParserBlockContext } from "../../core/BaseBlock.js"
+
 import { compactText } from "../../../../shared/text/TextUtils.js"
 import { createLinkParagraphBlocks } from "../../common/LinkParagraph.js"
 import { LeafBlock } from "../../core/BaseBlock.js"

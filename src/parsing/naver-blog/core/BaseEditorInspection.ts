@@ -1,10 +1,14 @@
 import type { CheerioAPI } from "cheerio"
 import type { AnyNode } from "domhandler"
+
 import type { ParserBlockOptions } from "../../../domain/ast/Types.js"
 import type { UnknownRecord } from "../../../shared/object/UnknownRecord.js"
+
 import type { BaseBlock, ParserBlockContext } from "./BaseBlock.js"
 import type { ParserBlockInspection } from "./BaseEditorTypes.js"
+
 import { compactText } from "../../../shared/text/TextUtils.js"
+
 import { ContainerBlock, LeafBlock } from "./BaseBlock.js"
 
 const inspectTextMaxLength = 200

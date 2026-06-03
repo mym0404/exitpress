@@ -1,8 +1,11 @@
+import { rm } from "node:fs/promises"
+
 import type { ApiRouteContext, ApiRouteRequest } from "./ApiRouteContext.js"
+
 import { resolveRepoPath } from "../../infra/node/FilePathUtils.js"
 import { isPlainObject, parseJsonBody, sendJson } from "../http/HttpResponse.js"
+
 import { rejectNonJson } from "./RouteSupport.js"
-import { rm } from "node:fs/promises"
 
 const parseOutputDirPayload = async (request: ApiRouteRequest["request"]) => {
   const payload = await parseJsonBody<{

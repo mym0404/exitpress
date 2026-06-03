@@ -1,5 +1,7 @@
 import { RiMoonClearLine, RiSunLine } from "@remixicon/react"
+
 import type { ThemePreference } from "../../../../domain/preferences/ThemePreference.js"
+
 import { Badge } from "../../../components/ui/Badge.js"
 import { Card, CardContent } from "../../../components/ui/Card.js"
 import { ToggleGroup, ToggleGroupItem } from "../../../components/ui/ToggleGroup.js"

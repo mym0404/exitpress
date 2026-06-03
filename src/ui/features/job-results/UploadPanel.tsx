@@ -3,7 +3,9 @@ import type {
   UploadProviderCatalogResponse,
   UploadProviderFields,
 } from "../../../domain/upload/UploadProviderTypes.js"
+
 import type { JobResultsMode } from "./JobResultsHelpers.js"
+
 import { JOB_STATUSES } from "../../../domain/export-job/ExportJobState.js"
 import { UPLOAD_PROVIDER_KEYS } from "../../../domain/upload/UploadProviderKeys.js"
 import { Button } from "../../components/ui/Button.js"
@@ -20,6 +22,7 @@ import {
   SelectValue,
 } from "../../components/ui/Select.js"
 import { ToggleGroup, ToggleGroupItem } from "../../components/ui/ToggleGroup.js"
+
 import { CompactMetrics } from "./CompactMetrics.js"
 import { isAListProvider, panelCopy, toProgressValue } from "./JobResultsHelpers.js"
 import { UploadGithubOptions } from "./UploadGithubOptions.js"

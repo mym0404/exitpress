@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest"
+
 import { defaultExportOptions } from "../../domain/export-options/ExportOptions.js"
+
 import { inspectPostHtml } from "./SinglePostInspect.js"
 
 const options = defaultExportOptions()

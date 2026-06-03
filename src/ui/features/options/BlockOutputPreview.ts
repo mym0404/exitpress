@@ -1,5 +1,6 @@
 import type { AstBlock, BlockOutputSelection } from "../../../domain/ast/Types.js"
 import type { ExportOptions } from "../../../domain/export-options/Types.js"
+
 import {
   createLinkFormatter,
   getHeadingLevelOffset,

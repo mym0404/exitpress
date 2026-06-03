@@ -1,4 +1,5 @@
 import type { ParserBlockContext } from "../../core/BaseBlock.js"
+
 import { compactText } from "../../../../shared/text/TextUtils.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
 

@@ -1,7 +1,9 @@
+import path from "node:path"
+
 import type { ThemePreference } from "../../domain/preferences/ThemePreference.js"
+
 import { DEFAULT_OUTPUT_DIR } from "../../domain/export-options/ExportDefaults.js"
 import { resolveRepoPath } from "../../infra/node/FilePathUtils.js"
-import path from "node:path"
 
 export const builtClientRoot = resolveRepoPath("dist/client")
 export const devIndexPath = resolveRepoPath("index.html")

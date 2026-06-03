@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest"
+
 import type { CategoryInfo, PostSummary } from "../../domain/blog/Types.js"
+
 import { cloneExportOptions } from "../../domain/export-options/ExportOptions.js"
+
 import { filterPostsByScope, isPostWithinScope, resolveSelectedCategoryIds } from "./ExportScope.js"
 
 const categories: CategoryInfo[] = [

@@ -1,12 +1,15 @@
 #!/usr/bin/env bun
 
-import type { SupportUnitClaimPullRequest } from "./lib/ingest-pr-check.js"
-import { resolveRepoPath } from "../../../../src/infra/node/FilePathUtils.js"
-import { createSupportUnitPrCheck, extractDiscoveredSupportUnits } from "./lib/ingest-pr-check.js"
 import { execFile } from "node:child_process"
 import { readFile } from "node:fs/promises"
 import path from "node:path"
 import { promisify } from "node:util"
+
+import type { SupportUnitClaimPullRequest } from "./lib/ingest-pr-check.js"
+
+import { resolveRepoPath } from "../../../../src/infra/node/FilePathUtils.js"
+
+import { createSupportUnitPrCheck, extractDiscoveredSupportUnits } from "./lib/ingest-pr-check.js"
 
 type CheckArgs = {
   outputDir?: string

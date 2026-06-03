@@ -1,11 +1,15 @@
+import { mkdir, readFile, rm, writeFile } from "node:fs/promises"
+import path from "node:path"
+
 import { describe, expect, it, vi } from "vitest"
+
 import type { RunSinglePostCliDeps } from "./export-single-post.js"
+
 import { createTestPath, createTestTempDir } from "../../tests/support/test-paths.js"
+
 import { runSinglePostCli } from "./export-single-post.js"
 import { parseSinglePostCliArgs, singlePostCliUsage } from "./SinglePostArgs.js"
 import { renderSinglePostInspectSummary, renderSinglePostSummary } from "./SinglePostSummary.js"
-import { mkdir, readFile, rm, writeFile } from "node:fs/promises"
-import path from "node:path"
 
 type RunSinglePostExportFn = NonNullable<RunSinglePostCliDeps["exportSinglePost"]>
 type RunSinglePostInspectFn = NonNullable<RunSinglePostCliDeps["inspectSinglePost"]>

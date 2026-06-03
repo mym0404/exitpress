@@ -1,5 +1,10 @@
+import { access, mkdir, readFile, rm, writeFile } from "node:fs/promises"
+import path from "node:path"
+
 import { afterEach, describe, expect, it, vi } from "vitest"
+
 import type { ExportJobState, ExportManifest } from "../../domain/export-job/Types.js"
+
 import {
   baseScanResult,
   cleanupTestServerRoots,
@@ -10,8 +15,6 @@ import { createTestTempDir } from "../../../tests/support/test-paths.js"
 import { defaultExportOptions } from "../../domain/export-options/ExportOptions.js"
 import { NaverBlogExporter } from "../../exporting/workflow/NaverBlogExporter.js"
 import { AbortOperationError } from "../../infra/runtime/AbortOperation.js"
-import { access, mkdir, readFile, rm, writeFile } from "node:fs/promises"
-import path from "node:path"
 
 let activeServer: ReturnType<typeof createTestHttpServer> | null = null
 
@@ -165,18 +168,18 @@ describe("http server resume reset", () => {
       resolveStarted = resolve
     })
 
-    vi.spyOn(NaverBlogExporter.prototype, "run").mockImplementation(async function (
-      this: NaverBlogExporter,
-    ) {
-      resolveStarted()
+    vi.spyOn(NaverBlogExporter.prototype, "run").mockImplementation(
+      async function (this: NaverBlogExporter) {
+        resolveStarted()
 
-      while (!this.abortSignal?.aborted) {
-        await new Promise((resolve) => setTimeout(resolve, 5))
-      }
+        while (!this.abortSignal?.aborted) {
+          await new Promise((resolve) => setTimeout(resolve, 5))
+        }
 
-      signalSeen = true
-      throw new AbortOperationError()
-    })
+        signalSeen = true
+        throw new AbortOperationError()
+      },
+    )
 
     try {
       activeServer = createTestHttpServer({

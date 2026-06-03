@@ -1,6 +1,9 @@
 import { RiExternalLinkLine, RiFileTextLine, RiFolderOpenLine } from "@remixicon/react"
+
 import type { ExportJobState } from "../../../domain/export-job/Types.js"
+
 import type { JobFilter, JobResultsMode } from "./JobResultsHelpers.js"
+
 import { Badge } from "../../components/ui/Badge.js"
 import { Button, buttonVariants } from "../../components/ui/Button.js"
 import { ScrollArea } from "../../components/ui/ScrollArea.js"
@@ -14,6 +17,7 @@ import {
 } from "../../components/ui/Table.js"
 import { Tooltip, TooltipContent, TooltipTrigger } from "../../components/ui/Tooltip.js"
 import { cn } from "../../lib/Cn.js"
+
 import {
   buildJobItemPathMeta,
   buildJobItemSeverity,

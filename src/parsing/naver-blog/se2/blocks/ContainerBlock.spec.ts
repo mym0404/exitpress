@@ -1,10 +1,13 @@
 import { load } from "cheerio"
 import { describe, expect, it } from "vitest"
+
 import type { AstBlock, ParsedPost } from "../../../../domain/ast/Types.js"
+
 import { parseSe2Blocks } from "../../../../../tests/support/parser-test-utils.js"
 import { defaultExportOptions } from "../../../../domain/export-options/ExportOptions.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
 import { BaseEditor } from "../../core/BaseEditor.js"
+
 import { NaverSe2ContainerBlock } from "./ContainerBlock.js"
 import { NaverSe2TextNodeBlock } from "./TextNodeBlock.js"
 

@@ -1,5 +1,6 @@
 import type { Cheerio, CheerioAPI } from "cheerio"
 import type { AnyNode } from "domhandler"
+
 import type {
   AstBlock,
   BlockOutputSelection,

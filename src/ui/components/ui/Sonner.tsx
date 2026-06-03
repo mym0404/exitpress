@@ -1,5 +1,6 @@
-import type { ToasterProps } from "sonner"
 import { Toaster as Sonner, toast } from "sonner"
+
+import type { ToasterProps } from "sonner"
 
 export const Toaster = ({ theme = "dark", ...props }: ToasterProps) => (
   <Sonner

@@ -1,8 +1,11 @@
 import type { CheerioAPI } from "cheerio"
+
 import type { ParserBlockContext } from "../../core/BaseBlock.js"
+
 import { convertHtmlToMarkdown } from "../../../../markdown/TurndownMarkdownConverter.js"
 import { compactMarkdownText } from "../../../../shared/text/TextUtils.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
+
 import { findInComponentRoot } from "./util/ComponentBoundary.js"
 
 const textComponentClasses = ["se_text", "se_paragraph", "se_sectionTitle"]

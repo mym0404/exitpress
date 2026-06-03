@@ -1,5 +1,7 @@
 import type { AstBlock } from "../../../domain/ast/Types.js"
+
 import type { parseHtmlTable } from "./parseHtmlTable.js"
+
 import { convertHtmlToMarkdown } from "../../../markdown/TurndownMarkdownConverter.js"
 
 export const parseSingleColumnTableAsParagraphs = ({

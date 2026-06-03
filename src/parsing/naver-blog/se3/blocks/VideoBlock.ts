@@ -1,10 +1,13 @@
 import type { AnyNode } from "domhandler"
+
 import type { OutputOption } from "../../../../domain/ast/Types.js"
 import type { UnknownRecord } from "../../../../shared/object/UnknownRecord.js"
 import type { ParserBlockContext } from "../../core/BaseBlock.js"
+
 import { compactText } from "../../../../shared/text/TextUtils.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
 import { parseJsonAttribute } from "../../core/JsonAttribute.js"
+
 import { findInComponentRoot } from "./util/ComponentBoundary.js"
 
 const parseDimension = (value: unknown) => {

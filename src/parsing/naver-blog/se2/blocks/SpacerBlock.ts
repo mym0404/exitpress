@@ -1,5 +1,7 @@
 import type { ParserBlockContext } from "../../core/BaseBlock.js"
+
 import { LeafBlock } from "../../core/BaseBlock.js"
+
 import { isSpacerBlock } from "./ContainerBlock.js"
 
 export class NaverSe2SpacerBlock extends LeafBlock {

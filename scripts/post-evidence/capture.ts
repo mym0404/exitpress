@@ -1,12 +1,20 @@
-import type { Browser } from "playwright"
+import { createHash } from "node:crypto"
+import { readFile, writeFile } from "node:fs/promises"
+import path from "node:path"
+
 import { chromium } from "playwright"
+
+import type { Browser } from "playwright"
+
 import type { AstBlock, ParsedPost } from "../../src/domain/ast/Types.js"
 import type { PostSummary, ScanResult } from "../../src/domain/blog/Types.js"
 import type { ExportOptions } from "../../src/domain/export-options/Types.js"
 import type { SinglePostFetcher } from "../../src/exporting/post/SinglePostExport.js"
+
 import type { EvidenceCase } from "./cases.js"
 import type { EvidenceMarkdownSection } from "./evidence.js"
 import type { EvidenceAssetProfile } from "./paths.js"
+
 import { extractBlogId } from "../../src/domain/blog/NaverUrl.js"
 import {
   cloneExportOptions,
@@ -27,6 +35,7 @@ import { mapConcurrent } from "../../src/shared/async/AsyncUtils.js"
 import { toErrorMessage } from "../../src/shared/error/ErrorUtils.js"
 import { createSinglePostMetadataCachingFetcher } from "../single-post/MetadataCache.js"
 import { readSinglePostOptions } from "../single-post/SinglePostOptions.js"
+
 import { renderEvidenceMarkdownSections } from "./evidence.js"
 import {
   createDefaultEvidenceOutputDir,
@@ -35,9 +44,6 @@ import {
   toMarkdownAssetPath,
 } from "./paths.js"
 import { captureNaverPost } from "./playwright.js"
-import { createHash } from "node:crypto"
-import { readFile, writeFile } from "node:fs/promises"
-import path from "node:path"
 
 export type EvidenceRowReport = {
   blogId: string

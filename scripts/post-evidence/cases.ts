@@ -1,5 +1,6 @@
-import type { EvidenceAssetProfile } from "./paths.js"
 import { readFile } from "node:fs/promises"
+
+import type { EvidenceAssetProfile } from "./paths.js"
 
 export type EvidenceTarget =
   | {

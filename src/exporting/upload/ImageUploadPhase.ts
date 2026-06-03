@@ -1,9 +1,12 @@
+import path from "node:path"
+
 import type { UploadCandidate } from "../../domain/export-job/Types.js"
 import type { UnknownRecord } from "../../shared/object/UnknownRecord.js"
+
 import { ensureDir, getProjectTempPath } from "../../infra/node/FilePathUtils.js"
 import { throwIfAborted } from "../../infra/runtime/AbortOperation.js"
+
 import { dedupeUploadCandidatesByLocalPath } from "./UploadCandidateUtils.js"
-import path from "node:path"
 
 type RuntimeUploadResponse = {
   imgUrl?: string

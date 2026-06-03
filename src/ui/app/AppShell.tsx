@@ -1,13 +1,16 @@
 import type { ReactNode, RefObject } from "react"
+
 import type { ThemePreference } from "../../domain/preferences/ThemePreference.js"
 import type { SetupStep, WizardStep } from "../features/common/shell/WizardFlow.js"
 import type { ResumeDialogState } from "../features/resume/ResumeState.js"
+
 import { Toaster } from "../components/ui/Sonner.js"
 import { WizardDock } from "../features/common/shell/WizardDock.js"
 import { NextActionIcon, stepMeta } from "../features/common/shell/WizardFlow.js"
 import { WizardHeader } from "../features/common/shell/WizardHeader.js"
 import { ResumeDialogPanel } from "../features/resume/ResumeDialogPanel.js"
 import { cn } from "../lib/Cn.js"
+
 import { BootstrapLoadingOverlay } from "./BootstrapLoadingOverlay.js"
 
 export const AppShell = ({

@@ -1,5 +1,6 @@
 import type { PostSummary } from "../../domain/blog/Types.js"
 import type { ExportOptions } from "../../domain/export-options/Types.js"
+
 import {
   formatCategorySegment,
   formatTitleSegment,

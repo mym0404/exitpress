@@ -1,7 +1,9 @@
-import type { IncomingMessage, ServerResponse } from "node:http"
-import type { UnknownRecord } from "../../shared/object/UnknownRecord.js"
 import { readFile } from "node:fs/promises"
 import path from "node:path"
+
+import type { IncomingMessage, ServerResponse } from "node:http"
+
+import type { UnknownRecord } from "../../shared/object/UnknownRecord.js"
 
 const contentTypes: Record<string, string> = {
   ".css": "text/css; charset=utf-8",

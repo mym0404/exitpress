@@ -1,4 +1,8 @@
+import { rm } from "node:fs/promises"
+import path from "node:path"
+
 import { chromium } from "playwright"
+
 import type { ScanResult } from "../../../src/domain/blog/Types.js"
 import type {
   ExportJobItem,
@@ -7,6 +11,7 @@ import type {
   ExportResumeSummary,
 } from "../../../src/domain/export-job/Types.js"
 import type { UploadProviderCatalogResponse } from "../../../src/domain/upload/UploadProviderTypes.js"
+
 import {
   defaultExportOptions,
   frontmatterFieldMeta,
@@ -17,8 +22,6 @@ import { NaverBlog } from "../../../src/parsing/naver-blog/NaverBlog.js"
 import { createHttpServer } from "../../../src/server/http/HttpServer.js"
 import { mapConcurrent } from "../../../src/shared/async/AsyncUtils.js"
 import { createTestTempDir } from "../../support/test-paths.js"
-import { rm } from "node:fs/promises"
-import path from "node:path"
 
 const desktopViewport = {
   width: 1440,

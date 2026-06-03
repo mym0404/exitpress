@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest"
+
 import { ignoredRuntimeOutputGlobs } from "./RuntimeOutputWatchGlobs.js"
 
 describe("vite config", () => {

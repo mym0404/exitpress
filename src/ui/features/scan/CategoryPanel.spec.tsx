@@ -3,7 +3,9 @@
 import "@testing-library/jest-dom/vitest"
 import { cleanup, fireEvent, render } from "@testing-library/react"
 import { afterEach, describe, expect, it, vi } from "vitest"
+
 import type { ScanResult } from "../../../domain/blog/Types.js"
+
 import { CategoryPanel } from "./CategoryPanel.js"
 
 afterEach(() => {

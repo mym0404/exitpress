@@ -1,7 +1,10 @@
 import { useCallback } from "react"
+
 import type { ScanResult } from "../../../../domain/blog/Types.js"
 import type { ExportResumeLookupResponse } from "../../../lib/Api.js"
+
 import type { WizardScanActionsArgs } from "./UseWizardActionTypes.js"
+
 import { toast } from "../../../components/ui/Sonner.js"
 import { postJson } from "../../../lib/Api.js"
 import {
@@ -14,6 +17,7 @@ import {
   resolveScopedCategoryIds,
   resumeLookupErrorStatus,
 } from "../../scan/ScanStatus.js"
+
 import { useWizardCategoryActions } from "./UseWizardCategoryActions.js"
 
 export const useWizardScanActions = ({

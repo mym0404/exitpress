@@ -1,7 +1,9 @@
 import type { ParserBlockContext } from "../../core/BaseBlock.js"
+
 import { normalizeAssetUrl } from "../../../../domain/blog/NaverUrl.js"
 import { compactText } from "../../../../shared/text/TextUtils.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
+
 import { hasOnlyTargetContent } from "./util/WrapperContent.js"
 
 const getPollLink = ({ $node }: Pick<ParserBlockContext, "$node">) => {

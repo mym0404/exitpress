@@ -1,7 +1,10 @@
 import { describe, expect, it } from "vitest"
+
 import type { CategoryInfo, PostSummary } from "../../domain/blog/Types.js"
+
 import { createTestPath } from "../../../tests/support/test-paths.js"
 import { defaultExportOptions } from "../../domain/export-options/ExportOptions.js"
+
 import {
   buildPostLinkTargets,
   createSameBlogPostLinkResolver,

@@ -1,5 +1,7 @@
 import { useCallback } from "react"
+
 import type { WizardScanActionsArgs } from "./UseWizardActionTypes.js"
+
 import { toast } from "../../../components/ui/Sonner.js"
 import { toggleCategorySelection } from "../../scan/CategorySelection.js"
 

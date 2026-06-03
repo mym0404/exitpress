@@ -1,8 +1,11 @@
+import { createHash } from "node:crypto"
+
 import { describe, expect, it, vi } from "vitest"
+
 import { createTestPath } from "../../../tests/support/test-paths.js"
 import { defaultExportOptions } from "../../domain/export-options/ExportOptions.js"
+
 import { AssetStore } from "./AssetStore.js"
-import { createHash } from "node:crypto"
 
 const testOutputDir = createTestPath("asset-store", "output")
 

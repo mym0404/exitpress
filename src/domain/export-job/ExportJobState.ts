@@ -39,9 +39,9 @@ export const isUploadActionableJob = (
 ) =>
   Boolean(
     job &&
-      (job.status === JOB_STATUSES.UPLOAD_READY ||
-        job.status === JOB_STATUSES.UPLOAD_FAILED ||
-        (job.status === JOB_STATUSES.UPLOADING && job.resumeAvailable)),
+    (job.status === JOB_STATUSES.UPLOAD_READY ||
+      job.status === JOB_STATUSES.UPLOAD_FAILED ||
+      (job.status === JOB_STATUSES.UPLOADING && job.resumeAvailable)),
   )
 
 export const resolveExportResumePhase = (status: JobStatus): ExportResumePhase => {

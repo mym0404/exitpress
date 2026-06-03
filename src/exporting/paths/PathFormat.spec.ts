@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest"
+
 import { formatTitleSegment, sanitizePathSegment, slugifyTitle } from "./PathFormat.js"
 
 describe("path format", () => {

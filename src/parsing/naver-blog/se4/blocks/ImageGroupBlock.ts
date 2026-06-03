@@ -1,5 +1,7 @@
 import type { ParserBlockContext } from "../../core/BaseBlock.js"
+
 import { LeafBlock } from "../../core/BaseBlock.js"
+
 import { imageGroupOutputOptions, parseSe4ImageGroup } from "./util/ImageCollection.js"
 
 export class NaverSe4ImageGroupBlock extends LeafBlock {

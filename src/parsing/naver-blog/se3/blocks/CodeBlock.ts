@@ -1,5 +1,7 @@
 import type { ParserBlockContext } from "../../core/BaseBlock.js"
+
 import { LeafBlock } from "../../core/BaseBlock.js"
+
 import { findInComponentRoot } from "./util/ComponentBoundary.js"
 
 export class NaverSe3CodeBlock extends LeafBlock {

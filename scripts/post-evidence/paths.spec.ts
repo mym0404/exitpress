@@ -1,7 +1,10 @@
-import { describe, expect, it } from "vitest"
-import { resolveRepoPath } from "../../src/infra/node/FilePathUtils.js"
-import { toMarkdownAssetPath } from "./paths.js"
 import path from "node:path"
+
+import { describe, expect, it } from "vitest"
+
+import { resolveRepoPath } from "../../src/infra/node/FilePathUtils.js"
+
+import { toMarkdownAssetPath } from "./paths.js"
 
 describe("toMarkdownAssetPath", () => {
   it("keeps tmp assets relative to the generated evidence document", () => {

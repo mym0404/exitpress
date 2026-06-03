@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest"
+
 import { parseSe4Blocks } from "../../../../../tests/support/parser-test-utils.js"
 
 describe("NaverSe4WrappingParagraphBlock", () => {

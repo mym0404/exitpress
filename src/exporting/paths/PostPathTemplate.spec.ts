@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest"
+
 import { defaultExportOptions } from "../../domain/export-options/ExportOptions.js"
+
 import {
   applyPostTemplate,
   buildPostFolderName,

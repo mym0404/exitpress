@@ -1,5 +1,6 @@
 import type { CheerioAPI } from "cheerio"
 import type { AnyNode } from "domhandler"
+
 import type {
   AstBlock,
   EditorBlockOutputDefinition,
@@ -8,9 +9,12 @@ import type {
 } from "../../../domain/ast/Types.js"
 import type { ExportOptions } from "../../../domain/export-options/Types.js"
 import type { UnknownRecord } from "../../../shared/object/UnknownRecord.js"
+
 import type { BaseBlock, ParserBlockContext, ParserBlockConvertContext } from "./BaseBlock.js"
 import type { ParserBlockInspection, ParserBlockSourceEvidence } from "./BaseEditorTypes.js"
+
 import { resolveBlockOutputSelection } from "../../../domain/export-options/BlockOutputSelection.js"
+
 import { LeafBlock } from "./BaseBlock.js"
 import { inspectEditorBlocks } from "./BaseEditorInspection.js"
 import {

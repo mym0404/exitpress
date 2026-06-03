@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest"
+
 import { listSampleFixtures, loadSampleFixture, renderSampleFixture } from "./sample-fixtures.js"
 
 const samples = await listSampleFixtures()

@@ -1,8 +1,11 @@
-import { describe, expect, it } from "vitest"
-import { createTestTempDir } from "../../tests/support/test-paths.js"
-import { createSinglePostMetadataCachingFetcher } from "./MetadataCache.js"
 import { readFile, rm } from "node:fs/promises"
 import path from "node:path"
+
+import { describe, expect, it } from "vitest"
+
+import { createTestTempDir } from "../../tests/support/test-paths.js"
+
+import { createSinglePostMetadataCachingFetcher } from "./MetadataCache.js"
 
 const createBaseFetcher = ({
   scanCount,

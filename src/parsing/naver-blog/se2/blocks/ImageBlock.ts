@@ -1,6 +1,8 @@
 import type { CheerioAPI } from "cheerio"
+
 import type { ImageData, OutputOption } from "../../../../domain/ast/Types.js"
 import type { ParserBlockContext } from "../../core/BaseBlock.js"
+
 import { normalizeAssetUrl } from "../../../../domain/blog/NaverUrl.js"
 import { compactText } from "../../../../shared/text/TextUtils.js"
 import { LeafBlock } from "../../core/BaseBlock.js"

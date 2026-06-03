@@ -1,5 +1,10 @@
+import { access, rm } from "node:fs/promises"
+import path from "node:path"
+
 import { afterEach, describe, expect, it, vi } from "vitest"
+
 import type { UploadCandidate } from "../../domain/export-job/Types.js"
+
 import {
   cleanupTestServerRoots,
   createTestHttpServer,
@@ -12,8 +17,6 @@ import {
 import { createTestPath, createTestTempDir } from "../../../tests/support/test-paths.js"
 import { defaultExportOptions } from "../../domain/export-options/ExportOptions.js"
 import { AbortOperationError } from "../../infra/runtime/AbortOperation.js"
-import { access, rm } from "node:fs/promises"
-import path from "node:path"
 
 let activeServer: ReturnType<typeof createTestHttpServer> | null = null
 

@@ -2,7 +2,9 @@
 
 import { RiCheckLine } from "@remixicon/react"
 import { Checkbox as CheckboxPrimitive } from "radix-ui"
+
 import type * as React from "react"
+
 import { cn } from "../../lib/Cn.js"
 
 function Checkbox({ className, ...props }: React.ComponentProps<typeof CheckboxPrimitive.Root>) {

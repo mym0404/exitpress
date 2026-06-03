@@ -1,4 +1,5 @@
 import { RiLoader4Line } from "@remixicon/react"
+
 import { Card, CardContent } from "../components/ui/Card.js"
 
 export const BootstrapLoadingOverlay = () => (

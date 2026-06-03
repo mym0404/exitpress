@@ -1,7 +1,10 @@
 import { describe, expect, it } from "vitest"
+
 import type { ExportManifest, ExportRequest } from "../../domain/export-job/Types.js"
+
 import { createTestPath } from "../../../tests/support/test-paths.js"
 import { defaultExportOptions } from "../../domain/export-options/ExportOptions.js"
+
 import { JobStore } from "./JobStore.js"
 
 const testOutputDir = createTestPath("job-store", "output")

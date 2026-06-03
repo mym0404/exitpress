@@ -1,6 +1,8 @@
 import type { AstBlock, BlockOutputSelection, ImageData } from "../domain/ast/Types.js"
 import type { ExportOptions } from "../domain/export-options/Types.js"
+
 import { resolveBlockOutputSelection } from "../domain/export-options/BlockOutputSelection.js"
+
 import {
   createLinkFormatter,
   getHeadingLevelOffset,

@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest"
+
 import { createCoalescedTaskRunner } from "./CoalescedTaskRunner.js"
 
 describe("coalesced task runner", () => {

@@ -1,5 +1,6 @@
 import type { OutputOption } from "../../../../domain/ast/Types.js"
 import type { ParserBlockContext } from "../../core/BaseBlock.js"
+
 import { convertHtmlToMarkdown } from "../../../../markdown/TurndownMarkdownConverter.js"
 import { compactText } from "../../../../shared/text/TextUtils.js"
 import { LeafBlock } from "../../core/BaseBlock.js"

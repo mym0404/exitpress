@@ -1,7 +1,10 @@
 import { RiCloseLine } from "@remixicon/react"
 import { Dialog as DialogPrimitive } from "radix-ui"
+
 import type * as React from "react"
+
 import { cn } from "../../lib/Cn.js"
+
 import { Button } from "./Button.js"
 
 function Dialog({ ...props }: React.ComponentProps<typeof DialogPrimitive.Root>) {

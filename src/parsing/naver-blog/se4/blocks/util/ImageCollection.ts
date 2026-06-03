@@ -1,5 +1,6 @@
 import type { ImageData, OutputOption } from "../../../../../domain/ast/Types.js"
 import type { LeafBlock } from "../../../core/BaseBlock.js"
+
 import { parseImageLink, se4ImageLinkSelector } from "./ImageLink.js"
 
 export const imageGroupOutputOptions = [

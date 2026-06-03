@@ -1,5 +1,6 @@
 import * as HttpUtil from "../../infra/http/HttpUtil.js"
 import { delay } from "../../shared/async/AsyncUtils.js"
+
 import { browserHeaders } from "./NaverBlogRequestHeaders.js"
 
 export const fetchNaverBlogJson = async <Result>({

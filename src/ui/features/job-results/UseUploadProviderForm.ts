@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react"
+
 import type {
   UploadProviderCatalogResponse,
   UploadProviderFields,
 } from "../../../domain/upload/UploadProviderTypes.js"
+
 import type { ProviderUiState } from "./UploadProviderFormRules.js"
+
 import {
   buildGitHubJsDelivrCustomUrl,
   buildInitialProviderFieldMap,

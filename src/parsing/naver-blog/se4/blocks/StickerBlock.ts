@@ -1,4 +1,5 @@
 import type { ParserBlockContext } from "../../core/BaseBlock.js"
+
 import { normalizeAssetUrl } from "../../../../domain/blog/NaverUrl.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
 import { parseJsonAttribute } from "../../core/JsonAttribute.js"

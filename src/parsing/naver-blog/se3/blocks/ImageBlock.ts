@@ -1,8 +1,11 @@
 import type { CheerioAPI } from "cheerio"
+
 import type { AstBlock, ImageData, OutputOption } from "../../../../domain/ast/Types.js"
 import type { ParserBlockContext } from "../../core/BaseBlock.js"
+
 import { normalizeAssetUrl } from "../../../../domain/blog/NaverUrl.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
+
 import { findInComponentRoot, textOutsideNestedComponents } from "./util/ComponentBoundary.js"
 
 const image360PreviewSelector = ".__se_360vr_preview"

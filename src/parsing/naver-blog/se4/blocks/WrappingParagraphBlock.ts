@@ -1,5 +1,7 @@
 import type { ParserBlockContext } from "../../core/BaseBlock.js"
+
 import { LeafBlock } from "../../core/BaseBlock.js"
+
 import { parseTextBlocks } from "./TextBlock.js"
 import { parseImageLink, se4ImageLinkSelector } from "./util/ImageLink.js"
 

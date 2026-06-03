@@ -1,8 +1,10 @@
 import type { ParserBlockContext } from "../../core/BaseBlock.js"
+
 import { compactText } from "../../../../shared/text/TextUtils.js"
 import { createLinkParagraphBlocks } from "../../common/LinkParagraph.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
 import { parseJsonAttribute } from "../../core/JsonAttribute.js"
+
 import { findInComponentRoot } from "./util/ComponentBoundary.js"
 
 export class NaverSe3LinkCardBlock extends LeafBlock {

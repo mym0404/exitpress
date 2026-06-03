@@ -1,6 +1,8 @@
 import type { IncomingMessage, ServerResponse } from "node:http"
+
 import { toErrorMessage } from "../../shared/error/ErrorUtils.js"
 import { hasJsonContentType, sendJson } from "../http/HttpResponse.js"
+
 import { isSameOriginUploadRequest } from "./LocalFileService.js"
 
 export const rejectNonJson = (request: IncomingMessage, response: ServerResponse) => {

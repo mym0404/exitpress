@@ -1,12 +1,14 @@
+import { readFile, rm, writeFile } from "node:fs/promises"
+import path from "node:path"
+
 import { afterEach, describe, expect, it, vi } from "vitest"
+
 import {
   cleanupTestServerRoots,
   createTestHttpServer,
   startServer,
 } from "../../../tests/support/server/HttpServerSpecHarness.js"
 import { createTestTempDir } from "../../../tests/support/test-paths.js"
-import { readFile, rm, writeFile } from "node:fs/promises"
-import path from "node:path"
 
 let activeServer: ReturnType<typeof createTestHttpServer> | null = null
 

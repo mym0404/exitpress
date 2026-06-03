@@ -1,5 +1,6 @@
 import type { OutputOption } from "../../../../domain/ast/Types.js"
 import type { ParserBlockContext } from "../../core/BaseBlock.js"
+
 import { parseHtmlTable } from "../../common/parseHtmlTable.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
 

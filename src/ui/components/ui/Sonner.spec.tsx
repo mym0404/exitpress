@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest"
+
 import { Toaster } from "./Sonner.js"
 
 describe("Toaster", () => {
