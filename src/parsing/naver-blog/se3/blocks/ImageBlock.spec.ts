@@ -134,6 +134,56 @@ describe("NaverSe3ImageBlock", () => {
     ])
   })
 
+  it("falls back to 360vr preview background images", () => {
+    const parsed = parseSe3Blocks(`
+      <div class="se_component se_image se_360vr default">
+        <div class="se_sectionArea se_align-justify">
+          <div class="se_editArea">
+            <div class="se_viewArea is-default __se_360vr_wrapper">
+              <div class="se_mediaArea __se_360vr_container">
+                <div class="se_imageArea">
+                  <div
+                    class="se_mediaImage __se_360vr_preview"
+                    style="background-image:url('https://example.com/vr.jpg?type=preview966_544');"
+                  ></div>
+                </div>
+              </div>
+              <div class="se_editView">
+                <div class="se_textView se_mediaCaption">
+                  <span class="se_textarea">360 preview</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `)
+
+    expect(parsed.blocks).toEqual([
+      {
+        type: "image",
+        image: {
+          sourceUrl: "https://example.com/vr.jpg?type=preview966_544",
+          originalSourceUrl: null,
+          alt: "",
+          caption: null,
+          mediaKind: "image",
+        },
+        outputSelectionKey: "naver-se3:image",
+        outputSelection: {
+          variant: "markdown-image",
+          params: {
+            includeCaption: false,
+          },
+        },
+      },
+      {
+        type: "paragraph",
+        text: "360 preview",
+      },
+    ])
+  })
+
   it("keeps gif video images without mp4 sources as source-only images", () => {
     const parsed = parseSe3Blocks(`
       <div class="se_component se_image default">
@@ -307,6 +357,37 @@ describe("NaverSe3ImageBlock", () => {
         <img src="https://example.com/root.png" alt="root" />
         <div class="se_component se_image">
           <img src="https://example.com/nested.png" alt="nested" />
+        </div>
+      </div>
+    `)
+
+    expect(parsed.blocks).toEqual([
+      {
+        type: "image",
+        image: {
+          sourceUrl: "https://example.com/root.png",
+          originalSourceUrl: null,
+          alt: "root",
+          caption: null,
+          mediaKind: "image",
+        },
+        outputSelectionKey: "naver-se3:image",
+        outputSelection: {
+          variant: "markdown-image",
+          params: {
+            includeCaption: false,
+          },
+        },
+      },
+    ])
+  })
+
+  it("does not pull 360vr preview images from nested components into the parent image block", () => {
+    const parsed = parseSe3Blocks(`
+      <div class="se_component se_image">
+        <img src="https://example.com/root.png" alt="root" />
+        <div class="se_component se_image se_360vr default">
+          <div class="se_mediaImage __se_360vr_preview" style="background-image:url('https://example.com/nested-vr.jpg');"></div>
         </div>
       </div>
     `)

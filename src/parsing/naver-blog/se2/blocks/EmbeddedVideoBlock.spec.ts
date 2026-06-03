@@ -184,6 +184,45 @@ describe("NaverSe2EmbeddedVideoBlock", () => {
     expect(parsed.videos).toEqual([video])
   })
 
+  it("parses direct video iframes wrapped in legacy paragraphs", () => {
+    const parsed = parseSe2Blocks(`
+      <p>
+        <iframe
+          src="https://photocast.cloud.naver.com/inlineplayer/2;sample;83295?blog&amp;__authenticIframe=true"
+          width="260"
+          height="190"
+          frameborder="0"
+          allowfullscreen=""
+        ></iframe>&nbsp;
+      </p>
+    `)
+
+    const video = {
+      title: "Video",
+      thumbnailUrl: null,
+      sourceUrl:
+        "https://photocast.cloud.naver.com/inlineplayer/2;sample;83295?blog&__authenticIframe=true",
+      vid: null,
+      inkey: null,
+      width: 260,
+      height: 190,
+    }
+
+    expect(parsed.blocks).toEqual([{ type: "video", video }])
+    expect(parsed.videos).toEqual([video])
+  })
+
+  it("does not parse direct video iframes mixed with text", () => {
+    const parsed = parseSe2Blocks(`
+      <p>
+        caption
+        <iframe src="https://example.com/embed" width="260" height="190"></iframe>
+      </p>
+    `)
+
+    expect(parsed.blocks).toEqual([{ type: "paragraph", text: "caption" }])
+  })
+
   it("keeps invalid iframe source strings without video metadata", () => {
     const parsed = parseSe2Blocks(`
       <p>
