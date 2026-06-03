@@ -5,8 +5,6 @@ import type { UploadProviderFields } from "../../../../domain/upload/UploadProvi
 import type { UseWizardActionsArgs } from "./UseWizardActionTypes.js"
 
 import { toast } from "../../../components/ui/Sonner.js"
-import { createErrorJobState } from "../../job-results/ExportJobFallback.js"
-import { normalizeOutputDir } from "../../scan/ScanStatus.js"
 import { setupSteps } from "../shell/WizardFlow.js"
 
 import { useWizardResumeActions } from "./UseWizardResumeActions.js"
@@ -17,15 +15,10 @@ export const useWizardActions = (args: UseWizardActionsArgs) => {
     isSetupStep,
     setupStep,
     setupStepIndex,
-    currentScanTarget,
-    outputDir,
     activeScanResult,
-    scopedPostCount,
-    options,
     frontmatterValidationErrors,
-    startJob,
+    startBlockScan,
     startUpload,
-    setJob,
     setCategoryStatus,
     setSetupStep,
     setActiveJobFilter,
@@ -58,45 +51,14 @@ export const useWizardActions = (args: UseWizardActionsArgs) => {
     }
 
     setActiveJobFilter("all")
-
-    try {
-      const jobId = await startJob({
-        blogIdOrUrl: currentScanTarget,
-        outputDir: normalizeOutputDir(outputDir),
-        options,
-        scanResult: activeScanResult,
-      })
-      toast.success("내보내기 작업을 등록했습니다.", {
-        description: `${scopedPostCount}개 글을 처리합니다. 작업 ID ${jobId}`,
-      })
-    } catch (error) {
-      const message = error instanceof Error ? error.message : String(error)
-      setJob(
-        createErrorJobState({
-          error: message,
-          request: {
-            blogIdOrUrl: currentScanTarget,
-            outputDir: normalizeOutputDir(outputDir),
-            options,
-          },
-        }),
-      )
-      toast.error("내보내기 작업 등록에 실패했습니다.", {
-        description: message,
-      })
-    }
+    await startBlockScan()
   }, [
     activeScanResult,
-    currentScanTarget,
     frontmatterValidationErrors.length,
-    options,
-    outputDir,
-    scopedPostCount,
     setActiveJobFilter,
     setCategoryStatus,
-    setJob,
     setSetupStep,
-    startJob,
+    startBlockScan,
   ])
 
   const handleUpload = useCallback(
@@ -140,6 +102,11 @@ export const useWizardActions = (args: UseWizardActionsArgs) => {
 
     if (setupStep === "blog-input") {
       await ensureScanResult()
+      return
+    }
+
+    if (setupStep === "category-selection") {
+      setSetupStep("structure-options")
       return
     }
 

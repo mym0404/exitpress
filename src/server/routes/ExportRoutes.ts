@@ -16,7 +16,7 @@ const parseJsonPayload = async <T>(request: ApiRouteRequest["request"]) => {
 }
 
 export const handleExportRoutes =
-  ({ jobStore, state, exportJobRunner }: ApiRouteContext) =>
+  ({ jobStore, state, blockScanJobRunner, exportJobRunner }: ApiRouteContext) =>
   async ({ request, response, method, url }: ApiRouteRequest) => {
     if (method === "POST" && url.pathname === "/api/scan") {
       const payload = await parseJsonPayload<{ blogIdOrUrl?: string; forceRefresh?: boolean }>(
@@ -39,6 +39,73 @@ export const handleExportRoutes =
       const scanResult = await new NaverBlogFetcher({ blogId }).scanBlog({ includePosts: true })
       await state.updateScanCache({ blogId, scanResult })
       sendJson({ response, statusCode: 200, body: scanResult })
+      return true
+    }
+
+    if (method === "POST" && url.pathname === "/api/scan-blocks/jobs") {
+      const payload = await parseJsonPayload<{
+        blogIdOrUrl?: string
+        scanResult?: ScanResult
+        options?: PartialExportOptions
+      }>(request)
+
+      if (!payload.blogIdOrUrl?.trim() || !payload.scanResult?.posts) {
+        sendJson({
+          response,
+          statusCode: 400,
+          body: { error: "blogIdOrUrl와 scanResult.posts는 필수입니다." },
+        })
+        return true
+      }
+
+      const blogId = extractBlogId(payload.blogIdOrUrl)
+
+      if (payload.scanResult.blogId !== blogId) {
+        sendJson({
+          response,
+          statusCode: 400,
+          body: { error: "scanResult.blogId가 요청 블로그와 일치하지 않습니다." },
+        })
+        return true
+      }
+
+      let options: ReturnType<typeof state.cloneOptions>
+
+      try {
+        options = state.cloneOptions(payload.options)
+      } catch (error) {
+        sendJson({ response, statusCode: 400, body: { error: toErrorMessage(error) } })
+        return true
+      }
+
+      const job = blockScanJobRunner.startJob({
+        scanResult: payload.scanResult as ScanResult & {
+          posts: NonNullable<ScanResult["posts"]>
+        },
+        options,
+      })
+
+      sendJson({
+        response,
+        statusCode: 202,
+        body: {
+          jobId: job.id,
+        },
+      })
+      return true
+    }
+
+    const scanJobMatch = url.pathname.match(/^\/api\/scan-blocks\/jobs\/([^/]+)$/)
+
+    if (method === "GET" && scanJobMatch?.[1]) {
+      const job = blockScanJobRunner.getJob(scanJobMatch[1])
+
+      if (!job) {
+        sendJson({ response, statusCode: 404, body: { error: "job not found" } })
+        return true
+      }
+
+      sendJson({ response, statusCode: 200, body: job })
       return true
     }
 

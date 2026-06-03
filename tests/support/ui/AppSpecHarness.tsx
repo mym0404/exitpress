@@ -15,11 +15,13 @@ import {
   frontmatterFieldOrder,
   optionDescriptions,
 } from "../../../src/domain/export-options/ExportOptions.js"
+import { NaverBlog } from "../../../src/parsing/naver-blog/NaverBlog.js"
 import { App } from "../../../src/ui/app/App.js"
 import { createTestPath } from "../test-paths.js"
 
 export const testOutputDir = createTestPath("ui-app", "output")
 export const testResumeOutputDir = createTestPath("ui-app", "resume-output")
+const blockOutputDefinitions = new NaverBlog().getBlockOutputDefinitions()
 
 export const buildJsonResponse = (body: unknown, status = 200) =>
   new Response(JSON.stringify(body), {
@@ -546,6 +548,7 @@ export const getBootstrapResponse = (url: string) => {
       frontmatterFieldOrder,
       frontmatterFieldMeta,
       optionDescriptions,
+      blockOutputDefinitions,
     })
   }
 
@@ -554,6 +557,22 @@ export const getBootstrapResponse = (url: string) => {
       resumedJob: null,
       resumeSummary: null,
       resumedScanResult: null,
+    })
+  }
+
+  if (url.endsWith("/api/scan-blocks/jobs")) {
+    return buildJsonResponse({ jobId: "block-scan-job" }, 202)
+  }
+
+  if (url.endsWith("/api/scan-blocks/jobs/block-scan-job")) {
+    return buildJsonResponse({
+      id: "block-scan-job",
+      status: "completed",
+      total: 1,
+      completed: 1,
+      failed: 0,
+      detectedBlockOutputKeys: ["naver-se4:image"],
+      error: null,
     })
   }
 
@@ -577,11 +596,33 @@ export const moveToDiagnosticsStep = async (user: ReturnType<typeof userEvent.se
     expect(document.querySelector('[data-step-view="category-selection"]')).not.toBeNull()
   })
   await user.click(screen.getByRole("button", { name: "구조 설정" }))
+  await waitFor(() => {
+    expect(document.querySelector('[data-step-view="structure-options"]')).not.toBeNull()
+  })
   await user.click(screen.getByRole("button", { name: "Frontmatter 설정" }))
-  await user.click(screen.getByRole("button", { name: "Markdown 설정" }))
+  await waitFor(() => {
+    expect(document.querySelector('[data-step-view="frontmatter-options"]')).not.toBeNull()
+  })
   await user.click(screen.getByRole("button", { name: "Assets 설정" }))
+  await waitFor(() => {
+    expect(document.querySelector('[data-step-view="assets-options"]')).not.toBeNull()
+  })
   await user.click(screen.getByRole("button", { name: "Link 처리" }))
+  await waitFor(() => {
+    expect(document.querySelector('[data-step-view="links-options"]')).not.toBeNull()
+  })
   await user.click(screen.getByRole("button", { name: "진단 설정" }))
+  await waitFor(() => {
+    expect(document.querySelector('[data-step-view="diagnostics-options"]')).not.toBeNull()
+  })
+}
+
+export const startExportFromDiagnosticsStep = async (user: ReturnType<typeof userEvent.setup>) => {
+  await user.click(screen.getByRole("button", { name: "내보내기" }))
+  await waitFor(() => {
+    expect(document.querySelector('[data-step-view="markdown-review"]')).not.toBeNull()
+  })
+  await user.click(screen.getByRole("button", { name: "변환 시작" }))
 }
 
 export { defaultExportOptions, frontmatterFieldMeta, frontmatterFieldOrder, optionDescriptions }

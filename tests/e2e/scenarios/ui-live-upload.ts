@@ -462,6 +462,7 @@ const run = async () => {
   const server = createHttpServer({
     settingsPath: path.join(tempRoot, "export-ui-settings.json"),
     scanCachePath: path.join(tempRoot, "scan-cache.json"),
+    postHtmlCacheDir: path.join(tempRoot, "post-html"),
   })
   const context = await browser.newContext({
     viewport: {
@@ -576,15 +577,10 @@ const run = async () => {
       step: "structure-options",
     })
 
-    for (const nextStep of ["frontmatter-options", "markdown-options", "assets-options"] as const) {
+    for (const nextStep of ["frontmatter-options", "assets-options"] as const) {
       await clickWizardButton({
         page,
-        label:
-          nextStep === "frontmatter-options"
-            ? "Frontmatter 설정"
-            : nextStep === "markdown-options"
-              ? "Markdown 설정"
-              : "Assets 설정",
+        label: nextStep === "frontmatter-options" ? "Frontmatter 설정" : "Assets 설정",
       })
       await waitForStepView({
         page,
@@ -628,6 +624,22 @@ const run = async () => {
       page,
       label: "내보내기",
     })
+    await page.waitForFunction(
+      () => {
+        const step = document.querySelector("[data-step-view]")?.getAttribute("data-step-view")
+        return step === "markdown-review" || step === "running"
+      },
+      undefined,
+      { timeout: responseTimeoutMs },
+    )
+
+    if ((await page.locator('[data-step-view="markdown-review"]').count()) > 0) {
+      await clickWizardButton({
+        page,
+        label: "변환 시작",
+      })
+    }
+
     const exportRequest = await exportRequestPromise
     const exportResponse = await exportResponsePromise
     const exportPayload = exportRequest.postDataJSON() as {

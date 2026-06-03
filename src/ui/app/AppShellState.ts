@@ -79,9 +79,7 @@ export const getAppShellState = ({
       ? currentScanTarget.length === 0 || scanPending
       : setupStep === "category-selection"
         ? !activeScanResult || selectedCount === 0
-        : setupStep === "markdown-options"
-          ? !activeScanResult
-          : setupStep === "diagnostics-options"
-            ? exportDisabled || submitting
-            : !activeScanResult,
+        : setupStep === "diagnostics-options"
+          ? exportDisabled || submitting
+          : !activeScanResult,
 })

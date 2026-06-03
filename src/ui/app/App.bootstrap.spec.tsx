@@ -72,6 +72,9 @@ describe("App bootstrap", () => {
     })
 
     await user.click(screen.getByRole("button", { name: "구조 설정" }))
+    await waitFor(() => {
+      expect(document.querySelector('[data-step-view="structure-options"]')).not.toBeNull()
+    })
     expect(screen.getByRole("checkbox", { name: /카테고리 폴더 유지/ })).not.toBeChecked()
 
     await user.click(screen.getByRole("button", { name: "Frontmatter 설정" }))

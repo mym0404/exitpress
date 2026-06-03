@@ -143,6 +143,47 @@ describe("NaverBlogExporter", () => {
     await rm(outputDir, { recursive: true, force: true })
   })
 
+  it("passes the injected post html cache to the Naver fetcher", async () => {
+    const outputDir = await createTestTempDir("bulk-export-")
+    const getPostHtml = vi.fn().mockResolvedValue(postHtml)
+    const setPostHtml = vi.fn()
+    const onProgress = vi.fn()
+
+    vi.spyOn(NaverBlogFetcher.prototype, "downloadBinary").mockResolvedValue()
+    vi.spyOn(NaverBlogFetcher.prototype, "fetchBinary").mockResolvedValue({
+      bytes: Buffer.from("image"),
+      contentType: "image/png",
+    })
+
+    const exporter = new NaverBlogExporter({
+      request: {
+        blogIdOrUrl: "https://blog.naver.com/mym0404",
+        outputDir,
+        profile: "gfm",
+        options: defaultExportOptions(),
+      },
+      cachedScanResult: {
+        ...scanResult,
+        posts,
+      },
+      fetcherCache: {
+        getPostHtml,
+        setPostHtml,
+      },
+      onProgress,
+    })
+
+    await exporter.run()
+
+    expect(getPostHtml).toHaveBeenCalledWith({
+      blogId: "mym0404",
+      logNo: "223034929697",
+    })
+    expect(setPostHtml).not.toHaveBeenCalled()
+
+    await rm(outputDir, { recursive: true, force: true })
+  })
+
   it("records unsupported representative cases as failed bulk export items", async () => {
     const outputDir = await createTestTempDir("bulk-export-")
     const onProgress = vi.fn()

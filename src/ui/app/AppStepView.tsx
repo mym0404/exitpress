@@ -1,5 +1,6 @@
 import type { Dispatch, SetStateAction } from "react"
 
+import type { BlockScanJobState } from "../../domain/block-scan/Types.js"
 import type { PostSummary, ScanResult } from "../../domain/blog/Types.js"
 import type { ExportJobState } from "../../domain/export-job/Types.js"
 import type { ExportOptions } from "../../domain/export-options/Types.js"
@@ -10,6 +11,8 @@ import type {
 import type { WizardStep } from "../features/common/shell/WizardFlow.js"
 import type { ExportBootstrapResponse } from "../lib/Api.js"
 
+import { Button } from "../components/ui/Button.js"
+import { Progress } from "../components/ui/Progress.js"
 import { JobResultsPanel } from "../features/job-results/JobResultsPanel.js"
 import { ExportOptionsPanel } from "../features/options/ExportOptionsPanel.js"
 import { BlogInputPanel } from "../features/scan/BlogInputPanel.js"
@@ -26,6 +29,8 @@ type AppStepViewProps = {
   blogIdOrUrl: string
   outputDir: string
   scanPending: boolean
+  blockScanJob: BlockScanJobState | null
+  blockScanError: string | null
   scanStatus: string
   scanStatusTone: "default" | "error"
   activeScanResult: ScanResult | null
@@ -55,6 +60,9 @@ type AppStepViewProps = {
     providerKey: string
     providerFields: UploadProviderFields
   }) => Promise<void> | void
+  handleRetryBlockScan: () => Promise<void> | void
+  handleBackFromBlockScan: () => void
+  handleConfirmMarkdownReview: () => Promise<void> | void
 }
 
 export const AppStepView = ({
@@ -68,6 +76,8 @@ export const AppStepView = ({
   blogIdOrUrl,
   outputDir,
   scanPending,
+  blockScanJob,
+  blockScanError,
   scanStatus,
   scanStatusTone,
   activeScanResult,
@@ -91,7 +101,18 @@ export const AppStepView = ({
   handleCategoryToggle,
   handleResumeExport,
   handleUpload,
+  handleRetryBlockScan,
+  handleBackFromBlockScan,
+  handleConfirmMarkdownReview,
 }: AppStepViewProps) => {
+  const blockOutputDefinitions = defaults.blockOutputDefinitions ?? []
+  const detectedBlockOutputKeys = activeScanResult?.detectedBlockOutputKeys
+  const visibleBlockOutputDefinitions = detectedBlockOutputKeys
+    ? blockOutputDefinitions.filter((definition) =>
+        detectedBlockOutputKeys.includes(definition.key),
+      )
+    : blockOutputDefinitions
+
   if (currentStep === "running" || currentStep === "upload" || currentStep === "result") {
     return (
       <JobResultsPanel
@@ -172,6 +193,69 @@ export const AppStepView = ({
     )
   }
 
+  if (currentStep === "block-scan") {
+    const total = blockScanJob?.total ?? scopedPostCount
+    const completed = blockScanJob?.completed ?? 0
+    const failed = blockScanJob?.failed ?? 0
+    const progressValue = total > 0 ? ((completed + failed) / total) * 100 : 100
+
+    return (
+      <div className="grid gap-5 rounded-[var(--radius-lg)] border border-border bg-card p-5 shadow-[var(--panel-shadow-border)]">
+        <div className="grid gap-2">
+          <div className="flex items-center justify-between gap-4 text-sm">
+            <span className="font-medium text-foreground">
+              {blockScanError ? "준비 실패" : "준비 중"}
+            </span>
+            <span className="text-muted-foreground">
+              총 {total} / 완료 {completed} / 실패 {failed}
+            </span>
+          </div>
+          <Progress value={progressValue} />
+        </div>
+        <p className="text-sm text-muted-foreground">
+          {blockScanError ?? "선택한 글에서 필요한 Markdown 옵션을 확인하고 있습니다."}
+        </p>
+        {blockScanError ? (
+          <div className="flex flex-wrap justify-end gap-2">
+            <Button type="button" variant="secondary" onClick={handleBackFromBlockScan}>
+              이전
+            </Button>
+            <Button type="button" onClick={() => void handleRetryBlockScan()}>
+              재시도
+            </Button>
+          </div>
+        ) : null}
+      </div>
+    )
+  }
+
+  if (currentStep === "markdown-review") {
+    return (
+      <>
+        <ExportOptionsPanel
+          step="markdown"
+          outputDir={outputDir}
+          options={options}
+          optionDescriptions={defaults.optionDescriptions}
+          blockOutputDefinitions={visibleBlockOutputDefinitions}
+          frontmatterFieldOrder={defaults.frontmatterFieldOrder}
+          frontmatterFieldMeta={defaults.frontmatterFieldMeta}
+          frontmatterValidationErrors={frontmatterValidationErrors}
+          linkTemplatePreviewPost={linkTemplatePreviewPost}
+          onOptionsChange={updateOptions}
+        />
+        <div className="flex flex-wrap justify-end gap-2">
+          <Button type="button" variant="secondary" onClick={handleBackFromBlockScan}>
+            이전
+          </Button>
+          <Button type="button" onClick={() => void handleConfirmMarkdownReview()}>
+            변환 시작
+          </Button>
+        </div>
+      </>
+    )
+  }
+
   return (
     <ExportOptionsPanel
       step={
@@ -179,18 +263,16 @@ export const AppStepView = ({
           ? "structure"
           : currentStep === "frontmatter-options"
             ? "frontmatter"
-            : currentStep === "markdown-options"
-              ? "markdown"
-              : currentStep === "assets-options"
-                ? "assets"
-                : currentStep === "links-options"
-                  ? "links"
-                  : "diagnostics"
+            : currentStep === "assets-options"
+              ? "assets"
+              : currentStep === "links-options"
+                ? "links"
+                : "diagnostics"
       }
       outputDir={outputDir}
       options={options}
       optionDescriptions={defaults.optionDescriptions}
-      blockOutputDefinitions={defaults.blockOutputDefinitions ?? []}
+      blockOutputDefinitions={visibleBlockOutputDefinitions}
       frontmatterFieldOrder={defaults.frontmatterFieldOrder}
       frontmatterFieldMeta={defaults.frontmatterFieldMeta}
       frontmatterValidationErrors={frontmatterValidationErrors}

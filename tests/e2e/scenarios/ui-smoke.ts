@@ -139,7 +139,7 @@ const waitForBlockOutputSettingsSave = ({
       }
       const defaults = body.options?.blockOutputs.defaults ?? {}
 
-      return defaults["naver-se4:formula"]?.params?.inlineWrapper === "\\(...\\)"
+      return defaults["naver-se4:image"]?.params?.includeCaption === true
     },
     { timeout: responseTimeoutMs },
   )
@@ -785,6 +785,7 @@ const run = async () => {
   const server = createHttpServer({
     settingsPath: path.join(tempRoot, "export-ui-settings.json"),
     scanCachePath: path.join(tempRoot, "scan-cache.json"),
+    postHtmlCacheDir: path.join(tempRoot, "post-html"),
   })
   await new Promise<void>((resolve) => {
     server.listen(0, "127.0.0.1", () => resolve())
@@ -908,14 +909,34 @@ const run = async () => {
       return
     }
 
+    if (pathname === "/api/scan-blocks/jobs" && request.method() === "POST") {
+      await route.fulfill(buildJsonResponse({ jobId: "block-scan-smoke" }, 202))
+      return
+    }
+
+    if (pathname === "/api/scan-blocks/jobs/block-scan-smoke" && request.method() === "GET") {
+      await route.fulfill(
+        buildJsonResponse({
+          id: "block-scan-smoke",
+          status: "completed",
+          total: 5,
+          completed: 5,
+          failed: 0,
+          detectedBlockOutputKeys: ["naver-se4:image"],
+          error: null,
+        }),
+      )
+      return
+    }
+
     if (pathname === "/api/export" && request.method() === "POST") {
       const body = request.postDataJSON() as {
         options?: ExportOptions
       }
       const defaults = body.options?.blockOutputs.defaults ?? {}
 
-      if (defaults["naver-se4:formula"]?.params?.inlineWrapper !== "\\(...\\)") {
-        throw new Error("export payload did not include the saved naver-se4 formula option")
+      if (defaults["naver-se4:image"]?.params?.includeCaption !== true) {
+        throw new Error("export payload did not include the saved naver-se4 image option")
       }
 
       if (Object.hasOwn(defaults, "formula")) {
@@ -1245,30 +1266,6 @@ const run = async () => {
       throw new Error("export button should not appear before the assets step")
     }
 
-    await page.click('button:has-text("Markdown 설정")')
-    await waitForStepView({
-      page,
-      step: "markdown-options",
-    })
-
-    if (await page.locator("#export-button").count()) {
-      throw new Error("export button should stay hidden until the diagnostics step")
-    }
-
-    if (await page.locator("#markdown-linkCardStyle").count()) {
-      throw new Error("removed markdown link card controls reappeared")
-    }
-
-    if (!(await page.locator('[data-block-output-card="naver-se4:formula"]').count())) {
-      throw new Error("block output cards should appear in the markdown step")
-    }
-
-    const blockOutputSettingsSavePromise = waitForBlockOutputSettingsSave({
-      page,
-      baseUrl,
-    })
-    await page.fill("#blockOutputs-defaults-naver-se4-formula-inlineWrapper", "\\(...\\)")
-    await blockOutputSettingsSavePromise
     await page.click('button:has-text("Assets 설정")')
     await waitForStepView({
       page,
@@ -1314,20 +1311,10 @@ const run = async () => {
     await page.click('button:has-text("이전")')
     await waitForStepView({
       page,
-      step: "markdown-options",
-    })
-    await page.click('button:has-text("이전")')
-    await waitForStepView({
-      page,
       step: "frontmatter-options",
     })
     await page.fill('[data-frontmatter-field="source"] input[data-alias-input="true"]', "")
     await page.fill('[data-frontmatter-field="title"] input[data-alias-input="true"]', "postTitle")
-    await page.click('button:has-text("Markdown 설정")')
-    await waitForStepView({
-      page,
-      step: "markdown-options",
-    })
     await page.click('button:has-text("Assets 설정")')
     await waitForStepView({
       page,
@@ -1440,14 +1427,44 @@ const run = async () => {
       step: "diagnostics-options",
     })
 
+    await page.click("#export-button")
+    await waitForStepView({
+      page,
+      step: "block-scan",
+    })
+    await waitForStepView({
+      page,
+      step: "markdown-review",
+    })
+
+    if (await page.locator("#markdown-linkCardStyle").count()) {
+      throw new Error("removed markdown link card controls reappeared")
+    }
+
+    if (!(await page.locator('[data-block-output-card="naver-se4:image"]').count())) {
+      throw new Error("detected block output cards should appear in the markdown review step")
+    }
+
+    if (await page.locator('[data-block-output-card="naver-se4:table"]').count()) {
+      throw new Error(
+        "undetected block output cards should stay hidden in the markdown review step",
+      )
+    }
+
+    const blockOutputSettingsSavePromise = waitForBlockOutputSettingsSave({
+      page,
+      baseUrl,
+    })
+    await page.click("#blockOutputs-defaults-naver-se4-image-includeCaption")
+    await blockOutputSettingsSavePromise
+
     debugLog("waitForResponse", "exportResponsePromise")
     const exportResponsePromise = page.waitForResponse(
       (response) =>
         response.url() === `${baseUrl}/api/export` && response.request().method() === "POST",
       { timeout: responseTimeoutMs },
     )
-
-    await page.click("#export-button")
+    await page.click('button:has-text("변환 시작")')
 
     const exportResponse = await exportResponsePromise
     const { jobId } = (await exportResponse.json()) as {
@@ -1713,10 +1730,9 @@ const run = async () => {
     }
 
     if (
-      manifest.options.blockOutputs.defaults["naver-se4:formula"]?.params?.inlineWrapper !==
-      "\\(...\\)"
+      manifest.options.blockOutputs.defaults["naver-se4:image"]?.params?.includeCaption !== true
     ) {
-      throw new Error("manifest did not preserve the naver-se4 formula option")
+      throw new Error("manifest did not preserve the naver-se4 image option")
     }
 
     if (Object.hasOwn(manifest.options.blockOutputs.defaults, "formula")) {

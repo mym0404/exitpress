@@ -25,6 +25,8 @@ export type ScanResult = {
   totalPostCount: number
   categories: CategoryInfo[]
   posts?: PostSummary[]
+  detectedBlockOutputKeys?: string[]
+  detectedBlockOutputScopeSignature?: string
 }
 
 export type ScanCacheMap = Record<string, ScanResult>

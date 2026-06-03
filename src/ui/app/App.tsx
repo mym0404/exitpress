@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 
-import type { ScanCacheMap } from "../../domain/blog/Types.js"
+import type { BlockScanJobState } from "../../domain/block-scan/Types.js"
+import type { ScanCacheMap, ScanResult } from "../../domain/blog/Types.js"
 import type { ExportOptions } from "../../domain/export-options/Types.js"
 import type { ThemePreference } from "../../domain/preferences/ThemePreference.js"
 import type { SetupStep, WizardStep } from "../features/common/shell/WizardFlow.js"
@@ -11,6 +12,7 @@ import {
   validateFrontmatterAliases,
 } from "../../domain/export-options/ExportOptions.js"
 import { filterPostsByScope } from "../../exporting/workflow/ExportScope.js"
+import { toast } from "../components/ui/Sonner.js"
 import { useBeforeUnloadWarning } from "../features/common/hooks/UseBeforeUnloadWarning.js"
 import { useBootstrapDefaults } from "../features/common/hooks/UseBootstrapDefaults.js"
 import { useBrandMarkScroll } from "../features/common/hooks/UseBrandMarkScroll.js"
@@ -23,7 +25,10 @@ import {
   resolveWizardStep,
   setupSteps,
 } from "../features/common/shell/WizardFlow.js"
-import { shouldLoadUploadProviders } from "../features/job-results/ExportJobFallback.js"
+import {
+  createErrorJobState,
+  shouldLoadUploadProviders,
+} from "../features/job-results/ExportJobFallback.js"
 import { setExportJobPollingConfig, useExportJob } from "../features/job-results/UseExportJob.js"
 import { useJobNotifications } from "../features/job-results/UseJobNotifications.js"
 import { useUploadProvidersCatalog } from "../features/job-results/UseUploadProvidersCatalog.js"
@@ -33,12 +38,21 @@ import {
   defaultScanStatus,
   normalizeOutputDir,
 } from "../features/scan/ScanStatus.js"
+import { fetchJson, postJson } from "../lib/Api.js"
 
 import { fallbackDefaults } from "./AppDefaults.js"
 import { useAppResumeBootstrap } from "./AppResumeBootstrap.js"
 import { AppShell } from "./AppShell.js"
 import { getAppShellState, shouldWarnBeforeLeavingApp } from "./AppShellState.js"
 import { AppStepView } from "./AppStepView.js"
+
+const getBlockDetectionScopeSignature = (options: Pick<ExportOptions, "scope">) =>
+  JSON.stringify(options.scope)
+
+const waitForBlockScanPoll = () =>
+  new Promise((resolve) => {
+    setTimeout(resolve, 250)
+  })
 
 export const App = () => {
   const [defaults, setDefaults] = useState(fallbackDefaults)
@@ -59,6 +73,11 @@ export const App = () => {
   const [categorySearch, setCategorySearch] = useState("")
   const [scanPending, setScanPending] = useState(false)
   const [setupStep, setSetupStep] = useState<SetupStep>("blog-input")
+  const [postExportStep, setPostExportStep] = useState<"block-scan" | "markdown-review" | null>(
+    null,
+  )
+  const [blockScanJob, setBlockScanJob] = useState<BlockScanJobState | null>(null)
+  const [blockScanError, setBlockScanError] = useState<string | null>(null)
   const [activeJobFilter, setActiveJobFilter] = useState<"all" | "success" | "failed">("all")
   const {
     job,
@@ -72,6 +91,7 @@ export const App = () => {
   } = useExportJob()
 
   const lastNotifiedJobKeyRef = useRef<string | null>(null)
+  const blockScanRequestIdRef = useRef(0)
   const stepViewRef = useRef<HTMLElement | null>(null)
   const previousStepRef = useRef<string | null>(null)
   const persistedUiStateSignatureRef = useRef<string | null>(null)
@@ -150,16 +170,18 @@ export const App = () => {
     activeScanResult,
     job,
   })
-  const currentStep = useMemo(
-    () =>
-      resolveWizardStep({
-        setupStep,
-        jobStatus: job?.status,
-        submitting,
-        uploadSubmitting,
-      }) as WizardStep,
-    [job?.status, setupStep, submitting, uploadSubmitting],
-  )
+  const currentStep = useMemo(() => {
+    const resolvedStep = resolveWizardStep({
+      setupStep,
+      jobStatus: job?.status,
+      submitting,
+      uploadSubmitting,
+    })
+
+    return resolvedStep === setupStep && postExportStep
+      ? postExportStep
+      : (resolvedStep as WizardStep)
+  }, [job?.status, postExportStep, setupStep, submitting, uploadSubmitting])
   const isSetupStep = currentStep === setupStep
 
   const { uploadProviders, uploadProviderError } = useUploadProvidersCatalog({
@@ -212,6 +234,165 @@ export const App = () => {
     setOptions((current) => updater(current))
   }, [])
 
+  const startExportWithScanResult = useCallback(
+    async (scanResult: ScanResult) => {
+      setActiveJobFilter("all")
+
+      try {
+        const jobId = await startJob({
+          blogIdOrUrl: currentScanTarget,
+          outputDir: normalizeOutputDir(outputDir),
+          options,
+          scanResult,
+        })
+        setPostExportStep(null)
+        toast.success("내보내기 작업을 등록했습니다.", {
+          description: `${scopedPostCount}개 글을 처리합니다. 작업 ID ${jobId}`,
+        })
+      } catch (error) {
+        const message = error instanceof Error ? error.message : String(error)
+        setPostExportStep(null)
+        setJob(
+          createErrorJobState({
+            error: message,
+            request: {
+              blogIdOrUrl: currentScanTarget,
+              outputDir: normalizeOutputDir(outputDir),
+              options,
+            },
+          }),
+        )
+        toast.error("내보내기 작업 등록에 실패했습니다.", {
+          description: message,
+        })
+      }
+    },
+    [currentScanTarget, options, outputDir, scopedPostCount, setJob, startJob],
+  )
+
+  const startBlockScan = useCallback(async () => {
+    if (!activeScanResult?.posts) {
+      setCategoryStatus("먼저 스캔을 완료해야 합니다.")
+      return
+    }
+
+    const requestId = blockScanRequestIdRef.current + 1
+    blockScanRequestIdRef.current = requestId
+    const initialJob: BlockScanJobState = {
+      id: "",
+      status: "queued",
+      total: scopedPostCount,
+      completed: 0,
+      failed: 0,
+      detectedBlockOutputKeys: [],
+      error: null,
+    }
+
+    setBlockScanJob(initialJob)
+    setBlockScanError(null)
+    setPostExportStep("block-scan")
+    setScanPending(true)
+    setCategoryStatus("Markdown 옵션을 확인하는 중입니다.")
+
+    try {
+      const { jobId } = await postJson<{ jobId: string }>("/api/scan-blocks/jobs", {
+        blogIdOrUrl: currentScanTarget,
+        scanResult: activeScanResult,
+        options,
+      })
+
+      let latestJob: BlockScanJobState = {
+        ...initialJob,
+        id: jobId,
+      }
+      setBlockScanJob(latestJob)
+      await waitForBlockScanPoll()
+
+      while (latestJob.status === "queued" || latestJob.status === "running") {
+        if (blockScanRequestIdRef.current !== requestId) {
+          return
+        }
+
+        latestJob = await fetchJson<BlockScanJobState>(`/api/scan-blocks/jobs/${jobId}`)
+        setBlockScanJob(latestJob)
+
+        if (latestJob.status === "queued" || latestJob.status === "running") {
+          await waitForBlockScanPoll()
+        }
+      }
+
+      if (blockScanRequestIdRef.current !== requestId) {
+        return
+      }
+
+      if (latestJob.status === "failed") {
+        const message = latestJob.error ?? "Markdown 옵션 준비에 실패했습니다."
+        setBlockScanError(message)
+        setCategoryStatus("Markdown 옵션 준비에 실패했습니다.")
+        toast.error("Markdown 옵션 준비에 실패했습니다.", {
+          description: message,
+        })
+        return
+      }
+
+      const nextScanResult: ScanResult = {
+        ...activeScanResult,
+        detectedBlockOutputKeys: latestJob.detectedBlockOutputKeys,
+        detectedBlockOutputScopeSignature: getBlockDetectionScopeSignature(options),
+      }
+
+      setScanCache((current) => ({
+        ...current,
+        [currentScanTarget]: nextScanResult,
+      }))
+      setCategoryStatus("Markdown 옵션 준비가 끝났습니다.")
+
+      if (latestJob.detectedBlockOutputKeys.length > 0) {
+        setPostExportStep("markdown-review")
+        return
+      }
+
+      setPostExportStep(null)
+      await startExportWithScanResult(nextScanResult)
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error)
+      setBlockScanError(message)
+      setCategoryStatus("Markdown 옵션 준비에 실패했습니다.")
+      toast.error("Markdown 옵션 준비에 실패했습니다.", {
+        description: message,
+      })
+    } finally {
+      if (blockScanRequestIdRef.current === requestId) {
+        setScanPending(false)
+      }
+    }
+  }, [
+    activeScanResult,
+    currentScanTarget,
+    options,
+    scopedPostCount,
+    setCategoryStatus,
+    setScanCache,
+    startExportWithScanResult,
+  ])
+
+  const confirmMarkdownAndStartExport = useCallback(async () => {
+    if (!activeScanResult) {
+      setCategoryStatus("먼저 스캔을 완료해야 합니다.")
+      return
+    }
+
+    await startExportWithScanResult(activeScanResult)
+  }, [activeScanResult, setCategoryStatus, startExportWithScanResult])
+
+  const goBackFromBlockScan = useCallback(() => {
+    blockScanRequestIdRef.current += 1
+    setScanPending(false)
+    setBlockScanError(null)
+    setPostExportStep(null)
+    setSetupStep("diagnostics-options")
+  }, [])
+
   const {
     ensureScanResult,
     handleBlogInputChange,
@@ -240,7 +421,7 @@ export const App = () => {
     resumeDialog,
     frontmatterValidationErrors,
     updateOptions,
-    startJob,
+    startBlockScan,
     startUpload,
     resumeJob,
     hydrateJob,
@@ -323,6 +504,8 @@ export const App = () => {
         blogIdOrUrl={blogIdOrUrl}
         outputDir={outputDir}
         scanPending={scanPending}
+        blockScanJob={blockScanJob}
+        blockScanError={blockScanError}
         scanStatus={scanStatus}
         scanStatusTone={scanStatusTone}
         activeScanResult={activeScanResult}
@@ -346,6 +529,9 @@ export const App = () => {
         handleCategoryToggle={handleCategoryToggle}
         handleResumeExport={handleResumeExport}
         handleUpload={handleUpload}
+        handleRetryBlockScan={startBlockScan}
+        handleBackFromBlockScan={goBackFromBlockScan}
+        handleConfirmMarkdownReview={confirmMarkdownAndStartExport}
       />
     </AppShell>
   )

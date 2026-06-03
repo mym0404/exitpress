@@ -19,6 +19,7 @@ import {
   rewritePendingJob,
   scanResult,
   selectOption,
+  startExportFromDiagnosticsStep,
   skippedUploadJob,
   testOutputDir,
   uploadCompletedJob,
@@ -40,6 +41,22 @@ describe("App upload", () => {
 
       if (url.endsWith("/api/scan")) {
         return buildJsonResponse(scanResult)
+      }
+
+      if (url.endsWith("/api/scan-blocks/jobs")) {
+        return buildJsonResponse({ jobId: "block-scan-job" }, 202)
+      }
+
+      if (url.endsWith("/api/scan-blocks/jobs/block-scan-job")) {
+        return buildJsonResponse({
+          id: "block-scan-job",
+          status: "completed",
+          total: 5,
+          completed: 5,
+          failed: 0,
+          detectedBlockOutputKeys: ["naver-se4:image"],
+          error: null,
+        })
       }
 
       if (url.endsWith("/api/export")) {
@@ -85,7 +102,7 @@ describe("App upload", () => {
     let jsDelivrToggle: HTMLElement | null = null
 
     await moveToDiagnosticsStep(user)
-    await user.click(screen.getByRole("button", { name: "내보내기" }))
+    await startExportFromDiagnosticsStep(user)
 
     await waitFor(() => {
       expect(document.querySelector('[data-step-view="upload"]')).not.toBeNull()
@@ -244,7 +261,7 @@ describe("App upload", () => {
     const user = renderApp()
 
     await moveToDiagnosticsStep(user)
-    await user.click(screen.getByRole("button", { name: "내보내기" }))
+    await startExportFromDiagnosticsStep(user)
 
     await waitFor(() => {
       expect(document.querySelector('[data-step-view="upload"]')).not.toBeNull()
@@ -353,6 +370,22 @@ describe("App upload", () => {
         return buildJsonResponse(scanResult)
       }
 
+      if (url.endsWith("/api/scan-blocks/jobs")) {
+        return buildJsonResponse({ jobId: "block-scan-job" }, 202)
+      }
+
+      if (url.endsWith("/api/scan-blocks/jobs/block-scan-job")) {
+        return buildJsonResponse({
+          id: "block-scan-job",
+          status: "completed",
+          total: 5,
+          completed: 5,
+          failed: 0,
+          detectedBlockOutputKeys: ["naver-se4:image"],
+          error: null,
+        })
+      }
+
       if (url.endsWith("/api/export")) {
         return buildJsonResponse({ jobId: "job-upload-error" }, init?.method === "POST" ? 202 : 200)
       }
@@ -372,7 +405,7 @@ describe("App upload", () => {
     await moveToDiagnosticsStep(user)
     expect(uploadProviderRequestCount).toBe(0)
 
-    await user.click(screen.getByRole("button", { name: "내보내기" }))
+    await startExportFromDiagnosticsStep(user)
 
     await waitFor(() => {
       expect(jobFetchCount).toBeGreaterThan(0)
@@ -462,7 +495,7 @@ describe("App upload", () => {
     const user = renderApp()
 
     await moveToDiagnosticsStep(user)
-    await user.click(screen.getByRole("button", { name: "내보내기" }))
+    await startExportFromDiagnosticsStep(user)
 
     await waitFor(() => {
       expect(document.querySelector('[data-step-view="upload"]')).not.toBeNull()
@@ -554,7 +587,7 @@ describe("App upload", () => {
     const user = renderApp()
 
     await moveToDiagnosticsStep(user)
-    await user.click(screen.getByRole("button", { name: "내보내기" }))
+    await startExportFromDiagnosticsStep(user)
 
     await waitFor(() => {
       expect(document.querySelector('[data-step-view="upload"]')).not.toBeNull()
@@ -605,7 +638,7 @@ describe("App upload", () => {
     const user = renderApp()
 
     await moveToDiagnosticsStep(user)
-    await user.click(screen.getByRole("button", { name: "내보내기" }))
+    await startExportFromDiagnosticsStep(user)
 
     await waitFor(() => {
       expect(document.querySelector('[data-step-view="result"]')).not.toBeNull()

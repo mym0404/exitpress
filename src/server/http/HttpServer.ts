@@ -11,11 +11,14 @@ import {
 } from "../../exporting/upload/ImageUploadRewriter.js"
 import { NaverBlog } from "../../parsing/naver-blog/NaverBlog.js"
 import { toErrorMessage } from "../../shared/error/ErrorUtils.js"
+import { createBlockScanJobRunner } from "../jobs/BlockScanJobRunner.js"
+import { BlockScanJobStore } from "../jobs/BlockScanJobStore.js"
 import { createHttpExportJobRunner } from "../jobs/HttpExportJobRunner.js"
 import { JobStore } from "../jobs/JobStore.js"
 import { createApiRoutes } from "../routes/ApiRoutes.js"
 import { openLocalPathWithSystem } from "../routes/LocalFileService.js"
 import { createHttpServerState } from "../state/HttpServerState.js"
+import { createPostHtmlCache } from "../state/PostHtmlCache.js"
 import { createBrowserAppResponder } from "../static/BrowserApp.js"
 import { createHttpUploadJobRunner } from "../upload/HttpUploadJobRunner.js"
 import { createImageUploadProviderSource } from "../upload/ImageUploadProviderSource.js"
@@ -23,6 +26,7 @@ import { createImageUploadProviderSource } from "../upload/ImageUploadProviderSo
 import { sendJson } from "./HttpResponse.js"
 import {
   defaultOutputDir,
+  defaultPostHtmlCacheDir,
   defaultScanCachePath,
   defaultSettingsPath,
   defaultThemePreference,
@@ -36,6 +40,7 @@ export const createHttpServer = ({
   postUploadRewriter = rewriteImageUploadPost,
   manifestSnapshotWriter = writeImageUploadManifestSnapshot,
   scanCachePath = defaultScanCachePath,
+  postHtmlCacheDir = defaultPostHtmlCacheDir,
   settingsPath = defaultSettingsPath,
   uploadProviderSource = createImageUploadProviderSource(),
   openLocalPath = openLocalPathWithSystem,
@@ -45,6 +50,7 @@ export const createHttpServer = ({
   postUploadRewriter?: typeof rewriteImageUploadPost
   manifestSnapshotWriter?: typeof writeImageUploadManifestSnapshot
   scanCachePath?: string
+  postHtmlCacheDir?: string
   settingsPath?: string
   uploadProviderSource?: UploadProviderSource
   openLocalPath?: (targetPath: string) => Promise<void> | void
@@ -61,9 +67,18 @@ export const createHttpServer = ({
     defaultThemePreference,
     blockOutputDefinitions,
   })
+  const postHtmlCache = createPostHtmlCache({
+    cacheDir: postHtmlCacheDir,
+  })
+  const blockScanJobRunner = createBlockScanJobRunner({
+    jobStore: new BlockScanJobStore(),
+    blockOutputDefinitions,
+    postHtmlCache,
+  })
   const exportJobRunner = createHttpExportJobRunner({
     jobStore,
     jobScanResults: state.jobScanResults,
+    postHtmlCache,
   })
   const uploadJobRunner = createHttpUploadJobRunner({
     jobStore,
@@ -79,7 +94,9 @@ export const createHttpServer = ({
   const apiRoutes = createApiRoutes({
     jobStore,
     state,
+    blockScanJobRunner,
     exportJobRunner,
+    postHtmlCache,
     uploadJobRunner,
     uploadProviderSource,
     openLocalPath,

@@ -14,14 +14,19 @@ export const setupSteps = [
   "category-selection",
   "structure-options",
   "frontmatter-options",
-  "markdown-options",
   "assets-options",
   "links-options",
   "diagnostics-options",
 ] as const
 
 export type SetupStep = (typeof setupSteps)[number]
-export type WizardStep = SetupStep | "running" | "upload" | "result"
+export type WizardStep =
+  | SetupStep
+  | "block-scan"
+  | "markdown-review"
+  | "running"
+  | "upload"
+  | "result"
 
 type SummaryCard = {
   label: string
@@ -73,10 +78,6 @@ export const stepMeta: Record<WizardStep, { title: string; description: string }
     title: exportOptionsStepMeta.frontmatter.title,
     description: "",
   },
-  "markdown-options": {
-    title: exportOptionsStepMeta.markdown.title,
-    description: "",
-  },
   "assets-options": {
     title: exportOptionsStepMeta.assets.title,
     description: "",
@@ -87,6 +88,14 @@ export const stepMeta: Record<WizardStep, { title: string; description: string }
   },
   "diagnostics-options": {
     title: exportOptionsStepMeta.diagnostics.title,
+    description: "",
+  },
+  "block-scan": {
+    title: "Markdown 옵션 준비",
+    description: "",
+  },
+  "markdown-review": {
+    title: exportOptionsStepMeta.markdown.title,
     description: "",
   },
   running: {
@@ -225,8 +234,6 @@ export const getNextButtonLabel = ({
     case "structure-options":
       return "Frontmatter 설정"
     case "frontmatter-options":
-      return "Markdown 설정"
-    case "markdown-options":
       return "Assets 설정"
     case "assets-options":
       return "Link 처리"

@@ -1,5 +1,6 @@
 import type { ScanResult } from "../../domain/blog/Types.js"
 import type { ExportRequest } from "../../domain/export-job/Types.js"
+import type { NaverBlogFetcherCache } from "../../integrations/naver-blog/NaverBlogFetcher.js"
 
 import type { JobStore } from "./JobStore.js"
 
@@ -16,9 +17,11 @@ export type HttpExportJobRunner = ReturnType<typeof createHttpExportJobRunner>
 export const createHttpExportJobRunner = ({
   jobStore,
   jobScanResults,
+  postHtmlCache,
 }: {
   jobStore: JobStore
   jobScanResults: Map<string, ScanResult | null>
+  postHtmlCache?: NaverBlogFetcherCache
 }) => {
   const activeJobTasks = new Map<
     string,
@@ -126,6 +129,7 @@ export const createHttpExportJobRunner = ({
           : null,
         writeManifestFile: false,
         abortSignal: signal,
+        fetcherCache: postHtmlCache,
         onProgress: (progress) => {
           jobStore.updateProgress(jobId, progress)
           scheduleJobManifestPersist(jobId)

@@ -13,12 +13,41 @@ import {
   createPosts,
   createTestHttpServer,
   startServer,
+  uploadHtml,
+  waitForJob,
 } from "../../../tests/support/server/HttpServerSpecHarness.js"
 import { createTestTempDir } from "../../../tests/support/test-paths.js"
+import { defaultExportOptions } from "../../domain/export-options/ExportOptions.js"
 import { buildMarkdownViewerShareUrl } from "../../exporting/post/MarkdownViewerShareUrl.js"
 import { NaverBlogFetcher } from "../../integrations/naver-blog/NaverBlogFetcher.js"
 
 let activeServer: ReturnType<typeof createTestHttpServer> | null = null
+
+const waitForBlockScanJob = async ({ baseUrl, jobId }: { baseUrl: string; jobId: string }) => {
+  for (let attempt = 0; attempt < 50; attempt += 1) {
+    const response = await fetch(`${baseUrl}/api/scan-blocks/jobs/${jobId}`)
+    const job = (await response.json()) as {
+      id: string
+      status: "queued" | "running" | "completed" | "failed"
+      total: number
+      completed: number
+      failed: number
+      detectedBlockOutputKeys: string[]
+      error: string | null
+    }
+
+    if (job.status === "completed" || job.status === "failed") {
+      return {
+        response,
+        job,
+      }
+    }
+
+    await new Promise((resolve) => setTimeout(resolve, 25))
+  }
+
+  throw new Error(`timed out waiting for block scan job ${jobId}`)
+}
 
 afterEach(async () => {
   vi.restoreAllMocks()
@@ -318,5 +347,228 @@ describe("http server local routes", () => {
     } finally {
       await rm(rootDir, { recursive: true, force: true })
     }
+  })
+
+  it("detects block output keys from scanned posts", async () => {
+    const originalFetch = globalThis.fetch
+
+    vi.spyOn(globalThis, "fetch").mockImplementation((async (
+      input: RequestInfo | URL,
+      init?: RequestInit,
+    ) => {
+      const url = typeof input === "string" || input instanceof URL ? String(input) : input.url
+
+      if (url.includes("PostView.naver")) {
+        return new Response(uploadHtml, { status: 200 })
+      }
+
+      return originalFetch(input, init)
+    }) as typeof fetch)
+
+    activeServer = createTestHttpServer()
+    const baseUrl = await startServer(activeServer)
+
+    const response = await fetch(`${baseUrl}/api/scan-blocks/jobs`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        blogIdOrUrl: "https://blog.naver.com/mym0404",
+        scanResult: {
+          ...baseScanResult,
+          posts: createPosts(null),
+        },
+        options: defaultExportOptions(),
+      }),
+    })
+    const body = (await response.json()) as {
+      jobId: string
+    }
+
+    expect(response.status).toBe(202)
+
+    const { job } = await waitForBlockScanJob({ baseUrl, jobId: body.jobId })
+
+    expect(job).toMatchObject({
+      status: "completed",
+      total: 1,
+      completed: 1,
+      failed: 0,
+      detectedBlockOutputKeys: ["naver-se4:image"],
+      error: null,
+    })
+  })
+
+  it("reuses post html fetched during block scans for exports", async () => {
+    const outputDir = await createTestTempDir("scan-block-export-cache-")
+    const originalFetch = globalThis.fetch
+    let postViewRequestCount = 0
+
+    vi.spyOn(globalThis, "fetch").mockImplementation((async (
+      input: RequestInfo | URL,
+      init?: RequestInit,
+    ) => {
+      const url = typeof input === "string" || input instanceof URL ? String(input) : input.url
+
+      if (url.includes("PostView.naver")) {
+        postViewRequestCount += 1
+        return new Response(uploadHtml, { status: 200 })
+      }
+
+      return originalFetch(input, init)
+    }) as typeof fetch)
+
+    try {
+      activeServer = createTestHttpServer()
+      const baseUrl = await startServer(activeServer)
+      const options = defaultExportOptions()
+      options.assets.imageHandlingMode = "remote"
+      const scanResult = {
+        ...baseScanResult,
+        posts: createPosts(null),
+      }
+
+      const scanBlocksResponse = await fetch(`${baseUrl}/api/scan-blocks/jobs`, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          blogIdOrUrl: "https://blog.naver.com/mym0404",
+          scanResult,
+          options,
+        }),
+      })
+
+      expect(scanBlocksResponse.status).toBe(202)
+      const scanBlocksBody = (await scanBlocksResponse.json()) as {
+        jobId: string
+      }
+      const { job: blockScanJob } = await waitForBlockScanJob({
+        baseUrl,
+        jobId: scanBlocksBody.jobId,
+      })
+
+      expect(blockScanJob.status).toBe("completed")
+      expect(postViewRequestCount).toBe(1)
+
+      const exportResponse = await fetch(`${baseUrl}/api/export`, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          blogIdOrUrl: "https://blog.naver.com/mym0404",
+          outputDir,
+          scanResult,
+          options,
+        }),
+      })
+      const exportBody = (await exportResponse.json()) as {
+        jobId: string
+      }
+
+      expect(exportResponse.status).toBe(202)
+
+      const job = await waitForJob({
+        baseUrl,
+        jobId: exportBody.jobId,
+        accept: (currentJob) => currentJob.status === "completed" || currentJob.status === "failed",
+      })
+
+      expect(job.status).toBe("completed")
+      expect(postViewRequestCount).toBe(1)
+    } finally {
+      await rm(outputDir, { recursive: true, force: true })
+    }
+  })
+
+  it("rejects block output scans without posts", async () => {
+    activeServer = createTestHttpServer()
+    const baseUrl = await startServer(activeServer)
+
+    const response = await fetch(`${baseUrl}/api/scan-blocks/jobs`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        blogIdOrUrl: "https://blog.naver.com/mym0404",
+        scanResult: baseScanResult,
+        options: defaultExportOptions(),
+      }),
+    })
+    const body = (await response.json()) as {
+      error: string
+    }
+
+    expect(response.status).toBe(400)
+    expect(body.error).toContain("scanResult.posts")
+  })
+
+  it("rejects block output scans when scan result blog id does not match", async () => {
+    activeServer = createTestHttpServer()
+    const baseUrl = await startServer(activeServer)
+
+    const response = await fetch(`${baseUrl}/api/scan-blocks/jobs`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        blogIdOrUrl: "https://blog.naver.com/mym0404",
+        scanResult: {
+          ...baseScanResult,
+          blogId: "other-blog",
+          posts: createPosts(null),
+        },
+        options: defaultExportOptions(),
+      }),
+    })
+    const body = (await response.json()) as {
+      error: string
+    }
+
+    expect(response.status).toBe(400)
+    expect(body.error).toContain("요청 블로그와 일치하지 않습니다")
+  })
+
+  it("rejects block output scans with invalid options", async () => {
+    activeServer = createTestHttpServer()
+    const baseUrl = await startServer(activeServer)
+
+    const response = await fetch(`${baseUrl}/api/scan-blocks/jobs`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        blogIdOrUrl: "https://blog.naver.com/mym0404",
+        scanResult: {
+          ...baseScanResult,
+          posts: createPosts(null),
+        },
+        options: {
+          frontmatter: {
+            enabled: true,
+            fields: {
+              source: true,
+              title: true,
+            },
+            aliases: {
+              source: "shared",
+              title: "shared",
+            },
+          },
+        },
+      }),
+    })
+    const body = (await response.json()) as {
+      error: string
+    }
+
+    expect(response.status).toBe(400)
+    expect(body.error).toContain('alias "shared"')
   })
 })

@@ -1,5 +1,7 @@
 import type { IncomingMessage, ServerResponse } from "node:http"
 
+import type { NaverBlogFetcherCache } from "../../integrations/naver-blog/NaverBlogFetcher.js"
+import type { BlockScanJobRunner } from "../jobs/BlockScanJobRunner.js"
 import type { HttpExportJobRunner } from "../jobs/HttpExportJobRunner.js"
 import type { JobStore } from "../jobs/JobStore.js"
 import type { HttpServerState } from "../state/HttpServerState.js"
@@ -16,7 +18,9 @@ export type ApiRouteRequest = {
 export type ApiRouteContext = {
   jobStore: JobStore
   state: HttpServerState
+  blockScanJobRunner: BlockScanJobRunner
   exportJobRunner: HttpExportJobRunner
+  postHtmlCache: NaverBlogFetcherCache
   uploadJobRunner: HttpUploadJobRunner
   uploadProviderSource: UploadProviderSource
   openLocalPath: (targetPath: string) => Promise<void> | void

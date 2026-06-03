@@ -374,6 +374,7 @@ export const createTestHttpServer = (
   return createHttpServer({
     settingsPath: options.settingsPath ?? path.join(serverRoot, "export-ui-settings.json"),
     scanCachePath: options.scanCachePath ?? path.join(serverRoot, "scan-cache.json"),
+    postHtmlCacheDir: options.postHtmlCacheDir ?? path.join(serverRoot, "post-html"),
     uploadProviderSource: createUploadProviderSourceStub(),
     ...options,
   })

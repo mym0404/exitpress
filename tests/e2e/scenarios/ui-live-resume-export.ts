@@ -188,11 +188,13 @@ const waitForServerReady = (child: ChildProcessWithoutNullStreams) =>
 const startServer = async ({
   settingsPath,
   scanCachePath,
+  postHtmlCacheDir,
   delayedLogNos = [],
   delayMs = 0,
 }: {
   settingsPath: string
   scanCachePath: string
+  postHtmlCacheDir: string
   delayedLogNos?: string[]
   delayMs?: number
 }) => {
@@ -204,6 +206,7 @@ const startServer = async ({
       NODE_ENV: "development",
       GOODBYE_SETTINGS_PATH: settingsPath,
       GOODBYE_SCAN_CACHE_PATH: scanCachePath,
+      GOODBYE_POST_HTML_CACHE_DIR: postHtmlCacheDir,
       GOODBYE_LIVE_FETCH_DELAY_LOGNOS: delayedLogNos.join(","),
       GOODBYE_LIVE_FETCH_DELAY_MS: String(delayMs),
     },
@@ -256,6 +259,7 @@ const run = async () => {
   const tempRoot = await createTestTempDir("goodbye-live-resume-export-")
   const settingsPath = path.join(tempRoot, "export-ui-settings.json")
   const scanCachePath = path.join(tempRoot, "scan-cache.json")
+  const postHtmlCacheDir = path.join(tempRoot, "post-html")
   const manifestPath = path.join(repoRoot, scopedOutputDir, "manifest.json")
   let firstServer: { child: ChildProcessWithoutNullStreams; baseUrl: string } | null = null
   let secondServer: { child: ChildProcessWithoutNullStreams; baseUrl: string } | null = null
@@ -264,6 +268,7 @@ const run = async () => {
     const activeFirstServer = await startServer({
       settingsPath,
       scanCachePath,
+      postHtmlCacheDir,
       delayedLogNos: [delayedLogNo],
       delayMs: 30_000,
     })
@@ -341,6 +346,7 @@ const run = async () => {
     const activeSecondServer = await startServer({
       settingsPath,
       scanCachePath,
+      postHtmlCacheDir,
     })
     secondServer = activeSecondServer
     console.log("live resume: second server ready")

@@ -3,6 +3,7 @@ import path from "node:path"
 
 import type { ScanResult } from "../../domain/blog/Types.js"
 import type { ExportJobItem, ExportManifest, ExportRequest } from "../../domain/export-job/Types.js"
+import type { NaverBlogFetcherCache } from "../../integrations/naver-blog/NaverBlogFetcher.js"
 import type { ProcessedPostResult } from "../post/PostExportResult.js"
 
 import { extractBlogId } from "../../domain/blog/NaverUrl.js"
@@ -46,6 +47,7 @@ export class NaverBlogExporter {
   readonly resumeState: ExportResumeState | null
   readonly writeManifestFile: boolean
   readonly abortSignal: AbortSignal | null
+  readonly fetcherCache: NaverBlogFetcherCache | undefined
 
   constructor({
     request,
@@ -55,6 +57,7 @@ export class NaverBlogExporter {
     resumeState,
     writeManifestFile,
     abortSignal,
+    fetcherCache,
   }: {
     request: ExportRequest
     onProgress: (progress: { total: number; completed: number; failed: number }) => void
@@ -63,6 +66,7 @@ export class NaverBlogExporter {
     resumeState?: ExportResumeState | null
     writeManifestFile?: boolean
     abortSignal?: AbortSignal | null
+    fetcherCache?: NaverBlogFetcherCache
   }) {
     this.request = request
     this.onProgress = onProgress
@@ -71,6 +75,7 @@ export class NaverBlogExporter {
     this.resumeState = resumeState ?? null
     this.writeManifestFile = writeManifestFile ?? true
     this.abortSignal = abortSignal ?? null
+    this.fetcherCache = fetcherCache
   }
 
   async run() {
@@ -83,6 +88,7 @@ export class NaverBlogExporter {
     })
     const fetcher = new NaverBlogFetcher({
       blogId,
+      cache: this.fetcherCache,
     })
     const assetStore = new AssetStore({
       outputDir,

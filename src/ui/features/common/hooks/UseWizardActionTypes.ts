@@ -23,12 +23,7 @@ export type UseWizardActionsArgs = {
   resumeDialog: ResumeDialogState | null
   frontmatterValidationErrors: string[]
   updateOptions: (updater: (current: ExportOptions) => ExportOptions) => void
-  startJob: (args: {
-    blogIdOrUrl: string
-    outputDir: string
-    options: ExportOptions
-    scanResult?: ScanResult | null
-  }) => Promise<string | undefined>
+  startBlockScan: () => Promise<void>
   startUpload: (args: {
     providerKey: string
     providerFields: UploadProviderFields
@@ -69,6 +64,7 @@ export type WizardScanActionsArgs = Pick<
   | "outputDirBaseline"
   | "activeScanResult"
   | "scanCache"
+  | "options"
   | "setResumeDialog"
   | "setScanCache"
   | "setScanPending"

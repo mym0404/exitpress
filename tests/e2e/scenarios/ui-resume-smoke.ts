@@ -683,6 +683,7 @@ const run = async () => {
   const server = createHttpServer({
     settingsPath: path.join(tempRoot, "export-ui-settings.json"),
     scanCachePath: path.join(tempRoot, "scan-cache.json"),
+    postHtmlCacheDir: path.join(tempRoot, "post-html"),
   })
   await new Promise<void>((resolve) => {
     server.listen(0, "127.0.0.1", () => resolve())

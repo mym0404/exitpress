@@ -31,6 +31,7 @@ if (delayedLogNos.size > 0 && delayMs > 0) {
 const server = createHttpServer({
   settingsPath: process.env.GOODBYE_SETTINGS_PATH,
   scanCachePath: process.env.GOODBYE_SCAN_CACHE_PATH,
+  postHtmlCacheDir: process.env.GOODBYE_POST_HTML_CACHE_DIR,
 })
 
 const shutdown = () => {

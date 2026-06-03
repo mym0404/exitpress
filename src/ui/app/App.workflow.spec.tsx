@@ -32,6 +32,7 @@ describe("App workflow", () => {
 
     const fetchMock = vi.fn<typeof fetch>(async (input, init) => {
       const url = typeof input === "string" ? input : input.toString()
+
       const bootstrapResponse = getBootstrapResponse(url)
 
       if (bootstrapResponse) {
@@ -95,6 +96,7 @@ describe("App workflow", () => {
   it("shows the output path input in the blog step and hides it in the structure step", async () => {
     const fetchMock = vi.fn<typeof fetch>(async (input) => {
       const url = typeof input === "string" ? input : input.toString()
+
       const bootstrapResponse = getBootstrapResponse(url)
 
       if (bootstrapResponse) {
@@ -154,8 +156,48 @@ describe("App workflow", () => {
   })
 
   it("runs the main export flow in the wizard without preview or modal", async () => {
+    const blockScanRequests: Array<{
+      method: string | undefined
+      payload: {
+        blogIdOrUrl?: string
+        scanResult?: unknown
+        options?: {
+          scope?: {
+            categoryIds?: number[]
+          }
+        }
+      }
+    }> = []
+    const expectedDetectedScanResult = {
+      ...scanResult,
+      detectedBlockOutputKeys: ["naver-se4:image"],
+      detectedBlockOutputScopeSignature: JSON.stringify(exportedOptions.scope),
+    }
     const fetchMock = vi.fn<typeof fetch>(async (input, init) => {
       const url = typeof input === "string" ? input : input.toString()
+
+      if (url.endsWith("/api/scan-blocks/jobs")) {
+        blockScanRequests.push({
+          method: init?.method,
+          payload: JSON.parse(
+            String(init?.body ?? "{}"),
+          ) as (typeof blockScanRequests)[number]["payload"],
+        })
+        return buildJsonResponse({ jobId: "block-scan-job" }, 202)
+      }
+
+      if (url.endsWith("/api/scan-blocks/jobs/block-scan-job")) {
+        return buildJsonResponse({
+          id: "block-scan-job",
+          status: "completed",
+          total: 5,
+          completed: 5,
+          failed: 0,
+          detectedBlockOutputKeys: ["naver-se4:image"],
+          error: null,
+        })
+      }
+
       const bootstrapResponse = getBootstrapResponse(url)
 
       if (bootstrapResponse) {
@@ -172,7 +214,7 @@ describe("App workflow", () => {
             blogIdOrUrl: "mym0404",
             outputDir: testOutputDir,
             options: exportedOptions,
-            scanResult,
+            scanResult: expectedDetectedScanResult,
           }),
         )
         return buildJsonResponse({ jobId: "job-1" }, init?.method === "POST" ? 202 : 200)
@@ -210,6 +252,7 @@ describe("App workflow", () => {
 
     await user.click(screen.getByRole("button", { name: "구조 설정" }))
     expect(document.querySelector('[data-step-view="structure-options"]')).not.toBeNull()
+    expect(blockScanRequests).toHaveLength(0)
     await user.click(screen.getByRole("button", { name: "Frontmatter 설정" }))
     expect(document.querySelector('[data-step-view="frontmatter-options"]')).not.toBeNull()
     expect(await screen.findByText("글 제목을 기록합니다.")).toBeInTheDocument()
@@ -218,8 +261,6 @@ describe("App workflow", () => {
     await user.clear(titleAliasInput)
     await user.type(titleAliasInput, "postTitle")
 
-    await user.click(screen.getByRole("button", { name: "Markdown 설정" }))
-    expect(document.querySelector('[data-step-view="markdown-options"]')).not.toBeNull()
     await user.click(screen.getByRole("button", { name: "Assets 설정" }))
     expect(document.querySelector('[data-step-view="assets-options"]')).not.toBeNull()
     await user.click(screen.getByRole("button", { name: "Link 처리" }))
@@ -228,6 +269,21 @@ describe("App workflow", () => {
     expect(document.querySelector('[data-step-view="diagnostics-options"]')).not.toBeNull()
 
     await user.click(screen.getByRole("button", { name: "내보내기" }))
+    expect(document.querySelector('[data-step-view="block-scan"]')).not.toBeNull()
+    expect(screen.getByText("Markdown 옵션 준비")).toBeInTheDocument()
+
+    await waitFor(() => {
+      expect(document.querySelector('[data-step-view="markdown-review"]')).not.toBeNull()
+    })
+    expect(blockScanRequests).toHaveLength(1)
+    expect(blockScanRequests[0]?.method).toBe("POST")
+    expect(blockScanRequests[0]?.payload.blogIdOrUrl).toBe("mym0404")
+    expect(blockScanRequests[0]?.payload.scanResult).toEqual(scanResult)
+    expect(blockScanRequests[0]?.payload.options?.scope?.categoryIds).toEqual([101])
+    expect(document.querySelector('[data-block-output-card="naver-se4:image"]')).not.toBeNull()
+    expect(document.querySelector('[data-block-output-card="naver-se4:table"]')).toBeNull()
+
+    await user.click(screen.getByRole("button", { name: "변환 시작" }))
 
     await waitFor(() => {
       expect(document.querySelector("#status-text")?.textContent).toContain("completed")
@@ -261,9 +317,86 @@ describe("App workflow", () => {
     expect(document.querySelector('[role="dialog"]')).toBeNull()
   })
 
+  it("starts export after block scan when no detected block output keys are available", async () => {
+    let exportRequestCount = 0
+    const fetchMock = vi.fn<typeof fetch>(async (input) => {
+      const url = typeof input === "string" ? input : input.toString()
+
+      if (url.endsWith("/api/scan-blocks/jobs")) {
+        return buildJsonResponse({ jobId: "empty-block-scan-job" }, 202)
+      }
+
+      if (url.endsWith("/api/scan-blocks/jobs/empty-block-scan-job")) {
+        return buildJsonResponse({
+          id: "empty-block-scan-job",
+          status: "completed",
+          total: 5,
+          completed: 5,
+          failed: 0,
+          detectedBlockOutputKeys: [],
+          error: null,
+        })
+      }
+
+      const bootstrapResponse = getBootstrapResponse(url)
+
+      if (bootstrapResponse) {
+        return bootstrapResponse
+      }
+
+      if (url.endsWith("/api/scan")) {
+        return buildJsonResponse(scanResult)
+      }
+
+      if (url.endsWith("/api/export")) {
+        exportRequestCount += 1
+        return buildJsonResponse({ jobId: "job-empty" }, 202)
+      }
+
+      if (url.endsWith("/api/export/job-empty")) {
+        return buildJsonResponse(completedJob)
+      }
+
+      throw new Error(`unexpected fetch: ${url}`)
+    })
+
+    vi.stubGlobal("fetch", fetchMock)
+
+    const user = renderApp()
+
+    await user.type(screen.getByLabelText("블로그 ID 또는 URL"), "mym0404")
+    await user.click(screen.getByRole("button", { name: "카테고리 불러오기" }))
+    await waitFor(() => {
+      expect(document.querySelector('[data-step-view="category-selection"]')).not.toBeNull()
+    })
+
+    await user.click(screen.getByRole("button", { name: "구조 설정" }))
+    await waitFor(() => {
+      expect(document.querySelector('[data-step-view="structure-options"]')).not.toBeNull()
+    })
+
+    await user.click(screen.getByRole("button", { name: "Frontmatter 설정" }))
+    await waitFor(() => {
+      expect(document.querySelector('[data-step-view="frontmatter-options"]')).not.toBeNull()
+    })
+
+    await user.click(screen.getByRole("button", { name: "Assets 설정" }))
+    await waitFor(() => {
+      expect(document.querySelector('[data-step-view="assets-options"]')).not.toBeNull()
+    })
+    await user.click(screen.getByRole("button", { name: "Link 처리" }))
+    await user.click(screen.getByRole("button", { name: "진단 설정" }))
+    await user.click(screen.getByRole("button", { name: "내보내기" }))
+    await waitFor(() => {
+      expect(exportRequestCount).toBe(1)
+    })
+    expect(document.querySelector('[data-step-view="markdown-review"]')).toBeNull()
+  })
+
   it("scrolls to the top when moving to the next setup step", async () => {
     const fetchMock = vi.fn<typeof fetch>(async (input) => {
       const url = typeof input === "string" ? input : input.toString()
+
       const bootstrapResponse = getBootstrapResponse(url)
 
       if (bootstrapResponse) {
@@ -367,6 +500,23 @@ describe("App workflow", () => {
   it("hides setup panels while the export job is running", async () => {
     const fetchMock = vi.fn<typeof fetch>(async (input, init) => {
       const url = typeof input === "string" ? input : input.toString()
+
+      if (url.endsWith("/api/scan-blocks/jobs")) {
+        return buildJsonResponse({ jobId: "block-scan-job" }, 202)
+      }
+
+      if (url.endsWith("/api/scan-blocks/jobs/block-scan-job")) {
+        return buildJsonResponse({
+          id: "block-scan-job",
+          status: "completed",
+          total: 5,
+          completed: 5,
+          failed: 0,
+          detectedBlockOutputKeys: ["naver-se4:image"],
+          error: null,
+        })
+      }
+
       const bootstrapResponse = getBootstrapResponse(url)
 
       if (bootstrapResponse) {
@@ -394,6 +544,10 @@ describe("App workflow", () => {
 
     await moveToDiagnosticsStep(user)
     await user.click(screen.getByRole("button", { name: "내보내기" }))
+    await waitFor(() => {
+      expect(document.querySelector('[data-step-view="markdown-review"]')).not.toBeNull()
+    })
+    await user.click(screen.getByRole("button", { name: "변환 시작" }))
 
     await waitFor(() => {
       expect(document.querySelector("#status-text")?.textContent).toContain("running")
