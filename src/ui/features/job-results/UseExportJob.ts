@@ -29,7 +29,8 @@ export const useExportJob = () => {
   const [pollVersion, setPollVersion] = useState(0)
   const restartPollingRef = useRef(false)
   const displayedJobRef = useRef<ExportJobState | null>(null)
-  const pollingConfig = getExportJobPollingConfig()
+  const { defaultPollMs, fastPollMs, uploadBurstAttempts, uploadBurstPollMs } =
+    getExportJobPollingConfig()
 
   useEffect(() => {
     if (!jobId) {
@@ -44,8 +45,7 @@ export const useExportJob = () => {
     restartPollingRef.current = false
 
     const scheduleNextLoad = (status: ExportJobState["status"] | null | undefined) => {
-      const nextDelay =
-        status === JOB_STATUSES.UPLOADING ? pollingConfig.fastPollMs : pollingConfig.defaultPollMs
+      const nextDelay = status === JOB_STATUSES.UPLOADING ? fastPollMs : defaultPollMs
 
       timeoutId = window.setTimeout(() => {
         void load()
@@ -75,7 +75,7 @@ export const useExportJob = () => {
     if (shouldLoadImmediately) {
       void load()
     } else if (!displayedJobRef.current?.resumeAvailable) {
-      scheduleNextLoad(job?.status)
+      scheduleNextLoad(displayedJobRef.current?.status)
     }
 
     return () => {
@@ -84,7 +84,7 @@ export const useExportJob = () => {
         window.clearTimeout(timeoutId)
       }
     }
-  }, [jobId, pollVersion])
+  }, [defaultPollMs, fastPollMs, jobId, pollVersion])
 
   const startJob = useCallback(
     async ({
@@ -167,7 +167,7 @@ export const useExportJob = () => {
         setPollVersion((current) => current + 1)
         let nextJob: ExportJobState | null = null
 
-        for (let attempt = 0; attempt < pollingConfig.uploadBurstAttempts; attempt += 1) {
+        for (let attempt = 0; attempt < uploadBurstAttempts; attempt += 1) {
           nextJob = await fetchJson<ExportJobState>(`/api/export/${jobId}`)
           displayedJobRef.current = nextJob
           setJob(nextJob)
@@ -183,7 +183,7 @@ export const useExportJob = () => {
           }
 
           await new Promise<void>((resolve) => {
-            window.setTimeout(resolve, pollingConfig.uploadBurstPollMs)
+            window.setTimeout(resolve, uploadBurstPollMs)
           })
         }
 
@@ -198,7 +198,7 @@ export const useExportJob = () => {
         setUploadSubmitting(false)
       }
     },
-    [job, jobId],
+    [job, jobId, uploadBurstAttempts, uploadBurstPollMs],
   )
 
   const resumeJob = useCallback(async () => {

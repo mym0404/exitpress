@@ -124,7 +124,10 @@ export const CategoryPanel = ({
             </Select>
           </div>
 
-          <label className="field-card grid min-h-0 gap-1.5 rounded-2xl px-3 py-3">
+          <label
+            className="field-card grid min-h-0 gap-1.5 rounded-2xl px-3 py-3"
+            htmlFor="scope-dateFrom"
+          >
             <span className="text-sm font-semibold text-foreground">시작일</span>
             <Input
               id="scope-dateFrom"
@@ -135,7 +138,10 @@ export const CategoryPanel = ({
             />
           </label>
 
-          <label className="field-card grid min-h-0 gap-1.5 rounded-2xl px-3 py-3">
+          <label
+            className="field-card grid min-h-0 gap-1.5 rounded-2xl px-3 py-3"
+            htmlFor="scope-dateTo"
+          >
             <span className="text-sm font-semibold text-foreground">종료일</span>
             <Input
               id="scope-dateTo"
@@ -148,7 +154,7 @@ export const CategoryPanel = ({
         </div>
 
         <div className="toolbar category-toolbar grid gap-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
-          <label className="input-stack toolbar-search grid gap-2">
+          <label className="input-stack toolbar-search grid gap-2" htmlFor="category-search">
             <span className="toolbar-label wizard-kicker">검색</span>
             <Input
               id="category-search"

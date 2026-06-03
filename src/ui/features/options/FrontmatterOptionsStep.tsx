@@ -135,9 +135,13 @@ export const FrontmatterOptionsStep = ({
                 {fieldMeta.description}
               </p>
             </div>
-            <label className="field frontmatter-alias-field grid min-h-0 gap-1.5">
+            <label
+              className="field frontmatter-alias-field grid min-h-0 gap-1.5"
+              htmlFor={`frontmatter-alias-${fieldName}`}
+            >
               <span className="text-sm font-semibold text-foreground">내보낼 key alias</span>
               <Input
+                id={`frontmatter-alias-${fieldName}`}
                 data-alias-input="true"
                 data-field-name={fieldName}
                 value={options.frontmatter.aliases[fieldName] ?? ""}

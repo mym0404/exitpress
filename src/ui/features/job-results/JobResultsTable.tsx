@@ -235,14 +235,14 @@ export const JobResultsTable = ({
                           {localOutputPath ? (
                             <Tooltip>
                               <TooltipTrigger asChild>
-                                <span
-                                  className="w-fit max-w-full cursor-help outline-none"
-                                  tabIndex={0}
+                                <button
+                                  type="button"
+                                  className="w-fit max-w-full cursor-help border-0 bg-transparent p-0 text-left outline-none"
                                 >
                                   <strong className="break-words text-[11px] font-semibold leading-[1.45] text-foreground sm:text-[13px]">
                                     {pathMeta.fileLabel}
                                   </strong>
-                                </span>
+                                </button>
                               </TooltipTrigger>
                               <TooltipContent align="start" side="top" sideOffset={8}>
                                 <span className="font-mono">{localOutputPath}</span>

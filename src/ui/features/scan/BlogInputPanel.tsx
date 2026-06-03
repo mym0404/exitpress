@@ -37,7 +37,7 @@ export const BlogInputPanel = ({
       </div>
     </CardHeader>
     <CardContent className="grid gap-3 p-5">
-      <label className="grid gap-2">
+      <label className="grid gap-2" htmlFor="blogIdOrUrl">
         <span className="text-sm font-semibold text-foreground">블로그 ID 또는 URL</span>
         <Input
           id="blogIdOrUrl"
@@ -53,7 +53,7 @@ export const BlogInputPanel = ({
           onChange={(event) => onBlogIdOrUrlChange(event.target.value)}
         />
       </label>
-      <label className="grid gap-2">
+      <label className="grid gap-2" htmlFor="outputDir">
         <span className="text-sm font-semibold text-foreground">출력 경로</span>
         <Input
           id="outputDir"

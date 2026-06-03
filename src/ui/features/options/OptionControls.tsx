@@ -183,13 +183,16 @@ export const RadioField = ({
       <input
         id={inputId}
         name={name}
+        aria-labelledby={`${inputId}-label`}
         className="mt-0.5 size-[1.1rem] shrink-0 accent-primary"
         type="radio"
         checked={checked}
         onChange={onChange}
       />
       <span className="check-copy grid min-w-0 gap-1">
-        <span className="check-title text-sm font-semibold text-foreground">{label}</span>
+        <span id={`${inputId}-label`} className="check-title text-sm font-semibold text-foreground">
+          {label}
+        </span>
         {description ? (
           <small className="field-help text-[13px] leading-5">{description}</small>
         ) : null}
