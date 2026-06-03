@@ -3,4 +3,7 @@ version = 1
 name = "goodbye-naver-blog"
 
 [setup]
-script = "pnpm install"
+script = '''
+corepack enable
+pnpm install
+'''
