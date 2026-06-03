@@ -130,6 +130,8 @@ Before committing, pushing, or creating a ready PR for each focused support unit
 
 ```bash
 pnpm typecheck
+pnpm check:fmt
+pnpm check:lint
 pnpm test:coverage
 pnpm smoke:ui
 pnpm check:unused
@@ -137,7 +139,7 @@ pnpm check:unused
 
 If any command fails, do not commit, push, or create the PR. If the failure is caused by the focused diff, fix it and rerun the full Local PR Gate from the beginning. If the failure appears unrelated or flaky, rerun the failing command by itself to capture evidence; if it still reproduces, stop PR creation and report the blocker.
 
-Do not add `pnpm check:local` to the Local PR Gate. `pnpm typecheck` and `pnpm test:coverage` directly cover the CI-relevant type and Vitest checks, while `pnpm check:unused` remains the local dead-code gate.
+Do not add `pnpm check:local` to the Local PR Gate. `pnpm check:fmt`, `pnpm check:lint`, `pnpm typecheck`, and `pnpm test:coverage` directly cover the CI-relevant format, lint, type, and Vitest checks, while `pnpm check:unused` remains the local dead-code gate.
 
 ## Report Rules
 
@@ -285,6 +287,8 @@ For the required Local PR Gate before every focused support-unit PR:
 
 ```bash
 pnpm typecheck
+pnpm check:fmt
+pnpm check:lint
 pnpm test:coverage
 pnpm smoke:ui
 pnpm check:unused

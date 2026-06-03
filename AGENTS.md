@@ -5,10 +5,10 @@
 - 로컬 웹 UI, 단건 export CLI, fixture-first regression, Playwright UI smoke, live network e2e를 함께 유지한다.
 
 ## Tech Stack
-- `pnpm` 단일 저장소에서 Node.js 24 LTS, Node.js ESM, TypeScript, Bun 기반 TS 실행을 사용한다.
+- `mise.toml`로 Node.js 24.16.0, pnpm 11.5.1, Bun 1.3.14를 고정하고, `pnpm` 단일 저장소에서 Node.js ESM, TypeScript, Bun 기반 TS 실행을 사용한다.
 - 웹 UI는 React, Vite, Tailwind CSS v4, shadcn/Radix, Sonner로 구성된다.
-- 포맷, import 정렬, 기본 lint는 Biome가 맡는다.
-- 검증은 Biome, Vitest, `tests/e2e/*` Playwright/Bun harness가 맡는다.
+- 포맷과 import 정렬은 Oxfmt, 기본 lint는 Oxlint가 맡는다.
+- 검증은 Oxfmt, Oxlint, Vitest, `tests/e2e/*` Playwright/Bun harness가 맡는다.
 
 ## Project Structure
 ```text
@@ -37,6 +37,9 @@
 |   |-- fixtures/samples/             # public sample expected outputs
 |   `-- support/                      # fixture, server, and test-path helpers
 |-- public/brand/                     # UI brand assets
+|-- mise.toml                         # tool runtime versions
+|-- .oxfmtrc.json                     # Oxfmt formatting and import sorting config
+|-- .oxlintrc.json                    # Oxlint lint config
 |-- .github/workflows/required-checks.yml
 `-- package.json                      # repo-native commands
 ```
@@ -60,9 +63,10 @@
 - commit, push, PR 생성은 사용자가 명시적으로 요청한 경우에만 수행한다.
 
 ## Validation Routes
-- `pnpm format:biome`: Biome formatter를 적용한다. 구조 변경이나 대량 import 수정 중간에 실행한다.
-- `pnpm check:biome`: Biome formatting, import 정렬, lint 기준선이다.
-- `pnpm check:local`: 저장소 파일 변경 뒤 기본 기준선이다. `check:biome`, `typecheck`, `test:offline`을 실행한다. 샘플 fixture 테스트는 live Naver HTML을 캐시하며 필요 시 네트워크를 쓴다.
+- `pnpm format`: Oxfmt formatter와 import sorting을 적용한다. 구조 변경이나 대량 import 수정 중간에 실행한다.
+- `pnpm check:fmt`: Oxfmt formatting과 import sorting 기준선이다.
+- `pnpm check:lint`: Oxlint lint 기준선이다.
+- `pnpm check:local`: 저장소 파일 변경 뒤 기본 기준선이다. `check:fmt`, `check:lint`, `typecheck`, `test:offline`을 실행한다. 샘플 fixture 테스트는 live Naver HTML을 캐시하며 필요 시 네트워크를 쓴다.
 - `pnpm check:unused`: source, test, script 코드의 dead code 기준선이다. `check:local`에는 포함되지 않는다.
 - `pnpm check:full`: `check:local`에 Playwright smoke UI를 더한 넓은 로컬 회귀다.
 - `pnpm smoke:ui`: mock 기반 UI 흐름과 복구 경로를 확인한다. 코어 사용자 흐름이나 상태 전이를 바꾼 뒤 실행한다.

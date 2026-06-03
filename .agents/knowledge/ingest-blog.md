@@ -76,9 +76,9 @@ bun .agents/skills/ingest-blog/scripts/write-sample-fixture.ts \
 - Multiple focused PRs are processed sequentially in the same working directory.
 - Each support unit uses one branch named `worktree/ingest-blog-<safeSupportUnitKey>`, where `worktree/` is a branch prefix and no git worktree is created.
 - Before moving to the next unit, `git status --short` must be clean so code from different PRs cannot mix.
-- Before commit, push, or PR creation, the Local PR Gate must pass: `pnpm typecheck`, `pnpm test:coverage`, `pnpm smoke:ui`, and `pnpm check:unused`.
+- Before commit, push, or PR creation, the Local PR Gate must pass: `pnpm check:fmt`, `pnpm check:lint`, `pnpm typecheck`, `pnpm test:coverage`, `pnpm smoke:ui`, and `pnpm check:unused`.
 - If the Local PR Gate fails because of the focused diff, fix the diff and rerun the full gate. If the failure appears unrelated or flaky, rerun the failing command alone; if it still reproduces, stop PR creation and report the blocker.
-- `pnpm check:local` is not part of the Local PR Gate because `pnpm typecheck` and `pnpm test:coverage` directly cover the CI-relevant type and Vitest checks.
+- `pnpm check:local` is not part of the Local PR Gate because `pnpm check:fmt`, `pnpm check:lint`, `pnpm typecheck`, and `pnpm test:coverage` directly cover the CI-relevant format, lint, type, and Vitest checks.
 - The PR title starts with exactly `[📦 New Block Parser]` when adding and registering a new parser block.
 - The PR title starts with exactly `[🎉 Parser Improvement]` when extending or fixing an existing parser block.
 - No other `ingest-blog` PR title prefix is used.

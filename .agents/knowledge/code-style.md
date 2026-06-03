@@ -11,10 +11,9 @@
 - `pnpm gh:update-branches` runs `scripts/maintenance/update-open-pr-branches.ts` and calls `gh pr update-branch` for open PRs.
 
 ## Formatting And Imports
-- Biome owns repository formatting, import organization, and baseline lint.
-- Run `pnpm format:biome` during multi-step edits when formatting may have drifted.
-- Run `pnpm check:biome` before or through `pnpm check:local`.
-- Use `pnpm check:biome:write` only when applying Biome safe fixes and import organization is part of the intended change.
+- Oxfmt owns repository formatting and import sorting. Oxlint owns the baseline lint.
+- Run `pnpm format` during multi-step edits when formatting or imports may have drifted.
+- Run `pnpm check:fmt` and `pnpm check:lint` before or through `pnpm check:local`.
 
 ## TypeScript
 - The repo is strict TypeScript with NodeNext ESM.

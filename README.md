@@ -55,14 +55,15 @@
 
 ### 요구 사항
 
-- Node.js `20+`
-- pnpm
+- [mise](https://mise.jdx.dev/)
 
 ### 설치
 
 ```bash
 git clone https://github.com/mym0404/goodbye-naver-blog.git
 cd goodbye-naver-blog
+mise trust
+mise install
 pnpm install
 ```
 

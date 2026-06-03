@@ -8,8 +8,9 @@
 - Test and harness temporary paths are rooted through `tests/support/test-paths.ts` under repo-local `tmp/`.
 
 ## Primary Commands
-- `pnpm check:biome`: `biome check .`. Runs the repository formatting, import organization, and lint baseline.
-- `pnpm check:local`: `pnpm check:biome && pnpm typecheck && pnpm test:offline`. Run after ordinary repository file changes.
+- `pnpm check:fmt`: `oxfmt --check ...`. Runs the repository formatting and import sorting baseline.
+- `pnpm check:lint`: `oxlint ...`. Runs the repository lint baseline.
+- `pnpm check:local`: `pnpm check:fmt && pnpm check:lint && pnpm typecheck && pnpm test:offline`. Run after ordinary repository file changes.
 - `pnpm check:unused`: `bun scripts/maintenance/check-unused.ts`. Run when removing, exporting, moving, or intentionally keeping source/test/script code that may be unused. This command is not part of `check:local`.
 - `pnpm check:full`: `pnpm check:local && pnpm smoke:ui`. Run when user flow, UI state, exporter output, or shared runtime behavior may be affected.
 - `pnpm smoke:ui`: `pnpm build:ui && bun tests/e2e/run-ui-smoke-suite.ts`. Verifies mock-based scan, export, upload, theme persistence, and resume UI.
@@ -17,8 +18,7 @@
 - `pnpm test:coverage`: runs the full Vitest suite once with V8 coverage and enforces global coverage thresholds.
 
 ## Focused Commands
-- `pnpm format:biome`: applies Biome formatter output during multi-step edits.
-- `pnpm check:biome:write`: applies Biome safe fixes and import organization when the intended change includes repository-wide formatting or import ordering.
+- `pnpm format`: applies Oxfmt formatter output and import sorting during multi-step edits.
 - `pnpm typecheck`: TypeScript contract check only.
 - `pnpm test:offline`: Vitest suite. Sample fixture tests fetch live Naver post HTML before comparing expected output, using the sample cache only outside CI.
 - `pnpm test:parser-blocks`: focused parser block spec run for `src/parsing/naver-blog/se*/blocks` behavior.
@@ -32,10 +32,10 @@
 - `bun .agents/skills/ingest-blog/scripts/collect-blog-errors.ts --help`: parser coverage ingest CLI surface check. Ingest workflow behavior is documented in `.agents/knowledge/ingest-blog.md`.
 
 ## Ingest Blog PR Gate
-- Before each `ingest-blog` support-unit PR, run `pnpm check:biome`, `pnpm typecheck`, `pnpm test:coverage`, `pnpm smoke:ui`, and `pnpm check:unused`.
-- `pnpm check:biome`, `pnpm typecheck`, `pnpm test:coverage`, and `pnpm smoke:ui` mirror the non-draft PR CI checks.
+- Before each `ingest-blog` support-unit PR, run `pnpm check:fmt`, `pnpm check:lint`, `pnpm typecheck`, `pnpm test:coverage`, `pnpm smoke:ui`, and `pnpm check:unused`.
+- `pnpm check:fmt`, `pnpm check:lint`, `pnpm typecheck`, `pnpm test:coverage`, and `pnpm smoke:ui` mirror the non-draft PR CI checks.
 - `pnpm check:unused` is an extra local source/test/script dead-code gate and is not part of CI.
-- Do not add `pnpm check:local` to this gate because `pnpm check:biome`, `pnpm typecheck`, and `pnpm test:coverage` cover the relevant formatting, import, type, and Vitest checks directly.
+- Do not add `pnpm check:local` to this gate because `pnpm check:fmt`, `pnpm check:lint`, `pnpm typecheck`, and `pnpm test:coverage` cover the relevant formatting, lint, import, type, and Vitest checks directly.
 - Network e2e is required only when live fetch, live resume, or upload behavior changes.
 
 ## Parser Block Unit Test
@@ -68,12 +68,12 @@
 
 ## CI
 - `.github/workflows/required-checks.yml` runs on non-draft pull requests.
-- CI uses Node.js 24, pnpm 10, and Bun 1.3.13.
+- CI uses `mise.toml` versions: Node.js 24.16.0, pnpm 11.5.1, and Bun 1.3.14.
 - CI restores the Playwright browser cache keyed by the installed Playwright version, then runs `pnpm exec playwright install --with-deps --only-shell chromium`.
-- CI runs `pnpm check:biome`, `pnpm typecheck`, `pnpm smoke:ui`, `pnpm test:coverage`, then uploads `coverage/lcov.info` to Codecov. CI does not run `pnpm test:offline` separately because `pnpm test:coverage` already runs the full Vitest suite.
+- CI runs `pnpm check:fmt`, `pnpm check:lint`, `pnpm typecheck`, `pnpm smoke:ui`, `pnpm test:coverage`, then uploads `coverage/lcov.info` to Codecov. CI does not run `pnpm test:offline` separately because `pnpm test:coverage` already runs the full Vitest suite.
 
 ## Task Loops
-- Run `pnpm format:biome` during multi-step edits before the validation command when formatting or imports may have drifted.
+- Run `pnpm format` during multi-step edits before the validation command when formatting or imports may have drifted.
 - Knowledge-only changes still need path and command spot checks. Run `pnpm check:local` when practical.
 - Dead-code cleanup needs `pnpm check:unused`; use `pnpm check:local` separately for the normal type and test baseline.
 - Parser block changes need `pnpm test:parser-blocks` and `pnpm test:offline`.
