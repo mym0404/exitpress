@@ -543,7 +543,7 @@ describe("JobResultsPanel upload provider UX", () => {
     expect(document.querySelector('[data-upload-row-status-badge="failed"]')).not.toBeNull()
   })
 
-  it("renders action buttons for source, preview, and local file open", async () => {
+  it("renders a hover action menu for source, preview, and local file open", async () => {
     const user = userEvent.setup()
     const fetchMock = vi.fn<typeof fetch>(async (input) => {
       if (input === "/api/local-file/preview-link") {
@@ -565,19 +565,9 @@ describe("JobResultsPanel upload provider UX", () => {
     vi.stubGlobal("open", openMock)
     renderPanel()
 
-    expect(
-      screen.getByRole("button", {
-        name: "첫 글 네이버 원문 보기",
-      }),
-    ).toHaveAttribute("data-job-item-source-link")
-    expect(
-      screen.getByRole("button", {
-        name: "첫 글 마크다운 미리보기",
-      }),
-    ).toHaveAttribute("data-job-item-preview-link")
-    expect(screen.getByRole("button", { name: "첫 글 파일 열기" }).className).toContain(
-      "text-muted-foreground",
-    )
+    const actionMenuButton = screen.getByRole("button", { name: "첫 글 액션 메뉴" })
+
+    expect(actionMenuButton.className).toContain("size-7")
 
     await user.hover(screen.getByText("first"))
 
@@ -585,7 +575,12 @@ describe("JobResultsPanel upload provider UX", () => {
       (await screen.findAllByText(`${testOutputDir}/posts/first/index.md`)).length,
     ).toBeGreaterThan(0)
 
-    await user.click(screen.getByRole("button", { name: "첫 글 네이버 원문 보기" }))
+    await user.hover(actionMenuButton)
+    expect(await screen.findByRole("menuitem", { name: "네이버 원문 보기" })).toHaveAttribute(
+      "data-job-item-source-link",
+    )
+
+    await user.click(screen.getByRole("menuitem", { name: "네이버 원문 보기" }))
 
     expect(openMock).toHaveBeenCalledWith(
       "https://blog.naver.com/mym0404/223034929697",
@@ -593,7 +588,11 @@ describe("JobResultsPanel upload provider UX", () => {
       "noopener,noreferrer",
     )
 
-    await user.click(screen.getByRole("button", { name: "첫 글 마크다운 미리보기" }))
+    await user.hover(actionMenuButton)
+    expect(await screen.findByRole("menuitem", { name: "마크다운 미리보기" })).toHaveAttribute(
+      "data-job-item-preview-link",
+    )
+    await user.click(screen.getByRole("menuitem", { name: "마크다운 미리보기" }))
 
     expect(fetchMock).toHaveBeenCalledWith(
       "/api/local-file/preview-link",
@@ -615,7 +614,8 @@ describe("JobResultsPanel upload provider UX", () => {
       "noopener,noreferrer",
     )
 
-    await user.click(screen.getByRole("button", { name: "첫 글 파일 열기" }))
+    await user.hover(actionMenuButton)
+    await user.click(await screen.findByRole("menuitem", { name: "로컬 파일 열기" }))
 
     expect(fetchMock).toHaveBeenCalledWith(
       "/api/local-file/open",

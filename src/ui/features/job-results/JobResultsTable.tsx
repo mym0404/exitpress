@@ -1,11 +1,18 @@
-import { RiExternalLinkLine, RiFileTextLine, RiFolderOpenLine } from "@remixicon/react"
+import { RiExternalLinkLine, RiFileTextLine, RiFolderOpenLine, RiMore2Line } from "@remixicon/react"
+import { useRef, useState } from "react"
 
 import type { ExportJobState } from "../../../domain/export-job/Types.js"
 
 import type { JobFilter, JobResultsMode } from "./JobResultsHelpers.js"
 
 import { Badge } from "../../components/ui/Badge.js"
-import { Button, buttonVariants } from "../../components/ui/Button.js"
+import { Button } from "../../components/ui/Button.js"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../../components/ui/DropdownMenu.js"
 import { ScrollArea } from "../../components/ui/ScrollArea.js"
 import {
   Table,
@@ -41,13 +48,135 @@ const uploadRowBadgeClass = (status: "pending" | "partial" | "complete" | "faile
           : "upload-badge--failed",
   )
 
-const jobActionButtonClassName = cn(
-  buttonVariants({
-    variant: "ghost",
-    size: "icon",
-  }),
-  "size-8 rounded-full text-muted-foreground",
-)
+type JobItem = ReturnType<typeof getJobItems>[number]
+
+const JobItemActionMenu = ({
+  item,
+  previewPending,
+  canOpenPreview,
+  onOpenLocalFile,
+  onOpenPreviewLink,
+  onOpenSourceLink,
+}: {
+  item: JobItem
+  previewPending: boolean
+  canOpenPreview: boolean
+  onOpenLocalFile: (input: { outputPath: string; title: string }) => void
+  onOpenPreviewLink: (input: { itemId: string; outputPath: string; title: string }) => void
+  onOpenSourceLink: (input: { source: string }) => void
+}) => {
+  const [open, setOpen] = useState(false)
+  const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  const clearCloseTimer = () => {
+    if (!closeTimerRef.current) {
+      return
+    }
+
+    clearTimeout(closeTimerRef.current)
+    closeTimerRef.current = null
+  }
+
+  const scheduleClose = () => {
+    clearCloseTimer()
+    closeTimerRef.current = setTimeout(() => {
+      setOpen(false)
+    }, 140)
+  }
+
+  const openPreviewLabel = previewPending
+    ? "미리보기 링크 생성 중"
+    : canOpenPreview
+      ? "마크다운 미리보기"
+      : "미리보기 없음"
+
+  return (
+    <div
+      className="inline-flex opacity-0 transition-opacity duration-150 group-hover/job-row:opacity-100 group-focus-within/job-row:opacity-100 data-[state=open]:opacity-100"
+      data-state={open ? "open" : "closed"}
+      onMouseEnter={() => {
+        clearCloseTimer()
+      }}
+      onMouseLeave={scheduleClose}
+    >
+      <DropdownMenu open={open} onOpenChange={setOpen}>
+        <DropdownMenuTrigger asChild>
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="size-7 rounded-full text-muted-foreground hover:bg-accent hover:text-foreground"
+            aria-label={`${item.title} 액션 메뉴`}
+            onMouseEnter={() => {
+              clearCloseTimer()
+              setOpen(true)
+            }}
+            onFocus={() => {
+              clearCloseTimer()
+              setOpen(true)
+            }}
+          >
+            <RiMore2Line className="size-4" aria-hidden="true" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent
+          onMouseEnter={() => {
+            clearCloseTimer()
+          }}
+          onMouseLeave={scheduleClose}
+        >
+          <DropdownMenuItem
+            data-job-item-source-link
+            onSelect={() => {
+              onOpenSourceLink({
+                source: item.source,
+              })
+            }}
+          >
+            <RiExternalLinkLine className="size-4" aria-hidden="true" />
+            네이버 원문 보기
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            data-job-item-preview-link
+            disabled={!canOpenPreview || previewPending}
+            onSelect={(event) => {
+              if (!item.outputPath) {
+                event.preventDefault()
+                return
+              }
+
+              onOpenPreviewLink({
+                itemId: item.id,
+                outputPath: item.outputPath,
+                title: item.title,
+              })
+            }}
+          >
+            <RiFileTextLine className="size-4" aria-hidden="true" />
+            {openPreviewLabel}
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            disabled={!item.outputPath}
+            onSelect={(event) => {
+              if (!item.outputPath) {
+                event.preventDefault()
+                return
+              }
+
+              onOpenLocalFile({
+                outputPath: item.outputPath,
+                title: item.title,
+              })
+            }}
+          >
+            <RiFolderOpenLine className="size-4" aria-hidden="true" />
+            로컬 파일 열기
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
+  )
+}
 
 const getJobFilterCounts = (job: ExportJobState | null) =>
   getJobItems(job).reduce(
@@ -174,7 +303,7 @@ export const JobResultsTable = ({
                 <TableHead className="w-[6.5rem] text-center text-[10px] sm:w-[7.5rem] sm:text-[11px]">
                   상태
                 </TableHead>
-                <TableHead className="w-[6.5rem] text-center text-[10px] sm:w-[7.5rem] sm:text-[11px]">
+                <TableHead className="w-[3.25rem] text-center text-[10px] sm:w-[3.5rem] sm:text-[11px]">
                   액션
                 </TableHead>
               </TableRow>
@@ -205,7 +334,7 @@ export const JobResultsTable = ({
                   <TableRow
                     key={item.id}
                     className={cn(
-                      "last:border-b-0",
+                      "group/job-row last:border-b-0",
                       severity === "error" ? "bg-[var(--status-error-bg)]" : "",
                     )}
                     data-upload-row-id={
@@ -314,90 +443,14 @@ export const JobResultsTable = ({
                       </Badge>
                     </TableCell>
                     <TableCell className="align-middle text-center">
-                      <div className="inline-flex items-center rounded-full border border-border bg-card p-1 shadow-[var(--panel-shadow-border)]">
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Button
-                              type="button"
-                              variant="ghost"
-                              size="icon"
-                              className={jobActionButtonClassName}
-                              aria-label={`${item.title} 네이버 원문 보기`}
-                              data-job-item-source-link
-                              onClick={() => {
-                                onOpenSourceLink({
-                                  source: item.source,
-                                })
-                              }}
-                            >
-                              <RiExternalLinkLine data-icon="inline-start" aria-hidden="true" />
-                            </Button>
-                          </TooltipTrigger>
-                          <TooltipContent side="top" sideOffset={8}>
-                            네이버 원문 보기
-                          </TooltipContent>
-                        </Tooltip>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Button
-                              type="button"
-                              variant="ghost"
-                              size="icon"
-                              className={jobActionButtonClassName}
-                              aria-label={`${item.title} 마크다운 미리보기`}
-                              data-job-item-preview-link
-                              disabled={!canOpenPreview || previewPending}
-                              onClick={() => {
-                                if (!item.outputPath) {
-                                  return
-                                }
-
-                                onOpenPreviewLink({
-                                  itemId: item.id,
-                                  outputPath: item.outputPath,
-                                  title: item.title,
-                                })
-                              }}
-                            >
-                              <RiFileTextLine data-icon="inline-start" aria-hidden="true" />
-                            </Button>
-                          </TooltipTrigger>
-                          <TooltipContent side="top" sideOffset={8}>
-                            {previewPending
-                              ? "미리보기 링크 생성 중"
-                              : canOpenPreview
-                                ? "마크다운 미리보기"
-                                : "미리보기 없음"}
-                          </TooltipContent>
-                        </Tooltip>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Button
-                              type="button"
-                              variant="ghost"
-                              size="icon"
-                              className={jobActionButtonClassName}
-                              aria-label={`${item.title} 파일 열기`}
-                              disabled={!item.outputPath}
-                              onClick={() => {
-                                if (!item.outputPath) {
-                                  return
-                                }
-
-                                onOpenLocalFile({
-                                  outputPath: item.outputPath,
-                                  title: item.title,
-                                })
-                              }}
-                            >
-                              <RiFolderOpenLine data-icon="inline-start" aria-hidden="true" />
-                            </Button>
-                          </TooltipTrigger>
-                          <TooltipContent side="top" sideOffset={8}>
-                            {item.outputPath ? "로컬 파일 열기" : "열 파일 없음"}
-                          </TooltipContent>
-                        </Tooltip>
-                      </div>
+                      <JobItemActionMenu
+                        item={item}
+                        previewPending={previewPending}
+                        canOpenPreview={canOpenPreview}
+                        onOpenLocalFile={onOpenLocalFile}
+                        onOpenPreviewLink={onOpenPreviewLink}
+                        onOpenSourceLink={onOpenSourceLink}
+                      />
                     </TableCell>
                   </TableRow>
                 )
