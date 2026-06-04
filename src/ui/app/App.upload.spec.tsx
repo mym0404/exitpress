@@ -160,8 +160,9 @@ describe("App upload", () => {
     await waitFor(
       () => {
         expect(
-          ["uploading", "upload-completed"].some((status) =>
-            document.querySelector("#status-text")?.textContent?.includes(status),
+          ["uploading", "upload-completed"].some(
+            (status) =>
+              document.querySelector("#status-text")?.getAttribute("data-status") === status,
           ),
         ).toBe(true)
         expect(document.querySelector("#upload-form")).toBeNull()
@@ -178,7 +179,9 @@ describe("App upload", () => {
           '#job-file-tree [data-upload-row-id="React/2026-04-12-2/index.md"]',
         )
 
-        expect(document.querySelector("#status-text")?.textContent).toContain("upload-completed")
+        expect(document.querySelector("#status-text")?.getAttribute("data-status")).toBe(
+          "upload-completed",
+        )
         expect(document.querySelector('[data-step-view="result"]')).not.toBeNull()
         expect(document.querySelector("#upload-targets-table")).toBeNull()
         expect(document.querySelector("#upload-progress")?.getAttribute("aria-valuenow")).toBe(
@@ -317,7 +320,9 @@ describe("App upload", () => {
 
     await waitFor(
       () => {
-        expect(document.querySelector("#status-text")?.textContent).toContain("upload-completed")
+        expect(document.querySelector("#status-text")?.getAttribute("data-status")).toBe(
+          "upload-completed",
+        )
         expect(document.querySelector('[data-step-view="result"]')).not.toBeNull()
       },
       { timeout: 7000 },
@@ -512,7 +517,9 @@ describe("App upload", () => {
     await user.click(screen.getByRole("button", { name: "업로드 시작" }))
 
     await waitFor(() => {
-      expect(document.querySelector("#status-text")?.textContent).toContain("upload-failed")
+      expect(document.querySelector("#status-text")?.getAttribute("data-status")).toBe(
+        "upload-failed",
+      )
       expect(screen.getByText("Image upload failed.")).toBeInTheDocument()
       expect(document.querySelector("#upload-form")).not.toBeNull()
       expect(document.querySelector("#upload-progress")?.getAttribute("aria-valuenow")).toBe("75")
@@ -603,7 +610,7 @@ describe("App upload", () => {
     await user.click(screen.getByRole("button", { name: "업로드 시작" }))
 
     await waitFor(() => {
-      expect(document.querySelector("#status-text")?.textContent).toContain("uploading")
+      expect(document.querySelector("#status-text")?.getAttribute("data-status")).toBe("uploading")
       expect(document.querySelector("#upload-progress")?.getAttribute("aria-valuenow")).toBe("100")
       expect(document.querySelector("#upload-form")).toBeNull()
     })

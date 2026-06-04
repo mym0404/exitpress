@@ -77,7 +77,7 @@ describe("App workflow", () => {
     await waitForAutosave()
     expect(savedPayloads).toEqual([])
 
-    await user.click(screen.getByRole("button", { name: "전체 해제" }))
+    await user.click(screen.getByRole("checkbox", { name: "전체 카테고리 선택" }))
     await user.click(screen.getByRole("checkbox", { name: /NestJS/ }))
     await waitForAutosave()
     expect(savedPayloads).toEqual([])
@@ -240,7 +240,7 @@ describe("App workflow", () => {
     expect(document.querySelector('[data-step-view="category-selection"]')).not.toBeNull()
     expect(document.querySelector("#export-button")).toBeNull()
 
-    await user.click(screen.getByRole("button", { name: "전체 해제" }))
+    await user.click(screen.getByRole("checkbox", { name: "전체 카테고리 선택" }))
     fireEvent.click(screen.getByRole("checkbox", { name: /NestJS/ }))
     await waitFor(() => {
       expect(document.querySelector("#selected-post-count")?.textContent).toContain(
@@ -286,7 +286,7 @@ describe("App workflow", () => {
     await user.click(screen.getByRole("button", { name: "변환 시작" }))
 
     await waitFor(() => {
-      expect(document.querySelector("#status-text")?.textContent).toContain("completed")
+      expect(document.querySelector("#status-text")?.getAttribute("data-status")).toBe("completed")
       expect(document.querySelector('[data-step-view="result"]')).not.toBeNull()
       expect(document.querySelector("#summary")?.textContent).toContain("1")
     })
@@ -550,7 +550,7 @@ describe("App workflow", () => {
     await user.click(screen.getByRole("button", { name: "변환 시작" }))
 
     await waitFor(() => {
-      expect(document.querySelector("#status-text")?.textContent).toContain("running")
+      expect(document.querySelector("#status-text")?.getAttribute("data-status")).toBe("running")
       expect(document.querySelector('[data-step-view="running"]')).not.toBeNull()
       expect(document.querySelector("#running-progress")).not.toBeNull()
       expect(document.querySelector("#running-progress")?.getAttribute("aria-valuenow")).toBe("40")

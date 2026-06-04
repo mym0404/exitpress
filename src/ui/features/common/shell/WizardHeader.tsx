@@ -13,7 +13,7 @@ import { Badge } from "../../../components/ui/Badge.js"
 import { Button } from "../../../components/ui/Button.js"
 import { Card, CardContent } from "../../../components/ui/Card.js"
 import { ToggleGroup, ToggleGroupItem } from "../../../components/ui/ToggleGroup.js"
-import { getStatusPillClassName } from "../status/StatusPill.js"
+import { getStatusPillClassName, getStatusPillLabel } from "../status/StatusPill.js"
 
 const headerLinks = [
   {
@@ -130,7 +130,7 @@ export const WizardHeader = ({
               className={getStatusPillClassName(headerStatus)}
               data-status={headerStatus}
             >
-              {headerStatus}
+              {getStatusPillLabel(headerStatus)}
             </Badge>
           </div>
         </div>

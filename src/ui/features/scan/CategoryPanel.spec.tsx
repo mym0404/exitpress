@@ -108,4 +108,74 @@ describe("CategoryPanel", () => {
 
     expect(onCategoryToggle).toHaveBeenCalledWith(2, true)
   })
+
+  it("uses the table header checkbox for bulk selection", () => {
+    const onSelectAll = vi.fn()
+    const onClearAll = vi.fn()
+
+    const { rerender } = render(
+      <CategoryPanel
+        scanResult={scanResult}
+        selectedCategoryIds={[1]}
+        categorySearch=""
+        categoryStatus="2개 카테고리"
+        categoryMode="selected-and-descendants"
+        dateFrom={null}
+        dateTo={null}
+        selectedCount={1}
+        selectedPostCount={5}
+        totalPostCount={8}
+        onCategorySearchChange={vi.fn()}
+        onCategoryModeChange={vi.fn()}
+        onDateFromChange={vi.fn()}
+        onDateToChange={vi.fn()}
+        onSelectAll={onSelectAll}
+        onClearAll={onClearAll}
+        onCategoryToggle={vi.fn()}
+      />,
+    )
+
+    expect(document.querySelector("#select-all-categories")).toBeNull()
+    expect(document.querySelector("#clear-all-categories")).toBeNull()
+
+    const bulkCheckbox = document.querySelector('[data-category-bulk-selection="true"]')
+
+    if (!(bulkCheckbox instanceof HTMLElement)) {
+      throw new Error("missing category bulk checkbox")
+    }
+
+    fireEvent.click(bulkCheckbox)
+    expect(onSelectAll).toHaveBeenCalledTimes(1)
+
+    rerender(
+      <CategoryPanel
+        scanResult={scanResult}
+        selectedCategoryIds={[1, 2]}
+        categorySearch=""
+        categoryStatus="2개 카테고리"
+        categoryMode="selected-and-descendants"
+        dateFrom={null}
+        dateTo={null}
+        selectedCount={2}
+        selectedPostCount={8}
+        totalPostCount={8}
+        onCategorySearchChange={vi.fn()}
+        onCategoryModeChange={vi.fn()}
+        onDateFromChange={vi.fn()}
+        onDateToChange={vi.fn()}
+        onSelectAll={onSelectAll}
+        onClearAll={onClearAll}
+        onCategoryToggle={vi.fn()}
+      />,
+    )
+
+    const checkedBulkCheckbox = document.querySelector('[data-category-bulk-selection="true"]')
+
+    if (!(checkedBulkCheckbox instanceof HTMLElement)) {
+      throw new Error("missing checked category bulk checkbox")
+    }
+
+    fireEvent.click(checkedBulkCheckbox)
+    expect(onClearAll).toHaveBeenCalledTimes(1)
+  })
 })

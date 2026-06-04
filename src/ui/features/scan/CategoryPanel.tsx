@@ -1,11 +1,9 @@
-import { RiCheckDoubleLine, RiEraserLine } from "@remixicon/react"
-
 import type { ScanResult } from "../../../domain/blog/Types.js"
 
 import { Badge } from "../../components/ui/Badge.js"
-import { Button } from "../../components/ui/Button.js"
 import { Card, CardContent } from "../../components/ui/Card.js"
 import { Checkbox } from "../../components/ui/Checkbox.js"
+import { Field, FieldGroup, FieldLabel } from "../../components/ui/Field.js"
 import { Input } from "../../components/ui/Input.js"
 import { ScrollArea } from "../../components/ui/ScrollArea.js"
 import {
@@ -76,6 +74,8 @@ export const CategoryPanel = ({
     const haystack = `${category.path.join(" / ")} ${category.name}`.toLowerCase()
     return haystack.includes(keyword)
   })
+  const bulkSelectionState =
+    selectedCount === 0 ? false : selectedCount === categories.length ? true : "indeterminate"
 
   return (
     <Card variant="panel" className="board-card overflow-hidden" id="category-panel">
@@ -84,11 +84,9 @@ export const CategoryPanel = ({
           {categoryStatus}
         </p>
 
-        <div className="grid gap-4 xl:grid-cols-3">
-          <div className="field-card grid min-h-0 gap-1.5 rounded-2xl px-3 py-3">
-            <label htmlFor="scope-categoryMode" className="text-sm font-semibold text-foreground">
-              카테고리 포함 범위
-            </label>
+        <FieldGroup className="gap-3 xl:grid xl:grid-cols-3">
+          <Field className="field-card min-h-0 rounded-2xl px-3 py-3" disabled={!scanResult}>
+            <FieldLabel htmlFor="scope-categoryMode">카테고리 포함 범위</FieldLabel>
             <Select
               value={categoryMode}
               disabled={!scanResult}
@@ -108,13 +106,10 @@ export const CategoryPanel = ({
                 </SelectGroup>
               </SelectContent>
             </Select>
-          </div>
+          </Field>
 
-          <label
-            className="field-card grid min-h-0 gap-1.5 rounded-2xl px-3 py-3"
-            htmlFor="scope-dateFrom"
-          >
-            <span className="text-sm font-semibold text-foreground">시작일</span>
+          <Field className="field-card min-h-0 rounded-2xl px-3 py-3" disabled={!scanResult}>
+            <FieldLabel htmlFor="scope-dateFrom">시작일</FieldLabel>
             <Input
               id="scope-dateFrom"
               type="date"
@@ -122,13 +117,10 @@ export const CategoryPanel = ({
               disabled={!scanResult}
               onChange={(event) => onDateFromChange(event.target.value || null)}
             />
-          </label>
+          </Field>
 
-          <label
-            className="field-card grid min-h-0 gap-1.5 rounded-2xl px-3 py-3"
-            htmlFor="scope-dateTo"
-          >
-            <span className="text-sm font-semibold text-foreground">종료일</span>
+          <Field className="field-card min-h-0 rounded-2xl px-3 py-3" disabled={!scanResult}>
+            <FieldLabel htmlFor="scope-dateTo">종료일</FieldLabel>
             <Input
               id="scope-dateTo"
               type="date"
@@ -136,10 +128,10 @@ export const CategoryPanel = ({
               disabled={!scanResult}
               onChange={(event) => onDateToChange(event.target.value || null)}
             />
-          </label>
-        </div>
+          </Field>
+        </FieldGroup>
 
-        <div className="toolbar category-toolbar grid gap-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
+        <div className="toolbar category-toolbar grid gap-4">
           <label className="input-stack toolbar-search grid gap-2" htmlFor="category-search">
             <span className="toolbar-label wizard-kicker">검색</span>
             <Input
@@ -150,31 +142,6 @@ export const CategoryPanel = ({
               onChange={(event) => onCategorySearchChange(event.target.value)}
             />
           </label>
-
-          <div className="toolbar-actions flex flex-wrap items-center gap-2.5">
-            <Button
-              type="button"
-              variant="surface"
-              id="select-all-categories"
-              disabled={!scanResult}
-              className="min-h-10 rounded-xl px-4"
-              onClick={onSelectAll}
-            >
-              <RiCheckDoubleLine className="size-4" aria-hidden="true" />
-              전체 선택
-            </Button>
-            <Button
-              type="button"
-              variant="ghost"
-              id="clear-all-categories"
-              disabled={!scanResult}
-              className="ghost-button min-h-10 rounded-xl px-4"
-              onClick={onClearAll}
-            >
-              <RiEraserLine className="size-4" aria-hidden="true" />
-              전체 해제
-            </Button>
-          </div>
         </div>
 
         <div className="selection-summary flex flex-col gap-3 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
@@ -217,7 +184,22 @@ export const CategoryPanel = ({
               <Table className="min-w-[30rem]">
                 <TableHeader className="sticky top-0 z-10">
                   <TableRow className="hover:bg-transparent">
-                    <TableHead className="w-14">선택</TableHead>
+                    <TableHead className="w-14">
+                      <Checkbox
+                        aria-label="전체 카테고리 선택"
+                        checked={bulkSelectionState}
+                        data-category-bulk-selection="true"
+                        disabled={!scanResult}
+                        onCheckedChange={(next) => {
+                          if (next === true) {
+                            onSelectAll()
+                            return
+                          }
+
+                          onClearAll()
+                        }}
+                      />
+                    </TableHead>
                     <TableHead>카테고리</TableHead>
                     <TableHead className="w-24">글 수</TableHead>
                   </TableRow>
