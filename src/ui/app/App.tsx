@@ -15,7 +15,6 @@ import { filterPostsByScope } from "../../exporting/workflow/ExportScope.js"
 import { toast } from "../components/ui/Sonner.js"
 import { useBeforeUnloadWarning } from "../features/common/hooks/UseBeforeUnloadWarning.js"
 import { useBootstrapDefaults } from "../features/common/hooks/UseBootstrapDefaults.js"
-import { useBrandMarkScroll } from "../features/common/hooks/UseBrandMarkScroll.js"
 import { useExportSettingsSync } from "../features/common/hooks/UseExportSettingsSync.js"
 import { useStepScroll } from "../features/common/hooks/UseStepScroll.js"
 import { useThemePreference } from "../features/common/hooks/UseThemePreference.js"
@@ -190,7 +189,6 @@ export const App = () => {
   })
 
   useThemePreference(themePreference)
-  useBrandMarkScroll()
   useStepScroll({
     currentStep,
     isSetupStep,

@@ -4,13 +4,7 @@ import type { ScanResult } from "../../../domain/blog/Types.js"
 
 import { Badge } from "../../components/ui/Badge.js"
 import { Button } from "../../components/ui/Button.js"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "../../components/ui/Card.js"
+import { Card, CardContent } from "../../components/ui/Card.js"
 import { Checkbox } from "../../components/ui/Checkbox.js"
 import { Input } from "../../components/ui/Input.js"
 import { ScrollArea } from "../../components/ui/ScrollArea.js"
@@ -85,19 +79,11 @@ export const CategoryPanel = ({
 
   return (
     <Card variant="panel" className="board-card overflow-hidden" id="category-panel">
-      <CardHeader className="panel-header gap-3 p-5 sm:flex sm:items-start sm:justify-between">
-        <div className="panel-heading space-y-2">
-          <CardTitle className="section-title text-2xl">카테고리 선택</CardTitle>
-        </div>
-        <CardDescription
-          id="category-status"
-          className="panel-description max-w-2xl text-sm leading-7"
-        >
-          {categoryStatus}
-        </CardDescription>
-      </CardHeader>
-
       <CardContent className="panel-body grid gap-4 p-5">
+        <p id="category-status" className="panel-description max-w-2xl text-sm leading-7">
+          {categoryStatus}
+        </p>
+
         <div className="grid gap-4 xl:grid-cols-3">
           <div className="field-card grid min-h-0 gap-1.5 rounded-2xl px-3 py-3">
             <label htmlFor="scope-categoryMode" className="text-sm font-semibold text-foreground">

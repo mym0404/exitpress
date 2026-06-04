@@ -9,21 +9,12 @@ import type {
 import type { JobFilter, JobResultsMode } from "./JobResultsHelpers.js"
 
 import { isUploadActionableJob } from "../../../domain/export-job/ExportJobState.js"
-import { Badge } from "../../components/ui/Badge.js"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "../../components/ui/Card.js"
+import { Card, CardContent } from "../../components/ui/Card.js"
 import { toast } from "../../components/ui/Sonner.js"
 import { TooltipProvider } from "../../components/ui/Tooltip.js"
 import { postSameOriginJson, postSameOriginJsonNoContent } from "../../lib/Api.js"
-import { getStatusPillClassName } from "../common/status/StatusPill.js"
 
 import { JobLogsPanel } from "./JobLogsPanel.js"
-import { panelCopy } from "./JobResultsHelpers.js"
 import { JobResultsTable } from "./JobResultsTable.js"
 import { ExportSummarySection, RunningProgressSection } from "./ProgressSections.js"
 import { UploadPanel } from "./UploadPanel.js"
@@ -138,23 +129,6 @@ export const JobResultsPanel = ({
   return (
     <TooltipProvider>
       <Card variant="panel" className="board-card overflow-hidden" id="status-panel">
-        <CardHeader className="panel-header gap-4 p-6 sm:flex sm:items-start sm:justify-between">
-          <div className="panel-heading space-y-2">
-            <CardTitle className="section-title text-2xl">{panelCopy[mode].title}</CardTitle>
-            {panelCopy[mode].description ? (
-              <CardDescription className="panel-description max-w-3xl text-sm leading-7">
-                {panelCopy[mode].description}
-              </CardDescription>
-            ) : null}
-          </div>
-          <Badge
-            className={getStatusPillClassName(job?.status)}
-            data-status={job?.status ?? "idle"}
-          >
-            {job?.status ?? "Idle"}
-          </Badge>
-        </CardHeader>
-
         <CardContent className="status-layout grid gap-5 p-6">
           {mode === "running" ? (
             <RunningProgressSection

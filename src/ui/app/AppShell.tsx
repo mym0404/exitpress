@@ -85,18 +85,13 @@ export const AppShell = ({
       className="shell-backdrop pointer-events-none fixed inset-0 -z-10"
       aria-hidden="true"
     />
-    <div
-      className="dashboard-brand-mark pointer-events-none fixed inset-x-0 z-0"
-      aria-hidden="true"
-    >
-      <img src="/brand/logo.svg" alt="" />
-    </div>
 
     {bootstrapping ? <BootstrapLoadingOverlay /> : null}
 
     <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-6xl flex-col gap-5 px-4 py-5 xl:px-6 xl:py-6">
       <WizardHeader
         title={stepMeta[currentStep].title}
+        description={stepMeta[currentStep].description}
         themePreference={themePreference}
         headerStatus={headerStatus}
         summaryCards={summaryCards}

@@ -1,10 +1,4 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "../../components/ui/Card.js"
+import { Card, CardContent } from "../../components/ui/Card.js"
 import { Input } from "../../components/ui/Input.js"
 import { cn } from "../../lib/Cn.js"
 
@@ -28,14 +22,6 @@ export const BlogInputPanel = ({
   onOutputDirBlur: () => void
 }) => (
   <Card variant="panel" className="hero-panel overflow-hidden">
-    <CardHeader className="panel-header gap-3 p-5">
-      <div className="space-y-2">
-        <CardTitle className="section-title text-2xl">블로그 ID 또는 URL</CardTitle>
-        <CardDescription className="panel-description max-w-3xl text-sm leading-7">
-          네이버 블로그 ID나 주소와 결과를 저장할 경로를 먼저 정합니다.
-        </CardDescription>
-      </div>
-    </CardHeader>
     <CardContent className="grid gap-3 p-5">
       <label className="grid gap-2" htmlFor="blogIdOrUrl">
         <span className="text-sm font-semibold text-foreground">블로그 ID 또는 URL</span>
