@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react"
 
 import type { BlockScanJobState } from "../../domain/block-scan/Types.js"
 import type { ScanCacheMap, ScanResult } from "../../domain/blog/Types.js"
@@ -48,12 +48,53 @@ import { AppStepView } from "./AppStepView.js"
 const getBlockDetectionScopeSignature = (options: Pick<ExportOptions, "scope">) =>
   JSON.stringify(options.scope)
 
+const ParserStorybookPage = lazy(() =>
+  import("../features/parser-stories/ParserStorybookPage.js").then((module) => ({
+    default: module.ParserStorybookPage,
+  })),
+)
+
 const waitForBlockScanPoll = () =>
   new Promise((resolve) => {
     setTimeout(resolve, 250)
   })
 
+const getCurrentAppRoute = () =>
+  typeof window !== "undefined" && window.location.pathname === "/storybook"
+    ? "storybook"
+    : "export"
+
+const useAppRoute = () => {
+  const [route, setRoute] = useState(getCurrentAppRoute)
+
+  useEffect(() => {
+    const handlePopState = () => {
+      setRoute(getCurrentAppRoute())
+    }
+
+    window.addEventListener("popstate", handlePopState)
+
+    return () => {
+      window.removeEventListener("popstate", handlePopState)
+    }
+  }, [])
+
+  return route
+}
+
 export const App = () => {
+  const route = useAppRoute()
+
+  return route === "storybook" ? (
+    <Suspense fallback={null}>
+      <ParserStorybookPage />
+    </Suspense>
+  ) : (
+    <ExportApp />
+  )
+}
+
+const ExportApp = () => {
   const [defaults, setDefaults] = useState(fallbackDefaults)
   const [bootstrapping, setBootstrapping] = useState(true)
   const [resettingResume, setResettingResume] = useState(false)

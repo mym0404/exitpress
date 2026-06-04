@@ -57,6 +57,14 @@
 - Parser는 render-time metadata가 필요한 AST block에 `outputSelectionKey`와 `outputSelection`을 붙인다.
 - 정확한 selectable key 목록과 노출 순서는 `BaseBlog`에서 파생되는 output definition과 관련 tests가 source of truth다.
 
+## Story Catalog
+- Parser Storybook catalog는 editor의 `supportedBlocks` 순서에서 파생된다.
+- Story key는 `editorType`, `supportedBlocks` index, `blockId` 조합이다.
+- Storybook tree는 `Editor -> Block` 순서로 모든 supported block을 렌더링해야 한다.
+- Story metadata는 block instance의 `id`, `label`, `outputOptions`, 선택적 `story` metadata에서 만든다.
+- 별도 중앙 block 목록으로 story catalog를 관리하지 않는다.
+- Markdown 출력이 없는 block은 auxiliary story로 남겨 전체 지원 범위를 빠뜨리지 않는다.
+
 ## Failure And Inspection
 - Unsupported content node는 `파싱 가능한 {editorType} block이 없습니다` 오류로 실패한다.
 - Error message에는 tag, class, SE4 `moduleType` 같은 inspection 단서가 들어간다.
@@ -67,4 +75,5 @@
 - Parser block 구현 변경은 `pnpm test:parser-blocks`와 `pnpm test:offline`으로 확인한다.
 - Editor dispatch 변경은 `pnpm test:offline`로 routing, tag 추출, editor별 output selection을 확인한다.
 - Markdown output이 바뀌면 `tests/fixtures/samples/*/expected.md` 또는 `expected-error.md`를 의도적으로 갱신한다.
+- Story catalog나 header route가 바뀌면 Storybook unit test와 catalog test를 확인한다.
 - Knowledge는 새 block 하나가 생길 때마다 갱신하지 않는다. block category, failure policy, output option contract가 달라질 때만 갱신한다.

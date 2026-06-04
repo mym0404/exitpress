@@ -1,10 +1,25 @@
-import { JSDOM } from "jsdom"
 import TurndownService, { type Node as TurndownNode } from "turndown"
 import { gfm } from "turndown-plugin-gfm"
 
-const createDocument = (html: string) => new JSDOM(`<body>${html}</body>`).window.document
+type AttributeNode = TurndownNode & {
+  getAttribute: (name: string) => string | null
+}
 
-const createTurndownService = () => {
+const cleanLinkAttribute = (attribute: string | null) =>
+  attribute ? attribute.replace(/(\n+\s*)+/g, "\n") : ""
+
+const escapeLinkDestination = (destination: string) => {
+  const escaped = destination.replace(/([<>()])/g, "\\$1")
+
+  return escaped.includes(" ") ? `<${escaped}>` : escaped
+}
+
+const escapeLinkTitle = (title: string) => title.replace(/"/g, '\\"')
+
+const isAttributeNode = (node: TurndownNode): node is AttributeNode =>
+  "getAttribute" in node && typeof node.getAttribute === "function"
+
+const createTurndownService = (resolveLinkUrl?: (url: string) => string) => {
   const service = new TurndownService({
     bulletListMarker: "-",
     codeBlockStyle: "fenced",
@@ -15,6 +30,7 @@ const createTurndownService = () => {
   })
 
   service.use(gfm)
+  service.remove(["script", "style", "noscript"])
   service.addRule("hardBreak", {
     filter: "br",
     replacement: () => "  \n",
@@ -24,25 +40,30 @@ const createTurndownService = () => {
     replacement: () => "",
   })
 
-  return service
-}
+  if (resolveLinkUrl) {
+    service.addRule("resolvedInlineLink", {
+      filter: (node: TurndownNode) =>
+        node.nodeName === "A" && isAttributeNode(node) && !!node.getAttribute("href"),
+      replacement: (content, node: TurndownNode) => {
+        if (!isAttributeNode(node)) {
+          return content
+        }
 
-const sanitizeHtmlFragment = (html: string) => {
-  const document = createDocument(html)
+        const href = cleanLinkAttribute(node.getAttribute("href")).trim()
 
-  document.querySelectorAll("script, style, noscript").forEach((node) => {
-    node.remove()
-  })
+        if (!href) {
+          return content
+        }
 
-  document.querySelectorAll("*").forEach((element) => {
-    element.getAttributeNames().forEach((attributeName) => {
-      if (attributeName.startsWith("on")) {
-        element.removeAttribute(attributeName)
-      }
+        const title = escapeLinkTitle(cleanLinkAttribute(node.getAttribute("title")))
+        const titlePart = title ? ` "${title}"` : ""
+
+        return `[${content}](${escapeLinkDestination(resolveLinkUrl(href))}${titlePart})`
+      },
     })
-  })
+  }
 
-  return document.body.innerHTML.trim()
+  return service
 }
 
 export const convertHtmlToMarkdown = ({
@@ -52,23 +73,8 @@ export const convertHtmlToMarkdown = ({
   html: string
   resolveLinkUrl?: (url: string) => string
 }) => {
-  const sanitized = sanitizeHtmlFragment(html)
-  const document = createDocument(sanitized)
-
-  if (resolveLinkUrl) {
-    document.querySelectorAll("a[href]").forEach((anchor) => {
-      const href = anchor.getAttribute("href")
-
-      if (!href?.trim()) {
-        return
-      }
-
-      anchor.setAttribute("href", resolveLinkUrl(href))
-    })
-  }
-
-  const turndownService = createTurndownService()
-  const markdown = turndownService.turndown(document.body)
+  const turndownService = createTurndownService(resolveLinkUrl)
+  const markdown = turndownService.turndown(html)
 
   return markdown.trim().replace(/\n{3,}/g, "\n\n")
 }

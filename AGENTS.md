@@ -27,7 +27,7 @@
 |   |-- markdown/                     # common AST to Markdown renderer
 |   |-- exporting/                    # workflow, post, assets, paths, upload
 |   |-- server/                       # HTTP API, jobs, local state, upload catalog
-|   `-- ui/                           # React wizard, feature panels, primitives, tokens
+|   `-- ui/                           # React wizard, parser stories, feature panels, primitives, tokens
 |-- scripts/
 |   |-- single-post/                  # single post export CLI
 |   |-- post-evidence/                # evidence capture/render helpers
@@ -48,7 +48,7 @@
 - 서버 시작점은 `src/Server.ts`, HTTP API는 `src/server/http/HttpServer.ts`다.
 - export 파이프라인은 `src/exporting/workflow/NaverBlogExporter.ts`에서 `fetch -> parse -> review -> render -> write -> manifest` 순서로 따라간다.
 - parser seam은 `src/parsing/naver-blog/core/PostParser.ts`, `src/parsing/naver-blog/NaverBlog.ts`, `src/parsing/naver-blog/core/*`, `src/parsing/naver-blog/se2|se3|se4/*`다.
-- UI 셸은 `src/ui/app/App.tsx`, 공용 shell/hook/status는 `src/ui/features/common/*`, 전역 토큰은 `src/ui/styles/globals.css`다.
+- UI 셸은 `src/ui/app/App.tsx`, 공용 shell/hook/status는 `src/ui/features/common/*`, parser story page는 `src/ui/features/parser-stories/*`, 전역 토큰은 `src/ui/styles/globals.css`다.
 
 ## Design System
 - UI 기준은 `.agents/knowledge/DESIGN.md`다.

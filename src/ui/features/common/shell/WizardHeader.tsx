@@ -1,22 +1,37 @@
-import { RiGithubLine, RiGlobalLine, RiMoonClearLine, RiSunLine } from "@remixicon/react"
+import {
+  RiArrowLeftLine,
+  RiBookOpenLine,
+  RiGithubLine,
+  RiGlobalLine,
+  RiMoonClearLine,
+  RiSunLine,
+} from "@remixicon/react"
 
 import type { ThemePreference } from "../../../../domain/preferences/ThemePreference.js"
 
 import { Badge } from "../../../components/ui/Badge.js"
+import { Button } from "../../../components/ui/Button.js"
 import { Card, CardContent } from "../../../components/ui/Card.js"
 import { ToggleGroup, ToggleGroupItem } from "../../../components/ui/ToggleGroup.js"
 import { getStatusPillClassName } from "../status/StatusPill.js"
 
 const headerLinks = [
   {
+    href: "/storybook",
+    Icon: RiBookOpenLine,
+    label: "Storybook",
+  },
+  {
     href: "https://github.com/mym0404/goodbye-naver-blog",
     Icon: RiGithubLine,
     label: "GitHub",
+    external: true,
   },
   {
     href: "https://mjstudio.net",
     Icon: RiGlobalLine,
     label: "MJ Studio",
+    external: true,
   },
 ]
 
@@ -26,6 +41,7 @@ export const WizardHeader = ({
   themePreference,
   headerStatus,
   summaryCards,
+  backLink,
   onThemeChange,
 }: {
   title: string
@@ -33,13 +49,29 @@ export const WizardHeader = ({
   themePreference: ThemePreference
   headerStatus: string
   summaryCards: Array<{ label: string; value: string }>
+  backLink?: {
+    href: string
+    label: string
+  }
   onThemeChange: (value: ThemePreference) => void
 }) => (
   <Card variant="panel" className="overflow-hidden">
     <CardContent className="grid gap-4 p-5">
       <div className="grid grid-cols-[minmax(0,1fr)_auto] gap-3 items-start">
         <div className="wizard-heading grid gap-1.5">
-          <h1 className="wizard-title text-[clamp(1.7rem,2.5vw,2.4rem)] leading-[1.04]">{title}</h1>
+          <div className="flex min-w-0 flex-wrap items-center gap-3">
+            {backLink ? (
+              <Button asChild variant="secondary" size="sm" className="shrink-0">
+                <a href={backLink.href}>
+                  <RiArrowLeftLine data-icon="inline-start" aria-hidden="true" />
+                  {backLink.label}
+                </a>
+              </Button>
+            ) : null}
+            <h1 className="wizard-title text-[clamp(1.7rem,2.5vw,2.4rem)] leading-[1.04]">
+              {title}
+            </h1>
+          </div>
           {description ? (
             <p className="wizard-description max-w-3xl text-sm leading-7 text-muted-foreground">
               {description}
@@ -49,15 +81,15 @@ export const WizardHeader = ({
 
         <div className="grid shrink-0 justify-items-end gap-2 self-start">
           <nav className="flex flex-wrap justify-end gap-x-3 gap-y-1 text-xs font-medium text-muted-foreground">
-            {headerLinks.map(({ href, Icon, label }) => (
+            {headerLinks.map(({ href, Icon, external, label }) => (
               <a
                 key={href}
                 href={href}
-                target="_blank"
-                rel="noreferrer"
+                target={external ? "_blank" : undefined}
+                rel={external ? "noreferrer" : undefined}
                 className="inline-flex items-center gap-1.5 transition-colors hover:text-foreground focus-visible:shadow-[var(--focus-ring)]"
               >
-                <Icon className="size-3.5" aria-hidden="true" />
+                {Icon ? <Icon className="size-3.5" aria-hidden="true" /> : null}
                 {label}
               </a>
             ))}

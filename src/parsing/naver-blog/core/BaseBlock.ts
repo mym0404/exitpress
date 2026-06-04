@@ -27,10 +27,21 @@ export type ParserBlockConvertContext = ParserBlockContext & {
   matchNode: (node: AnyNode, path: string) => AstBlock[]
 }
 
+export type ParserBlockStoryGroup = "output" | "auxiliary"
+
+type ParserBlockStoryMetadata = {
+  group?: ParserBlockStoryGroup
+  sourceUrl?: string
+  inspectPath?: string
+  inputHtml?: string
+  screenshotSrc?: string
+}
+
 export abstract class BaseBlock {
   abstract readonly id: string
   readonly outputOptions?: readonly OutputOption[]
   abstract readonly label: string
+  readonly story?: ParserBlockStoryMetadata
 
   abstract match(context: ParserBlockContext): boolean
 
