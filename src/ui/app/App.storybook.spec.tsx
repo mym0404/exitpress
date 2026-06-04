@@ -40,7 +40,8 @@ describe("App storybook route", () => {
     expect(se4DocumentTitle?.compareDocumentPosition(se4Formula as Node)).toBe(
       Node.DOCUMENT_POSITION_FOLLOWING,
     )
-    expect(screen.getByText("SmartEditor 4 / documentTitle / path 0")).toBeInTheDocument()
+    expect(screen.getByText("SmartEditor 4 / documentTitle")).toBeInTheDocument()
+    expect(screen.queryByText(/path 0/)).toBeNull()
     expect(screen.getByText("Input HTML")).toBeInTheDocument()
     expect(screen.getByText("Naver Capture")).toBeInTheDocument()
     expect(screen.getByText("Markdown")).toBeInTheDocument()

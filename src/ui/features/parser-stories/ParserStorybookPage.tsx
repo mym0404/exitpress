@@ -180,7 +180,7 @@ const StoryPreview = ({ story }: { story: ParserStory }) => {
           <div className="grid min-w-0 gap-1">
             <CardTitle className="text-xl tracking-normal">{story.blockLabel}</CardTitle>
             <CardDescription>
-              {story.editorLabel} / {story.blockId} / path {story.inspectPath}
+              {story.editorLabel} / {story.blockId}
             </CardDescription>
           </div>
           <Badge variant={story.group === "auxiliary" ? "idle" : "running"}>
