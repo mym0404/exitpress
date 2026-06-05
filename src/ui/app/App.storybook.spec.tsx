@@ -26,6 +26,7 @@ describe("App storybook route", () => {
 
     expect(await screen.findByRole("heading", { name: "Parser Storybook" })).toBeInTheDocument()
     expect(screen.getByRole("link", { name: /Back/ })).toHaveAttribute("href", "/")
+    expect(screen.getByRole("link", { name: "Storybook" })).toHaveAttribute("href", "/storybook")
     expect(screen.getByRole("tree", { name: "Parser block stories" })).toBeInTheDocument()
     expect(screen.getByRole("treeitem", { name: /SmartEditor 4/ })).toBeInTheDocument()
     expect(screen.getByRole("treeitem", { name: /SmartEditor 3/ })).toBeInTheDocument()

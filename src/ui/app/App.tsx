@@ -38,6 +38,7 @@ import {
   normalizeOutputDir,
 } from "../features/scan/ScanStatus.js"
 import { fetchJson, postJson } from "../lib/Api.js"
+import { getAppRoute } from "../lib/AppRoutes.js"
 
 import { fallbackDefaults } from "./AppDefaults.js"
 import { useAppResumeBootstrap } from "./AppResumeBootstrap.js"
@@ -60,8 +61,11 @@ const waitForBlockScanPoll = () =>
   })
 
 const getCurrentAppRoute = () =>
-  typeof window !== "undefined" && window.location.pathname === "/storybook"
-    ? "storybook"
+  typeof window !== "undefined"
+    ? getAppRoute({
+        pathname: window.location.pathname,
+        basePath: import.meta.env.BASE_URL,
+      })
     : "export"
 
 const useAppRoute = () => {

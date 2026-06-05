@@ -13,11 +13,12 @@ import { Badge } from "../../../components/ui/Badge.js"
 import { Button } from "../../../components/ui/Button.js"
 import { Card, CardContent } from "../../../components/ui/Card.js"
 import { ToggleGroup, ToggleGroupItem } from "../../../components/ui/ToggleGroup.js"
+import { createAppHref } from "../../../lib/AppRoutes.js"
 import { getStatusPillClassName, getStatusPillLabel } from "../status/StatusPill.js"
 
 const headerLinks = [
   {
-    href: "/storybook",
+    pathname: "/storybook",
     Icon: RiBookOpenLine,
     label: "Storybook",
   },
@@ -81,10 +82,17 @@ export const WizardHeader = ({
 
         <div className="grid shrink-0 justify-items-end gap-2 self-start">
           <nav className="flex flex-wrap justify-end gap-x-3 gap-y-1 text-xs font-medium text-muted-foreground">
-            {headerLinks.map(({ href, Icon, external, label }) => (
+            {headerLinks.map(({ href, pathname, Icon, external, label }) => (
               <a
-                key={href}
-                href={href}
+                key={href ?? pathname}
+                href={
+                  pathname
+                    ? createAppHref({
+                        pathname,
+                        basePath: import.meta.env.BASE_URL,
+                      })
+                    : href
+                }
                 target={external ? "_blank" : undefined}
                 rel={external ? "noreferrer" : undefined}
                 className="inline-flex items-center gap-1.5 transition-colors hover:text-foreground focus-visible:shadow-[var(--focus-ring)]"

@@ -46,6 +46,7 @@
 |-- .oxfmtrc.json                     # Oxfmt formatting and import sorting config
 |-- .oxlintrc.json                    # Oxlint lint config
 |-- .github/workflows/required-checks.yml
+|-- .github/workflows/pages.yml       # Storybook-only GitHub Pages deployment
 `-- package.json                      # repo-native commands
 ```
 
@@ -64,6 +65,7 @@
 - source of truth 우선순위는 사용자 지시, 루트 `AGENTS.md`, 코드/설정/테스트, `.agents/knowledge/*.md`, reference 문서다.
 - 영속 UI 설정과 서버 파일 캐시는 `.cache/` 아래에 저장한다. 임시 테스트, harness, 런타임 config 파일은 repo-local `tmp/` 아래에 둔다.
 - AI agent, test, harness가 서버를 띄울 때는 사용자 `mise exec -- pnpm dev`와 공유 `.cache/export-ui-settings.json`을 피하고, 별도 `GOODBYE_SETTINGS_PATH`, `GOODBYE_SCAN_CACHE_PATH`, repo-local `tmp/`, 비기본 `PORT` 또는 `listen(0)`을 쓴다.
+- GitHub Pages는 repository settings에서 GitHub Actions source를 사용하고, `vite.pages.config.ts`의 `/goodbye-naver-blog/storybook/` base로 Storybook route만 배포한다.
 - README, ingest report, PR 설명에 쓰는 evidence section 계약은 `.agents/knowledge/post-evidence.md`를 따른다.
 - commit, push, PR 생성은 사용자가 명시적으로 요청한 경우에만 수행한다.
 
@@ -75,6 +77,7 @@
 - `mise exec -- pnpm check:unused`: source, test, script 코드의 dead code 기준선이다. `check:local`에는 포함되지 않는다.
 - `mise exec -- pnpm check:full`: `check:local`에 Playwright smoke UI를 더한 넓은 로컬 회귀다.
 - `mise exec -- pnpm smoke:ui`: mock 기반 UI 흐름과 복구 경로를 확인한다. 코어 사용자 흐름이나 상태 전이를 바꾼 뒤 실행한다.
+- `mise exec -- pnpm exec vite build --config vite.pages.config.ts`: GitHub Pages용 Storybook 정적 산출물을 `dist/pages/storybook`에 만든다.
 - `mise exec -- pnpm test:network`: live resume export, SE2 table resume export, live upload e2e를 순서대로 실행한다. 외부 네트워크와 upload secret이 필요하고 remote state를 만든다.
 - 검증 명령이 실패하면 현재 작업이 만든 회귀인지 먼저 본다. 현재 작업 때문이면 고치고, 기존 상태나 다른 변경 때문이면 실패 명령과 영향 범위를 보고한다.
 

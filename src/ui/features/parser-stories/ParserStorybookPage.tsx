@@ -17,6 +17,7 @@ import { Badge } from "../../components/ui/Badge.js"
 import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/Card.js"
 import { ScrollArea } from "../../components/ui/ScrollArea.js"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../components/ui/Tabs.js"
+import { createAppHref, shouldShowStorybookBackLink } from "../../lib/AppRoutes.js"
 import { cn } from "../../lib/Cn.js"
 import { useThemePreference } from "../common/hooks/UseThemePreference.js"
 import { WizardHeader } from "../common/shell/WizardHeader.js"
@@ -454,6 +455,15 @@ export const ParserStorybookPage = () => {
   const [activeStoryKey, setActiveStoryKey] = useState(getInitialStoryKey)
   const activeStory = useMemo(() => findStory(activeStoryKey), [activeStoryKey])
   useThemePreference(themePreference)
+  const backLink = shouldShowStorybookBackLink(import.meta.env.BASE_URL)
+    ? {
+        href: createAppHref({
+          pathname: "/",
+          basePath: import.meta.env.BASE_URL,
+        }),
+        label: "Back",
+      }
+    : undefined
   const summaryCards = useMemo(
     () => [
       { label: "Editors", value: String(parserStoryCatalog.length) },
@@ -499,7 +509,7 @@ export const ParserStorybookPage = () => {
           themePreference={themePreference}
           headerStatus="ready"
           summaryCards={summaryCards}
-          backLink={{ href: "/", label: "Back" }}
+          backLink={backLink}
           onThemeChange={setThemePreference}
         />
         <div className="grid gap-5 lg:grid-cols-[18rem_minmax(0,1fr)]" data-parser-story-layout>
