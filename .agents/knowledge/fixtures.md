@@ -31,5 +31,5 @@
 - Parser block, renderer, or export option changes that alter Markdown output or parser failure behavior must update the affected expected files intentionally.
 
 ## Verification
-- `pnpm test:offline`: runs sample fixture live-fetch regression with the rest of the Vitest suite.
-- `pnpm check:local`: includes typecheck and sample fixture live-fetch regression.
+- `mise exec -- pnpm test:offline`: runs sample fixture live-fetch regression with the rest of the Vitest suite.
+- `mise exec -- pnpm check:local`: includes typecheck and sample fixture live-fetch regression.

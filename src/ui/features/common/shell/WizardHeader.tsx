@@ -61,10 +61,10 @@ export const WizardHeader = ({
         <div className="wizard-heading grid gap-1.5">
           <div className="flex min-w-0 flex-wrap items-center gap-3">
             {backLink ? (
-              <Button asChild variant="secondary" size="sm" className="shrink-0">
-                <a href={backLink.href}>
-                  <RiArrowLeftLine data-icon="inline-start" aria-hidden="true" />
-                  {backLink.label}
+              <Button asChild variant="secondary" size="icon" className="shrink-0">
+                <a href={backLink.href} aria-label={backLink.label} title={backLink.label}>
+                  <RiArrowLeftLine className="size-4" aria-hidden="true" />
+                  <span className="sr-only">{backLink.label}</span>
                 </a>
               </Button>
             ) : null}

@@ -10,16 +10,18 @@ import { findInComponentRoot } from "./util/ComponentBoundary.js"
 
 const textComponentClasses = ["se_text", "se_paragraph", "se_sectionTitle"]
 
-const parseTextBlocks = ({
+const parseTextNodes = ({
   $,
   $component,
   options,
+  selector,
 }: {
   $: CheerioAPI
   $component: ReturnType<CheerioAPI>
   options: ParserBlockContext["options"]
+  selector: string
 }) =>
-  findInComponentRoot({ $, $component, selector: ".se_textarea" })
+  findInComponentRoot({ $, $component, selector })
     .toArray()
     .map((node) =>
       convertHtmlToMarkdown({
@@ -30,6 +32,19 @@ const parseTextBlocks = ({
     )
     .map((text) => compactMarkdownText(text))
     .filter(Boolean)
+
+const parseTextBlocks = ({
+  $,
+  $component,
+  options,
+}: {
+  $: CheerioAPI
+  $component: ReturnType<CheerioAPI>
+  options: ParserBlockContext["options"]
+}) =>
+  parseTextNodes({ $, $component, options, selector: ".se_textarea" })
+    .concat(parseTextNodes({ $, $component, options, selector: ".se_textView" }))
+    .filter((text, index, texts) => texts.indexOf(text) === index)
     .map((text) => ({
       type: "paragraph" as const,
       text,

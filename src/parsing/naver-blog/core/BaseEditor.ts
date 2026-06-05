@@ -27,6 +27,7 @@ import {
   applyBlockOutputSelection,
   createBlockOutputSelectionKey,
 } from "./BaseEditorOutputSelection.js"
+import { parserStoryFixtures } from "./ParserStoryFixtures.js"
 
 const describeParserNode = ({ $node, node, moduleType }: ParserBlockContext) => {
   const tagName = node.type === "tag" ? node.tagName.toLowerCase() : node.type
@@ -97,7 +98,7 @@ const toParserStoryScreenshotSrc = ({
   editorType: string
   blockIndex: number
   blockId: string
-}) => `/parser-stories/${toParserStoryKey({ editorType, blockIndex, blockId })}.png`
+}) => `${toParserStoryKey({ editorType, blockIndex, blockId })}.png`
 
 const escapeJsonAttribute = (value: UnknownRecord) => JSON.stringify(value).replaceAll("'", "&#39;")
 
@@ -540,6 +541,7 @@ export abstract class BaseEditor {
         blockIndex,
         blockId: block.id,
       })
+      const fixture = parserStoryFixtures[storyKey]
 
       return {
         storyKey,
@@ -556,10 +558,11 @@ export abstract class BaseEditor {
         blockId: block.id,
         blockLabel: block.label,
         group,
-        sourceUrl: block.story?.sourceUrl ?? defaultParserStorySourceUrl,
-        inspectPath: block.story?.inspectPath ?? "0",
+        sourceUrl: block.story?.sourceUrl ?? fixture?.sourceUrl ?? defaultParserStorySourceUrl,
+        inspectPath: block.story?.inspectPath ?? fixture?.inspectPath ?? "0",
         inputHtml:
           block.story?.inputHtml ??
+          fixture?.inputHtml ??
           createDefaultStoryHtml({
             editorType: this.type,
             blockLabel: block.label,

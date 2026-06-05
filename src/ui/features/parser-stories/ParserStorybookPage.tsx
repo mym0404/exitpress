@@ -1,6 +1,8 @@
 import { RiArrowDownSLine } from "@remixicon/react"
 import { useEffect, useMemo, useState } from "react"
 
+import type { ReactNode } from "react"
+
 import type { ThemePreference } from "../../../domain/preferences/ThemePreference.js"
 
 import type { ParserStory } from "./ParserStoryCatalog.js"
@@ -12,15 +14,11 @@ import {
   AccordionTrigger,
 } from "../../components/ui/Accordion.js"
 import { Badge } from "../../components/ui/Badge.js"
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "../../components/ui/Card.js"
+import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/Card.js"
 import { ScrollArea } from "../../components/ui/ScrollArea.js"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../components/ui/Tabs.js"
 import { cn } from "../../lib/Cn.js"
+import { useThemePreference } from "../common/hooks/UseThemePreference.js"
 import { WizardHeader } from "../common/shell/WizardHeader.js"
 
 import { parserStoryCatalog } from "./ParserStoryCatalog.js"
@@ -41,6 +39,196 @@ const getStoryCount = () =>
 
 const findStory = (storyKey: string) =>
   parserStoryCatalog.flatMap((group) => group.stories).find((story) => story.storyKey === storyKey)
+
+const formatHtmlForDisplay = (html: string) => {
+  const lines: string[] = []
+  let depth = 0
+
+  html
+    .replace(/>\s+</g, ">\n<")
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .forEach((line) => {
+      const isClosingTag = line.startsWith("</")
+      const isSelfClosingTag = line.endsWith("/>") || /^<(br|hr|img|input|meta|link)\b/i.test(line)
+
+      if (isClosingTag) {
+        depth = Math.max(0, depth - 1)
+      }
+
+      lines.push(`${"  ".repeat(depth)}${line}`)
+
+      if (!isClosingTag && !isSelfClosingTag && /^<[^!?/][^>]*>$/.test(line)) {
+        depth += 1
+      }
+    })
+
+  return lines.join("\n")
+}
+
+const codeBlockClassName =
+  "min-w-0 max-h-[520px] overflow-auto whitespace-pre-wrap p-4 font-mono text-[0.75rem] leading-5 text-foreground"
+
+const htmlTokenClassNames = {
+  bracket: "text-muted-foreground",
+  tag: "text-[color:var(--status-ready-fg)]",
+  attribute: "text-[color:var(--status-running-fg)]",
+  operator: "text-muted-foreground",
+  value: "text-[color:var(--status-success-fg)]",
+  comment: "text-muted-foreground",
+  text: "text-foreground",
+} as const
+
+const markdownTokenClassNames = {
+  marker: "text-[color:var(--status-running-fg)]",
+  fence: "text-[color:var(--status-ready-fg)]",
+  link: "text-[color:var(--status-success-fg)]",
+  code: "text-[color:var(--status-ready-fg)]",
+  text: "text-foreground",
+} as const
+
+const renderToken = (
+  key: string,
+  tokenType: keyof typeof htmlTokenClassNames | keyof typeof markdownTokenClassNames,
+
+  children: string,
+) => {
+  const className =
+    tokenType in htmlTokenClassNames
+      ? htmlTokenClassNames[tokenType as keyof typeof htmlTokenClassNames]
+      : markdownTokenClassNames[tokenType as keyof typeof markdownTokenClassNames]
+
+  return (
+    <span key={key} data-parser-token={tokenType} className={className}>
+      {children}
+    </span>
+  )
+}
+
+const renderHtmlTag = (tag: string, tokenKey: string): ReactNode[] => {
+  const tagNameMatch = tag.match(/^<\/?\s*([A-Za-z][\w:.-]*)/)
+
+  if (!tagNameMatch) {
+    return [renderToken(`${tokenKey}-tag`, "text", tag)]
+  }
+
+  const tagName = tagNameMatch[1]
+  const tagNameStart = tag.indexOf(tagName)
+  const tagNameEnd = tagNameStart + tagName.length
+  const nodes: ReactNode[] = [
+    renderToken(`${tokenKey}-open`, "bracket", tag.slice(0, tagNameStart)),
+    renderToken(`${tokenKey}-name`, "tag", tagName),
+  ]
+  const attributeSource = tag.slice(tagNameEnd, -1)
+  const attributePattern = /([^\s=<>"'`]+)(\s*=\s*)("[^"]*"|'[^']*'|[^\s"'=<>`]+)/g
+  let cursor = 0
+  let attributeMatch: RegExpExecArray | null
+
+  while ((attributeMatch = attributePattern.exec(attributeSource)) !== null) {
+    const [source, name, operator, value] = attributeMatch
+
+    if (attributeMatch.index > cursor) {
+      nodes.push(
+        renderToken(
+          `${tokenKey}-between-${cursor}`,
+          "bracket",
+          attributeSource.slice(cursor, attributeMatch.index),
+        ),
+      )
+    }
+
+    nodes.push(renderToken(`${tokenKey}-attr-${attributeMatch.index}`, "attribute", name))
+    nodes.push(renderToken(`${tokenKey}-operator-${attributeMatch.index}`, "operator", operator))
+    nodes.push(renderToken(`${tokenKey}-value-${attributeMatch.index}`, "value", value))
+    cursor = attributeMatch.index + source.length
+  }
+
+  if (cursor < attributeSource.length) {
+    nodes.push(renderToken(`${tokenKey}-tail`, "bracket", attributeSource.slice(cursor)))
+  }
+
+  nodes.push(renderToken(`${tokenKey}-close`, "bracket", tag.slice(-1)))
+
+  return nodes
+}
+
+const highlightHtml = (html: string): ReactNode[] =>
+  html.split(/(<[^>]+>)/g).reduce<ReactNode[]>((nodes, part, index) => {
+    if (!part) {
+      return nodes
+    }
+
+    if (part.startsWith("<!--")) {
+      nodes.push(renderToken(`html-comment-${index}`, "comment", part))
+      return nodes
+    }
+
+    if (part.startsWith("<")) {
+      nodes.push(...renderHtmlTag(part, `html-tag-${index}`))
+      return nodes
+    }
+
+    nodes.push(renderToken(`html-text-${index}`, "text", part))
+    return nodes
+  }, [])
+
+const highlightMarkdownLine = (line: string, lineIndex: number): ReactNode[] => {
+  if (/^\s*```/.test(line)) {
+    return [renderToken(`md-${lineIndex}-fence`, "fence", line)]
+  }
+
+  const nodes: ReactNode[] = []
+  const markerMatch = line.match(/^(\s*(?:#{1,6}|>|[-*+]|\d+[.)])\s+)/)
+  let cursor = 0
+
+  if (markerMatch) {
+    nodes.push(renderToken(`md-${lineIndex}-marker`, "marker", markerMatch[1]))
+    cursor = markerMatch[1].length
+  }
+
+  const inlinePattern = /(!?\[[^\]]+\]\([^)]+\)|`[^`]+`)/g
+  inlinePattern.lastIndex = cursor
+  let inlineMatch: RegExpExecArray | null
+
+  while ((inlineMatch = inlinePattern.exec(line)) !== null) {
+    if (inlineMatch.index > cursor) {
+      nodes.push(
+        renderToken(
+          `md-${lineIndex}-text-${cursor}`,
+          "text",
+          line.slice(cursor, inlineMatch.index),
+        ),
+      )
+    }
+
+    nodes.push(
+      renderToken(
+        `md-${lineIndex}-inline-${inlineMatch.index}`,
+        inlineMatch[0].startsWith("`") ? "code" : "link",
+        inlineMatch[0],
+      ),
+    )
+    cursor = inlineMatch.index + inlineMatch[0].length
+  }
+
+  if (cursor < line.length) {
+    nodes.push(renderToken(`md-${lineIndex}-text-tail`, "text", line.slice(cursor)))
+  }
+
+  return nodes.length > 0 ? nodes : [renderToken(`md-${lineIndex}-empty`, "text", line)]
+}
+
+const highlightMarkdown = (markdown: string): ReactNode[] =>
+  markdown.split("\n").reduce<ReactNode[]>((nodes, line, index, lines) => {
+    nodes.push(...highlightMarkdownLine(line, index))
+
+    if (index < lines.length - 1) {
+      nodes.push("\n")
+    }
+
+    return nodes
+  }, [])
 
 const StoryTreeBlock = ({
   story,
@@ -154,14 +342,30 @@ const StoryTree = ({
   )
 }
 
-const CodePanel = ({ title, children }: { title: string; children: string }) => (
+const CodePanel = ({
+  title,
+  children,
+  codeType,
+  compact = false,
+}: {
+  title: string
+  children: string
+  codeType: "html" | "markdown"
+  compact?: boolean
+}) => (
   <Card variant="panel" className="overflow-hidden">
     <CardHeader className="border-b border-border p-4">
       <CardTitle className="text-base">{title}</CardTitle>
     </CardHeader>
     <CardContent className="p-0">
-      <pre className="code-surface max-h-[420px] overflow-auto whitespace-pre-wrap p-4 font-mono text-[0.8125rem] leading-6 text-foreground">
-        {children}
+      <pre
+        className={cn(
+          codeBlockClassName,
+          compact ? "text-[0.6875rem] leading-5" : "text-[0.75rem] leading-5",
+        )}
+        data-parser-story-code={codeType}
+      >
+        {codeType === "html" ? highlightHtml(children) : highlightMarkdown(children)}
       </pre>
     </CardContent>
   </Card>
@@ -191,7 +395,9 @@ const StoryPreview = ({ story }: { story: ParserStory }) => {
       </div>
 
       <div className="grid gap-4 xl:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">
-        <CodePanel title="Input HTML">{story.inputHtml}</CodePanel>
+        <CodePanel title="Input HTML" codeType="html" compact>
+          {formatHtmlForDisplay(story.inputHtml)}
+        </CodePanel>
         <Card variant="panel" className="overflow-hidden">
           <CardHeader className="border-b border-border p-4">
             <CardTitle className="text-base">Naver Capture</CardTitle>
@@ -210,10 +416,10 @@ const StoryPreview = ({ story }: { story: ParserStory }) => {
         <CardHeader className="border-b border-border p-4">
           <CardTitle className="text-base">Markdown</CardTitle>
         </CardHeader>
-        <CardContent className="p-4">
+        <CardContent className="p-0">
           {story.markdownVariants.length > 1 ? (
             <Tabs defaultValue={defaultVariantKey}>
-              <TabsList className="mb-3 inline-flex !w-fit max-w-full flex-nowrap overflow-x-auto group-data-[orientation=horizontal]/tabs:!w-fit">
+              <TabsList className="mx-4 mt-4 inline-flex !w-fit max-w-[calc(100%-2rem)] flex-nowrap overflow-x-auto group-data-[orientation=horizontal]/tabs:!w-fit">
                 {story.markdownVariants.map((variant) => (
                   <TabsTrigger
                     key={variant.label}
@@ -226,21 +432,15 @@ const StoryPreview = ({ story }: { story: ParserStory }) => {
               </TabsList>
               {story.markdownVariants.map((variant) => (
                 <TabsContent key={variant.label} value={variant.label}>
-                  <pre
-                    className="code-surface max-h-[520px] overflow-auto whitespace-pre-wrap rounded-[var(--radius-lg)] p-4 font-mono text-[0.8125rem] leading-6 text-foreground"
-                    data-parser-story-markdown
-                  >
-                    {variant.markdown}
+                  <pre className={codeBlockClassName} data-parser-story-markdown>
+                    {highlightMarkdown(variant.markdown)}
                   </pre>
                 </TabsContent>
               ))}
             </Tabs>
           ) : (
-            <pre
-              className="code-surface max-h-[520px] overflow-auto whitespace-pre-wrap rounded-[var(--radius-lg)] p-4 font-mono text-[0.8125rem] leading-6 text-foreground"
-              data-parser-story-markdown
-            >
-              {story.markdownVariants[0]?.markdown ?? ""}
+            <pre className={codeBlockClassName} data-parser-story-markdown>
+              {highlightMarkdown(story.markdownVariants[0]?.markdown ?? "")}
             </pre>
           )}
         </CardContent>
@@ -253,6 +453,7 @@ export const ParserStorybookPage = () => {
   const [themePreference, setThemePreference] = useState<ThemePreference>("dark")
   const [activeStoryKey, setActiveStoryKey] = useState(getInitialStoryKey)
   const activeStory = useMemo(() => findStory(activeStoryKey), [activeStoryKey])
+  useThemePreference(themePreference)
   const summaryCards = useMemo(
     () => [
       { label: "Editors", value: String(parserStoryCatalog.length) },

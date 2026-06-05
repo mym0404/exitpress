@@ -61,7 +61,9 @@
 - Parser Storybook catalog는 editor의 `supportedBlocks` 순서에서 파생된다.
 - Story key는 `editorType`, `supportedBlocks` index, `blockId` 조합이다.
 - Storybook tree는 `Editor -> Block` 순서로 모든 supported block을 렌더링해야 한다.
-- Story metadata는 block instance의 `id`, `label`, `outputOptions`, 선택적 `story` metadata에서 만든다.
+- Story metadata는 block instance의 `id`, `label`, `outputOptions`, 선택적 `story` metadata, 실제 source fixture에서 만든다.
+- Story fixture는 실제 source URL, inspect path, input HTML을 담고, Storybook capture asset은 같은 story key의 `src/ui/features/parser-stories/assets/*.png` 파일로 관리한다.
+- Input HTML, capture, Markdown preview는 같은 source block을 가리켜야 한다.
 - 별도 중앙 block 목록으로 story catalog를 관리하지 않는다.
 - Markdown 출력이 없는 block은 auxiliary story로 남겨 전체 지원 범위를 빠뜨리지 않는다.
 
@@ -72,8 +74,8 @@
 - Single post inspect 흐름은 unsupported block 조사에 이 정보를 사용한다.
 
 ## Verification
-- Parser block 구현 변경은 `pnpm test:parser-blocks`와 `pnpm test:offline`으로 확인한다.
-- Editor dispatch 변경은 `pnpm test:offline`로 routing, tag 추출, editor별 output selection을 확인한다.
+- Parser block 구현 변경은 `mise exec -- pnpm test:parser-blocks`와 `mise exec -- pnpm test:offline`으로 확인한다.
+- Editor dispatch 변경은 `mise exec -- pnpm test:offline`로 routing, tag 추출, editor별 output selection을 확인한다.
 - Markdown output이 바뀌면 `tests/fixtures/samples/*/expected.md` 또는 `expected-error.md`를 의도적으로 갱신한다.
 - Story catalog나 header route가 바뀌면 Storybook unit test와 catalog test를 확인한다.
 - Knowledge는 새 block 하나가 생길 때마다 갱신하지 않는다. block category, failure policy, output option contract가 달라질 때만 갱신한다.

@@ -28,6 +28,6 @@
 - `tests/e2e/run-ui-live-upload.ts` uses run-unique GitHub paths so live upload evidence is not hidden by a reused path.
 
 ## Verification
-- `pnpm smoke:ui`: mock upload/rewrite UI state, result table, and resume surfaces.
-- `pnpm test:network:upload`: live browser export plus PicList GitHub upload.
-- `pnpm test:network:resume-export`: manifest-based resume export without upload.
+- `mise exec -- pnpm smoke:ui`: mock upload/rewrite UI state, result table, and resume surfaces.
+- `mise exec -- pnpm test:network:upload`: live browser export plus PicList GitHub upload.
+- `mise exec -- pnpm test:network:resume-export`: manifest-based resume export without upload.

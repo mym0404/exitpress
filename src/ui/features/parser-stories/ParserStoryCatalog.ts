@@ -13,6 +13,8 @@ import { parsePostHtmlWithBlockEvidence } from "../../../parsing/naver-blog/core
 import { NaverBlog } from "../../../parsing/naver-blog/NaverBlog.js"
 import { renderBlockOutputPreview } from "../options/BlockOutputPreview.js"
 
+import { resolveParserStoryCaptureSrc } from "./ParserStoryAssets.js"
+
 type ParserStoryMarkdownVariant = {
   label: string
   markdown: string
@@ -194,6 +196,10 @@ const buildParserStoryCatalog = (): ParserStoryEditorGroup[] => {
   definitions.forEach((definition) => {
     const story: ParserStory = {
       ...definition,
+      screenshotSrc: resolveParserStoryCaptureSrc({
+        storyKey: definition.storyKey,
+        fallbackSrc: definition.screenshotSrc,
+      }),
       markdownVariants: createMarkdownVariants(definition),
     }
     const existingGroup = groups.find((group) => group.editorType === definition.editorType)

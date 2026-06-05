@@ -6,7 +6,7 @@
 - UI shell and common hooks live in `src/ui/features/common/*`.
 - Feature composition lives under `src/ui/features/scan`, `src/ui/features/options`, `src/ui/features/job-results`, `src/ui/features/resume`, and `src/ui/features/parser-stories`.
 - Brand assets live in `public/brand`.
-- Parser Storybook capture assets live in `public/parser-stories`.
+- Parser Storybook capture assets live in `src/ui/features/parser-stories/assets`.
 
 ## Visual Direction
 - The default theme is dark; light is a companion theme.
@@ -52,6 +52,6 @@
 - Reduced-motion users must still understand progress, toast, dialog, and toggle state changes.
 
 ## Verification
-- `pnpm build:ui`: Vite build and token/primitive compile signal.
-- `pnpm check:local`: typecheck and offline tests.
-- `pnpm smoke:ui`: dark default render, light persistence, category/export/upload flow, result table, resume dialog, and recovery path.
+- `mise exec -- pnpm build:ui`: Vite build and token/primitive compile signal.
+- `mise exec -- pnpm check:local`: typecheck and offline tests.
+- `mise exec -- pnpm smoke:ui`: dark default render, light persistence, category/export/upload flow, result table, resume dialog, and recovery path.

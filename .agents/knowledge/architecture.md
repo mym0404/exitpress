@@ -4,7 +4,8 @@
 - Runtime entrypoint is `src/Server.ts`.
 - HTTP API entry lives in `src/server/http/HttpServer.ts`; job lifecycle, local state, route file helpers, and upload provider catalog live under `src/server/jobs`, `src/server/state`, `src/server/routes`, and `src/server/upload`.
 - The export pipeline lives in `src/exporting/workflow/NaverBlogExporter.ts` and keeps fetch, parse, review, render, write, upload, rewrite, and manifest concerns separated.
-- UI uses HTTP APIs for runtime actions and may import pure domain contracts or option helpers. It does not import parser/editor runtime internals.
+- UI uses HTTP APIs for export wizard runtime actions and may import pure domain contracts or option helpers.
+- `/storybook` is the parser-preview exception: it builds a static catalog from parser story definitions and parser preview helpers, but it does not call export wizard bootstrap APIs.
 
 ## Main Flow
 - Blog scan and post HTML fetch start in `src/integrations/naver-blog/NaverBlogFetcher.ts`.
@@ -22,7 +23,7 @@
 - `src/markdown`: AST to Markdown, Turndown-based HTML fragment conversion, and frontmatter assembly.
 - `src/exporting`: export orchestration, asset persistence, upload/rewrite phase, single-post export, output paths.
 - `src/server`: local HTTP server, job store, local state/cache, upload provider catalog.
-- `src/ui`: React wizard, scan/options/results/resume surfaces, shadcn primitives, API client.
+- `src/ui`: React wizard, parser Storybook surface, scan/options/results/resume surfaces, shadcn primitives, API client.
 
 ## Parser Block Contract
 - Blog -> editor -> parser block routing and file layout rules live in `.agents/knowledge/parser-architecture.md`.
@@ -35,3 +36,4 @@
 - Renderer or exporter output changes usually affect `tests/fixtures/samples/*/expected.md`, `src/markdown/MarkdownRenderer.spec.ts`, `src/exporting/workflow/NaverBlogExporter.spec.ts`, and UI result assumptions.
 - Job lifecycle changes usually affect `src/server/http/HttpServer.ts`, `src/server/jobs/JobStore.ts`, `src/server/jobs/ExportJobManifest.ts`, `src/ui/features/job-results/*`, and `.agents/knowledge/upload.md`.
 - UI shell changes usually affect `src/ui/app/App.tsx`, `src/ui/features/common/*`, `src/ui/styles/globals.css`, and `.agents/knowledge/DESIGN.md`.
+- Parser Storybook changes usually affect `src/parsing/naver-blog/core/ParserStoryFixtures.ts`, `src/ui/features/parser-stories/*`, `src/ui/features/parser-stories/assets/*`, `.agents/knowledge/parser-blocks.md`, `.agents/knowledge/DESIGN.md`, and `.agents/knowledge/verification.md`.

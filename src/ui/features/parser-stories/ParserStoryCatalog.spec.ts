@@ -1,7 +1,3 @@
-import { access } from "node:fs/promises"
-import path from "node:path"
-import { fileURLToPath } from "node:url"
-
 import { load } from "cheerio"
 import { describe, expect, it } from "vitest"
 
@@ -9,9 +5,9 @@ import type { ParserBlockInspection } from "../../../parsing/naver-blog/core/Bas
 
 import { NaverBlog } from "../../../parsing/naver-blog/NaverBlog.js"
 
+import { parserStoryCaptureAssets } from "./ParserStoryAssets.js"
 import { parserStoryCatalog } from "./ParserStoryCatalog.js"
 
-const rootDir = fileURLToPath(new URL("../../../../", import.meta.url))
 const parserOptions = { blockOutputs: { defaults: {} } }
 
 const flattenInspections = (inspections: ParserBlockInspection[]): ParserBlockInspection[] =>
@@ -34,6 +30,9 @@ describe("parser story catalog", () => {
     expect(stories.every((story) => story.inputHtml.trim())).toBe(true)
     expect(stories.every((story) => story.markdownVariants.length > 0)).toBe(true)
     expect(new Set(stories.map((story) => story.screenshotSrc)).size).toBe(stories.length)
+    expect(Object.keys(parserStoryCaptureAssets).sort()).toEqual(
+      stories.map((story) => story.storyKey).sort(),
+    )
     expect(
       stories.every((story) => story.markdownVariants.every((variant) => variant.markdown.trim())),
     ).toBe(true)
@@ -59,10 +58,8 @@ describe("parser story catalog", () => {
       })
     })
 
-    await Promise.all(
-      stories.map((story) =>
-        access(path.join(rootDir, "public", story.screenshotSrc.replace(/^\//, ""))),
-      ),
-    )
+    stories.forEach((story) => {
+      expect(parserStoryCaptureAssets[story.storyKey]).toBe(story.screenshotSrc)
+    })
   })
 })

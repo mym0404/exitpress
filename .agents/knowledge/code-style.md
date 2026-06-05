@@ -8,12 +8,13 @@
 
 ## GitHub Workflow
 - Package scripts that operate on GitHub use the `gh:` prefix.
-- `pnpm gh:update-branches` runs `scripts/maintenance/update-open-pr-branches.ts` and calls `gh pr update-branch` for open PRs.
+- `mise exec -- pnpm gh:update-branches` runs `scripts/maintenance/update-open-pr-branches.ts` and calls `gh pr update-branch` for open PRs.
 
 ## Formatting And Imports
 - Oxfmt owns repository formatting and import sorting. Oxlint owns the baseline lint.
-- Run `pnpm format` during multi-step edits when formatting or imports may have drifted.
-- Run `pnpm check:fmt` and `pnpm check:lint` before or through `pnpm check:local`.
+- Run package scripts through `mise exec -- pnpm ...`; bare `pnpm` may resolve to a Corepack wrapper outside an activated mise shell.
+- Run `mise exec -- pnpm format` during multi-step edits when formatting or imports may have drifted.
+- Run `mise exec -- pnpm check:fmt` and `mise exec -- pnpm check:lint` before or through `mise exec -- pnpm check:local`.
 
 ## TypeScript
 - The repo is strict TypeScript with NodeNext ESM.
@@ -56,7 +57,7 @@
 - Keep primitive wrappers under `src/ui/components/ui`; do not move feature-specific behavior into primitives.
 
 ## Server And Harness
-- User `pnpm dev` owns the normal development server path.
+- User `mise exec -- pnpm dev` owns the normal development server path.
 - Tests and harnesses should use isolated `GOODBYE_SETTINGS_PATH`, `GOODBYE_SCAN_CACHE_PATH`, and non-default `PORT` or `listen(0)`.
 - Ad-hoc server checks should not share `.cache/export-ui-settings.json` with the user's development session.
 - Repo-local temporary files belong under `tmp/`; tests and e2e harnesses should use `tests/support/test-paths.ts` instead of `os.tmpdir()`.

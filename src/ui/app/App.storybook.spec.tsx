@@ -48,6 +48,9 @@ describe("App storybook route", () => {
     expect(screen.getByText("Input HTML")).toBeInTheDocument()
     expect(screen.getByText("Naver Capture")).toBeInTheDocument()
     expect(screen.getByText("Markdown")).toBeInTheDocument()
+    expect(document.querySelector("[data-parser-story-code='html']")).toBeInTheDocument()
+    expect(document.querySelector("[data-parser-story-markdown]")).toBeInTheDocument()
+    expect(document.querySelector("[data-parser-token]")).toBeInTheDocument()
 
     await waitFor(() => {
       expect(fetchMock).not.toHaveBeenCalled()
