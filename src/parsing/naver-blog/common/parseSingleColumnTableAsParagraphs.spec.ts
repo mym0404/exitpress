@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 
-import { parseSingleColumnTableAsParagraphs } from "./Table.js"
+import { parseSingleColumnTableAsParagraphs } from "./parseSingleColumnTableAsParagraphs.js"
 
 describe("parseSingleColumnTableAsParagraphs", () => {
   it("rejects non-single-column table shapes", () => {

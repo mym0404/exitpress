@@ -2,7 +2,7 @@ import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../co
 
 import { tableTemplate } from "../../../../domain/template/DefaultTemplates.js"
 import { parseHtmlTable } from "../../common/parseHtmlTable.js"
-import { parseSingleColumnTableAsParagraphs } from "../../common/Table.js"
+import { parseSingleColumnTableAsParagraphs } from "../../common/parseSingleColumnTableAsParagraphs.js"
 import { createTableBlock } from "../../core/ParsedBlockOutput.js"
 import { LeafParserBlock } from "../../core/ParserBlock.js"
 
