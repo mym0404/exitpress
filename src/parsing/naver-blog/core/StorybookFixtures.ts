@@ -1,10 +1,10 @@
-type ParserStoryFixture = {
+type StorybookFixture = {
   sourceUrl: string
   inspectPath: string
   inputHtml: string
 }
 
-export const parserStoryFixtures: Record<string, ParserStoryFixture> = {
+export const storybookFixtures: Record<string, StorybookFixture> = {
   "naver-se2-0-style": {
     sourceUrl: "https://blog.naver.com/anglekim3708/70180618808",
     inspectPath: "0.0",

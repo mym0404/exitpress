@@ -5,7 +5,7 @@ import type { ReactNode } from "react"
 
 import type { ThemePreference } from "../../../domain/preferences/ThemePreference.js"
 
-import type { ParserStory } from "./ParserStoryCatalog.js"
+import type { StorybookStory } from "./StorybookCatalog.js"
 
 import {
   Accordion,
@@ -16,30 +16,28 @@ import {
 import { Badge } from "../../components/ui/Badge.js"
 import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/Card.js"
 import { ScrollArea } from "../../components/ui/ScrollArea.js"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../components/ui/Tabs.js"
 import { createAppHref, shouldShowStorybookBackLink } from "../../lib/AppRoutes.js"
 import { cn } from "../../lib/Cn.js"
 import { useThemePreference } from "../common/hooks/UseThemePreference.js"
 import { WizardHeader } from "../common/shell/WizardHeader.js"
+import { BlockTemplateCard, getEffectiveBlockTemplate } from "../options/BlockTemplateCard.js"
 
-import { parserStoryCatalog } from "./ParserStoryCatalog.js"
+import { storybookCatalog } from "./StorybookCatalog.js"
 
 const getInitialStoryKey = () => {
   const hashKey = window.location.hash.replace(/^#/, "")
-  const firstStory = parserStoryCatalog[0]?.stories[0]
+  const firstStory = storybookCatalog[0]?.stories[0]
 
-  return parserStoryCatalog.some((group) =>
-    group.stories.some((story) => story.storyKey === hashKey),
-  )
+  return storybookCatalog.some((group) => group.stories.some((story) => story.storyKey === hashKey))
     ? hashKey
     : (firstStory?.storyKey ?? "")
 }
 
 const getStoryCount = () =>
-  parserStoryCatalog.reduce((count, group) => count + group.stories.length, 0)
+  storybookCatalog.reduce((count, group) => count + group.stories.length, 0)
 
 const findStory = (storyKey: string) =>
-  parserStoryCatalog.flatMap((group) => group.stories).find((story) => story.storyKey === storyKey)
+  storybookCatalog.flatMap((group) => group.stories).find((story) => story.storyKey === storyKey)
 
 const formatHtmlForDisplay = (html: string) => {
   const lines: string[] = []
@@ -69,7 +67,7 @@ const formatHtmlForDisplay = (html: string) => {
 }
 
 const codeBlockClassName =
-  "min-w-0 max-h-[520px] overflow-auto whitespace-pre-wrap p-4 font-mono text-[0.75rem] leading-5 text-foreground"
+  "min-w-0 max-h-[520px] overflow-auto p-4 font-mono text-[0.75rem] leading-5 text-foreground"
 
 const htmlTokenClassNames = {
   bracket: "text-muted-foreground",
@@ -101,7 +99,7 @@ const renderToken = (
       : markdownTokenClassNames[tokenType as keyof typeof markdownTokenClassNames]
 
   return (
-    <span key={key} data-parser-token={tokenType} className={className}>
+    <span key={key} data-storybook-token={tokenType} className={className}>
       {children}
     </span>
   )
@@ -236,7 +234,7 @@ const StoryTreeBlock = ({
   active,
   onSelect,
 }: {
-  story: ParserStory
+  story: StorybookStory
   active: boolean
   onSelect: (storyKey: string) => void
 }) => (
@@ -244,7 +242,7 @@ const StoryTreeBlock = ({
     type="button"
     role="treeitem"
     aria-selected={active}
-    data-parser-story-block={story.storyKey}
+    data-storybook-block={story.storyKey}
     className="grid w-full grid-cols-[auto_minmax(0,1fr)] items-center gap-2 rounded-[var(--radius-md)] px-2.5 py-2 text-left text-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:shadow-[var(--focus-ring)] aria-selected:bg-primary aria-selected:text-primary-foreground"
     onClick={() => onSelect(story.storyKey)}
   >
@@ -261,9 +259,9 @@ const StoryTree = ({
   onSelect: (storyKey: string) => void
 }) => {
   const activeEditorType =
-    parserStoryCatalog.find((group) =>
+    storybookCatalog.find((group) =>
       group.stories.some((story) => story.storyKey === activeStoryKey),
-    )?.editorType ?? parserStoryCatalog[0]?.editorType
+    )?.editorType ?? storybookCatalog[0]?.editorType
   const [openEditorTypes, setOpenEditorTypes] = useState<string[]>(
     activeEditorType ? [activeEditorType] : [],
   )
@@ -281,7 +279,7 @@ const StoryTree = ({
   return (
     <Card
       variant="panel"
-      data-parser-story-tree
+      data-storybook-tree
       className="overflow-hidden lg:sticky lg:top-5 lg:max-h-[calc(100vh-2.5rem)]"
     >
       <CardHeader className="border-b border-border p-4">
@@ -294,15 +292,15 @@ const StoryTree = ({
             value={openEditorTypes}
             onValueChange={setOpenEditorTypes}
             role="tree"
-            aria-label="Parser block stories"
+            aria-label="Storybook stories"
             className="grid gap-3 p-3"
           >
-            {parserStoryCatalog.map((group) => (
+            {storybookCatalog.map((group) => (
               <AccordionItem
                 key={group.editorType}
                 value={group.editorType}
                 className="grid gap-2"
-                data-parser-story-editor
+                data-storybook-editor
               >
                 <AccordionTrigger
                   role="treeitem"
@@ -362,9 +360,10 @@ const CodePanel = ({
       <pre
         className={cn(
           codeBlockClassName,
+          codeType === "html" ? "whitespace-pre" : "whitespace-pre-wrap",
           compact ? "text-[0.6875rem] leading-5" : "text-[0.75rem] leading-5",
         )}
-        data-parser-story-code={codeType}
+        data-storybook-code={codeType}
       >
         {codeType === "html" ? highlightHtml(children) : highlightMarkdown(children)}
       </pre>
@@ -372,17 +371,38 @@ const CodePanel = ({
   </Card>
 )
 
-const StoryPreview = ({ story }: { story: ParserStory }) => {
-  const defaultVariant =
-    story.markdownVariants.find((variant) => variant.isDefault) ?? story.markdownVariants[0]
-  const defaultVariantKey = defaultVariant?.label ?? "기본"
+const StoryTemplateCard = ({ story }: { story: StorybookStory }) => {
+  const [template, setTemplate] = useState("")
+
+  useEffect(() => {
+    setTemplate("")
+  }, [story.storyKey])
+
+  if (!story.templateDefinition) {
+    return null
+  }
 
   return (
-    <section className="grid gap-4" data-active-parser-story={story.storyKey}>
+    <BlockTemplateCard
+      key={story.storyKey}
+      definition={story.templateDefinition}
+      template={getEffectiveBlockTemplate({
+        definition: story.templateDefinition,
+        template,
+      })}
+      readOnly
+      onTemplateChange={setTemplate}
+    />
+  )
+}
+
+const StoryPreview = ({ story }: { story: StorybookStory }) => {
+  return (
+    <section className="grid gap-4" data-active-storybook-story={story.storyKey}>
       <div
         className="flex flex-wrap items-center gap-2"
-        aria-label="선택된 parser story"
-        data-parser-story-summary="true"
+        aria-label="선택된 storybook"
+        data-storybook-summary="true"
       >
         <Badge variant="secondary" className="px-3 py-1 text-sm">
           {story.blockLabel}
@@ -394,6 +414,8 @@ const StoryPreview = ({ story }: { story: ParserStory }) => {
           {story.group === "auxiliary" ? "Auxiliary" : "Output"}
         </Badge>
       </div>
+
+      <StoryTemplateCard story={story} />
 
       <div className="grid gap-4 xl:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">
         <CodePanel title="Input HTML" codeType="html" compact>
@@ -418,39 +440,16 @@ const StoryPreview = ({ story }: { story: ParserStory }) => {
           <CardTitle className="text-base">Markdown</CardTitle>
         </CardHeader>
         <CardContent className="p-0">
-          {story.markdownVariants.length > 1 ? (
-            <Tabs defaultValue={defaultVariantKey}>
-              <TabsList className="mx-4 mt-4 inline-flex !w-fit max-w-[calc(100%-2rem)] flex-nowrap overflow-x-auto group-data-[orientation=horizontal]/tabs:!w-fit">
-                {story.markdownVariants.map((variant) => (
-                  <TabsTrigger
-                    key={variant.label}
-                    value={variant.label}
-                    className="!w-auto shrink-0 group-data-[orientation=horizontal]/tabs:!w-auto"
-                  >
-                    {variant.label}
-                  </TabsTrigger>
-                ))}
-              </TabsList>
-              {story.markdownVariants.map((variant) => (
-                <TabsContent key={variant.label} value={variant.label}>
-                  <pre className={codeBlockClassName} data-parser-story-markdown>
-                    {highlightMarkdown(variant.markdown)}
-                  </pre>
-                </TabsContent>
-              ))}
-            </Tabs>
-          ) : (
-            <pre className={codeBlockClassName} data-parser-story-markdown>
-              {highlightMarkdown(story.markdownVariants[0]?.markdown ?? "")}
-            </pre>
-          )}
+          <pre className={codeBlockClassName} data-storybook-markdown>
+            {highlightMarkdown(story.markdown)}
+          </pre>
         </CardContent>
       </Card>
     </section>
   )
 }
 
-export const ParserStorybookPage = () => {
+export const StorybookPage = () => {
   const [themePreference, setThemePreference] = useState<ThemePreference>("dark")
   const [activeStoryKey, setActiveStoryKey] = useState(getInitialStoryKey)
   const activeStory = useMemo(() => findStory(activeStoryKey), [activeStoryKey])
@@ -466,7 +465,7 @@ export const ParserStorybookPage = () => {
     : undefined
   const summaryCards = useMemo(
     () => [
-      { label: "Editors", value: String(parserStoryCatalog.length) },
+      { label: "Editors", value: String(storybookCatalog.length) },
       { label: "Blocks", value: String(getStoryCount()) },
     ],
     [],
@@ -504,15 +503,15 @@ export const ParserStorybookPage = () => {
       />
       <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-7xl flex-col gap-5 px-4 py-5 xl:px-6 xl:py-6">
         <WizardHeader
-          title="Parser Storybook"
-          description="지원 중인 parser block의 입력 HTML, 원본 캡처, Markdown 출력을 비교합니다."
+          title="Storybook"
+          description="지원 중인 block의 입력 HTML, 원본 캡처, Markdown 출력을 비교합니다."
           themePreference={themePreference}
           headerStatus="ready"
           summaryCards={summaryCards}
           backLink={backLink}
           onThemeChange={setThemePreference}
         />
-        <div className="grid gap-5 lg:grid-cols-[18rem_minmax(0,1fr)]" data-parser-story-layout>
+        <div className="grid gap-5 lg:grid-cols-[18rem_minmax(0,1fr)]" data-storybook-layout>
           <StoryTree activeStoryKey={activeStory.storyKey} onSelect={selectStory} />
           <StoryPreview story={activeStory} />
         </div>

@@ -27,10 +27,10 @@ export type ParserBlockConvertContext = ParserBlockContext & {
   matchNode: (node: AnyNode, path: string) => ParsedBlock[]
 }
 
-export type ParserBlockStoryGroup = "output" | "auxiliary"
+export type StorybookBlockGroup = "output" | "auxiliary"
 
-type ParserBlockStoryMetadata = {
-  group?: ParserBlockStoryGroup
+type StorybookBlockMetadata = {
+  group?: StorybookBlockGroup
   sourceUrl?: string
   inspectPath?: string
   inputHtml?: string
@@ -41,7 +41,7 @@ export abstract class BaseBlock {
   abstract readonly id: string
   readonly templateDefinition?: ParserBlockTemplateDefinition
   abstract readonly label: string
-  readonly story?: ParserBlockStoryMetadata
+  readonly story?: StorybookBlockMetadata
 
   abstract match(context: ParserBlockContext): boolean
 

@@ -5,6 +5,25 @@ import { userEvent } from "@testing-library/user-event"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import "@testing-library/jest-dom/vitest"
 
+vi.mock("@uiw/react-codemirror", () => ({
+  default: ({
+    id,
+    value,
+    onChange,
+  }: {
+    id?: string
+    value: string
+    onChange: (value: string) => void
+  }) => (
+    <textarea
+      id={id}
+      aria-label="Block template"
+      value={value}
+      onChange={(event) => onChange(event.target.value)}
+    />
+  ),
+}))
+
 import type { ExportOptions } from "../../../domain/export-options/Types.js"
 
 import { createTestPath } from "../../../../tests/support/test-paths.js"
@@ -161,12 +180,12 @@ describe("ExportOptionsPanel", () => {
       />,
     )
 
-    fireEvent.change(query<HTMLInputElement>("#block-templates-naver-se4-formula"), {
+    fireEvent.change(query<HTMLInputElement>("#block-template-editor-naver-se4-formula"), {
       target: {
         value: "```math\n${formula}\n```",
       },
     })
-    fireEvent.change(query<HTMLInputElement>("#block-templates-naver-se4-image"), {
+    fireEvent.change(query<HTMLInputElement>("#block-template-editor-naver-se4-image"), {
       target: {
         value: "![${alt}](${url})\n_${caption ?? ''}_",
       },
@@ -464,8 +483,10 @@ describe("ExportOptionsPanel", () => {
     ).toEqual(blockTemplateDefinitions.map((definition) => definition.key))
   })
 
-  it("updates block preview snippets when block templates change", async () => {
+  it("updates block templates from the preset select and editor", async () => {
+    const user = userEvent.setup()
     let latestOptions = defaultExportOptions()
+    latestOptions.blockOutputs.templates["naver-se4:image"] = "CUSTOM ${url}"
 
     render(
       <ExportOptionsPanel
@@ -483,14 +504,24 @@ describe("ExportOptionsPanel", () => {
       />,
     )
 
-    expect(
-      query<HTMLElement>('[data-block-template-card="naver-se4:image"] pre').textContent,
-    ).toContain("![diagram]")
-    expect(
-      query<HTMLElement>('[data-block-template-card="naver-se4:image"] pre').textContent,
-    ).not.toContain("_caption_")
+    const imageDefinition = blockTemplateDefinitions.find(
+      (definition) => definition.key === "naver-se4:image",
+    )
+    const defaultPreset = imageDefinition?.presets.find((preset) => preset.id === "default")
 
-    fireEvent.change(query<HTMLInputElement>("#block-templates-naver-se4-image"), {
+    if (!defaultPreset) {
+      throw new Error("missing default preset")
+    }
+
+    await selectOption({
+      user,
+      trigger: "#block-template-preset-naver-se4-image",
+      value: "default",
+    })
+
+    expect(latestOptions.blockOutputs.templates["naver-se4:image"]).toBe(defaultPreset.template)
+
+    fireEvent.change(query<HTMLInputElement>("#block-template-editor-naver-se4-image"), {
       target: {
         value: "[![${alt}](${url})](${url})",
       },
@@ -519,44 +550,12 @@ describe("ExportOptionsPanel", () => {
       />,
     )
 
-    expect(
-      query<HTMLElement>('[data-block-template-card="naver-se4:image"] pre').textContent,
-    ).toContain("[![diagram]")
-
-    fireEvent.change(query<HTMLInputElement>("#block-templates-naver-se4-image"), {
-      target: {
-        value: "![${alt}](${url})\n_${caption}_",
-      },
-    })
-
-    expect(latestOptions.blockOutputs.templates["naver-se4:image"]).toBe(
-      "![${alt}](${url})\n_${caption}_",
+    expect(query<HTMLInputElement>("#block-template-editor-naver-se4-image")).toHaveValue(
+      "[![${alt}](${url})](${url})",
     )
-
-    cleanup()
-
-    render(
-      <ExportOptionsPanel
-        step="markdown"
-        outputDir={testOutputDir}
-        options={latestOptions}
-        optionDescriptions={optionDescriptions}
-        blockTemplateDefinitions={blockTemplateDefinitions}
-        frontmatterFieldOrder={frontmatterFieldOrder}
-        frontmatterFieldMeta={frontmatterFieldMeta}
-        frontmatterValidationErrors={[]}
-        onOptionsChange={(updater) => {
-          latestOptions = updater(latestOptions)
-        }}
-      />,
-    )
-
-    expect(
-      query<HTMLElement>('[data-block-template-card="naver-se4:image"] pre').textContent,
-    ).toContain("_caption_")
   })
 
-  it("keeps block output controls top-aligned next to the preview", () => {
+  it("renders compact block template cards with joined prop rows and type badges", () => {
     render(
       <ExportOptionsPanel
         step="markdown"
@@ -572,62 +571,25 @@ describe("ExportOptionsPanel", () => {
     )
 
     const blockCard = query<HTMLElement>('[data-block-template-card="naver-se4:formula"]')
-    const twoColumnLayout = blockCard.querySelector(
-      ".lg\\:grid-cols-\\[minmax\\(0\\,0\\.8fr\\)_minmax\\(0\\,1fr\\)\\]",
+    const propGrid = query<HTMLElement>(
+      '[data-block-template-card="naver-se4:image"] [data-template-prop-grid]',
     )
-    const optionField = blockCard.querySelector(
-      '[data-option-key="block-templates-naver-se4-formula"]',
+    const urlType = query<HTMLElement>(
+      '[data-block-template-card="naver-se4:image"] [data-template-prop="url"] [data-slot="badge"]',
     )
-    const preview = blockCard.querySelector("pre")
-
-    expect(twoColumnLayout).toHaveClass("items-start")
-    expect(optionField).toHaveClass("content-start", "self-start")
-    expect(preview?.parentElement).toHaveClass("content-start", "self-start")
-    expect(preview).toHaveClass("block-output-preview-surface")
-  })
-
-  it("renders image preview with local asset paths unless remote mode is selected", () => {
-    const options = defaultExportOptions()
-
-    render(
-      <ExportOptionsPanel
-        step="markdown"
-        outputDir={testOutputDir}
-        options={options}
-        optionDescriptions={optionDescriptions}
-        blockTemplateDefinitions={blockTemplateDefinitions}
-        frontmatterFieldOrder={frontmatterFieldOrder}
-        frontmatterFieldMeta={frontmatterFieldMeta}
-        frontmatterValidationErrors={[]}
-        onOptionsChange={vi.fn()}
-      />,
+    const codeSection = query<HTMLElement>(
+      '[data-block-template-card="naver-se4:image"] [data-template-code-section]',
     )
 
-    expect(
-      query<HTMLElement>('[data-block-template-card="naver-se4:image"] pre').textContent,
-    ).toContain("../../public/image.png")
-
-    cleanup()
-
-    options.assets.imageHandlingMode = "remote"
-
-    render(
-      <ExportOptionsPanel
-        step="markdown"
-        outputDir={testOutputDir}
-        options={options}
-        optionDescriptions={optionDescriptions}
-        blockTemplateDefinitions={blockTemplateDefinitions}
-        frontmatterFieldOrder={frontmatterFieldOrder}
-        frontmatterFieldMeta={frontmatterFieldMeta}
-        frontmatterValidationErrors={[]}
-        onOptionsChange={vi.fn()}
-      />,
-    )
-
-    expect(
-      query<HTMLElement>('[data-block-template-card="naver-se4:image"] pre').textContent,
-    ).toContain("https://example.com/image.png")
+    expect(blockCard.querySelector("pre")).toBeNull()
+    expect(screen.queryByText("Preview")).not.toBeInTheDocument()
+    expect(screen.queryByText("Template Editor")).not.toBeInTheDocument()
+    expect(screen.queryByText("Available Props")).not.toBeInTheDocument()
+    expect(screen.getAllByText("PROP").length).toBeGreaterThan(0)
+    expect(screen.getAllByText("CODE").length).toBeGreaterThan(0)
+    expect(propGrid).toHaveClass("gap-0", "sm:grid-cols-2")
+    expect(urlType).toHaveTextContent("string")
+    expect(codeSection.querySelector("#block-template-preset-naver-se4-image")).toBeInTheDocument()
   })
 
   it("does not render raw html or unsupported representative controls", () => {

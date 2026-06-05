@@ -22,6 +22,9 @@ export type TemplatePropDefinition = {
     | "array?"
 }
 
+/**
+ * A block template is a template that can be used to render a block.
+ */
 export type BlockTemplateDefinition = {
   key: string
   label: string

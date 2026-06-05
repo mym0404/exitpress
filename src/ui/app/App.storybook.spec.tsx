@@ -15,7 +15,7 @@ describe("App storybook route", () => {
     window.history.replaceState({}, "", "/")
   })
 
-  it("renders parser stories without loading export defaults", async () => {
+  it("renders storybook stories without loading export defaults", async () => {
     const fetchMock = vi.fn(async () => {
       throw new Error("storybook route must not call export APIs")
     })
@@ -24,24 +24,24 @@ describe("App storybook route", () => {
 
     renderApp()
 
-    expect(await screen.findByRole("heading", { name: "Parser Storybook" })).toBeInTheDocument()
+    expect(await screen.findByRole("heading", { name: "Storybook" })).toBeInTheDocument()
     expect(screen.getByRole("link", { name: /Back/ })).toHaveAttribute("href", "/")
     expect(screen.getByRole("link", { name: "Storybook" })).toHaveAttribute("href", "/storybook")
-    expect(screen.getByRole("tree", { name: "Parser block stories" })).toBeInTheDocument()
+    expect(screen.getByRole("tree", { name: "Storybook stories" })).toBeInTheDocument()
     expect(screen.getByRole("treeitem", { name: /SmartEditor 4/ })).toBeInTheDocument()
     expect(screen.getByRole("treeitem", { name: /SmartEditor 3/ })).toBeInTheDocument()
     expect(screen.getByRole("treeitem", { name: /SmartEditor 2/ })).toBeInTheDocument()
     const se4DocumentTitle = document.querySelector(
-      "[data-parser-story-block='naver-se4-0-documentTitle']",
+      "[data-storybook-block='naver-se4-0-documentTitle']",
     )
-    const se4Formula = document.querySelector("[data-parser-story-block='naver-se4-1-formula']")
+    const se4Formula = document.querySelector("[data-storybook-block='naver-se4-1-formula']")
 
     expect(se4DocumentTitle).toBeInTheDocument()
     expect(se4Formula).toBeInTheDocument()
     expect(se4DocumentTitle?.compareDocumentPosition(se4Formula as Node)).toBe(
       Node.DOCUMENT_POSITION_FOLLOWING,
     )
-    const storySummary = document.querySelector("[data-parser-story-summary='true']")
+    const storySummary = document.querySelector("[data-storybook-summary='true']")
 
     expect(storySummary).toHaveTextContent("SmartEditor 4 / documentTitle")
     expect(screen.getByText("SmartEditor 4 / documentTitle")).toBeInTheDocument()
@@ -49,16 +49,16 @@ describe("App storybook route", () => {
     expect(screen.getByText("Input HTML")).toBeInTheDocument()
     expect(screen.getByText("Source Capture")).toBeInTheDocument()
     expect(screen.getByText("Markdown")).toBeInTheDocument()
-    expect(document.querySelector("[data-parser-story-code='html']")).toBeInTheDocument()
-    expect(document.querySelector("[data-parser-story-markdown]")).toBeInTheDocument()
-    expect(document.querySelector("[data-parser-token]")).toBeInTheDocument()
+    expect(document.querySelector("[data-storybook-code='html']")).toBeInTheDocument()
+    expect(document.querySelector("[data-storybook-markdown]")).toBeInTheDocument()
+    expect(document.querySelector("[data-storybook-token]")).toBeInTheDocument()
 
     await waitFor(() => {
       expect(fetchMock).not.toHaveBeenCalled()
     })
   })
 
-  it("toggles parser editor groups from the story tree", async () => {
+  it("toggles editor groups from the story tree", async () => {
     vi.stubGlobal("fetch", vi.fn())
 
     renderApp()

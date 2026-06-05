@@ -49,9 +49,9 @@ import { AppStepView } from "./AppStepView.js"
 const getBlockDetectionScopeSignature = (options: Pick<ExportOptions, "scope">) =>
   JSON.stringify(options.scope)
 
-const ParserStorybookPage = lazy(() =>
-  import("../features/parser-stories/ParserStorybookPage.js").then((module) => ({
-    default: module.ParserStorybookPage,
+const StorybookPage = lazy(() =>
+  import("../features/storybook/StorybookPage.js").then((module) => ({
+    default: module.StorybookPage,
   })),
 )
 
@@ -91,7 +91,7 @@ export const App = () => {
 
   return route === "storybook" ? (
     <Suspense fallback={null}>
-      <ParserStorybookPage />
+      <StorybookPage />
     </Suspense>
   ) : (
     <ExportApp />

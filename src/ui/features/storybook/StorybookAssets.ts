@@ -4,17 +4,17 @@ const captureModules = import.meta.glob("./assets/*.png", {
   import: "default",
 }) as Record<string, string>
 
-export const parserStoryCaptureAssets = Object.fromEntries(
+export const storybookCaptureAssets = Object.fromEntries(
   Object.entries(captureModules).map(([path, url]) => [
     path.replace(/^.*\/([^/]+)\.png$/, "$1"),
     url,
   ]),
 )
 
-export const resolveParserStoryCaptureSrc = ({
+export const resolveStorybookCaptureSrc = ({
   storyKey,
   fallbackSrc,
 }: {
   storyKey: string
   fallbackSrc: string
-}) => parserStoryCaptureAssets[storyKey] ?? fallbackSrc
+}) => storybookCaptureAssets[storyKey] ?? fallbackSrc

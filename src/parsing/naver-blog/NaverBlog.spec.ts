@@ -64,9 +64,9 @@ describe("parser block catalog", () => {
     ).toBe(true)
   })
 
-  it("derives parser story definitions for every supported block in editor and block order", () => {
+  it("derives storybook definitions for every supported block in editor and block order", () => {
     const blog = new NaverBlog()
-    const storyDefinitions = blog.getParserBlockStoryDefinitions()
+    const storyDefinitions = blog.getStorybookBlockDefinitions()
 
     expect(
       storyDefinitions.map(

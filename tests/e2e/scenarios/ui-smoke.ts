@@ -674,7 +674,7 @@ const waitForJobStatus = async ({
   const failures = new Set(failureStatuses ?? ["failed", "upload-failed"])
 
   while (Date.now() - startTime < timeoutMs) {
-    const status = (await page.locator("#status-text").textContent())?.trim() ?? null
+    const status = await page.locator("#status-text").getAttribute("data-status")
 
     if (accept(status)) {
       return
@@ -1209,7 +1209,7 @@ const run = async () => {
     await page.fill("#scope-dateFrom", "2024-01-01")
     await page.fill("#scope-dateTo", "2024-12-31")
     await page.fill("#category-search", "NestJS")
-    await page.click("#clear-all-categories")
+    await page.click('[data-category-bulk-selection="true"]')
     await page.waitForSelector(".category-item")
     await page.click('.category-item [data-slot="checkbox"]')
     await page.click('button:has-text("구조 설정")')
@@ -1455,7 +1455,9 @@ const run = async () => {
       page,
       baseUrl,
     })
-    await page.fill("#block-templates-naver-se4-image", "![${alt}](${url})")
+    await page
+      .locator('#block-template-editor-naver-se4-image [contenteditable="true"]')
+      .fill("![${alt}](${url})")
     await blockTemplateSettingsSavePromise
 
     debugLog("waitForResponse", "exportResponsePromise")
@@ -1655,7 +1657,7 @@ const run = async () => {
     }
 
     await page.waitForFunction(
-      () => document.querySelector("#status-text")?.textContent?.trim() === "uploading",
+      () => document.querySelector("#status-text")?.getAttribute("data-status") === "uploading",
       undefined,
       { timeout: 10_000 },
     )

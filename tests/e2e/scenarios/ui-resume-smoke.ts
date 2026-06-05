@@ -555,6 +555,22 @@ const assertUploadRowStatus = async ({
   }
 }
 
+const assertHeaderStatus = async ({
+  page,
+  expectedStatus,
+  message,
+}: {
+  page: import("playwright").Page
+  expectedStatus: string
+  message: string
+}) => {
+  const status = await page.locator("#status-text").getAttribute("data-status")
+
+  if (status !== expectedStatus) {
+    throw new Error(`${message}: ${status ?? "null"}`)
+  }
+}
+
 const createBootstrap = ({
   lastOutputDir,
   resumedJob,
@@ -1093,11 +1109,11 @@ const run = async () => {
         })
         await closeDialog(page)
 
-        const statusText = await page.locator("#status-text").textContent()
-
-        if (statusText?.trim() !== "completed") {
-          throw new Error(`completed result step not restored: ${statusText ?? "null"}`)
-        }
+        await assertHeaderStatus({
+          page,
+          expectedStatus: "completed",
+          message: "completed result step not restored",
+        })
 
         if (state.resumeRequestCount !== 0 || state.uploadRequestCount !== 0) {
           throw new Error("completed restore should not trigger requests")
@@ -1128,11 +1144,11 @@ const run = async () => {
           timeout: responseTimeoutMs,
         })
 
-        const statusText = await page.locator("#status-text").textContent()
-
-        if (statusText?.trim() !== "upload-completed") {
-          throw new Error(`upload-completed result step not restored: ${statusText ?? "null"}`)
-        }
+        await assertHeaderStatus({
+          page,
+          expectedStatus: "upload-completed",
+          message: "upload-completed result step not restored",
+        })
 
         if (state.resumeRequestCount !== 0 || state.uploadRequestCount !== 0) {
           throw new Error("upload-completed restore should not trigger requests")
@@ -1163,11 +1179,11 @@ const run = async () => {
           timeout: responseTimeoutMs,
         })
 
-        const statusText = await page.locator("#status-text").textContent()
-
-        if (statusText?.trim() !== "failed") {
-          throw new Error(`failed result step not restored: ${statusText ?? "null"}`)
-        }
+        await assertHeaderStatus({
+          page,
+          expectedStatus: "failed",
+          message: "failed result step not restored",
+        })
 
         if (state.resumeRequestCount !== 0 || state.uploadRequestCount !== 0) {
           throw new Error("failed restore should not trigger requests")

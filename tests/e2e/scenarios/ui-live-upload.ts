@@ -177,7 +177,7 @@ const waitForStatus = async ({
 }) => {
   await page.waitForFunction(
     (expectedStatus) =>
-      document.querySelector("#status-text")?.textContent?.trim() === expectedStatus,
+      document.querySelector("#status-text")?.getAttribute("data-status") === expectedStatus,
     status,
     { timeout: responseTimeoutMs },
   )
@@ -398,7 +398,7 @@ const saveJsonCapture = async ({
 
 const readUiUploadState = async ({ page }: { page: import("playwright").Page }) =>
   page.evaluate(() => ({
-    statusText: document.querySelector("#status-text")?.textContent?.trim() ?? null,
+    statusText: document.querySelector("#status-text")?.getAttribute("data-status"),
     uploadProgress: Number(
       document.querySelector("#upload-progress")?.getAttribute("aria-valuenow") ?? "0",
     ),
@@ -558,7 +558,7 @@ const run = async () => {
     })
     await page.fill("#scope-dateFrom", scopedDate)
     await page.fill("#scope-dateTo", scopedDate)
-    await page.click("#clear-all-categories")
+    await page.click('[data-category-bulk-selection="true"]')
     await page.locator(`tr[data-category-id="${targetCategory.id}"] [role="checkbox"]`).click()
     await page.waitForFunction(
       () =>

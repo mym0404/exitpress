@@ -10,13 +10,13 @@ import type {
   BaseBlock,
   ParserBlockContext,
   ParserBlockConvertContext,
-  ParserBlockStoryGroup,
+  StorybookBlockGroup,
 } from "./BaseBlock.js"
 import type { ParserBlockInspection, ParserBlockSourceEvidence } from "./BaseEditorTypes.js"
 
 import { LeafBlock } from "./BaseBlock.js"
 import { inspectEditorBlocks } from "./BaseEditorInspection.js"
-import { parserStoryFixtures } from "./ParserStoryFixtures.js"
+import { storybookFixtures } from "./StorybookFixtures.js"
 
 const describeParserNode = ({ $node, node, moduleType }: ParserBlockContext) => {
   const tagName = node.type === "tag" ? node.tagName.toLowerCase() : node.type
@@ -44,14 +44,14 @@ export type BaseEditorParseInput = {
   captureBlockEvidence?: (evidence: ParserBlockSourceEvidence) => void
 }
 
-export type ParserBlockStoryDefinition = {
+export type StorybookBlockDefinition = {
   storyKey: string
   editorType: string
   editorLabel: string
   blockIndex: number
   blockId: string
   blockLabel: string
-  group: ParserBlockStoryGroup
+  group: StorybookBlockGroup
   sourceUrl: string
   inspectPath: string
   inputHtml: string
@@ -157,8 +157,8 @@ const createFallbackTemplateDefinition = ({
   return undefined
 }
 
-const defaultParserStorySourceUrl = "https://blog.naver.com/mym0404/223034929697"
-const toParserStoryKey = ({
+const defaultStorybookSourceUrl = "https://blog.naver.com/mym0404/223034929697"
+const toStorybookKey = ({
   editorType,
   blockIndex,
   blockId,
@@ -168,7 +168,7 @@ const toParserStoryKey = ({
   blockId: string
 }) => `${editorType}-${blockIndex}-${blockId}`.replace(/[^A-Za-z0-9_-]/g, "-")
 
-const toParserStoryScreenshotSrc = ({
+const toStorybookScreenshotSrc = ({
   editorType,
   blockIndex,
   blockId,
@@ -176,7 +176,7 @@ const toParserStoryScreenshotSrc = ({
   editorType: string
   blockIndex: number
   blockId: string
-}) => `${toParserStoryKey({ editorType, blockIndex, blockId })}.png`
+}) => `${toStorybookKey({ editorType, blockIndex, blockId })}.png`
 
 const escapeJsonAttribute = (value: UnknownRecord) => JSON.stringify(value).replaceAll("'", "&#39;")
 
@@ -586,7 +586,7 @@ export abstract class BaseEditor {
   }
 
   getBlockTemplateDefinitions(): BlockTemplateDefinition[] {
-    const definitions: BlockTemplateDefinition[] = []
+    const ret: BlockTemplateDefinition[] = []
     const seenKeys = new Set<string>()
 
     this.supportedBlocks.forEach((block) => {
@@ -604,33 +604,33 @@ export abstract class BaseEditor {
       }
 
       seenKeys.add(key)
-      definitions.push({
+      ret.push({
         ...templateDefinition,
         key,
       })
     })
 
-    return definitions
+    return ret
   }
 
-  getParserBlockStoryDefinitions(): ParserBlockStoryDefinition[] {
+  getStorybookBlockDefinitions(): StorybookBlockDefinition[] {
     return this.supportedBlocks.map((block, blockIndex) => {
       const group =
         block.story?.group ??
         (auxiliaryParserBlockIds.has(block.id) ? "auxiliary" : ("output" as const))
 
-      const storyKey = toParserStoryKey({
+      const storyKey = toStorybookKey({
         editorType: this.type,
         blockIndex,
         blockId: block.id,
       })
-      const fixture = parserStoryFixtures[storyKey]
+      const fixture = storybookFixtures[storyKey]
 
       return {
         storyKey,
         screenshotSrc:
           block.story?.screenshotSrc ??
-          toParserStoryScreenshotSrc({
+          toStorybookScreenshotSrc({
             editorType: this.type,
             blockIndex,
             blockId: block.id,
@@ -641,7 +641,7 @@ export abstract class BaseEditor {
         blockId: block.id,
         blockLabel: block.label,
         group,
-        sourceUrl: block.story?.sourceUrl ?? fixture?.sourceUrl ?? defaultParserStorySourceUrl,
+        sourceUrl: block.story?.sourceUrl ?? fixture?.sourceUrl ?? defaultStorybookSourceUrl,
         inspectPath: block.story?.inspectPath ?? fixture?.inspectPath ?? "0",
         inputHtml:
           block.story?.inputHtml ??
