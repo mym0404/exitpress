@@ -1,6 +1,7 @@
 import type { ParserBlockContext } from "../../core/BaseBlock.js"
 
 import { LeafBlock } from "../../core/BaseBlock.js"
+import { createCodeBlock } from "../../core/ParsedBlockOutput.js"
 
 export class NaverSe4CodeBlock extends LeafBlock {
   override readonly id = "code"
@@ -10,7 +11,7 @@ export class NaverSe4CodeBlock extends LeafBlock {
     return moduleType === "v2_code" || $node.hasClass("se-code")
   }
 
-  override convert({ $node }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ $node, blockId }: Parameters<LeafBlock["convert"]>[0]) {
     const sourceNode = $node.find(".__se_code_view").first()
     /* v8 ignore next */
     const classNames = sourceNode.attr("class") ?? ""
@@ -21,12 +22,6 @@ export class NaverSe4CodeBlock extends LeafBlock {
       return []
     }
 
-    return [
-      {
-        type: "code" as const,
-        language: languageMatch?.[1] ?? null,
-        code,
-      },
-    ]
+    return [createCodeBlock({ blockId, language: languageMatch?.[1] ?? null, code })]
   }
 }

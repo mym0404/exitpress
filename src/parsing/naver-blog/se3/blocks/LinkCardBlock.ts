@@ -15,7 +15,7 @@ export class NaverSe3LinkCardBlock extends LeafBlock {
     return $node.hasClass("se_oglink")
   }
 
-  override convert({ $, $node, options }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ $, $node, blockId, options }: Parameters<LeafBlock["convert"]>[0]) {
     const linkNode = findInComponentRoot({ $, $component: $node, selector: "a.se_og_box" }).first()
     const linkData = parseJsonAttribute(linkNode.attr("data-linkdata"))
     const url = linkNode.attr("href") ?? (typeof linkData?.link === "string" ? linkData.link : "")
@@ -37,6 +37,7 @@ export class NaverSe3LinkCardBlock extends LeafBlock {
       .text()
 
     return createLinkParagraphBlocks({
+      blockId,
       title: title || url,
       description,
       url,

@@ -1,6 +1,7 @@
 import type { ParserBlockContext } from "../../core/BaseBlock.js"
 
 import { LeafBlock } from "../../core/BaseBlock.js"
+import { createCodeBlock } from "../../core/ParsedBlockOutput.js"
 
 import { findInComponentRoot } from "./util/ComponentBoundary.js"
 
@@ -16,7 +17,7 @@ export class NaverSe3CodeBlock extends LeafBlock {
     )
   }
 
-  override convert({ $, $node }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ $, $node, blockId }: Parameters<LeafBlock["convert"]>[0]) {
     const code = findInComponentRoot({ $, $component: $node, selector: "pre, .__se_code_view" })
       .first()
       .text()
@@ -26,6 +27,6 @@ export class NaverSe3CodeBlock extends LeafBlock {
       return []
     }
 
-    return [{ type: "code" as const, language: null, code }]
+    return [createCodeBlock({ blockId, language: null, code })]
   }
 }

@@ -5,6 +5,7 @@ import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../co
 import { normalizeAssetUrl } from "../../../../domain/blog/NaverUrl.js"
 import { compactText } from "../../../../shared/text/TextUtils.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
+import { createVideoBlock } from "../../core/ParsedBlockOutput.js"
 
 import { hasOnlyTargetContent } from "./util/WrapperContent.js"
 
@@ -136,13 +137,13 @@ export class NaverSe2EmbeddedVideoBlock extends LeafBlock {
     return node.type === "tag" && getEmbeddedVideos({ $, $node }) !== null
   }
 
-  override convert({ $, $node }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ $, $node, blockId }: Parameters<LeafBlock["convert"]>[0]) {
     const videos = getEmbeddedVideos({ $, $node })
 
     if (!videos) {
       throw new Error("SE2 embedded video block parsing failed.")
     }
 
-    return videos.map((video) => ({ type: "video" as const, video }))
+    return videos.map((video) => createVideoBlock({ blockId, video }))
   }
 }

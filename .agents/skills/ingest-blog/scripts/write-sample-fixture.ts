@@ -12,6 +12,7 @@ import { ensureDir, resolveRepoPath } from "../../../../src/infra/node/FilePathU
 import { NaverBlogFetcher } from "../../../../src/integrations/naver-blog/NaverBlogFetcher.js"
 import { renderMarkdownPost } from "../../../../src/markdown/MarkdownRenderer.js"
 import { parsePostHtml } from "../../../../src/parsing/naver-blog/core/PostParser.js"
+import { createNaverBlogDefaultBlockTemplateMap } from "../../../../src/parsing/naver-blog/NaverBlog.js"
 import { toErrorMessage } from "../../../../src/shared/error/ErrorUtils.js"
 
 type FixtureArgs = {
@@ -180,9 +181,9 @@ const run = async () => {
     post,
     category,
     parsedPost,
+    defaultBlockTemplates: createNaverBlogDefaultBlockTemplateMap(),
     markdownFilePath: expectedMarkdownPath,
     options,
-    resolveLinkUrl: resolveSampleFixtureLinkUrl,
     resolveAsset: async ({ kind, sourceUrl }) =>
       ({
         kind,
@@ -207,7 +208,7 @@ const run = async () => {
       `expectedMarkdownPath: ${expectedMarkdownPath}`,
       `blogId: ${blogId}`,
       `logNo: ${post.logNo}`,
-      `blockTypes: ${parsedPost.blocks.map((block) => block.type).join(", ") || "(none)"}`,
+      `blockIds: ${parsedPost.blocks.map((block) => block.blockId).join(", ") || "(none)"}`,
       `assetRecordCount: ${rendered.assetRecords.length}`,
       `downloadedAssetFileCount: 0`,
     ].join("\n"),

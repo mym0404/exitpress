@@ -390,7 +390,7 @@ describe("ExportOptionsPanel", () => {
     )
   })
 
-  it("does not render removed link, divider, code controls while showing remaining block cards", () => {
+  it("does not render removed markdown style controls while showing block template cards", () => {
     render(
       <ExportOptionsPanel
         step="markdown"
@@ -409,10 +409,12 @@ describe("ExportOptionsPanel", () => {
     expect(screen.queryByLabelText("Video Style")).not.toBeInTheDocument()
     expect(document.querySelector("#markdown-linkCardStyle")).toBeNull()
     expect(document.querySelector("#markdown-videoStyle")).toBeNull()
-    expect(document.querySelector('[data-block-template-card="naver-se4:code"]')).toBeNull()
-    expect(document.querySelector('[data-block-template-card="naver-se4:linkCard"]')).toBeNull()
-    expect(document.querySelector('[data-block-template-card="naver-se4:divider"]')).toBeNull()
-    expect(document.querySelector('[data-block-template-card="naver-se4:paragraph"]')).toBeNull()
+    expect(document.querySelector('[data-block-template-card="naver-se4:code"]')).not.toBeNull()
+    expect(document.querySelector('[data-block-template-card="naver-se4:linkCard"]')).not.toBeNull()
+    expect(document.querySelector('[data-block-template-card="naver-se4:divider"]')).not.toBeNull()
+    expect(
+      document.querySelector('[data-block-template-card="naver-se4:paragraph"]'),
+    ).not.toBeNull()
     expect(document.querySelector('[data-block-template-card="naver-se4:formula"]')).not.toBeNull()
   })
 

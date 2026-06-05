@@ -5,6 +5,7 @@ import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../co
 
 import { compactText } from "../../../../shared/text/TextUtils.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
+import { createFormulaBlock } from "../../core/ParsedBlockOutput.js"
 
 export class NaverSe4FormulaBlock extends LeafBlock {
   override readonly id = "formula"
@@ -28,7 +29,7 @@ export class NaverSe4FormulaBlock extends LeafBlock {
     return moduleType === "v2_formula" && Boolean(moduleData)
   }
 
-  override convert({ $node, moduleData }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ $node, moduleData, blockId }: Parameters<LeafBlock["convert"]>[0]) {
     /* v8 ignore next 3 */
     if (!moduleData) {
       throw new Error("SE4 formula block metadata is missing.")
@@ -81,8 +82,8 @@ export class NaverSe4FormulaBlock extends LeafBlock {
     }
 
     return [
-      {
-        type: "formula" as const,
+      createFormulaBlock({
+        blockId,
         formula,
         display:
           !(data.display === false) &&
@@ -90,7 +91,7 @@ export class NaverSe4FormulaBlock extends LeafBlock {
           data.isInline !== true &&
           !$node.hasClass("se-inline-math") &&
           !$node.hasClass("se-math-inline"),
-      },
+      }),
     ]
   }
 }

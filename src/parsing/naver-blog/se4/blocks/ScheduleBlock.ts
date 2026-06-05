@@ -4,6 +4,7 @@ import type { ParserBlockContext } from "../../core/BaseBlock.js"
 import { compactText } from "../../../../shared/text/TextUtils.js"
 import { createLinkParagraphBlocks } from "../../common/LinkParagraph.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
+import { createParagraphBlock } from "../../core/ParsedBlockOutput.js"
 
 const readString = (record: UnknownRecord | undefined, key: string) => {
   const value = record?.[key]
@@ -15,14 +16,14 @@ const isRecord = (value: unknown): value is UnknownRecord =>
   typeof value === "object" && value !== null && !Array.isArray(value)
 
 export class NaverSe4ScheduleBlock extends LeafBlock {
-  override readonly id = "linkCard"
+  override readonly id = "schedule"
   override readonly label = "일정"
 
   override match({ $node, moduleType }: ParserBlockContext) {
     return moduleType === "v2_schedule" || $node.hasClass("se-schedule")
   }
 
-  override convert({ $node, moduleData, options }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ $node, moduleData, blockId, options }: Parameters<LeafBlock["convert"]>[0]) {
     const data = isRecord(moduleData?.data) ? moduleData.data : undefined
     const title = compactText($node.find(".se-schedule-title-text").first().text())
     const url = $node.find("a.se-schedule-url[href]").first().attr("href") ?? ""
@@ -30,6 +31,7 @@ export class NaverSe4ScheduleBlock extends LeafBlock {
 
     if (url) {
       return createLinkParagraphBlocks({
+        blockId,
         title: title || url,
         description,
         url,
@@ -40,6 +42,6 @@ export class NaverSe4ScheduleBlock extends LeafBlock {
 
     return [title, description]
       .filter(Boolean)
-      .map((text) => ({ type: "paragraph" as const, text }))
+      .map((text) => createParagraphBlock({ blockId, text }))
   }
 }

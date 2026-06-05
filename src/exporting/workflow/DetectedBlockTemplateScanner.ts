@@ -10,8 +10,6 @@ import { filterPostsByScope } from "./ExportScope.js"
 
 export const blockDetectionConcurrency = 3
 
-const getTemplateBlockId = (key: string) => key.split(":").at(-1) ?? key
-
 export const detectPostBlockTemplateKeys = ({
   html,
   sourceUrl,
@@ -31,14 +29,14 @@ export const detectPostBlockTemplateKeys = ({
     },
   })
 
-  const detectedBlockTypes = new Set<string>(parsedPost.blocks.map((block) => block.type))
+  const detectedBlockIds = new Set<string>(parsedPost.blocks.map((block) => block.blockId))
 
   return blog
     .getBlockTemplateDefinitions()
     .filter(
       (definition) =>
         (!editor || definition.key.startsWith(`${editor.type}:`)) &&
-        detectedBlockTypes.has(getTemplateBlockId(definition.key)),
+        detectedBlockIds.has(definition.key),
     )
     .map((definition) => definition.key)
 }

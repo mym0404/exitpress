@@ -3,6 +3,7 @@ import type { ParserBlockContext } from "../../core/BaseBlock.js"
 import { convertHtmlToMarkdown } from "../../../../markdown/TurndownMarkdownConverter.js"
 import { compactText } from "../../../../shared/text/TextUtils.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
+import { createParagraphBlock } from "../../core/ParsedBlockOutput.js"
 
 export class NaverSe2TextElementBlock extends LeafBlock {
   override readonly id = "paragraph"
@@ -20,7 +21,7 @@ export class NaverSe2TextElementBlock extends LeafBlock {
     return !["table", "hr", "br", "blockquote", "pre"].includes(node.tagName.toLowerCase())
   }
 
-  override convert({ $, $node, node, options }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ $, $node, node, options, blockId }: Parameters<LeafBlock["convert"]>[0]) {
     /* v8 ignore next 3 */
     if (node.type !== "tag") {
       throw new Error("SE2 text element block received a non-tag node.")
@@ -34,7 +35,7 @@ export class NaverSe2TextElementBlock extends LeafBlock {
     })
 
     if (markdown) {
-      return [{ type: "paragraph" as const, text: markdown }]
+      return [createParagraphBlock({ blockId, text: markdown })]
     }
 
     const text = compactText($node.text())

@@ -310,7 +310,7 @@ const renderPreviewTemplate = ({
     return value === undefined || value === null ? "" : String(value)
   })
 
-export const createBlockTemplatePreviewProps = ({
+const createBlockTemplatePreviewProps = ({
   definition,
   imageHandlingMode,
 }: {

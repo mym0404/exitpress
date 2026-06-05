@@ -1,4 +1,4 @@
-import type { BlockRenderInput } from "../domain/template/Types.js"
+import type { TemplateValue } from "../domain/template/Types.js"
 
 import { evaluateTemplateExpression } from "../domain/template/TemplateExpression.js"
 
@@ -33,7 +33,12 @@ const formatExpressionValue = ({
     .join("\n")
 }
 
-const renderBlockTemplate = ({ template, props }: BlockRenderInput) =>
+type TemplateBlock = {
+  template: string
+  props: Record<string, TemplateValue>
+}
+
+const renderBlockTemplate = ({ template, props }: TemplateBlock) =>
   template.replace(templateExpressionPattern, (_match, expression: string, offset: number) =>
     formatExpressionValue({
       value: evaluateTemplateExpression(expression.trim(), props),
@@ -42,8 +47,8 @@ const renderBlockTemplate = ({ template, props }: BlockRenderInput) =>
     }),
   )
 
-export const renderBlockTemplates = (inputs: BlockRenderInput[]) =>
-  inputs
-    .map((input) => renderBlockTemplate(input).trim())
+export const renderBlockTemplates = (blocks: TemplateBlock[]) =>
+  blocks
+    .map((block) => renderBlockTemplate(block).trim())
     .filter(Boolean)
     .join("\n\n")

@@ -1,13 +1,19 @@
 import type { ImageData } from "../../../../../domain/parser/Types.js"
 import type { LeafBlock } from "../../../core/BaseBlock.js"
 
+import { createImageBlocks } from "../../../core/ParsedBlockOutput.js"
+
 import { parseImageLink, se4ImageLinkSelector } from "./ImageLink.js"
 
 export const parseSe4ImageGroup = ({
   $node,
+  options,
+  blockId,
   blockName,
 }: {
   $node: Parameters<LeafBlock["convert"]>[0]["$node"]
+  options: Parameters<LeafBlock["convert"]>[0]["options"]
+  blockId: string
   blockName: string
 }) => {
   const images = $node
@@ -20,5 +26,5 @@ export const parseSe4ImageGroup = ({
     throw new Error(`SE4 ${blockName} block parsing failed.`)
   }
 
-  return [{ type: "imageGroup" as const, images }]
+  return createImageBlocks({ blockId, images, options })
 }

@@ -3,6 +3,7 @@ import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../co
 import { tableTemplate } from "../../../../domain/template/DefaultTemplates.js"
 import { parseHtmlTable } from "../../common/parseHtmlTable.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
+import { createTableBlock } from "../../core/ParsedBlockOutput.js"
 
 export class NaverSe4TableBlock extends LeafBlock {
   override readonly id = "table"
@@ -27,7 +28,7 @@ export class NaverSe4TableBlock extends LeafBlock {
     return moduleType === "v2_table" || $node.hasClass("se-table")
   }
 
-  override convert({ $, $node }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ $, $node, blockId }: Parameters<LeafBlock["convert"]>[0]) {
     const table = $node.find("table").first()
 
     if (table.length === 0) {
@@ -37,12 +38,12 @@ export class NaverSe4TableBlock extends LeafBlock {
     const parsedTable = parseHtmlTable({ $, table })
 
     return [
-      {
-        type: "table" as const,
+      createTableBlock({
+        blockId,
         rows: parsedTable.rows,
         html: parsedTable.html,
         complex: parsedTable.complex,
-      },
+      }),
     ]
   }
 }

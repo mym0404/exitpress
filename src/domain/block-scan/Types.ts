@@ -1,4 +1,4 @@
-export type BlockScanJobStatus = "queued" | "running" | "completed" | "failed"
+type BlockScanJobStatus = "queued" | "running" | "completed" | "failed"
 
 export type BlockScanJobState = {
   id: string

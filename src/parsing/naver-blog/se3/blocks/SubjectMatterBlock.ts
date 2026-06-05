@@ -4,6 +4,7 @@ import type { ParserBlockContext } from "../../core/BaseBlock.js"
 import { normalizeAssetUrl } from "../../../../domain/blog/NaverUrl.js"
 import { compactText } from "../../../../shared/text/TextUtils.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
+import { createImageBlock, createParagraphBlock } from "../../core/ParsedBlockOutput.js"
 
 import { findInComponentRoot } from "./util/ComponentBoundary.js"
 
@@ -15,7 +16,7 @@ export class NaverSe3SubjectMatterBlock extends LeafBlock {
     return $node.hasClass("se_subjectMatter") && $node.hasClass("subjectMatter_book")
   }
 
-  override convert({ $, $node, options }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ $, $node, options, blockId }: Parameters<LeafBlock["convert"]>[0]) {
     const blocks = []
     const imageNode = findInComponentRoot({
       $,
@@ -25,8 +26,9 @@ export class NaverSe3SubjectMatterBlock extends LeafBlock {
     const imageSource = imageNode.attr("data-lazy-src") ?? imageNode.attr("src")
 
     if (imageSource?.trim()) {
-      blocks.push({
-        type: "image" as const,
+      const imageBlock = createImageBlock({
+        blockId,
+        options,
         image: {
           sourceUrl: normalizeAssetUrl(imageSource),
           originalSourceUrl: null,
@@ -35,6 +37,10 @@ export class NaverSe3SubjectMatterBlock extends LeafBlock {
           mediaKind: "image",
         } satisfies ImageData,
       })
+
+      if (imageBlock) {
+        blocks.push(imageBlock)
+      }
     }
 
     const title = compactText(
@@ -63,10 +69,7 @@ export class NaverSe3SubjectMatterBlock extends LeafBlock {
     const summaryLines = [title ? `**${title}**` : "", ...details].filter(Boolean)
 
     if (summaryLines.length > 0) {
-      blocks.push({
-        type: "paragraph" as const,
-        text: summaryLines.join("  \n"),
-      })
+      blocks.push(createParagraphBlock({ blockId, text: summaryLines.join("  \n") }))
     }
 
     const detailLink = findInComponentRoot({
@@ -80,10 +83,7 @@ export class NaverSe3SubjectMatterBlock extends LeafBlock {
       const label = compactText(detailLink.text()) || "상세보기"
       const url = options.resolveLinkUrl ? options.resolveLinkUrl(detailUrl) : detailUrl
 
-      blocks.push({
-        type: "paragraph" as const,
-        text: `[${label}](${url})`,
-      })
+      blocks.push(createParagraphBlock({ blockId, text: `[${label}](${url})` }))
     }
 
     if (blocks.length === 0) {

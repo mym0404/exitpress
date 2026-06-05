@@ -11,6 +11,7 @@ import { ensureDir } from "../../infra/node/FilePathUtils.js"
 import { throwIfAborted } from "../../infra/runtime/AbortOperation.js"
 import { renderMarkdownPost } from "../../markdown/MarkdownRenderer.js"
 import { parsePostHtml } from "../../parsing/naver-blog/core/PostParser.js"
+import { createNaverBlogDefaultBlockTemplateMap } from "../../parsing/naver-blog/NaverBlog.js"
 import { createPostUploadSummary } from "../manifest/ExportManifestProgress.js"
 import { buildMarkdownFilePath, getCategoryForPost } from "../paths/ExportPaths.js"
 import { createSameBlogPostLinkResolver } from "../paths/PostLinkRewriter.js"
@@ -75,6 +76,7 @@ export const exportPostUnit = async ({
     post,
     category,
     parsedPost,
+    defaultBlockTemplates: createNaverBlogDefaultBlockTemplateMap(),
     markdownFilePath,
     options,
     resolveAsset: async (input) => assetStore.saveAsset(input),
@@ -107,7 +109,7 @@ export const exportPostUnit = async ({
     }),
     markdown: rendered.markdown,
     markdownFilePath,
-    blockTypes: parsedPost.blockTypes,
+    blockIds: [...new Set(parsedPost.blocks.map((block) => block.blockId))],
     assetPaths,
   }
 }

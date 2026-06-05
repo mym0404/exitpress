@@ -1,13 +1,13 @@
 import { load } from "cheerio"
 import { describe, expect, it } from "vitest"
 
-import type { ParserBlockNode, ParsedPost } from "../../../../domain/parser/Types.js"
+import type { ParsedPost } from "../../../../domain/parser/Types.js"
 
 import { parseSe2Blocks } from "../../../../../tests/support/parser-test-utils.js"
 import { defaultExportOptions } from "../../../../domain/export-options/ExportOptions.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
 import { BaseEditor } from "../../core/BaseEditor.js"
-import { buildParsedPost } from "../../core/ParsedPostBuilder.js"
+import { createParagraphBlock } from "../../core/ParsedBlockOutput.js"
 
 import { NaverSe2ContainerBlock } from "./ContainerBlock.js"
 import { NaverSe2TextNodeBlock } from "./TextNodeBlock.js"
@@ -20,8 +20,8 @@ class CustomSectionLeafBlock extends LeafBlock {
     return node.type === "tag" && node.tagName.toLowerCase() === "section"
   }
 
-  override convert({ $node }: Parameters<LeafBlock["convert"]>[0]) {
-    return [{ type: "paragraph" as const, text: `custom:${$node.text().trim()}` }]
+  override convert({ $node, blockId }: Parameters<LeafBlock["convert"]>[0]) {
+    return [createParagraphBlock({ blockId, text: `custom:${$node.text().trim()}` })]
   }
 }
 
@@ -50,13 +50,10 @@ class CustomSe2Editor extends BaseEditor {
       },
     })
 
-    return buildParsedPost({
+    return {
       tags: [],
-      nodes: blocks,
-      options: {
-        blockOutputs: defaultExportOptions().blockOutputs,
-      },
-    })
+      blocks,
+    }
   }
 }
 
@@ -78,7 +75,7 @@ const wrappedLeafFixture = `
   </span>
 `
 
-const wrappedLeafBlocks: ParserBlockNode[] = [
+const wrappedLeafBlocks = [
   { type: "paragraph", text: "첫 문단" },
   { type: "heading", level: 2, text: "둘째 제목" },
   { type: "quote", text: "셋째 인용" },
@@ -152,7 +149,9 @@ describe("NaverSe2ContainerBlock", () => {
   it("uses the current editor leaf blocks instead of a fixed child tag list", () => {
     const parsed = new CustomSe2Editor().parse()
 
-    expect(parsed.blocks).toEqual([{ type: "paragraph", text: "custom:leaf child" }])
+    expect(parsed.blocks).toEqual([
+      { blockId: "custom-se2:customSection", props: { text: "custom:leaf child" } },
+    ])
   })
 
   it("does not treat image-only wrappers as spacers", () => {

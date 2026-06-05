@@ -14,6 +14,7 @@ describe("parseSingleColumnTableAsParagraphs", () => {
 
     expect(
       parseSingleColumnTableAsParagraphs({
+        blockId: "naver-se2:table",
         parsedTable: {
           rows: [[baseCell, baseCell]],
           html: "<table></table>",
@@ -25,6 +26,7 @@ describe("parseSingleColumnTableAsParagraphs", () => {
 
     expect(
       parseSingleColumnTableAsParagraphs({
+        blockId: "naver-se2:table",
         parsedTable: {
           rows: [[{ ...baseCell, rowspan: 2 }]],
           html: "<table></table>",

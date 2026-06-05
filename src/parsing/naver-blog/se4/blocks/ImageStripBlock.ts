@@ -27,7 +27,7 @@ export class NaverSe4ImageStripBlock extends LeafBlock {
     return $node.hasClass("se-imageStrip")
   }
 
-  override convert({ $node }: Parameters<LeafBlock["convert"]>[0]) {
-    return parseSe4ImageGroup({ $node, blockName: "image strip" })
+  override convert({ $node, options, blockId }: Parameters<LeafBlock["convert"]>[0]) {
+    return parseSe4ImageGroup({ $node, options, blockId, blockName: "image strip" })
   }
 }

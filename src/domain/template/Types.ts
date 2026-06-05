@@ -7,19 +7,6 @@ export type TemplateValue =
   | TemplateValue[]
   | { [key: string]: TemplateValue }
 
-export type BlockRenderInput = {
-  template: string
-  props: Record<string, TemplateValue>
-}
-
-export type AssetCandidate = {
-  assetRole: "image" | "thumbnail"
-  sourceUrl: string
-  targetPropPath: string[]
-  dedupKey: string
-  required: boolean
-}
-
 export type TemplatePropDefinition = {
   label: string
   type:
@@ -44,26 +31,6 @@ export type BlockTemplateDefinition = {
     template: string
   }[]
   props: Record<string, TemplatePropDefinition>
-}
-
-export type ParsedPost = {
-  tags: string[]
-  renderInputs: BlockRenderInput[]
-  assetCandidates: AssetCandidate[]
-  videos: {
-    title: string
-    thumbnailUrl: string | null
-    sourceUrl: string
-    vid: string | null
-    inkey: string | null
-    width: number | null
-    height: number | null
-  }[]
-}
-
-export type PostPipelineFailure = {
-  stage: "fetch" | "preprocess" | "asset-download" | "asset-upload" | "render" | "write"
-  message: string
 }
 
 export type UploadRegistryEntry = {

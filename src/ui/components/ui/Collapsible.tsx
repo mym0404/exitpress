@@ -12,10 +12,4 @@ function CollapsibleContent({
   return <CollapsiblePrimitive.CollapsibleContent data-slot="collapsible-content" {...props} />
 }
 
-function CollapsibleTrigger({
-  ...props
-}: ComponentProps<typeof CollapsiblePrimitive.CollapsibleTrigger>) {
-  return <CollapsiblePrimitive.CollapsibleTrigger data-slot="collapsible-trigger" {...props} />
-}
-
-export { Collapsible, CollapsibleContent, CollapsibleTrigger }
+export { Collapsible, CollapsibleContent }

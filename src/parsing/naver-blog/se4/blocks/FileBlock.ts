@@ -6,14 +6,14 @@ import { createLinkParagraphBlocks } from "../../common/LinkParagraph.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
 
 export class NaverSe4FileBlock extends LeafBlock {
-  override readonly id = "linkCard"
+  override readonly id = "file"
   override readonly label = "첨부파일"
 
   override match({ $node, moduleType }: ParserBlockContext) {
     return moduleType === "v2_file" || $node.hasClass("se-file")
   }
 
-  override convert({ $node, moduleData, options }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ $node, moduleData, blockId, options }: Parameters<LeafBlock["convert"]>[0]) {
     const data = (moduleData?.data ?? {}) as UnknownRecord & {
       link?: string
     }
@@ -29,6 +29,7 @@ export class NaverSe4FileBlock extends LeafBlock {
     ].join("")
 
     return createLinkParagraphBlocks({
+      blockId,
       title: title || url,
       description: "",
       url,

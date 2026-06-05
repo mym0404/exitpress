@@ -3,6 +3,7 @@ import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../co
 import { convertHtmlToMarkdown } from "../../../../markdown/TurndownMarkdownConverter.js"
 import { compactText } from "../../../../shared/text/TextUtils.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
+import { createHeadingBlock } from "../../core/ParsedBlockOutput.js"
 
 export class NaverSe4HeadingBlock extends LeafBlock {
   override readonly id = "heading"
@@ -25,7 +26,7 @@ export class NaverSe4HeadingBlock extends LeafBlock {
     return $node.hasClass("se-sectionTitle")
   }
 
-  override convert({ $node, options }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ $node, options, blockId }: Parameters<LeafBlock["convert"]>[0]) {
     const $textModule = $node.find(".se-module-text")
     const hasTextModule = $textModule.length > 0
     const title = compactText(
@@ -43,6 +44,6 @@ export class NaverSe4HeadingBlock extends LeafBlock {
       throw new Error("SE4 heading block parsing failed.")
     }
 
-    return [{ type: "heading" as const, level: 2 as const, text: title }]
+    return [createHeadingBlock({ blockId, level: 2, text: title })]
   }
 }

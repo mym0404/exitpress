@@ -139,7 +139,7 @@ export const runSinglePostCli = async ({
     renderSinglePostSummary({
       blogId: diagnostics.post.blogId,
       logNo: diagnostics.post.logNo,
-      blockTypes: diagnostics.blockTypes,
+      blockIds: diagnostics.blockIds,
       exporterMarkdownFilePath: diagnostics.markdownFilePath,
       manualReviewMarkdownFilePath: resolvedManualReviewMarkdownPath,
       metadataCachePath: resolvedMetadataCachePath,

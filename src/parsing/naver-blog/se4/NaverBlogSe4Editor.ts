@@ -6,7 +6,6 @@ import type { BaseEditorParseInput } from "../core/BaseEditor.js"
 import { unique } from "../../../shared/collection/CollectionUtils.js"
 import { BaseEditor } from "../core/BaseEditor.js"
 import { parseJsonAttribute } from "../core/JsonAttribute.js"
-import { buildParsedPost } from "../core/ParsedPostBuilder.js"
 
 import { NaverSe4CodeBlock } from "./blocks/CodeBlock.js"
 import { NaverSe4DividerBlock } from "./blocks/DividerBlock.js"
@@ -98,11 +97,10 @@ export class NaverBlogSE4Editor extends BaseEditor {
       },
     })
 
-    return buildParsedPost({
+    return {
       tags: unique(tags),
-      nodes: blocks,
-      options,
-    }) satisfies ParsedPost
+      blocks,
+    } satisfies ParsedPost
   }
 
   override inspect({ $, sourceUrl = "", tags, options }: BaseEditorParseInput) {

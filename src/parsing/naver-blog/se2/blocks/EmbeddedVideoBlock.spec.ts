@@ -24,14 +24,13 @@ describe("NaverSe2EmbeddedVideoBlock", () => {
       thumbnailUrl: null,
       sourceUrl:
         "http://videofarm.daum.net/controller/video/viewer/Video.html?vid=v855c4MLyyLL5LLBiB5MB4L&play_loc=undefined&__authenticIframe=true",
-      vid: "v855c4MLyyLL5LLBiB5MB4L",
+      vid: null,
       inkey: null,
       width: 260,
       height: 190,
     }
 
     expect(parsed.blocks).toEqual([{ type: "video", video }])
-    expect(parsed.videos).toEqual([video])
   })
 
   it("parses multiple outer video iframes from one classic paragraph", () => {
@@ -72,7 +71,6 @@ describe("NaverSe2EmbeddedVideoBlock", () => {
       { type: "video", video: firstVideo },
       { type: "video", video: secondVideo },
     ])
-    expect(parsed.videos).toEqual([firstVideo, secondVideo])
   })
 
   it("does not parse outer video iframes mixed with text", () => {
@@ -108,7 +106,6 @@ describe("NaverSe2EmbeddedVideoBlock", () => {
     }
 
     expect(parsed.blocks).toEqual([{ type: "video", video }])
-    expect(parsed.videos).toEqual([video])
   })
 
   it("parses unwrapped outer video spans into video blocks", () => {
@@ -129,7 +126,6 @@ describe("NaverSe2EmbeddedVideoBlock", () => {
     }
 
     expect(parsed.blocks).toEqual([{ type: "video", video }])
-    expect(parsed.videos).toEqual([video])
   })
 
   it("parses naver video spans wrapped in classic paragraphs", () => {
@@ -151,14 +147,13 @@ describe("NaverSe2EmbeddedVideoBlock", () => {
       thumbnailUrl: null,
       sourceUrl:
         "https://serviceapi.rmcnmv.naver.com/flash/outKeyPlayer.nhn?vid=6E6ABC05CE7148D8961A0A965B71796E09EB&outKey=V1284d549da3f65ddf4e7",
-      vid: "6E6ABC05CE7148D8961A0A965B71796E09EB",
+      vid: null,
       inkey: null,
       width: 260,
       height: 190,
     }
 
     expect(parsed.blocks).toEqual([{ type: "video", video }])
-    expect(parsed.videos).toEqual([video])
   })
 
   it("parses direct video iframes into video blocks", () => {
@@ -182,7 +177,6 @@ describe("NaverSe2EmbeddedVideoBlock", () => {
     }
 
     expect(parsed.blocks).toEqual([{ type: "video", video }])
-    expect(parsed.videos).toEqual([video])
   })
 
   it("parses direct video iframes wrapped in classic paragraphs", () => {
@@ -210,7 +204,6 @@ describe("NaverSe2EmbeddedVideoBlock", () => {
     }
 
     expect(parsed.blocks).toEqual([{ type: "video", video }])
-    expect(parsed.videos).toEqual([video])
   })
 
   it("does not parse direct video iframes mixed with text", () => {

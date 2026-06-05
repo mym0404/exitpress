@@ -1,13 +1,16 @@
-import type { ParserBlockNode } from "../core/ParserBlockNode.js"
-
 import type { parseHtmlTable } from "./parseHtmlTable.js"
 
 import { convertHtmlToMarkdown } from "../../../markdown/TurndownMarkdownConverter.js"
+import { createParagraphBlock } from "../core/ParsedBlockOutput.js"
 
 export const parseSingleColumnTableAsParagraphs = ({
+  blockId,
+  paragraphBlockId = blockId,
   parsedTable,
   options,
 }: {
+  blockId: string
+  paragraphBlockId?: string
   parsedTable: ReturnType<typeof parseHtmlTable>
   options: {
     resolveLinkUrl?: (url: string) => string
@@ -34,13 +37,7 @@ export const parseSingleColumnTableAsParagraphs = ({
     )
     .map((text) => text.trim())
     .filter(Boolean)
-    .map(
-      (text) =>
-        ({
-          type: "paragraph",
-          text,
-        }) satisfies ParserBlockNode,
-    )
+    .map((text) => createParagraphBlock({ blockId: paragraphBlockId, text }))
 
   return paragraphs.length > 0 ? paragraphs : null
 }

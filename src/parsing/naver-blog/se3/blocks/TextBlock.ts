@@ -5,6 +5,7 @@ import type { ParserBlockContext } from "../../core/BaseBlock.js"
 import { convertHtmlToMarkdown } from "../../../../markdown/TurndownMarkdownConverter.js"
 import { compactMarkdownText } from "../../../../shared/text/TextUtils.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
+import { createParagraphBlock } from "../../core/ParsedBlockOutput.js"
 
 import { findInComponentRoot } from "./util/ComponentBoundary.js"
 
@@ -36,19 +37,18 @@ const parseTextNodes = ({
 const parseTextBlocks = ({
   $,
   $component,
+  blockId,
   options,
 }: {
   $: CheerioAPI
   $component: ReturnType<CheerioAPI>
+  blockId: string
   options: ParserBlockContext["options"]
 }) =>
   parseTextNodes({ $, $component, options, selector: ".se_textarea" })
     .concat(parseTextNodes({ $, $component, options, selector: ".se_textView" }))
     .filter((text, index, texts) => texts.indexOf(text) === index)
-    .map((text) => ({
-      type: "paragraph" as const,
-      text,
-    }))
+    .map((text) => createParagraphBlock({ blockId, text }))
 
 export class NaverSe3TextBlock extends LeafBlock {
   override readonly id = "paragraph"
@@ -61,8 +61,8 @@ export class NaverSe3TextBlock extends LeafBlock {
     )
   }
 
-  override convert({ $, $node, options }: Parameters<LeafBlock["convert"]>[0]) {
-    const blocks = parseTextBlocks({ $, $component: $node, options })
+  override convert({ $, $node, options, blockId }: Parameters<LeafBlock["convert"]>[0]) {
+    const blocks = parseTextBlocks({ $, $component: $node, blockId, options })
 
     if (blocks.length === 0) {
       return []

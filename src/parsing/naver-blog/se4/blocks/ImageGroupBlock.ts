@@ -27,7 +27,7 @@ export class NaverSe4ImageGroupBlock extends LeafBlock {
     return moduleType === "v2_imageGroup"
   }
 
-  override convert({ $node }: Parameters<LeafBlock["convert"]>[0]) {
-    return parseSe4ImageGroup({ $node, blockName: "image group" })
+  override convert({ $node, options, blockId }: Parameters<LeafBlock["convert"]>[0]) {
+    return parseSe4ImageGroup({ $node, options, blockId, blockName: "image group" })
   }
 }

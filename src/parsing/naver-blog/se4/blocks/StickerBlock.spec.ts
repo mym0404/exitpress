@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest"
 import { parseSe4Blocks } from "../../../../../tests/support/parser-test-utils.js"
 
 describe("NaverSe4StickerBlock", () => {
-  it("parses sticker components into image blocks", () => {
+  it("skips sticker components with the default asset option", () => {
     const parsed = parseSe4Blocks(`
       <div class="se-component se-sticker se-l-default">
         <div class="se-module se-module-sticker">
@@ -14,18 +14,7 @@ describe("NaverSe4StickerBlock", () => {
       </div>
     `)
 
-    expect(parsed.blocks).toEqual([
-      {
-        type: "image",
-        image: {
-          sourceUrl: "https://example.com/sticker.png?type=p100_100",
-          originalSourceUrl: "https://example.com/sticker.png",
-          alt: "",
-          caption: null,
-          mediaKind: "sticker",
-        },
-      },
-    ])
+    expect(parsed.blocks).toEqual([])
   })
 
   it("throws when a sticker has no source", () => {
@@ -47,12 +36,6 @@ describe("NaverSe4StickerBlock", () => {
       </div>
     `)
 
-    expect(parsed.blocks[0]).toMatchObject({
-      type: "image",
-      image: {
-        sourceUrl: "https://example.com/preview.png",
-        originalSourceUrl: null,
-      },
-    })
+    expect(parsed.blocks).toEqual([])
   })
 })

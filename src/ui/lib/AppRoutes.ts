@@ -1,4 +1,4 @@
-export type AppRoute = "export" | "storybook"
+type AppRoute = "export" | "storybook"
 
 const storybookPathname = "/storybook"
 
@@ -22,7 +22,7 @@ const isStorybookOnlyBasePath = (basePath: string) => {
   )
 }
 
-export const getAppPathname = ({ pathname, basePath }: { pathname: string; basePath: string }) => {
+const getAppPathname = ({ pathname, basePath }: { pathname: string; basePath: string }) => {
   const normalizedBasePath = normalizeBasePath(basePath)
 
   if (

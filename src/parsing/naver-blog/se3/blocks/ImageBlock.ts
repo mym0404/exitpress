@@ -2,15 +2,18 @@ import type { CheerioAPI } from "cheerio"
 
 import type { ImageData } from "../../../../domain/parser/Types.js"
 import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/BaseBlock.js"
-import type { ParserBlockNode } from "../../core/ParserBlockNode.js"
 
 import { normalizeAssetUrl } from "../../../../domain/blog/NaverUrl.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
+import { createImageBlocks, createParagraphBlock } from "../../core/ParsedBlockOutput.js"
 
 import { findInComponentRoot, textOutsideNestedComponents } from "./util/ComponentBoundary.js"
 
 const image360PreviewSelector = ".__se_360vr_preview"
 const standaloneImageSelector = `img, video._gifmp4.se_mediaImage[data-gif-url], ${image360PreviewSelector}`
+
+const toParagraphBlockId = (blockId: string) =>
+  blockId.replace(/:image$/, ":paragraph").replace(/^image$/, "paragraph")
 
 const getBackgroundImageUrl = (style: string | undefined) => {
   const match = style?.match(/background-image\s*:\s*url\((['"]?)(.*?)\1\)/i)
@@ -91,15 +94,12 @@ export class NaverSe3ImageBlock extends LeafBlock {
     )
   }
 
-  override convert({ $, $node }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ $, $node, options, blockId }: Parameters<LeafBlock["convert"]>[0]) {
     const { images, text } = getStandaloneImageContent({ $, $component: $node })
-    const blocks: ParserBlockNode[] =
-      images.length === 1
-        ? [{ type: "image" as const, image: images[0]! }]
-        : [{ type: "imageGroup" as const, images }]
+    const blocks = createImageBlocks({ blockId, images, options })
 
     if (text) {
-      blocks.push({ type: "paragraph", text })
+      blocks.push(createParagraphBlock({ blockId: toParagraphBlockId(blockId), text }))
     }
 
     return blocks

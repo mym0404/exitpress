@@ -5,8 +5,7 @@ import type { ParserBlockContext } from "../../core/BaseBlock.js"
 import { convertHtmlToMarkdown } from "../../../../markdown/TurndownMarkdownConverter.js"
 import { compactMarkdownText } from "../../../../shared/text/TextUtils.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
-
-type TextBlock = { type: "paragraph"; text: string }
+import { createParagraphBlock } from "../../core/ParsedBlockOutput.js"
 
 const isElementNode = (node: AnyNode | undefined): node is Element =>
   node?.type === "tag" || node?.type === "script" || node?.type === "style"
@@ -24,7 +23,13 @@ const isHashtagParagraph = (text: string) =>
     .filter(Boolean)
     .every((token) => token.startsWith("#"))
 
-const parseRecommendationTextBlocks = (texts: string[]) => {
+const parseRecommendationTextBlocks = ({
+  blockId,
+  texts,
+}: {
+  blockId: string
+  texts: string[]
+}) => {
   const recommendationStartIndex = texts.findIndex((text) =>
     recommendationHeaderPatterns.some((pattern) => pattern.test(text)),
   )
@@ -33,10 +38,9 @@ const parseRecommendationTextBlocks = (texts: string[]) => {
     return null
   }
 
-  const introBlocks = texts.slice(0, recommendationStartIndex).map((text) => ({
-    type: "paragraph" as const,
-    text,
-  }))
+  const introBlocks = texts
+    .slice(0, recommendationStartIndex)
+    .map((text) => createParagraphBlock({ blockId, text }))
   const items: string[] = []
   let currentItem: string | null = null
 
@@ -69,20 +73,19 @@ const parseRecommendationTextBlocks = (texts: string[]) => {
 
   return [
     ...introBlocks,
-    {
-      type: "paragraph" as const,
-      text: items.map((item) => `- ${item}`).join("\n"),
-    },
+    createParagraphBlock({ blockId, text: items.map((item) => `- ${item}`).join("\n") }),
   ]
 }
 
 export const parseTextBlocks = ({
   $,
   $node,
+  blockId,
   options,
 }: {
   $: Parameters<LeafBlock["convert"]>[0]["$"]
   $node: Parameters<LeafBlock["convert"]>[0]["$node"]
+  blockId: string
   options: ParserBlockContext["options"]
 }) => {
   const convertParagraph = (paragraph: Element) =>
@@ -93,9 +96,9 @@ export const parseTextBlocks = ({
         resolveLinkUrl: options.resolveLinkUrl,
       }),
     )
-  const toParagraphBlock = (text: string): TextBlock[] =>
+  const toParagraphBlock = (text: string) =>
     /* v8 ignore next */
-    text ? [{ type: "paragraph", text }] : []
+    text ? [createParagraphBlock({ blockId, text })] : []
   const parseParagraph = (paragraph: Element) => toParagraphBlock(convertParagraph(paragraph))
   const parseList = (list: Element) => {
     const $list = $node.find(list)
@@ -167,10 +170,14 @@ export const parseTextBlocks = ({
     .flatMap(parseContainer)
   const parsedBlocks =
     blocks.length > 0 ? blocks : $node.find("p.se-text-paragraph").toArray().flatMap(parseParagraph)
-  const texts = parsedBlocks.map((block) => block.text).filter(Boolean)
+  const texts = parsedBlocks
+    .map((block) => block.props.text)
+    .filter((text): text is string => typeof text === "string")
 
-  const hasListBlock = parsedBlocks.some((block) => /^(- |\d+\. )/m.test(block.text))
-  const recommendationBlocks = hasListBlock ? null : parseRecommendationTextBlocks(texts)
+  const hasListBlock = texts.some((text) => /^(- |\d+\. )/m.test(text))
+  const recommendationBlocks = hasListBlock
+    ? null
+    : parseRecommendationTextBlocks({ blockId, texts })
 
   if (recommendationBlocks) {
     return recommendationBlocks
@@ -187,7 +194,7 @@ export class NaverSe4TextBlock extends LeafBlock {
     return moduleType === "v2_text" || $node.hasClass("se-text")
   }
 
-  override convert({ $, $node, options }: Parameters<LeafBlock["convert"]>[0]) {
-    return parseTextBlocks({ $, $node, options })
+  override convert({ $, $node, blockId, options }: Parameters<LeafBlock["convert"]>[0]) {
+    return parseTextBlocks({ $, $node, blockId, options })
   }
 }

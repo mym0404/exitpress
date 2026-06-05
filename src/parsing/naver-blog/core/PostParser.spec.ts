@@ -30,7 +30,7 @@ describe("post-parser routing", () => {
       options: parserOptions,
     })
     expect(parsed.tags).toEqual(["algo", "math"])
-    expect(parsed.blocks).toEqual([{ type: "paragraph", text: "SE4 text" }])
+    expect(parsed.blocks).toEqual([{ blockId: "naver-se4:paragraph", props: { text: "SE4 text" } }])
   })
 
   it("rewrites same-blog links before paragraph markdown is finalized", () => {
@@ -54,7 +54,9 @@ describe("post-parser routing", () => {
       },
     })
 
-    expect(parsed.blocks).toEqual([{ type: "paragraph", text: "[내부 글](../other/index.md)" }])
+    expect(parsed.blocks).toEqual([
+      { blockId: "naver-se4:paragraph", props: { text: "[내부 글](../other/index.md)" } },
+    ])
   })
 
   it("rewrites same-blog link card urls when they become paragraphs", () => {
@@ -78,7 +80,9 @@ describe("post-parser routing", () => {
       },
     })
 
-    expect(parsed.blocks).toEqual([{ type: "paragraph", text: "[내부 카드](../card/index.md)" }])
+    expect(parsed.blocks).toEqual([
+      { blockId: "naver-se4:linkCard", props: { text: "[내부 카드](../card/index.md)" } },
+    ])
   })
 
   it("routes SE3 html to the SE3 parser", () => {
@@ -96,7 +100,7 @@ describe("post-parser routing", () => {
       sourceUrl: "https://blog.naver.com/mym0404/2",
       options: parserOptions,
     })
-    expect(parsed.blocks).toEqual([{ type: "paragraph", text: "SE3 text" }])
+    expect(parsed.blocks).toEqual([{ blockId: "naver-se3:paragraph", props: { text: "SE3 text" } }])
   })
 
   it("ignores stale code output selections", () => {
@@ -134,14 +138,18 @@ describe("post-parser routing", () => {
     })
 
     expect(se4Parsed.blocks[0]).toMatchObject({
-      type: "code",
-      language: "typescript",
-      code: "const se4 = true",
+      blockId: "naver-se4:code",
+      props: {
+        language: "typescript",
+        code: "const se4 = true",
+      },
     })
     expect(se3Parsed.blocks[0]).toMatchObject({
-      type: "code",
-      language: null,
-      code: "const se3 = true",
+      blockId: "naver-se3:code",
+      props: {
+        language: null,
+        code: "const se3 = true",
+      },
     })
   })
 
@@ -165,8 +173,10 @@ describe("post-parser routing", () => {
     })
 
     expect(parsed.blocks[0]).toEqual({
-      type: "paragraph",
-      text: "See [docs](https://example.com)",
+      blockId: "naver-se4:paragraph",
+      props: {
+        text: "See [docs](https://example.com)",
+      },
     })
   })
 
@@ -180,6 +190,8 @@ describe("post-parser routing", () => {
       sourceUrl: "https://blog.naver.com/mym0404/3",
       options: parserOptions,
     })
-    expect(parsed.blocks).toEqual([{ type: "heading", level: 2, text: "SE2 title" }])
+    expect(parsed.blocks).toEqual([
+      { blockId: "naver-se2:heading", props: { level: 2, text: "SE2 title" } },
+    ])
   })
 })

@@ -5,6 +5,7 @@ import type { ParserBlockContext } from "../../core/BaseBlock.js"
 
 import { normalizeAssetUrl } from "../../../../domain/blog/NaverUrl.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
+import { createImageBlocks } from "../../core/ParsedBlockOutput.js"
 
 import { hasOnlyTargetContent } from "./util/WrapperContent.js"
 
@@ -72,17 +73,13 @@ export class NaverSe2InlineGifVideoBlock extends LeafBlock {
     return node.type === "tag" && getInlineGifVideoImages({ $node }) !== null
   }
 
-  override convert({ $node }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ $node, options, blockId }: Parameters<LeafBlock["convert"]>[0]) {
     const images = getInlineGifVideoImages({ $node })
 
     if (!images) {
       throw new Error("SE2 inline GIF video block parsing failed.")
     }
 
-    if (images.length === 1) {
-      return [{ type: "image" as const, image: images[0]! }]
-    }
-
-    return [{ type: "imageGroup" as const, images }]
+    return createImageBlocks({ blockId, images, options })
   }
 }

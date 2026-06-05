@@ -2,6 +2,7 @@ import type { ParserBlockContext } from "../../core/BaseBlock.js"
 
 import { compactText } from "../../../../shared/text/TextUtils.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
+import { createParagraphBlock } from "../../core/ParsedBlockOutput.js"
 
 export class NaverSe2TextNodeBlock extends LeafBlock {
   override readonly id = "paragraph"
@@ -11,10 +12,10 @@ export class NaverSe2TextNodeBlock extends LeafBlock {
     return node.type === "text"
   }
 
-  override convert({ node }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ node, blockId }: Parameters<LeafBlock["convert"]>[0]) {
     /* v8 ignore next */
     const text = node.type === "text" ? compactText(node.data ?? "") : ""
 
-    return text ? [{ type: "paragraph" as const, text }] : []
+    return text ? [createParagraphBlock({ blockId, text })] : []
   }
 }

@@ -3,6 +3,7 @@ import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../co
 import { normalizeAssetUrl } from "../../../../domain/blog/NaverUrl.js"
 import { compactText } from "../../../../shared/text/TextUtils.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
+import { createImageBlock } from "../../core/ParsedBlockOutput.js"
 
 import { parseImageLink, se4ImageLinkSelector } from "./util/ImageLink.js"
 
@@ -36,7 +37,7 @@ export class NaverSe4ImageBlock extends LeafBlock {
     return $node.hasClass("se-image")
   }
 
-  override convert({ $node }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ $node, options, blockId }: Parameters<LeafBlock["convert"]>[0]) {
     const image =
       parseImageLink($node.find(se4ImageLinkSelector).first()) ??
       (() => {
@@ -61,6 +62,8 @@ export class NaverSe4ImageBlock extends LeafBlock {
       throw new Error("SE4 image block parsing failed.")
     }
 
-    return [{ type: "image" as const, image }]
+    const block = createImageBlock({ blockId, image, options })
+
+    return block ? [block] : []
   }
 }

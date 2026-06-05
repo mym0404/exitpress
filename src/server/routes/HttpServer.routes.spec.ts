@@ -411,7 +411,7 @@ describe("http server local routes", () => {
       total: 1,
       completed: 1,
       failed: 0,
-      detectedBlockTemplateKeys: ["naver-se4:image"],
+      detectedBlockTemplateKeys: ["naver-se4:image", "naver-se4:paragraph"],
       error: null,
     })
   })

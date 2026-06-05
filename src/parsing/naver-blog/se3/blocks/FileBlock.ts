@@ -7,14 +7,14 @@ import { LeafBlock } from "../../core/BaseBlock.js"
 import { findInComponentRoot } from "./util/ComponentBoundary.js"
 
 export class NaverSe3FileBlock extends LeafBlock {
-  override readonly id = "linkCard"
+  override readonly id = "file"
   override readonly label = "첨부파일"
 
   override match({ $node }: ParserBlockContext) {
     return $node.hasClass("se_file") && $node.hasClass("default")
   }
 
-  override convert({ $, $node, options }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ $, $node, blockId, options }: Parameters<LeafBlock["convert"]>[0]) {
     const link = findInComponentRoot({
       $,
       $component: $node,
@@ -27,6 +27,7 @@ export class NaverSe3FileBlock extends LeafBlock {
     }
 
     return createLinkParagraphBlocks({
+      blockId,
       title: compactText(link.find(".se_name").text()) || url,
       description: "",
       url,

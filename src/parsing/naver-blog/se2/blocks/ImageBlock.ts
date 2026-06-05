@@ -6,6 +6,7 @@ import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../co
 import { normalizeAssetUrl } from "../../../../domain/blog/NaverUrl.js"
 import { compactText } from "../../../../shared/text/TextUtils.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
+import { createImageBlocks } from "../../core/ParsedBlockOutput.js"
 
 const standaloneImageSelector = "img, [thumburl]"
 const standaloneRootImageSelector = "img.fx, img._postImage, [thumburl]"
@@ -69,13 +70,9 @@ export class NaverSe2ImageBlock extends LeafBlock {
     return node.type === "tag" && getStandaloneImages({ $, element: $node }).length > 0
   }
 
-  override convert({ $, $node }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ $, $node, options, blockId }: Parameters<LeafBlock["convert"]>[0]) {
     const standaloneImages = getStandaloneImages({ $, element: $node })
 
-    if (standaloneImages.length === 1) {
-      return [{ type: "image" as const, image: standaloneImages[0]! }]
-    }
-
-    return [{ type: "imageGroup" as const, images: standaloneImages }]
+    return createImageBlocks({ blockId, images: standaloneImages, options })
   }
 }

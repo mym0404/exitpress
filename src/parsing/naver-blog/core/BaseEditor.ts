@@ -2,7 +2,7 @@ import type { CheerioAPI } from "cheerio"
 import type { AnyNode } from "domhandler"
 
 import type { ExportOptions } from "../../../domain/export-options/Types.js"
-import type { ParsedPost, ParserBlockOptions } from "../../../domain/parser/Types.js"
+import type { ParsedBlock, ParsedPost, ParserBlockOptions } from "../../../domain/parser/Types.js"
 import type { BlockTemplateDefinition } from "../../../domain/template/Types.js"
 import type { UnknownRecord } from "../../../shared/object/UnknownRecord.js"
 
@@ -13,7 +13,6 @@ import type {
   ParserBlockStoryGroup,
 } from "./BaseBlock.js"
 import type { ParserBlockInspection, ParserBlockSourceEvidence } from "./BaseEditorTypes.js"
-import type { ParserBlockNode } from "./ParserBlockNode.js"
 
 import { LeafBlock } from "./BaseBlock.js"
 import { inspectEditorBlocks } from "./BaseEditorInspection.js"
@@ -69,6 +68,95 @@ const auxiliaryParserBlockIds = new Set([
   "style",
 ])
 
+const codeBlockTemplate = "```${language ?? ''}\n${code}\n```"
+const mixedTextOrImageTemplate = "${(url ?? '') ? '![' + alt + '](' + url + ')' : text}"
+const textBlockIds = new Set([
+  "file",
+  "linkCard",
+  "map",
+  "mapText",
+  "material",
+  "oembed",
+  "paragraph",
+  "poll",
+  "schedule",
+  "talkTalk",
+])
+const mixedTextOrImageBlockIds = new Set(["bookWidget", "subjectMatter", "wrappingParagraph"])
+const imageBlockIds = new Set(["image", "imageGroup", "inlineGifVideo", "sticker"])
+
+const createFallbackTemplateDefinition = ({
+  block,
+}: {
+  block: BaseBlock
+}): BaseBlock["templateDefinition"] => {
+  if (textBlockIds.has(block.id)) {
+    return {
+      label: block.label,
+      presets: [{ id: "default", label: "기본", template: "${text}" }],
+      props: {
+        text: { label: "본문", type: "string" },
+      },
+    }
+  }
+
+  if (mixedTextOrImageBlockIds.has(block.id)) {
+    return {
+      label: block.label,
+      presets: [{ id: "default", label: "기본", template: mixedTextOrImageTemplate }],
+      props: {
+        text: { label: "본문", type: "string?" },
+        alt: { label: "대체 텍스트", type: "string?" },
+        url: { label: "URL", type: "string?" },
+        caption: { label: "캡션", type: "string?" },
+      },
+    }
+  }
+
+  if (imageBlockIds.has(block.id)) {
+    return {
+      label: block.label,
+      presets: [{ id: "default", label: "기본", template: "![${alt}](${url})" }],
+      props: {
+        alt: { label: "대체 텍스트", type: "string" },
+        url: { label: "URL", type: "string" },
+        caption: { label: "캡션", type: "string?" },
+      },
+    }
+  }
+
+  if (block.id === "divider") {
+    return {
+      label: block.label,
+      presets: [{ id: "default", label: "기본", template: "---" }],
+      props: {},
+    }
+  }
+
+  if (block.id === "code") {
+    return {
+      label: block.label,
+      presets: [{ id: "default", label: "기본", template: codeBlockTemplate }],
+      props: {
+        language: { label: "언어", type: "string?" },
+        code: { label: "코드", type: "string" },
+      },
+    }
+  }
+
+  if (block.id === "mrBlog") {
+    return {
+      label: block.label,
+      presets: [{ id: "default", label: "기본", template: "> ${text}" }],
+      props: {
+        text: { label: "본문", type: "string" },
+      },
+    }
+  }
+
+  return undefined
+}
+
 const defaultParserStorySourceUrl = "https://blog.naver.com/mym0404/223034929697"
 const toParserStoryKey = ({
   editorType,
@@ -91,6 +179,14 @@ const toParserStoryScreenshotSrc = ({
 }) => `${toParserStoryKey({ editorType, blockIndex, blockId })}.png`
 
 const escapeJsonAttribute = (value: UnknownRecord) => JSON.stringify(value).replaceAll("'", "&#39;")
+
+const getParserBlockTemplateKey = ({
+  editorType,
+  block,
+}: {
+  editorType: string
+  block: BaseBlock
+}) => block.templateDefinition?.key ?? `${editorType}:${block.id}`
 
 const createSe4ModuleScript = (module: UnknownRecord) =>
   `<script class="__se_module_data" data-module-v2='${escapeJsonAttribute(module)}'></script>`
@@ -438,13 +534,13 @@ const createSe2StoryHtml = ({ blockIndex }: { blockIndex: number }) => {
         <a class="link" href="https://example.com/book">리뷰보기</a>
       </div>
     `,
-    4: "<table><tr><th>col</th></tr><tr><td>value</td></tr></table>",
-    5: "<div><hr /></div>",
-    6: "<hr />",
-    7: "<br />",
-    8: "<blockquote><p>Quoted line</p></blockquote>",
-    9: "<h2>Section title</h2>",
-    10: "<pre>const value = 1</pre>",
+    4: "<pre>const value = 1</pre>",
+    5: "<table><tr><th>col</th></tr><tr><td>value</td></tr></table>",
+    6: "<div><hr /></div>",
+    7: "<hr />",
+    8: "<br />",
+    9: "<blockquote><p>Quoted line</p></blockquote>",
+    10: "<h2>Section title</h2>",
     11: `<video class="fx _postImage _gifmp4" src="https://example.com/gif-preview.mp4" data-gif-url="https://example.com/gif.gif" alt="gif"></video>`,
     12: `
       <div>
@@ -494,11 +590,14 @@ export abstract class BaseEditor {
     const seenKeys = new Set<string>()
 
     this.supportedBlocks.forEach((block) => {
-      if (!block.templateDefinition || block.templateDefinition.presets.length < 1) {
+      const templateDefinition =
+        block.templateDefinition ?? createFallbackTemplateDefinition({ block })
+
+      if (!templateDefinition || templateDefinition.presets.length < 1) {
         return
       }
 
-      const key = block.templateDefinition.key ?? `${this.type}:${block.id}`
+      const key = getParserBlockTemplateKey({ editorType: this.type, block })
 
       if (seenKeys.has(key)) {
         return
@@ -506,7 +605,7 @@ export abstract class BaseEditor {
 
       seenKeys.add(key)
       definitions.push({
-        ...block.templateDefinition,
+        ...templateDefinition,
         key,
       })
     })
@@ -552,12 +651,13 @@ export abstract class BaseEditor {
             blockLabel: block.label,
             blockIndex,
           }),
-        templateDefinition: block.templateDefinition
-          ? {
-              ...block.templateDefinition,
-              key: block.templateDefinition.key ?? `${this.type}:${block.id}`,
-            }
-          : undefined,
+        templateDefinition:
+          (block.templateDefinition ?? createFallbackTemplateDefinition({ block }))
+            ? {
+                ...(block.templateDefinition ?? createFallbackTemplateDefinition({ block }))!,
+                key: getParserBlockTemplateKey({ editorType: this.type, block }),
+              }
+            : undefined,
       }
     })
   }
@@ -632,7 +732,9 @@ export abstract class BaseEditor {
       )
     }
 
-    const matchNode = (node: AnyNode, path: string): ParserBlockNode[] => {
+    let outputBlockCount = 0
+
+    const matchNode = (node: AnyNode, path: string): ParsedBlock[] => {
       const context = createBlockContext(node)
       const block = this.supportedBlocks.find((supportedBlock) => supportedBlock.match(context))
 
@@ -642,21 +744,26 @@ export abstract class BaseEditor {
 
       const convertContext = {
         ...context,
+        blockId: getParserBlockTemplateKey({ editorType: this.type, block }),
         path,
         matchNode,
       } satisfies ParserBlockConvertContext
 
-      return block.convert(convertContext).map((parsedBlock) => {
-        captureBlockEvidence?.({
-          path,
-          block: parsedBlock,
-          blockType: parsedBlock.type,
-          parserBlockId: block.id,
-          parserBlockLabel: block.label,
-        })
+      const startIndex = outputBlockCount
+      const parsedBlocks = block.convert(convertContext)
+      const blockIndexes = parsedBlocks.map((_parsedBlock, offset) => startIndex + offset)
+      outputBlockCount = Math.max(outputBlockCount, startIndex + parsedBlocks.length)
 
-        return parsedBlock
+      captureBlockEvidence?.({
+        path,
+        blocks: parsedBlocks,
+        blockIndexes,
+        blockId: convertContext.blockId,
+        parserBlockId: block.id,
+        parserBlockLabel: block.label,
       })
+
+      return parsedBlocks
     }
 
     return nodes.flatMap((node, index) => matchNode(node, String(index)))

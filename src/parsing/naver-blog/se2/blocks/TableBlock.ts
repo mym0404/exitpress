@@ -1,45 +1,13 @@
-import type { CheerioAPI } from "cheerio"
-
 import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/BaseBlock.js"
-import type { ParserBlockNode } from "../../core/ParserBlockNode.js"
 
 import { tableTemplate } from "../../../../domain/template/DefaultTemplates.js"
-import { convertHtmlToMarkdown } from "../../../../markdown/TurndownMarkdownConverter.js"
-import { compactText } from "../../../../shared/text/TextUtils.js"
 import { parseHtmlTable } from "../../common/parseHtmlTable.js"
 import { parseSingleColumnTableAsParagraphs } from "../../common/Table.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
+import { createTableBlock } from "../../core/ParsedBlockOutput.js"
 
-const parseColorScripterCodeBlock = ({
-  $,
-  element,
-}: {
-  $: CheerioAPI
-  element: ReturnType<CheerioAPI>
-}) => {
-  if (!element.hasClass("colorscripter-code-table")) {
-    return null
-  }
-
-  const lineNodes = element
-    .find('div[style*="white-space:pre"], div[_foo*="white-space:pre"], pre')
-    .toArray()
-  const code = lineNodes
-    .map((node) => $(node).text().replaceAll("\u00a0", " ").replaceAll("\u200b", ""))
-    .map((line) => (line.trim() === "" ? "" : line))
-    .join("\n")
-    .trimEnd()
-
-  if (!code) {
-    return null
-  }
-
-  return {
-    type: "code",
-    language: null,
-    code,
-  } satisfies ParserBlockNode
-}
+const toParagraphBlockId = (blockId: string) =>
+  blockId.replace(/:table$/, ":paragraph").replace(/^table$/, "paragraph")
 
 export class NaverSe2TableBlock extends LeafBlock {
   override readonly id = "table"
@@ -60,38 +28,13 @@ export class NaverSe2TableBlock extends LeafBlock {
     },
   } satisfies ParserBlockTemplateDefinition
 
-  override match({ node, $node }: ParserBlockContext) {
-    return (
-      node.type === "tag" &&
-      (node.tagName.toLowerCase() === "table" || $node.hasClass("colorscripter-code-table"))
-    )
+  override match({ node }: ParserBlockContext) {
+    return node.type === "tag" && node.tagName.toLowerCase() === "table"
   }
 
-  override convert({ $, $node, options }: Parameters<LeafBlock["convert"]>[0]) {
-    const colorScripterCodeBlock = parseColorScripterCodeBlock({
-      $,
-      element: $node,
-    })
-
-    if (colorScripterCodeBlock) {
-      return [colorScripterCodeBlock]
-    }
-
+  override convert({ $, $node, options, blockId }: Parameters<LeafBlock["convert"]>[0]) {
     if ($node.hasClass("colorscripter-code-table")) {
-      const text = compactText($node.text())
-
-      if (!text) {
-        return []
-      }
-
-      if (!$node.is("table")) {
-        const markdown = convertHtmlToMarkdown({
-          html: $.html($node) ?? "",
-          resolveLinkUrl: options.resolveLinkUrl,
-        })
-
-        return [{ type: "paragraph" as const, text: markdown || text }]
-      }
+      return []
     }
 
     if (!$node.is("table")) {
@@ -100,6 +43,8 @@ export class NaverSe2TableBlock extends LeafBlock {
 
     const parsedTable = parseHtmlTable({ $, table: $node })
     const flattenedTable = parseSingleColumnTableAsParagraphs({
+      blockId,
+      paragraphBlockId: toParagraphBlockId(blockId),
       parsedTable,
       options,
     })
@@ -109,12 +54,12 @@ export class NaverSe2TableBlock extends LeafBlock {
     }
 
     return [
-      {
-        type: "table" as const,
+      createTableBlock({
+        blockId,
         rows: parsedTable.rows,
         html: parsedTable.html,
         complex: parsedTable.complex,
-      },
+      }),
     ]
   }
 }

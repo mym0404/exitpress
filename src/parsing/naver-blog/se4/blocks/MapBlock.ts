@@ -9,14 +9,14 @@ const buildNaverMapSearchUrl = (query: string) =>
   `https://map.naver.com/p/search/${encodeURIComponent(query)}`
 
 export class NaverSe4MapBlock extends LeafBlock {
-  override readonly id = "linkCard"
+  override readonly id = "map"
   override readonly label = "지도"
 
   override match({ $node, moduleType }: ParserBlockContext) {
     return moduleType === "v2_map" || $node.hasClass("se-placesMap")
   }
 
-  override convert({ $node, moduleData, options }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ $node, moduleData, blockId, options }: Parameters<LeafBlock["convert"]>[0]) {
     const data = (moduleData?.data ?? {}) as {
       places?: Array<{
         placeId?: string
@@ -37,6 +37,7 @@ export class NaverSe4MapBlock extends LeafBlock {
       }
 
       return createLinkParagraphBlocks({
+        blockId,
         title,
         description,
         url:
@@ -68,6 +69,7 @@ export class NaverSe4MapBlock extends LeafBlock {
       }
 
       return createLinkParagraphBlocks({
+        blockId,
         title,
         description,
         url:

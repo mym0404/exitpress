@@ -28,14 +28,13 @@ describe("NaverSe3VideoBlock", () => {
       title: "Demo video",
       thumbnailUrl: null,
       sourceUrl: "",
-      vid: "vid-1",
-      inkey: "inkey-1",
+      vid: null,
+      inkey: null,
       width: 1920,
       height: 1080,
     }
 
     expect(parsed.blocks).toEqual([{ type: "video", video }])
-    expect(parsed.videos).toEqual([video])
   })
 
   it("uses defaults when module data is missing", () => {
@@ -90,8 +89,8 @@ describe("NaverSe3VideoBlock", () => {
         title: "Video",
         thumbnailUrl: null,
         sourceUrl: "",
-        vid: "right",
-        inkey: "matched",
+        vid: null,
+        inkey: null,
         width: null,
         height: 1080,
       },

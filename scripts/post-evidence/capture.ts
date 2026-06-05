@@ -8,7 +8,7 @@ import type { Browser } from "playwright"
 
 import type { PostSummary, ScanResult } from "../../src/domain/blog/Types.js"
 import type { ExportOptions } from "../../src/domain/export-options/Types.js"
-import type { ParserBlockNode, ParsedPost } from "../../src/domain/parser/Types.js"
+import type { ParsedPost } from "../../src/domain/parser/Types.js"
 import type { SinglePostFetcher } from "../../src/exporting/post/SinglePostExport.js"
 
 import type { EvidenceCase } from "./cases.js"
@@ -29,8 +29,8 @@ import {
 import { ensureDir, resolveRepoPath } from "../../src/infra/node/FilePathUtils.js"
 import { NaverBlogFetcher } from "../../src/integrations/naver-blog/NaverBlogFetcher.js"
 import { renderMarkdownPost } from "../../src/markdown/MarkdownRenderer.js"
-import { buildParsedPost } from "../../src/parsing/naver-blog/core/ParsedPostBuilder.js"
 import { parsePostHtmlWithBlockEvidence } from "../../src/parsing/naver-blog/core/PostParser.js"
+import { createNaverBlogDefaultBlockTemplateMap } from "../../src/parsing/naver-blog/NaverBlog.js"
 import { NaverBlog } from "../../src/parsing/naver-blog/NaverBlog.js"
 import { mapConcurrent } from "../../src/shared/async/AsyncUtils.js"
 import { toErrorMessage } from "../../src/shared/error/ErrorUtils.js"
@@ -111,54 +111,49 @@ const createRemoteAssetRecord = ({
 
 const createFragmentParsedPost = ({
   parsedPost,
-  blocks,
-  options,
+  blockIndexes,
 }: {
   parsedPost: ParsedPost
-  blocks: ParserBlockNode[]
-  options: ExportOptions
-}): ParsedPost =>
-  buildParsedPost({
-    tags: parsedPost.tags,
-    nodes: blocks,
-    options: {
-      blockOutputs: options.blockOutputs,
-      assets: options.assets,
-    },
-  })
+  blockIndexes: number[]
+}): ParsedPost => ({
+  tags: parsedPost.tags,
+  blocks: parsedPost.blocks.filter((_block, index) => blockIndexes.includes(index)),
+})
 
 const selectTargetParsedPost = ({
   parsedPost,
   target,
-  options,
 }: {
   parsedPost: ParsedPost & {
     blockEvidence: Array<{
       path: string
-      block: ParserBlockNode
+      blockIndexes: number[]
     }>
   }
   target: EvidenceCase["target"]
-  options: ExportOptions
 }) => {
   if (target.kind === "post") {
     return parsedPost
   }
 
-  const blocks = parsedPost.blockEvidence
-    .filter(
-      (evidence) => evidence.path === target.path || evidence.path.startsWith(`${target.path}.`),
-    )
-    .map((evidence) => evidence.block)
+  const blockIndexes = [
+    ...new Set(
+      parsedPost.blockEvidence
+        .filter(
+          (evidence) =>
+            evidence.path === target.path || evidence.path.startsWith(`${target.path}.`),
+        )
+        .flatMap((evidence) => evidence.blockIndexes),
+    ),
+  ].sort((left, right) => left - right)
 
-  if (blocks.length === 0) {
+  if (blockIndexes.length === 0) {
     throw new Error(`inspect path에 대응하는 parsed block이 없습니다: ${target.path}`)
   }
 
   return createFragmentParsedPost({
     parsedPost,
-    blocks,
-    options,
+    blockIndexes,
   })
 }
 
@@ -245,7 +240,6 @@ const renderEvidenceMarkdown = async ({
   const targetParsedPost = selectTargetParsedPost({
     parsedPost,
     target,
-    options,
   })
   const renderOptions = cloneExportOptions({
     ...options,
@@ -267,6 +261,7 @@ const renderEvidenceMarkdown = async ({
     post,
     category,
     parsedPost: targetParsedPost,
+    defaultBlockTemplates: createNaverBlogDefaultBlockTemplateMap(),
     markdownFilePath,
     options: renderOptions,
     resolveAsset:

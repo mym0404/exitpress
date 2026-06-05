@@ -1,6 +1,7 @@
 import type { ParserBlockContext } from "../../core/BaseBlock.js"
 
 import { LeafBlock } from "../../core/BaseBlock.js"
+import { createDividerBlock } from "../../core/ParsedBlockOutput.js"
 
 export class NaverSe4DividerBlock extends LeafBlock {
   override readonly id = "divider"
@@ -10,7 +11,7 @@ export class NaverSe4DividerBlock extends LeafBlock {
     return $node.hasClass("se-horizontalLine")
   }
 
-  override convert() {
-    return [{ type: "divider" as const }]
+  override convert({ blockId }: Parameters<LeafBlock["convert"]>[0]) {
+    return [createDividerBlock({ blockId })]
   }
 }

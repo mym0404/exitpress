@@ -4,14 +4,14 @@ import type { ParserBlockInspection } from "../../src/parsing/naver-blog/core/Ba
 export const renderSinglePostSummary = ({
   blogId,
   logNo,
-  blockTypes,
+  blockIds,
   exporterMarkdownFilePath,
   manualReviewMarkdownFilePath,
   metadataCachePath,
 }: {
   blogId: string
   logNo: string
-  blockTypes: string[]
+  blockIds: string[]
   exporterMarkdownFilePath: string
   manualReviewMarkdownFilePath: string | null
   metadataCachePath: string | null
@@ -19,7 +19,7 @@ export const renderSinglePostSummary = ({
   [
     `blogId: ${blogId}`,
     `logNo: ${logNo}`,
-    `blockTypes: ${blockTypes.join(", ") || "(none)"}`,
+    `blockIds: ${blockIds.join(", ") || "(none)"}`,
     `exporterMarkdownFilePath: ${exporterMarkdownFilePath}`,
     `manualReviewMarkdownFilePath: ${manualReviewMarkdownFilePath ?? "(not provided)"}`,
     `metadataCachePath: ${metadataCachePath ?? "(not provided)"}`,
@@ -50,7 +50,7 @@ export const renderSinglePostInspectSummary = ({
 }) => {
   const parseLines =
     diagnostics.parse.status === "success"
-      ? ["parse: success", `blockTypes: ${diagnostics.parse.blockTypes.join(", ") || "(none)"}`]
+      ? ["parse: success", `blockIds: ${diagnostics.parse.blockIds.join(", ") || "(none)"}`]
       : ["parse: failed", `error: ${diagnostics.parse.error}`]
 
   return [

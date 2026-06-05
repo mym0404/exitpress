@@ -2,7 +2,6 @@ import type { Cheerio, CheerioAPI } from "cheerio"
 import type { AnyNode } from "domhandler"
 
 import type { ParserBlockContext } from "../../../core/BaseBlock.js"
-import type { ParserBlockNode } from "../../../core/ParserBlockNode.js"
 
 import { compactText } from "../../../../../shared/text/TextUtils.js"
 import { createLinkParagraphBlocks } from "../../../common/LinkParagraph.js"
@@ -50,8 +49,9 @@ const buildNaverMapSearchUrl = (query: string) =>
 export const convertSe3MapPlace = ({
   $,
   $node,
+  blockId,
   options,
-}: Pick<ParserBlockContext, "$" | "$node" | "options">): ParserBlockNode[] => {
+}: Pick<ParserBlockContext, "$" | "$node" | "options"> & { blockId: string }) => {
   const title = compactText(
     findInComponentRoot({ $, $component: $node, selector: ".se_title" })
       .first()
@@ -68,6 +68,7 @@ export const convertSe3MapPlace = ({
   }
 
   return createLinkParagraphBlocks({
+    blockId,
     title,
     description,
     url: buildNaverMapSearchUrl(title),

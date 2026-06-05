@@ -3,6 +3,7 @@ import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../co
 import { tableTemplate } from "../../../../domain/template/DefaultTemplates.js"
 import { parseHtmlTable } from "../../common/parseHtmlTable.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
+import { createTableBlock } from "../../core/ParsedBlockOutput.js"
 
 import { findInComponentRoot } from "./util/ComponentBoundary.js"
 
@@ -32,17 +33,17 @@ export class NaverSe3TableBlock extends LeafBlock {
     )
   }
 
-  override convert({ $, $node }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ $, $node, blockId }: Parameters<LeafBlock["convert"]>[0]) {
     const table = findInComponentRoot({ $, $component: $node, selector: "table" }).first()
     const parsedTable = parseHtmlTable({ $, table })
 
     return [
-      {
-        type: "table" as const,
+      createTableBlock({
+        blockId,
         rows: parsedTable.rows,
         html: parsedTable.html,
         complex: parsedTable.complex,
-      },
+      }),
     ]
   }
 }

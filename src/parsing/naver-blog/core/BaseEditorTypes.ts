@@ -1,6 +1,5 @@
+import type { ParsedBlock } from "../../../domain/parser/Types.js"
 import type { UnknownRecord } from "../../../shared/object/UnknownRecord.js"
-
-import type { ParserBlockNode } from "./ParserBlockNode.js"
 
 export type ParserBlockInspection = {
   path: string
@@ -20,8 +19,9 @@ export type ParserBlockInspection = {
 
 export type ParserBlockSourceEvidence = {
   path: string
-  block: ParserBlockNode
-  blockType: ParserBlockNode["type"]
+  blocks: ParsedBlock[]
+  blockIndexes: number[]
+  blockId: string
   parserBlockId: string
   parserBlockLabel: string
 }

@@ -9,6 +9,7 @@ import { defaultExportOptions } from "../../src/domain/export-options/ExportOpti
 import { NaverBlogFetcher } from "../../src/integrations/naver-blog/NaverBlogFetcher.js"
 import { renderMarkdownPost } from "../../src/markdown/MarkdownRenderer.js"
 import { parsePostHtml } from "../../src/parsing/naver-blog/core/PostParser.js"
+import { createNaverBlogDefaultBlockTemplateMap } from "../../src/parsing/naver-blog/NaverBlog.js"
 
 import { ensureHarnessDir, pathExists, readUtf8, repoPath, writeUtf8 } from "./e2e/paths.js"
 
@@ -233,6 +234,7 @@ export const renderSampleFixture = async ({
       depth: Math.max(sample.post.categoryPath.length - 1, 0),
     },
     parsedPost,
+    defaultBlockTemplates: createNaverBlogDefaultBlockTemplateMap(),
     markdownFilePath,
     options,
     resolveAsset: async ({ kind, sourceUrl }) => ({

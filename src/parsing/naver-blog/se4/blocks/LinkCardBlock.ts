@@ -12,7 +12,7 @@ export class NaverSe4LinkCardBlock extends LeafBlock {
     return moduleType === "v2_oglink" || $node.hasClass("se-oglink")
   }
 
-  override convert({ $node, options }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ $node, blockId, options }: Parameters<LeafBlock["convert"]>[0]) {
     const infoNode = $node.find(".se-oglink-info")
     const url = infoNode.attr("href") ?? $node.find(".se-oglink-thumbnail").attr("href") ?? ""
 
@@ -21,6 +21,7 @@ export class NaverSe4LinkCardBlock extends LeafBlock {
     }
 
     return createLinkParagraphBlocks({
+      blockId,
       title: compactText($node.find(".se-oglink-title").text()) || url,
       description: $node.find(".se-oglink-summary").text(),
       url,

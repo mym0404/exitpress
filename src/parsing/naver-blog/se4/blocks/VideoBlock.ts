@@ -3,6 +3,7 @@ import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../co
 
 import { normalizeAssetUrl } from "../../../../domain/blog/NaverUrl.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
+import { createVideoBlock } from "../../core/ParsedBlockOutput.js"
 
 export class NaverSe4VideoBlock extends LeafBlock {
   override readonly id = "video"
@@ -26,7 +27,7 @@ export class NaverSe4VideoBlock extends LeafBlock {
     return moduleType === "v2_video" || $node.hasClass("se-video")
   }
 
-  override convert({ moduleData, sourceUrl }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ moduleData, sourceUrl, blockId }: Parameters<LeafBlock["convert"]>[0]) {
     const data = (moduleData?.data ?? {}) as UnknownRecord & {
       thumbnail?: string
       vid?: string
@@ -39,8 +40,8 @@ export class NaverSe4VideoBlock extends LeafBlock {
     }
 
     return [
-      {
-        type: "video" as const,
+      createVideoBlock({
+        blockId,
         video: {
           title: data.mediaMeta?.title?.trim() || "Video",
           thumbnailUrl: data.thumbnail ? normalizeAssetUrl(data.thumbnail) : null,
@@ -51,7 +52,7 @@ export class NaverSe4VideoBlock extends LeafBlock {
           width: data.width ? Number(data.width) : null,
           height: data.height ? Number(data.height) : null,
         },
-      },
+      }),
     ]
   }
 }

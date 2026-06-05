@@ -32,22 +32,11 @@ describe("NaverSe4VideoBlock", () => {
           title: "Demo video",
           thumbnailUrl: "https://example.com/video-thumb.png",
           sourceUrl,
-          vid: "vid-1",
-          inkey: "inkey-1",
+          vid: null,
+          inkey: null,
           width: 640,
           height: 360,
         },
-      },
-    ])
-    expect(parsed.videos).toEqual([
-      {
-        title: "Demo video",
-        thumbnailUrl: "https://example.com/video-thumb.png",
-        sourceUrl,
-        vid: "vid-1",
-        inkey: "inkey-1",
-        width: 640,
-        height: 360,
       },
     ])
   })

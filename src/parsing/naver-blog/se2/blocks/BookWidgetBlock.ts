@@ -2,17 +2,21 @@ import type { CheerioAPI } from "cheerio"
 
 import type { ImageData } from "../../../../domain/parser/Types.js"
 import type { ParserBlockContext } from "../../core/BaseBlock.js"
-import type { ParserBlockNode } from "../../core/ParserBlockNode.js"
 
 import { normalizeAssetUrl } from "../../../../domain/blog/NaverUrl.js"
 import { compactText } from "../../../../shared/text/TextUtils.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
+import { createImageBlock, createParagraphBlock } from "../../core/ParsedBlockOutput.js"
 
 const parseBookWidgetBlocks = ({
+  blockId,
   element,
+  options,
   resolveLinkUrl,
 }: {
+  blockId: string
   element: ReturnType<CheerioAPI>
+  options: Parameters<LeafBlock["convert"]>[0]["options"]
   resolveLinkUrl?: (url: string) => string
 }) => {
   /* v8 ignore next */
@@ -23,13 +27,14 @@ const parseBookWidgetBlocks = ({
     return null
   }
 
-  const blocks: ParserBlockNode[] = []
+  const blocks = []
   const imageNode = bookWidget.find("img").first()
   const imageSource = imageNode.attr("src")?.trim()
 
   if (imageSource) {
-    blocks.push({
-      type: "image",
+    const imageBlock = createImageBlock({
+      blockId,
+      options,
       image: {
         sourceUrl: normalizeAssetUrl(imageSource),
         originalSourceUrl: null,
@@ -38,6 +43,10 @@ const parseBookWidgetBlocks = ({
         mediaKind: "image",
       } satisfies ImageData,
     })
+
+    if (imageBlock) {
+      blocks.push(imageBlock)
+    }
   }
 
   const title =
@@ -63,10 +72,7 @@ const parseBookWidgetBlocks = ({
   const summaryLines = [title ? `**${title}**` : "", ...detailLines].filter(Boolean)
 
   if (summaryLines.length > 0) {
-    blocks.push({
-      type: "paragraph",
-      text: summaryLines.join("  \n"),
-    })
+    blocks.push(createParagraphBlock({ blockId, text: summaryLines.join("  \n") }))
   }
 
   const reviewLink = bookWidget.find("a.link, a.con_link").last()
@@ -74,11 +80,13 @@ const parseBookWidgetBlocks = ({
   const reviewLabel = compactText(reviewLink.text()) || "리뷰보기"
 
   if (reviewUrl) {
-    blocks.push({
-      type: "paragraph",
-      /* v8 ignore next */
-      text: `[${reviewLabel}](${resolveLinkUrl ? resolveLinkUrl(reviewUrl) : reviewUrl})`,
-    })
+    blocks.push(
+      createParagraphBlock({
+        blockId,
+        /* v8 ignore next */
+        text: `[${reviewLabel}](${resolveLinkUrl ? resolveLinkUrl(reviewUrl) : reviewUrl})`,
+      }),
+    )
   }
 
   return blocks.length > 0 ? blocks : null
@@ -92,9 +100,11 @@ export class NaverSe2BookWidgetBlock extends LeafBlock {
     return node.type === "tag" && $node.is('[s_type="db"][s_subtype="book"]')
   }
 
-  override convert({ $node, options }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ $node, options, blockId }: Parameters<LeafBlock["convert"]>[0]) {
     const blocks = parseBookWidgetBlocks({
+      blockId,
       element: $node,
+      options,
       resolveLinkUrl: options.resolveLinkUrl,
     })
 

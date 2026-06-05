@@ -1,6 +1,5 @@
-import type { ParserBlockNode } from "../core/ParserBlockNode.js"
-
 import { compactMarkdownText } from "../../../shared/text/TextUtils.js"
+import { createParagraphBlock } from "../core/ParsedBlockOutput.js"
 
 const isDegenerateMarkdownLine = (line: string) => /^[*_~`]+$/.test(line.trim())
 
@@ -22,18 +21,20 @@ const formatMarkdownLink = ({
 }) => `[${label}](${resolveLinkUrl ? resolveLinkUrl(url) : url})`
 
 export const createLinkParagraphBlocks = ({
+  blockId,
   title,
   description,
   url,
   hasThumbnail,
   resolveLinkUrl,
 }: {
+  blockId: string
   title: string
   description: string
   url: string
   hasThumbnail: boolean
   resolveLinkUrl?: (url: string) => string
-}): Extract<ParserBlockNode, { type: "paragraph" }>[] => {
+}) => {
   const linkText = formatMarkdownLink({
     label: title || url,
     url,
@@ -41,7 +42,7 @@ export const createLinkParagraphBlocks = ({
   })
 
   if (hasThumbnail) {
-    return [{ type: "paragraph", text: linkText }]
+    return [createParagraphBlock({ blockId, text: linkText })]
   }
 
   const descriptionText = normalizeMarkdownText(description)
@@ -65,7 +66,7 @@ export const createLinkParagraphBlocks = ({
     .join("\n")
 
   return [
-    { type: "paragraph", text: linkText },
-    ...(descriptionText ? [{ type: "paragraph" as const, text: descriptionText }] : []),
+    createParagraphBlock({ blockId, text: linkText }),
+    ...(descriptionText ? [createParagraphBlock({ blockId, text: descriptionText })] : []),
   ]
 }

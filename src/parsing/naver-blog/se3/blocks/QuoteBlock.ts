@@ -2,6 +2,7 @@ import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../co
 
 import { convertHtmlToMarkdown } from "../../../../markdown/TurndownMarkdownConverter.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
+import { createQuoteBlock } from "../../core/ParsedBlockOutput.js"
 
 import { findInComponentRoot } from "./util/ComponentBoundary.js"
 
@@ -29,7 +30,7 @@ export class NaverSe3QuoteBlock extends LeafBlock {
     )
   }
 
-  override convert({ $, $node, options }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ $, $node, options, blockId }: Parameters<LeafBlock["convert"]>[0]) {
     const blockquote = findInComponentRoot({ $, $component: $node, selector: "blockquote" }).first()
     const markdown = convertHtmlToMarkdown({
       /* v8 ignore next */
@@ -41,6 +42,6 @@ export class NaverSe3QuoteBlock extends LeafBlock {
       throw new Error("SE3 quote block parsing failed.")
     }
 
-    return [{ type: "quote" as const, text: markdown }]
+    return [createQuoteBlock({ blockId, text: markdown })]
   }
 }

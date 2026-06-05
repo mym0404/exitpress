@@ -150,7 +150,7 @@ describe("exportSinglePost", () => {
 
       expect(diagnostics.post).toEqual(post)
       expect(diagnostics.markdownFilePath).toBe(expectedMarkdownFilePath)
-      expect(diagnostics.blockTypes).toEqual(["paragraph", "image"])
+      expect(diagnostics.blockIds).toEqual(["naver-se4:paragraph", "naver-se4:image"])
       expect(diagnostics.assetPaths).toHaveLength(1)
       expect(diagnostics.assetPaths[0]).toBe(`../../../public/${expectedHash}.png`)
       expect(diagnostics.markdown).toContain("title: Single post")
@@ -209,7 +209,7 @@ describe("exportSinglePost", () => {
           }),
       })
 
-      expect(diagnostics.blockTypes).toEqual(["paragraph", "image"])
+      expect(diagnostics.blockIds).toEqual(["naver-se2:paragraph", "naver-se2:inlineGifVideo"])
       expect(diagnostics.markdown).toContain("인트로입니다.")
       expect(diagnostics.markdown).toContain(`![](${diagnostics.assetPaths[0]})`)
     } finally {

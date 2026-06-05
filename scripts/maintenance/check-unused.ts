@@ -67,6 +67,7 @@ const allowedKnipFileEntries: Record<string, string> = {
   "tests/e2e/scenarios/ui-smoke.ts": "spawned through smoke suite entrypoint",
   "tests/e2e/run-ui-resume-smoke.ts": "spawned by smoke suite",
   "tests/e2e/run-ui-smoke.ts": "spawned by smoke suite",
+  "vite.pages.config.ts": "GitHub Pages Storybook build config entrypoint",
   "vitest.parser-blocks.config.ts": "parser block coverage config entrypoint",
 }
 const allowedKnipExports: Record<string, string> = {

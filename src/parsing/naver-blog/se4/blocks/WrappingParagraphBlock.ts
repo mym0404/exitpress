@@ -1,6 +1,7 @@
 import type { ParserBlockContext } from "../../core/BaseBlock.js"
 
 import { LeafBlock } from "../../core/BaseBlock.js"
+import { createImageBlock } from "../../core/ParsedBlockOutput.js"
 
 import { parseTextBlocks } from "./TextBlock.js"
 import { parseImageLink, se4ImageLinkSelector } from "./util/ImageLink.js"
@@ -23,7 +24,7 @@ export class NaverSe4WrappingParagraphBlock extends LeafBlock {
     )
   }
 
-  override convert({ $, $node, options }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ $, $node, options, blockId }: Parameters<LeafBlock["convert"]>[0]) {
     const $imageSlot = $node.find(".se-component-slot-float").first()
     const imageBlocks = []
 
@@ -34,7 +35,11 @@ export class NaverSe4WrappingParagraphBlock extends LeafBlock {
         throw new Error("SE4 wrapping paragraph image parsing failed.")
       }
 
-      imageBlocks.push({ type: "image" as const, image })
+      const imageBlock = createImageBlock({ blockId, image, options })
+
+      if (imageBlock) {
+        imageBlocks.push(imageBlock)
+      }
     }
 
     const $textSlot = $node.find(".se-component-slot").not(".se-component-slot-float").first()
@@ -43,6 +48,7 @@ export class NaverSe4WrappingParagraphBlock extends LeafBlock {
         ? parseTextBlocks({
             $,
             $node: $textSlot,
+            blockId,
             options,
           })
         : []

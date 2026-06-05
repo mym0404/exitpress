@@ -8,14 +8,14 @@ import { createLinkParagraphBlocks } from "../../common/LinkParagraph.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
 
 export class NaverSe4OembedBlock extends LeafBlock {
-  override readonly id = "linkCard"
+  override readonly id = "oembed"
   override readonly label = "임베드"
 
   override match({ $node, moduleType }: ParserBlockContext) {
     return moduleType === "v2_oembed" || $node.hasClass("se-oembed")
   }
 
-  override convert({ moduleData, options }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ moduleData, blockId, options }: Parameters<LeafBlock["convert"]>[0]) {
     const data = (moduleData?.data ?? {}) as UnknownRecord & {
       html?: string
       inputUrl?: string
@@ -35,6 +35,7 @@ export class NaverSe4OembedBlock extends LeafBlock {
     }
 
     return createLinkParagraphBlocks({
+      blockId,
       title: compactText(data.title ?? "") || url,
       description: compactText(data.description ?? ""),
       url,

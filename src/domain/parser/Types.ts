@@ -1,5 +1,5 @@
 import type { ExportOptions } from "../export-options/Types.js"
-import type { ParsedPost as TemplateParsedPost } from "../template/Types.js"
+import type { TemplateValue } from "../template/Types.js"
 
 export type VideoData = {
   title: string
@@ -11,7 +11,7 @@ export type VideoData = {
   height: number | null
 }
 
-export type TableCell = {
+type TableCell = {
   text: string
   html: string
   colspan: number
@@ -31,23 +31,21 @@ export type ImageData = {
   mediaKind: MediaKind
 }
 
-export type ParserBlockNode =
-  | { type: "paragraph"; text: string }
-  | { type: "heading"; level: number; text: string }
-  | { type: "quote"; text: string }
-  | { type: "divider" }
-  | { type: "code"; language: string | null; code: string }
-  | { type: "formula"; formula: string; display: boolean }
-  | { type: "image"; image: ImageData }
-  | { type: "imageGroup"; images: ImageData[] }
-  | { type: "video"; video: VideoData }
-  | { type: "table"; rows: TableRow[]; html: string; complex: boolean }
+export type ParsedBlockAsset = {
+  role: "image" | "thumbnail"
+  sourceUrl: string
+  required: boolean
+}
 
-export type ParserBlockType = ParserBlockNode["type"]
+export type ParsedBlock = {
+  blockId: string
+  props: Record<string, TemplateValue>
+  assets?: Record<string, ParsedBlockAsset>
+}
 
-export type ParsedPost = TemplateParsedPost & {
-  blocks: ParserBlockNode[]
-  blockTypes: string[]
+export type ParsedPost = {
+  tags: string[]
+  blocks: ParsedBlock[]
 }
 
 export type ParserBlockOptions = {

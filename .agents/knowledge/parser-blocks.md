@@ -1,10 +1,10 @@
 # Parser Blocks
 
 ## Role
-- Parser block은 에디터별 HTML node를 공용 `ParserBlockNode`로 바꾸는 가장 작은 책임 단위다.
+- Parser block은 에디터별 HTML node를 렌더 대상 `ParsedBlock`으로 바꾸는 가장 작은 책임 단위다.
 - 모든 parser block은 공통 base contract를 따르고 `match()`와 `convert()`를 가진다.
 - `match()`는 현재 node가 자기 책임인지 판단한다.
-- `convert()`는 변환된 `ParserBlockNode[]`를 반환하고, 의도적으로 버릴 node는 빈 배열을 반환한다.
+- `convert()`는 변환된 `ParsedBlock[]`를 반환하고, 의도적으로 버릴 node는 빈 배열을 반환한다.
 
 ## Managed By Editors
 - Editor는 `supportedBlocks` 배열에 `BaseBlock` instance를 직접 들고 있다.
@@ -17,14 +17,14 @@
 
 ## Context
 - `ParserBlockContext`는 Cheerio API, 현재 node, source URL, tags, export options, SE4 module metadata, `matchLeafNode`를 담는다.
-- `ParserBlockConvertContext`는 `ParserBlockContext`에 `matchNode`와 `outputSelection`을 더한다.
+- `ParserBlockConvertContext`는 `ParserBlockContext`에 `blockId`, `path`, `matchNode`를 더한다.
 - `matchLeafNode`는 container가 direct child를 unwrap해도 되는지 확인할 때 쓴다.
 - `matchNode`는 container가 child node를 현재 editor의 `supportedBlocks`로 재귀 변환할 때 쓴다.
 
 ## Container And Leaf
 - `ContainerBlock`은 wrapper node를 잡고 direct child contents를 `matchNode`로 다시 흘려보낸다.
-- `LeafBlock`은 concrete DOM node를 직접 parser node로 바꾼다.
-- Container는 parser node를 직접 만들기보다 editor의 현재 parser block list를 재사용한다.
+- `LeafBlock`은 concrete DOM node를 직접 parsed block으로 바꾼다.
+- Container는 parsed block을 직접 만들지 않고 editor의 현재 parser block list를 재사용한다.
 - Leaf는 paragraph, image, table, code처럼 실제 output block을 만든다.
 - 현재 Container 계열은 legacy wrapper를 풀어 실제 content leaf로 넘기는 용도에 가깝다.
 
@@ -41,27 +41,24 @@
 - Descendant selector는 nested component나 sibling module data를 훔치지 않도록 editor boundary 안에서만 쓴다.
 - Fallback block은 더 구체적인 media, table, code, widget block을 가리지 않아야 한다.
 - First-match 순서가 의미를 결정하면 adjacent spec으로 대표 충돌 사례를 고정한다.
-- 내용 있는 matched node는 parser node로 보존하거나 명시적인 error로 드러낸다.
+- 내용 있는 matched node는 parsed block으로 보존하거나 명시적인 error로 드러낸다.
 - 빈 배열 반환은 document chrome, spacer, empty placeholder, empty known component처럼 의도된 discard만 허용한다.
-- 여러 block이 같은 parser node/output option family를 만들면 output option 적용 여부를 spec으로 고정한다.
+- 여러 block이 같은 output family를 만들면 template 적용 여부를 spec으로 고정한다.
 - Public sample fixture는 live failure regression을 맡고, block boundary와 near-miss 사례는 adjacent parser block spec이 맡는다.
 
-## Output Options
-- Parser block의 `outputOptions`는 사용자가 선택할 수 있는 Markdown 형식 차이가 남아 있는 block의 metadata다.
-- UI에 노출되는 selection key는 `editorType:blockId` 형식이다.
-- Output option이 2개 이상인 block만 `BaseEditor.getBlockOutputDefinitions()`에 노출된다.
-- 같은 editor 안에서 같은 `blockId`가 반복되면 첫 definition만 노출되고, 같은 key를 공유한다.
-- 여러 concrete block이 같은 output family를 공유하면 같은 `blockId`와 output selection을 공유할 수 있다.
-- `outputOptions`와 그 params는 concrete parser block 파일이 직접 소유한다.
-- Block별 output metadata를 `core`, `shared`, 공용 helper로 분리하지 않는다.
-- Parser는 `ParsedPost.renderInputs`를 만들 때 block template과 prop을 함께 확정한다.
-- 정확한 selectable key 목록과 노출 순서는 `BaseBlog`에서 파생되는 output definition과 관련 tests가 source of truth다.
+## Block Templates
+- Parser block의 template definition은 사용자가 바꿀 수 있는 Markdown template과 prop 계약을 설명한다.
+- UI에 노출되는 key는 `editorType:blockId` 형식이다.
+- 같은 editor 안에서 같은 key가 반복되면 첫 definition만 노출된다.
+- 여러 concrete block이 같은 output family를 공유하면 같은 key를 공유할 수 있다.
+- Parser는 `ParsedBlock.blockId`와 `props`만 만들고, 최종 template 문자열 선택은 renderer가 맡는다.
+- 정확한 selectable key 목록과 노출 순서는 `BaseBlog`에서 파생되는 template definition과 관련 tests가 source of truth다.
 
 ## Story Catalog
 - Parser Storybook catalog는 editor의 `supportedBlocks` 순서에서 파생된다.
 - Story key는 `editorType`, `supportedBlocks` index, `blockId` 조합이다.
 - Storybook tree는 `Editor -> Block` 순서로 모든 supported block을 렌더링해야 한다.
-- Story metadata는 block instance의 `id`, `label`, `outputOptions`, 선택적 `story` metadata, 실제 source fixture에서 만든다.
+- Story metadata는 block instance의 `id`, `label`, template definition, 선택적 `story` metadata, 실제 source fixture에서 만든다.
 - Story fixture는 실제 source URL, inspect path, input HTML을 담고, Storybook capture asset은 같은 story key의 `src/ui/features/parser-stories/assets/*.png` 파일로 관리한다.
 - Input HTML, capture, Markdown preview는 같은 source block을 가리켜야 한다.
 - 별도 중앙 block 목록으로 story catalog를 관리하지 않는다.

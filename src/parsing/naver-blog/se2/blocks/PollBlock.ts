@@ -3,6 +3,7 @@ import type { ParserBlockContext } from "../../core/BaseBlock.js"
 import { normalizeAssetUrl } from "../../../../domain/blog/NaverUrl.js"
 import { compactText } from "../../../../shared/text/TextUtils.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
+import { createParagraphBlock } from "../../core/ParsedBlockOutput.js"
 
 import { hasOnlyTargetContent } from "./util/WrapperContent.js"
 
@@ -46,13 +47,13 @@ export class NaverSe2PollBlock extends LeafBlock {
     return node.type === "tag" && getPollLink({ $node }) !== null
   }
 
-  override convert({ $node }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ $node, blockId }: Parameters<LeafBlock["convert"]>[0]) {
     const poll = getPollLink({ $node })
 
     if (!poll) {
       throw new Error("SE2 poll block parsing failed.")
     }
 
-    return [{ type: "paragraph" as const, text: `[${poll.title}](${poll.sourceUrl})` }]
+    return [createParagraphBlock({ blockId, text: `[${poll.title}](${poll.sourceUrl})` })]
   }
 }

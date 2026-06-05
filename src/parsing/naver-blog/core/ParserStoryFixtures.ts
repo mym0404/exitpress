@@ -1,4 +1,4 @@
-export type ParserStoryFixture = {
+type ParserStoryFixture = {
   sourceUrl: string
   inspectPath: string
   inputHtml: string

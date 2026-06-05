@@ -3,6 +3,7 @@ import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../co
 import { convertHtmlToMarkdown } from "../../../../markdown/TurndownMarkdownConverter.js"
 import { compactText } from "../../../../shared/text/TextUtils.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
+import { createHeadingBlock } from "../../core/ParsedBlockOutput.js"
 
 export class NaverSe2HeadingBlock extends LeafBlock {
   override readonly id = "heading"
@@ -25,7 +26,7 @@ export class NaverSe2HeadingBlock extends LeafBlock {
     return node.type === "tag" && /^h[1-6]$/.test(node.tagName.toLowerCase())
   }
 
-  override convert({ $node, node, options }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ $node, node, options, blockId }: Parameters<LeafBlock["convert"]>[0]) {
     /* v8 ignore next 3 */
     if (node.type !== "tag") {
       throw new Error("SE2 heading block received a non-tag node.")
@@ -44,6 +45,6 @@ export class NaverSe2HeadingBlock extends LeafBlock {
       throw new Error(`SE2 heading block parsing failed: <${node.tagName.toLowerCase()}>`)
     }
 
-    return [{ type: "heading" as const, level, text }]
+    return [createHeadingBlock({ blockId, level, text })]
   }
 }

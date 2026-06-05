@@ -6,6 +6,7 @@ describe("createLinkParagraphBlocks", () => {
   it("uses the URL as the link label when the title is empty", () => {
     expect(
       createLinkParagraphBlocks({
+        blockId: "naver-se4:linkCard",
         title: "",
         description: "",
         url: "https://example.com/post",
@@ -13,8 +14,10 @@ describe("createLinkParagraphBlocks", () => {
       }),
     ).toEqual([
       {
-        type: "paragraph",
-        text: "[https://example.com/post](https://example.com/post)",
+        blockId: "naver-se4:linkCard",
+        props: {
+          text: "[https://example.com/post](https://example.com/post)",
+        },
       },
     ])
   })

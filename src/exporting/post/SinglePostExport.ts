@@ -26,7 +26,7 @@ type ExportSinglePostDiagnostics = {
   post: PostSummary
   markdown: string
   markdownFilePath: string
-  blockTypes: string[]
+  blockIds: string[]
   assetPaths: string[]
 }
 
@@ -97,7 +97,7 @@ export const exportSinglePost = async ({
     post,
     markdown: result.markdown,
     markdownFilePath: result.markdownFilePath,
-    blockTypes: result.blockTypes,
+    blockIds: result.blockIds,
     assetPaths: result.assetPaths,
   }
 }

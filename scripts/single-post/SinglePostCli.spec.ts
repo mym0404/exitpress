@@ -98,7 +98,7 @@ describe("single-post cli", () => {
       renderSinglePostSummary({
         blogId: "my-blog",
         logNo: "123456789012",
-        blockTypes: ["paragraph", "code"],
+        blockIds: ["paragraph", "code"],
         exporterMarkdownFilePath: testExporterMarkdownFilePath,
         manualReviewMarkdownFilePath: "/tmp/manual-review/post.md",
         metadataCachePath: "/tmp/manual-review/metadata-cache.json",
@@ -107,7 +107,7 @@ describe("single-post cli", () => {
       [
         "blogId: my-blog",
         "logNo: 123456789012",
-        "blockTypes: paragraph, code",
+        "blockIds: paragraph, code",
         `exporterMarkdownFilePath: ${testExporterMarkdownFilePath}`,
         "manualReviewMarkdownFilePath: /tmp/manual-review/post.md",
         "metadataCachePath: /tmp/manual-review/metadata-cache.json",
@@ -120,7 +120,7 @@ describe("single-post cli", () => {
       renderSinglePostSummary({
         blogId: "my-blog",
         logNo: "123456789012",
-        blockTypes: [],
+        blockIds: [],
         exporterMarkdownFilePath: testExporterMarkdownFilePath,
         manualReviewMarkdownFilePath: null,
         metadataCachePath: null,
@@ -129,7 +129,7 @@ describe("single-post cli", () => {
       [
         "blogId: my-blog",
         "logNo: 123456789012",
-        "blockTypes: (none)",
+        "blockIds: (none)",
         `exporterMarkdownFilePath: ${testExporterMarkdownFilePath}`,
         "manualReviewMarkdownFilePath: (not provided)",
         "metadataCachePath: (not provided)",
@@ -221,7 +221,7 @@ describe("single-post cli", () => {
       },
       markdown: "# hello\n",
       markdownFilePath: path.join(outputDir, "posts", "single-post.md"),
-      blockTypes: ["paragraph"],
+      blockIds: ["paragraph"],
       assetPaths: [],
       options,
     }))
@@ -258,7 +258,7 @@ describe("single-post cli", () => {
         [
           "blogId: my-blog",
           "logNo: 123456789012",
-          "blockTypes: paragraph",
+          "blockIds: paragraph",
           `exporterMarkdownFilePath: ${markdownFilePath}`,
           `manualReviewMarkdownFilePath: ${manualReviewMarkdownPath}`,
           `metadataCachePath: ${metadataCachePath}`,
@@ -381,7 +381,7 @@ describe("single-post cli", () => {
           },
           markdown: "# stdout markdown",
           markdownFilePath: path.join(outputDir, "posts", "single-post.md"),
-          blockTypes: ["paragraph"],
+          blockIds: ["paragraph"],
           assetPaths: [],
         })) as RunSinglePostExportFn,
         stdoutWrite,
@@ -393,7 +393,7 @@ describe("single-post cli", () => {
         [
           "blogId: my-blog",
           "logNo: 123456789012",
-          "blockTypes: paragraph",
+          "blockIds: paragraph",
           `exporterMarkdownFilePath: ${path.join(outputDir, "posts", "single-post.md")}`,
           "manualReviewMarkdownFilePath: (not provided)",
           "metadataCachePath: (not provided)",
@@ -521,7 +521,7 @@ describe("single-post cli", () => {
       },
       markdown: "# hello\n",
       markdownFilePath: path.join(outputDir, "posts", "single-post.md"),
-      blockTypes: ["paragraph"],
+      blockIds: ["paragraph"],
       assetPaths: [],
       options,
     }))

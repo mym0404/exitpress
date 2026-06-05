@@ -1,7 +1,7 @@
 import { load } from "cheerio"
 import { describe, expect, it } from "vitest"
 
-import { parseSe3Blocks } from "../../../../../tests/support/parser-test-utils.js"
+import { parseSe3Blocks, toLegacyBlocks } from "../../../../../tests/support/parser-test-utils.js"
 import { NaverBlogSE3Editor } from "../NaverBlogSe3Editor.js"
 
 import { NaverSe3SubjectMatterBlock } from "./SubjectMatterBlock.js"
@@ -98,6 +98,7 @@ describe("NaverSe3SubjectMatterBlock", () => {
       $,
       $node,
       node: $node[0]!,
+      blockId: "naver-se3:subjectMatter",
       path: "0",
       tags: [],
       options: {
@@ -110,7 +111,7 @@ describe("NaverSe3SubjectMatterBlock", () => {
       matchNode: () => [],
     })
 
-    expect(blocks).toEqual([
+    expect(toLegacyBlocks(blocks)).toEqual([
       {
         type: "image",
         image: {

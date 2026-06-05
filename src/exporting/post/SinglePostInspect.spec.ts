@@ -8,7 +8,7 @@ const options = defaultExportOptions()
 const sourceUrl = "https://blog.naver.com/my-blog/123456789012"
 
 describe("single post inspect", () => {
-  it("reports successful parse block types", () => {
+  it("reports successful parse block ids", () => {
     const diagnostics = inspectPostHtml({
       blogId: "my-blog",
       logNo: "123456789012",
@@ -30,7 +30,7 @@ describe("single post inspect", () => {
     })
     expect(diagnostics.parse).toEqual({
       status: "success",
-      blockTypes: ["paragraph"],
+      blockIds: ["naver-se4:paragraph"],
     })
     expect(diagnostics.unsupportedNodes).toEqual([])
   })

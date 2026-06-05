@@ -8,14 +8,14 @@ import { parseJsonAttribute } from "../../core/JsonAttribute.js"
 const parseCssUrl = (value: string | undefined) => value?.match(/url\((['"]?)(.*?)\1\)/)?.[2]
 
 export class NaverSe4MaterialBlock extends LeafBlock {
-  override readonly id = "linkCard"
+  override readonly id = "material"
   override readonly label = "자료 링크"
 
   override match({ $node }: ParserBlockContext) {
     return $node.hasClass("se-material") || $node.find(".not_sponsored_component").length > 0
   }
 
-  override convert({ $node, options }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ $node, blockId, options }: Parameters<LeafBlock["convert"]>[0]) {
     const customCard = $node.find(".not_sponsored_component").first()
 
     if (customCard.length > 0) {
@@ -33,6 +33,7 @@ export class NaverSe4MaterialBlock extends LeafBlock {
         .join(" / ")
 
       return createLinkParagraphBlocks({
+        blockId,
         title: compactText(customCard.find(".title").text()) || url,
         description,
         url,
@@ -95,6 +96,7 @@ export class NaverSe4MaterialBlock extends LeafBlock {
       (typeof linkData?.thumbnail === "string" ? linkData.thumbnail : null)
 
     return createLinkParagraphBlocks({
+      blockId,
       title:
         compactText(materialLink.find(".se-material-title").text()) ||
         (typeof linkData?.title === "string" ? compactText(linkData.title) : "") ||

@@ -5,14 +5,14 @@ import { createLinkParagraphBlocks } from "../../common/LinkParagraph.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
 
 export class NaverSe4TalkTalkBlock extends LeafBlock {
-  override readonly id = "linkCard"
+  override readonly id = "talkTalk"
   override readonly label = "톡톡 링크"
 
   override match({ $node }: ParserBlockContext) {
     return $node.hasClass("se-talktalk")
   }
 
-  override convert({ $node, options }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ $node, blockId, options }: Parameters<LeafBlock["convert"]>[0]) {
     const talkTalkLink = $node.find("a.se-module-talktalk").first()
     const url = talkTalkLink.attr("href") ?? ""
 
@@ -21,6 +21,7 @@ export class NaverSe4TalkTalkBlock extends LeafBlock {
     }
 
     return createLinkParagraphBlocks({
+      blockId,
       title: compactText($node.find(".se-talktalk-banner-text").text()) || url,
       description: "",
       url,

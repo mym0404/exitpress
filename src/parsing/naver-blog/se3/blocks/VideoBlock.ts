@@ -6,6 +6,7 @@ import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../co
 import { compactText } from "../../../../shared/text/TextUtils.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
 import { parseJsonAttribute } from "../../core/JsonAttribute.js"
+import { createVideoBlock } from "../../core/ParsedBlockOutput.js"
 
 import { findInComponentRoot } from "./util/ComponentBoundary.js"
 
@@ -86,7 +87,7 @@ export class NaverSe3VideoBlock extends LeafBlock {
     return $node.hasClass("se_video") && $node.hasClass("default")
   }
 
-  override convert({ $, $node, sourceUrl = "" }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ $, $node, sourceUrl = "", blockId }: Parameters<LeafBlock["convert"]>[0]) {
     const moduleData = getVideoModuleData({ $, $node })
     const data = getRecord(moduleData?.data)
     const title =
@@ -99,8 +100,8 @@ export class NaverSe3VideoBlock extends LeafBlock {
       ) || "Video"
 
     return [
-      {
-        type: "video" as const,
+      createVideoBlock({
+        blockId,
         video: {
           title,
           thumbnailUrl: null,
@@ -110,7 +111,7 @@ export class NaverSe3VideoBlock extends LeafBlock {
           width: parseDimension(data.width),
           height: parseDimension(data.height),
         },
-      },
+      }),
     ]
   }
 }

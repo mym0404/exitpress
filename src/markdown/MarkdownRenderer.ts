@@ -3,11 +3,12 @@ import YAML from "yaml"
 import type { CategoryInfo, PostSummary } from "../domain/blog/Types.js"
 import type { AssetRecord } from "../domain/export-job/Types.js"
 import type { ExportOptions, FrontmatterFieldName } from "../domain/export-options/Types.js"
-import type { ParsedPost } from "../domain/template/Types.js"
+import type { ParsedBlock } from "../domain/parser/Types.js"
+import type { ParsedPost } from "../domain/parser/Types.js"
 import type { UnknownRecord } from "../shared/object/UnknownRecord.js"
 
 import { getFrontmatterExportKey } from "../domain/export-options/ExportOptions.js"
-import { resolveAssetCandidatesForRender } from "../exporting/assets/AssetCandidateResolver.js"
+import { resolveParsedBlockAssetsForRender } from "../exporting/assets/ParsedBlockAssetResolver.js"
 
 import { renderBlockTemplates } from "./BlockTemplateRenderer.js"
 
@@ -52,6 +53,7 @@ export const renderMarkdownPost = async ({
   post,
   category,
   parsedPost,
+  defaultBlockTemplates,
   markdownFilePath,
   options,
   resolveAsset,
@@ -59,6 +61,7 @@ export const renderMarkdownPost = async ({
   post: PostSummary
   category: CategoryInfo
   parsedPost: ParsedPost
+  defaultBlockTemplates: Record<string, string>
   markdownFilePath: string
   options: ExportOptions
   resolveAsset: (input: {
@@ -113,13 +116,12 @@ export const renderMarkdownPost = async ({
     })
   }
 
-  const resolved = await resolveAssetCandidatesForRender({
-    renderInputs: parsedPost.renderInputs,
-    assetCandidates: parsedPost.assetCandidates,
-    resolveAsset: async ({ assetRole, sourceUrl, dedupKey: _dedupKey }) => {
+  const resolved = await resolveParsedBlockAssetsForRender({
+    blocks: parsedPost.blocks,
+    resolveAsset: async ({ role, sourceUrl }) => {
       const reference =
         (await resolveAssetPath({
-          kind: assetRole,
+          kind: role,
           sourceUrl,
         })) ?? ""
 
@@ -127,7 +129,7 @@ export const renderMarkdownPost = async ({
         return {
           reference: "",
           record: {
-            kind: assetRole,
+            kind: role,
             sourceUrl,
             reference: "",
             relativePath: null,
@@ -138,9 +140,9 @@ export const renderMarkdownPost = async ({
       }
 
       const record = assetRecords.find(
-        (asset) => asset.kind === assetRole && asset.sourceUrl === sourceUrl,
+        (asset) => asset.kind === role && asset.sourceUrl === sourceUrl,
       ) ?? {
-        kind: assetRole,
+        kind: role,
         sourceUrl,
         reference,
         relativePath: reference === sourceUrl ? null : reference,
@@ -148,7 +150,7 @@ export const renderMarkdownPost = async ({
         uploadCandidate: null,
       }
 
-      if (!firstBodyThumbnailPath && assetRole === "image" && reference) {
+      if (!firstBodyThumbnailPath && role === "image" && reference) {
         firstBodyThumbnailPath = reference
       }
 
@@ -158,7 +160,22 @@ export const renderMarkdownPost = async ({
       }
     },
   })
-  const body = renderBlockTemplates(resolved.renderInputs)
+  const customBlockTemplates = options.blockOutputs.templates
+  const getBlockTemplate = (block: ParsedBlock) => {
+    const template = customBlockTemplates[block.blockId] ?? defaultBlockTemplates[block.blockId]
+
+    if (!template) {
+      throw new Error(`Parser block template is missing: ${block.blockId}`)
+    }
+
+    return template
+  }
+  const body = renderBlockTemplates(
+    resolved.blocks.map((block) => ({
+      template: getBlockTemplate(block),
+      props: block.props,
+    })),
+  )
 
   const thumbnailPath =
     options.assets.thumbnailSource === "none"

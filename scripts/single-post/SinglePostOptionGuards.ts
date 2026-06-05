@@ -50,16 +50,6 @@ export function assertString(
   }
 }
 
-export function assertFiniteNumber(
-  value: unknown,
-  context: string,
-  optionsPath: string,
-): asserts value is number {
-  if (typeof value !== "number" || !Number.isFinite(value)) {
-    failOptions(optionsPath, `${context} must be a finite number`)
-  }
-}
-
 export function assertNullableString(
   value: unknown,
   context: string,

@@ -25,7 +25,7 @@ export type SinglePostInspectDiagnostics = {
   parse:
     | {
         status: "success"
-        blockTypes: string[]
+        blockIds: string[]
       }
     | {
         status: "failed"
@@ -87,7 +87,7 @@ export const inspectPostHtml = ({
 
     parseResult = {
       status: "success",
-      blockTypes: parsedPost.blockTypes,
+      blockIds: [...new Set(parsedPost.blocks.map((block) => block.blockId))],
     }
   } catch (error) {
     parseResult = {

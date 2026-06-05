@@ -12,7 +12,7 @@ export class NaverSe3MapBlock extends LeafBlock {
     return $node.hasClass("se_map") && $node.hasClass("default")
   }
 
-  override convert({ $, $node, options }: Parameters<LeafBlock["convert"]>[0]) {
-    return convertSe3MapPlace({ $, $node, options })
+  override convert({ $, $node, blockId, options }: Parameters<LeafBlock["convert"]>[0]) {
+    return convertSe3MapPlace({ $, $node, blockId, options })
   }
 }

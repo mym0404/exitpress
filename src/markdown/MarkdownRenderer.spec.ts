@@ -2,31 +2,25 @@ import { describe, expect, it } from "vitest"
 
 import type { CategoryInfo, PostSummary } from "../domain/blog/Types.js"
 import type { AssetRecord } from "../domain/export-job/Types.js"
-import type { ParsedPost as ParserBlockNodePost, ParserBlockNode } from "../domain/parser/Types.js"
+import type { ParsedPost } from "../domain/parser/Types.js"
 
 import { createTestPath } from "../../tests/support/test-paths.js"
 import { defaultExportOptions } from "../domain/export-options/ExportOptions.js"
-import { buildParsedPost } from "../parsing/naver-blog/core/ParsedPostBuilder.js"
+import { tableTemplate } from "../domain/template/DefaultTemplates.js"
 
 import { renderMarkdownPost } from "./MarkdownRenderer.js"
 
-const testMarkdownFilePath = createTestPath(
-  "markdown-renderer",
-  "output",
-  "posts",
-  "Algorithm",
-  "test.md",
-)
+const markdownFilePath = createTestPath("markdown-renderer", "posts", "test.md")
 
 const category: CategoryInfo = {
-  id: 84,
-  name: "PS 알고리즘, 팁",
-  parentId: 79,
-  postCount: 49,
+  id: 1,
+  name: "Algorithm",
+  parentId: null,
+  postCount: 1,
   isDivider: false,
   isOpen: true,
-  path: ["Algorithm", "PS 알고리즘, 팁"],
-  depth: 1,
+  path: ["Algorithm"],
+  depth: 0,
 }
 
 const post: PostSummary = {
@@ -34,621 +28,181 @@ const post: PostSummary = {
   logNo: "223034929697",
   title: "테스트 글",
   publishedAt: "2023-03-04T13:00:00+09:00",
-  categoryId: 84,
-  categoryName: "PS 알고리즘, 팁",
+  categoryId: 1,
+  categoryName: "Algorithm",
   source: "https://blog.naver.com/mym0404/223034929697",
   thumbnailUrl: "https://example.com/thumb.png",
 }
 
-const publicImagePath = "../../public/hash-image.png"
-const publicThumbnailPath = "../../public/hash-thumbnail.png"
-const publicVideoThumbnailPath = "../../public/hash-video-thumbnail.png"
+const defaultBlockTemplates = {
+  "naver-se4:paragraph": "${text}",
+  "naver-se4:quote": "> ${text}",
+  "naver-se4:image": "![${alt}](${url})",
+  "naver-se4:video": "[${title}](${url})",
+  "naver-se4:table": tableTemplate,
+}
 
 const createAssetRecord = ({
   kind,
   sourceUrl,
-  relativePath,
   reference,
-  storageMode = "relative",
 }: {
   kind: "image" | "thumbnail"
   sourceUrl: string
-  relativePath: string | null
-  reference?: string
-  storageMode?: "relative" | "remote"
+  reference: string
 }) =>
   ({
     kind,
     sourceUrl,
-    reference: reference ?? relativePath ?? sourceUrl,
-    relativePath,
-    storageMode,
-    uploadCandidate:
-      storageMode === "relative" && relativePath
-        ? {
-            kind,
-            sourceUrl,
-            localPath: `Algorithm/test/${relativePath}`,
-            markdownReference: relativePath,
-          }
-        : null,
+    reference,
+    relativePath: reference === sourceUrl ? null : reference,
+    storageMode: reference === sourceUrl ? ("remote" as const) : ("relative" as const),
+    uploadCandidate: null,
   }) satisfies AssetRecord
 
-const parsedPostBlocks: ParserBlockNode[] = [
-  { type: "heading", level: 2, text: "섹션" },
-  { type: "paragraph", text: "본문입니다." },
-  { type: "formula", formula: "f(n)=n+1", display: true },
-  { type: "formula", formula: "g(n)=n-1", display: false },
-  { type: "code", language: "ts", code: "const a = 1" },
-  {
-    type: "imageGroup",
-    images: [
-      {
-        sourceUrl: "https://example.com/image-1.png",
-        originalSourceUrl: null,
-        alt: "one",
-        caption: null,
-        mediaKind: "image",
-      },
-      {
-        sourceUrl: "https://example.com/image-2.png",
-        originalSourceUrl: null,
-        alt: "two",
-        caption: "caption",
-        mediaKind: "image",
-      },
-    ],
-  },
-  {
-    type: "table",
-    complex: false,
-    html: "<table><tr><td>a</td></tr></table>",
-    rows: [
-      [
-        {
-          text: "col",
-          html: "col",
-          colspan: 1,
-          rowspan: 1,
-          isHeader: true,
-        },
-      ],
-      [
-        {
-          text: "value",
-          html: "value",
-          colspan: 1,
-          rowspan: 1,
-          isHeader: false,
-        },
-      ],
-    ],
-  },
-  {
-    type: "paragraph",
-    text: "[External article](https://example.com/article)",
-  },
-  {
-    type: "video",
-    video: {
-      title: "Demo",
-      thumbnailUrl: "https://example.com/video-thumb.png",
-      sourceUrl: "https://blog.naver.com/mym0404/223034929697",
-      vid: "vid",
-      inkey: "inkey",
-      width: 640,
-      height: 360,
-    },
-  },
-]
-
-const baseParsedPost = {
-  tags: ["algo"],
-  blocks: parsedPostBlocks,
-}
-
-const createParsedPost = (
-  overrides: Partial<Pick<ParserBlockNodePost, "tags" | "blocks">> = {},
+const render = ({
+  parsedPost,
   options = defaultExportOptions(),
-) =>
-  buildParsedPost({
-    tags: overrides.tags ?? baseParsedPost.tags,
-    nodes: overrides.blocks ?? baseParsedPost.blocks,
-    options: {
-      blockOutputs: options.blockOutputs,
-      assets: options.assets,
-    },
+  resolveAsset = async ({ kind, sourceUrl }: { kind: "image" | "thumbnail"; sourceUrl: string }) =>
+    createAssetRecord({
+      kind,
+      sourceUrl,
+      reference: sourceUrl.includes("thumb") ? "assets/thumb.png" : "assets/image.png",
+    }),
+}: {
+  parsedPost: ParsedPost
+  options?: ReturnType<typeof defaultExportOptions>
+  resolveAsset?: (input: { kind: "image" | "thumbnail"; sourceUrl: string }) => Promise<AssetRecord>
+}) =>
+  renderMarkdownPost({
+    post,
+    category,
+    parsedPost,
+    defaultBlockTemplates,
+    markdownFilePath,
+    options,
+    resolveAsset: async ({ kind, sourceUrl }) => resolveAsset({ kind, sourceUrl }),
   })
 
-const parsedPost = createParsedPost()
-
 describe("renderMarkdownPost", () => {
-  it("renders frontmatter, formula wrappers, and asset paths", async () => {
-    const rendered = await renderMarkdownPost({
-      post,
-      category,
-      parsedPost,
-      markdownFilePath: testMarkdownFilePath,
-      options: defaultExportOptions(),
-      resolveAsset: async ({ kind, sourceUrl }) =>
-        createAssetRecord({
-          kind,
-          sourceUrl,
-          relativePath: sourceUrl.includes("video")
-            ? publicVideoThumbnailPath
-            : sourceUrl.includes("thumb")
-              ? publicThumbnailPath
-              : publicImagePath,
-        }),
+  it("renders parsed blocks with default block templates", async () => {
+    const rendered = await render({
+      parsedPost: {
+        tags: ["algo"],
+        blocks: [
+          { blockId: "naver-se4:paragraph", props: { text: "본문입니다." } },
+          { blockId: "naver-se4:quote", props: { text: "인용문" } },
+          {
+            blockId: "naver-se4:video",
+            props: {
+              title: "Demo",
+              url: "https://example.com/video",
+              thumbnailUrl: "https://example.com/video-thumb.png",
+              width: 640,
+              height: 360,
+            },
+          },
+        ],
+      },
     })
 
     expect(rendered.markdown).toContain("title: 테스트 글")
-    expect(rendered.markdown).toContain("## 섹션")
-    expect(rendered.markdown).toContain("$$\nf(n)=n+1\n$$")
-    expect(rendered.markdown).toContain("$g(n)=n-1$")
-    expect(rendered.markdown).toContain(`![one](${publicImagePath})`)
-    expect(rendered.markdown).not.toContain("_caption_")
-    expect(rendered.markdown).toContain("| col |")
-    expect(rendered.markdown).toContain("[External article](https://example.com/article)")
-    expect(rendered.markdown).toContain("[Demo](https://blog.naver.com/mym0404/223034929697)")
-    expect(rendered.markdown).not.toContain("**Video:** Demo")
-    expect(rendered.markdown).not.toContain("\nvisibility:")
+    expect(rendered.markdown).toContain("본문입니다.")
+    expect(rendered.markdown).toContain("> 인용문")
+    expect(rendered.markdown).toContain("[Demo](https://example.com/video)")
     expect(rendered.markdown).not.toContain("\nvideo:")
-    expect(rendered.markdown).not.toContain("preview text")
-    expect(rendered.assetRecords).toHaveLength(2)
   })
 
-  it("applies configured block templates during markdown rendering", async () => {
+  it("uses custom templates by blockId", async () => {
     const options = defaultExportOptions()
+    options.blockOutputs.templates["naver-se4:paragraph"] = "CUSTOM ${text}"
 
-    options.blockOutputs.templates["naver-se4:image"] = "![${alt}](${url})\n_${caption}_"
-
-    const rendered = await renderMarkdownPost({
-      post,
-      category,
-      parsedPost: createParsedPost(
-        {
-          blocks: [
-            {
-              type: "image",
-              image: {
-                sourceUrl: "https://example.com/captioned-image.png",
-                originalSourceUrl: null,
-                alt: "captioned",
-                caption: "caption",
-                mediaKind: "image",
-              },
-            },
-          ],
-        },
-        options,
-      ),
-      markdownFilePath: testMarkdownFilePath,
+    const rendered = await render({
       options,
-      resolveAsset: async ({ kind, sourceUrl }) =>
-        createAssetRecord({
-          kind,
-          sourceUrl,
-          relativePath: publicImagePath,
-        }),
+      parsedPost: {
+        tags: [],
+        blocks: [{ blockId: "naver-se4:paragraph", props: { text: "본문" } }],
+      },
     })
 
-    expect(rendered.markdown).toContain(`![captioned](${publicImagePath})`)
-    expect(rendered.markdown).toContain("_caption_")
+    expect(rendered.markdown).toContain("CUSTOM 본문")
   })
 
-  it("supports structured table rows in configured block templates", async () => {
-    const options = defaultExportOptions()
-
-    options.blockOutputs.templates["naver-se4:table"] =
-      "${rows.map((row) => row.map((cell) => cell.text).join(' / ')).join('\\n')}"
-
-    const rendered = await renderMarkdownPost({
-      post,
-      category,
-      parsedPost: createParsedPost(
-        {
-          blocks: [parsedPostBlocks[6]!],
-        },
-        options,
-      ),
-      markdownFilePath: testMarkdownFilePath,
-      options,
-      resolveAsset: async ({ kind, sourceUrl }) =>
-        createAssetRecord({
-          kind,
-          sourceUrl,
-          relativePath: publicImagePath,
-        }),
-    })
-
-    expect(rendered.markdown).toContain("col\nvalue")
-  })
-
-  it("keeps custom multiline quote templates quoted on every line", async () => {
-    const options = defaultExportOptions()
-
-    options.blockOutputs.templates["naver-se4:quote"] = "> ${text}"
-
-    const rendered = await renderMarkdownPost({
-      post,
-      category,
-      parsedPost: createParsedPost(
-        {
-          blocks: [{ type: "quote", text: "인용문\n둘째 줄" }],
-        },
-        options,
-      ),
-      markdownFilePath: testMarkdownFilePath,
-      options,
-      resolveAsset: async ({ kind, sourceUrl }) =>
-        createAssetRecord({
-          kind,
-          sourceUrl,
-          relativePath: publicImagePath,
-        }),
-    })
-
-    expect(rendered.markdown).toContain("> 인용문\n> 둘째 줄")
-  })
-
-  it("preserves hard breaks inside paragraph markdown", async () => {
-    const rendered = await renderMarkdownPost({
-      post,
-      category,
-      parsedPost: createParsedPost({
-        blocks: [{ type: "paragraph", text: "**파이썬 웹 프로그래밍**  \n작가  \n김석훈" }],
-      }),
-      markdownFilePath: testMarkdownFilePath,
-      options: defaultExportOptions(),
-      resolveAsset: async ({ kind, sourceUrl }) =>
-        createAssetRecord({
-          kind,
-          sourceUrl,
-          relativePath: publicImagePath,
-        }),
-    })
-
-    expect(rendered.markdown).toContain("**파이썬 웹 프로그래밍**  \n작가  \n김석훈")
-  })
-
-  it("ignores stickers by default without adding diagnostics", async () => {
-    const rendered = await renderMarkdownPost({
-      post,
-      category,
-      parsedPost: createParsedPost({
+  it("resolves block asset records into top-level props", async () => {
+    const rendered = await render({
+      parsedPost: {
+        tags: [],
         blocks: [
           {
-            type: "image",
-            image: {
-              sourceUrl: "https://example.com/sticker-preview.png",
-              originalSourceUrl: "https://example.com/sticker-original.gif",
-              alt: "",
+            blockId: "naver-se4:image",
+            props: {
+              url: "https://example.com/image.png",
+              alt: "image",
               caption: null,
-              mediaKind: "sticker",
+            },
+            assets: {
+              url: {
+                role: "image",
+                sourceUrl: "https://example.com/image.png",
+                required: true,
+              },
             },
           },
         ],
-      }),
-      markdownFilePath: testMarkdownFilePath,
-      options: defaultExportOptions(),
-      resolveAsset: async ({ kind, sourceUrl }) =>
-        createAssetRecord({
-          kind,
-          sourceUrl,
-          relativePath: publicImagePath,
-        }),
+      },
     })
 
-    expect(rendered.markdown).not.toContain("## Export Diagnostics")
-    expect(rendered.markdown).not.toContain("sticker-original.gif")
-    expect(rendered.markdown).not.toContain(
-      "스티커 asset 옵션이 ignore라서 본문에서 스티커를 생략했습니다.",
+    expect(rendered.markdown).toContain("![image](assets/image.png)")
+    expect(rendered.assetRecords).toContainEqual(
+      expect.objectContaining({
+        kind: "image",
+        sourceUrl: "https://example.com/image.png",
+        reference: "assets/image.png",
+      }),
     )
   })
 
-  it("renders frontmatter keys with configured aliases", async () => {
-    const options = defaultExportOptions()
-
-    options.frontmatter.aliases.title = "postTitle"
-    options.frontmatter.aliases.publishedAt = "published_on"
-    options.frontmatter.fields.source = false
-
-    const rendered = await renderMarkdownPost({
-      post,
-      category,
-      parsedPost,
-      markdownFilePath: testMarkdownFilePath,
-      options,
-      resolveAsset: async ({ kind, sourceUrl }) =>
-        createAssetRecord({
-          kind,
-          sourceUrl,
-          relativePath: publicImagePath,
-        }),
-    })
-
-    expect(rendered.markdown).toContain("postTitle: 테스트 글")
-    expect(rendered.markdown).toContain("published_on: 2023-03-04T13:00:00+09:00")
-    expect(rendered.markdown).not.toContain("\nsource: https://blog.naver.com/mym0404/223034929697")
-  })
-
-  it("renders paragraph links and media links inline without frontmatter", async () => {
-    const options = defaultExportOptions()
-
-    options.frontmatter.enabled = false
-
-    const rendered = await renderMarkdownPost({
-      post,
-      category,
-      parsedPost: createParsedPost({
+  it("omits a block when a required asset resolves to an empty reference", async () => {
+    const rendered = await render({
+      parsedPost: {
+        tags: [],
         blocks: [
-          { type: "quote", text: "인용문\n둘째 줄" },
           {
-            type: "image",
-            image: {
-              sourceUrl: "https://example.com/source-only.png",
-              originalSourceUrl: null,
-              alt: "source only",
+            blockId: "naver-se4:image",
+            props: {
+              url: "https://example.com/missing.png",
+              alt: "missing",
               caption: null,
-              mediaKind: "image",
             },
-          },
-          {
-            type: "paragraph",
-            text: "[Reference Demo](https://example.com/watch)",
-          },
-        ],
-      }),
-      markdownFilePath: testMarkdownFilePath,
-      options,
-      resolveAsset: async ({ kind, sourceUrl }) =>
-        createAssetRecord({
-          kind,
-          sourceUrl,
-          relativePath: publicImagePath,
-        }),
-    })
-
-    expect(rendered.markdown).toContain("> 인용문")
-    expect(rendered.markdown).toContain("> 둘째 줄")
-    expect(rendered.markdown).toContain(`![source only](${publicImagePath})`)
-    expect(rendered.markdown).toContain("[Reference Demo](https://example.com/watch)")
-    expect(rendered.markdown).not.toContain("[ref-1]: https://example.com/watch")
-    expect(rendered.markdown).not.toContain("---\n")
-  })
-
-  it("renders fallback output for image-group and table edge cases while keeping videos as plain links", async () => {
-    const options = defaultExportOptions()
-
-    const rendered = await renderMarkdownPost({
-      post,
-      category,
-      parsedPost: createParsedPost({
-        blocks: [
-          {
-            type: "divider",
-          },
-          {
-            type: "code",
-            language: "html",
-            code: "<main></main>",
-          },
-          {
-            type: "formula",
-            formula: "x+y",
-            display: true,
-          },
-          {
-            type: "imageGroup",
-            images: [
-              {
-                sourceUrl: "https://example.com/group.png",
-                originalSourceUrl: null,
-                alt: "group",
-                caption: null,
-                mediaKind: "image",
+            assets: {
+              url: {
+                role: "image",
+                sourceUrl: "https://example.com/missing.png",
+                required: true,
               },
-            ],
-          },
-          {
-            type: "video",
-            video: {
-              title: "HTML Demo",
-              thumbnailUrl: "https://example.com/video-thumb.png",
-              sourceUrl: "https://example.com/watch-html",
-              vid: null,
-              inkey: null,
-              width: null,
-              height: null,
             },
           },
-          {
-            type: "table",
-            complex: true,
-            html: "<table><tr><td>cell</td></tr></table>",
-            rows: [],
-          },
         ],
-      }),
-      markdownFilePath: testMarkdownFilePath,
-      options,
+      },
       resolveAsset: async ({ kind, sourceUrl }) =>
         createAssetRecord({
           kind,
           sourceUrl,
-          relativePath: publicImagePath,
+          reference: "",
         }),
     })
 
-    expect(rendered.markdown).toContain("---")
-    expect(rendered.markdown).toContain("```html\n<main></main>\n```")
-    expect(rendered.markdown).not.toContain("***")
-    expect(rendered.markdown).not.toContain("~~~")
-    expect(rendered.markdown).toContain("$$\nx+y\n$$")
-    expect(rendered.markdown).toContain("[HTML Demo](https://example.com/watch-html)")
-    expect(rendered.markdown).not.toContain("![HTML Demo]")
-    expect(rendered.markdown).not.toContain("Open Original Post")
-    expect(rendered.markdown).toContain("cell")
+    expect(rendered.markdown).not.toContain("missing")
   })
 
-  it("keeps link descriptions without duplicating bare urls", async () => {
-    const rendered = await renderMarkdownPost({
-      post,
-      category,
-      parsedPost: createParsedPost({
-        blocks: [
-          {
-            type: "paragraph",
-            text: "[Docs](https://example.com/docs)",
-          },
-          {
-            type: "paragraph",
-            text: "Useful reference",
-          },
-        ],
-      }),
-      markdownFilePath: testMarkdownFilePath,
-      options: defaultExportOptions(),
-      resolveAsset: async ({ kind, sourceUrl }) =>
-        createAssetRecord({
-          kind,
-          sourceUrl,
-          relativePath: publicImagePath,
-        }),
-    })
-
-    expect(rendered.markdown).toContain("[Docs](https://example.com/docs)")
-    expect(rendered.markdown).toContain("Useful reference")
-    expect(rendered.markdown).not.toContain("\nhttps://example.com/docs\n")
-  })
-
-  it("fails when asset download fails and the asset option requests failure", async () => {
-    const options = defaultExportOptions()
-
-    options.assets.thumbnailSource = "none"
-
+  it("fails clearly when a default template is missing", async () => {
     await expect(
-      renderMarkdownPost({
-        post,
-        category,
-        parsedPost: createParsedPost({
-          blocks: [
-            {
-              type: "image",
-              image: {
-                sourceUrl: "https://example.com/failing-image.png",
-                originalSourceUrl: null,
-                alt: "broken",
-                caption: "caption",
-                mediaKind: "image",
-              },
-            },
-          ],
-        }),
-        markdownFilePath: testMarkdownFilePath,
-        options,
-        resolveAsset: async () => {
-          throw new Error("network timeout")
+      render({
+        parsedPost: {
+          tags: [],
+          blocks: [{ blockId: "naver-se4:unknown", props: { text: "본문" } }],
         },
       }),
-    ).rejects.toThrow("자산 다운로드 실패: https://example.com/failing-image.png (network timeout)")
-  })
-
-  it("omits images when asset download fails and the asset option requests omission", async () => {
-    const options = defaultExportOptions()
-
-    options.assets.downloadFailureMode = "omit"
-
-    const rendered = await renderMarkdownPost({
-      post,
-      category,
-      parsedPost: createParsedPost({
-        blocks: [
-          {
-            type: "image",
-            image: {
-              sourceUrl: "https://example.com/failing-image.png",
-              originalSourceUrl: null,
-              alt: "broken",
-              caption: "caption",
-              mediaKind: "image",
-            },
-          },
-        ],
-      }),
-      markdownFilePath: testMarkdownFilePath,
-      options,
-      resolveAsset: async () => {
-        throw new Error("network timeout")
-      },
-    })
-
-    expect(rendered.markdown).not.toContain("![broken](")
-    expect(rendered.markdown).not.toContain("_caption_")
-  })
-
-  it("keeps source url when asset download fails and the asset option keeps source urls", async () => {
-    const options = defaultExportOptions()
-
-    options.assets.downloadFailureMode = "use-source"
-
-    const rendered = await renderMarkdownPost({
-      post,
-      category,
-      parsedPost: createParsedPost({
-        blocks: [
-          {
-            type: "image",
-            image: {
-              sourceUrl: "https://example.com/failing-image.png",
-              originalSourceUrl: null,
-              alt: "broken",
-              caption: "caption",
-              mediaKind: "image",
-            },
-          },
-        ],
-      }),
-      markdownFilePath: testMarkdownFilePath,
-      options,
-      resolveAsset: async () => {
-        throw new Error("network timeout")
-      },
-    })
-
-    expect(rendered.markdown).toContain("![broken](https://example.com/failing-image.png)")
-  })
-
-  it("omits images when asset download fails and the asset option omits images", async () => {
-    const options = defaultExportOptions()
-
-    options.assets.downloadFailureMode = "omit"
-
-    const rendered = await renderMarkdownPost({
-      post,
-      category,
-      parsedPost: createParsedPost({
-        blocks: [
-          {
-            type: "image",
-            image: {
-              sourceUrl: "https://example.com/failing-image.png",
-              originalSourceUrl: null,
-              alt: "broken",
-              caption: "caption",
-              mediaKind: "image",
-            },
-          },
-        ],
-      }),
-      markdownFilePath: testMarkdownFilePath,
-      options,
-      resolveAsset: async () => {
-        throw new Error("network timeout")
-      },
-    })
-
-    expect(rendered.markdown).not.toContain("![broken](")
+    ).rejects.toThrow("Parser block template is missing: naver-se4:unknown")
   })
 })

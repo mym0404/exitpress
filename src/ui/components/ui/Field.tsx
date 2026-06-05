@@ -76,4 +76,4 @@ const FieldError = React.forwardRef<HTMLParagraphElement, React.ComponentProps<"
 )
 FieldError.displayName = "FieldError"
 
-export { Field, FieldDescription, FieldError, FieldGroup, FieldLabel }
+export { Field, FieldDescription, FieldGroup, FieldLabel }
