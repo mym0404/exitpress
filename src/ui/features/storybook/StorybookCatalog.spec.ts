@@ -64,6 +64,7 @@ describe("storybook catalog", () => {
     expect(stories).toHaveLength(52)
     expect(stories.every((story) => story.inputHtml.trim())).toBe(true)
     expect(stories.every((story) => story.markdown.trim())).toBe(true)
+    expect(new Set(stories.map((story) => story.storyKey)).size).toBe(stories.length)
     expect(new Set(stories.map((story) => story.screenshotSrc)).size).toBe(stories.length)
     expect(Object.keys(storybookCaptureAssets).sort()).toEqual(
       stories.map((story) => story.storyKey).sort(),

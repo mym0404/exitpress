@@ -1,0 +1,16 @@
+import type { StorybookDefinition } from "./StorybookDefinition.js"
+
+export const naverSe420Paragraph = {
+  storyKey: "naver-se4-20-paragraph",
+  screenshotSrc: "naver-se4-20-paragraph.png",
+  editorType: "naver-se4",
+  editorLabel: "SmartEditor 4",
+  blockIndex: 20,
+  blockId: "paragraph",
+  blockLabel: "문단",
+  group: "output",
+  sourceUrl: "https://blog.naver.com/lafleur7/223719242533",
+  inspectPath: "0",
+  inputHtml:
+    '<div id="viewTypeSelector">\n<div class="se-component se-text se-l-default" id="SE-4390ad7c-b3e1-4490-a0d2-5034715ebc45">\n                    <div class="se-component-content">\n                        <div class="se-section se-section-text se-l-default">\n                            <div class="se-module se-module-text">\n                                    <!-- SE-TEXT { --><p class="se-text-paragraph se-text-paragraph-align-center " style="" id="SE-0b22fd2a-233f-4ffe-ac69-4714c83c50e8"><span style="" class="se-fs-fs19 se-ff-   " id="SE-d79f7aee-ce16-11ef-bcd4-d77da8c7a481">​</span></p><!-- } SE-TEXT --><!-- SE-TEXT { --><p class="se-text-paragraph se-text-paragraph-align-center " style="" id="SE-46f872f6-0a81-40d3-85c3-2bcbf4325c58"><span style="" class="se-fs-fs19 se-ff-   " id="SE-d79f7aef-ce16-11ef-bcd4-6dfd83617582">​</span></p><!-- } SE-TEXT --><!-- SE-TEXT { --><p class="se-text-paragraph se-text-paragraph-align-center " style="" id="SE-04c1a8a3-0a01-400e-afde-1ac903696292"><span style="" class="se-fs-fs24 se-ff-   " id="SE-d79f7af0-ce16-11ef-bcd4-135f6382adae">@ 새알심 만들기</span></p><!-- } SE-TEXT --><!-- SE-TEXT { --><p class="se-text-paragraph se-text-paragraph-align-center " style="" id="SE-e2ee0604-43cf-431f-8b83-4395d20297cc"><span style="" class="se-fs-fs24 se-ff-   " id="SE-d79f7af1-ce16-11ef-bcd4-4dee512f8f16">새알심만들기 </span></p><!-- } SE-TEXT --><!-- SE-TEXT { --><p class="se-text-paragraph se-text-paragraph-align-center " style="" id="SE-6cffa49c-af6b-4c6d-b0d9-e0457d5e4467"><span style="" class="se-fs-fs24 se-ff-   " id="SE-d79f7af2-ce16-11ef-bcd4-e97c0989d40d">찹쌀가루 요리</span></p><!-- } SE-TEXT --><!-- SE-TEXT { --><p class="se-text-paragraph se-text-paragraph-align-center " style="" id="SE-a68dc3a6-034b-4756-833b-834d7436e029"><span style="" class="se-fs-fs19 se-ff-   " id="SE-d79f7af3-ce16-11ef-bcd4-1bc733582e2b">​</span></p><!-- } SE-TEXT --><!-- SE-TEXT { --><p class="se-text-paragraph se-text-paragraph-align-center " style="" id="SE-eefd6edd-2121-4f7a-b04c-eef7b9c78421"><span style="" class="se-fs-fs19 se-ff-   " id="SE-d79f7af4-ce16-11ef-bcd4-4f8a32abf191">© 글, 사진 / 윤스</span></p><!-- } SE-TEXT --><!-- SE-TEXT { --><p class="se-text-paragraph se-text-paragraph-align-center " style="" id="SE-ec256236-08e3-426e-802a-b36d964b74fb"><span style="" class="se-fs-fs19 se-ff-   " id="SE-d79f7af5-ce16-11ef-bcd4-332866cb097d">​</span></p><!-- } SE-TEXT --><!-- SE-TEXT { --><p class="se-text-paragraph se-text-paragraph-align-center " style="" id="SE-e9c23f5e-d65f-419b-aa4c-221f4d5be7d3"><span style="" class="se-fs-fs19 se-ff-   " id="SE-d79f7af6-ce16-11ef-bcd4-8dac44116e42">​</span></p><!-- } SE-TEXT -->\n                            </div>\n                        </div>\n                    </div>\n                </div>\n</div>',
+} satisfies StorybookDefinition

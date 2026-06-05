@@ -22,10 +22,6 @@ export abstract class BaseBlog {
     return this.editors.flatMap((editor) => editor.getBlockTemplateDefinitions())
   }
 
-  getStorybookBlockDefinitions() {
-    return this.editors.flatMap((editor) => editor.getStorybookBlockDefinitions())
-  }
-
   getEditorForHtml(html: string) {
     return this.editors.find((candidate) => candidate.canParse(html)) ?? null
   }

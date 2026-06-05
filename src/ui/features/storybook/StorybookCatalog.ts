@@ -1,15 +1,21 @@
 import type { ParsedBlock } from "../../../domain/parser/Types.js"
-import type { StorybookBlockDefinition } from "../../../parsing/naver-blog/core/BaseEditor.js"
+import type { BlockTemplateDefinition } from "../../../domain/template/Types.js"
+
+import type { StorybookDefinition } from "./data/StorybookDefinition.js"
 
 import { renderBlockTemplates } from "../../../markdown/BlockTemplateRenderer.js"
 import { parsePostHtml } from "../../../parsing/naver-blog/core/PostParser.js"
-import { NaverBlog } from "../../../parsing/naver-blog/NaverBlog.js"
-import { createNaverBlogDefaultBlockTemplateMap } from "../../../parsing/naver-blog/NaverBlog.js"
+import {
+  createNaverBlogDefaultBlockTemplateMap,
+  NaverBlog,
+} from "../../../parsing/naver-blog/NaverBlog.js"
 
+import { storybookDefinitions } from "./data/StorybookDefinitions.js"
 import { resolveStorybookCaptureSrc } from "./StorybookAssets.js"
 
-export type StorybookStory = StorybookBlockDefinition & {
+export type StorybookStory = StorybookDefinition & {
   markdown: string
+  templateDefinition?: BlockTemplateDefinition
 }
 
 type StorybookEditorGroup = {
@@ -21,6 +27,10 @@ type StorybookEditorGroup = {
 const emptyOutputMarkdown = "Markdown 출력 없음"
 const storybookOptions = { blockOutputs: { templates: {} } }
 const defaultBlockTemplates = createNaverBlogDefaultBlockTemplateMap()
+const blockTemplateDefinitions = new NaverBlog().getBlockTemplateDefinitions()
+const blockTemplateDefinitionByKey = Object.fromEntries(
+  blockTemplateDefinitions.map((definition) => [definition.key, definition]),
+)
 
 const resolveStoryBlockProps = (block: ParsedBlock) => {
   const props = { ...block.props }
@@ -32,7 +42,7 @@ const resolveStoryBlockProps = (block: ParsedBlock) => {
   return props
 }
 
-const renderStoryMarkdown = (definition: StorybookBlockDefinition) => {
+const renderStoryMarkdown = (definition: StorybookDefinition) => {
   const parsedPost = parsePostHtml({
     html: definition.inputHtml,
     sourceUrl: definition.sourceUrl,
@@ -57,10 +67,9 @@ const renderStoryMarkdown = (definition: StorybookBlockDefinition) => {
 }
 
 const buildStorybookCatalog = (): StorybookEditorGroup[] => {
-  const definitions = new NaverBlog().getStorybookBlockDefinitions()
   const groups: StorybookEditorGroup[] = []
 
-  definitions.forEach((definition) => {
+  storybookDefinitions.forEach((definition) => {
     const story: StorybookStory = {
       ...definition,
       screenshotSrc: resolveStorybookCaptureSrc({
@@ -68,6 +77,8 @@ const buildStorybookCatalog = (): StorybookEditorGroup[] => {
         fallbackSrc: definition.screenshotSrc,
       }),
       markdown: renderStoryMarkdown(definition),
+      templateDefinition:
+        blockTemplateDefinitionByKey[`${definition.editorType}:${definition.blockId}`],
     }
     const existingGroup = groups.find((group) => group.editorType === definition.editorType)
 
