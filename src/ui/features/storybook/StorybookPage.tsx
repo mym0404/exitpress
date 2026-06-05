@@ -280,13 +280,13 @@ const StoryTree = ({
     <Card
       variant="panel"
       data-storybook-tree
-      className="overflow-hidden lg:sticky lg:top-5 lg:max-h-[calc(100vh-2.5rem)]"
+      className="grid max-h-[min(44rem,calc(100vh-14rem))] grid-rows-[auto_minmax(0,1fr)] overflow-hidden lg:sticky lg:top-5"
     >
       <CardHeader className="border-b border-border p-4">
         <CardTitle className="text-base">Blocks</CardTitle>
       </CardHeader>
-      <CardContent className="p-0">
-        <ScrollArea className="h-[18rem] lg:h-[min(72vh,760px)]">
+      <CardContent className="min-h-0 p-0">
+        <ScrollArea className="h-full">
           <Accordion
             type="multiple"
             value={openEditorTypes}
