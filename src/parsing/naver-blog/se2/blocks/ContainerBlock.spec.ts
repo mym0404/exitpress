@@ -1,12 +1,13 @@
 import { load } from "cheerio"
 import { describe, expect, it } from "vitest"
 
-import type { AstBlock, ParsedPost } from "../../../../domain/ast/Types.js"
+import type { ParserBlockNode, ParsedPost } from "../../../../domain/parser/Types.js"
 
 import { parseSe2Blocks } from "../../../../../tests/support/parser-test-utils.js"
 import { defaultExportOptions } from "../../../../domain/export-options/ExportOptions.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
 import { BaseEditor } from "../../core/BaseEditor.js"
+import { buildParsedPost } from "../../core/ParsedPostBuilder.js"
 
 import { NaverSe2ContainerBlock } from "./ContainerBlock.js"
 import { NaverSe2TextNodeBlock } from "./TextNodeBlock.js"
@@ -49,11 +50,13 @@ class CustomSe2Editor extends BaseEditor {
       },
     })
 
-    return {
+    return buildParsedPost({
       tags: [],
-      blocks,
-      videos: [],
-    }
+      nodes: blocks,
+      options: {
+        blockOutputs: defaultExportOptions().blockOutputs,
+      },
+    })
   }
 }
 
@@ -75,7 +78,7 @@ const wrappedLeafFixture = `
   </span>
 `
 
-const wrappedLeafBlocks: AstBlock[] = [
+const wrappedLeafBlocks: ParserBlockNode[] = [
   { type: "paragraph", text: "첫 문단" },
   { type: "heading", level: 2, text: "둘째 제목" },
   { type: "quote", text: "셋째 인용" },

@@ -51,7 +51,7 @@ bun .agents/skills/ingest-blog/scripts/write-sample-fixture.ts \
 - Existing-block edits should normally touch the owning block file, its adjacent spec, one representative sample fixture, and durable knowledge only when the contract changed.
 - New-block additions should normally add the block file, adjacent spec, owning editor registration, one representative sample fixture, and durable knowledge only when the contract changed.
 - Committed `figure` evidence assets are allowed when report or PR evidence needs them.
-- Renderer, exporter, shared AST types, UI, workflow, broad helpers, and unrelated knowledge stay out of the PR unless the focused failed HTML cannot fit existing contracts.
+- Renderer, exporter, shared parser node types, UI, workflow, broad helpers, and unrelated knowledge stay out of the PR unless the focused failed HTML cannot fit existing contracts.
 - If the necessary diff is wider than the expected file shape, the report should state why the wider change belongs to the focused support unit.
 
 ## Reports And Evidence

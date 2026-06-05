@@ -1,4 +1,4 @@
-import type { AstBlock } from "../../../domain/ast/Types.js"
+import type { ParserBlockNode } from "../core/ParserBlockNode.js"
 
 import { compactMarkdownText } from "../../../shared/text/TextUtils.js"
 
@@ -33,7 +33,7 @@ export const createLinkParagraphBlocks = ({
   url: string
   hasThumbnail: boolean
   resolveLinkUrl?: (url: string) => string
-}): Extract<AstBlock, { type: "paragraph" }>[] => {
+}): Extract<ParserBlockNode, { type: "paragraph" }>[] => {
   const linkText = formatMarkdownLink({
     label: title || url,
     url,

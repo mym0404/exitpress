@@ -1,6 +1,6 @@
 import type { CheerioAPI } from "cheerio"
 
-import type { ImageData } from "../../../../domain/ast/Types.js"
+import type { ImageData } from "../../../../domain/parser/Types.js"
 import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/BaseBlock.js"
 
 import { normalizeAssetUrl } from "../../../../domain/blog/NaverUrl.js"

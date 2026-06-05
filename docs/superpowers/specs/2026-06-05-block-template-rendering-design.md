@@ -9,7 +9,7 @@
 
 ## 확정한 결정
 - 중간 본문 항목 이름은 `BlockRenderInput`으로 쓴다.
-- parser에서 renderer로 넘어가는 본문 파이프라인에서는 `AstBlock` 개념을 제거한다.
+- parser에서 renderer로 넘어가는 본문 파이프라인에서는 `ParserBlockNode` 개념을 제거한다.
 - `BlockRenderInput` 안에는 editor type, parser block id, label, option metadata를 넣지 않는다.
 - fallback AST block은 두지 않는다.
 - export option에는 최종 template string 하나만 저장한다.
@@ -24,7 +24,7 @@
 - template 실패 시 조용히 fallback하지 않는다.
 
 ## 현재 상태
-- 현재 parser block은 Markdown 렌더링에 맞춘 `AstBlock[]`를 반환한다.
+- 현재 parser block은 Markdown 렌더링에 맞춘 `ParserBlockNode[]`를 반환한다.
 - 현재 선택 가능한 output key는 `editorType:blockId` 형식이다.
 - 여러 parser block이 같은 block id를 공유한다. 특히 `linkCard` 계열에서 이 문제가 크다.
 - 책 위젯과 소재 카드 parser block은 원본에서 얻은 named field를 보존하지 못하고, `image`와 `paragraph`로 쪼개면서 의미 있는 prop 이름을 잃는다.
@@ -404,7 +404,7 @@ book widget props 예:
 
 | 테스트 영역 | 깨지는 이유 | 새 기대값 |
 |---|---|---|
-| `src/domain/ast/Types.ts` 의존 테스트 | `AstBlock`, `BlockType`, `ParsedPost.blocks`가 사라진다. | `BlockRenderInput`, `BlockTemplateDefinition`, `ParsedPost.renderInputs` 기준으로 타입과 fixture를 바꾼다. |
+| `src/domain/parser/Types.ts` 의존 테스트 | `ParserBlockNode`, `BlockType`, `ParsedPost.blocks`가 사라진다. | `BlockRenderInput`, `BlockTemplateDefinition`, `ParsedPost.renderInputs` 기준으로 타입과 fixture를 바꾼다. |
 | parser block specs | `convert()` 결과가 `paragraph`, `image`, `table` AST가 아니라 template input과 props가 된다. | 각 block spec은 `template`, `props`, `AssetCandidate`를 검증한다. 기본 template render 결과도 함께 확인한다. |
 | `MarkdownRenderer.spec.ts` | renderer가 AST별 Markdown 분기와 render 중 asset resolve를 하지 않는다. | template renderer spec으로 재구성하고, asset resolve가 끝난 props만 받아 Markdown을 만드는지 확인한다. |
 | `ExportOptions.spec.ts`, persisted option specs | export option이 `blockOutputs.templates`만 가진다. | 저장값은 template string만 유지하는지 확인한다. |
@@ -435,7 +435,7 @@ book widget props 예:
 - template editor UI 변경 뒤에는 `pnpm smoke:ui`를 실행한다.
 
 ## 구현 범위
-- `AstBlock` body output을 `BlockRenderInput`으로 교체한다.
+- `ParserBlockNode` body output을 `BlockRenderInput`으로 교체한다.
 - `ParsedPost.renderInputs`와 parser block 반환 계약을 바꾼다.
 - `ParsedPost.assetCandidates`와 `AssetCandidate` 계약을 추가한다.
 - 글 하나를 `fetch -> preprocess -> asset-download -> asset-upload -> render -> write` pipeline으로 실행한다.

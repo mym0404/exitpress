@@ -1,8 +1,8 @@
 import { load } from "cheerio"
 import { expect } from "vitest"
 
-import type { ParsedPost } from "../../src/domain/ast/Types.js"
 import type { ExportOptions } from "../../src/domain/export-options/Types.js"
+import type { ParsedPost } from "../../src/domain/parser/Types.js"
 import type { BlockTemplateDefinition } from "../../src/domain/template/Types.js"
 
 import { defaultExportOptions } from "../../src/domain/export-options/ExportOptions.js"

@@ -11,16 +11,16 @@
 - Blog scan and post HTML fetch start in `src/integrations/naver-blog/NaverBlogFetcher.ts`.
 - `src/parsing/naver-blog/core/PostParser.ts` builds a `src/parsing/naver-blog/NaverBlog.ts` instance and lets its editor instances choose the matching parser through `canParse`.
 - Editor classes own block ordering, output-option visibility order, and source-level context. Block-specific `match` and `convert` logic stays in `src/parsing/naver-blog/se2`, `src/parsing/naver-blog/se3`, and `src/parsing/naver-blog/se4`.
-- `src/markdown/MarkdownRenderer.ts` assembles frontmatter and final Markdown output, `AstMarkdownRenderer.ts` renders common AST blocks, and `TurndownMarkdownConverter.ts` handles HTML fragment conversion through Turndown.
+- `src/markdown/MarkdownRenderer.ts` assembles frontmatter and final Markdown output from parser render inputs, and `TurndownMarkdownConverter.ts` handles HTML fragment conversion through Turndown.
 - `src/exporting/paths/ExportPaths.ts`, `src/exporting/assets/AssetStore.ts`, `src/exporting/paths/PostLinkRewriter.ts`, and `src/server/jobs/ExportJobManifest.ts` handle output paths, deduped assets, post links, and resumable `manifest.json`.
 
 ## Module Boundaries
-- `src/domain`: AST, blog, export option/job, upload, and preference contracts.
+- `src/domain`: parser, blog, export option/job, upload, and preference contracts.
 - `src/shared`: runtime-neutral utility helpers and base object types.
 - `src/infra`: Node filesystem/path, HTTP fetch, runtime logging/abort adapters.
 - `src/integrations/naver-blog`: Naver mobile API and post HTML fetch.
-- `src/parsing/naver-blog`: SE2, SE3, SE4 HTML structures to common AST.
-- `src/markdown`: AST to Markdown, Turndown-based HTML fragment conversion, and frontmatter assembly.
+- `src/parsing/naver-blog`: SE2, SE3, SE4 HTML structures to parser nodes and render inputs.
+- `src/markdown`: template rendering, Turndown-based HTML fragment conversion, and frontmatter assembly.
 - `src/exporting`: export orchestration, asset persistence, upload/rewrite phase, single-post export, output paths.
 - `src/server`: local HTTP server, job store, local state/cache, upload provider catalog.
 - `src/ui`: React wizard, parser Storybook surface, scan/options/results/resume surfaces, shadcn primitives, API client.

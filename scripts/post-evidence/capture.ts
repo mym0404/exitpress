@@ -6,9 +6,9 @@ import { chromium } from "playwright"
 
 import type { Browser } from "playwright"
 
-import type { AstBlock, ParsedPost } from "../../src/domain/ast/Types.js"
 import type { PostSummary, ScanResult } from "../../src/domain/blog/Types.js"
 import type { ExportOptions } from "../../src/domain/export-options/Types.js"
+import type { ParserBlockNode, ParsedPost } from "../../src/domain/parser/Types.js"
 import type { SinglePostFetcher } from "../../src/exporting/post/SinglePostExport.js"
 
 import type { EvidenceCase } from "./cases.js"
@@ -28,8 +28,8 @@ import {
 } from "../../src/exporting/paths/PostLinkRewriter.js"
 import { ensureDir, resolveRepoPath } from "../../src/infra/node/FilePathUtils.js"
 import { NaverBlogFetcher } from "../../src/integrations/naver-blog/NaverBlogFetcher.js"
-import { convertAstParsedPostToTemplatePost } from "../../src/markdown/AstRenderInputAdapter.js"
 import { renderMarkdownPost } from "../../src/markdown/MarkdownRenderer.js"
+import { buildParsedPost } from "../../src/parsing/naver-blog/core/ParsedPostBuilder.js"
 import { parsePostHtmlWithBlockEvidence } from "../../src/parsing/naver-blog/core/PostParser.js"
 import { NaverBlog } from "../../src/parsing/naver-blog/NaverBlog.js"
 import { mapConcurrent } from "../../src/shared/async/AsyncUtils.js"
@@ -112,28 +112,34 @@ const createRemoteAssetRecord = ({
 const createFragmentParsedPost = ({
   parsedPost,
   blocks,
+  options,
 }: {
   parsedPost: ParsedPost
-  blocks: AstBlock[]
-}): ParsedPost => ({
-  tags: parsedPost.tags,
-  blocks,
-  videos: blocks
-    .filter((block): block is Extract<AstBlock, { type: "video" }> => block.type === "video")
-    .map((block) => block.video),
-})
+  blocks: ParserBlockNode[]
+  options: ExportOptions
+}): ParsedPost =>
+  buildParsedPost({
+    tags: parsedPost.tags,
+    nodes: blocks,
+    options: {
+      blockOutputs: options.blockOutputs,
+      assets: options.assets,
+    },
+  })
 
 const selectTargetParsedPost = ({
   parsedPost,
   target,
+  options,
 }: {
   parsedPost: ParsedPost & {
     blockEvidence: Array<{
       path: string
-      block: AstBlock
+      block: ParserBlockNode
     }>
   }
   target: EvidenceCase["target"]
+  options: ExportOptions
 }) => {
   if (target.kind === "post") {
     return parsedPost
@@ -152,6 +158,7 @@ const selectTargetParsedPost = ({
   return createFragmentParsedPost({
     parsedPost,
     blocks,
+    options,
   })
 }
 
@@ -231,12 +238,14 @@ const renderEvidenceMarkdown = async ({
     sourceUrl: post.source,
     options: {
       blockOutputs: options.blockOutputs,
+      assets: options.assets,
       resolveLinkUrl,
     },
   })
   const targetParsedPost = selectTargetParsedPost({
     parsedPost,
     target,
+    options,
   })
   const renderOptions = cloneExportOptions({
     ...options,
@@ -254,16 +263,10 @@ const renderEvidenceMarkdown = async ({
     downloader: fetcher,
     options: renderOptions,
   })
-  const templatePost = convertAstParsedPostToTemplatePost({
-    parsedPost: targetParsedPost,
-    blockOutputs: renderOptions.blockOutputs,
-    assets: renderOptions.assets,
-    resolveLinkUrl,
-  })
   const rendered = await renderMarkdownPost({
     post,
     category,
-    parsedPost: templatePost,
+    parsedPost: targetParsedPost,
     markdownFilePath,
     options: renderOptions,
     resolveAsset:

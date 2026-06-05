@@ -8,10 +8,10 @@
 ## Block Families
 - Text 계열은 direct text와 일반 HTML element를 Markdown paragraph로 정리한다.
 - Structure 계열은 legacy wrapper를 풀거나 빈 spacer, 빈 legacy list, top-level line break, HTML 주석을 버린다.
-- Media 계열은 image, image group, inline GIF-like media, div-wrapped poll iframe link, standalone 또는 legacy grouped embedded video를 공용 media AST나 링크 문단으로 수렴한다.
+- Media 계열은 image, image group, inline GIF-like media, div-wrapped poll iframe link, standalone 또는 legacy grouped embedded video를 공용 media parser node나 링크 문단으로 수렴한다.
 - Rich legacy widget 계열은 책 위젯처럼 블로그 고유 HTML을 image와 paragraph 조합으로 분해한다.
 - Table/code 계열은 일반 table, 단일 열 layout table, Color Scripter 같은 legacy code-table 변형을 처리한다.
-- Quote, heading, divider 계열은 legacy HTML tag 의미를 공용 AST로 보존한다.
+- Quote, heading, divider 계열은 legacy HTML tag 의미를 공용 parser node로 보존한다.
 
 ## Characteristics
 - SE2는 구조가 느슨하므로 fallback block의 순서가 중요하다.

@@ -1,4 +1,3 @@
-import type { AstBlock } from "../../domain/ast/Types.js"
 import type { PostSummary, ScanResult } from "../../domain/blog/Types.js"
 import type { ExportOptions } from "../../domain/export-options/Types.js"
 
@@ -27,7 +26,7 @@ type ExportSinglePostDiagnostics = {
   post: PostSummary
   markdown: string
   markdownFilePath: string
-  blockTypes: AstBlock["type"][]
+  blockTypes: string[]
   assetPaths: string[]
 }
 

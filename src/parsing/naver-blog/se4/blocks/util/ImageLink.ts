@@ -1,6 +1,6 @@
 import type { CheerioAPI } from "cheerio"
 
-import type { ImageData } from "../../../../../domain/ast/Types.js"
+import type { ImageData } from "../../../../../domain/parser/Types.js"
 
 import { normalizeAssetUrl } from "../../../../../domain/blog/NaverUrl.js"
 import { compactText } from "../../../../../shared/text/TextUtils.js"

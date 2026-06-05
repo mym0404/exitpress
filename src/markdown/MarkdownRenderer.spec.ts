@@ -1,13 +1,13 @@
 import { describe, expect, it } from "vitest"
 
-import type { ParsedPost as AstParsedPost } from "../domain/ast/Types.js"
 import type { CategoryInfo, PostSummary } from "../domain/blog/Types.js"
 import type { AssetRecord } from "../domain/export-job/Types.js"
+import type { ParsedPost as ParserBlockNodePost, ParserBlockNode } from "../domain/parser/Types.js"
 
 import { createTestPath } from "../../tests/support/test-paths.js"
 import { defaultExportOptions } from "../domain/export-options/ExportOptions.js"
+import { buildParsedPost } from "../parsing/naver-blog/core/ParsedPostBuilder.js"
 
-import { convertAstParsedPostToTemplatePost } from "./AstRenderInputAdapter.js"
 import { renderMarkdownPost } from "./MarkdownRenderer.js"
 
 const testMarkdownFilePath = createTestPath(
@@ -74,7 +74,7 @@ const createAssetRecord = ({
         : null,
   }) satisfies AssetRecord
 
-const parsedPostBlocks: AstParsedPost["blocks"] = [
+const parsedPostBlocks: ParserBlockNode[] = [
   { type: "heading", level: 2, text: "섹션" },
   { type: "paragraph", text: "본문입니다." },
   { type: "formula", formula: "f(n)=n+1", display: true },
@@ -142,33 +142,22 @@ const parsedPostBlocks: AstParsedPost["blocks"] = [
   },
 ]
 
-const astParsedPost: AstParsedPost = {
+const baseParsedPost = {
   tags: ["algo"],
-  videos: [
-    {
-      title: "Demo",
-      thumbnailUrl: "https://example.com/video-thumb.png",
-      sourceUrl: "https://blog.naver.com/mym0404/223034929697",
-      vid: "vid",
-      inkey: "inkey",
-      width: 640,
-      height: 360,
-    },
-  ],
   blocks: parsedPostBlocks,
 }
 
 const createParsedPost = (
-  overrides: Partial<AstParsedPost> = {},
+  overrides: Partial<Pick<ParserBlockNodePost, "tags" | "blocks">> = {},
   options = defaultExportOptions(),
 ) =>
-  convertAstParsedPostToTemplatePost({
-    parsedPost: {
-      ...astParsedPost,
-      ...overrides,
+  buildParsedPost({
+    tags: overrides.tags ?? baseParsedPost.tags,
+    nodes: overrides.blocks ?? baseParsedPost.blocks,
+    options: {
+      blockOutputs: options.blockOutputs,
+      assets: options.assets,
     },
-    blockOutputs: options.blockOutputs,
-    assets: options.assets,
   })
 
 const parsedPost = createParsedPost()
@@ -246,6 +235,61 @@ describe("renderMarkdownPost", () => {
 
     expect(rendered.markdown).toContain(`![captioned](${publicImagePath})`)
     expect(rendered.markdown).toContain("_caption_")
+  })
+
+  it("supports structured table rows in configured block templates", async () => {
+    const options = defaultExportOptions()
+
+    options.blockOutputs.templates["naver-se4:table"] =
+      "${rows.map((row) => row.map((cell) => cell.text).join(' / ')).join('\\n')}"
+
+    const rendered = await renderMarkdownPost({
+      post,
+      category,
+      parsedPost: createParsedPost(
+        {
+          blocks: [parsedPostBlocks[6]!],
+        },
+        options,
+      ),
+      markdownFilePath: testMarkdownFilePath,
+      options,
+      resolveAsset: async ({ kind, sourceUrl }) =>
+        createAssetRecord({
+          kind,
+          sourceUrl,
+          relativePath: publicImagePath,
+        }),
+    })
+
+    expect(rendered.markdown).toContain("col\nvalue")
+  })
+
+  it("keeps custom multiline quote templates quoted on every line", async () => {
+    const options = defaultExportOptions()
+
+    options.blockOutputs.templates["naver-se4:quote"] = "> ${text}"
+
+    const rendered = await renderMarkdownPost({
+      post,
+      category,
+      parsedPost: createParsedPost(
+        {
+          blocks: [{ type: "quote", text: "인용문\n둘째 줄" }],
+        },
+        options,
+      ),
+      markdownFilePath: testMarkdownFilePath,
+      options,
+      resolveAsset: async ({ kind, sourceUrl }) =>
+        createAssetRecord({
+          kind,
+          sourceUrl,
+          relativePath: publicImagePath,
+        }),
+    })
+
+    expect(rendered.markdown).toContain("> 인용문\n> 둘째 줄")
   })
 
   it("preserves hard breaks inside paragraph markdown", async () => {

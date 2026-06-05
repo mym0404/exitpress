@@ -1,7 +1,7 @@
 import type { CheerioAPI } from "cheerio"
 import type { AnyNode } from "domhandler"
 
-import type { ParserBlockOptions } from "../../../domain/ast/Types.js"
+import type { ParserBlockOptions } from "../../../domain/parser/Types.js"
 import type { UnknownRecord } from "../../../shared/object/UnknownRecord.js"
 
 import type { BaseBlock, ParserBlockContext } from "./BaseBlock.js"

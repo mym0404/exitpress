@@ -1,9 +1,11 @@
 import type { Cheerio, CheerioAPI } from "cheerio"
 import type { AnyNode } from "domhandler"
 
-import type { AstBlock, ParserBlockOptions } from "../../../domain/ast/Types.js"
+import type { ParserBlockOptions } from "../../../domain/parser/Types.js"
 import type { BlockTemplateDefinition } from "../../../domain/template/Types.js"
 import type { UnknownRecord } from "../../../shared/object/UnknownRecord.js"
+
+import type { ParserBlockNode } from "./ParserBlockNode.js"
 
 export type ParserBlockTemplateDefinition = Omit<BlockTemplateDefinition, "key"> & {
   key?: string
@@ -23,7 +25,7 @@ export type ParserBlockContext = {
 }
 export type ParserBlockConvertContext = ParserBlockContext & {
   path: string
-  matchNode: (node: AnyNode, path: string) => AstBlock[]
+  matchNode: (node: AnyNode, path: string) => ParserBlockNode[]
 }
 
 export type ParserBlockStoryGroup = "output" | "auxiliary"
@@ -44,7 +46,7 @@ export abstract class BaseBlock {
 
   abstract match(context: ParserBlockContext): boolean
 
-  abstract convert(context: ParserBlockConvertContext): AstBlock[]
+  abstract convert(context: ParserBlockConvertContext): ParserBlockNode[]
 }
 
 export abstract class ContainerBlock extends BaseBlock {

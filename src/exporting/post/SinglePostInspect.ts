@@ -1,6 +1,5 @@
 import { load } from "cheerio"
 
-import type { AstBlock } from "../../domain/ast/Types.js"
 import type { ExportOptions } from "../../domain/export-options/Types.js"
 import type { ParserBlockInspection } from "../../parsing/naver-blog/core/BaseEditorTypes.js"
 
@@ -26,7 +25,7 @@ export type SinglePostInspectDiagnostics = {
   parse:
     | {
         status: "success"
-        blockTypes: AstBlock["type"][]
+        blockTypes: string[]
       }
     | {
         status: "failed"
@@ -88,7 +87,7 @@ export const inspectPostHtml = ({
 
     parseResult = {
       status: "success",
-      blockTypes: parsedPost.blocks.map((block) => block.type),
+      blockTypes: parsedPost.blockTypes,
     }
   } catch (error) {
     parseResult = {

@@ -1,8 +1,8 @@
 import type { Cheerio, CheerioAPI } from "cheerio"
 import type { AnyNode } from "domhandler"
 
-import type { AstBlock } from "../../../../../domain/ast/Types.js"
 import type { ParserBlockContext } from "../../../core/BaseBlock.js"
+import type { ParserBlockNode } from "../../../core/ParserBlockNode.js"
 
 import { compactText } from "../../../../../shared/text/TextUtils.js"
 import { createLinkParagraphBlocks } from "../../../common/LinkParagraph.js"
@@ -51,7 +51,7 @@ export const convertSe3MapPlace = ({
   $,
   $node,
   options,
-}: Pick<ParserBlockContext, "$" | "$node" | "options">): AstBlock[] => {
+}: Pick<ParserBlockContext, "$" | "$node" | "options">): ParserBlockNode[] => {
   const title = compactText(
     findInComponentRoot({ $, $component: $node, selector: ".se_title" })
       .first()

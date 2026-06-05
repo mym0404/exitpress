@@ -8,9 +8,9 @@
 ## Block Families
 - Document chrome 계열은 본문 output이 아닌 제목 wrapper를 버린다.
 - Text 계열은 SE3 textarea HTML을 Markdown paragraph로 만들고, 비어 있는 textarea component는 버린다.
-- Media 계열은 component 안의 standalone images, GIF video images, legacy sticker, image strip을 image 또는 imageGroup AST로 만든다.
+- Media 계열은 component 안의 standalone images, GIF video images, legacy sticker, image strip을 image 또는 imageGroup parser node로 만든다.
 - Link card 계열은 SE3 oglink preview component를 Markdown link paragraph로 만든다.
-- Table, quote, code, divider, video 계열은 component 안의 대표 semantic child를 공용 AST로 만든다.
+- Table, quote, code, divider, video 계열은 component 안의 대표 semantic child를 공용 parser node로 만든다.
 - Map 계열은 component 안의 장소 정보를 Markdown link paragraph로 만든다.
 
 ## Characteristics

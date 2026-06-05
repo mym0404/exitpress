@@ -1,8 +1,8 @@
 import type { CheerioAPI } from "cheerio"
 import type { AnyNode } from "domhandler"
 
-import type { AstBlock, ParsedPost, ParserBlockOptions } from "../../../domain/ast/Types.js"
 import type { ExportOptions } from "../../../domain/export-options/Types.js"
+import type { ParsedPost, ParserBlockOptions } from "../../../domain/parser/Types.js"
 import type { BlockTemplateDefinition } from "../../../domain/template/Types.js"
 import type { UnknownRecord } from "../../../shared/object/UnknownRecord.js"
 
@@ -13,6 +13,7 @@ import type {
   ParserBlockStoryGroup,
 } from "./BaseBlock.js"
 import type { ParserBlockInspection, ParserBlockSourceEvidence } from "./BaseEditorTypes.js"
+import type { ParserBlockNode } from "./ParserBlockNode.js"
 
 import { LeafBlock } from "./BaseBlock.js"
 import { inspectEditorBlocks } from "./BaseEditorInspection.js"
@@ -631,7 +632,7 @@ export abstract class BaseEditor {
       )
     }
 
-    const matchNode = (node: AnyNode, path: string): AstBlock[] => {
+    const matchNode = (node: AnyNode, path: string): ParserBlockNode[] => {
       const context = createBlockContext(node)
       const block = this.supportedBlocks.find((supportedBlock) => supportedBlock.match(context))
 

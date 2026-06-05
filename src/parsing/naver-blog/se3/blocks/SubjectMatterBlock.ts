@@ -1,4 +1,4 @@
-import type { ImageData } from "../../../../domain/ast/Types.js"
+import type { ImageData } from "../../../../domain/parser/Types.js"
 import type { ParserBlockContext } from "../../core/BaseBlock.js"
 
 import { normalizeAssetUrl } from "../../../../domain/blog/NaverUrl.js"

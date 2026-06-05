@@ -1,7 +1,8 @@
 import type { CheerioAPI } from "cheerio"
 
-import type { AstBlock, ImageData } from "../../../../domain/ast/Types.js"
+import type { ImageData } from "../../../../domain/parser/Types.js"
 import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/BaseBlock.js"
+import type { ParserBlockNode } from "../../core/ParserBlockNode.js"
 
 import { normalizeAssetUrl } from "../../../../domain/blog/NaverUrl.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
@@ -92,7 +93,7 @@ export class NaverSe3ImageBlock extends LeafBlock {
 
   override convert({ $, $node }: Parameters<LeafBlock["convert"]>[0]) {
     const { images, text } = getStandaloneImageContent({ $, $component: $node })
-    const blocks: AstBlock[] =
+    const blocks: ParserBlockNode[] =
       images.length === 1
         ? [{ type: "image" as const, image: images[0]! }]
         : [{ type: "imageGroup" as const, images }]

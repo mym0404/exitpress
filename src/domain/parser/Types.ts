@@ -1,4 +1,7 @@
-type VideoData = {
+import type { ExportOptions } from "../export-options/Types.js"
+import type { ParsedPost as TemplateParsedPost } from "../template/Types.js"
+
+export type VideoData = {
   title: string
   thumbnailUrl: string | null
   sourceUrl: string
@@ -8,7 +11,7 @@ type VideoData = {
   height: number | null
 }
 
-type TableCell = {
+export type TableCell = {
   text: string
   html: string
   colspan: number
@@ -28,7 +31,7 @@ export type ImageData = {
   mediaKind: MediaKind
 }
 
-export type AstBlock =
+export type ParserBlockNode =
   | { type: "paragraph"; text: string }
   | { type: "heading"; level: number; text: string }
   | { type: "quote"; text: string }
@@ -40,17 +43,17 @@ export type AstBlock =
   | { type: "video"; video: VideoData }
   | { type: "table"; rows: TableRow[]; html: string; complex: boolean }
 
-export type BlockType = AstBlock["type"]
+export type ParserBlockType = ParserBlockNode["type"]
 
-export type ParsedPost = {
-  tags: string[]
-  blocks: AstBlock[]
-  videos: VideoData[]
+export type ParsedPost = TemplateParsedPost & {
+  blocks: ParserBlockNode[]
+  blockTypes: string[]
 }
 
 export type ParserBlockOptions = {
   blockOutputs: {
     templates: Partial<Record<string, string>>
   }
+  assets?: ExportOptions["assets"]
   resolveLinkUrl?: (url: string) => string
 }

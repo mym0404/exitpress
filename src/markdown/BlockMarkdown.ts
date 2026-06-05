@@ -1,4 +1,5 @@
-import type { AstBlock, ImageData } from "../domain/ast/Types.js"
+import type { ImageData } from "../domain/parser/Types.js"
+import type { ParserBlockNode } from "../parsing/naver-blog/core/ParserBlockNode.js"
 
 import { splitFormulaWrapper } from "./FormulaWrapper.js"
 
@@ -105,7 +106,7 @@ export const renderFormula = ({ formula, display }: { formula: string; display: 
   })
 }
 
-export const renderGfmTable = (block: Extract<AstBlock, { type: "table" }>) => {
+export const renderGfmTable = (block: Extract<ParserBlockNode, { type: "table" }>) => {
   const [headerRow, ...bodyRows] = block.rows
 
   if (!headerRow) {

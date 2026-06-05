@@ -1,8 +1,9 @@
-import type { AstBlock, ParsedPost } from "../../../domain/ast/Types.js"
+import type { ParsedPost } from "../../../domain/parser/Types.js"
 import type { BaseEditorParseInput } from "../core/BaseEditor.js"
 
 import { unique } from "../../../shared/collection/CollectionUtils.js"
 import { BaseEditor } from "../core/BaseEditor.js"
+import { buildParsedPost } from "../core/ParsedPostBuilder.js"
 
 import { NaverSe2BookWidgetBlock } from "./blocks/BookWidgetBlock.js"
 import { NaverSe2CodeBlock } from "./blocks/CodeBlock.js"
@@ -60,15 +61,11 @@ export class NaverBlogSE2Editor extends BaseEditor {
       captureBlockEvidence,
     })
 
-    const videos = blocks
-      .filter((block): block is Extract<AstBlock, { type: "video" }> => block.type === "video")
-      .map((block) => block.video)
-
-    return {
+    return buildParsedPost({
       tags: unique(tags),
-      blocks,
-      videos,
-    } satisfies ParsedPost
+      nodes: blocks,
+      options,
+    }) satisfies ParsedPost
   }
 
   override inspect({ $, tags, options }: BaseEditorParseInput) {

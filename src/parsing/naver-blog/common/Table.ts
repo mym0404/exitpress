@@ -1,4 +1,4 @@
-import type { AstBlock } from "../../../domain/ast/Types.js"
+import type { ParserBlockNode } from "../core/ParserBlockNode.js"
 
 import type { parseHtmlTable } from "./parseHtmlTable.js"
 
@@ -39,7 +39,7 @@ export const parseSingleColumnTableAsParagraphs = ({
         ({
           type: "paragraph",
           text,
-        }) satisfies AstBlock,
+        }) satisfies ParserBlockNode,
     )
 
   return paragraphs.length > 0 ? paragraphs : null

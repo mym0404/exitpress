@@ -1,7 +1,6 @@
 import { writeFile } from "node:fs/promises"
 import path from "node:path"
 
-import type { AstBlock } from "../../domain/ast/Types.js"
 import type { PostSummary } from "../../domain/blog/Types.js"
 import type { ExportOptions } from "../../domain/export-options/Types.js"
 import type { NaverBlogFetcher } from "../../integrations/naver-blog/NaverBlogFetcher.js"
@@ -10,7 +9,6 @@ import type { buildPostLinkTargets } from "../paths/PostLinkRewriter.js"
 
 import { ensureDir } from "../../infra/node/FilePathUtils.js"
 import { throwIfAborted } from "../../infra/runtime/AbortOperation.js"
-import { convertAstParsedPostToTemplatePost } from "../../markdown/AstRenderInputAdapter.js"
 import { renderMarkdownPost } from "../../markdown/MarkdownRenderer.js"
 import { parsePostHtml } from "../../parsing/naver-blog/core/PostParser.js"
 import { createPostUploadSummary } from "../manifest/ExportManifestProgress.js"
@@ -69,19 +67,14 @@ export const exportPostUnit = async ({
     sourceUrl: post.source,
     options: {
       blockOutputs: options.blockOutputs,
+      assets: options.assets,
       resolveLinkUrl,
     },
-  })
-  const templatePost = convertAstParsedPostToTemplatePost({
-    parsedPost,
-    blockOutputs: options.blockOutputs,
-    assets: options.assets,
-    resolveLinkUrl,
   })
   const rendered = await renderMarkdownPost({
     post,
     category,
-    parsedPost: templatePost,
+    parsedPost,
     markdownFilePath,
     options,
     resolveAsset: async (input) => assetStore.saveAsset(input),
@@ -114,7 +107,7 @@ export const exportPostUnit = async ({
     }),
     markdown: rendered.markdown,
     markdownFilePath,
-    blockTypes: parsedPost.blocks.map((block): AstBlock["type"] => block.type),
+    blockTypes: parsedPost.blockTypes,
     assetPaths,
   }
 }

@@ -1,8 +1,9 @@
 import type { CheerioAPI } from "cheerio"
 
-import type { AstBlock } from "../../../../domain/ast/Types.js"
 import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/BaseBlock.js"
+import type { ParserBlockNode } from "../../core/ParserBlockNode.js"
 
+import { tableTemplate } from "../../../../domain/template/DefaultTemplates.js"
 import { convertHtmlToMarkdown } from "../../../../markdown/TurndownMarkdownConverter.js"
 import { compactText } from "../../../../shared/text/TextUtils.js"
 import { parseHtmlTable } from "../../common/parseHtmlTable.js"
@@ -37,7 +38,7 @@ const parseColorScripterCodeBlock = ({
     type: "code",
     language: null,
     code,
-  } satisfies AstBlock
+  } satisfies ParserBlockNode
 }
 
 export class NaverSe2TableBlock extends LeafBlock {
@@ -49,11 +50,13 @@ export class NaverSe2TableBlock extends LeafBlock {
       {
         id: "default",
         label: "기본",
-        template: "${markdown}",
+        template: tableTemplate,
       },
     ],
     props: {
-      markdown: { label: "Markdown", type: "string" },
+      rows: { label: "행", type: "array" },
+      html: { label: "HTML", type: "string" },
+      complex: { label: "복합 표", type: "boolean" },
     },
   } satisfies ParserBlockTemplateDefinition
 

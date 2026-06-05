@@ -1,6 +1,6 @@
 import type { CheerioAPI } from "cheerio"
 
-import type { TableRow } from "../../../domain/ast/Types.js"
+import type { TableRow } from "../../../domain/parser/Types.js"
 
 import { compactText } from "../../../shared/text/TextUtils.js"
 

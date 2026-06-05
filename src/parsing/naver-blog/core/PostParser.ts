@@ -1,6 +1,6 @@
 import { load } from "cheerio"
 
-import type { ExportOptions } from "../../../domain/export-options/Types.js"
+import type { ParserBlockOptions } from "../../../domain/parser/Types.js"
 
 import type { ParserBlockSourceEvidence } from "./BaseEditorTypes.js"
 
@@ -22,9 +22,7 @@ export const parsePostHtml = ({
 }: {
   html: string
   sourceUrl: string
-  options: Pick<ExportOptions, "blockOutputs"> & {
-    resolveLinkUrl?: (url: string) => string
-  }
+  options: ParserBlockOptions
 }) => {
   const $ = load(html)
   const tags = extractPostTags($)
@@ -49,9 +47,7 @@ export const parsePostHtmlWithBlockEvidence = ({
 }: {
   html: string
   sourceUrl: string
-  options: Pick<ExportOptions, "blockOutputs"> & {
-    resolveLinkUrl?: (url: string) => string
-  }
+  options: ParserBlockOptions
 }): ParsedPostWithBlockEvidence => {
   const $ = load(html)
   const tags = extractPostTags($)

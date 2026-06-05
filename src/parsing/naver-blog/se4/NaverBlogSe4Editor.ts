@@ -1,11 +1,12 @@
 import type { AnyNode } from "domhandler"
 
-import type { AstBlock, ParsedPost } from "../../../domain/ast/Types.js"
+import type { ParsedPost } from "../../../domain/parser/Types.js"
 import type { BaseEditorParseInput } from "../core/BaseEditor.js"
 
 import { unique } from "../../../shared/collection/CollectionUtils.js"
 import { BaseEditor } from "../core/BaseEditor.js"
 import { parseJsonAttribute } from "../core/JsonAttribute.js"
+import { buildParsedPost } from "../core/ParsedPostBuilder.js"
 
 import { NaverSe4CodeBlock } from "./blocks/CodeBlock.js"
 import { NaverSe4DividerBlock } from "./blocks/DividerBlock.js"
@@ -97,15 +98,11 @@ export class NaverBlogSE4Editor extends BaseEditor {
       },
     })
 
-    const videos = blocks
-      .filter((block): block is Extract<AstBlock, { type: "video" }> => block.type === "video")
-      .map((block) => block.video)
-
-    return {
+    return buildParsedPost({
       tags: unique(tags),
-      blocks,
-      videos,
-    } satisfies ParsedPost
+      nodes: blocks,
+      options,
+    }) satisfies ParsedPost
   }
 
   override inspect({ $, sourceUrl = "", tags, options }: BaseEditorParseInput) {

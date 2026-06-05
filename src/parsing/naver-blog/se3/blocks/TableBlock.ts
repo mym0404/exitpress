@@ -1,5 +1,6 @@
 import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/BaseBlock.js"
 
+import { tableTemplate } from "../../../../domain/template/DefaultTemplates.js"
 import { parseHtmlTable } from "../../common/parseHtmlTable.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
 
@@ -14,11 +15,13 @@ export class NaverSe3TableBlock extends LeafBlock {
       {
         id: "default",
         label: "기본",
-        template: "${markdown}",
+        template: tableTemplate,
       },
     ],
     props: {
-      markdown: { label: "Markdown", type: "string" },
+      rows: { label: "행", type: "array" },
+      html: { label: "HTML", type: "string" },
+      complex: { label: "복합 표", type: "boolean" },
     },
   } satisfies ParserBlockTemplateDefinition
 

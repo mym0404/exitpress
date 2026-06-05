@@ -1,7 +1,6 @@
 import type { CheerioAPI } from "cheerio"
 
-import type { ParsedPost } from "../../../domain/ast/Types.js"
-import type { ExportOptions } from "../../../domain/export-options/Types.js"
+import type { ParsedPost, ParserBlockOptions } from "../../../domain/parser/Types.js"
 import type { BlockTemplateDefinition } from "../../../domain/template/Types.js"
 
 import type { BaseEditor } from "./BaseEditor.js"
@@ -12,9 +11,7 @@ type BlogPostParseInput = {
   html: string
   sourceUrl: string
   tags: string[]
-  options: Pick<ExportOptions, "blockOutputs"> & {
-    resolveLinkUrl?: (url: string) => string
-  }
+  options: ParserBlockOptions
   captureBlockEvidence?: (evidence: ParserBlockSourceEvidence) => void
 }
 

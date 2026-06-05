@@ -7,7 +7,6 @@ import type { NaverBlogFetcherCache } from "../../src/integrations/naver-blog/Na
 
 import { defaultExportOptions } from "../../src/domain/export-options/ExportOptions.js"
 import { NaverBlogFetcher } from "../../src/integrations/naver-blog/NaverBlogFetcher.js"
-import { convertAstParsedPostToTemplatePost } from "../../src/markdown/AstRenderInputAdapter.js"
 import { renderMarkdownPost } from "../../src/markdown/MarkdownRenderer.js"
 import { parsePostHtml } from "../../src/parsing/naver-blog/core/PostParser.js"
 
@@ -212,12 +211,6 @@ export const renderSampleFixture = async ({
       resolveLinkUrl: resolveSampleFixtureLinkUrl,
     },
   })
-  const templatePost = convertAstParsedPostToTemplatePost({
-    parsedPost,
-    blockOutputs: options.blockOutputs,
-    assets: options.assets,
-    resolveLinkUrl: resolveSampleFixtureLinkUrl,
-  })
   const rendered = await renderMarkdownPost({
     post: {
       blogId: sample.blogId,
@@ -239,7 +232,7 @@ export const renderSampleFixture = async ({
       path: sample.post.categoryPath,
       depth: Math.max(sample.post.categoryPath.length - 1, 0),
     },
-    parsedPost: templatePost,
+    parsedPost,
     markdownFilePath,
     options,
     resolveAsset: async ({ kind, sourceUrl }) => ({

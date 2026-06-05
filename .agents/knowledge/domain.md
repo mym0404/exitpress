@@ -10,7 +10,7 @@
 - `CategoryInfo`: category tree node with path and post count.
 - `ScanResult`: public post count, categories, and post summary snapshot.
 - `ExportOptions`: scope, structure, frontmatter, editor block output, asset, and link export options.
-- `ParsedPost`: common AST blocks, tags, videos, and optional per-block output selection metadata.
+- `ParsedPost`: parser render inputs, asset candidates, tags, videos, block types, and diagnostic parser nodes.
 - `ExportManifest`: post results, summary, upload summary, logs, and UI recovery job snapshot.
 - `ExportJobState`: server/UI state for export, upload, result, failure, and recovery.
 - `UploadCandidate`: local asset selected for post-export upload.

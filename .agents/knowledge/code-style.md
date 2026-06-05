@@ -19,7 +19,7 @@
 ## TypeScript
 - The repo is strict TypeScript with NodeNext ESM.
 - Use `.js` extensions in TS imports where NodeNext runtime imports require them.
-- Keep types with the domain that owns the shape, such as `src/domain/ast/Types.ts`, `src/domain/blog/Types.ts`, `src/domain/export-options/Types.ts`, `src/domain/export-job/Types.ts`, and `src/domain/upload/UploadProviderTypes.ts`.
+- Keep types with the domain that owns the shape, such as `src/domain/parser/Types.ts`, `src/domain/blog/Types.ts`, `src/domain/export-options/Types.ts`, `src/domain/export-job/Types.ts`, and `src/domain/upload/UploadProviderTypes.ts`.
 - Keep parser block output behavior aligned across `BaseBlock.outputOptions` arrays, editor `supportedBlocks` arrays, and `src/parsing/naver-blog/core/BaseBlog.ts`.
 - This project does not preserve local schema backward compatibility unless explicitly requested. When an option/state contract changes, prefer the current schema and remove stale aliases or migration paths.
 - Prefer `type` aliases for object shapes, unions, and inferred helper types; do not introduce `interface` unless an external API requires it.
@@ -33,7 +33,7 @@
 - Use `readonly` fields for constructor dependencies and long-lived state that should not be reassigned.
 - Use `private` methods for internal multi-step class logic.
 - Keep `createX` helpers for pure value construction, binding construction, or test/harness fixtures.
-- Parser block implementations should extend `ContainerBlock` for recursive wrapper parsing or `LeafBlock` for direct AST conversion, and return literal parser results with `as const` when inference would widen status or block types.
+- Parser block implementations should extend `ContainerBlock` for recursive wrapper parsing or `LeafBlock` for direct parser node conversion, and return literal parser results with `as const` when inference would widen status or block types.
 - Keep editor and parser block relationships as direct `BaseBlock` instances inside each editor class.
 - Keep helpers that only support one concrete parser block's `match` or `convert` logic inside that parser block file.
 - Inline single-use helpers when they only pass caller context through or hide a short expression; keep named local helpers inside the same block file when they clarify a substantial block-specific step.

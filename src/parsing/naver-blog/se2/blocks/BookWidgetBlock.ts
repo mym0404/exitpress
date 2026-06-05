@@ -1,7 +1,8 @@
 import type { CheerioAPI } from "cheerio"
 
-import type { AstBlock, ImageData } from "../../../../domain/ast/Types.js"
+import type { ImageData } from "../../../../domain/parser/Types.js"
 import type { ParserBlockContext } from "../../core/BaseBlock.js"
+import type { ParserBlockNode } from "../../core/ParserBlockNode.js"
 
 import { normalizeAssetUrl } from "../../../../domain/blog/NaverUrl.js"
 import { compactText } from "../../../../shared/text/TextUtils.js"
@@ -22,7 +23,7 @@ const parseBookWidgetBlocks = ({
     return null
   }
 
-  const blocks: AstBlock[] = []
+  const blocks: ParserBlockNode[] = []
   const imageNode = bookWidget.find("img").first()
   const imageSource = imageNode.attr("src")?.trim()
 

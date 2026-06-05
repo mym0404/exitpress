@@ -33,4 +33,17 @@ describe("renderBlockTemplates", () => {
       ]),
     ).toThrow(/missing identifier/)
   })
+
+  it("preserves the line prefix for multiline expression values", () => {
+    const markdown = renderBlockTemplates([
+      {
+        template: "> ${text}",
+        props: {
+          text: "First line\nSecond line",
+        },
+      },
+    ])
+
+    expect(markdown).toBe("> First line\n> Second line")
+  })
 })

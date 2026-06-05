@@ -4,7 +4,7 @@
 
 **Goal:** Replace the Markdown-shaped AST body pipeline with parser-owned block templates, safe expression evaluation, pre-render asset resolution, and per-post export pipelines.
 
-**Architecture:** Parser blocks produce `BlockRenderInput` and `AssetCandidate` instead of `AstBlock`. A template renderer evaluates only whitelisted expressions, while a pre-render asset resolver injects final URLs into props and a job-scoped upload registry prevents duplicate uploads. The export job runs post pipelines independently and records stage-level failures without a post-export Markdown rewrite phase.
+**Architecture:** Parser blocks produce `BlockRenderInput` and `AssetCandidate` instead of `ParserBlockNode`. A template renderer evaluates only whitelisted expressions, while a pre-render asset resolver injects final URLs into props and a job-scoped upload registry prevents duplicate uploads. The export job runs post pipelines independently and records stage-level failures without a post-export Markdown rewrite phase.
 
 **Tech Stack:** Node.js ESM, TypeScript, Bun runtime, React, Vitest, Testing Library, Oxc parser, existing Naver parser/export/upload modules.
 
@@ -36,7 +36,7 @@
   - Runs `fetch -> preprocess -> asset-download -> asset-upload -> render -> write` for one post.
 - Create `src/exporting/post/PostPipeline.spec.ts`
   - Unit tests for stage order, stage failure recording, and independent post failure shape.
-- Modify `src/domain/ast/Types.ts`
+- Modify `src/domain/parser/Types.ts`
   - Remove body AST contracts from the main parser/export path and re-home remaining post-level types that are still needed.
 - Modify `src/domain/export-options/Types.ts`
   - Keep `blockOutputs.templates` as the only block output option shape.
@@ -47,7 +47,7 @@
 - Modify `src/domain/export-options/DefaultExportOptions.ts`
   - Default `blockOutputs` to `{ templates: {} }`.
 - Modify `src/parsing/naver-blog/core/BaseBlock.ts`
-  - Change parser block conversion return contract to `ParsedBlockOutput`.
+  - Change parser block conversion return contract to `ParserBlockOutput`.
 - Modify `src/parsing/naver-blog/core/BaseEditor.ts`
   - Collect `renderInputs`, `assetCandidates`, tags, videos, and block evidence from parser blocks.
 - Modify `src/parsing/naver-blog/core/PostParser.ts`
@@ -58,7 +58,7 @@
   - Convert each supported block to named props, default preset template, and asset candidates.
 - Modify `src/markdown/MarkdownRenderer.ts`
   - Keep frontmatter assembly but call the template renderer after assets are resolved.
-- Remove or stop importing `src/markdown/AstMarkdownRenderer.ts`
+- Remove or stop importing `src/markdown/BlockTemplateRenderer.ts`
   - Delete only after all imports are gone.
 - Modify `src/exporting/assets/AssetStore.ts`
   - Accept `assetRole` instead of `kind`, keep source/hash download cache, and expose local asset path needed by upload registry.
@@ -119,7 +119,7 @@
 
 **Files:**
 - Create: `src/domain/template/Types.ts`
-- Modify: `src/domain/ast/Types.ts`
+- Modify: `src/domain/parser/Types.ts`
 - Modify: `src/domain/export-options/Types.ts`
 - Modify: `src/domain/export-options/DefaultExportOptions.ts`
 - Modify: `src/domain/export-options/ExportOptions.ts`
@@ -826,7 +826,7 @@ import type {
   BlockTemplateDefinition,
 } from "../../../domain/template/Types.js"
 
-export type ParsedBlockOutput = {
+export type ParserBlockOutput = {
   renderInputs: BlockRenderInput[]
   assetCandidates?: AssetCandidate[]
 }
@@ -840,7 +840,7 @@ export abstract class BaseBlock {
 
   abstract match(context: ParserBlockContext): boolean
 
-  abstract convert(context: ParserBlockConvertContext): ParsedBlockOutput
+  abstract convert(context: ParserBlockConvertContext): ParserBlockOutput
 }
 ```
 
@@ -857,14 +857,14 @@ override convert({ $node, matchNode, path }: ParserBlockConvertContext) {
         renderInputs: [...merged.renderInputs, ...output.renderInputs],
         assetCandidates: [...merged.assetCandidates, ...(output.assetCandidates ?? [])],
       }),
-      { renderInputs: [], assetCandidates: [] } satisfies Required<ParsedBlockOutput>,
+      { renderInputs: [], assetCandidates: [] } satisfies Required<ParserBlockOutput>,
     )
 }
 ```
 
 - [ ] **Step 4: Change editor aggregation**
 
-In `src/parsing/naver-blog/core/BaseEditor.ts`, make `matchNode` return `ParsedBlockOutput`, and aggregate top-level results into:
+In `src/parsing/naver-blog/core/BaseEditor.ts`, make `matchNode` return `ParserBlockOutput`, and aggregate top-level results into:
 
 ```ts
 return nodes
@@ -2060,7 +2060,7 @@ PASS tests/e2e/run-ui-smoke-suite.ts
 ## Self-Review
 
 - Spec coverage:
-  - `BlockRenderInput` and removal of `AstBlock` body output: Tasks 1, 4, 7.
+  - `BlockRenderInput` and removal of `ParserBlockNode` body output: Tasks 1, 4, 7.
   - Template string option shape: Tasks 1, 9.
   - Safe expression evaluation with Oxc: Task 2.
   - Template renderer without fallback: Task 3.

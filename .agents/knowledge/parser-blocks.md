@@ -1,10 +1,10 @@
 # Parser Blocks
 
 ## Role
-- Parser block은 에디터별 HTML node를 공용 `AstBlock`으로 바꾸는 가장 작은 책임 단위다.
+- Parser block은 에디터별 HTML node를 공용 `ParserBlockNode`로 바꾸는 가장 작은 책임 단위다.
 - 모든 parser block은 공통 base contract를 따르고 `match()`와 `convert()`를 가진다.
 - `match()`는 현재 node가 자기 책임인지 판단한다.
-- `convert()`는 변환된 `AstBlock[]`를 반환하고, 의도적으로 버릴 node는 빈 배열을 반환한다.
+- `convert()`는 변환된 `ParserBlockNode[]`를 반환하고, 의도적으로 버릴 node는 빈 배열을 반환한다.
 
 ## Managed By Editors
 - Editor는 `supportedBlocks` 배열에 `BaseBlock` instance를 직접 들고 있다.
@@ -23,8 +23,8 @@
 
 ## Container And Leaf
 - `ContainerBlock`은 wrapper node를 잡고 direct child contents를 `matchNode`로 다시 흘려보낸다.
-- `LeafBlock`은 concrete DOM node를 직접 AST로 바꾼다.
-- Container는 AST를 직접 만들기보다 editor의 현재 parser block list를 재사용한다.
+- `LeafBlock`은 concrete DOM node를 직접 parser node로 바꾼다.
+- Container는 parser node를 직접 만들기보다 editor의 현재 parser block list를 재사용한다.
 - Leaf는 paragraph, image, table, code처럼 실제 output block을 만든다.
 - 현재 Container 계열은 legacy wrapper를 풀어 실제 content leaf로 넘기는 용도에 가깝다.
 
@@ -41,9 +41,9 @@
 - Descendant selector는 nested component나 sibling module data를 훔치지 않도록 editor boundary 안에서만 쓴다.
 - Fallback block은 더 구체적인 media, table, code, widget block을 가리지 않아야 한다.
 - First-match 순서가 의미를 결정하면 adjacent spec으로 대표 충돌 사례를 고정한다.
-- 내용 있는 matched node는 AST로 보존하거나 명시적인 error로 드러낸다.
+- 내용 있는 matched node는 parser node로 보존하거나 명시적인 error로 드러낸다.
 - 빈 배열 반환은 document chrome, spacer, empty placeholder, empty known component처럼 의도된 discard만 허용한다.
-- 여러 block이 같은 AST/output option family를 만들면 output option 적용 여부를 spec으로 고정한다.
+- 여러 block이 같은 parser node/output option family를 만들면 output option 적용 여부를 spec으로 고정한다.
 - Public sample fixture는 live failure regression을 맡고, block boundary와 near-miss 사례는 adjacent parser block spec이 맡는다.
 
 ## Output Options
@@ -54,7 +54,7 @@
 - 여러 concrete block이 같은 output family를 공유하면 같은 `blockId`와 output selection을 공유할 수 있다.
 - `outputOptions`와 그 params는 concrete parser block 파일이 직접 소유한다.
 - Block별 output metadata를 `core`, `shared`, 공용 helper로 분리하지 않는다.
-- Parser는 render-time metadata가 필요한 AST block에 `outputSelectionKey`와 `outputSelection`을 붙인다.
+- Parser는 `ParsedPost.renderInputs`를 만들 때 block template과 prop을 함께 확정한다.
 - 정확한 selectable key 목록과 노출 순서는 `BaseBlog`에서 파생되는 output definition과 관련 tests가 source of truth다.
 
 ## Story Catalog
