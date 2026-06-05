@@ -1,6 +1,4 @@
-import type { OptionDescriptionMap } from "./Types.js"
-
-export const optionDescriptions: OptionDescriptionMap = {
+export const optionDescriptions: Record<string, string> = {
   "scope-categoryMode": "선택한 카테고리만 내보낼지, 하위 카테고리까지 함께 포함할지 정합니다.",
   "scope-dateFrom": "이 날짜 이후에 발행한 글만 범위에 포함합니다.",
   "scope-dateTo": "이 날짜 이전에 발행한 글까지만 범위에 포함합니다.",

@@ -1,4 +1,3 @@
-import type { PartialExportOptions as PersistedPartialExportOptions } from "./PersistedExportOptions.js"
 import type { ExportOptions, FrontmatterFieldName } from "./Types.js"
 
 import { defaultExportOptions as createDefaultExportOptions } from "./DefaultExportOptions.js"
@@ -7,12 +6,21 @@ import {
   frontmatterFieldOrder as configuredFrontmatterFieldOrder,
 } from "./FrontmatterFields.js"
 import { optionDescriptions as configuredOptionDescriptions } from "./OptionDescriptions.js"
-import {
-  pickFrontmatterRecord,
-  sanitizePersistedExportOptions as sanitizePersistedExportOptionsValue,
-} from "./PersistedExportOptions.js"
 
-export type PartialExportOptions = PersistedPartialExportOptions
+export type PartialExportOptions = {
+  scope?: Partial<ExportOptions["scope"]>
+  structure?: Partial<ExportOptions["structure"]>
+  frontmatter?: {
+    enabled?: boolean
+    fields?: Partial<Record<FrontmatterFieldName, boolean>>
+    aliases?: Partial<Record<FrontmatterFieldName, string>>
+  }
+  blockOutputs?: {
+    templates?: Partial<Record<string, string>>
+  }
+  assets?: Partial<ExportOptions["assets"]>
+  links?: Partial<ExportOptions["links"]>
+}
 
 export const frontmatterFieldOrder = configuredFrontmatterFieldOrder
 
@@ -88,7 +96,127 @@ export const validateFrontmatterAliases = ({
 
 export const defaultExportOptions = createDefaultExportOptions
 
-export const sanitizePersistedExportOptions = sanitizePersistedExportOptionsValue
+const pickFrontmatterRecord = <Value>(
+  values: Partial<Record<FrontmatterFieldName, Value>> | undefined,
+) => {
+  const entries = frontmatterFieldOrder.flatMap((fieldName) => {
+    const value = values?.[fieldName]
+
+    return value === undefined ? [] : [[fieldName, value] as const]
+  })
+
+  return Object.fromEntries(entries) as Partial<Record<FrontmatterFieldName, Value>>
+}
+
+export const sanitizePersistedExportOptions = (
+  options?: PartialExportOptions,
+): PartialExportOptions => {
+  const sanitized: PartialExportOptions = {}
+
+  if (options?.scope) {
+    const scope: NonNullable<PartialExportOptions["scope"]> = {}
+
+    if (options.scope.categoryMode) {
+      scope.categoryMode = options.scope.categoryMode
+    }
+
+    if ("dateFrom" in options.scope) {
+      scope.dateFrom = options.scope.dateFrom ?? null
+    }
+
+    if ("dateTo" in options.scope) {
+      scope.dateTo = options.scope.dateTo ?? null
+    }
+
+    if (Object.keys(scope).length > 0) {
+      sanitized.scope = scope
+    }
+  }
+
+  if (options?.structure) {
+    sanitized.structure = {
+      groupByCategory: options.structure.groupByCategory,
+      includeDateInPostFolderName: options.structure.includeDateInPostFolderName,
+      includeLogNoInPostFolderName: options.structure.includeLogNoInPostFolderName,
+      slugStyle: options.structure.slugStyle,
+      slugWhitespace: options.structure.slugWhitespace,
+      postFolderNameMode: options.structure.postFolderNameMode,
+      postFolderNameCustomTemplate: options.structure.postFolderNameCustomTemplate,
+    }
+
+    Object.keys(sanitized.structure).forEach((key) => {
+      if (
+        sanitized.structure &&
+        sanitized.structure[key as keyof typeof sanitized.structure] === undefined
+      ) {
+        delete sanitized.structure[key as keyof typeof sanitized.structure]
+      }
+    })
+
+    if (sanitized.structure && Object.keys(sanitized.structure).length === 0) {
+      delete sanitized.structure
+    }
+  }
+
+  if (options?.frontmatter) {
+    const frontmatter: NonNullable<PartialExportOptions["frontmatter"]> = {}
+
+    if (typeof options.frontmatter.enabled === "boolean") {
+      frontmatter.enabled = options.frontmatter.enabled
+    }
+
+    if (options.frontmatter.fields) {
+      const fields = pickFrontmatterRecord(options.frontmatter.fields)
+
+      if (Object.keys(fields).length > 0) {
+        frontmatter.fields = fields
+      }
+    }
+
+    if (options.frontmatter.aliases) {
+      const aliases = pickFrontmatterRecord(options.frontmatter.aliases)
+
+      if (Object.keys(aliases).length > 0) {
+        frontmatter.aliases = aliases
+      }
+    }
+
+    if (Object.keys(frontmatter).length > 0) {
+      sanitized.frontmatter = frontmatter
+    }
+  }
+
+  if (options?.blockOutputs) {
+    const blockOutputs: NonNullable<PartialExportOptions["blockOutputs"]> = {}
+
+    if (options.blockOutputs.templates) {
+      blockOutputs.templates = Object.fromEntries(
+        Object.entries(options.blockOutputs.templates).filter(
+          (entry): entry is [string, string] =>
+            Boolean(entry[0].trim()) && typeof entry[1] === "string",
+        ),
+      )
+    }
+
+    if (Object.keys(blockOutputs).length > 0) {
+      sanitized.blockOutputs = blockOutputs
+    }
+  }
+
+  if (options?.assets) {
+    sanitized.assets = {
+      ...options.assets,
+    }
+  }
+
+  if (options?.links) {
+    sanitized.links = {
+      ...options.links,
+    }
+  }
+
+  return sanitized
+}
 
 const coerceAssetOptions = (options: ExportOptions["assets"]) => {
   const downloadFailureMode =

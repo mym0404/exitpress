@@ -23,6 +23,7 @@
 - Keep parser block output behavior aligned across `ParserBlock.templateDefinition`, editor `supportedBlocks` arrays, `ExportOptions.blockOutputs`, and `src/parsing/naver-blog/core/BlogParser.ts`.
 - This project does not preserve local schema backward compatibility unless explicitly requested. When an option/state contract changes, prefer the current schema and remove stale aliases or migration paths.
 - Prefer `type` aliases for object shapes, unions, and inferred helper types; do not introduce `interface` unless an external API requires it.
+- Do not keep one-use type aliases for short unions or object shapes unless the name carries domain meaning or multiple modules consume the type.
 - For finite runtime options, define `as const` arrays or objects and derive union types from them with `typeof`.
 - Use `as const satisfies` for registries and status maps that need literal inference plus shared shape checking.
 - Use `Record<Union, Value>` when a map should stay exhaustive over a known union.
@@ -33,6 +34,8 @@
 - Use `readonly` fields for constructor dependencies and long-lived state that should not be reassigned.
 - Use `private` methods for internal multi-step class logic.
 - Keep `createX` helpers for pure value construction, binding construction, or test/harness fixtures.
+- Avoid pass-through modules, re-export aliases, and single-call wrappers that only hide a direct expression or one caller's context.
+- Keep legacy fallbacks, migration paths, and compatibility error copy only when the current contract explicitly requires them.
 - Parser block implementations should extend `ContainerParserBlock` for recursive wrapper parsing or `LeafParserBlock` for direct parsed block conversion, and return literal parser results with `as const` when inference would widen status or parsed block values.
 - Keep editor and parser block relationships as direct `ParserBlock` instances inside each editor class.
 - Keep helpers that only support one concrete parser block's `match` or `convert` logic inside that parser block file.

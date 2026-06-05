@@ -1,6 +1,6 @@
 import type { ScanCacheMap, ScanResult } from "../../domain/blog/Types.js"
 import type { ExportManifest } from "../../domain/export-job/Types.js"
-import type { PartialExportOptions } from "../../domain/export-options/PersistedExportOptions.js"
+import type { PartialExportOptions } from "../../domain/export-options/ExportOptions.js"
 import type { ThemePreference } from "../../domain/preferences/ThemePreference.js"
 import type { BlockTemplateDefinition } from "../../domain/template/Types.js"
 import type { JobStore } from "../jobs/JobStore.js"

@@ -1,11 +1,11 @@
 import type { Dispatch, SetStateAction } from "react"
 
 import type { ScanResult } from "../../../../domain/blog/Types.js"
+import type { ExportJobState } from "../../../../domain/export-job/Types.js"
 import type { sanitizePersistedExportOptions } from "../../../../domain/export-options/ExportOptions.js"
 import type { ExportOptions } from "../../../../domain/export-options/Types.js"
 import type { UploadProviderFields } from "../../../../domain/upload/UploadProviderTypes.js"
 import type { ExportBootstrapResponse } from "../../../lib/Api.js"
-import type { createErrorJobState } from "../../job-results/ExportJobFallback.js"
 import type { ResumeDialogState } from "../../resume/ResumeState.js"
 import type { SetupStep } from "../shell/WizardFlow.js"
 
@@ -37,7 +37,7 @@ export type UseWizardActionsArgs = {
     resumedScanResult: ScanResult | null
   }) => void
   applyBootstrapState: (defaults: ExportBootstrapResponse) => void
-  setJob: (job: ReturnType<typeof createErrorJobState>) => void
+  setJob: (job: ExportJobState | null) => void
   setResumeDialog: (value: ResumeDialogState | null) => void
   setScanCache: Dispatch<SetStateAction<Record<string, ScanResult>>>
   setScanPending: (value: boolean) => void

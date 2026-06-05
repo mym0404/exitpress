@@ -7,12 +7,13 @@ import type {
 
 import type { ProviderUiState } from "./UploadProviderFormRules.js"
 
+import { UPLOAD_PROVIDER_KEYS } from "../../../domain/upload/UploadProviderKeys.js"
+
 import {
   buildGitHubJsDelivrCustomUrl,
   buildInitialProviderFieldMap,
   buildInitialProviderFields,
   getPreferredDefaultProviderKey,
-  isGitHubProvider,
 } from "./JobResultsHelpers.js"
 import { buildInitialProviderUiState } from "./UploadProviderFormRules.js"
 
@@ -111,7 +112,7 @@ export const useUploadProviderForm = ({
     activeProviderUiState,
     githubUseJsDelivr,
     githubJsDelivrUrl,
-    isGitHubProvider: isGitHubProvider(providerKey),
+    isGitHubProvider: providerKey === UPLOAD_PROVIDER_KEYS.GITHUB,
     selectProvider,
     updateProviderField,
     updateProviderUiState,

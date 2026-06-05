@@ -8,7 +8,6 @@ import type {
   ExportOptions,
   FrontmatterFieldMeta,
   FrontmatterFieldName,
-  OptionDescriptionMap,
 } from "../../domain/export-options/Types.js"
 import type { ThemePreference } from "../../domain/preferences/ThemePreference.js"
 import type { BlockTemplateDefinition } from "../../domain/template/Types.js"
@@ -24,7 +23,7 @@ export type ExportBootstrapResponse = {
   resumedScanResult: ScanResult | null
   frontmatterFieldOrder: FrontmatterFieldName[]
   frontmatterFieldMeta: Record<FrontmatterFieldName, FrontmatterFieldMeta>
-  optionDescriptions: OptionDescriptionMap
+  optionDescriptions: Record<string, string>
   blockTemplateDefinitions: BlockTemplateDefinition[]
 }
 

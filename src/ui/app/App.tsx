@@ -2,11 +2,17 @@ import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } fro
 
 import type { BlockScanJobState } from "../../domain/block-scan/Types.js"
 import type { ScanCacheMap, ScanResult } from "../../domain/blog/Types.js"
+import type { ExportJobState } from "../../domain/export-job/Types.js"
 import type { ExportOptions } from "../../domain/export-options/Types.js"
 import type { ThemePreference } from "../../domain/preferences/ThemePreference.js"
 import type { SetupStep, WizardStep } from "../features/common/shell/WizardFlow.js"
 import type { ResumeDialogState } from "../features/resume/ResumeState.js"
 
+import {
+  isUploadActionableJob,
+  JOB_STATUSES,
+  UPLOAD_STATUSES,
+} from "../../domain/export-job/ExportJobState.js"
 import {
   sanitizePersistedExportOptions,
   validateFrontmatterAliases,
@@ -24,10 +30,6 @@ import {
   resolveWizardStep,
   setupSteps,
 } from "../features/common/shell/WizardFlow.js"
-import {
-  createErrorJobState,
-  shouldLoadUploadProviders,
-} from "../features/job-results/ExportJobFallback.js"
 import { setExportJobPollingConfig, useExportJob } from "../features/job-results/UseExportJob.js"
 import { useJobNotifications } from "../features/job-results/UseJobNotifications.js"
 import { useUploadProvidersCatalog } from "../features/job-results/UseUploadProvidersCatalog.js"
@@ -59,6 +61,45 @@ const waitForBlockScanPoll = () =>
   new Promise((resolve) => {
     setTimeout(resolve, 250)
   })
+
+const createErrorJobState = ({
+  error,
+  request,
+}: {
+  error: string
+  request: { blogIdOrUrl: string; outputDir: string; options: ExportOptions }
+}) =>
+  ({
+    id: "failed-local",
+    request: {
+      blogIdOrUrl: request.blogIdOrUrl,
+      outputDir: request.outputDir,
+      profile: "gfm",
+      options: request.options,
+    },
+    status: JOB_STATUSES.FAILED,
+    resumeAvailable: false,
+    logs: [],
+    createdAt: new Date().toISOString(),
+    startedAt: new Date().toISOString(),
+    finishedAt: new Date().toISOString(),
+    progress: {
+      total: 0,
+      completed: 0,
+      failed: 0,
+    },
+    upload: {
+      status: UPLOAD_STATUSES.NOT_REQUESTED,
+      eligiblePostCount: 0,
+      candidateCount: 0,
+      uploadedCount: 0,
+      failedCount: 0,
+      terminalReason: null,
+    },
+    items: [],
+    manifest: null,
+    error,
+  }) satisfies ExportJobState
 
 const getCurrentAppRoute = () =>
   typeof window !== "undefined"
@@ -230,7 +271,7 @@ const ExportApp = () => {
 
   const { uploadProviders, uploadProviderError } = useUploadProvidersCatalog({
     jobId: job?.id,
-    shouldLoad: shouldLoadUploadProviders(job),
+    shouldLoad: isUploadActionableJob(job),
   })
 
   useThemePreference(themePreference)

@@ -24,7 +24,7 @@ import {
 import { ToggleGroup, ToggleGroupItem } from "../../components/ui/ToggleGroup.js"
 
 import { CompactMetrics } from "./CompactMetrics.js"
-import { isAListProvider, panelCopy, toProgressValue } from "./JobResultsHelpers.js"
+import { panelCopy, toProgressValue } from "./JobResultsHelpers.js"
 import { UploadGithubOptions } from "./UploadGithubOptions.js"
 import {
   getUploadProviderFieldRule,
@@ -175,7 +175,7 @@ export const UploadPanel = ({
                 </p>
               </div>
               <div className="grid items-start gap-3 sm:grid-cols-2">
-                {isAListProvider(providerKey) ? (
+                {providerKey === UPLOAD_PROVIDER_KEYS.ALIST ? (
                   <div className="subtle-panel grid gap-2 rounded-2xl px-4 py-3 sm:col-span-2">
                     <span className="text-sm font-semibold text-foreground">Authentication</span>
                     <span className="text-sm leading-6 text-muted-foreground">

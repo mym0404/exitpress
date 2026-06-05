@@ -5,7 +5,6 @@ import type {
   ExportOptions,
   FrontmatterFieldMeta,
   FrontmatterFieldName,
-  OptionDescriptionMap,
 } from "../../../domain/export-options/Types.js"
 import type { BlockTemplateDefinition } from "../../../domain/template/Types.js"
 
@@ -35,7 +34,7 @@ export const ExportOptionsPanel = ({
   step: ExportOptionsStep
   outputDir: string
   options: ExportOptions
-  optionDescriptions: OptionDescriptionMap
+  optionDescriptions: Record<string, string>
   blockTemplateDefinitions?: BlockTemplateDefinition[]
   frontmatterFieldOrder: FrontmatterFieldName[]
   frontmatterFieldMeta: Record<FrontmatterFieldName, FrontmatterFieldMeta>

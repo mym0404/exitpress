@@ -1,10 +1,6 @@
-type CategorySelectionMode = "selected-and-descendants" | "exact-selected"
-
 export type SlugStyle = "kebab" | "snake" | "keep-title"
 
 export type SlugWhitespace = "dash" | "underscore" | "keep-space"
-
-type PostFolderNameMode = "preset" | "custom-template"
 
 export type FrontmatterFieldName =
   | "title"
@@ -25,22 +21,10 @@ export type FrontmatterFieldMeta = {
   defaultAlias: string
 }
 
-type ImageHandlingMode = "download" | "remote" | "download-and-upload"
-
-type AssetDownloadFailureMode = "fail" | "use-source" | "omit"
-
-type ThumbnailSource = "post-list-first" | "first-body-image" | "none"
-
-type StickerAssetMode = "ignore" | "download-original"
-
-type SameBlogPostLinkMode = "keep-source" | "custom-url" | "relative-filepath"
-
-export type OptionDescriptionMap = Record<string, string>
-
 export type ExportOptions = {
   scope: {
     categoryIds: number[]
-    categoryMode: CategorySelectionMode
+    categoryMode: "selected-and-descendants" | "exact-selected"
     dateFrom: string | null
     dateTo: string | null
   }
@@ -50,7 +34,7 @@ export type ExportOptions = {
     includeLogNoInPostFolderName: boolean
     slugStyle: SlugStyle
     slugWhitespace: SlugWhitespace
-    postFolderNameMode: PostFolderNameMode
+    postFolderNameMode: "preset" | "custom-template"
     postFolderNameCustomTemplate: string
   }
   frontmatter: {
@@ -62,17 +46,17 @@ export type ExportOptions = {
     templates: Partial<Record<string, string>>
   }
   assets: {
-    imageHandlingMode: ImageHandlingMode
+    imageHandlingMode: "download" | "remote" | "download-and-upload"
     compressionEnabled: boolean
-    downloadFailureMode: AssetDownloadFailureMode
-    stickerAssetMode: StickerAssetMode
+    downloadFailureMode: "fail" | "use-source" | "omit"
+    stickerAssetMode: "ignore" | "download-original"
     downloadImages: boolean
     downloadThumbnails: boolean
     includeImageCaptions: boolean
-    thumbnailSource: ThumbnailSource
+    thumbnailSource: "post-list-first" | "first-body-image" | "none"
   }
   links: {
-    sameBlogPostMode: SameBlogPostLinkMode
+    sameBlogPostMode: "keep-source" | "custom-url" | "relative-filepath"
     sameBlogPostCustomUrlTemplate: string
   }
 }

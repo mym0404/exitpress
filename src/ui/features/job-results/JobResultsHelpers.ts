@@ -5,10 +5,7 @@ import type {
   UploadProviderFields,
 } from "../../../domain/upload/UploadProviderTypes.js"
 
-import {
-  DEFAULT_UPLOAD_PROVIDER_KEY,
-  UPLOAD_PROVIDER_KEYS,
-} from "../../../domain/upload/UploadProviderKeys.js"
+import { DEFAULT_UPLOAD_PROVIDER_KEY } from "../../../domain/upload/UploadProviderKeys.js"
 
 const INDEX_MARKDOWN_FILE = "index.md"
 
@@ -215,6 +212,3 @@ export const buildUploadedLinkMeta = (item: ExportJobState["items"][number]) =>
     })
     return entries
   }, [])
-
-export const isGitHubProvider = (providerKey: string) => providerKey === UPLOAD_PROVIDER_KEYS.GITHUB
-export const isAListProvider = (providerKey: string) => providerKey === UPLOAD_PROVIDER_KEYS.ALIST
