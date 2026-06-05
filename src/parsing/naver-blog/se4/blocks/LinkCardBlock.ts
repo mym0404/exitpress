@@ -1,4 +1,4 @@
-import type { ParserBlockContext } from "../../core/BaseBlock.js"
+import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/BaseBlock.js"
 
 import { compactText } from "../../../../shared/text/TextUtils.js"
 import { createLinkParagraphBlocks } from "../../common/LinkParagraph.js"
@@ -7,6 +7,13 @@ import { LeafBlock } from "../../core/BaseBlock.js"
 export class NaverSe4LinkCardBlock extends LeafBlock {
   override readonly id = "linkCard"
   override readonly label = "링크 카드"
+  override readonly templateDefinition = {
+    label: this.label,
+    presets: [{ id: "default", label: "기본", template: "${text}" }],
+    props: {
+      text: { label: "본문", type: "string" },
+    },
+  } satisfies ParserBlockTemplateDefinition
 
   override match({ $node, moduleType }: ParserBlockContext) {
     return moduleType === "v2_oglink" || $node.hasClass("se-oglink")

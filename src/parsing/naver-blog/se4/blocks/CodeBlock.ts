@@ -1,4 +1,4 @@
-import type { ParserBlockContext } from "../../core/BaseBlock.js"
+import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/BaseBlock.js"
 
 import { LeafBlock } from "../../core/BaseBlock.js"
 import { createCodeBlock } from "../../core/ParsedBlockOutput.js"
@@ -6,6 +6,14 @@ import { createCodeBlock } from "../../core/ParsedBlockOutput.js"
 export class NaverSe4CodeBlock extends LeafBlock {
   override readonly id = "code"
   override readonly label = "코드"
+  override readonly templateDefinition = {
+    label: this.label,
+    presets: [{ id: "default", label: "기본", template: "```${language ?? ''}\n${code}\n```" }],
+    props: {
+      language: { label: "언어", type: "string?" },
+      code: { label: "코드", type: "string" },
+    },
+  } satisfies ParserBlockTemplateDefinition
 
   override match({ $node, moduleType }: ParserBlockContext) {
     return moduleType === "v2_code" || $node.hasClass("se-code")

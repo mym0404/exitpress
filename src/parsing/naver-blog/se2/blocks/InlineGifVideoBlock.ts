@@ -1,7 +1,7 @@
 import type { CheerioAPI } from "cheerio"
 
 import type { ImageData } from "../../../../domain/parser/Types.js"
-import type { ParserBlockContext } from "../../core/BaseBlock.js"
+import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/BaseBlock.js"
 
 import { normalizeAssetUrl } from "../../../../domain/blog/NaverUrl.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
@@ -68,6 +68,15 @@ const getInlineGifVideoImages = ({
 export class NaverSe2InlineGifVideoBlock extends LeafBlock {
   override readonly id = "inlineGifVideo"
   override readonly label = "인라인 GIF 비디오"
+  override readonly templateDefinition = {
+    label: this.label,
+    presets: [{ id: "default", label: "기본", template: "![${alt}](${url})" }],
+    props: {
+      alt: { label: "대체 텍스트", type: "string" },
+      url: { label: "URL", type: "string" },
+      caption: { label: "캡션", type: "string?" },
+    },
+  } satisfies ParserBlockTemplateDefinition
 
   override match({ node, $node }: ParserBlockContext) {
     return node.type === "tag" && getInlineGifVideoImages({ $node }) !== null

@@ -1,4 +1,4 @@
-import type { ParserBlockContext } from "../../core/BaseBlock.js"
+import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/BaseBlock.js"
 
 import { normalizeAssetUrl } from "../../../../domain/blog/NaverUrl.js"
 import { compactText } from "../../../../shared/text/TextUtils.js"
@@ -42,6 +42,13 @@ const getPollLink = ({ $node }: Pick<ParserBlockContext, "$node">) => {
 export class NaverSe2PollBlock extends LeafBlock {
   override readonly id = "poll"
   override readonly label = "투표"
+  override readonly templateDefinition = {
+    label: this.label,
+    presets: [{ id: "default", label: "기본", template: "${text}" }],
+    props: {
+      text: { label: "본문", type: "string" },
+    },
+  } satisfies ParserBlockTemplateDefinition
 
   override match({ node, $node }: ParserBlockContext) {
     return node.type === "tag" && getPollLink({ $node }) !== null

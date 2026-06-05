@@ -1,7 +1,7 @@
 import { load } from "cheerio"
 
 import type { UnknownRecord } from "../../../../shared/object/UnknownRecord.js"
-import type { ParserBlockContext } from "../../core/BaseBlock.js"
+import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/BaseBlock.js"
 
 import { compactText } from "../../../../shared/text/TextUtils.js"
 import { createLinkParagraphBlocks } from "../../common/LinkParagraph.js"
@@ -10,6 +10,13 @@ import { LeafBlock } from "../../core/BaseBlock.js"
 export class NaverSe4OembedBlock extends LeafBlock {
   override readonly id = "oembed"
   override readonly label = "임베드"
+  override readonly templateDefinition = {
+    label: this.label,
+    presets: [{ id: "default", label: "기본", template: "${text}" }],
+    props: {
+      text: { label: "본문", type: "string" },
+    },
+  } satisfies ParserBlockTemplateDefinition
 
   override match({ $node, moduleType }: ParserBlockContext) {
     return moduleType === "v2_oembed" || $node.hasClass("se-oembed")

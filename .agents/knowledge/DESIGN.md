@@ -4,9 +4,9 @@
 - Global tokens, theme variables, helper surfaces, and font declarations live in `src/ui/styles/globals.css`.
 - UI primitives live in `src/ui/components/ui/*`.
 - UI shell and common hooks live in `src/ui/features/common/*`.
-- Feature composition lives under `src/ui/features/scan`, `src/ui/features/options`, `src/ui/features/job-results`, `src/ui/features/resume`, and `src/ui/features/parser-stories`.
+- Feature composition lives under `src/ui/features/scan`, `src/ui/features/options`, `src/ui/features/job-results`, `src/ui/features/resume`, and `src/ui/features/storybook`.
 - Brand assets live in `public/brand`.
-- Parser Storybook capture assets live in `src/ui/features/parser-stories/assets`.
+- Storybook capture assets live in `src/ui/features/storybook/assets`.
 
 ## Visual Direction
 - The default theme is dark; light is a companion theme.
@@ -36,8 +36,8 @@
 
 ## Feature Contracts
 - The wizard step model stays in `src/ui/app/App.tsx` and common shell files.
-- `/storybook` is a static parser story surface and must not load export defaults or start export wizard bootstrap.
-- Parser Storybook navigation follows `Editor -> Block` and reflects every parser block from `supportedBlocks`.
+- `/storybook` is a static Storybook surface and must not load export defaults or start export wizard bootstrap.
+- Storybook navigation follows `Editor -> Block` and reflects every parser block from `supportedBlocks`.
 - The top wizard header should show stage context without duplicating long instructions inside each step.
 - Feature files should own layout and composition; primitives and tokens own repeated visual language.
 - `running`, `upload`, and `result` stages share the result table surface.

@@ -1,4 +1,4 @@
-import type { ParserBlockContext } from "../../core/BaseBlock.js"
+import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/BaseBlock.js"
 
 import { normalizeAssetUrl } from "../../../../domain/blog/NaverUrl.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
@@ -8,6 +8,15 @@ import { createImageBlock } from "../../core/ParsedBlockOutput.js"
 export class NaverSe4StickerBlock extends LeafBlock {
   override readonly id = "sticker"
   override readonly label = "스티커"
+  override readonly templateDefinition = {
+    label: this.label,
+    presets: [{ id: "default", label: "기본", template: "![${alt}](${url})" }],
+    props: {
+      alt: { label: "대체 텍스트", type: "string" },
+      url: { label: "URL", type: "string" },
+      caption: { label: "캡션", type: "string?" },
+    },
+  } satisfies ParserBlockTemplateDefinition
 
   override match({ $node }: ParserBlockContext) {
     return $node.hasClass("se-sticker")

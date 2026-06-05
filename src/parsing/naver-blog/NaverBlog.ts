@@ -1,5 +1,3 @@
-import { createDefaultBlockTemplateMap } from "../../domain/template/BlockTemplateMap.js"
-
 import { BaseBlog } from "./core/BaseBlog.js"
 import { NaverBlogSE2Editor } from "./se2/NaverBlogSe2Editor.js"
 import { NaverBlogSE3Editor } from "./se3/NaverBlogSe3Editor.js"
@@ -14,4 +12,10 @@ export class NaverBlog extends BaseBlog {
 }
 
 export const createNaverBlogDefaultBlockTemplateMap = () =>
-  createDefaultBlockTemplateMap(new NaverBlog().getBlockTemplateDefinitions())
+  Object.fromEntries(
+    new NaverBlog().getBlockTemplateDefinitions().flatMap((definition) => {
+      const template = definition.presets[0]?.template
+
+      return template ? [[definition.key, template]] : []
+    }),
+  )

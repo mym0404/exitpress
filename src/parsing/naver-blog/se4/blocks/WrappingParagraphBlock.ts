@@ -1,4 +1,4 @@
-import type { ParserBlockContext } from "../../core/BaseBlock.js"
+import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/BaseBlock.js"
 
 import { LeafBlock } from "../../core/BaseBlock.js"
 import { createImageBlock } from "../../core/ParsedBlockOutput.js"
@@ -16,6 +16,22 @@ const wrappingParagraphLayoutClasses = [
 export class NaverSe4WrappingParagraphBlock extends LeafBlock {
   override readonly id = "wrappingParagraph"
   override readonly label = "감싸는 문단"
+  override readonly templateDefinition = {
+    label: this.label,
+    presets: [
+      {
+        id: "default",
+        label: "기본",
+        template: "${(url ?? '') ? '![' + alt + '](' + url + ')' : text}",
+      },
+    ],
+    props: {
+      text: { label: "본문", type: "string?" },
+      alt: { label: "대체 텍스트", type: "string?" },
+      url: { label: "URL", type: "string?" },
+      caption: { label: "캡션", type: "string?" },
+    },
+  } satisfies ParserBlockTemplateDefinition
 
   override match({ $node }: ParserBlockContext) {
     return (

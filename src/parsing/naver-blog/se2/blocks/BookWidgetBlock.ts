@@ -1,7 +1,7 @@
 import type { CheerioAPI } from "cheerio"
 
 import type { ImageData } from "../../../../domain/parser/Types.js"
-import type { ParserBlockContext } from "../../core/BaseBlock.js"
+import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/BaseBlock.js"
 
 import { normalizeAssetUrl } from "../../../../domain/blog/NaverUrl.js"
 import { compactText } from "../../../../shared/text/TextUtils.js"
@@ -95,6 +95,22 @@ const parseBookWidgetBlocks = ({
 export class NaverSe2BookWidgetBlock extends LeafBlock {
   override readonly id = "bookWidget"
   override readonly label = "책 위젯"
+  override readonly templateDefinition = {
+    label: this.label,
+    presets: [
+      {
+        id: "default",
+        label: "기본",
+        template: "${(url ?? '') ? '![' + alt + '](' + url + ')' : text}",
+      },
+    ],
+    props: {
+      text: { label: "본문", type: "string?" },
+      alt: { label: "대체 텍스트", type: "string?" },
+      url: { label: "URL", type: "string?" },
+      caption: { label: "캡션", type: "string?" },
+    },
+  } satisfies ParserBlockTemplateDefinition
 
   override match({ node, $node }: ParserBlockContext) {
     return node.type === "tag" && $node.is('[s_type="db"][s_subtype="book"]')

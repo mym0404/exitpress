@@ -1,4 +1,4 @@
-import type { ParserBlockContext } from "../../core/BaseBlock.js"
+import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/BaseBlock.js"
 
 import { compactText } from "../../../../shared/text/TextUtils.js"
 import { createLinkParagraphBlocks } from "../../common/LinkParagraph.js"
@@ -10,6 +10,13 @@ const parseCssUrl = (value: string | undefined) => value?.match(/url\((['"]?)(.*
 export class NaverSe4MaterialBlock extends LeafBlock {
   override readonly id = "material"
   override readonly label = "자료 링크"
+  override readonly templateDefinition = {
+    label: this.label,
+    presets: [{ id: "default", label: "기본", template: "${text}" }],
+    props: {
+      text: { label: "본문", type: "string" },
+    },
+  } satisfies ParserBlockTemplateDefinition
 
   override match({ $node }: ParserBlockContext) {
     return $node.hasClass("se-material") || $node.find(".not_sponsored_component").length > 0

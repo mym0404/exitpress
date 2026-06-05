@@ -39,7 +39,7 @@
 - `src/parsing/naver-blog/core/PostParser.spec.ts` covers parser routing, tag extraction, same-blog link rewrite, and editor-specific output selection behavior.
 - Parser block implementation changes require `mise exec -- pnpm test:parser-blocks` and `mise exec -- pnpm test:offline`.
 - Parser routing changes require `mise exec -- pnpm test:offline`.
-- Parser Storybook catalog, fixture, or capture asset changes require the parser story catalog test and Storybook route unit test. The catalog test verifies every `supportedBlocks` story has fixture HTML, a matching parser inspection path, Markdown variants, and a bundled capture asset.
+- Storybook catalog, definition, or capture asset changes require the Storybook catalog test and Storybook route unit test. The catalog test verifies every story has input HTML, a matching parser inspection path, rendered Markdown, and a bundled capture asset.
 
 ## Unused Code Verification
 - `mise exec -- pnpm check:unused` succeeds only when `scripts/maintenance/check-unused.ts` reports no unresolved `knip`, `tsc noUnused`, or `tsserver` unused diagnostics.

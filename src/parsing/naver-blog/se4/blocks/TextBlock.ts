@@ -1,6 +1,6 @@
 import type { AnyNode, Element } from "domhandler"
 
-import type { ParserBlockContext } from "../../core/BaseBlock.js"
+import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/BaseBlock.js"
 
 import { convertHtmlToMarkdown } from "../../../../markdown/TurndownMarkdownConverter.js"
 import { compactMarkdownText } from "../../../../shared/text/TextUtils.js"
@@ -189,6 +189,13 @@ export const parseTextBlocks = ({
 export class NaverSe4TextBlock extends LeafBlock {
   override readonly id = "paragraph"
   override readonly label = "문단"
+  override readonly templateDefinition = {
+    label: this.label,
+    presets: [{ id: "default", label: "기본", template: "${text}" }],
+    props: {
+      text: { label: "본문", type: "string" },
+    },
+  } satisfies ParserBlockTemplateDefinition
 
   override match({ $node, moduleType }: ParserBlockContext) {
     return moduleType === "v2_text" || $node.hasClass("se-text")

@@ -1,6 +1,6 @@
 import type { CheerioAPI } from "cheerio"
 
-import type { ParserBlockContext } from "../../core/BaseBlock.js"
+import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/BaseBlock.js"
 
 import { convertHtmlToMarkdown } from "../../../../markdown/TurndownMarkdownConverter.js"
 import { compactMarkdownText } from "../../../../shared/text/TextUtils.js"
@@ -53,6 +53,13 @@ const parseTextBlocks = ({
 export class NaverSe3TextBlock extends LeafBlock {
   override readonly id = "paragraph"
   override readonly label = "문단"
+  override readonly templateDefinition = {
+    label: this.label,
+    presets: [{ id: "default", label: "기본", template: "${text}" }],
+    props: {
+      text: { label: "본문", type: "string" },
+    },
+  } satisfies ParserBlockTemplateDefinition
 
   override match({ $, $node }: ParserBlockContext) {
     return (

@@ -1,4 +1,4 @@
-import type { ParserBlockContext } from "../../core/BaseBlock.js"
+import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/BaseBlock.js"
 
 import { convertHtmlToMarkdown } from "../../../../markdown/TurndownMarkdownConverter.js"
 import { compactText } from "../../../../shared/text/TextUtils.js"
@@ -8,6 +8,13 @@ import { createParagraphBlock } from "../../core/ParsedBlockOutput.js"
 export class NaverSe2TextElementBlock extends LeafBlock {
   override readonly id = "paragraph"
   override readonly label = "문단"
+  override readonly templateDefinition = {
+    label: this.label,
+    presets: [{ id: "default", label: "기본", template: "${text}" }],
+    props: {
+      text: { label: "본문", type: "string" },
+    },
+  } satisfies ParserBlockTemplateDefinition
 
   override match({ node, $node }: ParserBlockContext) {
     if (node.type !== "tag") {

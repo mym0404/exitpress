@@ -1,4 +1,4 @@
-import type { ParserBlockContext } from "../../core/BaseBlock.js"
+import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/BaseBlock.js"
 
 import { compactText } from "../../../../shared/text/TextUtils.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
@@ -7,6 +7,13 @@ import { createQuoteBlock } from "../../core/ParsedBlockOutput.js"
 export class NaverSe4MrBlogBlock extends LeafBlock {
   override readonly id = "mrBlog"
   override readonly label = "블로그씨 질문"
+  override readonly templateDefinition = {
+    label: this.label,
+    presets: [{ id: "default", label: "기본", template: "> ${text}" }],
+    props: {
+      text: { label: "본문", type: "string" },
+    },
+  } satisfies ParserBlockTemplateDefinition
 
   override match({ $node }: ParserBlockContext) {
     return $node.hasClass("se-mrBlog")

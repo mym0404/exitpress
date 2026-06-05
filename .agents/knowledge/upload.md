@@ -4,7 +4,7 @@
 - `download-and-upload` finishes export first, then keeps the same job and enters `upload-ready -> uploading -> upload-completed | upload-failed`.
 - Post-export upload input is collected in the result panel as `providerKey + providerFields`; it is not stored as an export option.
 - `providerFields` values are scalar `string | number | boolean`.
-- Upload provider catalog comes from the installed PicList runtime and is normalized for UI display by `src/server/ImageUploadProviderSource.ts`.
+- Upload provider catalog comes from the installed PicList runtime and is normalized for UI display by `src/server/upload/ImageUploadProviderSource.ts`.
 - GitHub upload with jsDelivr enabled locks `customUrl` and derives `https://cdn.jsdelivr.net/gh/<repo>@<branch>`; empty branch omits `@<branch>`.
 
 ## Progress Semantics

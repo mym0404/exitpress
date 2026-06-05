@@ -10,7 +10,7 @@
 - `CategoryInfo`: category tree node with path and post count.
 - `ScanResult`: public post count, categories, and post summary snapshot.
 - `ExportOptions`: scope, structure, frontmatter, editor block output, asset, and link export options.
-- `ParsedPost`: parser render inputs, asset candidates, tags, videos, block types, and diagnostic parser nodes.
+- `ParsedPost`: tags and render-target `ParsedBlock[]` values.
 - `ExportManifest`: post results, summary, upload summary, logs, and UI recovery job snapshot.
 - `ExportJobState`: server/UI state for export, upload, result, failure, and recovery.
 - `UploadCandidate`: local asset selected for post-export upload.
@@ -26,11 +26,11 @@
 - Naver link-like blocks render through the link-card Markdown path when no richer Markdown form exists; this includes SE4 link cards, material/oEmbed links, videos, and file attachments.
 - SE4 Blog씨 question widgets render as quote blocks.
 - SE2 inline GIF video wrappers render as image blocks when the wrapper contains only one `_gifmp4` video and no other media.
-- SE2 standalone embedded videos render as video links and remain in parsed video metadata.
+- SE2 standalone embedded videos render as video links in Markdown.
 - Simple tables render as GFM tables; complex parsed tables can render as HTML fragments.
 - Parsing fails when a content node is unsupported or cannot be converted.
 - Markdown links render inline, dividers render as `---`, and code blocks render with backtick fences.
-- Remaining Markdown output differences, such as formula, image, and table forms, are selected through Editor+ParserBlock keys in `ExportOptions.blockOutputs.defaults`; `manifest.json.options` preserves those keys.
+- Remaining Markdown output differences, such as formula, image, and table forms, are selected through parser block keys in `ExportOptions.blockOutputs.templates`; `manifest.json.options` preserves those keys.
 
 ## Frontmatter Rules
 - `category` is a display string.

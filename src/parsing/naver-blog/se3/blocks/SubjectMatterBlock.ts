@@ -1,5 +1,5 @@
 import type { ImageData } from "../../../../domain/parser/Types.js"
-import type { ParserBlockContext } from "../../core/BaseBlock.js"
+import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/BaseBlock.js"
 
 import { normalizeAssetUrl } from "../../../../domain/blog/NaverUrl.js"
 import { compactText } from "../../../../shared/text/TextUtils.js"
@@ -11,6 +11,22 @@ import { findInComponentRoot } from "./util/ComponentBoundary.js"
 export class NaverSe3SubjectMatterBlock extends LeafBlock {
   override readonly id = "subjectMatter"
   override readonly label = "소재 카드"
+  override readonly templateDefinition = {
+    label: this.label,
+    presets: [
+      {
+        id: "default",
+        label: "기본",
+        template: "${(url ?? '') ? '![' + alt + '](' + url + ')' : text}",
+      },
+    ],
+    props: {
+      text: { label: "본문", type: "string?" },
+      alt: { label: "대체 텍스트", type: "string?" },
+      url: { label: "URL", type: "string?" },
+      caption: { label: "캡션", type: "string?" },
+    },
+  } satisfies ParserBlockTemplateDefinition
 
   override match({ $node }: ParserBlockContext) {
     return $node.hasClass("se_subjectMatter") && $node.hasClass("subjectMatter_book")

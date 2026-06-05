@@ -38,95 +38,6 @@ export type BaseEditorParseInput = {
   captureBlockEvidence?: (evidence: ParserBlockSourceEvidence) => void
 }
 
-const codeBlockTemplate = "```${language ?? ''}\n${code}\n```"
-const mixedTextOrImageTemplate = "${(url ?? '') ? '![' + alt + '](' + url + ')' : text}"
-const textBlockIds = new Set([
-  "file",
-  "linkCard",
-  "map",
-  "mapText",
-  "material",
-  "oembed",
-  "paragraph",
-  "poll",
-  "schedule",
-  "talkTalk",
-])
-const mixedTextOrImageBlockIds = new Set(["bookWidget", "subjectMatter", "wrappingParagraph"])
-const imageBlockIds = new Set(["image", "imageGroup", "inlineGifVideo", "sticker"])
-
-const createFallbackTemplateDefinition = ({
-  block,
-}: {
-  block: BaseBlock
-}): BaseBlock["templateDefinition"] => {
-  if (textBlockIds.has(block.id)) {
-    return {
-      label: block.label,
-      presets: [{ id: "default", label: "기본", template: "${text}" }],
-      props: {
-        text: { label: "본문", type: "string" },
-      },
-    }
-  }
-
-  if (mixedTextOrImageBlockIds.has(block.id)) {
-    return {
-      label: block.label,
-      presets: [{ id: "default", label: "기본", template: mixedTextOrImageTemplate }],
-      props: {
-        text: { label: "본문", type: "string?" },
-        alt: { label: "대체 텍스트", type: "string?" },
-        url: { label: "URL", type: "string?" },
-        caption: { label: "캡션", type: "string?" },
-      },
-    }
-  }
-
-  if (imageBlockIds.has(block.id)) {
-    return {
-      label: block.label,
-      presets: [{ id: "default", label: "기본", template: "![${alt}](${url})" }],
-      props: {
-        alt: { label: "대체 텍스트", type: "string" },
-        url: { label: "URL", type: "string" },
-        caption: { label: "캡션", type: "string?" },
-      },
-    }
-  }
-
-  if (block.id === "divider") {
-    return {
-      label: block.label,
-      presets: [{ id: "default", label: "기본", template: "---" }],
-      props: {},
-    }
-  }
-
-  if (block.id === "code") {
-    return {
-      label: block.label,
-      presets: [{ id: "default", label: "기본", template: codeBlockTemplate }],
-      props: {
-        language: { label: "언어", type: "string?" },
-        code: { label: "코드", type: "string" },
-      },
-    }
-  }
-
-  if (block.id === "mrBlog") {
-    return {
-      label: block.label,
-      presets: [{ id: "default", label: "기본", template: "> ${text}" }],
-      props: {
-        text: { label: "본문", type: "string" },
-      },
-    }
-  }
-
-  return undefined
-}
-
 const getParserBlockTemplateKey = ({
   editorType,
   block,
@@ -154,8 +65,7 @@ export abstract class BaseEditor {
     const seenKeys = new Set<string>()
 
     this.supportedBlocks.forEach((block) => {
-      const templateDefinition =
-        block.templateDefinition ?? createFallbackTemplateDefinition({ block })
+      const templateDefinition = block.templateDefinition
 
       if (!templateDefinition || templateDefinition.presets.length < 1) {
         return

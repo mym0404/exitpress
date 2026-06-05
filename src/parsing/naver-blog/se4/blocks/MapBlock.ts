@@ -1,4 +1,4 @@
-import type { ParserBlockContext } from "../../core/BaseBlock.js"
+import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/BaseBlock.js"
 
 import { compactText } from "../../../../shared/text/TextUtils.js"
 import { createLinkParagraphBlocks } from "../../common/LinkParagraph.js"
@@ -11,6 +11,13 @@ const buildNaverMapSearchUrl = (query: string) =>
 export class NaverSe4MapBlock extends LeafBlock {
   override readonly id = "map"
   override readonly label = "지도"
+  override readonly templateDefinition = {
+    label: this.label,
+    presets: [{ id: "default", label: "기본", template: "${text}" }],
+    props: {
+      text: { label: "본문", type: "string" },
+    },
+  } satisfies ParserBlockTemplateDefinition
 
   override match({ $node, moduleType }: ParserBlockContext) {
     return moduleType === "v2_map" || $node.hasClass("se-placesMap")

@@ -1,7 +1,7 @@
 # Agent Guide
 
 ## Project Overview
-- 이 저장소는 공개 블로그 글을 수집해 플랫폼별 parser block으로 공용 AST를 만들고, Markdown, frontmatter, 자산 파일, `manifest.json`으로 export하는 로컬 도구다.
+- 이 저장소는 공개 블로그 글을 수집해 플랫폼별 parser block으로 렌더 대상 block을 만들고, Markdown, frontmatter, 자산 파일, `manifest.json`으로 export하는 로컬 도구다.
 - 로컬 웹 UI, 단건 export CLI, fixture-first regression, Playwright UI smoke, live network e2e를 함께 유지한다.
 
 ## Tech Stack
@@ -20,17 +20,17 @@
 |   `-- skills/ingest-blog/           # repo-local parser coverage workflow
 |-- src/
 |   |-- Server.ts                     # local server entrypoint
-|   |-- domain/                       # AST, blog, export option/job, upload contracts
+|   |-- domain/                       # parser, blog, export option/job, upload contracts
 |   |-- shared/                       # runtime-neutral collection, text, date, error helpers
 |   |-- infra/                        # Node, HTTP, runtime adapters
 |   |-- integrations/naver-blog/      # current Naver Blog API and HTML fetch boundary
 |   |-- parsing/naver-blog/           # parser core plus SE2, SE3, SE4 families
-|   |-- markdown/                     # common AST to Markdown renderer
+|   |-- markdown/                     # parsed block to Markdown renderer
 |   |-- exporting/                    # workflow, post, assets, paths, upload
 |   |-- server/                       # HTTP API, jobs, local state, upload catalog
 |   `-- ui/
 |       |-- app/                       # React route shell and wizard/storybook entry selection
-|       |-- features/parser-stories/   # static parser Storybook catalog, preview UI, and bundled capture assets
+|       |-- features/storybook/        # static Storybook catalog, preview UI, and bundled capture assets
 |       |-- features/common/           # shell, hooks, and shared wizard/status UI
 |       `-- styles/                    # global tokens and theme CSS
 |-- scripts/
@@ -54,7 +54,7 @@
 - 서버 시작점은 `src/Server.ts`, HTTP API는 `src/server/http/HttpServer.ts`다.
 - export 파이프라인은 `src/exporting/workflow/NaverBlogExporter.ts`에서 `fetch -> parse -> review -> render -> write -> manifest` 순서로 따라간다.
 - parser seam은 `src/parsing/naver-blog/core/PostParser.ts`, `src/parsing/naver-blog/NaverBlog.ts`, `src/parsing/naver-blog/core/*`, `src/parsing/naver-blog/se2|se3|se4/*`다.
-- UI 셸은 `src/ui/app/App.tsx`, 공용 shell/hook/status는 `src/ui/features/common/*`, parser story page와 capture asset은 `src/ui/features/parser-stories/*`, 전역 토큰은 `src/ui/styles/globals.css`다.
+- UI 셸은 `src/ui/app/App.tsx`, 공용 shell/hook/status는 `src/ui/features/common/*`, Storybook page와 capture asset은 `src/ui/features/storybook/*`, 전역 토큰은 `src/ui/styles/globals.css`다.
 
 ## Design System
 - UI 기준은 `.agents/knowledge/DESIGN.md`다.

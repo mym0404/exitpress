@@ -48,6 +48,8 @@
 
 ## Block Templates
 - Parser block의 template definition은 사용자가 바꿀 수 있는 Markdown template과 prop 계약을 설명한다.
+- 각 concrete `*Block.ts`가 자기 `templateDefinition.presets`와 `props`를 직접 정의한다.
+- `BaseEditor`는 block template key, editor별 순서, 중복 key 제거만 맡는다.
 - UI에 노출되는 key는 `editorType:blockId` 형식이다.
 - 같은 editor 안에서 같은 key가 반복되면 첫 definition만 노출된다.
 - 여러 concrete block이 같은 output family를 공유하면 같은 key를 공유할 수 있다.
@@ -55,13 +57,13 @@
 - 정확한 selectable key 목록과 노출 순서는 `BaseBlog`에서 파생되는 template definition과 관련 tests가 source of truth다.
 
 ## Story Catalog
-- Parser Storybook catalog는 editor의 `supportedBlocks` 순서에서 파생된다.
+- Storybook catalog는 `src/ui/features/storybook/data/*`의 정적 definition에서 만들어진다.
 - Story key는 `editorType`, `supportedBlocks` index, `blockId` 조합이다.
 - Storybook tree는 `Editor -> Block` 순서로 모든 supported block을 렌더링해야 한다.
-- Story metadata는 block instance의 `id`, `label`, template definition, 선택적 `story` metadata, 실제 source fixture에서 만든다.
-- Story fixture는 실제 source URL, inspect path, input HTML을 담고, Storybook capture asset은 같은 story key의 `src/ui/features/parser-stories/assets/*.png` 파일로 관리한다.
+- Story metadata는 story key, editor identity, block id/label, 실제 source URL, inspect path, input HTML을 담는다.
+- Storybook capture asset은 같은 story key의 `src/ui/features/storybook/assets/*.png` 파일로 관리한다.
 - Input HTML, capture, Markdown preview는 같은 source block을 가리켜야 한다.
-- 별도 중앙 block 목록으로 story catalog를 관리하지 않는다.
+- Storybook definition은 parser inspection path와 Markdown 렌더 결과로 실제 parser block과 계속 맞아야 한다.
 - Markdown 출력이 없는 block은 auxiliary story로 남겨 전체 지원 범위를 빠뜨리지 않는다.
 
 ## Failure And Inspection
