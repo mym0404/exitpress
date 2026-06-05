@@ -99,7 +99,7 @@ const uploadProviderCatalog: UploadProviderCatalogResponse = {
   ],
 }
 
-const blockOutputDefinitions = new NaverBlog().getBlockOutputDefinitions()
+const blockTemplateDefinitions = new NaverBlog().getBlockTemplateDefinitions()
 
 const resumedScanResult: ScanResult = {
   blogId: "mym0404",
@@ -573,7 +573,7 @@ const createBootstrap = ({
   frontmatterFieldOrder,
   frontmatterFieldMeta,
   optionDescriptions,
-  blockOutputDefinitions,
+  blockTemplateDefinitions,
 })
 
 const runScenario = async ({

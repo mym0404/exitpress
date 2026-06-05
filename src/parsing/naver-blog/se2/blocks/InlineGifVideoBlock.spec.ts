@@ -80,7 +80,7 @@ describe("NaverSe2InlineGifVideoBlock", () => {
     ])
   })
 
-  it("parses linked inline gif video wrappers inside legacy paragraphs", () => {
+  it("parses linked inline gif video wrappers inside classic paragraphs", () => {
     const parsed = parseSe2Blocks(`
       <p>
         <span>

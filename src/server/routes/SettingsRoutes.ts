@@ -53,9 +53,6 @@ export const handleSettingsRoutes =
     try {
       const sanitizedOptions = sanitizePersistedExportOptions(
         payload.options as PartialExportOptions,
-        {
-          blockOutputDefinitions: state.blockOutputDefinitions,
-        },
       )
 
       state.cloneOptions(sanitizedOptions)

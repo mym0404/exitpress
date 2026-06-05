@@ -12,7 +12,6 @@ import { ensureDir, resolveRepoPath } from "../../infra/node/FilePathUtils.js"
 import { isAbortOperationError, throwIfAborted } from "../../infra/runtime/AbortOperation.js"
 import { log } from "../../infra/runtime/Logger.js"
 import { NaverBlogFetcher } from "../../integrations/naver-blog/NaverBlogFetcher.js"
-import { NaverBlog } from "../../parsing/naver-blog/NaverBlog.js"
 import { mapConcurrent } from "../../shared/async/AsyncUtils.js"
 import { toErrorMessage } from "../../shared/error/ErrorUtils.js"
 import { AssetStore } from "../assets/AssetStore.js"
@@ -83,9 +82,7 @@ export class NaverBlogExporter {
 
     const blogId = extractBlogId(this.request.blogIdOrUrl)
     const outputDir = resolveRepoPath(this.request.outputDir)
-    const options = cloneExportOptions(this.request.options, {
-      blockOutputDefinitions: new NaverBlog().getBlockOutputDefinitions(),
-    })
+    const options = cloneExportOptions(this.request.options)
     const fetcher = new NaverBlogFetcher({
       blogId,
       cache: this.fetcherCache,

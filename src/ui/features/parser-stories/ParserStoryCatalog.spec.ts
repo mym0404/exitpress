@@ -8,7 +8,7 @@ import { NaverBlog } from "../../../parsing/naver-blog/NaverBlog.js"
 import { parserStoryCaptureAssets } from "./ParserStoryAssets.js"
 import { parserStoryCatalog } from "./ParserStoryCatalog.js"
 
-const parserOptions = { blockOutputs: { defaults: {} } }
+const parserOptions = { blockOutputs: { templates: {} } }
 
 const flattenInspections = (inspections: ParserBlockInspection[]): ParserBlockInspection[] =>
   inspections.flatMap((inspection) => [

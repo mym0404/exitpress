@@ -1,11 +1,8 @@
-import { NaverBlog } from "../../src/parsing/naver-blog/NaverBlog.js"
-
 export const allowedTopLevelOptionKeys = [
   "scope",
   "structure",
   "frontmatter",
   "blockOutputs",
-  "unsupportedBlockCases",
   "assets",
   "links",
 ] as const
@@ -35,7 +32,7 @@ export const allowedFrontmatterFieldKeys = [
   "exportedAt",
   "assetPaths",
 ] as const
-export const allowedBlockOutputsKeys = ["defaults"] as const
+export const allowedBlockTemplateKeys = ["templates"] as const
 export const allowedAssetsKeys = [
   "imageHandlingMode",
   "compressionEnabled",
@@ -55,11 +52,3 @@ export const imageHandlingModes = ["download", "remote", "download-and-upload"] 
 export const stickerAssetModes = ["ignore", "download-original"] as const
 export const thumbnailSources = ["post-list-first", "first-body-image", "none"] as const
 export const sameBlogPostModes = ["keep-source", "custom-url", "relative-filepath"] as const
-
-const editorBlockOutputDefinitions = new NaverBlog().getBlockOutputDefinitions()
-export const editorBlockOutputDefinitionMap = new Map(
-  editorBlockOutputDefinitions.map((definition) => [definition.key, definition]),
-)
-export const editorBlockOutputSelectionKeys = editorBlockOutputDefinitions.map(
-  (definition) => definition.key,
-)

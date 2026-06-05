@@ -1,5 +1,4 @@
-import type { OutputOption } from "../../../../domain/ast/Types.js"
-import type { ParserBlockContext } from "../../core/BaseBlock.js"
+import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/BaseBlock.js"
 
 import { convertHtmlToMarkdown } from "../../../../markdown/TurndownMarkdownConverter.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
@@ -9,18 +8,19 @@ import { findInComponentRoot } from "./util/ComponentBoundary.js"
 export class NaverSe3QuoteBlock extends LeafBlock {
   override readonly id = "quote"
   override readonly label = "인용문"
-  override readonly outputOptions = [
-    {
-      id: "blockquote",
-      label: "blockquote",
-      description: "모든 줄 앞에 `>`를 붙입니다.",
-      preview: {
-        type: "quote",
-        text: "Quoted line\nsecond line",
+  override readonly templateDefinition = {
+    label: this.label,
+    presets: [
+      {
+        id: "default",
+        label: "기본",
+        template: "> ${text}",
       },
-      isDefault: true,
+    ],
+    props: {
+      text: { label: "본문", type: "string" },
     },
-  ] satisfies OutputOption<"quote">[]
+  } satisfies ParserBlockTemplateDefinition
 
   override match({ $, $node }: ParserBlockContext) {
     return (

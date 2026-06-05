@@ -15,7 +15,7 @@ describe("NaverSe3TextBlock", () => {
       { type: "paragraph", text: "Alpha **beta**" },
       { type: "paragraph", text: "Gamma" },
     ])
-    expect(parsed.tags).toEqual(["daily", "legacy"])
+    expect(parsed.tags).toEqual(["daily", "archive"])
   })
 
   it("preserves hard breaks inside text components", () => {
@@ -60,7 +60,7 @@ describe("NaverSe3TextBlock", () => {
     ])
   })
 
-  it("parses legacy paragraph and section title text components", () => {
+  it("parses classic paragraph and section title text components", () => {
     const parsed = parseSe3Blocks(`
       <div class="se_component se_paragraph default">
         <div class="se_textarea">Paragraph text</div>

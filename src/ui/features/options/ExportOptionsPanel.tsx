@@ -1,6 +1,5 @@
 import type { ReactNode } from "react"
 
-import type { EditorBlockOutputDefinition } from "../../../domain/ast/Types.js"
 import type { PostSummary } from "../../../domain/blog/Types.js"
 import type {
   ExportOptions,
@@ -8,13 +7,14 @@ import type {
   FrontmatterFieldName,
   OptionDescriptionMap,
 } from "../../../domain/export-options/Types.js"
+import type { BlockTemplateDefinition } from "../../../domain/template/Types.js"
 
 import type { ExportOptionsStep } from "./ExportOptionsSteps.js"
 
 import { Card, CardContent } from "../../components/ui/Card.js"
 
 import { AssetsOptionsStep } from "./AssetsOptionsStep.js"
-import { MarkdownOptionsStep } from "./BlockOutputOptions.js"
+import { MarkdownOptionsStep } from "./BlockTemplateOptions.js"
 import { DiagnosticsOptionsStep } from "./DiagnosticsOptionsStep.js"
 import { FrontmatterOptionsStep } from "./FrontmatterOptionsStep.js"
 import { LinksOptionsStep } from "./LinksOptionsStep.js"
@@ -25,7 +25,7 @@ export const ExportOptionsPanel = ({
   outputDir,
   options,
   optionDescriptions,
-  blockOutputDefinitions = [],
+  blockTemplateDefinitions = [],
   frontmatterFieldOrder,
   frontmatterFieldMeta,
   frontmatterValidationErrors,
@@ -36,7 +36,7 @@ export const ExportOptionsPanel = ({
   outputDir: string
   options: ExportOptions
   optionDescriptions: OptionDescriptionMap
-  blockOutputDefinitions?: EditorBlockOutputDefinition[]
+  blockTemplateDefinitions?: BlockTemplateDefinition[]
   frontmatterFieldOrder: FrontmatterFieldName[]
   frontmatterFieldMeta: Record<FrontmatterFieldName, FrontmatterFieldMeta>
   frontmatterValidationErrors: string[]
@@ -69,7 +69,7 @@ export const ExportOptionsPanel = ({
     markdown: (
       <MarkdownOptionsStep
         options={options}
-        blockOutputDefinitions={blockOutputDefinitions}
+        blockTemplateDefinitions={blockTemplateDefinitions}
         onOptionsChange={onOptionsChange}
       />
     ),

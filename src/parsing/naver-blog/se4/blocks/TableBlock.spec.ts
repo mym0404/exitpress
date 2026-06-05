@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest"
 
 import {
   createSe4ModuleScript,
-  expectEveryBlockOutputOption,
+  expectBlockTemplateDefinition,
   parseSe4Blocks,
   parseSe4BlocksWithOptions,
 } from "../../../../../tests/support/parser-test-utils.js"
@@ -48,7 +48,7 @@ describe("NaverSe4TableBlock", () => {
   })
 
   it("applies every output option", () => {
-    expectEveryBlockOutputOption({
+    expectBlockTemplateDefinition({
       editorType: "naver-se4",
       blockId: "table",
       parse: (blockOutputs) =>

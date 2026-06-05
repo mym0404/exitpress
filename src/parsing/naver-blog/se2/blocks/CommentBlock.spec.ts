@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest"
 import { parseSe2Blocks } from "../../../../../tests/support/parser-test-utils.js"
 
 describe("NaverSe2CommentBlock", () => {
-  it("skips legacy SE object marker comments", () => {
+  it("skips classic SE object marker comments", () => {
     const parsed = parseSe2Blocks(`
       <div>
         <!-- Not Allowed Attribute Filtered -->

@@ -4,7 +4,7 @@ import type { ScanResult } from "../../domain/blog/Types.js"
 
 import { cloneExportOptions } from "../../domain/export-options/ExportOptions.js"
 
-import { detectBlockOutputKeys } from "./DetectedBlockOutputScanner.js"
+import { detectBlockTemplateKeys } from "./DetectedBlockTemplateScanner.js"
 
 const categories = [
   {
@@ -94,7 +94,7 @@ const se4TableHtml = createSe4Html(`
   </div>
 `)
 
-describe("detectBlockOutputKeys", () => {
+describe("detectBlockTemplateKeys", () => {
   it("fetches scoped posts and returns unique output selection keys", async () => {
     const options = cloneExportOptions({
       scope: {
@@ -111,7 +111,7 @@ describe("detectBlockOutputKeys", () => {
     })
 
     await expect(
-      detectBlockOutputKeys({
+      detectBlockTemplateKeys({
         scanResult,
         options,
         fetcher: {

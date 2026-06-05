@@ -21,7 +21,7 @@ import { createTestPath } from "../test-paths.js"
 
 export const testOutputDir = createTestPath("ui-app", "output")
 export const testResumeOutputDir = createTestPath("ui-app", "resume-output")
-const blockOutputDefinitions = new NaverBlog().getBlockOutputDefinitions()
+const blockTemplateDefinitions = new NaverBlog().getBlockTemplateDefinitions()
 
 export const buildJsonResponse = (body: unknown, status = 200) =>
   new Response(JSON.stringify(body), {
@@ -548,7 +548,7 @@ export const getBootstrapResponse = (url: string) => {
       frontmatterFieldOrder,
       frontmatterFieldMeta,
       optionDescriptions,
-      blockOutputDefinitions,
+      blockTemplateDefinitions,
     })
   }
 
@@ -571,7 +571,7 @@ export const getBootstrapResponse = (url: string) => {
       total: 1,
       completed: 1,
       failed: 0,
-      detectedBlockOutputKeys: ["naver-se4:image"],
+      detectedBlockTemplateKeys: ["naver-se4:image"],
       error: null,
     })
   }

@@ -102,7 +102,7 @@ describe("NaverSe3SubjectMatterBlock", () => {
       tags: [],
       options: {
         blockOutputs: {
-          defaults: {},
+          templates: {},
         },
         resolveLinkUrl: (url) => `resolved:${url}`,
       },
@@ -150,7 +150,7 @@ describe("NaverSe3SubjectMatterBlock", () => {
         tags: [],
         options: {
           blockOutputs: {
-            defaults: {},
+            templates: {},
           },
         },
       }),

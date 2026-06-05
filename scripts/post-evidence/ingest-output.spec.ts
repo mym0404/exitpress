@@ -58,7 +58,7 @@ const createManifest = (overrides: Partial<ExportManifest> = {}): ExportManifest
       },
     },
     blockOutputs: {
-      defaults: {},
+      templates: {},
     },
     assets: {
       imageHandlingMode: "remote",

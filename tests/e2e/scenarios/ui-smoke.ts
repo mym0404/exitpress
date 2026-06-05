@@ -21,7 +21,7 @@ import { createHttpServer } from "../../../src/server/http/HttpServer.js"
 import { createTestPath, createTestTempDir } from "../../support/test-paths.js"
 
 const responseTimeoutMs = 90_000
-const blockOutputDefinitions = new NaverBlog().getBlockOutputDefinitions()
+const blockTemplateDefinitions = new NaverBlog().getBlockTemplateDefinitions()
 const smokeFast = process.env.EXITPRESS_SMOKE_FAST !== "0"
 const smokeDebug = process.env.EXITPRESS_SMOKE_DEBUG === "1"
 const debugLog = (...args: unknown[]) => {
@@ -121,7 +121,7 @@ const waitForExportSettingsSave = ({
     { timeout: responseTimeoutMs },
   )
 
-const waitForBlockOutputSettingsSave = ({
+const waitForBlockTemplateSettingsSave = ({
   page,
   baseUrl,
 }: {
@@ -137,9 +137,9 @@ const waitForBlockOutputSettingsSave = ({
       const body = request.postDataJSON() as {
         options?: ExportOptions
       }
-      const defaults = body.options?.blockOutputs.defaults ?? {}
+      const templates = body.options?.blockOutputs.templates ?? {}
 
-      return defaults["naver-se4:image"]?.params?.includeCaption === true
+      return typeof templates["naver-se4:image"] === "string"
     },
     { timeout: responseTimeoutMs },
   )
@@ -865,7 +865,7 @@ const run = async () => {
           frontmatterFieldOrder,
           frontmatterFieldMeta,
           optionDescriptions,
-          blockOutputDefinitions,
+          blockTemplateDefinitions,
         }),
       )
       return
@@ -922,7 +922,7 @@ const run = async () => {
           total: 5,
           completed: 5,
           failed: 0,
-          detectedBlockOutputKeys: ["naver-se4:image"],
+          detectedBlockTemplateKeys: ["naver-se4:image"],
           error: null,
         }),
       )
@@ -933,13 +933,13 @@ const run = async () => {
       const body = request.postDataJSON() as {
         options?: ExportOptions
       }
-      const defaults = body.options?.blockOutputs.defaults ?? {}
+      const templates = body.options?.blockOutputs.templates ?? {}
 
-      if (defaults["naver-se4:image"]?.params?.includeCaption !== true) {
-        throw new Error("export payload did not include the saved naver-se4 image option")
+      if (typeof templates["naver-se4:image"] !== "string") {
+        throw new Error("export payload did not include the saved naver-se4 image template")
       }
 
-      if (Object.hasOwn(defaults, "formula")) {
+      if (Object.hasOwn(templates, "formula")) {
         throw new Error("export payload included old block-type-only output option key")
       }
 
@@ -1441,22 +1441,22 @@ const run = async () => {
       throw new Error("removed markdown link card controls reappeared")
     }
 
-    if (!(await page.locator('[data-block-output-card="naver-se4:image"]').count())) {
+    if (!(await page.locator('[data-block-template-card="naver-se4:image"]').count())) {
       throw new Error("detected block output cards should appear in the markdown review step")
     }
 
-    if (await page.locator('[data-block-output-card="naver-se4:table"]').count()) {
+    if (await page.locator('[data-block-template-card="naver-se4:table"]').count()) {
       throw new Error(
         "undetected block output cards should stay hidden in the markdown review step",
       )
     }
 
-    const blockOutputSettingsSavePromise = waitForBlockOutputSettingsSave({
+    const blockTemplateSettingsSavePromise = waitForBlockTemplateSettingsSave({
       page,
       baseUrl,
     })
-    await page.click("#blockOutputs-defaults-naver-se4-image-includeCaption")
-    await blockOutputSettingsSavePromise
+    await page.fill("#block-templates-naver-se4-image", "![${alt}](${url})")
+    await blockTemplateSettingsSavePromise
 
     debugLog("waitForResponse", "exportResponsePromise")
     const exportResponsePromise = page.waitForResponse(
@@ -1729,14 +1729,12 @@ const run = async () => {
       throw new Error("manifest did not reflect upload completion")
     }
 
-    if (
-      manifest.options.blockOutputs.defaults["naver-se4:image"]?.params?.includeCaption !== true
-    ) {
-      throw new Error("manifest did not preserve the naver-se4 image option")
+    if (typeof manifest.options.blockOutputs.templates["naver-se4:image"] !== "string") {
+      throw new Error("manifest did not preserve the naver-se4 image template")
     }
 
-    if (Object.hasOwn(manifest.options.blockOutputs.defaults, "formula")) {
-      throw new Error("manifest included old block-type-only output option key")
+    if (Object.hasOwn(manifest.options.blockOutputs.templates, "formula")) {
+      throw new Error("manifest included block-type-only template key")
     }
 
     const finalStatusText = await page.locator("#status-panel").textContent()

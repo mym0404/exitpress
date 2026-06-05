@@ -170,8 +170,8 @@ describe("App workflow", () => {
     }> = []
     const expectedDetectedScanResult = {
       ...scanResult,
-      detectedBlockOutputKeys: ["naver-se4:image"],
-      detectedBlockOutputScopeSignature: JSON.stringify(exportedOptions.scope),
+      detectedBlockTemplateKeys: ["naver-se4:image"],
+      detectedBlockTemplateScopeSignature: JSON.stringify(exportedOptions.scope),
     }
     const fetchMock = vi.fn<typeof fetch>(async (input, init) => {
       const url = typeof input === "string" ? input : input.toString()
@@ -193,7 +193,7 @@ describe("App workflow", () => {
           total: 5,
           completed: 5,
           failed: 0,
-          detectedBlockOutputKeys: ["naver-se4:image"],
+          detectedBlockTemplateKeys: ["naver-se4:image"],
           error: null,
         })
       }
@@ -280,8 +280,8 @@ describe("App workflow", () => {
     expect(blockScanRequests[0]?.payload.blogIdOrUrl).toBe("mym0404")
     expect(blockScanRequests[0]?.payload.scanResult).toEqual(scanResult)
     expect(blockScanRequests[0]?.payload.options?.scope?.categoryIds).toEqual([101])
-    expect(document.querySelector('[data-block-output-card="naver-se4:image"]')).not.toBeNull()
-    expect(document.querySelector('[data-block-output-card="naver-se4:table"]')).toBeNull()
+    expect(document.querySelector('[data-block-template-card="naver-se4:image"]')).not.toBeNull()
+    expect(document.querySelector('[data-block-template-card="naver-se4:table"]')).toBeNull()
 
     await user.click(screen.getByRole("button", { name: "변환 시작" }))
 
@@ -333,7 +333,7 @@ describe("App workflow", () => {
           total: 5,
           completed: 5,
           failed: 0,
-          detectedBlockOutputKeys: [],
+          detectedBlockTemplateKeys: [],
           error: null,
         })
       }
@@ -512,7 +512,7 @@ describe("App workflow", () => {
           total: 5,
           completed: 5,
           failed: 0,
-          detectedBlockOutputKeys: ["naver-se4:image"],
+          detectedBlockTemplateKeys: ["naver-se4:image"],
           error: null,
         })
       }

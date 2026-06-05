@@ -19,14 +19,12 @@
 
 ## 제외 범위
 - `.mdx` output은 추가하지 않는다.
-- 기존 `blockOutputs.defaults` option shape의 하위 호환 처리는 두지 않는다.
 - 서로 다른 parser block을 도메인 개념으로 묶지 않는다.
 - renderer에 parser metadata를 넘기지 않는다.
 - template 실패 시 조용히 fallback하지 않는다.
 
 ## 현재 상태
 - 현재 parser block은 Markdown 렌더링에 맞춘 `AstBlock[]`를 반환한다.
-- 현재 output option은 `blockOutputs.defaults` 아래에 `{ variant, params }` 형태로 저장된다.
 - 현재 선택 가능한 output key는 `editorType:blockId` 형식이다.
 - 여러 parser block이 같은 block id를 공유한다. 특히 `linkCard` 계열에서 이 문제가 크다.
 - 책 위젯과 소재 카드 parser block은 원본에서 얻은 named field를 보존하지 못하고, `image`와 `paragraph`로 쪼개면서 의미 있는 prop 이름을 잃는다.
@@ -178,19 +176,6 @@ props: {
 - 이 key는 `BlockRenderInput` 안에 넣지 않는다.
 
 ## Export Options
-기존 형태:
-```ts
-blockOutputs: {
-  defaults: {
-    [key: string]: {
-      variant: string
-      params?: Record<string, string | number | boolean>
-    }
-  }
-}
-```
-
-새 형태:
 ```ts
 blockOutputs: {
   templates: {
@@ -200,8 +185,7 @@ blockOutputs: {
 ```
 
 - `templates[key]`가 없으면 parser block definition의 `presets[0].template`을 쓴다.
-- 저장된 기존 `blockOutputs.defaults` 값은 읽지 않는다.
-- legacy alias나 migration shim은 추가하지 않는다.
+- 추가 저장 형태나 호환 shim은 두지 않는다.
 
 ## 렌더링 흐름
 - editor가 parser block을 match한다.
@@ -423,8 +407,8 @@ book widget props 예:
 | `src/domain/ast/Types.ts` 의존 테스트 | `AstBlock`, `BlockType`, `ParsedPost.blocks`가 사라진다. | `BlockRenderInput`, `BlockTemplateDefinition`, `ParsedPost.renderInputs` 기준으로 타입과 fixture를 바꾼다. |
 | parser block specs | `convert()` 결과가 `paragraph`, `image`, `table` AST가 아니라 template input과 props가 된다. | 각 block spec은 `template`, `props`, `AssetCandidate`를 검증한다. 기본 template render 결과도 함께 확인한다. |
 | `MarkdownRenderer.spec.ts` | renderer가 AST별 Markdown 분기와 render 중 asset resolve를 하지 않는다. | template renderer spec으로 재구성하고, asset resolve가 끝난 props만 받아 Markdown을 만드는지 확인한다. |
-| `ExportOptions.spec.ts`, persisted option specs | `blockOutputs.defaults`와 `{ variant, params }`가 없어지고 `blockOutputs.templates`만 남는다. | old `defaults`는 읽지 않고, 저장값은 template string만 유지하는지 확인한다. |
-| `DetectedBlockOutputScanner.spec.ts`, route specs | 검출 대상이 `outputSelectionKey`가 아니라 template definition key다. | 실제 export scope에서 검출된 stable template key와 대표 props를 반환하는지 확인한다. |
+| `ExportOptions.spec.ts`, persisted option specs | export option이 `blockOutputs.templates`만 가진다. | 저장값은 template string만 유지하는지 확인한다. |
+| `DetectedBlockTemplateScanner.spec.ts`, route specs | 검출 대상이 template definition key다. | 실제 export scope에서 검출된 stable template key와 대표 props를 반환하는지 확인한다. |
 | `NaverBlogExporter.spec.ts`, `PostExportUnit` 관련 테스트 | render 중 asset resolve, export 후 upload-ready 상태, rewrite 전제가 바뀐다. | 글 단위 pipeline stage 순서, render 전 final URL 주입, stage 실패 기록, post별 병렬 실행, upload registry 공유를 확인한다. |
 | `ImageUploadRewriter` 관련 tests | post-export Markdown rewrite 흐름을 제거한다. | 해당 rewrite 테스트는 삭제하거나, upload URL 검증 helper만 asset resolver/upload stage 테스트로 옮긴다. |
 | server upload route specs | `/api/export/:jobId/upload`로 upload-ready job을 나중에 시작하는 흐름이 사라진다. | export request가 upload provider payload를 먼저 받는지, upload stage가 pipeline 안에서 실행되는지, provider secret이 저장되지 않는지 확인한다. |
@@ -460,7 +444,7 @@ book widget props 예:
 - Markdown renderer 내부를 template renderer로 교체한다.
 - 필요하면 Oxc parser dependency를 추가한다.
 - custom expression evaluator를 추가한다.
-- `blockOutputs.defaults`를 `blockOutputs.templates`로 교체한다.
+- export option의 `blockOutputs`는 `templates`만 쓴다.
 - output definition을 parser block instance template definition으로 바꾼다.
 - detected block scanning이 template definition key를 쓰도록 바꾼다.
 - image, table, video, link card, book widget, subject matter block을 props 기반 렌더링으로 전환한다.

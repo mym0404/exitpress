@@ -1,4 +1,3 @@
-import type { EditorBlockOutputDefinition } from "../../domain/ast/Types.js"
 import type { ScanResult } from "../../domain/blog/Types.js"
 import type {
   ExportJobPollingConfig,
@@ -12,6 +11,7 @@ import type {
   OptionDescriptionMap,
 } from "../../domain/export-options/Types.js"
 import type { ThemePreference } from "../../domain/preferences/ThemePreference.js"
+import type { BlockTemplateDefinition } from "../../domain/template/Types.js"
 
 export type ExportBootstrapResponse = {
   profile: "gfm"
@@ -25,7 +25,7 @@ export type ExportBootstrapResponse = {
   frontmatterFieldOrder: FrontmatterFieldName[]
   frontmatterFieldMeta: Record<FrontmatterFieldName, FrontmatterFieldMeta>
   optionDescriptions: OptionDescriptionMap
-  blockOutputDefinitions: EditorBlockOutputDefinition[]
+  blockTemplateDefinitions: BlockTemplateDefinition[]
 }
 
 export type ExportResumeLookupResponse = {

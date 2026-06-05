@@ -1,8 +1,8 @@
-import type { EditorBlockOutputDefinition } from "../../domain/ast/Types.js"
 import type { ScanCacheMap, ScanResult } from "../../domain/blog/Types.js"
 import type { ExportManifest } from "../../domain/export-job/Types.js"
 import type { PartialExportOptions } from "../../domain/export-options/PersistedExportOptions.js"
 import type { ThemePreference } from "../../domain/preferences/ThemePreference.js"
+import type { BlockTemplateDefinition } from "../../domain/template/Types.js"
 import type { JobStore } from "../jobs/JobStore.js"
 
 import {
@@ -31,21 +31,17 @@ export type HttpServerState = ReturnType<typeof createHttpServerState>
 export const createHttpServerState = ({
   jobStore,
   scanCachePath,
-  legacyScanCachePath,
   settingsPath,
-  legacySettingsPath,
   defaultOutputDir,
   defaultThemePreference,
-  blockOutputDefinitions,
+  blockTemplateDefinitions,
 }: {
   jobStore: JobStore
   scanCachePath: string
-  legacyScanCachePath?: string
   settingsPath: string
-  legacySettingsPath?: string
   defaultOutputDir: string
   defaultThemePreference: ThemePreference
-  blockOutputDefinitions: EditorBlockOutputDefinition[]
+  blockTemplateDefinitions: BlockTemplateDefinition[]
 }) => {
   let scanCachePromise: Promise<ScanCacheMap> | null = null
   const jobScanResults = new Map<string, ScanResult | null>()
@@ -54,7 +50,6 @@ export const createHttpServerState = ({
     if (!scanCachePromise) {
       scanCachePromise = readScanCacheFile({
         scanCachePath,
-        legacyScanCachePath,
       })
     }
 
@@ -148,10 +143,9 @@ export const createHttpServerState = ({
   const buildBootstrapResponse = async () => {
     const persistedUiState = await readPersistedUiState({
       settingsPath,
-      legacySettingsPath,
       defaultOutputDir,
       defaultThemePreference,
-      blockOutputDefinitions,
+      blockTemplateDefinitions,
     })
     const cachedScans = await ensureScanCache()
     const resumed = await loadResumedJob({
@@ -170,7 +164,7 @@ export const createHttpServerState = ({
       frontmatterFieldOrder,
       frontmatterFieldMeta,
       optionDescriptions,
-      blockOutputDefinitions,
+      blockTemplateDefinitions,
     }
   }
 
@@ -204,18 +198,16 @@ export const createHttpServerState = ({
       input: {
         lastOutputDir,
       },
-      legacySettingsPath,
       defaultOutputDir,
       defaultThemePreference,
-      blockOutputDefinitions,
+      blockTemplateDefinitions,
     })
 
   return {
     buildBootstrapResponse,
     buildResumeLookupResponse,
-    blockOutputDefinitions,
-    cloneOptions: (options: PartialExportOptions | undefined) =>
-      cloneExportOptions(options, { blockOutputDefinitions }),
+    blockTemplateDefinitions,
+    cloneOptions: (options: PartialExportOptions | undefined) => cloneExportOptions(options),
     defaultOutputDir,
     ensureScanCache,
     jobScanResults,
@@ -225,10 +217,9 @@ export const createHttpServerState = ({
       writePersistedUiState({
         settingsPath,
         input,
-        legacySettingsPath,
         defaultOutputDir,
         defaultThemePreference,
-        blockOutputDefinitions,
+        blockTemplateDefinitions,
       }),
   }
 }

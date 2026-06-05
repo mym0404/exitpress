@@ -4,7 +4,7 @@ import type { BlockScanJobState } from "../../domain/block-scan/Types.js"
 
 const cloneJob = (job: BlockScanJobState): BlockScanJobState => ({
   ...job,
-  detectedBlockOutputKeys: [...job.detectedBlockOutputKeys],
+  detectedBlockTemplateKeys: [...job.detectedBlockTemplateKeys],
 })
 
 export class BlockScanJobStore {
@@ -17,7 +17,7 @@ export class BlockScanJobStore {
       total,
       completed: 0,
       failed: 0,
-      detectedBlockOutputKeys: [],
+      detectedBlockTemplateKeys: [],
       error: null,
     }
 
@@ -36,11 +36,11 @@ export class BlockScanJobStore {
     })
   }
 
-  completePost(jobId: string, detectedBlockOutputKeys: string[]) {
+  completePost(jobId: string, detectedBlockTemplateKeys: string[]) {
     this.update(jobId, (job) => {
       job.completed += 1
-      job.detectedBlockOutputKeys = Array.from(
-        new Set([...job.detectedBlockOutputKeys, ...detectedBlockOutputKeys]),
+      job.detectedBlockTemplateKeys = Array.from(
+        new Set([...job.detectedBlockTemplateKeys, ...detectedBlockTemplateKeys]),
       )
     })
   }
@@ -52,10 +52,10 @@ export class BlockScanJobStore {
     })
   }
 
-  complete(jobId: string, detectedBlockOutputKeys: string[]) {
+  complete(jobId: string, detectedBlockTemplateKeys: string[]) {
     this.update(jobId, (job) => {
       job.status = "completed"
-      job.detectedBlockOutputKeys = detectedBlockOutputKeys
+      job.detectedBlockTemplateKeys = detectedBlockTemplateKeys
       job.error = null
     })
   }

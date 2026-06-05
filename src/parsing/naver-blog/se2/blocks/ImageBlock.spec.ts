@@ -1,14 +1,14 @@
 import { describe, expect, it } from "vitest"
 
 import {
-  expectEveryBlockOutputOption,
+  expectBlockTemplateDefinition,
   parseSe2Blocks,
 } from "../../../../../tests/support/parser-test-utils.js"
 
 describe("NaverSe2ImageBlock", () => {
   it("parses standalone image wrappers into image blocks", () => {
     const parsed = parseSe2Blocks(`
-      <p><img src="https://example.com/se2-image.png" alt="legacy image" /></p>
+      <p><img src="https://example.com/se2-image.png" alt="classic image" /></p>
     `)
 
     expect(parsed.blocks).toEqual([
@@ -17,22 +17,15 @@ describe("NaverSe2ImageBlock", () => {
         image: {
           sourceUrl: "https://example.com/se2-image.png",
           originalSourceUrl: null,
-          alt: "legacy image",
+          alt: "classic image",
           caption: null,
           mediaKind: "image",
-        },
-        outputSelectionKey: "naver-se2:image",
-        outputSelection: {
-          variant: "markdown-image",
-          params: {
-            includeCaption: false,
-          },
         },
       },
     ])
   })
 
-  it("parses top-level legacy post images into image blocks", () => {
+  it("parses top-level classic post images into image blocks", () => {
     const parsed = parseSe2Blocks(`
       <img class="fx _postImage" src="https://example.com/top-level.png" alt="top level image" />
     `)
@@ -46,13 +39,6 @@ describe("NaverSe2ImageBlock", () => {
           alt: "top level image",
           caption: null,
           mediaKind: "image",
-        },
-        outputSelectionKey: "naver-se2:image",
-        outputSelection: {
-          variant: "markdown-image",
-          params: {
-            includeCaption: false,
-          },
         },
       },
     ])
@@ -107,18 +93,11 @@ describe("NaverSe2ImageBlock", () => {
           caption: null,
           mediaKind: "image",
         },
-        outputSelectionKey: "naver-se2:image",
-        outputSelection: {
-          variant: "markdown-image",
-          params: {
-            includeCaption: false,
-          },
-        },
       },
     ])
   })
 
-  it("parses legacy thumburl image groups inside nested wrappers", () => {
+  it("parses classic thumburl image groups inside nested wrappers", () => {
     const parsed = parseSe2Blocks(`
       <div style="font-size:12pt;">
         <p>
@@ -157,12 +136,12 @@ describe("NaverSe2ImageBlock", () => {
   })
 
   it("applies every output option", () => {
-    expectEveryBlockOutputOption({
+    expectBlockTemplateDefinition({
       editorType: "naver-se2",
       blockId: "image",
       parse: (blockOutputs) =>
         parseSe2Blocks(
-          `<p><img src="https://example.com/se2-image.png" alt="legacy image" /></p>`,
+          `<p><img src="https://example.com/se2-image.png" alt="classic image" /></p>`,
           { blockOutputs },
         ),
     })

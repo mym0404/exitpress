@@ -4,9 +4,9 @@ import { parseSe2Blocks } from "../../../../../tests/support/parser-test-utils.j
 
 describe("NaverSe2QuoteBlock", () => {
   it("parses blockquote tags into quote blocks", () => {
-    const parsed = parseSe2Blocks("<blockquote><p>Legacy <strong>quote</strong></p></blockquote>")
+    const parsed = parseSe2Blocks("<blockquote><p>Classic <strong>quote</strong></p></blockquote>")
 
-    expect(parsed.blocks).toEqual([{ type: "quote", text: "Legacy **quote**" }])
+    expect(parsed.blocks).toEqual([{ type: "quote", text: "Classic **quote**" }])
   })
 
   it("throws when a quote has no markdown content", () => {

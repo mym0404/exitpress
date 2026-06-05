@@ -3,7 +3,7 @@ import type { ExportOptions } from "../../src/domain/export-options/Types.js"
 import { defaultExportOptions } from "../../src/domain/export-options/ExportOptions.js"
 
 import { validateAssetsOptions, validateLinksOptions } from "./SinglePostAssetLinkOptions.js"
-import { validateBlockOutputsOptions } from "./SinglePostBlockOutputOptions.js"
+import { validateBlockTemplateOptions } from "./SinglePostBlockTemplateOptions.js"
 import {
   validateFrontmatterOptions,
   validateScopeOptions,
@@ -31,7 +31,7 @@ const validateSinglePostOptionsJson = (value: unknown, optionsPath: string): Exp
   }
 
   if ("blockOutputs" in value) {
-    options.blockOutputs = validateBlockOutputsOptions(value.blockOutputs, optionsPath)
+    options.blockOutputs = validateBlockTemplateOptions(value.blockOutputs, optionsPath)
   }
 
   if ("assets" in value) {

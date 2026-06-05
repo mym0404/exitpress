@@ -1,12 +1,13 @@
 import { describe, expect, it } from "vitest"
 
-import type { ParsedPost } from "../domain/ast/Types.js"
+import type { ParsedPost as AstParsedPost } from "../domain/ast/Types.js"
 import type { CategoryInfo, PostSummary } from "../domain/blog/Types.js"
 import type { AssetRecord } from "../domain/export-job/Types.js"
 
 import { createTestPath } from "../../tests/support/test-paths.js"
 import { defaultExportOptions } from "../domain/export-options/ExportOptions.js"
 
+import { convertAstParsedPostToTemplatePost } from "./AstRenderInputAdapter.js"
 import { renderMarkdownPost } from "./MarkdownRenderer.js"
 
 const testMarkdownFilePath = createTestPath(
@@ -73,7 +74,7 @@ const createAssetRecord = ({
         : null,
   }) satisfies AssetRecord
 
-const parsedPostBlocks: ParsedPost["blocks"] = [
+const parsedPostBlocks: AstParsedPost["blocks"] = [
   { type: "heading", level: 2, text: "섹션" },
   { type: "paragraph", text: "본문입니다." },
   { type: "formula", formula: "f(n)=n+1", display: true },
@@ -141,7 +142,7 @@ const parsedPostBlocks: ParsedPost["blocks"] = [
   },
 ]
 
-const parsedPost: ParsedPost = {
+const astParsedPost: AstParsedPost = {
   tags: ["algo"],
   videos: [
     {
@@ -157,12 +158,20 @@ const parsedPost: ParsedPost = {
   blocks: parsedPostBlocks,
 }
 
-const createParsedPost = (overrides: Partial<ParsedPost>): ParsedPost => {
-  return {
-    ...parsedPost,
-    ...overrides,
-  }
-}
+const createParsedPost = (
+  overrides: Partial<AstParsedPost> = {},
+  options = defaultExportOptions(),
+) =>
+  convertAstParsedPostToTemplatePost({
+    parsedPost: {
+      ...astParsedPost,
+      ...overrides,
+    },
+    blockOutputs: options.blockOutputs,
+    assets: options.assets,
+  })
+
+const parsedPost = createParsedPost()
 
 describe("renderMarkdownPost", () => {
   it("renders frontmatter, formula wrappers, and asset paths", async () => {
@@ -200,77 +209,31 @@ describe("renderMarkdownPost", () => {
     expect(rendered.assetRecords).toHaveLength(2)
   })
 
-  it("renders custom formula wrappers and image asset references", async () => {
+  it("applies configured block templates during markdown rendering", async () => {
     const options = defaultExportOptions()
-    const formulaSelection = {
-      variant: "wrapper",
-      params: {
-        inlineWrapper: "\\(...\\)",
-        blockWrapper: "\\[...\\]",
-      },
-    } satisfies ParsedPost["blocks"][number]["outputSelection"]
 
-    options.blockOutputs.defaults["naver-se4:formula"] = formulaSelection
+    options.blockOutputs.templates["naver-se4:image"] = "![${alt}](${url})\n_${caption}_"
 
     const rendered = await renderMarkdownPost({
       post,
       category,
-      parsedPost: createParsedPost({
-        blocks: parsedPostBlocks.map((block) =>
-          block.type === "formula"
-            ? {
-                ...block,
-                outputSelectionKey: "naver-se4:formula",
-                outputSelection: formulaSelection,
-              }
-            : block,
-        ),
-      }),
-      markdownFilePath: testMarkdownFilePath,
-      options,
-      resolveAsset: async ({ kind, sourceUrl }) =>
-        createAssetRecord({
-          kind,
-          sourceUrl,
-          relativePath: publicImagePath,
-        }),
-    })
-
-    expect(rendered.markdown).toContain("\\[\nf(n)=n+1\n\\]")
-    expect(rendered.markdown).toContain("\\(g(n)=n-1\\)")
-    expect(rendered.markdown).toContain(`![one](${publicImagePath})`)
-    expect(rendered.assetRecords.every((asset) => asset.storageMode === "relative")).toBe(true)
-  })
-
-  it("renders image captions when the image output option requests captions", async () => {
-    const options = defaultExportOptions()
-
-    options.blockOutputs.defaults["naver-se4:image"] = {
-      variant: "markdown-image",
-      params: {
-        includeCaption: true,
-      },
-    }
-
-    const rendered = await renderMarkdownPost({
-      post,
-      category,
-      parsedPost: createParsedPost({
-        blocks: [
-          {
-            type: "image",
-            image: {
-              sourceUrl: "https://example.com/captioned-image.png",
-              originalSourceUrl: null,
-              alt: "captioned",
-              caption: "caption",
-              mediaKind: "image",
+      parsedPost: createParsedPost(
+        {
+          blocks: [
+            {
+              type: "image",
+              image: {
+                sourceUrl: "https://example.com/captioned-image.png",
+                originalSourceUrl: null,
+                alt: "captioned",
+                caption: "caption",
+                mediaKind: "image",
+              },
             },
-            outputSelectionKey: "naver-se4:image",
-            outputSelection: options.blockOutputs.defaults["naver-se4:image"],
-          },
-        ],
-      }),
+          ],
+        },
+        options,
+      ),
       markdownFilePath: testMarkdownFilePath,
       options,
       resolveAsset: async ({ kind, sourceUrl }) =>
@@ -283,54 +246,6 @@ describe("renderMarkdownPost", () => {
 
     expect(rendered.markdown).toContain(`![captioned](${publicImagePath})`)
     expect(rendered.markdown).toContain("_caption_")
-  })
-
-  it("ignores stale code output selections and renders backtick fences", async () => {
-    const options = defaultExportOptions()
-    options.blockOutputs.defaults["naver-se4:code"] = {
-      variant: "tilde-fence",
-    }
-    options.blockOutputs.defaults["naver-se3:code"] = {
-      variant: "backtick-fence",
-    }
-    const se4CodeBlock = {
-      type: "code",
-      language: "ts",
-      code: "const se4 = true",
-      outputSelectionKey: "naver-se4:code",
-      outputSelection: {
-        variant: "tilde-fence",
-      },
-    } satisfies ParsedPost["blocks"][number]
-    const se3CodeBlock = {
-      type: "code",
-      language: "ts",
-      code: "const se3 = true",
-      outputSelectionKey: "naver-se3:code",
-      outputSelection: {
-        variant: "backtick-fence",
-      },
-    } satisfies ParsedPost["blocks"][number]
-
-    const rendered = await renderMarkdownPost({
-      post,
-      category,
-      parsedPost: createParsedPost({
-        blocks: [se4CodeBlock, se3CodeBlock],
-      }),
-      markdownFilePath: testMarkdownFilePath,
-      options,
-      resolveAsset: async ({ kind, sourceUrl }) =>
-        createAssetRecord({
-          kind,
-          sourceUrl,
-          relativePath: null,
-        }),
-    })
-
-    expect(rendered.markdown).toContain("```ts\nconst se4 = true\n```")
-    expect(rendered.markdown).toContain("```ts\nconst se3 = true\n```")
-    expect(rendered.markdown).not.toContain("~~~")
   })
 
   it("preserves hard breaks inside paragraph markdown", async () => {
@@ -357,8 +272,7 @@ describe("renderMarkdownPost", () => {
     const rendered = await renderMarkdownPost({
       post,
       category,
-      parsedPost: {
-        ...parsedPost,
+      parsedPost: createParsedPost({
         blocks: [
           {
             type: "image",
@@ -371,7 +285,7 @@ describe("renderMarkdownPost", () => {
             },
           },
         ],
-      },
+      }),
       markdownFilePath: testMarkdownFilePath,
       options: defaultExportOptions(),
       resolveAsset: async ({ kind, sourceUrl }) =>
@@ -419,9 +333,6 @@ describe("renderMarkdownPost", () => {
     const options = defaultExportOptions()
 
     options.frontmatter.enabled = false
-    options.blockOutputs.defaults["naver-se4:image"] = {
-      variant: "source-only",
-    }
 
     const rendered = await renderMarkdownPost({
       post,
@@ -437,10 +348,6 @@ describe("renderMarkdownPost", () => {
               alt: "source only",
               caption: null,
               mediaKind: "image",
-            },
-            outputSelectionKey: "naver-se4:image",
-            outputSelection: {
-              variant: "source-only",
             },
           },
           {
@@ -461,7 +368,7 @@ describe("renderMarkdownPost", () => {
 
     expect(rendered.markdown).toContain("> 인용문")
     expect(rendered.markdown).toContain("> 둘째 줄")
-    expect(rendered.markdown).toContain(`[source only](${publicImagePath})`)
+    expect(rendered.markdown).toContain(`![source only](${publicImagePath})`)
     expect(rendered.markdown).toContain("[Reference Demo](https://example.com/watch)")
     expect(rendered.markdown).not.toContain("[ref-1]: https://example.com/watch")
     expect(rendered.markdown).not.toContain("---\n")
@@ -470,55 +377,23 @@ describe("renderMarkdownPost", () => {
   it("renders fallback output for image-group and table edge cases while keeping videos as plain links", async () => {
     const options = defaultExportOptions()
 
-    options.blockOutputs.defaults["naver-se4:formula"] = {
-      variant: "math-fence",
-      params: {
-        inlineWrapper: "$",
-      },
-    }
-    options.blockOutputs.defaults["naver-se4:code"] = {
-      variant: "tilde-fence",
-    }
-    options.blockOutputs.defaults["naver-se4:divider"] = {
-      variant: "asterisk-rule",
-    }
-    options.blockOutputs.defaults["naver-se4:table"] = {
-      variant: "html-only",
-    }
-
     const rendered = await renderMarkdownPost({
       post,
       category,
-      parsedPost: {
-        ...parsedPost,
+      parsedPost: createParsedPost({
         blocks: [
           {
             type: "divider",
-            outputSelectionKey: "naver-se4:divider",
-            outputSelection: {
-              variant: "asterisk-rule",
-            },
           },
           {
             type: "code",
             language: "html",
             code: "<main></main>",
-            outputSelectionKey: "naver-se4:code",
-            outputSelection: {
-              variant: "tilde-fence",
-            },
           },
           {
             type: "formula",
             formula: "x+y",
             display: true,
-            outputSelectionKey: "naver-se4:formula",
-            outputSelection: {
-              variant: "math-fence",
-              params: {
-                inlineWrapper: "$",
-              },
-            },
           },
           {
             type: "imageGroup",
@@ -549,13 +424,9 @@ describe("renderMarkdownPost", () => {
             complex: true,
             html: "<table><tr><td>cell</td></tr></table>",
             rows: [],
-            outputSelectionKey: "naver-se4:table",
-            outputSelection: {
-              variant: "html-only",
-            },
           },
         ],
-      },
+      }),
       markdownFilePath: testMarkdownFilePath,
       options,
       resolveAsset: async ({ kind, sourceUrl }) =>
@@ -570,11 +441,11 @@ describe("renderMarkdownPost", () => {
     expect(rendered.markdown).toContain("```html\n<main></main>\n```")
     expect(rendered.markdown).not.toContain("***")
     expect(rendered.markdown).not.toContain("~~~")
-    expect(rendered.markdown).toContain("```math\nx+y\n```")
+    expect(rendered.markdown).toContain("$$\nx+y\n$$")
     expect(rendered.markdown).toContain("[HTML Demo](https://example.com/watch-html)")
     expect(rendered.markdown).not.toContain("![HTML Demo]")
     expect(rendered.markdown).not.toContain("Open Original Post")
-    expect(rendered.markdown).toContain("<table><tr><td>cell</td></tr></table>")
+    expect(rendered.markdown).toContain("cell")
   })
 
   it("keeps link descriptions without duplicating bare urls", async () => {

@@ -1,67 +1,45 @@
 <svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
   <title>Exitpress Open Graph image</title>
   <defs>
-    <radialGradient id="bg-left" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(190 148) rotate(79.412) scale(356.898 536.688)">
-      <stop stop-color="#116B44" />
-      <stop offset="1" stop-color="#07110D" />
+    <radialGradient id="og-base-left" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(238 112) rotate(58) scale(494 650)">
+      <stop stop-color="#211A55" />
+      <stop offset="1" stop-color="#0C0A12" stop-opacity="0" />
     </radialGradient>
-    <radialGradient id="bg-right" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1028 112) rotate(122.218) scale(370.991 500.606)">
-      <stop stop-color="#173728" stop-opacity="0.92" />
-      <stop offset="1" stop-color="#08100D" stop-opacity="0" />
+    <radialGradient id="og-base-right" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(966 446) rotate(132) scale(544 664)">
+      <stop stop-color="#3E1630" stop-opacity="0.82" />
+      <stop offset="1" stop-color="#0C0A12" stop-opacity="0" />
     </radialGradient>
-    <linearGradient id="icon-face" x1="124" y1="118" x2="244" y2="244" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#62F6A4" />
-      <stop offset="1" stop-color="#2DE07D" />
+    <linearGradient id="og-wave" x1="0" y1="0" x2="1200" y2="0" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#76A7FF" />
+      <stop offset="0.25" stop-color="#745DFF" />
+      <stop offset="0.55" stop-color="#A845FF" />
+      <stop offset="0.78" stop-color="#FF5FB8" />
+      <stop offset="1" stop-color="#C8B9FF" />
     </linearGradient>
-    <linearGradient id="icon-glow" x1="120" y1="124" x2="228" y2="232" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#62F6A4" stop-opacity="0.34" />
-      <stop offset="1" stop-color="#62F6A4" stop-opacity="0" />
-    </linearGradient>
-    <filter id="noise" x="0" y="0" width="100%" height="100%">
-      <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="2" stitchTiles="stitch" result="grain" />
-      <feColorMatrix in="grain" type="matrix" values="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 0 0 0 0.04 0" />
+    <filter id="og-blur" x="-240" y="-240" width="1680" height="1110" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="48" />
     </filter>
-    <filter id="logo-shadow" x="0" y="0" width="1200" height="630" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-      <feDropShadow dx="0" dy="24" stdDeviation="22" flood-color="#000000" flood-opacity="0.34" />
-      <feDropShadow dx="0" dy="0" stdDeviation="18" flood-color="#2DE07D" flood-opacity="0.14" />
+    <filter id="og-soft" x="-260" y="-260" width="1720" height="1150" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="78" />
     </filter>
-    <filter id="shadow-deep" x="0" y="0" width="1200" height="630" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-      <feDropShadow dx="0" dy="36" stdDeviation="36" flood-color="#000000" flood-opacity="0.42" />
+    <filter id="og-grain" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.62" numOctaves="2" stitchTiles="stitch" result="noise" />
+      <feColorMatrix in="noise" type="matrix" values="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 0 0 0 0.028 0" />
     </filter>
-    <clipPath id="preview-clip">
-      <rect x="0" y="0" width="412" height="252" rx="22" />
-    </clipPath>
+    <filter id="og-logo-shadow" x="0" y="0" width="650" height="630" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="28" stdDeviation="28" flood-color="#000000" flood-opacity="0.38" />
+    </filter>
   </defs>
 
-  <rect width="1200" height="630" fill="#08110D" />
-  <rect width="1200" height="630" fill="url(#bg-left)" />
-  <rect width="1200" height="630" fill="url(#bg-right)" />
-  <rect width="1200" height="630" fill="#E7FFF1" filter="url(#noise)" opacity="0.18" />
+  <rect width="1200" height="630" fill="#0C0A12" />
+  <rect width="1200" height="630" fill="url(#og-base-left)" />
+  <rect width="1200" height="630" fill="url(#og-base-right)" />
+  <path d="M-120 410C74 468 176 372 330 400C458 424 514 496 646 412C790 320 890 366 996 414C1080 452 1134 382 1320 420" stroke="url(#og-wave)" stroke-width="68" stroke-linecap="round" opacity="0.48" filter="url(#og-blur)" />
+  <path d="M-140 430C96 486 204 390 352 420C470 446 542 496 662 430C804 350 896 368 1014 422C1102 462 1164 408 1328 446" stroke="#FF64C2" stroke-width="106" stroke-linecap="round" opacity="0.22" filter="url(#og-soft)" />
+  <path d="M-100 404C86 450 186 374 326 396C462 418 524 476 648 402C788 320 896 358 1000 404C1086 442 1138 394 1310 418" stroke="#C9C1FF" stroke-width="6" stroke-linecap="round" opacity="0.32" />
+  <rect width="1200" height="630" filter="url(#og-grain)" opacity="0.35" />
 
-  <g filter="url(#logo-shadow)">
-    <rect x="132" y="118" width="104" height="144" rx="18" fill="#EFFAF4" />
-    <path d="M158 160H210" stroke="#0A1510" stroke-width="12" stroke-linecap="round" opacity="0.42" />
-    <path d="M158 194H202" stroke="#0A1510" stroke-width="12" stroke-linecap="round" opacity="0.3" />
-    <path d="M198 202H294" stroke="url(#icon-face)" stroke-width="18" stroke-linecap="round" />
-    <path d="M268 174L296 202L268 230" stroke="url(#icon-face)" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" />
-  </g>
-
-  <g filter="url(#shadow-deep)" transform="translate(708 102) rotate(21)">
-    <path d="M0 26L412 26L456 58L44 58L0 26Z" fill="#070C09" />
-    <path d="M412 26L456 58L456 310L412 278V26Z" fill="#050806" />
-    <g clip-path="url(#preview-clip)">
-      <image href="preview-source.png" x="0" y="0" width="412" height="252" preserveAspectRatio="xMidYMid slice" />
-    </g>
-    <rect x="0.75" y="0.75" width="410.5" height="250.5" rx="21.25" stroke="#284738" stroke-width="1.5" />
-  </g>
-
-  <text x="84" y="360" fill="#EFFAF4" font-size="62" font-weight="500" font-family="Public Sans, Inter, Arial, sans-serif" letter-spacing="-1.8">
-    Exitpress
-  </text>
-  <text x="84" y="428" fill="#D1E6D8" font-size="30" font-weight="400" font-family="Public Sans, Inter, Arial, sans-serif">
-    Every post deserves an exit.
-  </text>
-  <text x="84" y="468" fill="#D1E6D8" font-size="30" font-weight="400" font-family="Public Sans, Inter, Arial, sans-serif">
-    Export public posts to Markdown, frontmatter, and assets.
-  </text>
+  <image href="logo.png" x="108" y="124" width="386" height="386" preserveAspectRatio="xMidYMid meet" filter="url(#og-logo-shadow)" />
+  <text x="622" y="274" fill="#F6F6FF" font-size="82" font-weight="650" font-family="Inter, Public Sans, Arial, sans-serif">Exitpress</text>
+  <text x="626" y="338" fill="#D4D7EC" font-size="31" font-weight="400" font-family="Inter, Public Sans, Arial, sans-serif">Every post deserves an exit.</text>
 </svg>

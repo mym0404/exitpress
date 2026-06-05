@@ -1,23 +1,13 @@
 import { describe, expect, it } from "vitest"
 
-import { NaverBlog } from "../../parsing/naver-blog/NaverBlog.js"
-
-import { resolveBlockOutputSelection } from "./BlockOutputSelection.js"
 import {
-  cloneExportOptions as cloneExportOptionsRaw,
+  cloneExportOptions,
   frontmatterFieldMeta,
   getFrontmatterExportKey,
   optionDescriptions,
-  sanitizePersistedExportOptions as sanitizePersistedExportOptionsRaw,
+  sanitizePersistedExportOptions,
   validateFrontmatterAliases,
 } from "./ExportOptions.js"
-
-const blockOutputDefinitions = new NaverBlog().getBlockOutputDefinitions()
-const cloneExportOptions = (options?: Parameters<typeof cloneExportOptionsRaw>[0]) =>
-  cloneExportOptionsRaw(options, { blockOutputDefinitions })
-const sanitizePersistedExportOptions = (
-  options?: Parameters<typeof sanitizePersistedExportOptionsRaw>[0],
-) => sanitizePersistedExportOptionsRaw(options, { blockOutputDefinitions })
 
 describe("export options", () => {
   it("merges frontmatter aliases with defaults", () => {
@@ -43,11 +33,7 @@ describe("export options", () => {
     expect(options.assets.includeImageCaptions).toBe(false)
     expect(options.links.sameBlogPostMode).toBe("keep-source")
     expect(options.links.sameBlogPostCustomUrlTemplate).toBe("")
-    expect(Object.hasOwn(options, "markdown")).toBe(false)
-    expect(options.blockOutputs.defaults["naver-se4:formula"]?.params?.inlineWrapper).toBe("$")
-    expect(options.blockOutputs.defaults["naver-se4:formula"]?.params?.blockWrapper).toBe("$$")
-    expect(options.blockOutputs.defaults["naver-se4:image"]?.params?.includeCaption).toBe(false)
-    expect(Object.hasOwn(options, "unsupportedBlockCases")).toBe(false)
+    expect(options.blockOutputs.templates).toEqual({})
     expect(options.structure.groupByCategory).toBe(true)
     expect(options.structure.includeDateInPostFolderName).toBe(true)
     expect(options.structure.includeLogNoInPostFolderName).toBe(false)
@@ -57,80 +43,36 @@ describe("export options", () => {
     expect(options.structure.postFolderNameCustomTemplate).toBe("")
     expect(Object.hasOwn(options.structure, "postDirectoryName")).toBe(false)
     expect(Object.hasOwn(options.assets, "assetPathMode")).toBe(false)
-    expect(Object.hasOwn(options.assets, "imageContentMode")).toBe(false)
   })
 
-  it("drops removed legacy markdown option containers", () => {
-    const legacyOptions = JSON.parse(`{
-      "markdown": {
-        "linkStyle": "referenced",
-        "headingLevelOffset": 1,
-        "linkCardStyle": "quote",
-        "videoStyle": "link-only"
-      }
-    }`) as Parameters<typeof cloneExportOptions>[0]
-
-    const options = cloneExportOptions(legacyOptions)
-
-    expect(Object.hasOwn(options, "markdown")).toBe(false)
-  })
-
-  it("merges editor block output defaults", () => {
+  it("stores block output templates as plain strings", () => {
     const options = cloneExportOptions({
       blockOutputs: {
-        defaults: {
-          "naver-se4:code": {
-            variant: "tilde-fence",
-          },
-          "naver-se4:image": {
-            variant: "linked-image",
-          },
-          "naver-se4:formula": {
-            variant: "wrapper",
-            params: {
-              inlineWrapper: "\\(...\\)",
-              blockWrapper: "\\[...\\]",
-            },
-          },
+        templates: {
+          "naver-se4:image": "![${alt}](${url})",
         },
       },
     })
 
-    expect(options.blockOutputs.defaults["naver-se4:code"]).toBeUndefined()
-    expect(options.blockOutputs.defaults["naver-se4:image"]?.variant).toBe("linked-image")
-    expect(options.blockOutputs.defaults["naver-se4:image"]?.params?.includeCaption).toBe(false)
-    expect(options.blockOutputs.defaults["naver-se4:formula"]?.variant).toBe("wrapper")
-    expect(options.blockOutputs.defaults["naver-se4:formula"]?.params?.inlineWrapper).toBe(
-      "\\(...\\)",
-    )
-    expect(options.blockOutputs.defaults["naver-se4:formula"]?.params?.blockWrapper).toBe(
-      "\\[...\\]",
-    )
+    expect(options.blockOutputs.templates).toEqual({
+      "naver-se4:image": "![${alt}](${url})",
+    })
   })
 
-  it("drops block-type-only and removed output defaults from persisted options", () => {
+  it("keeps block output templates from persisted options", () => {
     const sanitized = sanitizePersistedExportOptions(
       JSON.parse(`{
         "blockOutputs": {
-          "defaults": {
-            "code": {
-              "variant": "tilde-fence"
-            },
-            "naver-se4:code": {
-              "variant": "tilde-fence"
-            },
-            "naver-se4:image": {
-              "variant": "linked-image"
-            }
+          "templates": {
+            "naver-se4:image": "![\${alt}](\${url})",
+            "naver-se4:code": 123
           }
         }
       }`),
     )
 
-    expect(sanitized.blockOutputs?.defaults).toEqual({
-      "naver-se4:image": {
-        variant: "linked-image",
-      },
+    expect(sanitized.blockOutputs?.templates).toEqual({
+      "naver-se4:image": "![${alt}](${url})",
     })
   })
 
@@ -162,49 +104,6 @@ describe("export options", () => {
     })
   })
 
-  it("ignores legacy unsupported block representative-case selections", () => {
-    const options = cloneExportOptions(
-      JSON.parse(`{
-        "unsupportedBlockCases": {
-          "se2-inline-gif-video": {
-            "candidateId": "poster-image-only",
-            "confirmed": true
-          },
-          "se3-oglink-og_bSize": {
-            "candidateId": "not-a-real-candidate",
-            "confirmed": true
-          }
-        }
-      }`),
-    )
-
-    expect(Object.hasOwn(options, "unsupportedBlockCases")).toBe(false)
-  })
-
-  it("merges formula params with parser block option defaults", () => {
-    const options = cloneExportOptions({
-      blockOutputs: {
-        defaults: {
-          "naver-se4:formula": {
-            variant: "wrapper",
-            params: {
-              inlineWrapper: "\\(...\\)",
-            },
-          },
-        },
-      },
-    })
-
-    const selection = resolveBlockOutputSelection({
-      blockType: "formula",
-      blockOutputs: options.blockOutputs,
-      selectionKey: "naver-se4:formula",
-    })
-
-    expect(selection.params?.inlineWrapper).toBe("\\(...\\)")
-    expect(selection.params?.blockWrapper).toBe("$$")
-  })
-
   it("returns field name when alias is blank", () => {
     expect(
       getFrontmatterExportKey({
@@ -226,22 +125,6 @@ describe("export options", () => {
     expect(options.assets.imageHandlingMode).toBe("download-and-upload")
     expect(options.assets.downloadImages).toBe(true)
     expect(options.assets.downloadThumbnails).toBe(true)
-  })
-
-  it("drops removed legacy image content mode while keeping upload mode", () => {
-    const legacyOptions = JSON.parse(`{
-      "assets": {
-        "imageHandlingMode": "download-and-upload",
-        "downloadImages": false,
-        "imageContentMode": "base64"
-      }
-    }`) as Parameters<typeof cloneExportOptions>[0]
-
-    const options = cloneExportOptions(legacyOptions)
-
-    expect(options.assets.imageHandlingMode).toBe("download-and-upload")
-    expect(options.assets.downloadImages).toBe(true)
-    expect(Object.hasOwn(options.assets, "imageContentMode")).toBe(false)
   })
 
   it("removes category ids from persisted options while keeping other scope fields", () => {
@@ -285,22 +168,7 @@ describe("export options", () => {
     })
   })
 
-  it("drops legacy unsupported block case selections from persisted options", () => {
-    const sanitized = sanitizePersistedExportOptions(
-      JSON.parse(`{
-        "unsupportedBlockCases": {
-          "se3-horizontal-line-default": {
-            "candidateId": "html-default-hr",
-            "confirmed": true
-          }
-        }
-      }`),
-    )
-
-    expect(Object.hasOwn(sanitized, "unsupportedBlockCases")).toBe(false)
-  })
-
-  it("infers legacy slug whitespace from stored slug style", () => {
+  it("infers classic slug whitespace from stored slug style", () => {
     expect(
       cloneExportOptions({
         structure: {
@@ -382,8 +250,6 @@ describe("export options", () => {
     expect(optionDescriptions["links-sameBlogPostCustomUrlTemplate"]).toContain("{date}")
     expect(optionDescriptions["links-sameBlogPostCustomUrlTemplate"]).toContain("{YYYY}")
     expect(optionDescriptions["structure-postFolderNameCustomTemplate"]).toContain("{MM}")
-    expect(optionDescriptions["assets-imageContentMode"]).toBeUndefined()
-    expect(optionDescriptions["markdown-linkStyle"]).toBeUndefined()
     expect(optionDescriptions["assets-assetPathMode"]).toBeUndefined()
   })
 })

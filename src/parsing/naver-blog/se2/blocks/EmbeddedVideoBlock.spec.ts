@@ -34,7 +34,7 @@ describe("NaverSe2EmbeddedVideoBlock", () => {
     expect(parsed.videos).toEqual([video])
   })
 
-  it("parses multiple outer video iframes from one legacy paragraph", () => {
+  it("parses multiple outer video iframes from one classic paragraph", () => {
     const parsed = parseSe2Blocks(`
       <p style="text-align: center;" align="center">
         <style>@media all and (min-width:116px){#_video1 iframe{width:76px !important;height:90px !important}}</style>
@@ -132,7 +132,7 @@ describe("NaverSe2EmbeddedVideoBlock", () => {
     expect(parsed.videos).toEqual([video])
   })
 
-  it("parses naver video spans wrapped in legacy paragraphs", () => {
+  it("parses naver video spans wrapped in classic paragraphs", () => {
     const parsed = parseSe2Blocks(`
       <p align="center">
         <style>@media all and (min-width:600px){#_video1 iframe{width:560px !important;height:315px !important}}</style>
@@ -185,7 +185,7 @@ describe("NaverSe2EmbeddedVideoBlock", () => {
     expect(parsed.videos).toEqual([video])
   })
 
-  it("parses direct video iframes wrapped in legacy paragraphs", () => {
+  it("parses direct video iframes wrapped in classic paragraphs", () => {
     const parsed = parseSe2Blocks(`
       <p>
         <iframe

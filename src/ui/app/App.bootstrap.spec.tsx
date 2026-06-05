@@ -159,7 +159,9 @@ describe("App bootstrap", () => {
 
     const table = await screen.findByRole("table")
 
-    expect(within(table).getByRole("columnheader", { name: "선택" })).toBeInTheDocument()
+    expect(
+      within(table).getByRole("columnheader", { name: "전체 카테고리 선택" }),
+    ).toBeInTheDocument()
     expect(within(table).getByRole("columnheader", { name: "카테고리" })).toBeInTheDocument()
     expect(within(table).getByRole("columnheader", { name: "글 수" })).toBeInTheDocument()
     expect(within(table).queryByRole("columnheader", { name: "경로" })).not.toBeInTheDocument()

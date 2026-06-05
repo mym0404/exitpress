@@ -1,41 +1,3 @@
-export type BlockOutputParamValue = string | number | boolean
-
-export type BlockOutputSelection = {
-  variant: string
-  params?: Record<string, BlockOutputParamValue>
-}
-
-type OutputOptionParam = {
-  key: string
-  label: string
-  description: string
-  input: "text" | "number" | "boolean"
-  defaultValue?: BlockOutputParamValue
-}
-
-export type OutputOption<Block extends BlockType = BlockType> = {
-  id: string
-  label: string
-  description: string
-  preview: Extract<AstBlock, { type: Block }>
-  isDefault?: boolean
-  params?: OutputOptionParam[]
-}
-
-export type EditorBlockOutputDefinition = {
-  key: string
-  editorType: string
-  editorLabel: string
-  blockId: string
-  blockLabel: string
-  options: OutputOption[]
-}
-
-type AstBlockOutputSelection = {
-  outputSelectionKey?: string
-  outputSelection?: BlockOutputSelection
-}
-
 type VideoData = {
   title: string
   thumbnailUrl: string | null
@@ -67,16 +29,16 @@ export type ImageData = {
 }
 
 export type AstBlock =
-  | ({ type: "paragraph"; text: string } & AstBlockOutputSelection)
-  | ({ type: "heading"; level: number; text: string } & AstBlockOutputSelection)
-  | ({ type: "quote"; text: string } & AstBlockOutputSelection)
-  | ({ type: "divider" } & AstBlockOutputSelection)
-  | ({ type: "code"; language: string | null; code: string } & AstBlockOutputSelection)
-  | ({ type: "formula"; formula: string; display: boolean } & AstBlockOutputSelection)
-  | ({ type: "image"; image: ImageData } & AstBlockOutputSelection)
-  | ({ type: "imageGroup"; images: ImageData[] } & AstBlockOutputSelection)
-  | ({ type: "video"; video: VideoData } & AstBlockOutputSelection)
-  | ({ type: "table"; rows: TableRow[]; html: string; complex: boolean } & AstBlockOutputSelection)
+  | { type: "paragraph"; text: string }
+  | { type: "heading"; level: number; text: string }
+  | { type: "quote"; text: string }
+  | { type: "divider" }
+  | { type: "code"; language: string | null; code: string }
+  | { type: "formula"; formula: string; display: boolean }
+  | { type: "image"; image: ImageData }
+  | { type: "imageGroup"; images: ImageData[] }
+  | { type: "video"; video: VideoData }
+  | { type: "table"; rows: TableRow[]; html: string; complex: boolean }
 
 export type BlockType = AstBlock["type"]
 
@@ -88,9 +50,7 @@ export type ParsedPost = {
 
 export type ParserBlockOptions = {
   blockOutputs: {
-    defaults: Partial<{
-      [Key in string]: BlockOutputSelection
-    }>
+    templates: Partial<Record<string, string>>
   }
   resolveLinkUrl?: (url: string) => string
 }

@@ -101,12 +101,6 @@ describe("post-parser routing", () => {
 
   it("ignores stale code output selections", () => {
     const options = defaultExportOptions()
-    options.blockOutputs.defaults["naver-se4:code"] = {
-      variant: "tilde-fence",
-    }
-    options.blockOutputs.defaults["naver-se3:code"] = {
-      variant: "backtick-fence",
-    }
     const se4Parsed = parsePostHtml({
       html: `
         <script>var data = { smartEditorVersion: 4 }</script>
@@ -149,15 +143,10 @@ describe("post-parser routing", () => {
       language: null,
       code: "const se3 = true",
     })
-    expect(se4Parsed.blocks[0]).not.toHaveProperty("outputSelectionKey")
-    expect(se3Parsed.blocks[0]).not.toHaveProperty("outputSelectionKey")
   })
 
   it("renders paragraph links inline when stale reference link selections are present", () => {
     const options = defaultExportOptions()
-    options.blockOutputs.defaults["naver-se4:paragraph"] = {
-      variant: "reference-links",
-    }
 
     const parsed = parsePostHtml({
       html: `
@@ -181,7 +170,7 @@ describe("post-parser routing", () => {
     })
   })
 
-  it("routes legacy html to the SE2 parser", () => {
+  it("routes classic html to the SE2 parser", () => {
     const parsed = parsePostHtml({
       html: `
         <div id="viewTypeSelector">

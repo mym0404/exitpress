@@ -198,16 +198,8 @@ describe("single-post cli", () => {
       optionsPath,
       JSON.stringify({
         blockOutputs: {
-          defaults: {
-            "naver-se4:image": {
-              variant: "linked-image",
-            },
-          },
-        },
-        unsupportedBlockCases: {
-          "se3-oglink-og_bSize": {
-            candidateId: "markdown-image-summary",
-            confirmed: true,
+          templates: {
+            "naver-se4:image": "![${alt}](${url})",
           },
         },
       }),
@@ -259,11 +251,8 @@ describe("single-post cli", () => {
 
       expect(exportSinglePost).toHaveBeenCalledTimes(1)
       expect(
-        exportSinglePost.mock.calls[0][0].options.blockOutputs.defaults["naver-se4:image"]?.variant,
-      ).toBe("linked-image")
-      expect(
-        Object.hasOwn(exportSinglePost.mock.calls[0][0].options, "unsupportedBlockCases"),
-      ).toBe(false)
+        exportSinglePost.mock.calls[0][0].options.blockOutputs.templates["naver-se4:image"],
+      ).toBe("![${alt}](${url})")
       expect(stdoutWrite).not.toHaveBeenCalled()
       expect(stderrWrite).toHaveBeenCalledWith(
         [
@@ -425,12 +414,8 @@ describe("single-post cli", () => {
       optionsPath,
       JSON.stringify({
         blockOutputs: {
-          defaults: {
-            "naver-se4:formula": {
-              params: {
-                blockWrapper: 1,
-              },
-            },
+          templates: {
+            "naver-se4:formula": 1,
           },
         },
       }),
@@ -464,7 +449,7 @@ describe("single-post cli", () => {
     }
   })
 
-  it("fails fast when block output defaults use block type keys", async () => {
+  it("fails fast when block output templates use unsupported fields", async () => {
     const rootDir = await createTestTempDir("single-post-cli-")
     const outputDir = path.join(rootDir, "output")
     const optionsPath = path.join(rootDir, "options.json")
@@ -474,10 +459,8 @@ describe("single-post cli", () => {
       optionsPath,
       JSON.stringify({
         blockOutputs: {
-          defaults: {
-            image: {
-              variant: "linked-image",
-            },
+          templates: {
+            image: "![${alt}](${url})",
           },
         },
       }),
@@ -503,7 +486,7 @@ describe("single-post cli", () => {
           stdoutWrite: vi.fn(),
           stderrWrite: vi.fn(),
         }),
-      ).rejects.toThrow("blockOutputs.defaults contains unsupported keys: image")
+      ).rejects.toThrow("blockOutputs.templates contains unsupported keys: image")
 
       expect(exportSinglePost).not.toHaveBeenCalled()
     } finally {
@@ -605,7 +588,7 @@ describe("single-post cli", () => {
     }
   })
 
-  it("fails fast when removed structure legacy keys are present in options JSON", async () => {
+  it("fails fast when removed structure classic keys are present in options JSON", async () => {
     const rootDir = await createTestTempDir("single-post-cli-")
     const outputDir = path.join(rootDir, "output")
     const optionsPath = path.join(rootDir, "options.json")
@@ -640,7 +623,7 @@ describe("single-post cli", () => {
     }
   })
 
-  it("fails fast when removed asset legacy keys are present in options JSON", async () => {
+  it("fails fast when removed asset classic keys are present in options JSON", async () => {
     const rootDir = await createTestTempDir("single-post-cli-")
     const outputDir = path.join(rootDir, "output")
     const optionsPath = path.join(rootDir, "options.json")

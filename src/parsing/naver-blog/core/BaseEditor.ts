@@ -1,14 +1,9 @@
 import type { CheerioAPI } from "cheerio"
 import type { AnyNode } from "domhandler"
 
-import type {
-  AstBlock,
-  EditorBlockOutputDefinition,
-  OutputOption,
-  ParsedPost,
-  ParserBlockOptions,
-} from "../../../domain/ast/Types.js"
+import type { AstBlock, ParsedPost, ParserBlockOptions } from "../../../domain/ast/Types.js"
 import type { ExportOptions } from "../../../domain/export-options/Types.js"
+import type { BlockTemplateDefinition } from "../../../domain/template/Types.js"
 import type { UnknownRecord } from "../../../shared/object/UnknownRecord.js"
 
 import type {
@@ -19,14 +14,8 @@ import type {
 } from "./BaseBlock.js"
 import type { ParserBlockInspection, ParserBlockSourceEvidence } from "./BaseEditorTypes.js"
 
-import { resolveBlockOutputSelection } from "../../../domain/export-options/BlockOutputSelection.js"
-
 import { LeafBlock } from "./BaseBlock.js"
 import { inspectEditorBlocks } from "./BaseEditorInspection.js"
-import {
-  applyBlockOutputSelection,
-  createBlockOutputSelectionKey,
-} from "./BaseEditorOutputSelection.js"
 import { parserStoryFixtures } from "./ParserStoryFixtures.js"
 
 const describeParserNode = ({ $node, node, moduleType }: ParserBlockContext) => {
@@ -67,7 +56,7 @@ export type ParserBlockStoryDefinition = {
   inspectPath: string
   inputHtml: string
   screenshotSrc: string
-  outputOptions: OutputOption[]
+  templateDefinition?: BlockTemplateDefinition
 }
 
 const auxiliaryParserBlockIds = new Set([
@@ -439,7 +428,7 @@ const createSe2StoryHtml = ({ blockIndex }: { blockIndex: number }) => {
   const storyHtmlByIndex: Record<number, string> = {
     0: "<style>.post{color:red}</style>",
     1: "<!-- naver comment -->",
-    2: "plain legacy text",
+    2: "plain classic text",
     3: `
       <div s_type="db" s_subtype="book">
         <img src="https://example.com/book.png" alt="book" />
@@ -499,18 +488,16 @@ export abstract class BaseEditor {
     return []
   }
 
-  getBlockOutputDefinitions(): EditorBlockOutputDefinition[] {
-    const definitions: EditorBlockOutputDefinition[] = []
+  getBlockTemplateDefinitions(): BlockTemplateDefinition[] {
+    const definitions: BlockTemplateDefinition[] = []
     const seenKeys = new Set<string>()
 
     this.supportedBlocks.forEach((block) => {
-      const outputOptions = block.outputOptions
-
-      if (!block.id || !outputOptions || outputOptions.length < 2) {
+      if (!block.templateDefinition || block.templateDefinition.presets.length < 1) {
         return
       }
 
-      const key = this.createBlockOutputSelectionKey(block.id)
+      const key = block.templateDefinition.key ?? `${this.type}:${block.id}`
 
       if (seenKeys.has(key)) {
         return
@@ -518,12 +505,8 @@ export abstract class BaseEditor {
 
       seenKeys.add(key)
       definitions.push({
+        ...block.templateDefinition,
         key,
-        editorType: this.type,
-        editorLabel: this.label,
-        blockId: block.id,
-        blockLabel: block.label,
-        options: [...outputOptions],
       })
     })
 
@@ -568,15 +551,13 @@ export abstract class BaseEditor {
             blockLabel: block.label,
             blockIndex,
           }),
-        outputOptions: [...(block.outputOptions ?? [])],
+        templateDefinition: block.templateDefinition
+          ? {
+              ...block.templateDefinition,
+              key: block.templateDefinition.key ?? `${this.type}:${block.id}`,
+            }
+          : undefined,
       }
-    })
-  }
-
-  private createBlockOutputSelectionKey(blockId: string) {
-    return createBlockOutputSelectionKey({
-      editorType: this.type,
-      blockId,
     })
   }
 
@@ -658,41 +639,22 @@ export abstract class BaseEditor {
         throw new Error(`파싱 가능한 ${this.type} block이 없습니다: ${describeParserNode(context)}`)
       }
 
-      const outputOptions = block.outputOptions
-      const firstOutputOption = outputOptions?.[0]
-      const outputSelection =
-        block.id && outputOptions && outputOptions.length >= 2 && firstOutputOption
-          ? resolveBlockOutputSelection({
-              blockType: firstOutputOption.preview.type,
-              outputOptions,
-              blockOutputs: options.blockOutputs,
-              selectionKey: this.createBlockOutputSelectionKey(block.id),
-            })
-          : undefined
       const convertContext = {
         ...context,
         path,
-        outputSelection,
         matchNode,
       } satisfies ParserBlockConvertContext
 
       return block.convert(convertContext).map((parsedBlock) => {
-        const blockWithSelection = applyBlockOutputSelection({
-          editorType: this.type,
-          parsedBlock,
-          parserBlock: block,
-          options,
-        })
-
         captureBlockEvidence?.({
           path,
-          block: blockWithSelection,
-          blockType: blockWithSelection.type,
+          block: parsedBlock,
+          blockType: parsedBlock.type,
           parserBlockId: block.id,
           parserBlockLabel: block.label,
         })
 
-        return blockWithSelection
+        return parsedBlock
       })
     }
 

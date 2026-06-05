@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest"
 
 import {
-  expectEveryBlockOutputOption,
+  expectBlockTemplateDefinition,
   parseSe4Blocks,
   parseSe4BlocksWithOptions,
 } from "../../../../../tests/support/parser-test-utils.js"
@@ -27,13 +27,6 @@ describe("NaverSe4ImageBlock", () => {
           caption: "image caption",
           mediaKind: "image",
         },
-        outputSelectionKey: "naver-se4:image",
-        outputSelection: {
-          variant: "markdown-image",
-          params: {
-            includeCaption: false,
-          },
-        },
       },
     ])
   })
@@ -47,11 +40,11 @@ describe("NaverSe4ImageBlock", () => {
               href="#"
               class="se-module se-module-image __se_image_link __se_link"
               data-linktype="img"
-              data-linkdata='{"src":"https://example.com/legacy-se4.png"}'
+              data-linkdata='{"src":"https://example.com/classic-se4.png"}'
             >
               <img
-                src="https://example.com/legacy-se4.png?type=w80_blur"
-                data-lazy-src="https://example.com/legacy-se4.png?type=w800"
+                src="https://example.com/classic-se4.png?type=w80_blur"
+                data-lazy-src="https://example.com/classic-se4.png?type=w800"
                 alt=""
                 class="se-image-resource"
               />
@@ -65,18 +58,11 @@ describe("NaverSe4ImageBlock", () => {
       {
         type: "image",
         image: {
-          sourceUrl: "https://example.com/legacy-se4.png",
-          originalSourceUrl: "https://example.com/legacy-se4.png",
+          sourceUrl: "https://example.com/classic-se4.png",
+          originalSourceUrl: "https://example.com/classic-se4.png",
           alt: "",
           caption: null,
           mediaKind: "image",
-        },
-        outputSelectionKey: "naver-se4:image",
-        outputSelection: {
-          variant: "markdown-image",
-          params: {
-            includeCaption: false,
-          },
         },
       },
     ])
@@ -155,7 +141,7 @@ describe("NaverSe4ImageBlock", () => {
   })
 
   it("applies every output option", () => {
-    expectEveryBlockOutputOption({
+    expectBlockTemplateDefinition({
       editorType: "naver-se4",
       blockId: "image",
       parse: (blockOutputs) =>

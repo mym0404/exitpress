@@ -46,7 +46,7 @@ export const defaultExportOptions = (): ExportOptions => ({
     },
   },
   blockOutputs: {
-    defaults: {},
+    templates: {},
   },
   assets: {
     imageHandlingMode: "download-and-upload",

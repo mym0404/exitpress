@@ -1,50 +1,19 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises"
 import path from "node:path"
 
-import type { EditorBlockOutputDefinition } from "../../domain/ast/Types.js"
 import type { ScanCacheMap } from "../../domain/blog/Types.js"
 import type { PartialExportOptions } from "../../domain/export-options/ExportOptions.js"
 import type { ThemePreference } from "../../domain/preferences/ThemePreference.js"
+import type { BlockTemplateDefinition } from "../../domain/template/Types.js"
 
 import {
   cloneExportOptions,
   sanitizePersistedExportOptions,
 } from "../../domain/export-options/ExportOptions.js"
 
-const readFileWithFallback = async ({
-  filePath,
-  legacyFilePath,
-}: {
-  filePath: string
-  legacyFilePath?: string
-}) => {
+export const readScanCacheFile = async ({ scanCachePath }: { scanCachePath: string }) => {
   try {
-    return await readFile(filePath, "utf8")
-  } catch (error) {
-    if (
-      (error as NodeJS.ErrnoException).code === "ENOENT" &&
-      legacyFilePath &&
-      legacyFilePath !== filePath
-    ) {
-      return readFile(legacyFilePath, "utf8")
-    }
-
-    throw error
-  }
-}
-
-export const readScanCacheFile = async ({
-  scanCachePath,
-  legacyScanCachePath,
-}: {
-  scanCachePath: string
-  legacyScanCachePath?: string
-}) => {
-  try {
-    const raw = await readFileWithFallback({
-      filePath: scanCachePath,
-      legacyFilePath: legacyScanCachePath,
-    })
+    const raw = await readFile(scanCachePath, "utf8")
     const parsed = JSON.parse(raw) as {
       scans?: ScanCacheMap
     }
@@ -82,22 +51,17 @@ export const writeScanCacheFile = async ({
 
 export const readPersistedUiState = async ({
   settingsPath,
-  legacySettingsPath,
   defaultOutputDir,
   defaultThemePreference,
-  blockOutputDefinitions,
+  blockTemplateDefinitions: _blockTemplateDefinitions,
 }: {
   settingsPath: string
-  legacySettingsPath?: string
   defaultOutputDir: string
   defaultThemePreference: ThemePreference
-  blockOutputDefinitions?: EditorBlockOutputDefinition[]
+  blockTemplateDefinitions?: BlockTemplateDefinition[]
 }) => {
   try {
-    const raw = await readFileWithFallback({
-      filePath: settingsPath,
-      legacyFilePath: legacySettingsPath,
-    })
+    const raw = await readFile(settingsPath, "utf8")
     const parsed = JSON.parse(raw) as {
       options?: PartialExportOptions
       lastOutputDir?: string
@@ -114,9 +78,7 @@ export const readPersistedUiState = async ({
             !Array.isArray(parsed.options)
             ? parsed.options
             : undefined,
-          { blockOutputDefinitions },
         ),
-        { blockOutputDefinitions },
       ),
       lastOutputDir:
         parsed &&
@@ -134,7 +96,7 @@ export const readPersistedUiState = async ({
     }
   } catch {
     return {
-      options: cloneExportOptions(undefined, { blockOutputDefinitions }),
+      options: cloneExportOptions(),
       lastOutputDir: defaultOutputDir,
       themePreference: defaultThemePreference,
     }
@@ -144,10 +106,9 @@ export const readPersistedUiState = async ({
 export const writePersistedUiState = async ({
   settingsPath,
   input,
-  legacySettingsPath,
   defaultOutputDir,
   defaultThemePreference,
-  blockOutputDefinitions,
+  blockTemplateDefinitions,
 }: {
   settingsPath: string
   input: {
@@ -155,17 +116,15 @@ export const writePersistedUiState = async ({
     lastOutputDir?: string
     themePreference?: ThemePreference
   }
-  legacySettingsPath?: string
   defaultOutputDir: string
   defaultThemePreference: ThemePreference
-  blockOutputDefinitions?: EditorBlockOutputDefinition[]
+  blockTemplateDefinitions?: BlockTemplateDefinition[]
 }) => {
   const current = await readPersistedUiState({
     settingsPath,
-    legacySettingsPath,
     defaultOutputDir,
     defaultThemePreference,
-    blockOutputDefinitions,
+    blockTemplateDefinitions,
   })
 
   await mkdir(path.dirname(settingsPath), { recursive: true })
@@ -173,9 +132,7 @@ export const writePersistedUiState = async ({
     settingsPath,
     JSON.stringify(
       {
-        options: sanitizePersistedExportOptions(input.options ?? current.options, {
-          blockOutputDefinitions,
-        }),
+        options: sanitizePersistedExportOptions(input.options ?? current.options),
         lastOutputDir: input.lastOutputDir ?? current.lastOutputDir,
         themePreference: input.themePreference ?? current.themePreference,
       },

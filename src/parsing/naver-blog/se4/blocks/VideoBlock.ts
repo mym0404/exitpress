@@ -1,6 +1,5 @@
-import type { OutputOption } from "../../../../domain/ast/Types.js"
 import type { UnknownRecord } from "../../../../shared/object/UnknownRecord.js"
-import type { ParserBlockContext } from "../../core/BaseBlock.js"
+import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/BaseBlock.js"
 
 import { normalizeAssetUrl } from "../../../../domain/blog/NaverUrl.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
@@ -8,26 +7,20 @@ import { LeafBlock } from "../../core/BaseBlock.js"
 export class NaverSe4VideoBlock extends LeafBlock {
   override readonly id = "video"
   override readonly label = "비디오"
-  override readonly outputOptions = [
-    {
-      id: "source-link",
-      label: "원문 링크",
-      description: "비디오 제목을 원문 URL 링크로 출력합니다.",
-      preview: {
-        type: "video",
-        video: {
-          title: "Demo video",
-          thumbnailUrl: "https://example.com/video-thumb.png",
-          sourceUrl: "https://example.com/video",
-          vid: "vid",
-          inkey: "inkey",
-          width: 640,
-          height: 360,
-        },
+  override readonly templateDefinition = {
+    label: this.label,
+    presets: [
+      {
+        id: "default",
+        label: "기본",
+        template: "[${title}](${url})",
       },
-      isDefault: true,
+    ],
+    props: {
+      title: { label: "제목", type: "string" },
+      url: { label: "URL", type: "string" },
     },
-  ] satisfies OutputOption<"video">[]
+  } satisfies ParserBlockTemplateDefinition
 
   override match({ $node, moduleType }: ParserBlockContext) {
     return moduleType === "v2_video" || $node.hasClass("se-video")

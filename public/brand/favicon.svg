@@ -1,15 +1,83 @@
 <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
   <title>Exitpress favicon</title>
-  <rect width="64" height="64" rx="18" fill="#050A08" />
-  <rect x="15" y="10" width="25" height="42" rx="5" fill="#EFFAF4" />
-  <path d="M21 22H33" stroke="#0A1510" stroke-width="4" stroke-linecap="round" opacity="0.42" />
-  <path d="M21 30H31" stroke="#0A1510" stroke-width="4" stroke-linecap="round" opacity="0.3" />
-  <path d="M29 33H53" stroke="#2DE07D" stroke-width="6" stroke-linecap="round" />
-  <path
-    d="M46 25L54 33L46 41"
-    stroke="#2DE07D"
-    stroke-width="6"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-  />
+  <defs>
+    <radialGradient id="fb-left" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(18 10) rotate(52) scale(38 56)">
+      <stop stop-color="#241C58" />
+      <stop offset="1" stop-color="#0D0B13" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="fb-right" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(48 48) rotate(132) scale(38 50)">
+      <stop stop-color="#35142B" stop-opacity="0.88" />
+      <stop offset="1" stop-color="#0D0B13" stop-opacity="0" />
+    </radialGradient>
+    <filter id="fb-blur" x="-18" y="-18" width="100" height="100" filterUnits="userSpaceOnUse">
+      <feGaussianBlur stdDeviation="4" />
+    </filter>
+  </defs>
+  <rect width="64" height="64" fill="#0D0B13" />
+  <rect width="64" height="64" fill="url(#fb-left)" />
+  <rect width="64" height="64" fill="url(#fb-right)" />
+  <path d="M-8 39C8 45 19 34 31 38C42 42 50 34 72 38" stroke="#7FA7FF" stroke-width="5" stroke-linecap="round" opacity="0.5" filter="url(#fb-blur)" />
+  <path d="M-8 40C8 46 19 36 31 39C42 43 50 35 72 40" stroke="#FF6AC2" stroke-width="7" stroke-linecap="round" opacity="0.26" filter="url(#fb-blur)" />
+  <g transform="translate(8 9) scale(0.095)">
+  
+  <defs>
+    <linearGradient id="sheet-fill" x1="154" y1="112" x2="338" y2="384" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF" />
+      <stop offset="0.56" stop-color="#F1F3FA" />
+      <stop offset="1" stop-color="#CED3E1" />
+    </linearGradient>
+    <linearGradient id="sheet-soft" x1="154" y1="112" x2="306" y2="332" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF" stop-opacity="0.92" />
+      <stop offset="1" stop-color="#B9BFD0" stop-opacity="0.2" />
+    </linearGradient>
+    <linearGradient id="back-fill" x1="222" y1="176" x2="338" y2="386" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0A1027" />
+      <stop offset="1" stop-color="#182B67" />
+    </linearGradient>
+    <linearGradient id="fold-fill" x1="294" y1="126" x2="360" y2="214" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF" />
+      <stop offset="0.52" stop-color="#EEF1F8" />
+      <stop offset="1" stop-color="#9BA3BA" />
+    </linearGradient>
+    <linearGradient id="edge-stroke" x1="145" y1="390" x2="393" y2="198" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#4D63D8" stop-opacity="0" />
+      <stop offset="0.44" stop-color="#FFFFFF" stop-opacity="0.64" />
+      <stop offset="0.58" stop-color="#FF9C43" />
+      <stop offset="0.72" stop-color="#FF6F2E" />
+      <stop offset="1" stop-color="#5268FF" stop-opacity="0.16" />
+    </linearGradient>
+    <linearGradient id="blue-fill" x1="286" y1="242" x2="356" y2="342" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#4A82FF" />
+      <stop offset="1" stop-color="#2660E8" />
+    </linearGradient>
+    <filter id="logo-shadow" x="82" y="76" width="340" height="340" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#000000" flood-opacity="0.28" />
+    </filter>
+    <filter id="edge-glow" x="106" y="162" width="322" height="260" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="2" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+  <g filter="url(#logo-shadow)">
+    <path d="M183 177H337C355.225 177 370 191.775 370 210V350C370 368.225 355.225 383 337 383H169C150.775 383 136 368.225 136 350V224C136 198.043 157.043 177 183 177Z" fill="url(#back-fill)" />
+    <path d="M156 112H288C302.852 112 317.096 117.9 327.598 128.402L394 194.804L150.71 388.888C141.573 396.176 128 389.669 128 377.978V140C128 124.536 140.536 112 156 112Z" fill="url(#sheet-fill)" />
+    <path d="M156 112H288C302.852 112 317.096 117.9 327.598 128.402L394 194.804L150.71 388.888C141.573 396.176 128 389.669 128 377.978V140C128 124.536 140.536 112 156 112Z" fill="url(#sheet-soft)" />
+    <path d="M288 112V162C288 184.091 305.909 202 328 202H394L327.598 128.402C317.096 117.9 302.852 112 288 112Z" fill="url(#fold-fill)" />
+    <path d="M288 112V162C288 184.091 305.909 202 328 202H394" stroke="#FFFFFF" stroke-opacity="0.54" stroke-width="2" stroke-linecap="round" />
+    <rect x="158" y="156" width="122" height="58" rx="8" fill="#9BA2B6" opacity="0.7" />
+    <rect x="158" y="234" width="122" height="11" rx="5.5" fill="#8F96AB" opacity="0.82" />
+    <rect x="158" y="260" width="86" height="11" rx="5.5" fill="#8F96AB" opacity="0.78" />
+    <rect x="158" y="292" width="40" height="40" rx="7" fill="#8F96AB" opacity="0.7" />
+    <rect x="321" y="235" width="40" height="12" rx="6" fill="url(#blue-fill)" />
+    <rect x="294" y="263" width="67" height="12" rx="6" fill="url(#blue-fill)" />
+    <rect x="266" y="291" width="95" height="12" rx="6" fill="url(#blue-fill)" />
+    <rect x="238" y="319" width="123" height="12" rx="6" fill="url(#blue-fill)" />
+    <rect x="312" y="348" width="49" height="49" rx="8" fill="url(#blue-fill)" />
+    <path d="M146 390L394 194" stroke="url(#edge-stroke)" stroke-width="3" stroke-linecap="round" filter="url(#edge-glow)" />
+    <path d="M173 376L394 194" stroke="#FFFFFF" stroke-opacity="0.38" stroke-width="1.2" stroke-linecap="round" />
+  </g>
+</g>
 </svg>

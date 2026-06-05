@@ -105,13 +105,13 @@ export const AppStepView = ({
   handleBackFromBlockScan,
   handleConfirmMarkdownReview,
 }: AppStepViewProps) => {
-  const blockOutputDefinitions = defaults.blockOutputDefinitions ?? []
-  const detectedBlockOutputKeys = activeScanResult?.detectedBlockOutputKeys
-  const visibleBlockOutputDefinitions = detectedBlockOutputKeys
-    ? blockOutputDefinitions.filter((definition) =>
-        detectedBlockOutputKeys.includes(definition.key),
+  const blockTemplateDefinitions = defaults.blockTemplateDefinitions ?? []
+  const detectedBlockTemplateKeys = activeScanResult?.detectedBlockTemplateKeys
+  const visibleBlockTemplateDefinitions = detectedBlockTemplateKeys
+    ? blockTemplateDefinitions.filter((definition) =>
+        detectedBlockTemplateKeys.includes(definition.key),
       )
-    : blockOutputDefinitions
+    : blockTemplateDefinitions
 
   if (currentStep === "running" || currentStep === "upload" || currentStep === "result") {
     return (
@@ -237,7 +237,7 @@ export const AppStepView = ({
           outputDir={outputDir}
           options={options}
           optionDescriptions={defaults.optionDescriptions}
-          blockOutputDefinitions={visibleBlockOutputDefinitions}
+          blockTemplateDefinitions={visibleBlockTemplateDefinitions}
           frontmatterFieldOrder={defaults.frontmatterFieldOrder}
           frontmatterFieldMeta={defaults.frontmatterFieldMeta}
           frontmatterValidationErrors={frontmatterValidationErrors}
@@ -272,7 +272,7 @@ export const AppStepView = ({
       outputDir={outputDir}
       options={options}
       optionDescriptions={defaults.optionDescriptions}
-      blockOutputDefinitions={visibleBlockOutputDefinitions}
+      blockTemplateDefinitions={visibleBlockTemplateDefinitions}
       frontmatterFieldOrder={defaults.frontmatterFieldOrder}
       frontmatterFieldMeta={defaults.frontmatterFieldMeta}
       frontmatterValidationErrors={frontmatterValidationErrors}

@@ -1,4 +1,4 @@
-import type { AstBlock, BlockOutputSelection, ImageData } from "../domain/ast/Types.js"
+import type { AstBlock, ImageData } from "../domain/ast/Types.js"
 
 import { splitFormulaWrapper } from "./FormulaWrapper.js"
 
@@ -75,17 +75,9 @@ const renderWrappedFormula = ({
   return `${open}${formula}${close}`
 }
 
-export const renderFormula = ({
-  formula,
-  display,
-  selection,
-}: {
-  formula: string
-  display: boolean
-  selection: BlockOutputSelection
-}) => {
+export const renderFormula = ({ formula, display }: { formula: string; display: boolean }) => {
   const inline = splitFormulaWrapper({
-    wrapper: String(selection.params?.inlineWrapper ?? "$"),
+    wrapper: "$",
     fallbackOpen: "$",
     fallbackClose: "$",
   })
@@ -99,12 +91,8 @@ export const renderFormula = ({
     })
   }
 
-  if (selection.variant === "math-fence") {
-    return `\`\`\`math\n${formula}\n\`\`\``
-  }
-
   const block = splitFormulaWrapper({
-    wrapper: String(selection.params?.blockWrapper ?? "$$"),
+    wrapper: "$$",
     fallbackOpen: "$$",
     fallbackClose: "$$",
   })
@@ -116,9 +104,6 @@ export const renderFormula = ({
     display: true,
   })
 }
-
-export const getHeadingLevelOffset = (selection: BlockOutputSelection) =>
-  Number(selection.params?.levelOffset ?? 0)
 
 export const renderGfmTable = (block: Extract<AstBlock, { type: "table" }>) => {
   const [headerRow, ...bodyRows] = block.rows
@@ -144,40 +129,9 @@ export const renderGfmTable = (block: Extract<AstBlock, { type: "table" }>) => {
 export const renderImageBlockMarkdown = ({
   image,
   assetPath,
-  selection,
-  formatLink,
 }: {
   image: ImageData
   assetPath: string
-  selection: BlockOutputSelection
-  formatLink: (input: { label: string; url: string }) => string
 }) => {
-  const safeLabel = image.alt || image.caption || "Image"
-  const lines: string[] = []
-
-  if (selection.variant === "source-only") {
-    lines.push(
-      formatLink({
-        label: safeLabel,
-        url: assetPath,
-      }),
-    )
-  } else {
-    const imageMarkdown = `![${image.alt}](${assetPath})`
-    const content =
-      selection.variant === "linked-image"
-        ? formatLink({
-            label: imageMarkdown,
-            url: image.originalSourceUrl || image.sourceUrl,
-          })
-        : imageMarkdown
-
-    lines.push(content)
-  }
-
-  if (selection.params?.includeCaption === true && image.caption) {
-    lines.push(`_${image.caption}_`)
-  }
-
-  return lines.join("\n\n")
+  return `![${image.alt}](${assetPath})`
 }

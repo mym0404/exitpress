@@ -1,7 +1,8 @@
 import type { CheerioAPI } from "cheerio"
 
-import type { EditorBlockOutputDefinition, ParsedPost } from "../../../domain/ast/Types.js"
+import type { ParsedPost } from "../../../domain/ast/Types.js"
 import type { ExportOptions } from "../../../domain/export-options/Types.js"
+import type { BlockTemplateDefinition } from "../../../domain/template/Types.js"
 
 import type { BaseEditor } from "./BaseEditor.js"
 import type { ParserBlockSourceEvidence } from "./BaseEditorTypes.js"
@@ -20,8 +21,8 @@ type BlogPostParseInput = {
 export abstract class BaseBlog {
   abstract readonly editors: BaseEditor[]
 
-  getBlockOutputDefinitions(): EditorBlockOutputDefinition[] {
-    return this.editors.flatMap((editor) => editor.getBlockOutputDefinitions())
+  getBlockTemplateDefinitions(): BlockTemplateDefinition[] {
+    return this.editors.flatMap((editor) => editor.getBlockTemplateDefinitions())
   }
 
   getParserBlockStoryDefinitions() {

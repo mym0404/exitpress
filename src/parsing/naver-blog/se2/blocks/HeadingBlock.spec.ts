@@ -4,9 +4,9 @@ import { parseSe2Blocks } from "../../../../../tests/support/parser-test-utils.j
 
 describe("NaverSe2HeadingBlock", () => {
   it("parses heading tags into heading blocks", () => {
-    const parsed = parseSe2Blocks("<h3>Legacy heading</h3>")
+    const parsed = parseSe2Blocks("<h3>Classic heading</h3>")
 
-    expect(parsed.blocks).toEqual([{ type: "heading", level: 3, text: "Legacy heading" }])
+    expect(parsed.blocks).toEqual([{ type: "heading", level: 3, text: "Classic heading" }])
   })
 
   it("throws when a heading has no text", () => {

@@ -80,13 +80,7 @@ describe("http server resume defaults", () => {
             postFolderNameCustomTemplate: string
           }
           blockOutputs: {
-            defaults: {
-              "naver-se4:formula"?: {
-                params?: {
-                  blockWrapper?: string
-                }
-              }
-            }
+            templates: Record<string, string>
           }
           assets: {
             stickerAssetMode: string
@@ -109,9 +103,7 @@ describe("http server resume defaults", () => {
       expect(body.options.structure.slugWhitespace).toBe("underscore")
       expect(body.options.structure.postFolderNameMode).toBe("preset")
       expect(body.options.structure.postFolderNameCustomTemplate).toBe("")
-      expect(body.options.blockOutputs.defaults["naver-se4:formula"]?.params?.blockWrapper).toBe(
-        "$$",
-      )
+      expect(body.options.blockOutputs.templates).toEqual({})
       expect(body.options.assets.stickerAssetMode).toBe("ignore")
       expect(body.lastOutputDir).toBe(outputDir)
       expect(body.resumedJob).toBeNull()

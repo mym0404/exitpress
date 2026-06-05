@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest"
 import { parseSe2Blocks } from "../../../../../tests/support/parser-test-utils.js"
 
 describe("NaverSe2BookWidgetBlock", () => {
-  it("parses wrapped legacy book widgets and following review paragraphs", () => {
+  it("parses wrapped classic book widgets and following review paragraphs", () => {
     const parsed = parseSe2Blocks(`
       <div style="font-size:12pt;">
         <div align="">

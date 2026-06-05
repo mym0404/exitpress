@@ -6,7 +6,6 @@ import { extractBlogId } from "../../domain/blog/NaverUrl.js"
 import { cloneExportOptions } from "../../domain/export-options/ExportOptions.js"
 import { recreateDir, resolveRepoPath } from "../../infra/node/FilePathUtils.js"
 import { NaverBlogFetcher } from "../../integrations/naver-blog/NaverBlogFetcher.js"
-import { NaverBlog } from "../../parsing/naver-blog/NaverBlog.js"
 import { AssetStore } from "../assets/AssetStore.js"
 import { buildPostLinkTargets } from "../paths/PostLinkRewriter.js"
 import { isPostWithinScope } from "../workflow/ExportScope.js"
@@ -46,9 +45,7 @@ export const exportSinglePost = async ({
   createFetcher?: (input: { blogId: string }) => SinglePostFetcher | Promise<SinglePostFetcher>
 }): Promise<ExportSinglePostDiagnostics> => {
   const resolvedOutputDir = resolveRepoPath(outputDir)
-  const resolvedOptions = cloneExportOptions(options, {
-    blockOutputDefinitions: new NaverBlog().getBlockOutputDefinitions(),
-  })
+  const resolvedOptions = cloneExportOptions(options)
   const resolvedBlogId = extractBlogId(blogId)
   const fetcher = createFetcher
     ? await createFetcher({

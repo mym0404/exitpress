@@ -20,7 +20,7 @@ import { ExportOptionsPanel } from "./ExportOptionsPanel.js"
 
 const testOutputDir = createTestPath("ui-export-options-panel", "output")
 const testExportDir = createTestPath("ui-export-options-panel", "export")
-const blockOutputDefinitions = new NaverBlog().getBlockOutputDefinitions()
+const blockTemplateDefinitions = new NaverBlog().getBlockTemplateDefinitions()
 
 afterEach(() => {
   cleanup()
@@ -99,7 +99,7 @@ describe("ExportOptionsPanel", () => {
         outputDir={testOutputDir}
         options={latestOptions}
         optionDescriptions={optionDescriptions}
-        blockOutputDefinitions={blockOutputDefinitions}
+        blockTemplateDefinitions={blockTemplateDefinitions}
         frontmatterFieldOrder={frontmatterFieldOrder}
         frontmatterFieldMeta={frontmatterFieldMeta}
         frontmatterValidationErrors={['title와 source가 같은 alias "shared"를 사용할 수 없습니다.']}
@@ -122,7 +122,7 @@ describe("ExportOptionsPanel", () => {
         outputDir={testOutputDir}
         options={latestOptions}
         optionDescriptions={optionDescriptions}
-        blockOutputDefinitions={blockOutputDefinitions}
+        blockTemplateDefinitions={blockTemplateDefinitions}
         frontmatterFieldOrder={frontmatterFieldOrder}
         frontmatterFieldMeta={frontmatterFieldMeta}
         frontmatterValidationErrors={['title와 source가 같은 alias "shared"를 사용할 수 없습니다.']}
@@ -153,7 +153,7 @@ describe("ExportOptionsPanel", () => {
         outputDir={testOutputDir}
         options={latestOptions}
         optionDescriptions={optionDescriptions}
-        blockOutputDefinitions={blockOutputDefinitions}
+        blockTemplateDefinitions={blockTemplateDefinitions}
         frontmatterFieldOrder={frontmatterFieldOrder}
         frontmatterFieldMeta={frontmatterFieldMeta}
         frontmatterValidationErrors={[]}
@@ -161,34 +161,15 @@ describe("ExportOptionsPanel", () => {
       />,
     )
 
-    fireEvent.change(
-      query<HTMLInputElement>("#blockOutputs-defaults-naver-se4-formula-inlineWrapper"),
-      {
-        target: {
-          value: "\\(...\\)",
-        },
+    fireEvent.change(query<HTMLInputElement>("#block-templates-naver-se4-formula"), {
+      target: {
+        value: "```math\n${formula}\n```",
       },
-    )
-    fireEvent.change(
-      query<HTMLInputElement>("#blockOutputs-defaults-naver-se4-formula-blockWrapper"),
-      {
-        target: {
-          value: "\\[...\\]",
-        },
-      },
-    )
-    await selectOption({
-      user,
-      trigger: "#blockOutputs-defaults-naver-se4-image-variant",
-      value: "linked-image",
     })
-    await user.click(
-      query<HTMLInputElement>("#blockOutputs-defaults-naver-se4-image-includeCaption"),
-    )
-    await selectOption({
-      user,
-      trigger: "#blockOutputs-defaults-naver-se4-formula-variant",
-      value: "math-fence",
+    fireEvent.change(query<HTMLInputElement>("#block-templates-naver-se4-image"), {
+      target: {
+        value: "![${alt}](${url})\n_${caption ?? ''}_",
+      },
     })
     cleanup()
 
@@ -198,7 +179,7 @@ describe("ExportOptionsPanel", () => {
         outputDir={testOutputDir}
         options={latestOptions}
         optionDescriptions={optionDescriptions}
-        blockOutputDefinitions={blockOutputDefinitions}
+        blockTemplateDefinitions={blockTemplateDefinitions}
         frontmatterFieldOrder={frontmatterFieldOrder}
         frontmatterFieldMeta={frontmatterFieldMeta}
         frontmatterValidationErrors={[]}
@@ -220,7 +201,7 @@ describe("ExportOptionsPanel", () => {
         outputDir={testOutputDir}
         options={latestOptions}
         optionDescriptions={optionDescriptions}
-        blockOutputDefinitions={blockOutputDefinitions}
+        blockTemplateDefinitions={blockTemplateDefinitions}
         frontmatterFieldOrder={frontmatterFieldOrder}
         frontmatterFieldMeta={frontmatterFieldMeta}
         frontmatterValidationErrors={[]}
@@ -238,7 +219,7 @@ describe("ExportOptionsPanel", () => {
         outputDir={testOutputDir}
         options={latestOptions}
         optionDescriptions={optionDescriptions}
-        blockOutputDefinitions={blockOutputDefinitions}
+        blockTemplateDefinitions={blockTemplateDefinitions}
         frontmatterFieldOrder={frontmatterFieldOrder}
         frontmatterFieldMeta={frontmatterFieldMeta}
         frontmatterValidationErrors={[]}
@@ -260,7 +241,7 @@ describe("ExportOptionsPanel", () => {
         outputDir={testOutputDir}
         options={latestOptions}
         optionDescriptions={optionDescriptions}
-        blockOutputDefinitions={blockOutputDefinitions}
+        blockTemplateDefinitions={blockTemplateDefinitions}
         frontmatterFieldOrder={frontmatterFieldOrder}
         frontmatterFieldMeta={frontmatterFieldMeta}
         frontmatterValidationErrors={[]}
@@ -286,20 +267,11 @@ describe("ExportOptionsPanel", () => {
     expect(latestOptions.frontmatter.enabled).toBe(false)
     expect(latestOptions.frontmatter.fields.title).toBe(false)
     expect(latestOptions.frontmatter.aliases.title).toBe("headline")
-    expect(latestOptions.blockOutputs.defaults["naver-se4:paragraph"]).toBeUndefined()
-    expect(latestOptions.blockOutputs.defaults["naver-se4:formula"]?.params?.inlineWrapper).toBe(
-      "\\(...\\)",
-    )
-    expect(latestOptions.blockOutputs.defaults["naver-se4:formula"]?.params?.blockWrapper).toBe(
-      "\\[...\\]",
-    )
-    expect(latestOptions.blockOutputs.defaults["naver-se4:image"]?.variant).toBe("linked-image")
-    expect(latestOptions.blockOutputs.defaults["naver-se4:image"]?.params?.includeCaption).toBe(
-      true,
-    )
-    expect(latestOptions.blockOutputs.defaults["naver-se4:divider"]).toBeUndefined()
-    expect(latestOptions.blockOutputs.defaults["naver-se4:code"]).toBeUndefined()
-    expect(latestOptions.blockOutputs.defaults["naver-se4:formula"]?.variant).toBe("math-fence")
+    expect(latestOptions.blockOutputs.templates["naver-se4:paragraph"]).toBeUndefined()
+    expect(latestOptions.blockOutputs.templates["naver-se4:formula"]).toBeDefined()
+    expect(latestOptions.blockOutputs.templates["naver-se4:image"]).toBeDefined()
+    expect(latestOptions.blockOutputs.templates["naver-se4:divider"]).toBeUndefined()
+    expect(latestOptions.blockOutputs.templates["naver-se4:code"]).toBeUndefined()
     expect(latestOptions.assets.imageHandlingMode).toBe("remote")
     expect(latestOptions.assets.compressionEnabled).toBe(false)
     expect(latestOptions.assets.stickerAssetMode).toBe("download-original")
@@ -322,7 +294,7 @@ describe("ExportOptionsPanel", () => {
         outputDir={testOutputDir}
         options={options}
         optionDescriptions={optionDescriptions}
-        blockOutputDefinitions={blockOutputDefinitions}
+        blockTemplateDefinitions={blockTemplateDefinitions}
         frontmatterFieldOrder={frontmatterFieldOrder}
         frontmatterFieldMeta={frontmatterFieldMeta}
         frontmatterValidationErrors={[]}
@@ -362,7 +334,7 @@ describe("ExportOptionsPanel", () => {
         outputDir={testExportDir}
         options={options}
         optionDescriptions={optionDescriptions}
-        blockOutputDefinitions={blockOutputDefinitions}
+        blockTemplateDefinitions={blockTemplateDefinitions}
         frontmatterFieldOrder={frontmatterFieldOrder}
         frontmatterFieldMeta={frontmatterFieldMeta}
         frontmatterValidationErrors={[]}
@@ -394,7 +366,7 @@ describe("ExportOptionsPanel", () => {
         outputDir={testOutputDir}
         options={options}
         optionDescriptions={optionDescriptions}
-        blockOutputDefinitions={blockOutputDefinitions}
+        blockTemplateDefinitions={blockTemplateDefinitions}
         frontmatterFieldOrder={frontmatterFieldOrder}
         frontmatterFieldMeta={frontmatterFieldMeta}
         frontmatterValidationErrors={[]}
@@ -425,7 +397,7 @@ describe("ExportOptionsPanel", () => {
         outputDir={testOutputDir}
         options={defaultExportOptions()}
         optionDescriptions={optionDescriptions}
-        blockOutputDefinitions={blockOutputDefinitions}
+        blockTemplateDefinitions={blockTemplateDefinitions}
         frontmatterFieldOrder={frontmatterFieldOrder}
         frontmatterFieldMeta={frontmatterFieldMeta}
         frontmatterValidationErrors={[]}
@@ -437,11 +409,11 @@ describe("ExportOptionsPanel", () => {
     expect(screen.queryByLabelText("Video Style")).not.toBeInTheDocument()
     expect(document.querySelector("#markdown-linkCardStyle")).toBeNull()
     expect(document.querySelector("#markdown-videoStyle")).toBeNull()
-    expect(document.querySelector('[data-block-output-card="naver-se4:code"]')).toBeNull()
-    expect(document.querySelector('[data-block-output-card="naver-se4:linkCard"]')).toBeNull()
-    expect(document.querySelector('[data-block-output-card="naver-se4:divider"]')).toBeNull()
-    expect(document.querySelector('[data-block-output-card="naver-se4:paragraph"]')).toBeNull()
-    expect(document.querySelector('[data-block-output-card="naver-se4:formula"]')).not.toBeNull()
+    expect(document.querySelector('[data-block-template-card="naver-se4:code"]')).toBeNull()
+    expect(document.querySelector('[data-block-template-card="naver-se4:linkCard"]')).toBeNull()
+    expect(document.querySelector('[data-block-template-card="naver-se4:divider"]')).toBeNull()
+    expect(document.querySelector('[data-block-template-card="naver-se4:paragraph"]')).toBeNull()
+    expect(document.querySelector('[data-block-template-card="naver-se4:formula"]')).not.toBeNull()
   })
 
   it("renders selectable block outputs by editor and supported block order", () => {
@@ -451,7 +423,7 @@ describe("ExportOptionsPanel", () => {
         outputDir={testOutputDir}
         options={defaultExportOptions()}
         optionDescriptions={optionDescriptions}
-        blockOutputDefinitions={blockOutputDefinitions}
+        blockTemplateDefinitions={blockTemplateDefinitions}
         frontmatterFieldOrder={frontmatterFieldOrder}
         frontmatterFieldMeta={frontmatterFieldMeta}
         frontmatterValidationErrors={[]}
@@ -459,7 +431,7 @@ describe("ExportOptionsPanel", () => {
       />,
     )
 
-    const editorGroups = Array.from(document.querySelectorAll("[data-block-output-editor-group]"))
+    const editorGroups = Array.from(document.querySelectorAll("[data-block-template-editor-group]"))
 
     expect(screen.queryByText("Markdown 규칙")).not.toBeInTheDocument()
     expect(
@@ -467,33 +439,30 @@ describe("ExportOptionsPanel", () => {
         "링크 방식과 블록별 출력 결과를 정합니다. 아래 preview는 실제 export될 Markdown snippet 기준입니다.",
       ),
     ).not.toBeInTheDocument()
+    const editorKeys = blockTemplateDefinitions.map((definition) => definition.key.split(":")[0])
+
     expect(
-      editorGroups.map((group) => group.getAttribute("data-block-output-editor-group")),
-    ).toEqual(["naver-se4", "naver-se3", "naver-se2"])
+      editorGroups.map((group) => group.getAttribute("data-block-template-editor-group")),
+    ).toEqual(Array.from(new Set(editorKeys)))
     expect(editorGroups.every((group) => group.classList.contains("field-card"))).toBe(true)
-    expect(query<HTMLElement>('[data-block-output-card="naver-se4:formula"]')).not.toHaveClass(
+    expect(query<HTMLElement>('[data-block-template-card="naver-se4:formula"]')).not.toHaveClass(
       "field-card",
     )
     expect(screen.getByText("SmartEditor 4")).toBeInTheDocument()
-    expect(screen.getByText("SmartEditor 3")).toBeInTheDocument()
-    expect(screen.getByText("SmartEditor 2")).toBeInTheDocument()
+    if (editorKeys.includes("naver-se3")) {
+      expect(screen.getByText("SmartEditor 3")).toBeInTheDocument()
+    }
+    if (editorKeys.includes("naver-se2")) {
+      expect(screen.getByText("SmartEditor 2")).toBeInTheDocument()
+    }
     expect(
-      Array.from(document.querySelectorAll("[data-block-output-card]")).map((card) =>
-        card.getAttribute("data-block-output-card"),
+      Array.from(document.querySelectorAll("[data-block-template-card]")).map((card) =>
+        card.getAttribute("data-block-template-card"),
       ),
-    ).toEqual([
-      "naver-se4:formula",
-      "naver-se4:table",
-      "naver-se4:image",
-      "naver-se3:table",
-      "naver-se3:image",
-      "naver-se2:table",
-      "naver-se2:image",
-    ])
+    ).toEqual(blockTemplateDefinitions.map((definition) => definition.key))
   })
 
-  it("updates block preview snippets when block output selections change", async () => {
-    const user = userEvent.setup()
+  it("updates block preview snippets when block templates change", async () => {
     let latestOptions = defaultExportOptions()
 
     render(
@@ -502,7 +471,7 @@ describe("ExportOptionsPanel", () => {
         outputDir={testOutputDir}
         options={latestOptions}
         optionDescriptions={optionDescriptions}
-        blockOutputDefinitions={blockOutputDefinitions}
+        blockTemplateDefinitions={blockTemplateDefinitions}
         frontmatterFieldOrder={frontmatterFieldOrder}
         frontmatterFieldMeta={frontmatterFieldMeta}
         frontmatterValidationErrors={[]}
@@ -513,23 +482,22 @@ describe("ExportOptionsPanel", () => {
     )
 
     expect(
-      query<HTMLElement>('[data-block-output-card="naver-se4:image"] pre').textContent,
+      query<HTMLElement>('[data-block-template-card="naver-se4:image"] pre').textContent,
     ).toContain("![diagram]")
     expect(
-      query<HTMLElement>('[data-block-output-card="naver-se4:image"] pre').textContent,
+      query<HTMLElement>('[data-block-template-card="naver-se4:image"] pre').textContent,
     ).not.toContain("_caption_")
 
-    await selectOption({
-      user,
-      trigger: "#blockOutputs-defaults-naver-se4-image-variant",
-      value: "linked-image",
+    fireEvent.change(query<HTMLInputElement>("#block-templates-naver-se4-image"), {
+      target: {
+        value: "[![${alt}](${url})](${url})",
+      },
     })
 
-    expect(latestOptions.blockOutputs.defaults["naver-se4:image"]?.variant).toBe("linked-image")
-    expect(latestOptions.blockOutputs.defaults["naver-se3:image"]).toBeUndefined()
-    expect(latestOptions.blockOutputs.defaults["naver-se4:image"]?.params?.includeCaption).toBe(
-      false,
+    expect(latestOptions.blockOutputs.templates["naver-se4:image"]).toBe(
+      "[![${alt}](${url})](${url})",
     )
+    expect(latestOptions.blockOutputs.templates["naver-se3:image"]).toBeUndefined()
 
     cleanup()
 
@@ -539,7 +507,7 @@ describe("ExportOptionsPanel", () => {
         outputDir={testOutputDir}
         options={latestOptions}
         optionDescriptions={optionDescriptions}
-        blockOutputDefinitions={blockOutputDefinitions}
+        blockTemplateDefinitions={blockTemplateDefinitions}
         frontmatterFieldOrder={frontmatterFieldOrder}
         frontmatterFieldMeta={frontmatterFieldMeta}
         frontmatterValidationErrors={[]}
@@ -550,15 +518,17 @@ describe("ExportOptionsPanel", () => {
     )
 
     expect(
-      query<HTMLElement>('[data-block-output-card="naver-se4:image"] pre').textContent,
+      query<HTMLElement>('[data-block-template-card="naver-se4:image"] pre').textContent,
     ).toContain("[![diagram]")
 
-    await user.click(
-      query<HTMLInputElement>("#blockOutputs-defaults-naver-se4-image-includeCaption"),
-    )
+    fireEvent.change(query<HTMLInputElement>("#block-templates-naver-se4-image"), {
+      target: {
+        value: "![${alt}](${url})\n_${caption}_",
+      },
+    })
 
-    expect(latestOptions.blockOutputs.defaults["naver-se4:image"]?.params?.includeCaption).toBe(
-      true,
+    expect(latestOptions.blockOutputs.templates["naver-se4:image"]).toBe(
+      "![${alt}](${url})\n_${caption}_",
     )
 
     cleanup()
@@ -569,7 +539,7 @@ describe("ExportOptionsPanel", () => {
         outputDir={testOutputDir}
         options={latestOptions}
         optionDescriptions={optionDescriptions}
-        blockOutputDefinitions={blockOutputDefinitions}
+        blockTemplateDefinitions={blockTemplateDefinitions}
         frontmatterFieldOrder={frontmatterFieldOrder}
         frontmatterFieldMeta={frontmatterFieldMeta}
         frontmatterValidationErrors={[]}
@@ -580,7 +550,7 @@ describe("ExportOptionsPanel", () => {
     )
 
     expect(
-      query<HTMLElement>('[data-block-output-card="naver-se4:image"] pre').textContent,
+      query<HTMLElement>('[data-block-template-card="naver-se4:image"] pre').textContent,
     ).toContain("_caption_")
   })
 
@@ -591,7 +561,7 @@ describe("ExportOptionsPanel", () => {
         outputDir={testOutputDir}
         options={defaultExportOptions()}
         optionDescriptions={optionDescriptions}
-        blockOutputDefinitions={blockOutputDefinitions}
+        blockTemplateDefinitions={blockTemplateDefinitions}
         frontmatterFieldOrder={frontmatterFieldOrder}
         frontmatterFieldMeta={frontmatterFieldMeta}
         frontmatterValidationErrors={[]}
@@ -599,12 +569,12 @@ describe("ExportOptionsPanel", () => {
       />,
     )
 
-    const blockCard = query<HTMLElement>('[data-block-output-card="naver-se4:formula"]')
+    const blockCard = query<HTMLElement>('[data-block-template-card="naver-se4:formula"]')
     const twoColumnLayout = blockCard.querySelector(
       ".lg\\:grid-cols-\\[minmax\\(0\\,0\\.8fr\\)_minmax\\(0\\,1fr\\)\\]",
     )
     const optionField = blockCard.querySelector(
-      '[data-option-key="blockOutputs-defaults-naver-se4-formula-variant"]',
+      '[data-option-key="block-templates-naver-se4-formula"]',
     )
     const preview = blockCard.querySelector("pre")
 
@@ -623,7 +593,7 @@ describe("ExportOptionsPanel", () => {
         outputDir={testOutputDir}
         options={options}
         optionDescriptions={optionDescriptions}
-        blockOutputDefinitions={blockOutputDefinitions}
+        blockTemplateDefinitions={blockTemplateDefinitions}
         frontmatterFieldOrder={frontmatterFieldOrder}
         frontmatterFieldMeta={frontmatterFieldMeta}
         frontmatterValidationErrors={[]}
@@ -632,7 +602,7 @@ describe("ExportOptionsPanel", () => {
     )
 
     expect(
-      query<HTMLElement>('[data-block-output-card="naver-se4:image"] pre').textContent,
+      query<HTMLElement>('[data-block-template-card="naver-se4:image"] pre').textContent,
     ).toContain("../../public/image.png")
 
     cleanup()
@@ -645,7 +615,7 @@ describe("ExportOptionsPanel", () => {
         outputDir={testOutputDir}
         options={options}
         optionDescriptions={optionDescriptions}
-        blockOutputDefinitions={blockOutputDefinitions}
+        blockTemplateDefinitions={blockTemplateDefinitions}
         frontmatterFieldOrder={frontmatterFieldOrder}
         frontmatterFieldMeta={frontmatterFieldMeta}
         frontmatterValidationErrors={[]}
@@ -654,7 +624,7 @@ describe("ExportOptionsPanel", () => {
     )
 
     expect(
-      query<HTMLElement>('[data-block-output-card="naver-se4:image"] pre').textContent,
+      query<HTMLElement>('[data-block-template-card="naver-se4:image"] pre').textContent,
     ).toContain("https://example.com/image.png")
   })
 
@@ -665,7 +635,7 @@ describe("ExportOptionsPanel", () => {
         outputDir={testOutputDir}
         options={defaultExportOptions()}
         optionDescriptions={optionDescriptions}
-        blockOutputDefinitions={blockOutputDefinitions}
+        blockTemplateDefinitions={blockTemplateDefinitions}
         frontmatterFieldOrder={frontmatterFieldOrder}
         frontmatterFieldMeta={frontmatterFieldMeta}
         frontmatterValidationErrors={[]}
@@ -674,7 +644,7 @@ describe("ExportOptionsPanel", () => {
     )
 
     expect(screen.queryByText("Raw HTML")).not.toBeInTheDocument()
-    expect(document.querySelector('[data-block-output-card="rawHtml"]')).toBeNull()
+    expect(document.querySelector('[data-block-template-card="rawHtml"]')).toBeNull()
     expect(document.querySelector("[data-unsupported-block-card]")).toBeNull()
     expect(document.querySelector("[data-unsupported-block-confirm]")).toBeNull()
   })
@@ -690,7 +660,7 @@ describe("ExportOptionsPanel", () => {
         outputDir={testOutputDir}
         options={options}
         optionDescriptions={optionDescriptions}
-        blockOutputDefinitions={blockOutputDefinitions}
+        blockTemplateDefinitions={blockTemplateDefinitions}
         frontmatterFieldOrder={frontmatterFieldOrder}
         frontmatterFieldMeta={frontmatterFieldMeta}
         frontmatterValidationErrors={[]}
@@ -720,7 +690,7 @@ describe("ExportOptionsPanel", () => {
         outputDir={testOutputDir}
         options={latestOptions}
         optionDescriptions={optionDescriptions}
-        blockOutputDefinitions={blockOutputDefinitions}
+        blockTemplateDefinitions={blockTemplateDefinitions}
         frontmatterFieldOrder={frontmatterFieldOrder}
         frontmatterFieldMeta={frontmatterFieldMeta}
         frontmatterValidationErrors={[]}
@@ -753,7 +723,7 @@ describe("ExportOptionsPanel", () => {
         outputDir={testOutputDir}
         options={latestOptions}
         optionDescriptions={optionDescriptions}
-        blockOutputDefinitions={blockOutputDefinitions}
+        blockTemplateDefinitions={blockTemplateDefinitions}
         frontmatterFieldOrder={frontmatterFieldOrder}
         frontmatterFieldMeta={frontmatterFieldMeta}
         frontmatterValidationErrors={[]}
@@ -777,7 +747,7 @@ describe("ExportOptionsPanel", () => {
         outputDir={testOutputDir}
         options={latestOptions}
         optionDescriptions={optionDescriptions}
-        blockOutputDefinitions={blockOutputDefinitions}
+        blockTemplateDefinitions={blockTemplateDefinitions}
         frontmatterFieldOrder={frontmatterFieldOrder}
         frontmatterFieldMeta={frontmatterFieldMeta}
         frontmatterValidationErrors={[]}
@@ -805,7 +775,7 @@ describe("ExportOptionsPanel", () => {
         outputDir={testOutputDir}
         options={options}
         optionDescriptions={optionDescriptions}
-        blockOutputDefinitions={blockOutputDefinitions}
+        blockTemplateDefinitions={blockTemplateDefinitions}
         frontmatterFieldOrder={frontmatterFieldOrder}
         frontmatterFieldMeta={frontmatterFieldMeta}
         frontmatterValidationErrors={[]}

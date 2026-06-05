@@ -19,5 +19,5 @@ export const fallbackDefaults: ExportBootstrapResponse = {
   frontmatterFieldOrder,
   frontmatterFieldMeta,
   optionDescriptions,
-  blockOutputDefinitions: [],
+  blockTemplateDefinitions: [],
 }

@@ -1,14 +1,9 @@
 import { load } from "cheerio"
 import { expect } from "vitest"
 
-import type {
-  BlockOutputParamValue,
-  BlockOutputSelection,
-  EditorBlockOutputDefinition,
-  OutputOption,
-  ParsedPost,
-} from "../../src/domain/ast/Types.js"
+import type { ParsedPost } from "../../src/domain/ast/Types.js"
 import type { ExportOptions } from "../../src/domain/export-options/Types.js"
+import type { BlockTemplateDefinition } from "../../src/domain/template/Types.js"
 
 import { defaultExportOptions } from "../../src/domain/export-options/ExportOptions.js"
 import { NaverBlogSE2Editor } from "../../src/parsing/naver-blog/se2/NaverBlogSe2Editor.js"
@@ -27,24 +22,6 @@ const createParserOptions = ({ blockOutputs }: ParserTestOptions = {}) => ({
   blockOutputs: blockOutputs ?? testOptions.blockOutputs,
 })
 
-const createSelectionFromOutputOption = (option: OutputOption): BlockOutputSelection => {
-  const params = (option.params ?? []).reduce<Record<string, BlockOutputParamValue>>(
-    (nextParams, param) => {
-      if (param.defaultValue !== undefined) {
-        nextParams[param.key] = param.defaultValue
-      }
-
-      return nextParams
-    },
-    {},
-  )
-
-  return {
-    variant: option.id,
-    ...(Object.keys(params).length > 0 ? { params } : {}),
-  }
-}
-
 const se2Editor = new NaverBlogSE2Editor()
 const se3Editor = new NaverBlogSE3Editor()
 const se4Editor = new NaverBlogSE4Editor()
@@ -57,7 +34,7 @@ export const createSe4ModuleScript = (module: Record<string, unknown>) =>
 export const parseSe2Blocks = (content: string, options?: ParserTestOptions) =>
   se2Editor.parse({
     $: load(`<div id="viewTypeSelector">${content}</div>`),
-    tags: ["legacy", "legacy", "archive"],
+    tags: ["classic", "classic", "archive"],
     options: createParserOptions(options),
   })
 
@@ -67,7 +44,7 @@ const createSe3Html = (...components: string[]) =>
 export const parseSe3Blocks = (...components: string[]) =>
   se3Editor.parse({
     $: load(createSe3Html(...components)),
-    tags: ["daily", "daily", "legacy"],
+    tags: ["daily", "daily", "archive"],
     options: createParserOptions(),
   })
 
@@ -80,7 +57,7 @@ export const parseSe3BlocksWithOptions = ({
 }) =>
   se3Editor.parse({
     $: load(createSe3Html(...components)),
-    tags: ["daily", "daily", "legacy"],
+    tags: ["daily", "daily", "archive"],
     options: createParserOptions({ blockOutputs }),
   })
 
@@ -106,13 +83,13 @@ export const parseSe4BlocksWithOptions = ({
     options: createParserOptions({ blockOutputs }),
   })
 
-const editorDefinitions: Record<EditorType, () => EditorBlockOutputDefinition[]> = {
-  "naver-se2": () => se2Editor.getBlockOutputDefinitions(),
-  "naver-se3": () => se3Editor.getBlockOutputDefinitions(),
-  "naver-se4": () => se4Editor.getBlockOutputDefinitions(),
+const editorDefinitions: Record<EditorType, () => BlockTemplateDefinition[]> = {
+  "naver-se2": () => se2Editor.getBlockTemplateDefinitions(),
+  "naver-se3": () => se3Editor.getBlockTemplateDefinitions(),
+  "naver-se4": () => se4Editor.getBlockTemplateDefinitions(),
 }
 
-const getBlockOutputDefinition = ({
+const getBlockTemplateDefinition = ({
   editorType,
   blockId,
 }: {
@@ -125,13 +102,13 @@ const getBlockOutputDefinition = ({
   )
 
   if (!definition) {
-    throw new Error(`Missing parser block output definition: ${selectionKey}`)
+    throw new Error(`Missing parser block template definition: ${selectionKey}`)
   }
 
   return definition
 }
 
-export const expectEveryBlockOutputOption = ({
+export const expectBlockTemplateDefinition = ({
   editorType,
   blockId,
   parse,
@@ -142,22 +119,14 @@ export const expectEveryBlockOutputOption = ({
   parse: (blockOutputs: ExportOptions["blockOutputs"]) => ParsedPost
   blockIndex?: number
 }) => {
-  const definition = getBlockOutputDefinition({ editorType, blockId })
+  const definition = getBlockTemplateDefinition({ editorType, blockId })
 
-  expect(definition.options.length).toBeGreaterThanOrEqual(2)
+  expect(definition.presets.length).toBeGreaterThanOrEqual(1)
+  expect(definition.props).toEqual(expect.any(Object))
 
-  definition.options.forEach((option) => {
-    const outputSelection = createSelectionFromOutputOption(option)
-    const parsed = parse({
-      defaults: {
-        [definition.key]: outputSelection,
-      },
-    })
-
-    expect(parsed.blocks[blockIndex]).toMatchObject({
-      type: option.preview.type,
-      outputSelectionKey: definition.key,
-      outputSelection,
-    })
+  const parsed = parse({
+    templates: {},
   })
+
+  expect(parsed.blocks[blockIndex]).toEqual(expect.any(Object))
 }

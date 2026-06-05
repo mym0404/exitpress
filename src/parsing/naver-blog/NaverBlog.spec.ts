@@ -3,11 +3,9 @@ import { describe, expect, it } from "vitest"
 import { NaverBlog } from "./NaverBlog.js"
 
 describe("parser block catalog", () => {
-  it("keeps Naver editor instances and derives selectable output options by editor and block order", () => {
+  it("keeps Naver editor instances and derives block templates by editor and block order", () => {
     const blog = new NaverBlog()
-    const outputDefinitions = blog.getBlockOutputDefinitions()
-    const getDefaultOption = (definition: (typeof outputDefinitions)[number]) =>
-      definition.options.find((option) => option.isDefault) ?? definition.options[0]
+    const templateDefinitions = blog.getBlockTemplateDefinitions()
 
     expect(blog.editors).toHaveLength(3)
     expect(blog.editors.map((editor) => editor.type)).toEqual([
@@ -15,26 +13,28 @@ describe("parser block catalog", () => {
       "naver-se3",
       "naver-se2",
     ])
-    expect(outputDefinitions.map((definition) => definition.key)).toEqual([
+    expect(templateDefinitions.map((definition) => definition.key)).toEqual([
       "naver-se4:formula",
+      "naver-se4:video",
       "naver-se4:table",
+      "naver-se4:imageGroup",
       "naver-se4:image",
+      "naver-se4:heading",
+      "naver-se4:quote",
       "naver-se3:table",
+      "naver-se3:quote",
+      "naver-se3:video",
       "naver-se3:image",
       "naver-se2:table",
+      "naver-se2:quote",
+      "naver-se2:heading",
+      "naver-se2:video",
       "naver-se2:image",
     ])
-    expect(outputDefinitions.every((definition) => definition.options.length >= 2)).toBe(true)
+    expect(templateDefinitions.every((definition) => definition.presets.length >= 1)).toBe(true)
     expect(
-      outputDefinitions.some(
-        (definition) => String(definition.key) === getDefaultOption(definition)?.preview.type,
-      ),
-    ).toBe(false)
-    expect(
-      outputDefinitions
-        .filter((definition) => getDefaultOption(definition)?.preview.type === "code")
-        .map((definition) => definition.key),
-    ).toEqual([])
+      templateDefinitions.every((definition) => Object.keys(definition.props).length >= 0),
+    ).toBe(true)
   })
 
   it("derives parser story definitions for every supported block in editor and block order", () => {

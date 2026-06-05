@@ -6,6 +6,6 @@ export type BlockScanJobState = {
   total: number
   completed: number
   failed: number
-  detectedBlockOutputKeys: string[]
+  detectedBlockTemplateKeys: string[]
   error: string | null
 }

@@ -28,10 +28,10 @@ describe("NaverSe2TextElementBlock", () => {
   })
 
   it("renders links inline", () => {
-    const parsed = parseSe2Blocks(`<div>Legacy <a href="https://example.com">link</a></div>`)
+    const parsed = parseSe2Blocks(`<div>Classic <a href="https://example.com">link</a></div>`)
 
     expect(parsed.blocks).toEqual([
-      { type: "paragraph", text: "Legacy [link](https://example.com)" },
+      { type: "paragraph", text: "Classic [link](https://example.com)" },
     ])
   })
 })

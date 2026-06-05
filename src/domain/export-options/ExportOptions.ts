@@ -1,9 +1,6 @@
-import type { EditorBlockOutputDefinition } from "../ast/Types.js"
-
 import type { PartialExportOptions as PersistedPartialExportOptions } from "./PersistedExportOptions.js"
 import type { ExportOptions, FrontmatterFieldName } from "./Types.js"
 
-import { resolveBlockOutputSelection } from "./BlockOutputSelection.js"
 import { defaultExportOptions as createDefaultExportOptions } from "./DefaultExportOptions.js"
 import {
   frontmatterFieldMeta as configuredFrontmatterFieldMeta,
@@ -16,10 +13,6 @@ import {
 } from "./PersistedExportOptions.js"
 
 export type PartialExportOptions = PersistedPartialExportOptions
-
-type ExportOptionsDefinitionContext = {
-  blockOutputDefinitions?: EditorBlockOutputDefinition[]
-}
 
 export const frontmatterFieldOrder = configuredFrontmatterFieldOrder
 
@@ -118,44 +111,18 @@ const coerceAssetOptions = (options: ExportOptions["assets"]) => {
   return coercedOptions
 }
 
-const buildDefaultBlockOutputs = (
-  options?: PartialExportOptions["blockOutputs"],
-  blockOutputDefinitions: EditorBlockOutputDefinition[] = [],
-) =>
+const pickBlockTemplates = (blockOutputs?: PartialExportOptions["blockOutputs"]) =>
   Object.fromEntries(
-    blockOutputDefinitions.flatMap((definition) => {
-      const defaultOption =
-        definition.options.find((option) => option.isDefault) ?? definition.options[0]
+    Object.entries(blockOutputs?.templates ?? {}).filter(
+      (entry): entry is [string, string] =>
+        Boolean(entry[0].trim()) && typeof entry[1] === "string",
+    ),
+  ) satisfies ExportOptions["blockOutputs"]["templates"]
 
-      if (!defaultOption) {
-        return []
-      }
-
-      return [
-        [
-          definition.key,
-          resolveBlockOutputSelection({
-            blockType: defaultOption.preview.type,
-            outputOptions: definition.options,
-            blockOutputs: options,
-            selectionKey: definition.key,
-          }),
-        ],
-      ]
-    }),
-  ) as ExportOptions["blockOutputs"]["defaults"]
-
-export const cloneExportOptions = (
-  options?: PartialExportOptions,
-  context: ExportOptionsDefinitionContext = {},
-) => {
+export const cloneExportOptions = (options?: PartialExportOptions) => {
   const defaults = defaultExportOptions()
   const slugStyle = options?.structure?.slugStyle ?? defaults.structure.slugStyle
   const slugWhitespace = options?.structure?.slugWhitespace ?? getDefaultSlugWhitespace(slugStyle)
-  const resolvedBlockOutputDefaults = buildDefaultBlockOutputs(
-    options?.blockOutputs,
-    context.blockOutputDefinitions,
-  )
 
   const clonedOptions = {
     scope: {
@@ -181,7 +148,7 @@ export const cloneExportOptions = (
       },
     },
     blockOutputs: {
-      defaults: resolvedBlockOutputDefaults,
+      templates: pickBlockTemplates(options?.blockOutputs),
     },
     assets: {
       imageHandlingMode: options?.assets?.imageHandlingMode ?? defaults.assets.imageHandlingMode,

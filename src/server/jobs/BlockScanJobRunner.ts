@@ -1,14 +1,14 @@
-import type { EditorBlockOutputDefinition } from "../../domain/ast/Types.js"
 import type { ScanResult } from "../../domain/blog/Types.js"
 import type { ExportOptions } from "../../domain/export-options/Types.js"
+import type { BlockTemplateDefinition } from "../../domain/template/Types.js"
 import type { NaverBlogFetcherCache } from "../../integrations/naver-blog/NaverBlogFetcher.js"
 
 import type { BlockScanJobStore } from "./BlockScanJobStore.js"
 
 import {
   blockDetectionConcurrency,
-  detectPostBlockOutputKeys,
-} from "../../exporting/workflow/DetectedBlockOutputScanner.js"
+  detectPostBlockTemplateKeys,
+} from "../../exporting/workflow/DetectedBlockTemplateScanner.js"
 import { filterPostsByScope } from "../../exporting/workflow/ExportScope.js"
 import { NaverBlogFetcher } from "../../integrations/naver-blog/NaverBlogFetcher.js"
 import { mapConcurrent } from "../../shared/async/AsyncUtils.js"
@@ -18,29 +18,29 @@ export type BlockScanJobRunner = ReturnType<typeof createBlockScanJobRunner>
 
 const sortDetectedKeys = ({
   keys,
-  blockOutputDefinitions,
+  blockTemplateDefinitions,
 }: {
   keys: string[]
-  blockOutputDefinitions: EditorBlockOutputDefinition[]
+  blockTemplateDefinitions: BlockTemplateDefinition[]
 }) => {
-  const blockOutputKeyOrder = new Map(
-    blockOutputDefinitions.map((definition, index) => [definition.key, index]),
+  const blockTemplateKeyOrder = new Map(
+    blockTemplateDefinitions.map((definition, index) => [definition.key, index]),
   )
 
   return [...keys].sort(
     (left, right) =>
-      (blockOutputKeyOrder.get(left) ?? Number.MAX_SAFE_INTEGER) -
-        (blockOutputKeyOrder.get(right) ?? Number.MAX_SAFE_INTEGER) || left.localeCompare(right),
+      (blockTemplateKeyOrder.get(left) ?? Number.MAX_SAFE_INTEGER) -
+        (blockTemplateKeyOrder.get(right) ?? Number.MAX_SAFE_INTEGER) || left.localeCompare(right),
   )
 }
 
 export const createBlockScanJobRunner = ({
   jobStore,
-  blockOutputDefinitions,
+  blockTemplateDefinitions,
   postHtmlCache,
 }: {
   jobStore: BlockScanJobStore
-  blockOutputDefinitions: EditorBlockOutputDefinition[]
+  blockTemplateDefinitions: BlockTemplateDefinition[]
   postHtmlCache: NaverBlogFetcherCache
 }) => {
   const startJob = ({
@@ -73,7 +73,7 @@ export const createBlockScanJobRunner = ({
         mapper: async (post) => {
           try {
             const html = await fetcher.fetchPostHtml(post.logNo)
-            const keys = detectPostBlockOutputKeys({
+            const keys = detectPostBlockTemplateKeys({
               html,
               sourceUrl: post.source,
               options,
@@ -99,8 +99,8 @@ export const createBlockScanJobRunner = ({
       jobStore.complete(
         job.id,
         sortDetectedKeys({
-          keys: currentJob.detectedBlockOutputKeys,
-          blockOutputDefinitions,
+          keys: currentJob.detectedBlockTemplateKeys,
+          blockTemplateDefinitions,
         }),
       )
     })().catch((error) => {

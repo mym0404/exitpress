@@ -54,7 +54,7 @@ describe("App upload", () => {
           total: 5,
           completed: 5,
           failed: 0,
-          detectedBlockOutputKeys: ["naver-se4:image"],
+          detectedBlockTemplateKeys: ["naver-se4:image"],
           error: null,
         })
       }
@@ -386,7 +386,7 @@ describe("App upload", () => {
           total: 5,
           completed: 5,
           failed: 0,
-          detectedBlockOutputKeys: ["naver-se4:image"],
+          detectedBlockTemplateKeys: ["naver-se4:image"],
           error: null,
         })
       }

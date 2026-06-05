@@ -1,35 +1,7 @@
-import type { ImageData, OutputOption } from "../../../../../domain/ast/Types.js"
+import type { ImageData } from "../../../../../domain/ast/Types.js"
 import type { LeafBlock } from "../../../core/BaseBlock.js"
 
 import { parseImageLink, se4ImageLinkSelector } from "./ImageLink.js"
-
-export const imageGroupOutputOptions = [
-  {
-    id: "split-images",
-    label: "개별 이미지로 분해",
-    description: "이미지 하나씩 순서대로 출력합니다.",
-    preview: {
-      type: "imageGroup",
-      images: [
-        {
-          sourceUrl: "https://example.com/image.png",
-          originalSourceUrl: "https://example.com/image.png",
-          alt: "diagram",
-          caption: "caption",
-          mediaKind: "image",
-        },
-        {
-          sourceUrl: "https://example.com/image-2.png",
-          originalSourceUrl: "https://example.com/image-2.png",
-          alt: "detail",
-          caption: "caption",
-          mediaKind: "image",
-        },
-      ],
-    },
-    isDefault: true,
-  },
-] satisfies OutputOption<"imageGroup">[]
 
 export const parseSe4ImageGroup = ({
   $node,

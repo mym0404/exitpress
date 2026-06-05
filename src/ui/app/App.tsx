@@ -327,7 +327,7 @@ const ExportApp = () => {
       total: scopedPostCount,
       completed: 0,
       failed: 0,
-      detectedBlockOutputKeys: [],
+      detectedBlockTemplateKeys: [],
       error: null,
     }
 
@@ -380,8 +380,8 @@ const ExportApp = () => {
 
       const nextScanResult: ScanResult = {
         ...activeScanResult,
-        detectedBlockOutputKeys: latestJob.detectedBlockOutputKeys,
-        detectedBlockOutputScopeSignature: getBlockDetectionScopeSignature(options),
+        detectedBlockTemplateKeys: latestJob.detectedBlockTemplateKeys,
+        detectedBlockTemplateScopeSignature: getBlockDetectionScopeSignature(options),
       }
 
       setScanCache((current) => ({
@@ -390,7 +390,7 @@ const ExportApp = () => {
       }))
       setCategoryStatus("Markdown 옵션 준비가 끝났습니다.")
 
-      if (latestJob.detectedBlockOutputKeys.length > 0) {
+      if (latestJob.detectedBlockTemplateKeys.length > 0) {
         setPostExportStep("markdown-review")
         return
       }

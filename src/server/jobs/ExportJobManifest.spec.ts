@@ -10,9 +10,7 @@ import { buildResumableExportManifest } from "./ExportJobManifest.js"
 
 const testOutputDir = createTestPath("export-job-manifest", "output")
 const jobOptions = defaultExportOptions()
-jobOptions.blockOutputs.defaults["naver-se4:image"] = {
-  variant: "linked-image",
-}
+jobOptions.blockOutputs.templates["naver-se4:image"] = "![${alt}](${url})"
 
 const scanResult: ScanResult = {
   blogId: "mym0404",
@@ -131,9 +129,7 @@ describe("buildResumableExportManifest", () => {
       blogId: scanResult.blogId,
       totalPostCount: scanResult.totalPostCount,
     })
-    expect(manifest.options.blockOutputs.defaults["naver-se4:image"]).toMatchObject({
-      variant: "linked-image",
-    })
-    expect(manifest.job?.request.options.blockOutputs.defaults).not.toHaveProperty("code")
+    expect(manifest.options.blockOutputs.templates["naver-se4:image"]).toBe("![${alt}](${url})")
+    expect(manifest.job?.request.options.blockOutputs.templates).not.toHaveProperty("code")
   })
 })

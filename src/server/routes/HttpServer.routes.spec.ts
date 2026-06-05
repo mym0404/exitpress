@@ -1,5 +1,6 @@
 import { mkdir, readFile, rm, writeFile } from "node:fs/promises"
 import path from "node:path"
+import { setTimeout as delay } from "node:timers/promises"
 
 import { afterEach, describe, expect, it, vi } from "vitest"
 
@@ -23,6 +24,21 @@ import { NaverBlogFetcher } from "../../integrations/naver-blog/NaverBlogFetcher
 
 let activeServer: ReturnType<typeof createTestHttpServer> | null = null
 
+const removeDirWithRetry = async (targetPath: string) => {
+  for (let attempt = 0; attempt < 5; attempt += 1) {
+    try {
+      await rm(targetPath, { recursive: true, force: true })
+      return
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code !== "ENOTEMPTY" || attempt === 4) {
+        throw error
+      }
+
+      await delay(20)
+    }
+  }
+}
+
 const waitForBlockScanJob = async ({ baseUrl, jobId }: { baseUrl: string; jobId: string }) => {
   for (let attempt = 0; attempt < 50; attempt += 1) {
     const response = await fetch(`${baseUrl}/api/scan-blocks/jobs/${jobId}`)
@@ -32,7 +48,7 @@ const waitForBlockScanJob = async ({ baseUrl, jobId }: { baseUrl: string; jobId:
       total: number
       completed: number
       failed: number
-      detectedBlockOutputKeys: string[]
+      detectedBlockTemplateKeys: string[]
       error: string | null
     }
 
@@ -395,7 +411,7 @@ describe("http server local routes", () => {
       total: 1,
       completed: 1,
       failed: 0,
-      detectedBlockOutputKeys: ["naver-se4:image"],
+      detectedBlockTemplateKeys: ["naver-se4:image"],
       error: null,
     })
   })
@@ -480,7 +496,7 @@ describe("http server local routes", () => {
       expect(job.status).toBe("completed")
       expect(postViewRequestCount).toBe(1)
     } finally {
-      await rm(outputDir, { recursive: true, force: true })
+      await removeDirWithRetry(outputDir)
     }
   })
 

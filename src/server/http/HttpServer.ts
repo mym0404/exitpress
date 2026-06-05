@@ -30,8 +30,6 @@ import {
   defaultScanCachePath,
   defaultSettingsPath,
   defaultThemePreference,
-  legacyScanCachePath,
-  legacySettingsPath,
 } from "./ServerPaths.js"
 
 export const createHttpServer = ({
@@ -56,23 +54,21 @@ export const createHttpServer = ({
   openLocalPath?: (targetPath: string) => Promise<void> | void
 } = {}) => {
   let httpServer: NodeHttpServer
-  const blockOutputDefinitions = new NaverBlog().getBlockOutputDefinitions()
+  const blockTemplateDefinitions = new NaverBlog().getBlockTemplateDefinitions()
   const state = createHttpServerState({
     jobStore,
     scanCachePath,
-    legacyScanCachePath: scanCachePath === defaultScanCachePath ? legacyScanCachePath : undefined,
     settingsPath,
-    legacySettingsPath: settingsPath === defaultSettingsPath ? legacySettingsPath : undefined,
     defaultOutputDir,
     defaultThemePreference,
-    blockOutputDefinitions,
+    blockTemplateDefinitions,
   })
   const postHtmlCache = createPostHtmlCache({
     cacheDir: postHtmlCacheDir,
   })
   const blockScanJobRunner = createBlockScanJobRunner({
     jobStore: new BlockScanJobStore(),
-    blockOutputDefinitions,
+    blockTemplateDefinitions,
     postHtmlCache,
   })
   const exportJobRunner = createHttpExportJobRunner({

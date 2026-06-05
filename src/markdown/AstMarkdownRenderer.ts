@@ -1,11 +1,9 @@
-import type { AstBlock, BlockOutputSelection, ImageData } from "../domain/ast/Types.js"
+import type { AstBlock, ImageData } from "../domain/ast/Types.js"
 import type { ExportOptions } from "../domain/export-options/Types.js"
-
-import { resolveBlockOutputSelection } from "../domain/export-options/BlockOutputSelection.js"
+import type { TemplateValue } from "../domain/template/Types.js"
 
 import {
   createLinkFormatter,
-  getHeadingLevelOffset,
   renderCodeBlock,
   renderFormula,
   renderGfmTable,
@@ -13,7 +11,43 @@ import {
   renderParagraph,
   renderQuote,
 } from "./BlockMarkdown.js"
+import { renderBlockTemplates } from "./BlockTemplateRenderer.js"
 import { convertHtmlToMarkdown } from "./TurndownMarkdownConverter.js"
+
+const findTemplateForBlock = ({
+  blockType,
+  options,
+}: {
+  blockType: AstBlock["type"]
+  options: ExportOptions
+}) =>
+  Object.entries(options.blockOutputs.templates).find(
+    ([key, template]) => key.endsWith(`:${blockType}`) && typeof template === "string",
+  )?.[1]
+
+const renderTemplateIfConfigured = ({
+  blockType,
+  options,
+  props,
+}: {
+  blockType: AstBlock["type"]
+  options: ExportOptions
+  props: Record<string, TemplateValue>
+}) => {
+  const template = findTemplateForBlock({
+    blockType,
+    options,
+  })
+
+  return template
+    ? renderBlockTemplates([
+        {
+          template,
+          props,
+        },
+      ])
+    : null
+}
 
 const renderVideoBlock = ({
   block,
@@ -63,13 +97,7 @@ export const renderAstMarkdown = async ({
     resolveLinkUrl,
   })
 
-  const renderImageWithSelection = async ({
-    image,
-    selection,
-  }: {
-    image: ImageData
-    selection: BlockOutputSelection
-  }) => {
+  const renderImageWithSelection = async ({ image }: { image: ImageData }) => {
     const renderableSourceUrl = getRenderableImageSource({
       image,
       options,
@@ -89,29 +117,31 @@ export const renderAstMarkdown = async ({
     }
 
     recordBodyThumbnail(assetPath)
+
+    const templateMarkdown = renderTemplateIfConfigured({
+      blockType: "image",
+      options,
+      props: {
+        url: assetPath,
+        alt: image.alt,
+        caption: image.caption,
+      },
+    })
+
+    if (templateMarkdown !== null) {
+      return templateMarkdown
+    }
+
     return renderImageBlockMarkdown({
       image: {
         ...image,
         originalSourceUrl: image.originalSourceUrl ?? renderableSourceUrl,
       },
       assetPath,
-      selection,
-      formatLink: inlineLinkFormatter.formatLink,
     })
   }
 
   const renderTableBlock = (block: Extract<AstBlock, { type: "table" }>) => {
-    const selection =
-      block.outputSelection ??
-      resolveBlockOutputSelection({
-        blockType: "table",
-        blockOutputs: options.blockOutputs,
-      })
-
-    if (selection.variant === "html-only") {
-      return block.html
-    }
-
     if (block.rows.length > 0) {
       return renderGfmTable(block)
     }
@@ -124,67 +154,96 @@ export const renderAstMarkdown = async ({
 
   for (const block of blocks) {
     if (block.type === "paragraph") {
-      sections.push(renderParagraph(block.text))
+      sections.push(
+        renderTemplateIfConfigured({
+          blockType: block.type,
+          options,
+          props: {
+            text: block.text,
+          },
+        }) ?? renderParagraph(block.text),
+      )
       continue
     }
 
     if (block.type === "heading") {
-      const selection = resolveBlockOutputSelection({
-        blockType: "heading",
-        blockOutputs: options.blockOutputs,
-      })
-      const adjustedLevel = Math.min(Math.max(block.level + getHeadingLevelOffset(selection), 1), 6)
-
-      sections.push(`${"#".repeat(adjustedLevel)} ${block.text}`)
+      sections.push(
+        renderTemplateIfConfigured({
+          blockType: block.type,
+          options,
+          props: {
+            level: block.level,
+            text: block.text,
+          },
+        }) ?? `${"#".repeat(block.level)} ${block.text}`,
+      )
       continue
     }
 
     if (block.type === "quote") {
-      sections.push(renderQuote(block.text))
+      sections.push(
+        renderTemplateIfConfigured({
+          blockType: block.type,
+          options,
+          props: {
+            text: block.text,
+          },
+        }) ?? renderQuote(block.text),
+      )
       continue
     }
 
     if (block.type === "divider") {
-      sections.push("---")
+      sections.push(
+        renderTemplateIfConfigured({
+          blockType: block.type,
+          options,
+          props: {},
+        }) ?? "---",
+      )
       continue
     }
 
     if (block.type === "code") {
       sections.push(
-        renderCodeBlock({
-          language: block.language,
-          code: block.code,
-        }),
+        renderTemplateIfConfigured({
+          blockType: block.type,
+          options,
+          props: {
+            language: block.language,
+            code: block.code,
+          },
+        }) ??
+          renderCodeBlock({
+            language: block.language,
+            code: block.code,
+          }),
       )
       continue
     }
 
     if (block.type === "formula") {
-      const selection =
-        block.outputSelection ??
-        resolveBlockOutputSelection({
-          blockType: "formula",
-          blockOutputs: options.blockOutputs,
-        })
       sections.push(
-        renderFormula({
-          formula: block.formula,
-          display: block.display,
-          selection,
-        }),
+        renderTemplateIfConfigured({
+          blockType: block.type,
+          options,
+          props: {
+            formula: block.formula,
+            display: block.display,
+          },
+        }) ??
+          renderFormula({
+            formula: block.formula,
+            display: block.display,
+          }),
       )
       continue
     }
 
     if (block.type === "image") {
-      const selection = resolveBlockOutputSelection({
-        blockType: "image",
-        blockOutputs: options.blockOutputs,
-      })
       sections.push(
         await renderImageWithSelection({
           image: block.image,
-          selection: block.outputSelection ?? selection,
         }),
       )
       continue
@@ -192,16 +251,11 @@ export const renderAstMarkdown = async ({
 
     if (block.type === "imageGroup") {
       const groupSections: string[] = []
-      const imageSelection = resolveBlockOutputSelection({
-        blockType: "image",
-        blockOutputs: options.blockOutputs,
-      })
 
       for (const image of block.images) {
         groupSections.push(
           await renderImageWithSelection({
             image,
-            selection: imageSelection,
           }),
         )
       }
@@ -212,16 +266,37 @@ export const renderAstMarkdown = async ({
 
     if (block.type === "video") {
       sections.push(
-        renderVideoBlock({
-          block,
-          formatLink: inlineLinkFormatter.formatLink,
-        }),
+        renderTemplateIfConfigured({
+          blockType: block.type,
+          options,
+          props: {
+            title: block.video.title,
+            url: block.video.sourceUrl,
+            thumbnailUrl: block.video.thumbnailUrl,
+            width: block.video.width,
+            height: block.video.height,
+          },
+        }) ??
+          renderVideoBlock({
+            block,
+            formatLink: inlineLinkFormatter.formatLink,
+          }),
       )
       continue
     }
 
     if (block.type === "table") {
-      sections.push(renderTableBlock(block))
+      const markdown = renderTableBlock(block)
+      sections.push(
+        renderTemplateIfConfigured({
+          blockType: block.type,
+          options,
+          props: {
+            markdown,
+            html: block.html,
+          },
+        }) ?? markdown,
+      )
     }
   }
 

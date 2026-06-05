@@ -6,8 +6,8 @@ describe("NaverSe3CodeBlock", () => {
   it("parses code components into code blocks", () => {
     const parsed = parseSe3Blocks(`
       <div class="se_component se_code">
-        <pre>const legacy = true
-console.log(legacy)
+        <pre>const classic = true
+console.log(classic)
 </pre>
       </div>
     `)
@@ -16,7 +16,7 @@ console.log(legacy)
       {
         type: "code",
         language: null,
-        code: "const legacy = true\nconsole.log(legacy)",
+        code: "const classic = true\nconsole.log(classic)",
       },
     ])
   })

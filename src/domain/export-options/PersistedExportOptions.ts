@@ -1,5 +1,3 @@
-import type { EditorBlockOutputDefinition } from "../ast/Types.js"
-
 import type { ExportOptions, FrontmatterFieldName } from "./Types.js"
 
 import { frontmatterFieldOrder } from "./FrontmatterFields.js"
@@ -13,14 +11,10 @@ export type PartialExportOptions = {
     aliases?: Partial<Record<FrontmatterFieldName, string>>
   }
   blockOutputs?: {
-    defaults?: Partial<ExportOptions["blockOutputs"]["defaults"]>
+    templates?: Partial<Record<string, string>>
   }
   assets?: Partial<ExportOptions["assets"]>
   links?: Partial<ExportOptions["links"]>
-}
-
-type ExportOptionsDefinitionContext = {
-  blockOutputDefinitions?: EditorBlockOutputDefinition[]
 }
 
 export const pickFrontmatterRecord = <Value>(
@@ -37,7 +31,6 @@ export const pickFrontmatterRecord = <Value>(
 
 export const sanitizePersistedExportOptions = (
   options?: PartialExportOptions,
-  context: ExportOptionsDefinitionContext = {},
 ): PartialExportOptions => {
   const sanitized: PartialExportOptions = {}
 
@@ -117,15 +110,13 @@ export const sanitizePersistedExportOptions = (
   if (options?.blockOutputs) {
     const blockOutputs: NonNullable<PartialExportOptions["blockOutputs"]> = {}
 
-    if (options.blockOutputs.defaults) {
-      const allowedSelectionKeys = context.blockOutputDefinitions
-        ? new Set(context.blockOutputDefinitions.map((definition) => definition.key))
-        : undefined
-      blockOutputs.defaults = Object.fromEntries(
-        Object.entries(options.blockOutputs.defaults).filter(([selectionKey]) =>
-          allowedSelectionKeys ? allowedSelectionKeys.has(selectionKey) : true,
+    if (options.blockOutputs.templates) {
+      blockOutputs.templates = Object.fromEntries(
+        Object.entries(options.blockOutputs.templates).filter(
+          (entry): entry is [string, string] =>
+            Boolean(entry[0].trim()) && typeof entry[1] === "string",
         ),
-      ) as NonNullable<PartialExportOptions["blockOutputs"]>["defaults"]
+      )
     }
 
     if (Object.keys(blockOutputs).length > 0) {

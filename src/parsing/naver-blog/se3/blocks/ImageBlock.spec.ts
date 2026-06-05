@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest"
 
 import {
-  expectEveryBlockOutputOption,
+  expectBlockTemplateDefinition,
   parseSe3Blocks,
   parseSe3BlocksWithOptions,
 } from "../../../../../tests/support/parser-test-utils.js"
@@ -23,13 +23,6 @@ describe("NaverSe3ImageBlock", () => {
           alt: "se3 image",
           caption: null,
           mediaKind: "image",
-        },
-        outputSelectionKey: "naver-se3:image",
-        outputSelection: {
-          variant: "markdown-image",
-          params: {
-            includeCaption: false,
-          },
         },
       },
     ])
@@ -84,13 +77,6 @@ describe("NaverSe3ImageBlock", () => {
           caption: null,
           mediaKind: "image",
         },
-        outputSelectionKey: "naver-se3:image",
-        outputSelection: {
-          variant: "markdown-image",
-          params: {
-            includeCaption: false,
-          },
-        },
       },
     ])
   })
@@ -123,13 +109,6 @@ describe("NaverSe3ImageBlock", () => {
           alt: "",
           caption: null,
           mediaKind: "image",
-        },
-        outputSelectionKey: "naver-se3:image",
-        outputSelection: {
-          variant: "markdown-image",
-          params: {
-            includeCaption: false,
-          },
         },
       },
     ])
@@ -170,13 +149,6 @@ describe("NaverSe3ImageBlock", () => {
           caption: null,
           mediaKind: "image",
         },
-        outputSelectionKey: "naver-se3:image",
-        outputSelection: {
-          variant: "markdown-image",
-          params: {
-            includeCaption: false,
-          },
-        },
       },
       {
         type: "paragraph",
@@ -205,18 +177,11 @@ describe("NaverSe3ImageBlock", () => {
           caption: null,
           mediaKind: "image",
         },
-        outputSelectionKey: "naver-se3:image",
-        outputSelection: {
-          variant: "markdown-image",
-          params: {
-            includeCaption: false,
-          },
-        },
       },
     ])
   })
 
-  it("parses legacy sticker image components as image blocks", () => {
+  it("parses classic sticker image components as image blocks", () => {
     const parsed = parseSe3Blocks(`
       <div class="se_component se_sticker default">
         <img src="https://example.com/sticker.png" alt="sticker" />
@@ -233,18 +198,11 @@ describe("NaverSe3ImageBlock", () => {
           caption: null,
           mediaKind: "image",
         },
-        outputSelectionKey: "naver-se3:image",
-        outputSelection: {
-          variant: "markdown-image",
-          params: {
-            includeCaption: false,
-          },
-        },
       },
     ])
   })
 
-  it("parses legacy image strip components as image group blocks", () => {
+  it("parses classic image strip components as image group blocks", () => {
     const parsed = parseSe3Blocks(`
       <div class="se_component se_imageStrip imageStrip2 default">
         <img src="https://example.com/strip-1.png" alt="strip 1" />
@@ -296,13 +254,6 @@ describe("NaverSe3ImageBlock", () => {
           alt: "image",
           caption: null,
           mediaKind: "image",
-        },
-        outputSelectionKey: "naver-se3:image",
-        outputSelection: {
-          variant: "markdown-image",
-          params: {
-            includeCaption: false,
-          },
         },
       },
       {
@@ -372,13 +323,6 @@ describe("NaverSe3ImageBlock", () => {
           caption: null,
           mediaKind: "image",
         },
-        outputSelectionKey: "naver-se3:image",
-        outputSelection: {
-          variant: "markdown-image",
-          params: {
-            includeCaption: false,
-          },
-        },
       },
     ])
   })
@@ -403,19 +347,12 @@ describe("NaverSe3ImageBlock", () => {
           caption: null,
           mediaKind: "image",
         },
-        outputSelectionKey: "naver-se3:image",
-        outputSelection: {
-          variant: "markdown-image",
-          params: {
-            includeCaption: false,
-          },
-        },
       },
     ])
   })
 
   it("applies every output option", () => {
-    expectEveryBlockOutputOption({
+    expectBlockTemplateDefinition({
       editorType: "naver-se3",
       blockId: "image",
       parse: (blockOutputs) =>

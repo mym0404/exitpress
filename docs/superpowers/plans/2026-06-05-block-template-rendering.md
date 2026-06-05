@@ -39,9 +39,9 @@
 - Modify `src/domain/ast/Types.ts`
   - Remove body AST contracts from the main parser/export path and re-home remaining post-level types that are still needed.
 - Modify `src/domain/export-options/Types.ts`
-  - Replace `blockOutputs.defaults` with `blockOutputs.templates`.
+  - Keep `blockOutputs.templates` as the only block output option shape.
 - Modify `src/domain/export-options/ExportOptions.ts`
-  - Stop reading legacy `blockOutputs.defaults` and clone only template strings.
+  - Clone only template strings.
 - Modify `src/domain/export-options/PersistedExportOptions.ts`
   - Persist the new `blockOutputs.templates` shape only.
 - Modify `src/domain/export-options/DefaultExportOptions.ts`
@@ -52,8 +52,6 @@
   - Collect `renderInputs`, `assetCandidates`, tags, videos, and block evidence from parser blocks.
 - Modify `src/parsing/naver-blog/core/PostParser.ts`
   - Return `ParsedPost` with `renderInputs` and `assetCandidates`.
-- Modify `src/parsing/naver-blog/core/BaseEditorOutputSelection.ts`
-  - Remove AST selection application and replace it with template lookup by stable block key.
 - Modify `src/parsing/naver-blog/NaverBlog.ts`
   - Expose `getBlockTemplateDefinitions()`.
 - Modify `src/parsing/naver-blog/se2/**/*Block.ts`, `src/parsing/naver-blog/se3/**/*Block.ts`, `src/parsing/naver-blog/se4/**/*Block.ts`
@@ -90,11 +88,11 @@
   - Pass runtime upload config into `NaverBlogExporter`.
 - Modify `src/server/jobs/JobStore.ts`, `src/server/jobs/JobStoreFactory.ts`, `src/server/jobs/ExportJobManifest.ts`
   - Store sanitized job state, upload registry summaries, and stage failures.
-- Modify `src/exporting/workflow/DetectedBlockOutputScanner.ts`
-  - Return template definition keys and representative props, not `outputSelectionKey`.
+- Modify `src/exporting/workflow/DetectedBlockTemplateScanner.ts`
+  - Return template definition keys and representative props detected from parsed post content.
 - Modify `src/domain/block-scan/Types.ts`
   - Rename detected output types to template definition types.
-- Modify `src/ui/features/options/BlockOutputOptions.tsx`
+- Modify `src/ui/features/options/BlockTemplateOptions.tsx`
   - Replace output variant controls with block template cards.
 - Create `src/ui/features/options/BlockTemplateEditor.tsx`
   - Shows preset buttons, textarea, variable list, preview, and validation errors.
@@ -103,7 +101,7 @@
 - Modify `src/ui/features/options/ExportOptionsPanel.tsx`
   - Mount the block template editor in the markdown step.
 - Modify `src/ui/features/options/ExportOptionsPanel.spec.tsx`
-  - Update tests from `blockOutputs.defaults` to `blockOutputs.templates`.
+  - Verify block template option state through `blockOutputs.templates`.
 - Modify `src/ui/features/job-results/UploadPanel.tsx`
   - Remove manual upload start form from result state.
 - Modify `src/ui/features/job-results/JobResultsPanel.tsx`
@@ -146,23 +144,6 @@ it("stores block output templates as plain strings", () => {
     "naver-se4:image": "![${alt}](${url})",
   })
 })
-
-it("does not read legacy block output defaults", () => {
-  const options = cloneExportOptions({
-    blockOutputs: {
-      defaults: {
-        "naver-se4:image": {
-          variant: "linked-image",
-          params: {
-            includeCaption: true,
-          },
-        },
-      },
-    },
-  } as never)
-
-  expect(options.blockOutputs.templates).toEqual({})
-})
 ```
 
 - [ ] **Step 2: Run the focused failing test**
@@ -179,7 +160,7 @@ Expected:
 FAIL src/domain/export-options/ExportOptions.spec.ts
 ```
 
-The failure should mention `templates` missing or the old `defaults` shape still being returned.
+The failure should mention `templates` missing.
 
 - [ ] **Step 3: Add template domain types**
 
@@ -265,9 +246,9 @@ export type UploadRegistryEntry = {
 export type UploadRegistrySnapshot = Record<string, UploadRegistryEntry>
 ```
 
-- [ ] **Step 4: Change export option types**
+- [ ] **Step 4: Define export option types**
 
-In `src/domain/export-options/Types.ts`, remove the `BlockOutputSelection` import and replace the `blockOutputs` field with:
+In `src/domain/export-options/Types.ts`, define the `blockOutputs` field as:
 
 ```ts
   blockOutputs: {
@@ -283,12 +264,12 @@ In `src/domain/export-options/DefaultExportOptions.ts`, change the default to:
   },
 ```
 
-- [ ] **Step 5: Clone only template strings**
+- [ ] **Step 5: Clone template strings**
 
-In `src/domain/export-options/ExportOptions.ts`, remove `EditorBlockOutputDefinition`, `resolveBlockOutputSelection`, and `buildDefaultBlockOutputs`. Add:
+In `src/domain/export-options/ExportOptions.ts`, add:
 
 ```ts
-const pickBlockOutputTemplates = (blockOutputs?: PartialExportOptions["blockOutputs"]) =>
+const pickBlockTemplates = (blockOutputs?: PartialExportOptions["blockOutputs"]) =>
   Object.fromEntries(
     Object.entries(blockOutputs?.templates ?? {}).filter(
       (entry): entry is [string, string] =>
@@ -301,7 +282,7 @@ Then set cloned options to:
 
 ```ts
     blockOutputs: {
-      templates: pickBlockOutputTemplates(options?.blockOutputs),
+      templates: pickBlockTemplates(options?.blockOutputs),
     },
 ```
 
@@ -1746,18 +1727,18 @@ PASS
 
 **Files:**
 - Modify: `src/domain/block-scan/Types.ts`
-- Modify: `src/exporting/workflow/DetectedBlockOutputScanner.ts`
-- Modify: `src/exporting/workflow/DetectedBlockOutputScanner.spec.ts`
+- Modify: `src/exporting/workflow/DetectedBlockTemplateScanner.ts`
+- Modify: `src/exporting/workflow/DetectedBlockTemplateScanner.spec.ts`
 - Create: `src/ui/features/options/BlockTemplateEditor.tsx`
 - Create: `src/ui/features/options/BlockTemplateEditor.spec.tsx`
-- Modify: `src/ui/features/options/BlockOutputOptions.tsx`
+- Modify: `src/ui/features/options/BlockTemplateOptions.tsx`
 - Modify: `src/ui/features/options/ExportOptionsPanel.tsx`
 - Modify: `src/ui/features/options/ExportOptionsPanel.spec.tsx`
 - Modify: `src/ui/app/App.workflow.spec.tsx`
 
 - [ ] **Step 1: Write detection tests**
 
-In `src/exporting/workflow/DetectedBlockOutputScanner.spec.ts`, update expectations to:
+In `src/exporting/workflow/DetectedBlockTemplateScanner.spec.ts`, update expectations to:
 
 ```ts
 expect(result.detectedTemplates).toEqual([
@@ -1814,7 +1795,7 @@ describe("BlockTemplateEditor", () => {
           },
         ]}
         templates={{ "naver-se4:image": "![${alt}](${url})" }}
-        previewProps={{ "naver-se4:image": { url: "assets/a.png", alt: "A" } }}
+        props={{ "naver-se4:image": { url: "assets/a.png", alt: "A" } }}
         onTemplateChange={onTemplateChange}
       />,
     )
@@ -1831,7 +1812,7 @@ describe("BlockTemplateEditor", () => {
 Run:
 
 ```bash
-mise exec -- pnpm test:offline -- src/exporting/workflow/DetectedBlockOutputScanner.spec.ts src/ui/features/options/BlockTemplateEditor.spec.tsx
+mise exec -- pnpm test:offline -- src/exporting/workflow/DetectedBlockTemplateScanner.spec.ts src/ui/features/options/BlockTemplateEditor.spec.tsx
 ```
 
 Expected:
@@ -1853,12 +1834,12 @@ import { Button } from "../../components/ui/Button.js"
 export const BlockTemplateEditor = ({
   definitions,
   templates,
-  previewProps,
+  props,
   onTemplateChange,
 }: {
   definitions: BlockTemplateDefinition[]
   templates: Record<string, string>
-  previewProps: Record<string, Record<string, TemplateValue>>
+  props: Record<string, Record<string, TemplateValue>>
   onTemplateChange: (key: string, template: string) => void
 }) => (
   <div className="grid gap-5">
@@ -1898,7 +1879,7 @@ export const BlockTemplateEditor = ({
             ))}
           </dl>
           <pre data-block-template-preview={definition.key}>
-            {JSON.stringify(previewProps[definition.key] ?? {}, null, 2)}
+            {JSON.stringify(props[definition.key] ?? {}, null, 2)}
           </pre>
         </section>
       )
@@ -1911,7 +1892,7 @@ Keep visual styling aligned with existing option components during implementatio
 
 - [ ] **Step 5: Replace markdown options panel**
 
-In `src/ui/features/options/BlockOutputOptions.tsx`, export a `MarkdownOptionsStep` that renders `BlockTemplateEditor` and updates:
+In `src/ui/features/options/BlockTemplateOptions.tsx`, export a `MarkdownOptionsStep` that renders `BlockTemplateEditor` and updates:
 
 ```ts
 blockOutputs: {

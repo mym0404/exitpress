@@ -1,8 +1,7 @@
 import { load } from "cheerio"
 
-import type { OutputOption } from "../../../../domain/ast/Types.js"
 import type { UnknownRecord } from "../../../../shared/object/UnknownRecord.js"
-import type { ParserBlockContext } from "../../core/BaseBlock.js"
+import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/BaseBlock.js"
 
 import { compactText } from "../../../../shared/text/TextUtils.js"
 import { LeafBlock } from "../../core/BaseBlock.js"
@@ -10,54 +9,20 @@ import { LeafBlock } from "../../core/BaseBlock.js"
 export class NaverSe4FormulaBlock extends LeafBlock {
   override readonly id = "formula"
   override readonly label = "수식"
-  override readonly outputOptions = [
-    {
-      id: "wrapper",
-      label: "custom wrapper",
-      description: "인라인과 블록 수식을 wrapper 문자열로 감쌉니다.",
-      preview: {
-        type: "formula",
-        formula: "x^2 + y^2 = z^2",
-        display: true,
+  override readonly templateDefinition = {
+    label: this.label,
+    presets: [
+      {
+        id: "default",
+        label: "기본",
+        template: "${display ? '$$\\n' + formula + '\\n$$' : '$' + formula + '$'}",
       },
-      isDefault: true,
-      params: [
-        {
-          key: "inlineWrapper",
-          label: "인라인 wrapper",
-          description: "예: `$`, `\\(...\\)`",
-          input: "text",
-          defaultValue: "$",
-        },
-        {
-          key: "blockWrapper",
-          label: "블록 wrapper",
-          description: "예: `$$`, `\\[...\\]`",
-          input: "text",
-          defaultValue: "$$",
-        },
-      ],
+    ],
+    props: {
+      formula: { label: "수식", type: "string" },
+      display: { label: "블록 표시", type: "boolean" },
     },
-    {
-      id: "math-fence",
-      label: "```math fence",
-      description: "블록 수식은 `math` fence, 인라인 수식은 wrapper로 출력합니다.",
-      preview: {
-        type: "formula",
-        formula: "x^2 + y^2 = z^2",
-        display: true,
-      },
-      params: [
-        {
-          key: "inlineWrapper",
-          label: "인라인 wrapper",
-          description: "예: `$`, `\\(...\\)`",
-          input: "text",
-          defaultValue: "$",
-        },
-      ],
-    },
-  ] satisfies OutputOption<"formula">[]
+  } satisfies ParserBlockTemplateDefinition
 
   override match({ moduleData, moduleType }: ParserBlockContext) {
     return moduleType === "v2_formula" && Boolean(moduleData)

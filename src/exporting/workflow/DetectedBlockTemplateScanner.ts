@@ -3,13 +3,16 @@ import type { ExportOptions } from "../../domain/export-options/Types.js"
 import type { NaverBlogFetcher } from "../../integrations/naver-blog/NaverBlogFetcher.js"
 
 import { parsePostHtml } from "../../parsing/naver-blog/core/PostParser.js"
+import { NaverBlog } from "../../parsing/naver-blog/NaverBlog.js"
 import { mapConcurrent } from "../../shared/async/AsyncUtils.js"
 
 import { filterPostsByScope } from "./ExportScope.js"
 
 export const blockDetectionConcurrency = 3
 
-export const detectPostBlockOutputKeys = ({
+const getTemplateBlockId = (key: string) => key.split(":").at(-1) ?? key
+
+export const detectPostBlockTemplateKeys = ({
   html,
   sourceUrl,
   options,
@@ -18,6 +21,8 @@ export const detectPostBlockOutputKeys = ({
   sourceUrl: string
   options: ExportOptions
 }) => {
+  const blog = new NaverBlog()
+  const editor = blog.getEditorForHtml(html)
   const parsedPost = parsePostHtml({
     html,
     sourceUrl,
@@ -26,12 +31,19 @@ export const detectPostBlockOutputKeys = ({
     },
   })
 
-  return parsedPost.blocks
-    .map((block) => block.outputSelectionKey)
-    .filter((key): key is string => Boolean(key))
+  const detectedBlockTypes = new Set<string>(parsedPost.blocks.map((block) => block.type))
+
+  return blog
+    .getBlockTemplateDefinitions()
+    .filter(
+      (definition) =>
+        (!editor || definition.key.startsWith(`${editor.type}:`)) &&
+        detectedBlockTypes.has(getTemplateBlockId(definition.key)),
+    )
+    .map((definition) => definition.key)
 }
 
-export const detectBlockOutputKeys = async ({
+export const detectBlockTemplateKeys = async ({
   scanResult,
   options,
   fetcher,
@@ -50,7 +62,7 @@ export const detectBlockOutputKeys = async ({
     concurrency: blockDetectionConcurrency,
     mapper: async (post) => {
       const html = await fetcher.fetchPostHtml(post.logNo)
-      return detectPostBlockOutputKeys({
+      return detectPostBlockTemplateKeys({
         html,
         sourceUrl: post.source,
         options,

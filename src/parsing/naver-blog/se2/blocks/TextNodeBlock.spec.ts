@@ -4,10 +4,10 @@ import { parseSe2Blocks } from "../../../../../tests/support/parser-test-utils.j
 
 describe("NaverSe2TextNodeBlock", () => {
   it("parses direct text nodes into paragraph blocks", () => {
-    const parsed = parseSe2Blocks("plain legacy text")
+    const parsed = parseSe2Blocks("plain classic text")
 
-    expect(parsed.blocks).toEqual([{ type: "paragraph", text: "plain legacy text" }])
-    expect(parsed.tags).toEqual(["legacy", "archive"])
+    expect(parsed.blocks).toEqual([{ type: "paragraph", text: "plain classic text" }])
+    expect(parsed.tags).toEqual(["classic", "archive"])
   })
 
   it("skips blank text nodes", () => {

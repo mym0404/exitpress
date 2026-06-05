@@ -28,6 +28,7 @@ import {
 } from "../../src/exporting/paths/PostLinkRewriter.js"
 import { ensureDir, resolveRepoPath } from "../../src/infra/node/FilePathUtils.js"
 import { NaverBlogFetcher } from "../../src/integrations/naver-blog/NaverBlogFetcher.js"
+import { convertAstParsedPostToTemplatePost } from "../../src/markdown/AstRenderInputAdapter.js"
 import { renderMarkdownPost } from "../../src/markdown/MarkdownRenderer.js"
 import { parsePostHtmlWithBlockEvidence } from "../../src/parsing/naver-blog/core/PostParser.js"
 import { NaverBlog } from "../../src/parsing/naver-blog/NaverBlog.js"
@@ -90,9 +91,7 @@ const readEvidenceOptions = async (optionsPath: string | undefined) => {
       })
     : createDefaultEvidenceOptions()
 
-  return cloneExportOptions(options, {
-    blockOutputDefinitions: new NaverBlog().getBlockOutputDefinitions(),
-  })
+  return cloneExportOptions(options)
 }
 
 const createRemoteAssetRecord = ({
@@ -239,34 +238,34 @@ const renderEvidenceMarkdown = async ({
     parsedPost,
     target,
   })
-  const renderOptions = cloneExportOptions(
-    {
-      ...options,
-      frontmatter: {
-        ...options.frontmatter,
-        enabled: target.kind === "post" ? options.frontmatter.enabled : false,
-      },
-      assets: {
-        ...options.assets,
-        thumbnailSource: target.kind === "post" ? options.assets.thumbnailSource : "none",
-      },
+  const renderOptions = cloneExportOptions({
+    ...options,
+    frontmatter: {
+      ...options.frontmatter,
+      enabled: target.kind === "post" ? options.frontmatter.enabled : false,
     },
-    {
-      blockOutputDefinitions: new NaverBlog().getBlockOutputDefinitions(),
+    assets: {
+      ...options.assets,
+      thumbnailSource: target.kind === "post" ? options.assets.thumbnailSource : "none",
     },
-  )
+  })
   const assetStore = new AssetStore({
     outputDir,
     downloader: fetcher,
     options: renderOptions,
   })
+  const templatePost = convertAstParsedPostToTemplatePost({
+    parsedPost: targetParsedPost,
+    blockOutputs: renderOptions.blockOutputs,
+    assets: renderOptions.assets,
+    resolveLinkUrl,
+  })
   const rendered = await renderMarkdownPost({
     post,
     category,
-    parsedPost: targetParsedPost,
+    parsedPost: templatePost,
     markdownFilePath,
     options: renderOptions,
-    resolveLinkUrl,
     resolveAsset:
       renderOptions.assets.imageHandlingMode === "remote" ||
       (!renderOptions.assets.downloadImages && !renderOptions.assets.downloadThumbnails)

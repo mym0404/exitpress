@@ -1,5 +1,3 @@
-import type { BlockOutputSelection } from "../ast/Types.js"
-
 type CategorySelectionMode = "selected-and-descendants" | "exact-selected"
 
 export type SlugStyle = "kebab" | "snake" | "keep-title"
@@ -61,9 +59,7 @@ export type ExportOptions = {
     aliases: Record<FrontmatterFieldName, string>
   }
   blockOutputs: {
-    defaults: Partial<{
-      [Key in string]: BlockOutputSelection
-    }>
+    templates: Partial<Record<string, string>>
   }
   assets: {
     imageHandlingMode: ImageHandlingMode

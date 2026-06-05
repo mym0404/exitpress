@@ -10,6 +10,7 @@ import type { buildPostLinkTargets } from "../paths/PostLinkRewriter.js"
 
 import { ensureDir } from "../../infra/node/FilePathUtils.js"
 import { throwIfAborted } from "../../infra/runtime/AbortOperation.js"
+import { convertAstParsedPostToTemplatePost } from "../../markdown/AstRenderInputAdapter.js"
 import { renderMarkdownPost } from "../../markdown/MarkdownRenderer.js"
 import { parsePostHtml } from "../../parsing/naver-blog/core/PostParser.js"
 import { createPostUploadSummary } from "../manifest/ExportManifestProgress.js"
@@ -71,14 +72,19 @@ export const exportPostUnit = async ({
       resolveLinkUrl,
     },
   })
+  const templatePost = convertAstParsedPostToTemplatePost({
+    parsedPost,
+    blockOutputs: options.blockOutputs,
+    assets: options.assets,
+    resolveLinkUrl,
+  })
   const rendered = await renderMarkdownPost({
     post,
     category,
-    parsedPost,
+    parsedPost: templatePost,
     markdownFilePath,
     options,
     resolveAsset: async (input) => assetStore.saveAsset(input),
-    resolveLinkUrl,
   })
 
   throwIfAborted(abortSignal)

@@ -8,12 +8,14 @@ category: Review PS Vita
 categoryPath:
   - PS Vita
   - Review PS Vita
-thumbnail: https://mblogthumb-phinf.pstatic.net/MjAxODA2MDNfMjI1/MDAxNTI4MDM0NTQwNTg5.ERq5Wa-BGkly6OymiT-ruEFUigr43NXjjd25J1hXNxkg.yrCSnvvU0niyVKTC8_BINfqjLWi0g4QZoDashAlpHVgg.JPEG.is02019/2017-11-18-210621.jpg?type=w800
+thumbnail: https://mblogthumb-phinf.pstatic.net/MjAxODA2MDNfMjI1/MDAxNTI4MDM0NTQwNTg5.ERq5Wa-BGkly6OymiT-ruEFUigr43NXjjd25J1hXNxkg.yrCSnvvU0niyVKTC8_BINfqjLWi0g4QZoDashAlpHVgg.JPEG.is02019/2017-11-18-210621.jpg?type=w
 ---
 
-![](https://mblogthumb-phinf.pstatic.net/MjAxODA2MDNfMTY5/MDAxNTI4MDM0NTMyODQw.rjygL-4CrrRFzO2-6HXk_gKajGqAh-2naXSBa6Ymaj0g.CH2CdbfTHTLCrZvQF-FIuCiUXuCPeSP66PXdkG9VKEgg.JPEG.is02019/image_8875983951528028610005.jpg?type=w800)
+![](https://mblogthumb-phinf.pstatic.net/MjAxODA2MDNfMTY5/MDAxNTI4MDM0NTMyODQw.rjygL-4CrrRFzO2-6HXk_gKajGqAh-2naXSBa6Ymaj0g.CH2CdbfTHTLCrZvQF-FIuCiUXuCPeSP66PXdkG9VKEgg.JPEG.is02019/image_8875983951528028610005.jpg?type=w)
 
 건담 브레이커 3 브레이크 에디션
+
+##### 건담 브레이커 3 브레이크 에디션
 
 | Gundam Breaker 3 BREAK EDITION |
 | --- |
@@ -32,11 +34,11 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/MjAxODA2MDNfMjI1/MDAxNTI4MDM0NTQ
 
 > 이 게임은...
 
-![](https://mblogthumb-phinf.pstatic.net/MjAxODA2MDNfMjk2/MDAxNTI4MDM0NTMzODE1.u6z0h0_4_ZaAFflvsnEfI-9juSAH1W75_mUGKWSu2U0g.rQ58_ox1V8Kuc2qTUFX4MAtIqd0JMAJvdTZt_8v4MqAg.JPEG.is02019/image_682969181528028609989.jpg?type=w800)
+![](https://mblogthumb-phinf.pstatic.net/MjAxODA2MDNfMjk2/MDAxNTI4MDM0NTMzODE1.u6z0h0_4_ZaAFflvsnEfI-9juSAH1W75_mUGKWSu2U0g.rQ58_ox1V8Kuc2qTUFX4MAtIqd0JMAJvdTZt_8v4MqAg.JPEG.is02019/image_682969181528028609989.jpg?type=w)
 
 건담 브레이커 3 브레이크 에디션은 한국 2016년 3월 3일에 출시한 **건담 브레이커 3**을 DLC 합본판 DL게임입니다. 건담무쌍 시리즈와 건담 버서스하고는 차별화된 점이며 이 게임의 대표적인 특징은 게임 중 얻은 부품으로 자신만의 기체를 만들어 플레이할 수 있다는 점이 건덕들을 열광하게 한 특징입니다. 건담 브레이커3는 **퍼스트 건담**부터 **철혈의** **오펀스**까지 **MS(모빌슈트)**파츠가 등장하여 올드팬들과 신규 팬들 양쪽 다 만족할 게임입니다.
 
-![](https://mblogthumb-phinf.pstatic.net/MjAxODA2MDNfMyAg/MDAxNTI4MDM0NTM0NjM2.xMy_WTBLRpzH8dOJCX15hL2csJiukNDpI7-9FNwFVscg.eKMM-kQveJhbgByaQrIig1MFpBdHeejCC72IP6YzUXkg.JPEG.is02019/image_3695535571528028609980.jpg?type=w800)
+![](https://mblogthumb-phinf.pstatic.net/MjAxODA2MDNfMyAg/MDAxNTI4MDM0NTM0NjM2.xMy_WTBLRpzH8dOJCX15hL2csJiukNDpI7-9FNwFVscg.eKMM-kQveJhbgByaQrIig1MFpBdHeejCC72IP6YzUXkg.JPEG.is02019/image_3695535571528028609980.jpg?type=w)
 
 | 우주 엘리베이터가 완성된지 1년.어느 게임센터에서 놀고있던 당신은 미사라는 소녀를 알게 된다. 『우리 아야토 상점가 건프라 팀에 너를 스카우트 하고 싶어!』 미사가 사는 지역은 오래된 상점가.그녀는 이 아야토 상점가를 부흥시키기 위해 건프라 팀으로 홍보에 나서려고 한다.미사와 당신은 지역 대회부터 전국 대회까지의 여정을 함께하게 되는데… |
 | --- |
@@ -45,11 +47,11 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/MjAxODA2MDNfMjI1/MDAxNTI4MDM0NTQ
 
 > 비주얼
 
-![](https://mblogthumb-phinf.pstatic.net/MjAxODA2MDNfNjEg/MDAxNTI4MDM0NTM2NjMy.sOrUNdscvZdmAJrB8t-XHDoSTe3-UmC4Ur9G13yhwNEg.9Q213OdHdflfTNiYYnX_XN8buHqHYfoozz6XI65u9YUg.JPEG.is02019/image_2452255651528029967681.jpg?type=w800)
+![](https://mblogthumb-phinf.pstatic.net/MjAxODA2MDNfNjEg/MDAxNTI4MDM0NTM2NjMy.sOrUNdscvZdmAJrB8t-XHDoSTe3-UmC4Ur9G13yhwNEg.9Q213OdHdflfTNiYYnX_XN8buHqHYfoozz6XI65u9YUg.JPEG.is02019/image_2452255651528029967681.jpg?type=w)
 
 **게임 그래픽**은 제가 본 PS Vita 게임 중 상위권에 해당하며 PS Vita의 성능을 끝까지 보여준 게임입니다. 개인적인 생각이지만 PS4와 비교를 해도 큰 차이는 안 보여주는듯합니다. 하지만 높은 시각적인 퀄리티를 보여주는 대신에 잃은 것이 있습니다.
 
-![](https://mblogthumb-phinf.pstatic.net/MjAxODA2MDNfMTY1/MDAxNTI4MDM0NTM3MzAx.yoQlwDB8peMIywvp01-Yqfb80bso4w2bW3Ef95IkarQg.O6oXRCDICvzQnMIdKDh8T48jOvoMCk1hlfweUbRL9Jog.JPEG.is02019/image_8135999361528030895681.jpg?type=w800)
+![](https://mblogthumb-phinf.pstatic.net/MjAxODA2MDNfMTY1/MDAxNTI4MDM0NTM3MzAx.yoQlwDB8peMIywvp01-Yqfb80bso4w2bW3Ef95IkarQg.O6oXRCDICvzQnMIdKDh8T48jOvoMCk1hlfweUbRL9Jog.JPEG.is02019/image_8135999361528030895681.jpg?type=w)
 
 첫번째 **프레임드랍**이 굉장히 심한 모습을 보여줍니다. 30프레임조차도 잘 유지되지 않으면 심할 때는 10프레임 정도로 보이는 모습을 자주 보여주어 게임 플레이 시 불편함이 자주 발생합니다.  
 두번째는 너무 작은 **텍스트** **크기** 입니다. PS4에 사용하던 UI를 그대로 가지고 온것인지 보여주는 텍스트의 크기가 너무 작아서 보기에 불편했습니다. 그래서 이런 불편함 때문에 저는 **PS TV**(Vita TV)로 자주 플레이 했습니다.  
@@ -61,19 +63,21 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/MjAxODA2MDNfMjI1/MDAxNTI4MDM0NTQ
 
 > 게임진행
 
-![](https://mblogthumb-phinf.pstatic.net/MjAxODA2MDNfOTEg/MDAxNTI4MDM0NTM4MjM2.nRCN3I9qsUX6zy2hTBZk-NpaPAZHQFScRdaqmqWJBiYg.By1Kx-DBv8lPy7yPMRP6r-8K0Oyo1Eo-2HJ0OlQqScEg.JPEG.is02019/image_2034999841528031549065.jpg?type=w800)
+![](https://mblogthumb-phinf.pstatic.net/MjAxODA2MDNfOTEg/MDAxNTI4MDM0NTM4MjM2.nRCN3I9qsUX6zy2hTBZk-NpaPAZHQFScRdaqmqWJBiYg.By1Kx-DBv8lPy7yPMRP6r-8K0Oyo1Eo-2HJ0OlQqScEg.JPEG.is02019/image_2034999841528031549065.jpg?type=w)
 
 게임 진행은 플레이어가 만든 **건프라**(건담 프라모델)로 배틀에 참가해 상대 건프라와 싸우며 얻은 파츠를 획득해서 새로운 건프라를 만들고 더 강한 상대에게 도전하는 진행 방식입니다. 단순하지만 단순한 만큼 반복적이며 강한 상대라고 해도 대부분 체력 게이지만 올려놓은 적들이 많습니다. 하다 보면 게임 자체보다는 건프라 만드는 것이 더 재미있었집니다. 문제는 건프라를 만들려면 단순한 체력 게이지만 높은 적과 싸우는게 아니고 시간과 싸우는 듯한 배틀 게임만 진행한다는 단점을 피할 수 없다는 것입니다.
 
-![](https://mblogthumb-phinf.pstatic.net/MjAxODA2MDNfMjIx/MDAxNTI4MDM0NzIxMjQ2.Ejz-1s8c8xE_94CbgoTmSsqwZNf7_RNriGCn2KbUqw0g.wituqqaR9EHmFboTLydlbIncksfW6yKjxIK6aiUewNEg.JPEG.is02019/image_8343243381528033225046.jpg?type=w800)
+![](https://mblogthumb-phinf.pstatic.net/MjAxODA2MDNfMjIx/MDAxNTI4MDM0NzIxMjQ2.Ejz-1s8c8xE_94CbgoTmSsqwZNf7_RNriGCn2KbUqw0g.wituqqaR9EHmFboTLydlbIncksfW6yKjxIK6aiUewNEg.JPEG.is02019/image_8343243381528033225046.jpg?type=w)
 
 라고 말했지만 **커스터마이징**이 매우 뛰어나며 자신만의 창작 건프라 제작이 가능하다는 것이 지루한 게임을 계속 잡고 해주는 추진력이 됩니다. 존재하는 건프라는 물론 건프라 바리에이션, 창작 건프라, 그리고 용자물까지 제작이 가능합니다. 한정적인 게임에 커스터마이징 하나는 자유도가 매우 높습니다.
 
 > 이 게임은...
 
-![](https://mblogthumb-phinf.pstatic.net/MjAxODA2MDNfNjAg/MDAxNTI4MDM0NTM5OTAz.JHn9qNpDNFQ1cvJ1pFyAksgC1BbMSSJlZCu3k3e04gUg.c1whYXLD7eSb1LC16OZpvKAkOpaS9bKoIeUTgyrhmAQg.JPEG.is02019/image_9068091111528032549607.jpg?type=w800)
+![](https://mblogthumb-phinf.pstatic.net/MjAxODA2MDNfNjAg/MDAxNTI4MDM0NTM5OTAz.JHn9qNpDNFQ1cvJ1pFyAksgC1BbMSSJlZCu3k3e04gUg.c1whYXLD7eSb1LC16OZpvKAkOpaS9bKoIeUTgyrhmAQg.JPEG.is02019/image_9068091111528032549607.jpg?type=w)
 
 평가하기 전에 잠깐!
+
+###### 평가하기 전에 잠깐!
 
 \- 건담 브레이커 시리즈의 세 번째 게임.  
 \- 건담 마니아들의 위한 건프라 배틀  
@@ -95,7 +99,7 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/MjAxODA2MDNfMjI1/MDAxNTI4MDM0NTQ
 
 > 후기
 
-![](https://mblogthumb-phinf.pstatic.net/MjAxODA2MDNfMjI1/MDAxNTI4MDM0NTQwNTg5.ERq5Wa-BGkly6OymiT-ruEFUigr43NXjjd25J1hXNxkg.yrCSnvvU0niyVKTC8_BINfqjLWi0g4QZoDashAlpHVgg.JPEG.is02019/image_6271503691528034261850.jpg?type=w800)
+![](https://mblogthumb-phinf.pstatic.net/MjAxODA2MDNfMjI1/MDAxNTI4MDM0NTQwNTg5.ERq5Wa-BGkly6OymiT-ruEFUigr43NXjjd25J1hXNxkg.yrCSnvvU0niyVKTC8_BINfqjLWi0g4QZoDashAlpHVgg.JPEG.is02019/image_6271503691528034261850.jpg?type=w)
 
 또 리뷰를 오랜만에 하게 되었습니다. 학교 복학 이후로 리뷰를 하고 싶어도 과제와의 싸움으로 힘들어지더군요. 그래서 건담 브레이커 3 브레이크 에디션 리뷰를 늦게 작성하게 되었습니다. 늦은 리뷰 죄송합니다. 그리고 6월 21일 **뉴 건담 브레이커**가 출시 예정이니 건담을 좋아하시거나 게임에 관심 있으신 분들은 플레이 전에 건담 브레이커 3을 플레이 해보시는 것을 추천드립니다. 일반판 같은 경우는 덤핑 되어 쓰니 가격이 매우 착하더군요.  
 이상 리뷰를 마치도록 하겠습니다. 부족한 글이었지만 봐주셔서 진심으로 감사합니다.

@@ -59,9 +59,7 @@ export const inspectPostHtml = ({
   const blog = new NaverBlog()
   const editor = blog.getEditorForHtml(html)
   const parserOptions = {
-    blockOutputs: cloneExportOptions(options, {
-      blockOutputDefinitions: blog.getBlockOutputDefinitions(),
-    }).blockOutputs,
+    blockOutputs: cloneExportOptions(options).blockOutputs,
   }
 
   if (!editor) {

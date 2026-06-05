@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest"
 
 import {
   createSe4ModuleScript,
-  expectEveryBlockOutputOption,
+  expectBlockTemplateDefinition,
   parseSe4Blocks,
   parseSe4BlocksWithOptions,
 } from "../../../../../tests/support/parser-test-utils.js"
@@ -20,14 +20,6 @@ describe("NaverSe4FormulaBlock", () => {
         type: "formula",
         formula: "x^2 + y^2 = z^2",
         display: true,
-        outputSelectionKey: "naver-se4:formula",
-        outputSelection: {
-          variant: "wrapper",
-          params: {
-            inlineWrapper: "$",
-            blockWrapper: "$$",
-          },
-        },
       },
     ])
   })
@@ -44,14 +36,6 @@ describe("NaverSe4FormulaBlock", () => {
         type: "formula",
         formula: "x+y",
         display: false,
-        outputSelectionKey: "naver-se4:formula",
-        outputSelection: {
-          variant: "wrapper",
-          params: {
-            inlineWrapper: "$",
-            blockWrapper: "$$",
-          },
-        },
       },
     ])
   })
@@ -97,7 +81,7 @@ describe("NaverSe4FormulaBlock", () => {
   })
 
   it("applies every output option", () => {
-    expectEveryBlockOutputOption({
+    expectBlockTemplateDefinition({
       editorType: "naver-se4",
       blockId: "formula",
       parse: (blockOutputs) =>

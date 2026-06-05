@@ -1,14 +1,15 @@
 import YAML from "yaml"
 
-import type { ParsedPost } from "../domain/ast/Types.js"
 import type { CategoryInfo, PostSummary } from "../domain/blog/Types.js"
 import type { AssetRecord } from "../domain/export-job/Types.js"
 import type { ExportOptions, FrontmatterFieldName } from "../domain/export-options/Types.js"
+import type { ParsedPost } from "../domain/template/Types.js"
 import type { UnknownRecord } from "../shared/object/UnknownRecord.js"
 
 import { getFrontmatterExportKey } from "../domain/export-options/ExportOptions.js"
+import { resolveAssetCandidatesForRender } from "../exporting/assets/AssetCandidateResolver.js"
 
-import { renderAstMarkdown } from "./AstMarkdownRenderer.js"
+import { renderBlockTemplates } from "./BlockTemplateRenderer.js"
 
 const buildFrontmatter = ({
   fields,
@@ -54,7 +55,6 @@ export const renderMarkdownPost = async ({
   markdownFilePath,
   options,
   resolveAsset,
-  resolveLinkUrl,
 }: {
   post: PostSummary
   category: CategoryInfo
@@ -66,7 +66,6 @@ export const renderMarkdownPost = async ({
     sourceUrl: string
     markdownFilePath: string
   }) => Promise<AssetRecord>
-  resolveLinkUrl?: (url: string) => string
 }) => {
   const assetRecords: AssetRecord[] = []
   let postListThumbnailPath: string | null = null
@@ -114,19 +113,52 @@ export const renderMarkdownPost = async ({
     })
   }
 
-  const maybeRecordBodyThumbnail = (pathValue: string | null) => {
-    if (!firstBodyThumbnailPath && pathValue) {
-      firstBodyThumbnailPath = pathValue
-    }
-  }
+  const resolved = await resolveAssetCandidatesForRender({
+    renderInputs: parsedPost.renderInputs,
+    assetCandidates: parsedPost.assetCandidates,
+    resolveAsset: async ({ assetRole, sourceUrl, dedupKey: _dedupKey }) => {
+      const reference =
+        (await resolveAssetPath({
+          kind: assetRole,
+          sourceUrl,
+        })) ?? ""
 
-  const body = await renderAstMarkdown({
-    blocks: parsedPost.blocks,
-    options,
-    resolveAssetPath,
-    resolveLinkUrl,
-    recordBodyThumbnail: maybeRecordBodyThumbnail,
+      if (!reference) {
+        return {
+          reference: "",
+          record: {
+            kind: assetRole,
+            sourceUrl,
+            reference: "",
+            relativePath: null,
+            storageMode: "remote",
+            uploadCandidate: null,
+          },
+        }
+      }
+
+      const record = assetRecords.find(
+        (asset) => asset.kind === assetRole && asset.sourceUrl === sourceUrl,
+      ) ?? {
+        kind: assetRole,
+        sourceUrl,
+        reference,
+        relativePath: reference === sourceUrl ? null : reference,
+        storageMode: reference === sourceUrl ? ("remote" as const) : ("relative" as const),
+        uploadCandidate: null,
+      }
+
+      if (!firstBodyThumbnailPath && assetRole === "image" && reference) {
+        firstBodyThumbnailPath = reference
+      }
+
+      return {
+        reference,
+        record,
+      }
+    },
   })
+  const body = renderBlockTemplates(resolved.renderInputs)
 
   const thumbnailPath =
     options.assets.thumbnailSource === "none"
