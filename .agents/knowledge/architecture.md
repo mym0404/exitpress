@@ -28,7 +28,6 @@
 ## Parser Block Contract
 - Blog -> editor -> parser block routing and file layout rules live in `.agents/knowledge/parser-architecture.md`.
 - Parser block role, Container/Leaf behavior, output option ownership, and failure rules live in `.agents/knowledge/parser-blocks.md`.
-- Editor-specific behavior notes live in `.agents/knowledge/editor-se2.md`, `.agents/knowledge/editor-se3.md`, and `.agents/knowledge/editor-se4.md`.
 
 ## Important Seams
 - Parser block changes usually touch `BaseBlock.outputOptions`, an editor's `supportedBlocks`, `src/parsing/naver-blog/se*/*`, and focused parser tests.

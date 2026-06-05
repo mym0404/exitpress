@@ -30,14 +30,6 @@
 - `mise exec -- pnpm start`: builds UI and serves `dist/client` through `src/Server.ts`.
 - `bun scripts/maintenance/update-open-pr-branches.ts --help`: GitHub PR branch update CLI surface check. `mise exec -- pnpm gh:update-branches` changes remote PR branches through `gh pr update-branch`.
 - `bun scripts/post-evidence/capture-post-evidence.ts --help`: post evidence CLI surface check. Live smoke cases may open Playwright and Naver mobile pages. Evidence section behavior is documented in `.agents/knowledge/post-evidence.md`.
-- `bun .agents/skills/ingest-blog/scripts/collect-blog-errors.ts --help`: parser coverage ingest CLI surface check. Ingest workflow behavior is documented in `.agents/knowledge/ingest-blog.md`.
-
-## Ingest Blog PR Gate
-- Before each `ingest-blog` support-unit PR, run `mise exec -- pnpm check:fmt`, `mise exec -- pnpm check:lint`, `mise exec -- pnpm typecheck`, `mise exec -- pnpm test:coverage`, `mise exec -- pnpm smoke:ui`, and `mise exec -- pnpm check:unused`.
-- `mise exec -- pnpm check:fmt`, `mise exec -- pnpm check:lint`, `mise exec -- pnpm typecheck`, `mise exec -- pnpm test:coverage`, and `mise exec -- pnpm smoke:ui` mirror the non-draft PR CI checks.
-- `mise exec -- pnpm check:unused` is an extra local source/test/script dead-code gate and is not part of CI.
-- Do not add `mise exec -- pnpm check:local` to this gate because format, lint, typecheck, and coverage commands cover the relevant CI checks directly.
-- Network e2e is required only when live fetch, live resume, or upload behavior changes.
 
 ## Parser Block Unit Test
 - Parser block specs live beside parser block implementations under `src/parsing/naver-blog/se2/blocks/*`, `src/parsing/naver-blog/se3/blocks/*`, and `src/parsing/naver-blog/se4/blocks/*`.

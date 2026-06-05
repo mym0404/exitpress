@@ -3,7 +3,6 @@
 ## Scope
 - 이 문서는 Naver Blog HTML이 editor별 parser block을 거쳐 parser node와 template render input이 되는 구조를 설명한다.
 - Parser block 자체의 계약과 Container/Leaf 개념은 `.agents/knowledge/parser-blocks.md`를 따른다.
-- 에디터별 동작 차이는 `.agents/knowledge/editor-se2.md`, `.agents/knowledge/editor-se3.md`, `.agents/knowledge/editor-se4.md`를 따른다.
 
 ## Routing Flow
 - `src/parsing/naver-blog/core/PostParser.ts`가 Cheerio로 HTML을 읽고, 태그를 추출한 뒤 `NaverBlog.parsePost()`에 넘긴다.
@@ -24,7 +23,7 @@
 - SE2는 loose legacy DOM을 대상으로 하고, wrapper를 풀어 child block을 다시 처리하는 경로가 있다.
 - SE3는 component 단위 구조를 대상으로 하는 leaf block 중심 parser다.
 - SE4는 component metadata와 class fallback을 함께 써서 module context를 parser block에 전달한다.
-- 구체 selector, module field, block ordering은 editor implementation과 focused specs에서 확인한다.
+- 구체 selector, module field, block ordering, 에디터별 예외는 editor implementation과 focused specs에서 확인한다.
 
 ## Parser Output Boundary
 - 공용 parser node 타입 문자열은 `src/domain/parser/Types.ts`의 `ParserBlockNode` union이 기준이다.
