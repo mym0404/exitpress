@@ -48,4 +48,4 @@
 - `강제로 불러오기` invalidates the scan cache for the current blog input.
 - UI bootstrap reads the last `outputDir` and its `manifest.json` to recover prior job state.
 - `running`, `upload`, and `result` stages share the same result table surface.
-- DOM/test hooks such as `data-step-view`, `#blogIdOrUrl`, `#scan-button`, `#export-button`, `#job-file-tree`, `[data-job-filter]`, `#summary`, `#status-text`, and `#logs` are part of the UI regression contract.
+- UI regression hooks for wizard steps, job status, summary, logs, and the result table are owned by UI unit tests and e2e scenarios; keep exact selector inventories in tests.

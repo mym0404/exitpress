@@ -94,5 +94,6 @@
 ## Knowledge System
 - 루트 `AGENTS.md`는 agent entry와 지식 라우터 역할을 맡고, 영속 지식은 `.agents/knowledge/*`에 둔다.
 - 프로젝트 구조, runtime entrypoint, 검증 명령, ownership boundary, 문서화된 동작이 바뀌면 같은 변경에서 루트 `AGENTS.md`와 관련 `.agents/knowledge/*` 문서를 함께 갱신한다.
+- 작업별 범위, 성공 기준, 임시 제약, 선호, 예시는 사용자가 일반 지식으로 저장하라고 명시했거나 저장소 변경으로 현재 사실이 된 경우에만 영속 지식으로 남긴다.
 - 현재 repository knowledge는 기존 상태를 설명한다. 의도된 기능 변경이나 구조 변경을 거절하는 근거로 단독 사용하지 않는다.
 - Knowledge는 전체 코드 목록을 복제하지 않고 오래 유지되는 책임 경계, 운영 계약, 검증 기준만 담는다.

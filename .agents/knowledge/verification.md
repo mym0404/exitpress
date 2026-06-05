@@ -49,12 +49,8 @@
 
 ## Unused Code Verification
 - `pnpm check:unused` succeeds only when `scripts/maintenance/check-unused.ts` reports no unresolved `knip`, `tsc noUnused`, or `tsserver` unused diagnostics.
-- `knip` runs with `--include files,exports,types,nsExports,nsTypes,enumMembers,namespaceMembers,duplicates --no-progress`.
-- `tsc noUnused` runs `tsc -p tsconfig.json --noEmit --noUnusedLocals --noUnusedParameters --pretty false`.
-- `tsserver` opens `src/Server.ts`, reads the configured project file list with `projectInfo`, then checks `src`, `tests`, and `scripts` TypeScript files with `semanticDiagnosticsSync` and `suggestionDiagnosticsSync`.
-- The unused script filters tsserver diagnostics to TypeScript unused diagnostic codes: `6133`, `6138`, `6192`, `6196`, `6198`, `6199`.
-- Static false positives are allowed only inside `scripts/maintenance/check-unused.ts` allowlists when the file or export is a real runtime entrypoint that static analysis cannot see.
-- Exact allowlisted file and export entrypoints live in `scripts/maintenance/check-unused.ts`.
+- The command combines `knip`, TypeScript no-unused diagnostics, and tsserver diagnostics; exact analyzer flags and allowlists live in `scripts/maintenance/check-unused.ts`.
+- Static false positives are allowed only inside that script when the file or export is a real runtime entrypoint that static analysis cannot see.
 - The command covers source/test/script dead code. It does not check unused package dependencies because the `knip` invocation intentionally excludes dependency categories.
 - A syntax or type error in the TypeScript project can make `check:unused` fail before dead-code cleanup is meaningful; restore the type baseline first, then interpret unused diagnostics.
 
