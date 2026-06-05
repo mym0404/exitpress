@@ -15,7 +15,6 @@ import { Badge } from "../../components/ui/Badge.js"
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "../../components/ui/Card.js"
@@ -175,19 +174,21 @@ const StoryPreview = ({ story }: { story: ParserStory }) => {
 
   return (
     <section className="grid gap-4" data-active-parser-story={story.storyKey}>
-      <Card variant="panel" className="overflow-hidden">
-        <CardHeader className="flex-row items-start justify-between gap-4 p-4">
-          <div className="grid min-w-0 gap-1">
-            <CardTitle className="text-xl tracking-normal">{story.blockLabel}</CardTitle>
-            <CardDescription>
-              {story.editorLabel} / {story.blockId}
-            </CardDescription>
-          </div>
-          <Badge variant={story.group === "auxiliary" ? "idle" : "running"}>
-            {story.group === "auxiliary" ? "Auxiliary" : "Output"}
-          </Badge>
-        </CardHeader>
-      </Card>
+      <div
+        className="flex flex-wrap items-center gap-2"
+        aria-label="선택된 parser story"
+        data-parser-story-summary="true"
+      >
+        <Badge variant="secondary" className="px-3 py-1 text-sm">
+          {story.blockLabel}
+        </Badge>
+        <Badge variant="outline" className="px-3 py-1 text-sm">
+          {story.editorLabel} / {story.blockId}
+        </Badge>
+        <Badge variant={story.group === "auxiliary" ? "idle" : "running"} className="px-3 py-1">
+          {story.group === "auxiliary" ? "Auxiliary" : "Output"}
+        </Badge>
+      </div>
 
       <div className="grid gap-4 xl:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">
         <CodePanel title="Input HTML">{story.inputHtml}</CodePanel>

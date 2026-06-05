@@ -40,6 +40,9 @@ describe("App storybook route", () => {
     expect(se4DocumentTitle?.compareDocumentPosition(se4Formula as Node)).toBe(
       Node.DOCUMENT_POSITION_FOLLOWING,
     )
+    const storySummary = document.querySelector("[data-parser-story-summary='true']")
+
+    expect(storySummary).toHaveTextContent("SmartEditor 4 / documentTitle")
     expect(screen.getByText("SmartEditor 4 / documentTitle")).toBeInTheDocument()
     expect(screen.queryByText(/path 0/)).toBeNull()
     expect(screen.getByText("Input HTML")).toBeInTheDocument()
