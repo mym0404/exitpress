@@ -1,13 +1,13 @@
-import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/BaseBlock.js"
+import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/ParserBlock.js"
 
 import { tableTemplate } from "../../../../domain/template/DefaultTemplates.js"
 import { parseHtmlTable } from "../../common/parseHtmlTable.js"
-import { LeafBlock } from "../../core/BaseBlock.js"
 import { createTableBlock } from "../../core/ParsedBlockOutput.js"
+import { LeafParserBlock } from "../../core/ParserBlock.js"
 
 import { findInComponentRoot } from "./util/ComponentBoundary.js"
 
-export class NaverSe3TableBlock extends LeafBlock {
+export class NaverSe3TableBlock extends LeafParserBlock {
   override readonly id = "table"
   override readonly label = "표"
   override readonly templateDefinition = {
@@ -33,7 +33,7 @@ export class NaverSe3TableBlock extends LeafBlock {
     )
   }
 
-  override convert({ $, $node, blockId }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ $, $node, blockId }: Parameters<LeafParserBlock["convert"]>[0]) {
     const table = findInComponentRoot({ $, $component: $node, selector: "table" }).first()
     const parsedTable = parseHtmlTable({ $, table })
 

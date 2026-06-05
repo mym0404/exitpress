@@ -1,12 +1,12 @@
 import type { CheerioAPI } from "cheerio"
 
 import type { ImageData } from "../../../../domain/parser/Types.js"
-import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/BaseBlock.js"
+import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/ParserBlock.js"
 
 import { normalizeAssetUrl } from "../../../../domain/blog/NaverUrl.js"
 import { compactText } from "../../../../shared/text/TextUtils.js"
-import { LeafBlock } from "../../core/BaseBlock.js"
 import { createImageBlocks } from "../../core/ParsedBlockOutput.js"
+import { LeafParserBlock } from "../../core/ParserBlock.js"
 
 const standaloneImageSelector = "img, [thumburl]"
 const standaloneRootImageSelector = "img.fx, img._postImage, [thumburl]"
@@ -47,7 +47,7 @@ const getStandaloneImages = ({
   return textWithoutImages ? [] : images
 }
 
-export class NaverSe2ImageBlock extends LeafBlock {
+export class NaverSe2ImageBlock extends LeafParserBlock {
   override readonly id = "image"
   override readonly label = "이미지"
   override readonly templateDefinition = {
@@ -70,7 +70,7 @@ export class NaverSe2ImageBlock extends LeafBlock {
     return node.type === "tag" && getStandaloneImages({ $, element: $node }).length > 0
   }
 
-  override convert({ $, $node, options, blockId }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ $, $node, options, blockId }: Parameters<LeafParserBlock["convert"]>[0]) {
     const standaloneImages = getStandaloneImages({ $, element: $node })
 
     return createImageBlocks({ blockId, images: standaloneImages, options })

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 
-import { renderBlockTemplates } from "./BlockTemplateRenderer.js"
+import { renderBlockTemplates } from "./renderBlockTemplates.js"
 
 describe("renderBlockTemplates", () => {
   it("renders plain text and expressions from props", () => {

@@ -10,7 +10,7 @@ import { defaultExportOptions } from "../../../../src/domain/export-options/Expo
 import { getCategoryForPost } from "../../../../src/exporting/paths/ExportPaths.js"
 import { ensureDir, resolveRepoPath } from "../../../../src/infra/node/FilePathUtils.js"
 import { NaverBlogFetcher } from "../../../../src/integrations/naver-blog/NaverBlogFetcher.js"
-import { renderMarkdownPost } from "../../../../src/markdown/MarkdownRenderer.js"
+import { renderMarkdownPost } from "../../../../src/markdown/utils/renderMarkdownPost.js"
 import { parsePostHtml } from "../../../../src/parsing/naver-blog/core/PostParser.js"
 import { createNaverBlogDefaultBlockTemplateMap } from "../../../../src/parsing/naver-blog/NaverBlog.js"
 import { toErrorMessage } from "../../../../src/shared/error/ErrorUtils.js"

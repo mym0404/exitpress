@@ -1,10 +1,10 @@
 import type { UnknownRecord } from "../../../../shared/object/UnknownRecord.js"
-import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/BaseBlock.js"
+import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/ParserBlock.js"
 
 import { compactText } from "../../../../shared/text/TextUtils.js"
 import { createLinkParagraphBlocks } from "../../common/LinkParagraph.js"
-import { LeafBlock } from "../../core/BaseBlock.js"
 import { createParagraphBlock } from "../../core/ParsedBlockOutput.js"
+import { LeafParserBlock } from "../../core/ParserBlock.js"
 
 const readString = (record: UnknownRecord | undefined, key: string) => {
   const value = record?.[key]
@@ -15,7 +15,7 @@ const readString = (record: UnknownRecord | undefined, key: string) => {
 const isRecord = (value: unknown): value is UnknownRecord =>
   typeof value === "object" && value !== null && !Array.isArray(value)
 
-export class NaverSe4ScheduleBlock extends LeafBlock {
+export class NaverSe4ScheduleBlock extends LeafParserBlock {
   override readonly id = "schedule"
   override readonly label = "일정"
   override readonly templateDefinition = {
@@ -30,7 +30,12 @@ export class NaverSe4ScheduleBlock extends LeafBlock {
     return moduleType === "v2_schedule" || $node.hasClass("se-schedule")
   }
 
-  override convert({ $node, moduleData, blockId, options }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({
+    $node,
+    moduleData,
+    blockId,
+    options,
+  }: Parameters<LeafParserBlock["convert"]>[0]) {
     const data = isRecord(moduleData?.data) ? moduleData.data : undefined
     const title = compactText($node.find(".se-schedule-title-text").first().text())
     const url = $node.find("a.se-schedule-url[href]").first().attr("href") ?? ""

@@ -2,7 +2,7 @@ import { load } from "cheerio"
 
 import type { ParserBlockOptions } from "../../../domain/parser/Types.js"
 
-import type { ParserBlockSourceEvidence } from "./BaseEditorTypes.js"
+import type { ParserBlockParseEvidence } from "./ParserBlockDiagnostics.js"
 
 import { unique } from "../../../shared/collection/CollectionUtils.js"
 import { NaverBlog } from "../NaverBlog.js"
@@ -37,7 +37,7 @@ export const parsePostHtml = ({
 }
 
 type ParsedPostWithBlockEvidence = ReturnType<typeof parsePostHtml> & {
-  blockEvidence: ParserBlockSourceEvidence[]
+  blockEvidence: ParserBlockParseEvidence[]
 }
 
 export const parsePostHtmlWithBlockEvidence = ({
@@ -51,14 +51,14 @@ export const parsePostHtmlWithBlockEvidence = ({
 }): ParsedPostWithBlockEvidence => {
   const $ = load(html)
   const tags = extractPostTags($)
-  const blockEvidence: ParserBlockSourceEvidence[] = []
+  const blockEvidence: ParserBlockParseEvidence[] = []
   const parsedPost = new NaverBlog().parsePost({
     $,
     html,
     sourceUrl,
     tags,
     options,
-    captureBlockEvidence: (evidence) => {
+    captureBlockParseEvidence: (evidence) => {
       blockEvidence.push(evidence)
     },
   })

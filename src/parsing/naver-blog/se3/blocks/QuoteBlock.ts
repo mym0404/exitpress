@@ -1,12 +1,12 @@
-import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/BaseBlock.js"
+import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/ParserBlock.js"
 
-import { convertHtmlToMarkdown } from "../../../../markdown/TurndownMarkdownConverter.js"
-import { LeafBlock } from "../../core/BaseBlock.js"
+import { convertHtmlToMarkdown } from "../../../../markdown/utils/convertHtmlToMarkdown.js"
 import { createQuoteBlock } from "../../core/ParsedBlockOutput.js"
+import { LeafParserBlock } from "../../core/ParserBlock.js"
 
 import { findInComponentRoot } from "./util/ComponentBoundary.js"
 
-export class NaverSe3QuoteBlock extends LeafBlock {
+export class NaverSe3QuoteBlock extends LeafParserBlock {
   override readonly id = "quote"
   override readonly label = "인용문"
   override readonly templateDefinition = {
@@ -30,7 +30,7 @@ export class NaverSe3QuoteBlock extends LeafBlock {
     )
   }
 
-  override convert({ $, $node, options, blockId }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ $, $node, options, blockId }: Parameters<LeafParserBlock["convert"]>[0]) {
     const blockquote = findInComponentRoot({ $, $component: $node, selector: "blockquote" }).first()
     const markdown = convertHtmlToMarkdown({
       /* v8 ignore next */

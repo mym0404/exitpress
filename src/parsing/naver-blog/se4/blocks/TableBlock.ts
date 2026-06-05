@@ -1,11 +1,11 @@
-import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/BaseBlock.js"
+import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/ParserBlock.js"
 
 import { tableTemplate } from "../../../../domain/template/DefaultTemplates.js"
 import { parseHtmlTable } from "../../common/parseHtmlTable.js"
-import { LeafBlock } from "../../core/BaseBlock.js"
 import { createTableBlock } from "../../core/ParsedBlockOutput.js"
+import { LeafParserBlock } from "../../core/ParserBlock.js"
 
-export class NaverSe4TableBlock extends LeafBlock {
+export class NaverSe4TableBlock extends LeafParserBlock {
   override readonly id = "table"
   override readonly label = "표"
   override readonly templateDefinition = {
@@ -28,7 +28,7 @@ export class NaverSe4TableBlock extends LeafBlock {
     return moduleType === "v2_table" || $node.hasClass("se-table")
   }
 
-  override convert({ $, $node, blockId }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ $, $node, blockId }: Parameters<LeafParserBlock["convert"]>[0]) {
     const table = $node.find("table").first()
 
     if (table.length === 0) {

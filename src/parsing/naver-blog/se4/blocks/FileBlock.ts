@@ -1,11 +1,11 @@
 import type { UnknownRecord } from "../../../../shared/object/UnknownRecord.js"
-import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/BaseBlock.js"
+import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/ParserBlock.js"
 
 import { compactText } from "../../../../shared/text/TextUtils.js"
 import { createLinkParagraphBlocks } from "../../common/LinkParagraph.js"
-import { LeafBlock } from "../../core/BaseBlock.js"
+import { LeafParserBlock } from "../../core/ParserBlock.js"
 
-export class NaverSe4FileBlock extends LeafBlock {
+export class NaverSe4FileBlock extends LeafParserBlock {
   override readonly id = "file"
   override readonly label = "첨부파일"
   override readonly templateDefinition = {
@@ -20,7 +20,12 @@ export class NaverSe4FileBlock extends LeafBlock {
     return moduleType === "v2_file" || $node.hasClass("se-file")
   }
 
-  override convert({ $node, moduleData, blockId, options }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({
+    $node,
+    moduleData,
+    blockId,
+    options,
+  }: Parameters<LeafParserBlock["convert"]>[0]) {
     const data = (moduleData?.data ?? {}) as UnknownRecord & {
       link?: string
     }

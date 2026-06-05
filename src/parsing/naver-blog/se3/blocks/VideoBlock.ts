@@ -1,12 +1,12 @@
 import type { AnyNode } from "domhandler"
 
 import type { UnknownRecord } from "../../../../shared/object/UnknownRecord.js"
-import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/BaseBlock.js"
+import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/ParserBlock.js"
 
 import { compactText } from "../../../../shared/text/TextUtils.js"
-import { LeafBlock } from "../../core/BaseBlock.js"
 import { parseJsonAttribute } from "../../core/JsonAttribute.js"
 import { createVideoBlock } from "../../core/ParsedBlockOutput.js"
+import { LeafParserBlock } from "../../core/ParserBlock.js"
 
 import { findInComponentRoot } from "./util/ComponentBoundary.js"
 
@@ -65,7 +65,7 @@ const getVideoModuleData = ({ $, $node }: Pick<ParserBlockContext, "$" | "$node"
   return undefined
 }
 
-export class NaverSe3VideoBlock extends LeafBlock {
+export class NaverSe3VideoBlock extends LeafParserBlock {
   override readonly id = "video"
   override readonly label = "비디오"
   override readonly templateDefinition = {
@@ -87,7 +87,12 @@ export class NaverSe3VideoBlock extends LeafBlock {
     return $node.hasClass("se_video") && $node.hasClass("default")
   }
 
-  override convert({ $, $node, sourceUrl = "", blockId }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({
+    $,
+    $node,
+    sourceUrl = "",
+    blockId,
+  }: Parameters<LeafParserBlock["convert"]>[0]) {
     const moduleData = getVideoModuleData({ $, $node })
     const data = getRecord(moduleData?.data)
     const title =

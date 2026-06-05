@@ -1,10 +1,10 @@
-import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/BaseBlock.js"
+import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/ParserBlock.js"
 
-import { LeafBlock } from "../../core/BaseBlock.js"
+import { LeafParserBlock } from "../../core/ParserBlock.js"
 
 import { parseSe4ImageGroup } from "./util/ImageCollection.js"
 
-export class NaverSe4ImageStripBlock extends LeafBlock {
+export class NaverSe4ImageStripBlock extends LeafParserBlock {
   override readonly id = "imageGroup"
   override readonly label = "이미지 스트립"
   override readonly templateDefinition = {
@@ -27,7 +27,7 @@ export class NaverSe4ImageStripBlock extends LeafBlock {
     return $node.hasClass("se-imageStrip")
   }
 
-  override convert({ $node, options, blockId }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ $node, options, blockId }: Parameters<LeafParserBlock["convert"]>[0]) {
     return parseSe4ImageGroup({ $node, options, blockId, blockName: "image strip" })
   }
 }

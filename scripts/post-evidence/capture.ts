@@ -28,7 +28,7 @@ import {
 } from "../../src/exporting/paths/PostLinkRewriter.js"
 import { ensureDir, resolveRepoPath } from "../../src/infra/node/FilePathUtils.js"
 import { NaverBlogFetcher } from "../../src/integrations/naver-blog/NaverBlogFetcher.js"
-import { renderMarkdownPost } from "../../src/markdown/MarkdownRenderer.js"
+import { renderMarkdownPost } from "../../src/markdown/utils/renderMarkdownPost.js"
 import { parsePostHtmlWithBlockEvidence } from "../../src/parsing/naver-blog/core/PostParser.js"
 import { createNaverBlogDefaultBlockTemplateMap } from "../../src/parsing/naver-blog/NaverBlog.js"
 import { NaverBlog } from "../../src/parsing/naver-blog/NaverBlog.js"

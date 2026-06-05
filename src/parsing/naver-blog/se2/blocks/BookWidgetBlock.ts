@@ -1,12 +1,12 @@
 import type { CheerioAPI } from "cheerio"
 
 import type { ImageData } from "../../../../domain/parser/Types.js"
-import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/BaseBlock.js"
+import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/ParserBlock.js"
 
 import { normalizeAssetUrl } from "../../../../domain/blog/NaverUrl.js"
 import { compactText } from "../../../../shared/text/TextUtils.js"
-import { LeafBlock } from "../../core/BaseBlock.js"
 import { createImageBlock, createParagraphBlock } from "../../core/ParsedBlockOutput.js"
+import { LeafParserBlock } from "../../core/ParserBlock.js"
 
 const parseBookWidgetBlocks = ({
   blockId,
@@ -16,7 +16,7 @@ const parseBookWidgetBlocks = ({
 }: {
   blockId: string
   element: ReturnType<CheerioAPI>
-  options: Parameters<LeafBlock["convert"]>[0]["options"]
+  options: Parameters<LeafParserBlock["convert"]>[0]["options"]
   resolveLinkUrl?: (url: string) => string
 }) => {
   /* v8 ignore next */
@@ -92,7 +92,7 @@ const parseBookWidgetBlocks = ({
   return blocks.length > 0 ? blocks : null
 }
 
-export class NaverSe2BookWidgetBlock extends LeafBlock {
+export class NaverSe2BookWidgetBlock extends LeafParserBlock {
   override readonly id = "bookWidget"
   override readonly label = "책 위젯"
   override readonly templateDefinition = {
@@ -116,7 +116,7 @@ export class NaverSe2BookWidgetBlock extends LeafBlock {
     return node.type === "tag" && $node.is('[s_type="db"][s_subtype="book"]')
   }
 
-  override convert({ $node, options, blockId }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ $node, options, blockId }: Parameters<LeafParserBlock["convert"]>[0]) {
     const blocks = parseBookWidgetBlocks({
       blockId,
       element: $node,

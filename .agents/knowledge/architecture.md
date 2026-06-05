@@ -30,7 +30,7 @@
 - Parser block role, Container/Leaf behavior, output option ownership, and failure rules live in `.agents/knowledge/parser-blocks.md`.
 
 ## Important Seams
-- Parser block changes usually touch `BaseBlock.outputOptions`, an editor's `supportedBlocks`, `src/parsing/naver-blog/se*/*`, and focused parser tests.
+- Parser block changes usually touch `ParserBlock.templateDefinition`, an editor's `supportedBlocks`, `src/parsing/naver-blog/se*/*`, and focused parser tests.
 - Parser/editor knowledge changes only when ownership, routing shape, output contract, or validation policy changes. Exact block inventories stay in code and tests.
 - Renderer or exporter output changes usually affect `tests/fixtures/samples/*/expected.md`, `src/markdown/MarkdownRenderer.spec.ts`, `src/exporting/workflow/NaverBlogExporter.spec.ts`, and UI result assumptions.
 - Job lifecycle changes usually affect `src/server/http/HttpServer.ts`, `src/server/jobs/JobStore.ts`, `src/server/jobs/ExportJobManifest.ts`, `src/ui/features/job-results/*`, and `.agents/knowledge/upload.md`.

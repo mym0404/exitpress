@@ -1,6 +1,6 @@
-import type { TemplateValue } from "../domain/template/Types.js"
+import type { TemplateValue } from "../../domain/template/Types.js"
 
-import { evaluateTemplateExpression } from "../domain/template/TemplateExpression.js"
+import { evaluateTemplateExpression } from "../../domain/template/TemplateExpression.js"
 
 const templateExpressionPattern = /\$\{([^{}]+)\}/g
 

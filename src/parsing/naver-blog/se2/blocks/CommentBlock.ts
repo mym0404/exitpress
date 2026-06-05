@@ -1,8 +1,8 @@
-import type { ParserBlockContext } from "../../core/BaseBlock.js"
+import type { ParserBlockContext } from "../../core/ParserBlock.js"
 
-import { LeafBlock } from "../../core/BaseBlock.js"
+import { LeafParserBlock } from "../../core/ParserBlock.js"
 
-export class NaverSe2CommentBlock extends LeafBlock {
+export class NaverSe2CommentBlock extends LeafParserBlock {
   override readonly id = "comment"
   override readonly label = "HTML 주석"
 

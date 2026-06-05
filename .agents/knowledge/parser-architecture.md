@@ -7,7 +7,7 @@
 ## Routing Flow
 - `src/parsing/naver-blog/core/PostParser.ts`가 Cheerio로 HTML을 읽고, 태그를 추출한 뒤 `NaverBlog.parsePost()`에 넘긴다.
 - `src/parsing/naver-blog/NaverBlog.ts`가 modern editor부터 legacy fallback까지 editor 후보를 들고 있다.
-- `src/parsing/naver-blog/core/BaseBlog.ts`는 각 editor의 `canParse()` 결과로 parser를 고른다.
+- `src/parsing/naver-blog/core/BlogParser.ts`는 각 editor의 `canParse()` 결과로 parser를 고른다.
 - 정확한 editor 판별 조건과 순서는 코드와 parser routing tests가 source of truth다.
 
 ## Ownership
@@ -33,7 +33,7 @@
 - Inspect/evidence 도구가 source path를 필요로 할 때는 별도 parser helper가 block evidence를 함께 반환한다. 이 값은 디버깅과 리포트용이며 export manifest나 Markdown 도메인 모델에 저장하지 않는다.
 
 ## File Structure Rules
-- Blog ownership은 `src/parsing/naver-blog/NaverBlog.ts`와 `src/parsing/naver-blog/core/BaseBlog.ts`에 둔다.
+- Blog ownership은 `src/parsing/naver-blog/NaverBlog.ts`와 `src/parsing/naver-blog/core/BlogParser.ts`에 둔다.
 - Editor ownership은 `src/parsing/naver-blog/se2`, `src/parsing/naver-blog/se3`, `src/parsing/naver-blog/se4`의 editor 파일에 둔다.
 - 공통 parser entrypoint와 cross-editor parser helper는 `src/parsing/naver-blog/core/*`에 둔다.
 - Storybook source definition은 `src/ui/features/storybook/data/*`에 둔다.

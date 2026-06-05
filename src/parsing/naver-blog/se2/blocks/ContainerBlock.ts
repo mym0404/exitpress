@@ -1,9 +1,9 @@
 import type { CheerioAPI } from "cheerio"
 
-import type { ParserBlockContext } from "../../core/BaseBlock.js"
+import type { ParserBlockContext } from "../../core/ParserBlock.js"
 
 import { compactText } from "../../../../shared/text/TextUtils.js"
-import { ContainerBlock } from "../../core/BaseBlock.js"
+import { ContainerParserBlock } from "../../core/ParserBlock.js"
 
 const nestedBlockContainerTags = new Set(["div", "span", "font", "strong"])
 const spacerContainerTags = new Set([
@@ -96,7 +96,7 @@ export const isSpacerBlock = ({
   return compactText(clone.text()) === ""
 }
 
-export class NaverSe2ContainerBlock extends ContainerBlock {
+export class NaverSe2ContainerBlock extends ContainerParserBlock {
   override readonly id = "container"
   override readonly label = "중첩 컨테이너"
 

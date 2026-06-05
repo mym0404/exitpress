@@ -1,8 +1,8 @@
 import type { ParsedPost } from "../../../domain/parser/Types.js"
-import type { BaseEditorParseInput } from "../core/BaseEditor.js"
+import type { BlogEditorParseInput } from "../core/BlogEditorParser.js"
 
 import { unique } from "../../../shared/collection/CollectionUtils.js"
-import { BaseEditor } from "../core/BaseEditor.js"
+import { BlogEditorParser } from "../core/BlogEditorParser.js"
 
 import { NaverSe2BookWidgetBlock } from "./blocks/BookWidgetBlock.js"
 import { NaverSe2CodeBlock } from "./blocks/CodeBlock.js"
@@ -22,7 +22,7 @@ import { NaverSe2TableBlock } from "./blocks/TableBlock.js"
 import { NaverSe2TextElementBlock } from "./blocks/TextElementBlock.js"
 import { NaverSe2TextNodeBlock } from "./blocks/TextNodeBlock.js"
 
-export class NaverBlogSE2Editor extends BaseEditor {
+export class NaverBlogSE2Editor extends BlogEditorParser {
   override readonly type = "naver-se2"
   override readonly label = "SmartEditor 2"
 
@@ -50,14 +50,19 @@ export class NaverBlogSE2Editor extends BaseEditor {
     return !html.includes('class="se-component') && !html.includes('class="se_component')
   }
 
-  override parse({ $, tags, options, captureBlockEvidence }: BaseEditorParseInput): ParsedPost {
+  override parse({
+    $,
+    tags,
+    options,
+    captureBlockParseEvidence,
+  }: BlogEditorParseInput): ParsedPost {
     const container = $("#viewTypeSelector").first()
-    const blocks = this.runBlocks({
+    const blocks = this.parseSupportedParserBlocks({
       $,
       nodes: container.contents().toArray(),
       tags,
       options,
-      captureBlockEvidence,
+      captureBlockParseEvidence,
     })
 
     return {
@@ -66,8 +71,8 @@ export class NaverBlogSE2Editor extends BaseEditor {
     } satisfies ParsedPost
   }
 
-  override inspect({ $, tags, options }: BaseEditorParseInput) {
-    return this.inspectBlocks({
+  override inspect({ $, tags, options }: BlogEditorParseInput) {
+    return this.inspectSupportedParserBlocks({
       $,
       nodes: $("#viewTypeSelector").first().contents().toArray(),
       tags,

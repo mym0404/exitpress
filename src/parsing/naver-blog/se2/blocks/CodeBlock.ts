@@ -1,9 +1,9 @@
 import type { CheerioAPI } from "cheerio"
 
-import type { ParserBlockTemplateDefinition } from "../../core/BaseBlock.js"
+import type { ParserBlockTemplateDefinition } from "../../core/ParserBlock.js"
 
-import { LeafBlock } from "../../core/BaseBlock.js"
 import { createCodeBlock } from "../../core/ParsedBlockOutput.js"
+import { LeafParserBlock } from "../../core/ParserBlock.js"
 
 const parseColorScripterCode = ({
   $,
@@ -28,7 +28,7 @@ const parseColorScripterCode = ({
   return code || undefined
 }
 
-export class NaverSe2CodeBlock extends LeafBlock {
+export class NaverSe2CodeBlock extends LeafParserBlock {
   override readonly id = "code"
   override readonly label = "코드"
   override readonly templateDefinition = {
@@ -40,7 +40,7 @@ export class NaverSe2CodeBlock extends LeafBlock {
     },
   } satisfies ParserBlockTemplateDefinition
 
-  override match({ $, $node, node }: Parameters<LeafBlock["match"]>[0]) {
+  override match({ $, $node, node }: Parameters<LeafParserBlock["match"]>[0]) {
     if (node.type !== "tag") {
       return false
     }
@@ -52,7 +52,7 @@ export class NaverSe2CodeBlock extends LeafBlock {
     return parseColorScripterCode({ $, element: $node }) !== undefined
   }
 
-  override convert({ $, $node, blockId }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ $, $node, blockId }: Parameters<LeafParserBlock["convert"]>[0]) {
     const code = parseColorScripterCode({ $, element: $node }) ?? $node.text().trimEnd()
 
     if (!code) {

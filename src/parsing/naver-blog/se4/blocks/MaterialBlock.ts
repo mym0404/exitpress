@@ -1,13 +1,13 @@
-import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/BaseBlock.js"
+import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/ParserBlock.js"
 
 import { compactText } from "../../../../shared/text/TextUtils.js"
 import { createLinkParagraphBlocks } from "../../common/LinkParagraph.js"
-import { LeafBlock } from "../../core/BaseBlock.js"
 import { parseJsonAttribute } from "../../core/JsonAttribute.js"
+import { LeafParserBlock } from "../../core/ParserBlock.js"
 
 const parseCssUrl = (value: string | undefined) => value?.match(/url\((['"]?)(.*?)\1\)/)?.[2]
 
-export class NaverSe4MaterialBlock extends LeafBlock {
+export class NaverSe4MaterialBlock extends LeafParserBlock {
   override readonly id = "material"
   override readonly label = "자료 링크"
   override readonly templateDefinition = {
@@ -22,7 +22,7 @@ export class NaverSe4MaterialBlock extends LeafBlock {
     return $node.hasClass("se-material") || $node.find(".not_sponsored_component").length > 0
   }
 
-  override convert({ $node, blockId, options }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ $node, blockId, options }: Parameters<LeafParserBlock["convert"]>[0]) {
     const customCard = $node.find(".not_sponsored_component").first()
 
     if (customCard.length > 0) {

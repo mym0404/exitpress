@@ -5,27 +5,27 @@ import type { ParsedPost } from "../../../../domain/parser/Types.js"
 
 import { parseSe2Blocks } from "../../../../../tests/support/parser-test-utils.js"
 import { defaultExportOptions } from "../../../../domain/export-options/ExportOptions.js"
-import { LeafBlock } from "../../core/BaseBlock.js"
-import { BaseEditor } from "../../core/BaseEditor.js"
+import { BlogEditorParser } from "../../core/BlogEditorParser.js"
 import { createParagraphBlock } from "../../core/ParsedBlockOutput.js"
+import { LeafParserBlock } from "../../core/ParserBlock.js"
 
 import { NaverSe2ContainerBlock } from "./ContainerBlock.js"
 import { NaverSe2TextNodeBlock } from "./TextNodeBlock.js"
 
-class CustomSectionLeafBlock extends LeafBlock {
+class CustomSectionLeafBlock extends LeafParserBlock {
   override readonly id = "customSection"
   override readonly label = "Custom section"
 
-  override match({ node }: Parameters<LeafBlock["match"]>[0]) {
+  override match({ node }: Parameters<LeafParserBlock["match"]>[0]) {
     return node.type === "tag" && node.tagName.toLowerCase() === "section"
   }
 
-  override convert({ $node, blockId }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ $node, blockId }: Parameters<LeafParserBlock["convert"]>[0]) {
     return [createParagraphBlock({ blockId, text: `custom:${$node.text().trim()}` })]
   }
 }
 
-class CustomSe2Editor extends BaseEditor {
+class CustomSe2Editor extends BlogEditorParser {
   override readonly type = "custom-se2"
   override readonly label = "Custom SE2"
 
@@ -41,7 +41,7 @@ class CustomSe2Editor extends BaseEditor {
 
   override parse(): ParsedPost {
     const $ = load(customLeafFixture)
-    const blocks = this.runBlocks({
+    const blocks = this.parseSupportedParserBlocks({
       $,
       nodes: $("#viewTypeSelector").contents().toArray(),
       tags: [],

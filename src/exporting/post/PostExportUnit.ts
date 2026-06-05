@@ -9,7 +9,7 @@ import type { buildPostLinkTargets } from "../paths/PostLinkRewriter.js"
 
 import { ensureDir } from "../../infra/node/FilePathUtils.js"
 import { throwIfAborted } from "../../infra/runtime/AbortOperation.js"
-import { renderMarkdownPost } from "../../markdown/MarkdownRenderer.js"
+import { renderMarkdownPost } from "../../markdown/utils/renderMarkdownPost.js"
 import { parsePostHtml } from "../../parsing/naver-blog/core/PostParser.js"
 import { createNaverBlogDefaultBlockTemplateMap } from "../../parsing/naver-blog/NaverBlog.js"
 import { createPostUploadSummary } from "../manifest/ExportManifestProgress.js"

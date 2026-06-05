@@ -1,10 +1,10 @@
-import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/BaseBlock.js"
+import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/ParserBlock.js"
 
 import { compactText } from "../../../../shared/text/TextUtils.js"
-import { LeafBlock } from "../../core/BaseBlock.js"
 import { createParagraphBlock } from "../../core/ParsedBlockOutput.js"
+import { LeafParserBlock } from "../../core/ParserBlock.js"
 
-export class NaverSe2TextNodeBlock extends LeafBlock {
+export class NaverSe2TextNodeBlock extends LeafParserBlock {
   override readonly id = "paragraph"
   override readonly label = "문단"
   override readonly templateDefinition = {
@@ -19,7 +19,7 @@ export class NaverSe2TextNodeBlock extends LeafBlock {
     return node.type === "text"
   }
 
-  override convert({ node, blockId }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ node, blockId }: Parameters<LeafParserBlock["convert"]>[0]) {
     /* v8 ignore next */
     const text = node.type === "text" ? compactText(node.data ?? "") : ""
 

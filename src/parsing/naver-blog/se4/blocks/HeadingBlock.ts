@@ -1,11 +1,11 @@
-import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/BaseBlock.js"
+import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/ParserBlock.js"
 
-import { convertHtmlToMarkdown } from "../../../../markdown/TurndownMarkdownConverter.js"
+import { convertHtmlToMarkdown } from "../../../../markdown/utils/convertHtmlToMarkdown.js"
 import { compactText } from "../../../../shared/text/TextUtils.js"
-import { LeafBlock } from "../../core/BaseBlock.js"
 import { createHeadingBlock } from "../../core/ParsedBlockOutput.js"
+import { LeafParserBlock } from "../../core/ParserBlock.js"
 
-export class NaverSe4HeadingBlock extends LeafBlock {
+export class NaverSe4HeadingBlock extends LeafParserBlock {
   override readonly id = "heading"
   override readonly label = "제목"
   override readonly templateDefinition = {
@@ -26,7 +26,7 @@ export class NaverSe4HeadingBlock extends LeafBlock {
     return $node.hasClass("se-sectionTitle")
   }
 
-  override convert({ $node, options, blockId }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ $node, options, blockId }: Parameters<LeafParserBlock["convert"]>[0]) {
     const $textModule = $node.find(".se-module-text")
     const hasTextModule = $textModule.length > 0
     const title = compactText(

@@ -17,7 +17,7 @@ export type ParserBlockInspection = {
   children?: ParserBlockInspection[]
 }
 
-export type ParserBlockSourceEvidence = {
+export type ParserBlockParseEvidence = {
   path: string
   blocks: ParsedBlock[]
   blockIndexes: number[]

@@ -1,10 +1,10 @@
-import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/BaseBlock.js"
+import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/ParserBlock.js"
 
 import { compactText } from "../../../../shared/text/TextUtils.js"
 import { createLinkParagraphBlocks } from "../../common/LinkParagraph.js"
-import { LeafBlock } from "../../core/BaseBlock.js"
+import { LeafParserBlock } from "../../core/ParserBlock.js"
 
-export class NaverSe4LinkCardBlock extends LeafBlock {
+export class NaverSe4LinkCardBlock extends LeafParserBlock {
   override readonly id = "linkCard"
   override readonly label = "링크 카드"
   override readonly templateDefinition = {
@@ -19,7 +19,7 @@ export class NaverSe4LinkCardBlock extends LeafBlock {
     return moduleType === "v2_oglink" || $node.hasClass("se-oglink")
   }
 
-  override convert({ $node, blockId, options }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ $node, blockId, options }: Parameters<LeafParserBlock["convert"]>[0]) {
     const infoNode = $node.find(".se-oglink-info")
     const url = infoNode.attr("href") ?? $node.find(".se-oglink-thumbnail").attr("href") ?? ""
 

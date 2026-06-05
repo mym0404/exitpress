@@ -1,13 +1,13 @@
 import { load } from "cheerio"
 
 import type { UnknownRecord } from "../../../../shared/object/UnknownRecord.js"
-import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/BaseBlock.js"
+import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/ParserBlock.js"
 
 import { compactText } from "../../../../shared/text/TextUtils.js"
-import { LeafBlock } from "../../core/BaseBlock.js"
 import { createFormulaBlock } from "../../core/ParsedBlockOutput.js"
+import { LeafParserBlock } from "../../core/ParserBlock.js"
 
-export class NaverSe4FormulaBlock extends LeafBlock {
+export class NaverSe4FormulaBlock extends LeafParserBlock {
   override readonly id = "formula"
   override readonly label = "수식"
   override readonly templateDefinition = {
@@ -29,7 +29,7 @@ export class NaverSe4FormulaBlock extends LeafBlock {
     return moduleType === "v2_formula" && Boolean(moduleData)
   }
 
-  override convert({ $node, moduleData, blockId }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ $node, moduleData, blockId }: Parameters<LeafParserBlock["convert"]>[0]) {
     /* v8 ignore next 3 */
     if (!moduleData) {
       throw new Error("SE4 formula block metadata is missing.")

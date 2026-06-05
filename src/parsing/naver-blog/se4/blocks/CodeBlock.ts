@@ -1,9 +1,9 @@
-import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/BaseBlock.js"
+import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/ParserBlock.js"
 
-import { LeafBlock } from "../../core/BaseBlock.js"
 import { createCodeBlock } from "../../core/ParsedBlockOutput.js"
+import { LeafParserBlock } from "../../core/ParserBlock.js"
 
-export class NaverSe4CodeBlock extends LeafBlock {
+export class NaverSe4CodeBlock extends LeafParserBlock {
   override readonly id = "code"
   override readonly label = "코드"
   override readonly templateDefinition = {
@@ -19,7 +19,7 @@ export class NaverSe4CodeBlock extends LeafBlock {
     return moduleType === "v2_code" || $node.hasClass("se-code")
   }
 
-  override convert({ $node, blockId }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ $node, blockId }: Parameters<LeafParserBlock["convert"]>[0]) {
     const sourceNode = $node.find(".__se_code_view").first()
     /* v8 ignore next */
     const classNames = sourceNode.attr("class") ?? ""

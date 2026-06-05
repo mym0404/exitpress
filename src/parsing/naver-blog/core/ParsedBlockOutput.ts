@@ -8,7 +8,7 @@ import type {
 } from "../../../domain/parser/Types.js"
 import type { TemplateValue } from "../../../domain/template/Types.js"
 
-import { renderParagraph } from "../../../markdown/BlockMarkdown.js"
+import { renderParagraph } from "../../../markdown/utils/renderParagraph.js"
 
 const escapeTableCell = (value: string) =>
   value.replace(/\|/g, "\\|").replace(/\n+/g, "<br>").trim() || " "

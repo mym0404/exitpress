@@ -1,7 +1,7 @@
-import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/BaseBlock.js"
+import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/ParserBlock.js"
 
-import { LeafBlock } from "../../core/BaseBlock.js"
 import { createImageBlock } from "../../core/ParsedBlockOutput.js"
+import { LeafParserBlock } from "../../core/ParserBlock.js"
 
 import { parseTextBlocks } from "./TextBlock.js"
 import { parseImageLink, se4ImageLinkSelector } from "./util/ImageLink.js"
@@ -13,7 +13,7 @@ const wrappingParagraphLayoutClasses = [
   "se-l-inner-right",
 ]
 
-export class NaverSe4WrappingParagraphBlock extends LeafBlock {
+export class NaverSe4WrappingParagraphBlock extends LeafParserBlock {
   override readonly id = "wrappingParagraph"
   override readonly label = "감싸는 문단"
   override readonly templateDefinition = {
@@ -40,7 +40,7 @@ export class NaverSe4WrappingParagraphBlock extends LeafBlock {
     )
   }
 
-  override convert({ $, $node, options, blockId }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ $, $node, options, blockId }: Parameters<LeafParserBlock["convert"]>[0]) {
     const $imageSlot = $node.find(".se-component-slot-float").first()
     const imageBlocks = []
 

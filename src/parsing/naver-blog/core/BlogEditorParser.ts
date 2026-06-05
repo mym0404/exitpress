@@ -6,11 +6,11 @@ import type { ParsedBlock, ParsedPost, ParserBlockOptions } from "../../../domai
 import type { BlockTemplateDefinition } from "../../../domain/template/Types.js"
 import type { UnknownRecord } from "../../../shared/object/UnknownRecord.js"
 
-import type { BaseBlock, ParserBlockContext, ParserBlockConvertContext } from "./BaseBlock.js"
-import type { ParserBlockInspection, ParserBlockSourceEvidence } from "./BaseEditorTypes.js"
+import type { ParserBlock, ParserBlockContext, ParserBlockConvertContext } from "./ParserBlock.js"
+import type { ParserBlockInspection, ParserBlockParseEvidence } from "./ParserBlockDiagnostics.js"
 
-import { LeafBlock } from "./BaseBlock.js"
-import { inspectEditorBlocks } from "./BaseEditorInspection.js"
+import { LeafParserBlock } from "./ParserBlock.js"
+import { inspectParserBlocks } from "./ParserBlockInspector.js"
 
 const describeParserNode = ({ $node, node, moduleType }: ParserBlockContext) => {
   const tagName = node.type === "tag" ? node.tagName.toLowerCase() : node.type
@@ -28,14 +28,14 @@ const describeParserNode = ({ $node, node, moduleType }: ParserBlockContext) => 
   return parts.join(" ")
 }
 
-export type BaseEditorParseInput = {
+export type BlogEditorParseInput = {
   $: CheerioAPI
   sourceUrl?: string
   tags: string[]
   options: Pick<ExportOptions, "blockOutputs"> & {
     resolveLinkUrl?: (url: string) => string
   }
-  captureBlockEvidence?: (evidence: ParserBlockSourceEvidence) => void
+  captureBlockParseEvidence?: (evidence: ParserBlockParseEvidence) => void
 }
 
 const getParserBlockTemplateKey = ({
@@ -43,20 +43,20 @@ const getParserBlockTemplateKey = ({
   block,
 }: {
   editorType: string
-  block: BaseBlock
+  block: ParserBlock
 }) => block.templateDefinition?.key ?? `${editorType}:${block.id}`
 
-export abstract class BaseEditor {
+export abstract class BlogEditorParser {
   abstract readonly type: string
   abstract readonly label: string
 
-  protected readonly supportedBlocks: readonly BaseBlock[] = []
+  protected readonly supportedBlocks: readonly ParserBlock[] = []
 
   abstract canParse(html: string): boolean
 
-  abstract parse(input: BaseEditorParseInput): ParsedPost
+  abstract parse(input: BlogEditorParseInput): ParsedPost
 
-  inspect(_input: BaseEditorParseInput): ParserBlockInspection[] {
+  inspect(_input: BlogEditorParseInput): ParserBlockInspection[] {
     return []
   }
 
@@ -87,7 +87,7 @@ export abstract class BaseEditor {
     return ret
   }
 
-  protected inspectBlocks({
+  protected inspectSupportedParserBlocks({
     $,
     nodes,
     tags,
@@ -106,7 +106,7 @@ export abstract class BaseEditor {
       hasQuote?: boolean
     }
   }) {
-    return inspectEditorBlocks({
+    return inspectParserBlocks({
       $,
       nodes,
       tags,
@@ -117,14 +117,14 @@ export abstract class BaseEditor {
     })
   }
 
-  protected runBlocks({
+  protected parseSupportedParserBlocks({
     $,
     nodes,
     tags,
     options,
     sourceUrl,
     moduleContext,
-    captureBlockEvidence,
+    captureBlockParseEvidence,
   }: {
     $: CheerioAPI
     nodes: AnyNode[]
@@ -136,7 +136,7 @@ export abstract class BaseEditor {
       moduleType?: string | null
       hasQuote?: boolean
     }
-    captureBlockEvidence?: (evidence: ParserBlockSourceEvidence) => void
+    captureBlockParseEvidence?: (evidence: ParserBlockParseEvidence) => void
   }) {
     const createBlockContext = (node: AnyNode): ParserBlockContext => ({
       $,
@@ -153,7 +153,8 @@ export abstract class BaseEditor {
       const context = createBlockContext(node)
 
       return this.supportedBlocks.some(
-        (supportedBlock) => supportedBlock instanceof LeafBlock && supportedBlock.match(context),
+        (supportedBlock) =>
+          supportedBlock instanceof LeafParserBlock && supportedBlock.match(context),
       )
     }
 
@@ -179,7 +180,7 @@ export abstract class BaseEditor {
       const blockIndexes = parsedBlocks.map((_parsedBlock, offset) => startIndex + offset)
       outputBlockCount = Math.max(outputBlockCount, startIndex + parsedBlocks.length)
 
-      captureBlockEvidence?.({
+      captureBlockParseEvidence?.({
         path,
         blocks: parsedBlocks,
         blockIndexes,

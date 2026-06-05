@@ -2,12 +2,12 @@ import { describe, expect, it } from "vitest"
 
 import type { ParsedPost } from "../../../domain/parser/Types.js"
 
-import type { ParserBlockContext, ParserBlockConvertContext } from "./BaseBlock.js"
+import type { ParserBlockContext, ParserBlockConvertContext } from "./ParserBlock.js"
 
-import { LeafBlock } from "./BaseBlock.js"
-import { BaseEditor, type BaseEditorParseInput } from "./BaseEditor.js"
+import { BlogEditorParser, type BlogEditorParseInput } from "./BlogEditorParser.js"
+import { LeafParserBlock } from "./ParserBlock.js"
 
-class TemplateLessParagraphBlock extends LeafBlock {
+class TemplateLessParagraphBlock extends LeafParserBlock {
   override readonly id = "paragraph"
   override readonly label = "문단"
 
@@ -20,7 +20,7 @@ class TemplateLessParagraphBlock extends LeafBlock {
   }
 }
 
-class TemplateLessEditor extends BaseEditor {
+class TemplateLessEditor extends BlogEditorParser {
   override readonly type = "template-less"
   override readonly label = "Template Less"
 
@@ -30,7 +30,7 @@ class TemplateLessEditor extends BaseEditor {
     return true
   }
 
-  override parse(_input: BaseEditorParseInput): ParsedPost {
+  override parse(_input: BlogEditorParseInput): ParsedPost {
     return {
       tags: [],
       blocks: [],
@@ -38,7 +38,7 @@ class TemplateLessEditor extends BaseEditor {
   }
 }
 
-describe("BaseEditor", () => {
+describe("BlogEditorParser", () => {
   it("does not create block template presets for blocks without template definitions", () => {
     const editor = new TemplateLessEditor()
 

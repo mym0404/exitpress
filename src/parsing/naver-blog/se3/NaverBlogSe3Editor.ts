@@ -1,8 +1,8 @@
 import type { ParsedPost } from "../../../domain/parser/Types.js"
-import type { BaseEditorParseInput } from "../core/BaseEditor.js"
+import type { BlogEditorParseInput } from "../core/BlogEditorParser.js"
 
 import { unique } from "../../../shared/collection/CollectionUtils.js"
-import { BaseEditor } from "../core/BaseEditor.js"
+import { BlogEditorParser } from "../core/BlogEditorParser.js"
 
 import { NaverSe3CodeBlock } from "./blocks/CodeBlock.js"
 import { NaverSe3DividerBlock } from "./blocks/DividerBlock.js"
@@ -18,7 +18,7 @@ import { NaverSe3TableBlock } from "./blocks/TableBlock.js"
 import { NaverSe3TextBlock } from "./blocks/TextBlock.js"
 import { NaverSe3VideoBlock } from "./blocks/VideoBlock.js"
 
-export class NaverBlogSE3Editor extends BaseEditor {
+export class NaverBlogSE3Editor extends BlogEditorParser {
   override readonly type = "naver-se3"
   override readonly label = "SmartEditor 3"
 
@@ -52,16 +52,16 @@ export class NaverBlogSE3Editor extends BaseEditor {
     sourceUrl = "",
     tags,
     options,
-    captureBlockEvidence,
-  }: BaseEditorParseInput): ParsedPost {
+    captureBlockParseEvidence,
+  }: BlogEditorParseInput): ParsedPost {
     const container = $("#viewTypeSelector .se_component_wrap.sect_dsc").first()
-    const blocks = this.runBlocks({
+    const blocks = this.parseSupportedParserBlocks({
       $,
       nodes: container.children(".se_component").toArray(),
       sourceUrl,
       tags,
       options,
-      captureBlockEvidence,
+      captureBlockParseEvidence,
     })
     return {
       tags: unique(tags),
@@ -69,8 +69,8 @@ export class NaverBlogSE3Editor extends BaseEditor {
     } satisfies ParsedPost
   }
 
-  override inspect({ $, sourceUrl = "", tags, options }: BaseEditorParseInput) {
-    return this.inspectBlocks({
+  override inspect({ $, sourceUrl = "", tags, options }: BlogEditorParseInput) {
+    return this.inspectSupportedParserBlocks({
       $,
       nodes: $("#viewTypeSelector .se_component_wrap.sect_dsc")
         .first()

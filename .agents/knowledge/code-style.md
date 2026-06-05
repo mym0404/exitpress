@@ -20,7 +20,7 @@
 - The repo is strict TypeScript with NodeNext ESM.
 - Use `.js` extensions in TS imports where NodeNext runtime imports require them.
 - Keep types with the domain that owns the shape, such as `src/domain/parser/Types.ts`, `src/domain/blog/Types.ts`, `src/domain/export-options/Types.ts`, `src/domain/export-job/Types.ts`, and `src/domain/upload/UploadProviderTypes.ts`.
-- Keep parser block output behavior aligned across `BaseBlock.outputOptions` arrays, editor `supportedBlocks` arrays, and `src/parsing/naver-blog/core/BaseBlog.ts`.
+- Keep parser block output behavior aligned across `ParserBlock.templateDefinition`, editor `supportedBlocks` arrays, `ExportOptions.blockOutputs`, and `src/parsing/naver-blog/core/BlogParser.ts`.
 - This project does not preserve local schema backward compatibility unless explicitly requested. When an option/state contract changes, prefer the current schema and remove stale aliases or migration paths.
 - Prefer `type` aliases for object shapes, unions, and inferred helper types; do not introduce `interface` unless an external API requires it.
 - For finite runtime options, define `as const` arrays or objects and derive union types from them with `typeof`.
@@ -33,13 +33,13 @@
 - Use `readonly` fields for constructor dependencies and long-lived state that should not be reassigned.
 - Use `private` methods for internal multi-step class logic.
 - Keep `createX` helpers for pure value construction, binding construction, or test/harness fixtures.
-- Parser block implementations should extend `ContainerBlock` for recursive wrapper parsing or `LeafBlock` for direct parsed block conversion, and return literal parser results with `as const` when inference would widen status or parsed block values.
-- Keep editor and parser block relationships as direct `BaseBlock` instances inside each editor class.
+- Parser block implementations should extend `ContainerParserBlock` for recursive wrapper parsing or `LeafParserBlock` for direct parsed block conversion, and return literal parser results with `as const` when inference would widen status or parsed block values.
+- Keep editor and parser block relationships as direct `ParserBlock` instances inside each editor class.
 - Keep helpers that only support one concrete parser block's `match` or `convert` logic inside that parser block file.
 - Inline single-use helpers when they only pass caller context through or hide a short expression; keep named local helpers inside the same block file when they clarify a substantial block-specific step.
 - Split editor-local parser helper files only when at least two parser blocks reuse them.
 - Put shared editor-local parser helper files under that editor's `blocks/util/*`; keep block class files, single-block helpers, and adjacent specs directly under `blocks/*`.
-- Keep parser block `outputOptions` and option params in the concrete parser block file, even when similar options appear in another editor family.
+- Keep parser block `templateDefinition` and option params in the concrete parser block file, even when similar options appear in another editor family.
 
 ## Date And Time
 - Store manifest, job, and export timestamps as ISO strings from `new Date().toISOString()`.

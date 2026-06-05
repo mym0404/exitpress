@@ -1,12 +1,12 @@
-import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/BaseBlock.js"
+import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/ParserBlock.js"
 
 import { compactText } from "../../../../shared/text/TextUtils.js"
 import { createLinkParagraphBlocks } from "../../common/LinkParagraph.js"
-import { LeafBlock } from "../../core/BaseBlock.js"
+import { LeafParserBlock } from "../../core/ParserBlock.js"
 
 import { findInComponentRoot } from "./util/ComponentBoundary.js"
 
-export class NaverSe3FileBlock extends LeafBlock {
+export class NaverSe3FileBlock extends LeafParserBlock {
   override readonly id = "file"
   override readonly label = "첨부파일"
   override readonly templateDefinition = {
@@ -21,7 +21,7 @@ export class NaverSe3FileBlock extends LeafBlock {
     return $node.hasClass("se_file") && $node.hasClass("default")
   }
 
-  override convert({ $, $node, blockId, options }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ $, $node, blockId, options }: Parameters<LeafParserBlock["convert"]>[0]) {
     const link = findInComponentRoot({
       $,
       $component: $node,

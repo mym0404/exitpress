@@ -1,7 +1,7 @@
 import type { Cheerio, CheerioAPI } from "cheerio"
 import type { AnyNode } from "domhandler"
 
-import type { ParserBlockContext } from "../../../core/BaseBlock.js"
+import type { ParserBlockContext } from "../../../core/ParserBlock.js"
 
 import { compactText } from "../../../../../shared/text/TextUtils.js"
 import { createLinkParagraphBlocks } from "../../../common/LinkParagraph.js"

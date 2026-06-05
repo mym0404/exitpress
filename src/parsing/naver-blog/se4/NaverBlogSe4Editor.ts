@@ -1,10 +1,10 @@
 import type { AnyNode } from "domhandler"
 
 import type { ParsedPost } from "../../../domain/parser/Types.js"
-import type { BaseEditorParseInput } from "../core/BaseEditor.js"
+import type { BlogEditorParseInput } from "../core/BlogEditorParser.js"
 
 import { unique } from "../../../shared/collection/CollectionUtils.js"
-import { BaseEditor } from "../core/BaseEditor.js"
+import { BlogEditorParser } from "../core/BlogEditorParser.js"
 import { parseJsonAttribute } from "../core/JsonAttribute.js"
 
 import { NaverSe4CodeBlock } from "./blocks/CodeBlock.js"
@@ -30,7 +30,7 @@ import { NaverSe4TextBlock } from "./blocks/TextBlock.js"
 import { NaverSe4VideoBlock } from "./blocks/VideoBlock.js"
 import { NaverSe4WrappingParagraphBlock } from "./blocks/WrappingParagraphBlock.js"
 
-export class NaverBlogSE4Editor extends BaseEditor {
+export class NaverBlogSE4Editor extends BlogEditorParser {
   override readonly type = "naver-se4"
   override readonly label = "SmartEditor 4"
 
@@ -73,15 +73,15 @@ export class NaverBlogSE4Editor extends BaseEditor {
     sourceUrl = "",
     tags,
     options,
-    captureBlockEvidence,
-  }: BaseEditorParseInput): ParsedPost {
-    const blocks = this.runBlocks({
+    captureBlockParseEvidence,
+  }: BlogEditorParseInput): ParsedPost {
+    const blocks = this.parseSupportedParserBlocks({
       $,
       nodes: $("#viewTypeSelector .se-component").toArray(),
       sourceUrl,
       tags,
       options,
-      captureBlockEvidence,
+      captureBlockParseEvidence,
       moduleContext: (node: AnyNode) => {
         const $component = $(node)
         const moduleScript = $component.find("script.__se_module_data").first()
@@ -103,8 +103,8 @@ export class NaverBlogSE4Editor extends BaseEditor {
     } satisfies ParsedPost
   }
 
-  override inspect({ $, sourceUrl = "", tags, options }: BaseEditorParseInput) {
-    return this.inspectBlocks({
+  override inspect({ $, sourceUrl = "", tags, options }: BlogEditorParseInput) {
+    return this.inspectSupportedParserBlocks({
       $,
       nodes: $("#viewTypeSelector .se-component").toArray(),
       sourceUrl,

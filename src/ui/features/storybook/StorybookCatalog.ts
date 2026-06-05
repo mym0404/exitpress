@@ -3,7 +3,7 @@ import type { BlockTemplateDefinition } from "../../../domain/template/Types.js"
 
 import type { StorybookDefinition } from "./data/StorybookDefinition.js"
 
-import { renderBlockTemplates } from "../../../markdown/BlockTemplateRenderer.js"
+import { renderBlockTemplates } from "../../../markdown/utils/renderBlockTemplates.js"
 import { parsePostHtml } from "../../../parsing/naver-blog/core/PostParser.js"
 import {
   createNaverBlogDefaultBlockTemplateMap,

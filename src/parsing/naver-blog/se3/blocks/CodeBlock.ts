@@ -1,11 +1,11 @@
-import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/BaseBlock.js"
+import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/ParserBlock.js"
 
-import { LeafBlock } from "../../core/BaseBlock.js"
 import { createCodeBlock } from "../../core/ParsedBlockOutput.js"
+import { LeafParserBlock } from "../../core/ParserBlock.js"
 
 import { findInComponentRoot } from "./util/ComponentBoundary.js"
 
-export class NaverSe3CodeBlock extends LeafBlock {
+export class NaverSe3CodeBlock extends LeafParserBlock {
   override readonly id = "code"
   override readonly label = "코드"
   override readonly templateDefinition = {
@@ -25,7 +25,7 @@ export class NaverSe3CodeBlock extends LeafBlock {
     )
   }
 
-  override convert({ $, $node, blockId }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ $, $node, blockId }: Parameters<LeafParserBlock["convert"]>[0]) {
     const code = findInComponentRoot({ $, $component: $node, selector: "pre, .__se_code_view" })
       .first()
       .text()

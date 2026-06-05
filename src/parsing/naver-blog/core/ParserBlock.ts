@@ -27,7 +27,7 @@ export type ParserBlockConvertContext = ParserBlockContext & {
   matchNode: (node: AnyNode, path: string) => ParsedBlock[]
 }
 
-export abstract class BaseBlock {
+export abstract class ParserBlock {
   abstract readonly id: string
   readonly templateDefinition?: ParserBlockTemplateDefinition
   abstract readonly label: string
@@ -37,7 +37,7 @@ export abstract class BaseBlock {
   abstract convert(context: ParserBlockConvertContext): ParsedBlock[]
 }
 
-export abstract class ContainerBlock extends BaseBlock {
+export abstract class ContainerParserBlock extends ParserBlock {
   override convert({ $node, matchNode, path }: ParserBlockConvertContext) {
     return $node
       .contents()
@@ -46,4 +46,4 @@ export abstract class ContainerBlock extends BaseBlock {
   }
 }
 
-export abstract class LeafBlock extends BaseBlock {}
+export abstract class LeafParserBlock extends ParserBlock {}

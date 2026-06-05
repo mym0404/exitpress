@@ -1,14 +1,14 @@
 import { describe, expect, it } from "vitest"
 
-import type { CategoryInfo, PostSummary } from "../domain/blog/Types.js"
-import type { AssetRecord } from "../domain/export-job/Types.js"
-import type { ParsedPost } from "../domain/parser/Types.js"
+import type { CategoryInfo, PostSummary } from "../../domain/blog/Types.js"
+import type { AssetRecord } from "../../domain/export-job/Types.js"
+import type { ParsedPost } from "../../domain/parser/Types.js"
 
-import { createTestPath } from "../../tests/support/test-paths.js"
-import { defaultExportOptions } from "../domain/export-options/ExportOptions.js"
-import { tableTemplate } from "../domain/template/DefaultTemplates.js"
+import { createTestPath } from "../../../tests/support/test-paths.js"
+import { defaultExportOptions } from "../../domain/export-options/ExportOptions.js"
+import { tableTemplate } from "../../domain/template/DefaultTemplates.js"
 
-import { renderMarkdownPost } from "./MarkdownRenderer.js"
+import { renderMarkdownPost } from "./renderMarkdownPost.js"
 
 const markdownFilePath = createTestPath("markdown-renderer", "posts", "test.md")
 

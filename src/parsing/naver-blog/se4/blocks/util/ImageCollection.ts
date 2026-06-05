@@ -1,5 +1,5 @@
 import type { ImageData } from "../../../../../domain/parser/Types.js"
-import type { LeafBlock } from "../../../core/BaseBlock.js"
+import type { LeafParserBlock } from "../../../core/ParserBlock.js"
 
 import { createImageBlocks } from "../../../core/ParsedBlockOutput.js"
 
@@ -11,8 +11,8 @@ export const parseSe4ImageGroup = ({
   blockId,
   blockName,
 }: {
-  $node: Parameters<LeafBlock["convert"]>[0]["$node"]
-  options: Parameters<LeafBlock["convert"]>[0]["options"]
+  $node: Parameters<LeafParserBlock["convert"]>[0]["$node"]
+  options: Parameters<LeafParserBlock["convert"]>[0]["options"]
   blockId: string
   blockName: string
 }) => {

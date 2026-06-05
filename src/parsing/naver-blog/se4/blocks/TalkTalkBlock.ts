@@ -1,10 +1,10 @@
-import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/BaseBlock.js"
+import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/ParserBlock.js"
 
 import { compactText } from "../../../../shared/text/TextUtils.js"
 import { createLinkParagraphBlocks } from "../../common/LinkParagraph.js"
-import { LeafBlock } from "../../core/BaseBlock.js"
+import { LeafParserBlock } from "../../core/ParserBlock.js"
 
-export class NaverSe4TalkTalkBlock extends LeafBlock {
+export class NaverSe4TalkTalkBlock extends LeafParserBlock {
   override readonly id = "talkTalk"
   override readonly label = "톡톡 링크"
   override readonly templateDefinition = {
@@ -19,7 +19,7 @@ export class NaverSe4TalkTalkBlock extends LeafBlock {
     return $node.hasClass("se-talktalk")
   }
 
-  override convert({ $node, blockId, options }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ $node, blockId, options }: Parameters<LeafParserBlock["convert"]>[0]) {
     const talkTalkLink = $node.find("a.se-module-talktalk").first()
     const url = talkTalkLink.attr("href") ?? ""
 

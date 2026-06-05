@@ -1,10 +1,10 @@
-import type { ParserBlockContext } from "../../core/BaseBlock.js"
+import type { ParserBlockContext } from "../../core/ParserBlock.js"
 
-import { LeafBlock } from "../../core/BaseBlock.js"
+import { LeafParserBlock } from "../../core/ParserBlock.js"
 
 import { isSpacerBlock } from "./ContainerBlock.js"
 
-export class NaverSe2SpacerBlock extends LeafBlock {
+export class NaverSe2SpacerBlock extends LeafParserBlock {
   override readonly id = "spacer"
   override readonly label = "빈 줄"
 

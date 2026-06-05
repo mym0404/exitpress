@@ -1,11 +1,11 @@
 import type { CheerioAPI } from "cheerio"
 
-import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/BaseBlock.js"
+import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/ParserBlock.js"
 
 import { normalizeAssetUrl } from "../../../../domain/blog/NaverUrl.js"
 import { compactText } from "../../../../shared/text/TextUtils.js"
-import { LeafBlock } from "../../core/BaseBlock.js"
 import { createVideoBlock } from "../../core/ParsedBlockOutput.js"
+import { LeafParserBlock } from "../../core/ParserBlock.js"
 
 import { hasOnlyTargetContent } from "./util/WrapperContent.js"
 
@@ -115,7 +115,7 @@ const getEmbeddedVideos = ({ $, $node }: { $: CheerioAPI; $node: ReturnType<Chee
   return videos
 }
 
-export class NaverSe2EmbeddedVideoBlock extends LeafBlock {
+export class NaverSe2EmbeddedVideoBlock extends LeafParserBlock {
   override readonly id = "video"
   override readonly label = "비디오"
   override readonly templateDefinition = {
@@ -137,7 +137,7 @@ export class NaverSe2EmbeddedVideoBlock extends LeafBlock {
     return node.type === "tag" && getEmbeddedVideos({ $, $node }) !== null
   }
 
-  override convert({ $, $node, blockId }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ $, $node, blockId }: Parameters<LeafParserBlock["convert"]>[0]) {
     const videos = getEmbeddedVideos({ $, $node })
 
     if (!videos) {

@@ -4,12 +4,12 @@ import type { AnyNode } from "domhandler"
 import type { ParserBlockOptions } from "../../../domain/parser/Types.js"
 import type { UnknownRecord } from "../../../shared/object/UnknownRecord.js"
 
-import type { BaseBlock, ParserBlockContext } from "./BaseBlock.js"
-import type { ParserBlockInspection } from "./BaseEditorTypes.js"
+import type { ParserBlock, ParserBlockContext } from "./ParserBlock.js"
+import type { ParserBlockInspection } from "./ParserBlockDiagnostics.js"
 
 import { compactText } from "../../../shared/text/TextUtils.js"
 
-import { ContainerBlock, LeafBlock } from "./BaseBlock.js"
+import { ContainerParserBlock, LeafParserBlock } from "./ParserBlock.js"
 
 const inspectTextMaxLength = 200
 const inspectHtmlMaxLength = 700
@@ -17,7 +17,7 @@ const inspectHtmlMaxLength = 700
 const truncateInspectionValue = (value: string, maxLength: number) =>
   value.length > maxLength ? `${value.slice(0, maxLength)}...` : value
 
-export const inspectEditorBlocks = ({
+export const inspectParserBlocks = ({
   $,
   nodes,
   tags,
@@ -31,7 +31,7 @@ export const inspectEditorBlocks = ({
   tags: string[]
   options: ParserBlockOptions
   sourceUrl?: string
-  supportedBlocks: readonly BaseBlock[]
+  supportedBlocks: readonly ParserBlock[]
   moduleContext?: (node: AnyNode) => {
     moduleData?: UnknownRecord | null
     moduleType?: string | null
@@ -53,7 +53,8 @@ export const inspectEditorBlocks = ({
     const context = createBlockContext(node)
 
     return supportedBlocks.some(
-      (supportedBlock) => supportedBlock instanceof LeafBlock && supportedBlock.match(context),
+      (supportedBlock) =>
+        supportedBlock instanceof LeafParserBlock && supportedBlock.match(context),
     )
   }
 
@@ -63,7 +64,7 @@ export const inspectEditorBlocks = ({
     const $node = $(node)
     const tagName = node.type === "tag" ? node.tagName.toLowerCase() : node.type
     const children =
-      node.type === "tag" && (!block || block instanceof ContainerBlock)
+      node.type === "tag" && (!block || block instanceof ContainerParserBlock)
         ? $node
             .contents()
             .toArray()

@@ -1,11 +1,11 @@
 import type { CheerioAPI } from "cheerio"
 
 import type { ImageData } from "../../../../domain/parser/Types.js"
-import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/BaseBlock.js"
+import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/ParserBlock.js"
 
 import { normalizeAssetUrl } from "../../../../domain/blog/NaverUrl.js"
-import { LeafBlock } from "../../core/BaseBlock.js"
 import { createImageBlocks } from "../../core/ParsedBlockOutput.js"
+import { LeafParserBlock } from "../../core/ParserBlock.js"
 
 import { hasOnlyTargetContent } from "./util/WrapperContent.js"
 
@@ -65,7 +65,7 @@ const getInlineGifVideoImages = ({
   return images.filter((image): image is ImageData => image !== null)
 }
 
-export class NaverSe2InlineGifVideoBlock extends LeafBlock {
+export class NaverSe2InlineGifVideoBlock extends LeafParserBlock {
   override readonly id = "inlineGifVideo"
   override readonly label = "인라인 GIF 비디오"
   override readonly templateDefinition = {
@@ -82,7 +82,7 @@ export class NaverSe2InlineGifVideoBlock extends LeafBlock {
     return node.type === "tag" && getInlineGifVideoImages({ $node }) !== null
   }
 
-  override convert({ $node, options, blockId }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ $node, options, blockId }: Parameters<LeafParserBlock["convert"]>[0]) {
     const images = getInlineGifVideoImages({ $node })
 
     if (!images) {

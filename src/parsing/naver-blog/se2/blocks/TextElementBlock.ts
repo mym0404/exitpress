@@ -1,11 +1,11 @@
-import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/BaseBlock.js"
+import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/ParserBlock.js"
 
-import { convertHtmlToMarkdown } from "../../../../markdown/TurndownMarkdownConverter.js"
+import { convertHtmlToMarkdown } from "../../../../markdown/utils/convertHtmlToMarkdown.js"
 import { compactText } from "../../../../shared/text/TextUtils.js"
-import { LeafBlock } from "../../core/BaseBlock.js"
 import { createParagraphBlock } from "../../core/ParsedBlockOutput.js"
+import { LeafParserBlock } from "../../core/ParserBlock.js"
 
-export class NaverSe2TextElementBlock extends LeafBlock {
+export class NaverSe2TextElementBlock extends LeafParserBlock {
   override readonly id = "paragraph"
   override readonly label = "문단"
   override readonly templateDefinition = {
@@ -28,7 +28,13 @@ export class NaverSe2TextElementBlock extends LeafBlock {
     return !["table", "hr", "br", "blockquote", "pre"].includes(node.tagName.toLowerCase())
   }
 
-  override convert({ $, $node, node, options, blockId }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({
+    $,
+    $node,
+    node,
+    options,
+    blockId,
+  }: Parameters<LeafParserBlock["convert"]>[0]) {
     /* v8 ignore next 3 */
     if (node.type !== "tag") {
       throw new Error("SE2 text element block received a non-tag node.")

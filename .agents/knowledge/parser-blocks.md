@@ -7,7 +7,7 @@
 - `convert()`는 변환된 `ParsedBlock[]`를 반환하고, 의도적으로 버릴 node는 빈 배열을 반환한다.
 
 ## Managed By Editors
-- Editor는 `supportedBlocks` 배열에 `BaseBlock` instance를 직접 들고 있다.
+- Editor는 `supportedBlocks` 배열에 `ParserBlock` instance를 직접 들고 있다.
 - `supportedBlocks`는 ordered first-match list다.
 - 첫 번째로 match된 block만 convert를 실행한다.
 - match되는 block이 없으면 parser는 실패한다.
@@ -22,8 +22,8 @@
 - `matchNode`는 container가 child node를 현재 editor의 `supportedBlocks`로 재귀 변환할 때 쓴다.
 
 ## Container And Leaf
-- `ContainerBlock`은 wrapper node를 잡고 direct child contents를 `matchNode`로 다시 흘려보낸다.
-- `LeafBlock`은 concrete DOM node를 직접 parsed block으로 바꾼다.
+- `ContainerParserBlock`은 wrapper node를 잡고 direct child contents를 `matchNode`로 다시 흘려보낸다.
+- `LeafParserBlock`은 concrete DOM node를 직접 parsed block으로 바꾼다.
 - Container는 parsed block을 직접 만들지 않고 editor의 현재 parser block list를 재사용한다.
 - Leaf는 paragraph, image, table, code처럼 실제 output block을 만든다.
 - 현재 Container 계열은 legacy wrapper를 풀어 실제 content leaf로 넘기는 용도에 가깝다.
@@ -49,12 +49,12 @@
 ## Block Templates
 - Parser block의 template definition은 사용자가 바꿀 수 있는 Markdown template과 prop 계약을 설명한다.
 - 각 concrete `*Block.ts`가 자기 `templateDefinition.presets`와 `props`를 직접 정의한다.
-- `BaseEditor`는 block template key, editor별 순서, 중복 key 제거만 맡는다.
+- `BlogEditorParser`는 block template key, editor별 순서, 중복 key 제거만 맡는다.
 - UI에 노출되는 key는 `editorType:blockId` 형식이다.
 - 같은 editor 안에서 같은 key가 반복되면 첫 definition만 노출된다.
 - 여러 concrete block이 같은 output family를 공유하면 같은 key를 공유할 수 있다.
 - Parser는 `ParsedBlock.blockId`와 `props`만 만들고, 최종 template 문자열 선택은 renderer가 맡는다.
-- 정확한 selectable key 목록과 노출 순서는 `BaseBlog`에서 파생되는 template definition과 관련 tests가 source of truth다.
+- 정확한 selectable key 목록과 노출 순서는 `BlogParser`에서 파생되는 template definition과 관련 tests가 source of truth다.
 
 ## Story Catalog
 - Storybook catalog는 `src/ui/features/storybook/data/*`의 정적 definition에서 만들어진다.
@@ -69,7 +69,7 @@
 ## Failure And Inspection
 - Unsupported content node는 `파싱 가능한 {editorType} block이 없습니다` 오류로 실패한다.
 - Error message에는 tag, class, SE4 `moduleType` 같은 inspection 단서가 들어간다.
-- `BaseEditor.inspectBlocks()`는 unsupported node와 matched block 정보를 tree 형태로 만든다.
+- `BlogEditorParser.inspectSupportedParserBlocks()`는 unsupported node와 matched block 정보를 tree 형태로 만든다.
 - Single post inspect 흐름은 unsupported block 조사에 이 정보를 사용한다.
 
 ## Verification

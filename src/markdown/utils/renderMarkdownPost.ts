@@ -1,16 +1,16 @@
 import YAML from "yaml"
 
-import type { CategoryInfo, PostSummary } from "../domain/blog/Types.js"
-import type { AssetRecord } from "../domain/export-job/Types.js"
-import type { ExportOptions, FrontmatterFieldName } from "../domain/export-options/Types.js"
-import type { ParsedBlock } from "../domain/parser/Types.js"
-import type { ParsedPost } from "../domain/parser/Types.js"
-import type { UnknownRecord } from "../shared/object/UnknownRecord.js"
+import type { CategoryInfo, PostSummary } from "../../domain/blog/Types.js"
+import type { AssetRecord } from "../../domain/export-job/Types.js"
+import type { ExportOptions, FrontmatterFieldName } from "../../domain/export-options/Types.js"
+import type { ParsedBlock } from "../../domain/parser/Types.js"
+import type { ParsedPost } from "../../domain/parser/Types.js"
+import type { UnknownRecord } from "../../shared/object/UnknownRecord.js"
 
-import { getFrontmatterExportKey } from "../domain/export-options/ExportOptions.js"
-import { resolveParsedBlockAssetsForRender } from "../exporting/assets/ParsedBlockAssetResolver.js"
+import { getFrontmatterExportKey } from "../../domain/export-options/ExportOptions.js"
+import { resolveParsedBlockAssetsForRender } from "../../exporting/assets/ParsedBlockAssetResolver.js"
 
-import { renderBlockTemplates } from "./BlockTemplateRenderer.js"
+import { renderBlockTemplates } from "./renderBlockTemplates.js"
 
 const buildFrontmatter = ({
   fields,

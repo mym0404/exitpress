@@ -1,6 +1,6 @@
 import type { parseHtmlTable } from "./parseHtmlTable.js"
 
-import { convertHtmlToMarkdown } from "../../../markdown/TurndownMarkdownConverter.js"
+import { convertHtmlToMarkdown } from "../../../markdown/utils/convertHtmlToMarkdown.js"
 import { createParagraphBlock } from "../core/ParsedBlockOutput.js"
 
 export const parseSingleColumnTableAsParagraphs = ({

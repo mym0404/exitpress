@@ -1,7 +1,7 @@
 import { load } from "cheerio"
 
 import type { ExportOptions } from "../../domain/export-options/Types.js"
-import type { ParserBlockInspection } from "../../parsing/naver-blog/core/BaseEditorTypes.js"
+import type { ParserBlockInspection } from "../../parsing/naver-blog/core/ParserBlockDiagnostics.js"
 
 import { extractBlogId, getSourceUrl } from "../../domain/blog/NaverUrl.js"
 import { cloneExportOptions } from "../../domain/export-options/ExportOptions.js"

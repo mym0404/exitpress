@@ -1,15 +1,15 @@
-import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/BaseBlock.js"
+import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/ParserBlock.js"
 
 import { tableTemplate } from "../../../../domain/template/DefaultTemplates.js"
 import { parseHtmlTable } from "../../common/parseHtmlTable.js"
 import { parseSingleColumnTableAsParagraphs } from "../../common/Table.js"
-import { LeafBlock } from "../../core/BaseBlock.js"
 import { createTableBlock } from "../../core/ParsedBlockOutput.js"
+import { LeafParserBlock } from "../../core/ParserBlock.js"
 
 const toParagraphBlockId = (blockId: string) =>
   blockId.replace(/:table$/, ":paragraph").replace(/^table$/, "paragraph")
 
-export class NaverSe2TableBlock extends LeafBlock {
+export class NaverSe2TableBlock extends LeafParserBlock {
   override readonly id = "table"
   override readonly label = "표"
   override readonly templateDefinition = {
@@ -32,7 +32,7 @@ export class NaverSe2TableBlock extends LeafBlock {
     return node.type === "tag" && node.tagName.toLowerCase() === "table"
   }
 
-  override convert({ $, $node, options, blockId }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ $, $node, options, blockId }: Parameters<LeafParserBlock["convert"]>[0]) {
     if ($node.hasClass("colorscripter-code-table")) {
       return []
     }

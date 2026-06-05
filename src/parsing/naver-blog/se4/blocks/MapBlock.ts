@@ -1,14 +1,14 @@
-import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/BaseBlock.js"
+import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/ParserBlock.js"
 
 import { compactText } from "../../../../shared/text/TextUtils.js"
 import { createLinkParagraphBlocks } from "../../common/LinkParagraph.js"
-import { LeafBlock } from "../../core/BaseBlock.js"
 import { parseJsonAttribute } from "../../core/JsonAttribute.js"
+import { LeafParserBlock } from "../../core/ParserBlock.js"
 
 const buildNaverMapSearchUrl = (query: string) =>
   `https://map.naver.com/p/search/${encodeURIComponent(query)}`
 
-export class NaverSe4MapBlock extends LeafBlock {
+export class NaverSe4MapBlock extends LeafParserBlock {
   override readonly id = "map"
   override readonly label = "지도"
   override readonly templateDefinition = {
@@ -23,7 +23,12 @@ export class NaverSe4MapBlock extends LeafBlock {
     return moduleType === "v2_map" || $node.hasClass("se-placesMap")
   }
 
-  override convert({ $node, moduleData, blockId, options }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({
+    $node,
+    moduleData,
+    blockId,
+    options,
+  }: Parameters<LeafParserBlock["convert"]>[0]) {
     const data = (moduleData?.data ?? {}) as {
       places?: Array<{
         placeId?: string

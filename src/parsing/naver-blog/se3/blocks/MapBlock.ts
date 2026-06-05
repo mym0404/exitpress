@@ -1,10 +1,10 @@
-import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/BaseBlock.js"
+import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/ParserBlock.js"
 
-import { LeafBlock } from "../../core/BaseBlock.js"
+import { LeafParserBlock } from "../../core/ParserBlock.js"
 
 import { convertSe3MapPlace } from "./util/ComponentBoundary.js"
 
-export class NaverSe3MapBlock extends LeafBlock {
+export class NaverSe3MapBlock extends LeafParserBlock {
   override readonly id = "map"
   override readonly label = "지도"
   override readonly templateDefinition = {
@@ -19,7 +19,7 @@ export class NaverSe3MapBlock extends LeafBlock {
     return $node.hasClass("se_map") && $node.hasClass("default")
   }
 
-  override convert({ $, $node, blockId, options }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ $, $node, blockId, options }: Parameters<LeafParserBlock["convert"]>[0]) {
     return convertSe3MapPlace({ $, $node, blockId, options })
   }
 }

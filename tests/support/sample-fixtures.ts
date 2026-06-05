@@ -7,7 +7,7 @@ import type { NaverBlogFetcherCache } from "../../src/integrations/naver-blog/Na
 
 import { defaultExportOptions } from "../../src/domain/export-options/ExportOptions.js"
 import { NaverBlogFetcher } from "../../src/integrations/naver-blog/NaverBlogFetcher.js"
-import { renderMarkdownPost } from "../../src/markdown/MarkdownRenderer.js"
+import { renderMarkdownPost } from "../../src/markdown/utils/renderMarkdownPost.js"
 import { parsePostHtml } from "../../src/parsing/naver-blog/core/PostParser.js"
 import { createNaverBlogDefaultBlockTemplateMap } from "../../src/parsing/naver-blog/NaverBlog.js"
 

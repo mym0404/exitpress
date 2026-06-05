@@ -1,11 +1,11 @@
 import type { CheerioAPI } from "cheerio"
 
 import type { ImageData } from "../../../../domain/parser/Types.js"
-import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/BaseBlock.js"
+import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/ParserBlock.js"
 
 import { normalizeAssetUrl } from "../../../../domain/blog/NaverUrl.js"
-import { LeafBlock } from "../../core/BaseBlock.js"
 import { createImageBlocks, createParagraphBlock } from "../../core/ParsedBlockOutput.js"
+import { LeafParserBlock } from "../../core/ParserBlock.js"
 
 import { findInComponentRoot, textOutsideNestedComponents } from "./util/ComponentBoundary.js"
 
@@ -66,7 +66,7 @@ const getStandaloneImageContent = ({
   return { images, text }
 }
 
-export class NaverSe3ImageBlock extends LeafBlock {
+export class NaverSe3ImageBlock extends LeafParserBlock {
   override readonly id = "image"
   override readonly label = "이미지"
   override readonly templateDefinition = {
@@ -94,7 +94,7 @@ export class NaverSe3ImageBlock extends LeafBlock {
     )
   }
 
-  override convert({ $, $node, options, blockId }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ $, $node, options, blockId }: Parameters<LeafParserBlock["convert"]>[0]) {
     const { images, text } = getStandaloneImageContent({ $, $component: $node })
     const blocks = createImageBlocks({ blockId, images, options })
 

@@ -1,9 +1,9 @@
-import type { ParserBlockTemplateDefinition } from "../../core/BaseBlock.js"
+import type { ParserBlockTemplateDefinition } from "../../core/ParserBlock.js"
 
-import { LeafBlock } from "../../core/BaseBlock.js"
 import { createDividerBlock } from "../../core/ParsedBlockOutput.js"
+import { LeafParserBlock } from "../../core/ParserBlock.js"
 
-export class NaverSe3DividerBlock extends LeafBlock {
+export class NaverSe3DividerBlock extends LeafParserBlock {
   override readonly id = "divider"
   override readonly label = "구분선"
   override readonly templateDefinition = {
@@ -12,11 +12,11 @@ export class NaverSe3DividerBlock extends LeafBlock {
     props: {},
   } satisfies ParserBlockTemplateDefinition
 
-  override match({ $node }: Parameters<LeafBlock["match"]>[0]) {
+  override match({ $node }: Parameters<LeafParserBlock["match"]>[0]) {
     return $node.hasClass("se_horizontalLine")
   }
 
-  override convert({ blockId }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ blockId }: Parameters<LeafParserBlock["convert"]>[0]) {
     return [createDividerBlock({ blockId })]
   }
 }

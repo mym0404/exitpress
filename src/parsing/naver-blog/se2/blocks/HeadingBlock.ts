@@ -1,11 +1,11 @@
-import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/BaseBlock.js"
+import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/ParserBlock.js"
 
-import { convertHtmlToMarkdown } from "../../../../markdown/TurndownMarkdownConverter.js"
+import { convertHtmlToMarkdown } from "../../../../markdown/utils/convertHtmlToMarkdown.js"
 import { compactText } from "../../../../shared/text/TextUtils.js"
-import { LeafBlock } from "../../core/BaseBlock.js"
 import { createHeadingBlock } from "../../core/ParsedBlockOutput.js"
+import { LeafParserBlock } from "../../core/ParserBlock.js"
 
-export class NaverSe2HeadingBlock extends LeafBlock {
+export class NaverSe2HeadingBlock extends LeafParserBlock {
   override readonly id = "heading"
   override readonly label = "제목"
   override readonly templateDefinition = {
@@ -26,7 +26,7 @@ export class NaverSe2HeadingBlock extends LeafBlock {
     return node.type === "tag" && /^h[1-6]$/.test(node.tagName.toLowerCase())
   }
 
-  override convert({ $node, node, options, blockId }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ $node, node, options, blockId }: Parameters<LeafParserBlock["convert"]>[0]) {
     /* v8 ignore next 3 */
     if (node.type !== "tag") {
       throw new Error("SE2 heading block received a non-tag node.")

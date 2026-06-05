@@ -1,10 +1,10 @@
 import { load } from "cheerio"
 import { describe, expect, it } from "vitest"
 
-import type { ParserBlockInspection } from "../../../parsing/naver-blog/core/BaseEditorTypes.js"
+import type { ParserBlockInspection } from "../../../parsing/naver-blog/core/ParserBlockDiagnostics.js"
 
 import { resolveParsedBlockAssetsForRender } from "../../../exporting/assets/ParsedBlockAssetResolver.js"
-import { renderBlockTemplates } from "../../../markdown/BlockTemplateRenderer.js"
+import { renderBlockTemplates } from "../../../markdown/utils/renderBlockTemplates.js"
 import { parsePostHtml } from "../../../parsing/naver-blog/core/PostParser.js"
 import { NaverBlog } from "../../../parsing/naver-blog/NaverBlog.js"
 import { createNaverBlogDefaultBlockTemplateMap } from "../../../parsing/naver-blog/NaverBlog.js"

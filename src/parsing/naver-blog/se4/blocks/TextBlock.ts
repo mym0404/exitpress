@@ -1,11 +1,11 @@
 import type { AnyNode, Element } from "domhandler"
 
-import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/BaseBlock.js"
+import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/ParserBlock.js"
 
-import { convertHtmlToMarkdown } from "../../../../markdown/TurndownMarkdownConverter.js"
+import { convertHtmlToMarkdown } from "../../../../markdown/utils/convertHtmlToMarkdown.js"
 import { compactMarkdownText } from "../../../../shared/text/TextUtils.js"
-import { LeafBlock } from "../../core/BaseBlock.js"
 import { createParagraphBlock } from "../../core/ParsedBlockOutput.js"
+import { LeafParserBlock } from "../../core/ParserBlock.js"
 
 const isElementNode = (node: AnyNode | undefined): node is Element =>
   node?.type === "tag" || node?.type === "script" || node?.type === "style"
@@ -83,8 +83,8 @@ export const parseTextBlocks = ({
   blockId,
   options,
 }: {
-  $: Parameters<LeafBlock["convert"]>[0]["$"]
-  $node: Parameters<LeafBlock["convert"]>[0]["$node"]
+  $: Parameters<LeafParserBlock["convert"]>[0]["$"]
+  $node: Parameters<LeafParserBlock["convert"]>[0]["$node"]
   blockId: string
   options: ParserBlockContext["options"]
 }) => {
@@ -186,7 +186,7 @@ export const parseTextBlocks = ({
   return parsedBlocks
 }
 
-export class NaverSe4TextBlock extends LeafBlock {
+export class NaverSe4TextBlock extends LeafParserBlock {
   override readonly id = "paragraph"
   override readonly label = "문단"
   override readonly templateDefinition = {
@@ -201,7 +201,7 @@ export class NaverSe4TextBlock extends LeafBlock {
     return moduleType === "v2_text" || $node.hasClass("se-text")
   }
 
-  override convert({ $, $node, blockId, options }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ $, $node, blockId, options }: Parameters<LeafParserBlock["convert"]>[0]) {
     return parseTextBlocks({ $, $node, blockId, options })
   }
 }

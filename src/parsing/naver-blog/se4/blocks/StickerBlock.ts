@@ -1,11 +1,11 @@
-import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/BaseBlock.js"
+import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/ParserBlock.js"
 
 import { normalizeAssetUrl } from "../../../../domain/blog/NaverUrl.js"
-import { LeafBlock } from "../../core/BaseBlock.js"
 import { parseJsonAttribute } from "../../core/JsonAttribute.js"
 import { createImageBlock } from "../../core/ParsedBlockOutput.js"
+import { LeafParserBlock } from "../../core/ParserBlock.js"
 
-export class NaverSe4StickerBlock extends LeafBlock {
+export class NaverSe4StickerBlock extends LeafParserBlock {
   override readonly id = "sticker"
   override readonly label = "스티커"
   override readonly templateDefinition = {
@@ -22,7 +22,7 @@ export class NaverSe4StickerBlock extends LeafBlock {
     return $node.hasClass("se-sticker")
   }
 
-  override convert({ $node, options, blockId }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ $node, options, blockId }: Parameters<LeafParserBlock["convert"]>[0]) {
     const stickerLink = $node.find("a.__se_sticker_link").first()
     const linkData = parseJsonAttribute(stickerLink.attr("data-linkdata"))
     const previewSourceUrl = $node.find("img.se-sticker-image").attr("src")?.trim() ?? null

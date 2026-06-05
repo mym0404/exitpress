@@ -1,13 +1,13 @@
 import { load } from "cheerio"
 
 import type { UnknownRecord } from "../../../../shared/object/UnknownRecord.js"
-import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/BaseBlock.js"
+import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/ParserBlock.js"
 
 import { compactText } from "../../../../shared/text/TextUtils.js"
 import { createLinkParagraphBlocks } from "../../common/LinkParagraph.js"
-import { LeafBlock } from "../../core/BaseBlock.js"
+import { LeafParserBlock } from "../../core/ParserBlock.js"
 
-export class NaverSe4OembedBlock extends LeafBlock {
+export class NaverSe4OembedBlock extends LeafParserBlock {
   override readonly id = "oembed"
   override readonly label = "임베드"
   override readonly templateDefinition = {
@@ -22,7 +22,7 @@ export class NaverSe4OembedBlock extends LeafBlock {
     return moduleType === "v2_oembed" || $node.hasClass("se-oembed")
   }
 
-  override convert({ moduleData, blockId, options }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ moduleData, blockId, options }: Parameters<LeafParserBlock["convert"]>[0]) {
     const data = (moduleData?.data ?? {}) as UnknownRecord & {
       html?: string
       inputUrl?: string

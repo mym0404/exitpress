@@ -1,14 +1,14 @@
 import type { ImageData } from "../../../../domain/parser/Types.js"
-import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/BaseBlock.js"
+import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/ParserBlock.js"
 
 import { normalizeAssetUrl } from "../../../../domain/blog/NaverUrl.js"
 import { compactText } from "../../../../shared/text/TextUtils.js"
-import { LeafBlock } from "../../core/BaseBlock.js"
 import { createImageBlock, createParagraphBlock } from "../../core/ParsedBlockOutput.js"
+import { LeafParserBlock } from "../../core/ParserBlock.js"
 
 import { findInComponentRoot } from "./util/ComponentBoundary.js"
 
-export class NaverSe3SubjectMatterBlock extends LeafBlock {
+export class NaverSe3SubjectMatterBlock extends LeafParserBlock {
   override readonly id = "subjectMatter"
   override readonly label = "소재 카드"
   override readonly templateDefinition = {
@@ -32,7 +32,7 @@ export class NaverSe3SubjectMatterBlock extends LeafBlock {
     return $node.hasClass("se_subjectMatter") && $node.hasClass("subjectMatter_book")
   }
 
-  override convert({ $, $node, options, blockId }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ $, $node, options, blockId }: Parameters<LeafParserBlock["convert"]>[0]) {
     const blocks = []
     const imageNode = findInComponentRoot({
       $,

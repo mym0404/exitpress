@@ -1,11 +1,11 @@
 import type { UnknownRecord } from "../../../../shared/object/UnknownRecord.js"
-import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/BaseBlock.js"
+import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/ParserBlock.js"
 
 import { normalizeAssetUrl } from "../../../../domain/blog/NaverUrl.js"
-import { LeafBlock } from "../../core/BaseBlock.js"
 import { createVideoBlock } from "../../core/ParsedBlockOutput.js"
+import { LeafParserBlock } from "../../core/ParserBlock.js"
 
-export class NaverSe4VideoBlock extends LeafBlock {
+export class NaverSe4VideoBlock extends LeafParserBlock {
   override readonly id = "video"
   override readonly label = "비디오"
   override readonly templateDefinition = {
@@ -27,7 +27,7 @@ export class NaverSe4VideoBlock extends LeafBlock {
     return moduleType === "v2_video" || $node.hasClass("se-video")
   }
 
-  override convert({ moduleData, sourceUrl, blockId }: Parameters<LeafBlock["convert"]>[0]) {
+  override convert({ moduleData, sourceUrl, blockId }: Parameters<LeafParserBlock["convert"]>[0]) {
     const data = (moduleData?.data ?? {}) as UnknownRecord & {
       thumbnail?: string
       vid?: string

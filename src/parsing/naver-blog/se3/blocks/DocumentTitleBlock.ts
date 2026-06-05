@@ -1,8 +1,8 @@
-import type { ParserBlockContext } from "../../core/BaseBlock.js"
+import type { ParserBlockContext } from "../../core/ParserBlock.js"
 
-import { LeafBlock } from "../../core/BaseBlock.js"
+import { LeafParserBlock } from "../../core/ParserBlock.js"
 
-export class NaverSe3DocumentTitleBlock extends LeafBlock {
+export class NaverSe3DocumentTitleBlock extends LeafParserBlock {
   override readonly id = "documentTitle"
   override readonly label = "문서 제목"
 
