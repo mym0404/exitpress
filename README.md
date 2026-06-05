@@ -1,5 +1,5 @@
 <p align="left">
-  <img src="public/brand/logo.svg" alt="Exitpress logo" width="88" />
+  <img src="public/brand/logo.png" alt="Exitpress logo" width="88" />
 </p>
 
 # Exitpress
