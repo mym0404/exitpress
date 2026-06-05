@@ -47,15 +47,16 @@ const parseResumeCaseId = (argv: string[]): ResumeCaseId => {
 }
 
 const selectedResumeCase = resumeCases[parseResumeCaseId(process.argv.slice(2))]
-const blogId = process.env.GOODBYE_LIVE_RESUME_BLOG_ID ?? selectedResumeCase.blogId
-const scopedDateFrom = process.env.GOODBYE_LIVE_RESUME_DATE_FROM ?? selectedResumeCase.dateFrom
-const scopedDateTo = process.env.GOODBYE_LIVE_RESUME_DATE_TO ?? selectedResumeCase.dateTo
+const blogId = process.env.EXITPRESS_LIVE_RESUME_BLOG_ID ?? selectedResumeCase.blogId
+const scopedDateFrom = process.env.EXITPRESS_LIVE_RESUME_DATE_FROM ?? selectedResumeCase.dateFrom
+const scopedDateTo = process.env.EXITPRESS_LIVE_RESUME_DATE_TO ?? selectedResumeCase.dateTo
 const scopedCategoryId = Number(
-  process.env.GOODBYE_LIVE_RESUME_CATEGORY_ID ?? selectedResumeCase.categoryId,
+  process.env.EXITPRESS_LIVE_RESUME_CATEGORY_ID ?? selectedResumeCase.categoryId,
 )
-const delayedLogNo = process.env.GOODBYE_LIVE_RESUME_DELAY_LOGNO ?? selectedResumeCase.delayedLogNo
+const delayedLogNo =
+  process.env.EXITPRESS_LIVE_RESUME_DELAY_LOGNO ?? selectedResumeCase.delayedLogNo
 const expectedScopedPostCount = Number(
-  process.env.GOODBYE_LIVE_RESUME_EXPECTED_POSTS ?? selectedResumeCase.expectedPosts,
+  process.env.EXITPRESS_LIVE_RESUME_EXPECTED_POSTS ?? selectedResumeCase.expectedPosts,
 )
 const scopedOutputDir = `output/live-resume-e2e-${Date.now()}`
 
@@ -204,11 +205,11 @@ const startServer = async ({
     env: {
       ...process.env,
       NODE_ENV: "development",
-      GOODBYE_SETTINGS_PATH: settingsPath,
-      GOODBYE_SCAN_CACHE_PATH: scanCachePath,
-      GOODBYE_POST_HTML_CACHE_DIR: postHtmlCacheDir,
-      GOODBYE_LIVE_FETCH_DELAY_LOGNOS: delayedLogNos.join(","),
-      GOODBYE_LIVE_FETCH_DELAY_MS: String(delayMs),
+      EXITPRESS_SETTINGS_PATH: settingsPath,
+      EXITPRESS_SCAN_CACHE_PATH: scanCachePath,
+      EXITPRESS_POST_HTML_CACHE_DIR: postHtmlCacheDir,
+      EXITPRESS_LIVE_FETCH_DELAY_LOGNOS: delayedLogNos.join(","),
+      EXITPRESS_LIVE_FETCH_DELAY_MS: String(delayMs),
     },
     stdio: ["pipe", "pipe", "pipe"],
   })
@@ -256,7 +257,7 @@ const buildScopedOptions = () => {
 }
 
 const run = async () => {
-  const tempRoot = await createTestTempDir("goodbye-live-resume-export-")
+  const tempRoot = await createTestTempDir("exitpress-live-resume-export-")
   const settingsPath = path.join(tempRoot, "export-ui-settings.json")
   const scanCachePath = path.join(tempRoot, "scan-cache.json")
   const postHtmlCacheDir = path.join(tempRoot, "post-html")

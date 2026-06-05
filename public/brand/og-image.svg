@@ -1,5 +1,5 @@
 <svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <title>Goodbye Naver Blog Open Graph image</title>
+  <title>Exitpress Open Graph image</title>
   <defs>
     <radialGradient id="bg-left" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(190 148) rotate(79.412) scale(356.898 536.688)">
       <stop stop-color="#116B44" />
@@ -10,12 +10,12 @@
       <stop offset="1" stop-color="#08100D" stop-opacity="0" />
     </radialGradient>
     <linearGradient id="icon-face" x1="124" y1="118" x2="244" y2="244" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#1AE072" />
-      <stop offset="1" stop-color="#04BA55" />
+      <stop stop-color="#62F6A4" />
+      <stop offset="1" stop-color="#2DE07D" />
     </linearGradient>
     <linearGradient id="icon-glow" x1="120" y1="124" x2="228" y2="232" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#26F387" stop-opacity="0.34" />
-      <stop offset="1" stop-color="#26F387" stop-opacity="0" />
+      <stop stop-color="#62F6A4" stop-opacity="0.34" />
+      <stop offset="1" stop-color="#62F6A4" stop-opacity="0" />
     </linearGradient>
     <filter id="noise" x="0" y="0" width="100%" height="100%">
       <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="2" stitchTiles="stitch" result="grain" />
@@ -23,7 +23,7 @@
     </filter>
     <filter id="logo-shadow" x="0" y="0" width="1200" height="630" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
       <feDropShadow dx="0" dy="24" stdDeviation="22" flood-color="#000000" flood-opacity="0.34" />
-      <feDropShadow dx="0" dy="0" stdDeviation="18" flood-color="#03C75A" flood-opacity="0.14" />
+      <feDropShadow dx="0" dy="0" stdDeviation="18" flood-color="#2DE07D" flood-opacity="0.14" />
     </filter>
     <filter id="shadow-deep" x="0" y="0" width="1200" height="630" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
       <feDropShadow dx="0" dy="36" stdDeviation="36" flood-color="#000000" flood-opacity="0.42" />
@@ -39,8 +39,11 @@
   <rect width="1200" height="630" fill="#E7FFF1" filter="url(#noise)" opacity="0.18" />
 
   <g filter="url(#logo-shadow)">
-    <path d="M17.5 2C19.9853 2 22 4.01472 22 6.5C22 7.85621 21.4001 9.07229 20.4511 9.89732C20.8061 10.8644 21 11.9096 21 13C21 17.9706 16.9706 22 12 22C7.02944 22 3 17.9706 3 13C3 11.9096 3.19392 10.8644 3.54916 9.8972C2.59995 9.07229 2 7.85621 2 6.5C2 4.01472 4.01472 2 6.5 2C8.12553 2 9.54976 2.86189 10.3406 4.15362C10.8774 4.05251 11.4326 4 12 4C12.5674 4 13.1226 4.05251 13.6609 4.15294C14.4502 2.86189 15.8745 2 17.5 2ZM10 13H8C8 15.2091 9.79086 17 12 17C14.2091 17 16 15.2091 16 13H14C14 14.1046 13.1046 15 12 15C10.8954 15 10 14.1046 10 13Z" transform="translate(126 120) scale(5.55)" fill="url(#icon-face)" />
-    <path d="M17.5 2C19.9853 2 22 4.01472 22 6.5C22 7.85621 21.4001 9.07229 20.4511 9.89732C20.8061 10.8644 21 11.9096 21 13C21 17.9706 16.9706 22 12 22C7.02944 22 3 17.9706 3 13C3 11.9096 3.19392 10.8644 3.54916 9.8972C2.59995 9.07229 2 7.85621 2 6.5C2 4.01472 4.01472 2 6.5 2C8.12553 2 9.54976 2.86189 10.3406 4.15362C10.8774 4.05251 11.4326 4 12 4C12.5674 4 13.1226 4.05251 13.6609 4.15294C14.4502 2.86189 15.8745 2 17.5 2ZM10 13H8C8 15.2091 9.79086 17 12 17C14.2091 17 16 15.2091 16 13H14C14 14.1046 13.1046 15 12 15C10.8954 15 10 14.1046 10 13Z" transform="translate(126 120) scale(5.55)" fill="url(#icon-glow)" />
+    <rect x="132" y="118" width="104" height="144" rx="18" fill="#EFFAF4" />
+    <path d="M158 160H210" stroke="#0A1510" stroke-width="12" stroke-linecap="round" opacity="0.42" />
+    <path d="M158 194H202" stroke="#0A1510" stroke-width="12" stroke-linecap="round" opacity="0.3" />
+    <path d="M198 202H294" stroke="url(#icon-face)" stroke-width="18" stroke-linecap="round" />
+    <path d="M268 174L296 202L268 230" stroke="url(#icon-face)" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" />
   </g>
 
   <g filter="url(#shadow-deep)" transform="translate(708 102) rotate(21)">
@@ -53,12 +56,12 @@
   </g>
 
   <text x="84" y="360" fill="#EFFAF4" font-size="62" font-weight="500" font-family="Public Sans, Inter, Arial, sans-serif" letter-spacing="-1.8">
-    Goodbye Naver Blog
+    Exitpress
   </text>
   <text x="84" y="428" fill="#D1E6D8" font-size="30" font-weight="400" font-family="Public Sans, Inter, Arial, sans-serif">
-    Export public posts to Markdown, frontmatter,
+    Every post deserves an exit.
   </text>
   <text x="84" y="468" fill="#D1E6D8" font-size="30" font-weight="400" font-family="Public Sans, Inter, Arial, sans-serif">
-    and local assets before you leave.
+    Export public posts to Markdown, frontmatter, and assets.
   </text>
 </svg>

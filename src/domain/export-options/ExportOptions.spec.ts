@@ -374,7 +374,7 @@ describe("export options", () => {
     expect(optionDescriptions["assets-imageHandlingMode"]).toContain("업로드")
     expect(optionDescriptions["assets-compressionEnabled"]).toContain("압축")
     expect(optionDescriptions["assets-downloadFailureMode"]).toContain("원본 URL")
-    expect(optionDescriptions["assets-stickerAssetMode"]).toContain("네이버 스티커")
+    expect(optionDescriptions["assets-stickerAssetMode"]).toContain("플랫폼 스티커")
     expect(optionDescriptions["links-sameBlogPostMode"]).toContain("같은 블로그")
     expect(optionDescriptions["links-sameBlogPostCustomUrlTemplate"]).toContain("{slug}")
     expect(optionDescriptions["links-sameBlogPostCustomUrlTemplate"]).toContain("{category}")

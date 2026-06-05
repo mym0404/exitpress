@@ -11,13 +11,11 @@ describe("app routes", () => {
   })
 
   it("treats the GitHub Pages storybook base as the storybook route", () => {
-    const basePath = "/goodbye-naver-blog/storybook/"
+    const basePath = "/exitpress/storybook/"
 
-    expect(getAppRoute({ pathname: "/goodbye-naver-blog/storybook/", basePath })).toBe("storybook")
-    expect(getAppRoute({ pathname: "/goodbye-naver-blog/storybook", basePath })).toBe("storybook")
-    expect(createAppHref({ pathname: "/storybook", basePath })).toBe(
-      "/goodbye-naver-blog/storybook/",
-    )
+    expect(getAppRoute({ pathname: "/exitpress/storybook/", basePath })).toBe("storybook")
+    expect(getAppRoute({ pathname: "/exitpress/storybook", basePath })).toBe("storybook")
+    expect(createAppHref({ pathname: "/storybook", basePath })).toBe("/exitpress/storybook/")
     expect(shouldShowStorybookBackLink(basePath)).toBe(false)
   })
 })

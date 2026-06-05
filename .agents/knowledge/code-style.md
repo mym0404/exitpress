@@ -58,7 +58,7 @@
 
 ## Server And Harness
 - User `mise exec -- pnpm dev` owns the normal development server path.
-- Tests and harnesses should use isolated `GOODBYE_SETTINGS_PATH`, `GOODBYE_SCAN_CACHE_PATH`, and non-default `PORT` or `listen(0)`.
+- Tests and harnesses should use isolated `EXITPRESS_SETTINGS_PATH`, `EXITPRESS_SCAN_CACHE_PATH`, and non-default `PORT` or `listen(0)`.
 - Ad-hoc server checks should not share `.cache/export-ui-settings.json` with the user's development session.
 - Repo-local temporary files belong under `tmp/`; tests and e2e harnesses should use `tests/support/test-paths.ts` instead of `os.tmpdir()`.
 - `.cache/` is persisted app state, not a scratch directory for tests, harnesses, or runtime upload config.

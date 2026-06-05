@@ -25,7 +25,7 @@ const linkTemplateVariableMeta: Record<
   },
   logNo: {
     label: "{logNo}",
-    description: "네이버 글 번호를 그대로 넣습니다.",
+    description: "원본 글 번호를 그대로 넣습니다.",
   },
   blogId: {
     label: "{blogId}",

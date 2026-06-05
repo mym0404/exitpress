@@ -55,8 +55,8 @@ export const LinksOptionsStep = ({
           inputId="links-sameBlogPostMode-keep-source"
           name="links-sameBlogPostMode"
           optionKey="links-sameBlogPostMode"
-          label="원래 네이버 블로그 링크 유지"
-          description="같은 블로그 글이어도 기존 네이버 URL을 그대로 둡니다."
+          label="원래 블로그 링크 유지"
+          description="같은 블로그 글이어도 기존 URL을 그대로 둡니다."
           checked={options.links.sameBlogPostMode === "keep-source"}
           onChange={() =>
             onOptionsChange((current) => ({

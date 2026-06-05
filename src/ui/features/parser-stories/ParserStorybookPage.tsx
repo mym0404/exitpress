@@ -401,12 +401,12 @@ const StoryPreview = ({ story }: { story: ParserStory }) => {
         </CodePanel>
         <Card variant="panel" className="overflow-hidden">
           <CardHeader className="border-b border-border p-4">
-            <CardTitle className="text-base">Naver Capture</CardTitle>
+            <CardTitle className="text-base">Source Capture</CardTitle>
           </CardHeader>
           <CardContent className="grid place-items-center bg-muted p-4">
             <img
               src={story.screenshotSrc}
-              alt={`${story.blockLabel} Naver capture`}
+              alt={`${story.blockLabel} source capture`}
               className="max-h-[420px] max-w-full rounded-[var(--radius-md)] border border-border bg-card object-contain shadow-[var(--panel-shadow-border)]"
             />
           </CardContent>
@@ -505,7 +505,7 @@ export const ParserStorybookPage = () => {
       <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-7xl flex-col gap-5 px-4 py-5 xl:px-6 xl:py-6">
         <WizardHeader
           title="Parser Storybook"
-          description="지원 중인 Naver Blog parser block의 입력 HTML, 원본 캡처, Markdown 출력을 비교합니다."
+          description="지원 중인 parser block의 입력 HTML, 원본 캡처, Markdown 출력을 비교합니다."
           themePreference={themePreference}
           headerStatus="ready"
           summaryCards={summaryCards}

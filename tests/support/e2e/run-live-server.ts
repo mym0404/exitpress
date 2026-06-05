@@ -6,9 +6,9 @@ const wait = (ms: number) =>
     setTimeout(resolve, ms)
   })
 
-const delayMs = Number(process.env.GOODBYE_LIVE_FETCH_DELAY_MS ?? "0")
+const delayMs = Number(process.env.EXITPRESS_LIVE_FETCH_DELAY_MS ?? "0")
 const delayedLogNos = new Set(
-  (process.env.GOODBYE_LIVE_FETCH_DELAY_LOGNOS ?? "")
+  (process.env.EXITPRESS_LIVE_FETCH_DELAY_LOGNOS ?? "")
     .split(",")
     .map((value) => value.trim())
     .filter(Boolean),
@@ -29,9 +29,9 @@ if (delayedLogNos.size > 0 && delayMs > 0) {
 }
 
 const server = createHttpServer({
-  settingsPath: process.env.GOODBYE_SETTINGS_PATH,
-  scanCachePath: process.env.GOODBYE_SCAN_CACHE_PATH,
-  postHtmlCacheDir: process.env.GOODBYE_POST_HTML_CACHE_DIR,
+  settingsPath: process.env.EXITPRESS_SETTINGS_PATH,
+  scanCachePath: process.env.EXITPRESS_SCAN_CACHE_PATH,
+  postHtmlCacheDir: process.env.EXITPRESS_POST_HTML_CACHE_DIR,
 })
 
 const shutdown = () => {

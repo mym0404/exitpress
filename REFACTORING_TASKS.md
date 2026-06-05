@@ -94,7 +94,7 @@
 - [x] 2026-05-11 custom production import gate scan: violations 0
 - [x] 2026-05-11 custom import graph cycle scan over source files: cycles 0
 - [x] 2026-05-11 stale path scan: removed project old path references from config, docs, source, scripts, tests
-- [x] 2026-05-11 `pnpm test:network`: default live resume passed with completedCount 2; SE2 table live resume passed with completedCount 4; live upload did not run in the full chain because `GOODBYE_UPLOAD_E2E=1` is not set
-- [x] 2026-05-11 `GOODBYE_UPLOAD_E2E=1 bun tests/e2e/run-ui-live-upload.ts`: blocked before browser start because `GOODBYE_UPLOAD_E2E_GITHUB_TOKEN` is not present in shell env or `.env`
+- [x] 2026-05-11 `pnpm test:network`: default live resume passed with completedCount 2; SE2 table live resume passed with completedCount 4; live upload did not run in the full chain because `EXITPRESS_UPLOAD_E2E=1` is not set
+- [x] 2026-05-11 `EXITPRESS_UPLOAD_E2E=1 bun tests/e2e/run-ui-live-upload.ts`: blocked before browser start because `EXITPRESS_UPLOAD_E2E_GITHUB_TOKEN` is not present in shell env or `.env`
 - [x] 2026-05-11 live resume fix: final completed manifest persist is scheduled after `jobStore.completeExport`
 - [x] 2026-05-11 SE2 parser fix: top-level legacy `img.fx` / `img._postImage` nodes parse as image blocks

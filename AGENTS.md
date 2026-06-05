@@ -1,7 +1,7 @@
 # Agent Guide
 
 ## Project Overview
-- 이 저장소는 공개 네이버 블로그 글을 수집해 editor별 parser block으로 공용 AST를 만들고, Markdown, frontmatter, 자산 파일, `manifest.json`으로 export하는 로컬 도구다.
+- 이 저장소는 공개 블로그 글을 수집해 플랫폼별 parser block으로 공용 AST를 만들고, Markdown, frontmatter, 자산 파일, `manifest.json`으로 export하는 로컬 도구다.
 - 로컬 웹 UI, 단건 export CLI, fixture-first regression, Playwright UI smoke, live network e2e를 함께 유지한다.
 
 ## Tech Stack
@@ -23,7 +23,7 @@
 |   |-- domain/                       # AST, blog, export option/job, upload contracts
 |   |-- shared/                       # runtime-neutral collection, text, date, error helpers
 |   |-- infra/                        # Node, HTTP, runtime adapters
-|   |-- integrations/naver-blog/      # Naver Blog API and HTML fetch boundary
+|   |-- integrations/naver-blog/      # current Naver Blog API and HTML fetch boundary
 |   |-- parsing/naver-blog/           # parser core plus SE2, SE3, SE4 families
 |   |-- markdown/                     # common AST to Markdown renderer
 |   |-- exporting/                    # workflow, post, assets, paths, upload
@@ -64,8 +64,8 @@
 ## Operating Rules
 - source of truth 우선순위는 사용자 지시, 루트 `AGENTS.md`, 코드/설정/테스트, `.agents/knowledge/*.md`, reference 문서다.
 - 영속 UI 설정과 서버 파일 캐시는 `.cache/` 아래에 저장한다. 임시 테스트, harness, 런타임 config 파일은 repo-local `tmp/` 아래에 둔다.
-- AI agent, test, harness가 서버를 띄울 때는 사용자 `mise exec -- pnpm dev`와 공유 `.cache/export-ui-settings.json`을 피하고, 별도 `GOODBYE_SETTINGS_PATH`, `GOODBYE_SCAN_CACHE_PATH`, repo-local `tmp/`, 비기본 `PORT` 또는 `listen(0)`을 쓴다.
-- GitHub Pages는 repository settings에서 GitHub Actions source를 사용하고, `vite.pages.config.ts`의 `/goodbye-naver-blog/storybook/` base로 Storybook route만 배포한다.
+- AI agent, test, harness가 서버를 띄울 때는 사용자 `mise exec -- pnpm dev`와 공유 `.cache/export-ui-settings.json`을 피하고, 별도 `EXITPRESS_SETTINGS_PATH`, `EXITPRESS_SCAN_CACHE_PATH`, repo-local `tmp/`, 비기본 `PORT` 또는 `listen(0)`을 쓴다.
+- GitHub Pages는 repository settings에서 GitHub Actions source를 사용하고, `vite.pages.config.ts`의 `/exitpress/storybook/` base로 Storybook route만 배포한다.
 - README, ingest report, PR 설명에 쓰는 evidence section 계약은 `.agents/knowledge/post-evidence.md`를 따른다.
 - commit, push, PR 생성은 사용자가 명시적으로 요청한 경우에만 수행한다.
 

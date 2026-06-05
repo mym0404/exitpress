@@ -23,7 +23,7 @@ const headerLinks = [
     label: "Storybook",
   },
   {
-    href: "https://github.com/mym0404/goodbye-naver-blog",
+    href: "https://github.com/mym0404/exitpress",
     Icon: RiGithubLine,
     label: "GitHub",
     external: true,

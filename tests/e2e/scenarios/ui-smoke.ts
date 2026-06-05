@@ -22,8 +22,8 @@ import { createTestPath, createTestTempDir } from "../../support/test-paths.js"
 
 const responseTimeoutMs = 90_000
 const blockOutputDefinitions = new NaverBlog().getBlockOutputDefinitions()
-const smokeFast = process.env.GOODBYE_SMOKE_FAST !== "0"
-const smokeDebug = process.env.GOODBYE_SMOKE_DEBUG === "1"
+const smokeFast = process.env.EXITPRESS_SMOKE_FAST !== "0"
+const smokeDebug = process.env.EXITPRESS_SMOKE_DEBUG === "1"
 const debugLog = (...args: unknown[]) => {
   if (!smokeDebug) {
     return
@@ -780,7 +780,7 @@ const waitForStepView = async ({
 }
 
 const run = async () => {
-  const tempRoot = await createTestTempDir("goodbye-naver-blog-smoke-")
+  const tempRoot = await createTestTempDir("exitpress-smoke-")
   const outputDir = path.join(tempRoot, "output")
   const server = createHttpServer({
     settingsPath: path.join(tempRoot, "export-ui-settings.json"),

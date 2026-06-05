@@ -47,7 +47,7 @@ describe("App storybook route", () => {
     expect(screen.getByText("SmartEditor 4 / documentTitle")).toBeInTheDocument()
     expect(screen.queryByText(/path 0/)).toBeNull()
     expect(screen.getByText("Input HTML")).toBeInTheDocument()
-    expect(screen.getByText("Naver Capture")).toBeInTheDocument()
+    expect(screen.getByText("Source Capture")).toBeInTheDocument()
     expect(screen.getByText("Markdown")).toBeInTheDocument()
     expect(document.querySelector("[data-parser-story-code='html']")).toBeInTheDocument()
     expect(document.querySelector("[data-parser-story-markdown]")).toBeInTheDocument()

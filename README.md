@@ -1,14 +1,16 @@
 <p align="left">
-  <img src="public/brand/logo.svg" alt="Goodbye Naver Blog logo" width="88" />
+  <img src="public/brand/logo.svg" alt="Exitpress logo" width="88" />
 </p>
 
-# Goodbye Naver Blog
+# Exitpress
 
-[![codecov](https://codecov.io/gh/mym0404/goodbye-naver-blog/graph/badge.svg)](https://codecov.io/gh/mym0404/goodbye-naver-blog)
+[![codecov](https://codecov.io/gh/mym0404/exitpress/graph/badge.svg)](https://codecov.io/gh/mym0404/exitpress)
 
-네이버 블로그 공개 글을 스캔해서 Markdown, frontmatter, 로컬 자산, 복구 가능한 `manifest.json`으로 export하는 도구입니다.
+Every post deserves an exit.
 
-![Goodbye Naver Blog Open Graph image](public/brand/og-image.png)
+Exitpress는 공개 블로그 글을 스캔해서 Markdown, frontmatter, 로컬 자산, 복구 가능한 `manifest.json`으로 export하는 도구입니다. 현재 구현된 수집 대상은 Naver Blog 공개 글이며, 구조는 여러 블로그 플랫폼을 추가하는 방향을 전제로 합니다.
+
+![Exitpress Open Graph image](public/brand/og-image.png)
 
 ## 내 블로그에 특정 블록이 파싱이 안돼요
 
@@ -24,7 +26,7 @@
 
 다음과 같은 루틴을 통해 이 저장소의 Parser는 점점 진화하고 강해집니다.
 
-[PR List](https://github.com/mym0404/goodbye-naver-blog/pulls?q=is%3Apr+label%3Aai-generated)
+[PR List](https://github.com/mym0404/exitpress/pulls?q=is%3Apr+label%3Aai-generated)
 
 - AI는 automation을 통해 스스로 부족하다고 생각하는 부분을 많이 담고 있을 것 같은 Blog를 탐색
 - 파싱이 되지 않는 블록들을 Unit으로 나눠 구조화
@@ -37,9 +39,9 @@
 
 ## 무엇을 할 수 있나요?
 
-- ✅ SE2, SE3, ONE(SE4) 모든 블로그 에디터 타입을 지원
+- ✅ 현재 Naver Blog SE2, SE3, ONE(SE4) 에디터 타입을 지원
 - ✅ 다양한 이미지 처리 옵션
-  1. 기존 네이버 블로그 글의 이미지 주소로 남겨두기
+  1. 기존 글의 이미지 주소로 남겨두기
   2. 다운로드, 압축 후 로컬 경로로 변환하기
   3. **다운로드, 압축 후 PicList 로 커스텀 Provider 업로드 후 URI 변경하기**
 - ✅ 동일한 이미지는 비교 후 **중복 다운로드 하지 않음** (예를 들어, 특정 카테고리의 고정된 썸네일들이 중복 다운로드 되거나 업로드되지 않음)
@@ -49,7 +51,7 @@
 - ✅ 같은 블로그에 있는 다른 글 백링크를 자유 형식으로 변환 가능(예를 들어, 새로운 블로그로 이전한다고 할 때 그 블로그의 https 주소나 상대 경로로 변경 가능)
 - ✅ 그 외 다양한 옵션들
 
-> 지원 범위는 공개 글만입니다.
+> 현재 수집 지원 범위는 공개 글만입니다.
 
 ## 빠른 시작
 
@@ -60,8 +62,8 @@
 ### 설치
 
 ```bash
-git clone https://github.com/mym0404/goodbye-naver-blog.git
-cd goodbye-naver-blog
+git clone https://github.com/mym0404/exitpress.git
+cd exitpress
 mise trust
 mise install
 pnpm install
@@ -102,7 +104,7 @@ output/
 
 [원문 보기](https://blog.naver.com/mym0404/221504285266)
 
-<img src=".agents/knowledge/reference/assets/readme/mym0404-221504285266-path-1-0-1-0-0-0-naver.png" alt="SE2 link image Naver capture" width="300">
+<img src=".agents/knowledge/reference/assets/readme/mym0404-221504285266-path-1-0-1-0-0-0-naver.png" alt="SE2 link image source capture" width="300">
 
 ```markdown
 ![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fcdn-images-1.medium.com%2Fmax%2F1200%2F0*WZM2cHocLncEgg1F.png%22&type=f560_336)
@@ -112,7 +114,7 @@ output/
 
 [원문 보기](https://blog.naver.com/mym0404/221504285266)
 
-<img src=".agents/knowledge/reference/assets/readme/mym0404-221504285266-path-1-3-naver.png" alt="SE2 paragraph Naver capture" width="300">
+<img src=".agents/knowledge/reference/assets/readme/mym0404-221504285266-path-1-3-naver.png" alt="SE2 paragraph source capture" width="300">
 
 ```markdown
 우선 아래와 같은 클래스를 하나 만들어준다.
@@ -122,7 +124,7 @@ output/
 
 [원문 보기](https://blog.naver.com/mym0404/221504285266)
 
-<img src=".agents/knowledge/reference/assets/readme/mym0404-221504285266-path-1-7-0-naver.png" alt="SE2 code block Naver capture" width="300">
+<img src=".agents/knowledge/reference/assets/readme/mym0404-221504285266-path-1-7-0-naver.png" alt="SE2 code block source capture" width="300">
 
 ````markdown
 ```
@@ -140,7 +142,7 @@ class Device {
 
 [원문 보기](https://blog.naver.com/mym0404/223034929697)
 
-<img src=".agents/knowledge/reference/assets/readme/mym0404-223034929697-path-2-naver.png" alt="SE4 link card Naver capture" width="300">
+<img src=".agents/knowledge/reference/assets/readme/mym0404-223034929697-path-2-naver.png" alt="SE4 link card source capture" width="300">
 
 ```markdown
 [9942번: 하노이의 네 탑](https://www.acmicpc.net/problem/9942)
@@ -152,7 +154,7 @@ class Device {
 
 [원문 보기](https://blog.naver.com/mym0404/223034929697)
 
-<img src=".agents/knowledge/reference/assets/readme/mym0404-223034929697-path-4-naver.png" alt="SE4 image Naver capture" width="300">
+<img src=".agents/knowledge/reference/assets/readme/mym0404-223034929697-path-4-naver.png" alt="SE4 image source capture" width="300">
 
 ```markdown
 ![](https://mblogthumb-phinf.pstatic.net/MjAyMzAzMDRfMjcz/MDAxNjc3OTM2NjkzMzk1.dBw7P8v6syYqhX6uiGFtZYMxhRNu5AdLgy0ubMXc0o8g.NCYvjxO4oXkJt-ZuBNXDiROJWj-zxI7ibwoKHpoyOKog.PNG.mym0404/image.png?type=w800)
@@ -162,7 +164,7 @@ class Device {
 
 [원문 보기](https://blog.naver.com/mym0404/222619228134)
 
-<img src=".agents/knowledge/reference/assets/readme/mym0404-222619228134-path-6-naver.png" alt="SE4 quote Naver capture" width="300">
+<img src=".agents/knowledge/reference/assets/readme/mym0404-222619228134-path-6-naver.png" alt="SE4 quote source capture" width="300">
 
 ```markdown
 > Description & Relation
@@ -172,7 +174,7 @@ class Device {
 
 [원문 보기](https://blog.naver.com/mym0404/223034929697)
 
-<img src=".agents/knowledge/reference/assets/readme/mym0404-223034929697-path-10-naver.png" alt="SE4 formula Naver capture" width="300">
+<img src=".agents/knowledge/reference/assets/readme/mym0404-223034929697-path-10-naver.png" alt="SE4 formula source capture" width="300">
 
 ```markdown
 $$
@@ -184,7 +186,7 @@ $$
 
 [원문 보기](https://blog.naver.com/mym0404/223034929697)
 
-<img src=".agents/knowledge/reference/assets/readme/mym0404-223034929697-path-12-naver.png" alt="SE4 code block Naver capture" width="300">
+<img src=".agents/knowledge/reference/assets/readme/mym0404-223034929697-path-12-naver.png" alt="SE4 code block source capture" width="300">
 
 ````markdown
 ```javascript
@@ -216,7 +218,7 @@ void solve() {
 
 [원문 보기](https://blog.naver.com/mym0404/221302086471)
 
-<img src=".agents/knowledge/reference/assets/readme/mym0404-221302086471-path-2-naver.png" alt="SE4 video Naver capture" width="300">
+<img src=".agents/knowledge/reference/assets/readme/mym0404-221302086471-path-2-naver.png" alt="SE4 video source capture" width="300">
 
 ```markdown
 [휴머노이드 첫 Rigging 성공 애니메이션](https://blog.naver.com/mym0404/221302086471)
@@ -226,7 +228,7 @@ void solve() {
 
 [원문 보기](https://blog.naver.com/mym0404/221302086471)
 
-<img src=".agents/knowledge/reference/assets/readme/mym0404-221302086471-path-4-naver.png" alt="SE4 table Naver capture" width="300">
+<img src=".agents/knowledge/reference/assets/readme/mym0404-221302086471-path-4-naver.png" alt="SE4 table source capture" width="300">
 
 ```markdown
 | ㅗㄷ | 1 | 2 |

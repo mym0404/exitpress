@@ -408,7 +408,7 @@ describe("ExportOptionsPanel", () => {
       screen.getByText("카테고리 이름을 현재 slug 규칙에 맞춰 바꾼 값입니다."),
     ).toBeInTheDocument()
     expect(screen.getAllByText("{logNo}").length).toBeGreaterThan(0)
-    expect(screen.getByText("네이버 글 번호를 그대로 넣습니다.")).toBeInTheDocument()
+    expect(screen.getByText("원본 글 번호를 그대로 넣습니다.")).toBeInTheDocument()
     expect(screen.getAllByText("{YYYY}").length).toBeGreaterThan(0)
     expect(screen.getAllByText("발행 연도를 4자리로 넣습니다.").length).toBeGreaterThan(0)
     expect(screen.getAllByText("{MM}").length).toBeGreaterThan(0)

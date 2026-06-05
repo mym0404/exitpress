@@ -6,7 +6,7 @@ export const optionDescriptions: OptionDescriptionMap = {
   "scope-dateTo": "이 날짜 이전에 발행한 글까지만 범위에 포함합니다.",
   "structure-groupByCategory": "카테고리 경로를 출력 폴더 구조에 유지할지 정합니다.",
   "structure-includeDateInPostFolderName": "글 폴더 이름 앞부분에 발행 날짜를 붙입니다.",
-  "structure-includeLogNoInPostFolderName": "글 폴더 이름에 네이버 logNo를 함께 넣습니다.",
+  "structure-includeLogNoInPostFolderName": "글 폴더 이름에 원본 글 번호를 함께 넣습니다.",
   "structure-slugStyle":
     "글 제목 slug와 카테고리 경로를 kebab-case, snake_case, 원본 제목 유지 중 어떤 방식으로 쓸지 정합니다.",
   "structure-slugWhitespace":
@@ -22,7 +22,7 @@ export const optionDescriptions: OptionDescriptionMap = {
   "assets-downloadFailureMode":
     "이미지 다운로드가 실패했을 때 글을 실패 처리할지, 원본 URL을 유지할지, 이미지를 생략할지 정합니다.",
   "assets-stickerAssetMode":
-    "네이버 스티커를 기본적으로 무시할지, 원본 자산 URL로 내려받아 본문에 포함할지 정합니다.",
+    "플랫폼 스티커를 기본적으로 무시할지, 원본 자산 URL로 내려받아 본문에 포함할지 정합니다.",
   "assets-downloadImages": "본문 이미지 파일을 실제로 다운로드할지 정합니다.",
   "assets-downloadThumbnails": "썸네일과 비디오 썸네일 파일을 실제로 다운로드할지 정합니다.",
   "assets-includeImageCaptions": "이미지 아래에 캡션 텍스트를 Markdown으로 함께 남깁니다.",

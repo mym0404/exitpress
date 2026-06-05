@@ -6,7 +6,7 @@
 
 ## Server Rules
 - Do not reuse a user's `mise exec -- pnpm dev` session for agent harness checks.
-- Start isolated checks with non-default `PORT`, separate `GOODBYE_SETTINGS_PATH`, and separate `GOODBYE_SCAN_CACHE_PATH`.
+- Start isolated checks with non-default `PORT`, separate `EXITPRESS_SETTINGS_PATH`, and separate `EXITPRESS_SCAN_CACHE_PATH`.
 - Keep browser verification scratch files under repo-local `tmp/`.
 - Prefer harnesses that use `listen(0)` when available.
 
@@ -16,7 +16,7 @@
 - Export reaches `completed` or `upload-ready` as expected.
 - Upload reaches `upload-completed`, `upload-failed`, or the requested intermediate state.
 - Desktop/mobile layout has no obvious horizontal overflow, clipping, or unreadable contrast.
-- Parser Storybook checks should confirm the rendered `Input HTML`, `Naver Capture`, and `Markdown` areas describe the same source block.
+- Parser Storybook checks should confirm the rendered `Input HTML`, `Source Capture`, and `Markdown` areas describe the same source block.
 - Parser Storybook capture images should resolve from bundled `src/ui/features/parser-stories/assets` URLs in development or built asset URLs in production.
 
 ## Record

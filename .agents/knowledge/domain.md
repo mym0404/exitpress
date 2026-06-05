@@ -1,7 +1,7 @@
 # Domain
 
 ## Product Surface
-- The tool exports public Naver Blog posts into portable Markdown sets.
+- The tool exports public blog posts into portable Markdown sets. The current implemented source is public Naver Blog posts.
 - Users can scan a blog, select categories or scope, tune frontmatter/Markdown/assets options, run export, optionally upload images, and recover the last job from `manifest.json`.
 - Output contains Markdown files, YAML frontmatter, local or remote image references, shared assets under `output/public`, and a `manifest.json` that is also the UI recovery source of truth.
 
