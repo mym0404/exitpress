@@ -28,7 +28,7 @@ const Field = React.forwardRef<
     data-disabled={disabled || undefined}
     data-invalid={invalid || undefined}
     className={cn(
-      "group/field grid min-w-0 gap-2 data-[disabled=true]:opacity-60 data-[invalid=true]:text-destructive",
+      "group/field grid w-full min-w-0 content-start gap-2 self-start data-[disabled=true]:opacity-60 data-[invalid=true]:text-destructive",
       className,
     )}
     {...props}

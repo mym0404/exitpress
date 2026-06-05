@@ -25,7 +25,7 @@ export const BlogInputPanel = ({
 }) => (
   <Card variant="panel" className="hero-panel overflow-hidden">
     <CardContent className="grid gap-4 p-5">
-      <FieldGroup className="gap-3 md:grid md:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]">
+      <FieldGroup className="gap-3 md:grid md:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] md:items-start">
         <Field invalid={scanStatusTone === "error"} disabled={scanPending}>
           <FieldLabel htmlFor="blogIdOrUrl">블로그 ID 또는 URL</FieldLabel>
           <Input

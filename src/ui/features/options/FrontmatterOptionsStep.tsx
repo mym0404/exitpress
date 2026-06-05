@@ -28,7 +28,7 @@ export const FrontmatterOptionsStep = ({
   onOptionsChange: (updater: (current: ExportOptions) => ExportOptions) => void
 }) => (
   <OptionSection title="Frontmatter" note="메타데이터 블록">
-    <div className="frontmatter-toolbar grid gap-3 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]">
+    <div className="frontmatter-toolbar grid gap-3 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:items-start">
       <CheckField
         inputId="frontmatter-enabled"
         optionKey="frontmatter-enabled"
@@ -48,7 +48,7 @@ export const FrontmatterOptionsStep = ({
       />
       <div
         className={cn(
-          "frontmatter-state-card field-card flex min-h-0 flex-col justify-between gap-3 rounded-2xl px-4 py-4 sm:flex-row sm:items-start",
+          "frontmatter-state-card field-card flex min-h-0 w-full flex-col justify-between gap-3 self-start rounded-2xl px-4 py-4 sm:flex-row sm:items-start",
           frontmatterValidationErrors.length > 0 &&
             "border-[color-mix(in_srgb,var(--status-error-fg)_26%,transparent)] shadow-[var(--panel-shadow-border),0_0_0_1px_color-mix(in_srgb,var(--status-error-fg)_12%,transparent)]",
         )}
@@ -87,7 +87,7 @@ export const FrontmatterOptionsStep = ({
 
     <div
       id="frontmatter-fields"
-      className="frontmatter-grid grid gap-3 md:grid-cols-2 xl:col-span-2 2xl:grid-cols-3"
+      className="frontmatter-grid grid items-start gap-3 md:grid-cols-2 xl:col-span-2 2xl:grid-cols-3"
     >
       {frontmatterFieldOrder.map((fieldName) => {
         const fieldMeta = frontmatterFieldMeta[fieldName]
@@ -98,7 +98,7 @@ export const FrontmatterOptionsStep = ({
           <div
             key={fieldName}
             className={cn(
-              "frontmatter-row field-card grid content-start gap-3 rounded-2xl px-3 py-3",
+              "frontmatter-row field-card grid content-start gap-3 self-start rounded-2xl px-3 py-3",
               hasError &&
                 "border-[color-mix(in_srgb,var(--status-error-fg)_26%,transparent)] shadow-[var(--panel-shadow-border),0_0_0_1px_color-mix(in_srgb,var(--status-error-fg)_12%,transparent)]",
             )}

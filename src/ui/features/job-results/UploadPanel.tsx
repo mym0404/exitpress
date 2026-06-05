@@ -174,7 +174,7 @@ export const UploadPanel = ({
                   {activeProviderDefinition.description}
                 </p>
               </div>
-              <div className="grid gap-3 sm:grid-cols-2">
+              <div className="grid items-start gap-3 sm:grid-cols-2">
                 {isAListProvider(providerKey) ? (
                   <div className="subtle-panel grid gap-2 rounded-2xl px-4 py-3 sm:col-span-2">
                     <span className="text-sm font-semibold text-foreground">Authentication</span>
@@ -273,7 +273,10 @@ export const UploadPanel = ({
 
                   if (field.inputType === "select") {
                     return (
-                      <div key={`${providerKey}:${field.key}`} className="grid gap-2">
+                      <div
+                        key={`${providerKey}:${field.key}`}
+                        className="grid content-start gap-2 self-start"
+                      >
                         <label
                           htmlFor={fieldInputId}
                           className="text-sm font-semibold text-foreground"
@@ -338,7 +341,10 @@ export const UploadPanel = ({
                   }
 
                   return (
-                    <div key={`${providerKey}:${field.key}`} className="grid gap-2">
+                    <div
+                      key={`${providerKey}:${field.key}`}
+                      className="grid content-start gap-2 self-start"
+                    >
                       <label
                         htmlFor={fieldInputId}
                         className="text-sm font-semibold text-foreground"

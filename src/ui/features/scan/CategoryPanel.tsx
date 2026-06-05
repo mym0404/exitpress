@@ -84,7 +84,7 @@ export const CategoryPanel = ({
           {categoryStatus}
         </p>
 
-        <FieldGroup className="gap-3 xl:grid xl:grid-cols-3">
+        <FieldGroup className="gap-3 xl:grid xl:grid-cols-3 xl:items-start">
           <Field className="field-card min-h-0 rounded-2xl px-3 py-3" disabled={!scanResult}>
             <FieldLabel htmlFor="scope-categoryMode">카테고리 포함 범위</FieldLabel>
             <Select

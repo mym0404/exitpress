@@ -44,6 +44,10 @@
 - Upload badges remain soft badges for `대기`, `부분 완료`, `완료`, and `실패`.
 - Floating bottom dock should read as a command dock, not a full-width footer.
 - Theme toggle is only in the top shell.
+- Horizontal form grids must solve control alignment with alignment constraints, not reserved or
+  fixed heights. Field containers should use `content-start`/`self-start`, and the grid parent
+  should use breakpoint-scoped `items-start`, so labels, descriptions, or error messages in one
+  column do not stretch sibling fields or move their controls.
 
 ## Accessibility And Motion
 - Normal text contrast target is 4.5:1 or better in dark and light themes.

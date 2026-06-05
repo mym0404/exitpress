@@ -14,7 +14,7 @@ import { cn } from "../../lib/Cn.js"
 const optionFieldCardClass =
   "field-card grid min-h-[6.25rem] content-start gap-1.5 self-start rounded-2xl px-3 py-3"
 const optionFieldPlainClass = "grid min-h-0 content-start gap-1.5 self-start"
-const checkFieldClass = "field-card flex flex-col rounded-2xl px-3 py-3"
+const checkFieldClass = "field-card flex w-full flex-col self-start rounded-2xl px-3 py-3"
 const optionSectionClass = "option-section grid gap-4"
 export const optionEmbeddedFieldClass =
   "field grid min-h-0 gap-2 rounded-xl border border-border bg-muted/20 px-3 py-3"
