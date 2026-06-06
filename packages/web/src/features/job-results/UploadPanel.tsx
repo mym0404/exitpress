@@ -120,7 +120,7 @@ export const UploadPanel = ({
         ) : (
           <form
             id="upload-form"
-            className="field-card grid gap-4 rounded-[1.5rem] p-4"
+            className="grid gap-4 border-t border-border pt-4"
             onSubmit={async (event) => {
               event.preventDefault()
               const normalizedProviderFields = trimProviderFieldsForSubmit({
@@ -232,7 +232,7 @@ export const UploadPanel = ({
                     return (
                       <div
                         key={`${providerKey}:${field.key}`}
-                        className={`subtle-panel flex items-center gap-3 rounded-2xl px-4 py-3 sm:col-span-2 ${rule.disabled ? "opacity-70" : ""}`}
+                        className={`flex items-start gap-3 rounded-[var(--radius-md)] px-2 py-1.5 transition-colors hover:bg-accent/55 sm:col-span-2 ${rule.disabled ? "opacity-70" : ""}`}
                       >
                         <Checkbox
                           id={fieldInputId}
