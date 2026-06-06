@@ -8,7 +8,6 @@ export const naverSe21Comment = {
   blockIndex: 1,
   blockId: "comment",
   blockLabel: "HTML 주석",
-  group: "auxiliary",
   sourceUrl: "https://blog.naver.com/anglekim3708/70187292476",
   inspectPath: "0.1",
   inputHtml:

@@ -5,6 +5,8 @@ import { describe, expect, it } from "vitest"
 
 import type { ParsedPost } from "@exitpress/domain/parser/schema/ParsedPost.js"
 
+import type { ParserBlockTemplateDefinition } from "../../core/ParserBlock.js"
+
 import { BlogEditorParser } from "../../core/BlogEditorParser.js"
 import { createParagraphBlock } from "../../core/ParsedBlockOutput.js"
 import { LeafParserBlock } from "../../core/ParserBlock.js"
@@ -15,6 +17,13 @@ import { NaverSe2TextNodeBlock } from "./TextNodeBlock.js"
 class CustomSectionLeafBlock extends LeafParserBlock {
   override readonly id = "customSection"
   override readonly label = "Custom section"
+  override readonly templateDefinition = {
+    label: this.label,
+    presets: [{ id: "paragraph", label: "본문", template: "${text}" }],
+    props: {
+      text: { label: "본문", type: "string" },
+    },
+  } satisfies ParserBlockTemplateDefinition
 
   override match({ node }: Parameters<LeafParserBlock["match"]>[0]) {
     return node.type === "tag" && node.tagName.toLowerCase() === "section"

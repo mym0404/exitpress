@@ -16,6 +16,6 @@ export const createNaverBlogDefaultBlockTemplateMap = () =>
     new NaverBlog().getBlockTemplateDefinitions().flatMap((definition) => {
       const template = definition.presets[0]?.template
 
-      return template ? [[definition.key, template]] : []
+      return template === undefined ? [] : [[definition.key, template]]
     }),
   )

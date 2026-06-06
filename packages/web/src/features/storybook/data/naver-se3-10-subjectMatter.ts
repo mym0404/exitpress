@@ -8,7 +8,6 @@ export const naverSe310SubjectMatter = {
   blockIndex: 10,
   blockId: "subjectMatter",
   blockLabel: "소재 카드",
-  group: "output",
   sourceUrl: "https://blog.naver.com/dlwkdlf/221298156647",
   inspectPath: "0",
   inputHtml:

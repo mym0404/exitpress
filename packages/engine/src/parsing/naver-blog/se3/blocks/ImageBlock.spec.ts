@@ -201,7 +201,7 @@ describe("NaverSe3ImageBlock", () => {
     ])
   })
 
-  it("parses classic image strip components as image group blocks", () => {
+  it("parses classic image strip components as image strip blocks", () => {
     const parsed = parseSe3Blocks(`
       <div class="se_component se_imageStrip imageStrip2 default">
         <img src="https://example.com/strip-1.png" alt="strip 1" />
@@ -211,21 +211,17 @@ describe("NaverSe3ImageBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "imageGroup",
+        type: "imageStrip",
         images: [
           {
-            sourceUrl: "https://example.com/strip-1.png",
-            originalSourceUrl: null,
+            url: "https://example.com/strip-1.png",
             alt: "strip 1",
             caption: null,
-            mediaKind: "image",
           },
           {
-            sourceUrl: "https://example.com/strip-2.png",
-            originalSourceUrl: null,
+            url: "https://example.com/strip-2.png",
             alt: "strip 2",
             caption: null,
-            mediaKind: "image",
           },
         ],
       },
@@ -262,7 +258,7 @@ describe("NaverSe3ImageBlock", () => {
     ])
   })
 
-  it("preserves text inside image strip components as a paragraph after the image group", () => {
+  it("preserves text inside image strip components as a paragraph after the image strip", () => {
     const parsed = parseSe3Blocks(`
       <div class="se_component se_imageStrip imageStrip2 default">
         <img src="https://example.com/strip-1.png" alt="strip 1" />
@@ -277,21 +273,17 @@ describe("NaverSe3ImageBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "imageGroup",
+        type: "imageStrip",
         images: [
           {
-            sourceUrl: "https://example.com/strip-1.png",
-            originalSourceUrl: null,
+            url: "https://example.com/strip-1.png",
             alt: "strip 1",
             caption: null,
-            mediaKind: "image",
           },
           {
-            sourceUrl: "https://example.com/strip-2.png",
-            originalSourceUrl: null,
+            url: "https://example.com/strip-2.png",
             alt: "strip 2",
             caption: null,
-            mediaKind: "image",
           },
         ],
       },

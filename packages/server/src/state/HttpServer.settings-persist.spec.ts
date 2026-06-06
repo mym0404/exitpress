@@ -142,6 +142,50 @@ describe("http server settings persist", () => {
     }
   })
 
+  it("drops saved block templates that do not match current block props", async () => {
+    const rootDir = await createTestTempDir("export-settings-")
+    const settingsPath = path.join(rootDir, "export-ui-settings.json")
+
+    await writeFile(
+      settingsPath,
+      JSON.stringify({
+        options: {
+          blockOutputs: {
+            templates: {
+              "naver-se4:linkCard": "${text}",
+              "naver-se4:file": "[${fileName}${fileExtension}](${fileUrl})",
+              "naver-se4:missing": "${title}",
+            },
+          },
+        },
+      }),
+      "utf8",
+    )
+
+    try {
+      activeServer = createTestHttpServer({
+        settingsPath,
+      })
+      const baseUrl = await startServer(activeServer)
+
+      const response = await fetch(`${baseUrl}/api/export-defaults`)
+      const body = (await response.json()) as {
+        options: {
+          blockOutputs: {
+            templates: Record<string, string>
+          }
+        }
+      }
+
+      expect(response.status).toBe(200)
+      expect(body.options.blockOutputs.templates).toEqual({
+        "naver-se4:file": "[${fileName}${fileExtension}](${fileUrl})",
+      })
+    } finally {
+      await rm(rootDir, { recursive: true, force: true })
+    }
+  })
+
   it("rejects invalid persisted export settings payloads", async () => {
     const rootDir = await createTestTempDir("export-settings-")
     const settingsPath = path.join(rootDir, "export-ui-settings.json")

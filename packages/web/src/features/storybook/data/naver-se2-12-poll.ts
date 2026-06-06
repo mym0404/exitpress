@@ -8,7 +8,6 @@ export const naverSe212Poll = {
   blockIndex: 12,
   blockId: "poll",
   blockLabel: "투표",
-  group: "output",
   sourceUrl: "https://blog.naver.com/anglekim3708/70170491705",
   inspectPath: "0",
   inputHtml:

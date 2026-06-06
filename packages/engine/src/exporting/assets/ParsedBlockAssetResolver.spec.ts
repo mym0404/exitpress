@@ -70,4 +70,48 @@ describe("resolveParsedBlockAssetsForRender", () => {
 
     expect(result.blocks).toEqual([])
   })
+
+  it("replaces nested asset paths in array props", async () => {
+    const result = await resolveParsedBlockAssetsForRender({
+      blocks: [
+        {
+          blockId: "naver-se4:imageGroup",
+          props: {
+            images: [
+              {
+                url: "https://example.com/one.png",
+                alt: "one",
+              },
+            ],
+          },
+          assets: {
+            "images.0.url": {
+              role: "image",
+              sourceUrl: "https://example.com/one.png",
+              required: true,
+            },
+          },
+        },
+      ],
+      resolveAsset: async ({ role, sourceUrl }) => ({
+        reference: "assets/one.png",
+        record: {
+          kind: role,
+          sourceUrl,
+          reference: "assets/one.png",
+          relativePath: "assets/one.png",
+          storageMode: "relative",
+          uploadCandidate: null,
+        },
+      }),
+    })
+
+    expect(result.blocks[0]?.props.images).toEqual([
+      {
+        url: "assets/one.png",
+        alt: "one",
+      },
+    ])
+    expect(result.assetRecords).toHaveLength(1)
+  })
 })

@@ -8,7 +8,6 @@ export const naverSe31Divider = {
   blockIndex: 1,
   blockId: "divider",
   blockLabel: "구분선",
-  group: "output",
   sourceUrl: "https://blog.naver.com/blogpeople/220957996267",
   inspectPath: "0",
   inputHtml:

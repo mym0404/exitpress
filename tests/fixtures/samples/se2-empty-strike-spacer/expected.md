@@ -8,7 +8,7 @@ category: 네이버 피플
 categoryPath:
   - 네이버 인사이드
   - 네이버 피플
-thumbnail: https://mblogthumb-phinf.pstatic.net/20120220_160/naver_diary_1329704465273Pd8gV_PNG/%BA%CE%B5%BF%BB%EA%BE%DB%BE%C6%C0%CC%C4%DC.png?type=w800
+thumbnail: https://mblogthumb-phinf.pstatic.net/20120220_160/naver_diary_1329704465273Pd8gV_PNG/%BA%CE%B5%BF%BB%EA%BE%DB%BE%C6%C0%CC%C4%DC.png?type=w
 ---
 
 **부동산 정보에 증강현실을 입히다**
@@ -20,7 +20,7 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/20120220_160/naver_diary_1329704
 
 <증강현실 기능을 적용한 네이버 부동산앱에서는 증강현실 뿐 아니라 거리뷰, 항공뷰도 볼 수 있습니다 >
 
-![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2Fdata43%2F2009%2F4%2F6%2F24%2Fbullet_1_naver_diary.jpg%3Ftype%3Dw3%22&type=w2)
+![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2Fdata43%2F2009%2F4%2F6%2F24%2Fbullet_1_naver_diary.jpg%3Ftype%3Dw3%22&type=w)
 
 **그걸 왜 리스트로 보여줘? 공간에 뿌려야지**
 
@@ -32,18 +32,18 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/20120220_160/naver_diary_1329704
 | --- |
 |   |
 
-![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2Fdata43%2F2009%2F4%2F6%2F24%2Fbullet_1_naver_diary.jpg%3Ftype%3Dw3%22&type=w2) **현실에 부동산 정보를 덧붙이는 여러 가지 방법들**
+![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2Fdata43%2F2009%2F4%2F6%2F24%2Fbullet_1_naver_diary.jpg%3Ftype%3Dw3%22&type=w) **현실에 부동산 정보를 덧붙이는 여러 가지 방법들**
 
 그럼, 저희가 맨 처음 한 일은? 네, 떨리는 마음으로 ‘언어’ 공부부터 새로 했답니다. 정확히 말하면 프로그래밍 언어죠. ^^. 사실 네이버부동산팀 개발자들은 모바일앱 개발이 처음이었습니다. 현재 NHN은 개발에서 자바(JAVA) 언어를 많이 쓰고 또 모바일 분야에서도 안드로이드OS는 자바 언어를 거의 그대로 씁니다. 하지만 저희는 아이폰용 앱을 기획하고 있었고, 아이폰용 앱 개발에서는 무조건 'Objective C'라는 언어를 써야 했습니다. 낯선 언어공부와 더불어 앱 구조 설계 고민도 해야했습니다. 증강현실기술은 카메라 화면에 정보들을 보기 좋게 노출하는 것이 관건입니다. 때문에 저희도 ‘화면에 어떤 정보를 어떤 식으로 예쁘게 뿌려야 할까?’란 고민에 집중했습니다.
 
-![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2Fdata42%2F2009%2F4%2F6%2F299%2F1_naver_diary.jpg%3Ftype%3Dw3%22&type=w2) **‘부동산 확인매물’ 3차원 구현? 2차원 구현?**
+![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2Fdata42%2F2009%2F4%2F6%2F299%2F1_naver_diary.jpg%3Ftype%3Dw3%22&type=w) **‘부동산 확인매물’ 3차원 구현? 2차원 구현?**
 
 역시 가장 중요한 것은 '부동산 확인매물 정보'였습니다. 이 정보를 어떻게 보기 좋게 구현할까요? 처음에는 아이폰 화면에서도 3차원 공간 느낌이 나도록 원근감을 주는 것이 좋을 듯 했습니다. 그래서 멀리 있는 부동산 정보일수록 표시를 작게 해봤습니다. 그런데 아뿔싸. 표시가 너무 작아서 선택이 잘 되지 않는 문제가 있었습니다. 이런저런 궁리 끝에 가까운 곳은 화면 아래쪽, 거리가 멀어질수록 화면 위쪽에 표시했습니다. 대신, 내 주변 반경 범위를 100m~1.6km 단위로 선택할 수 있는 옵션버튼을 만들어 좀 더 다양한 범주로 매물을 확인할 수 있게 했습니다. 카메라를 회전할 때 매물이 너무 빨리 지나가는 문제도 보여서 화면을 멈춘 상태에서 매물을 볼 수 있도록 \[정지\] 버튼도 만들었습니다.
 
-![](https://mblogthumb-phinf.pstatic.net/data41/2009/3/19/33/slice_9_naver_blog.jpg?type=w210)  
+![](https://mblogthumb-phinf.pstatic.net/data41/2009/3/19/33/slice_9_naver_blog.jpg?type=w)  
 <네이버 부동산앱에서 증강현실로 확인매물을 볼 때는 외쪽 상단의 정지버튼을 이용해 화면을 정지해서도 볼 수 있고, 오른쪽 상단의 옵션버튼을 이용해 매물을 표시할 반경 범주도 지정할 수 있습니다. \>
 
-**![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2Fdata42%2F2009%2F4%2F6%2F67%2F2_naver_diary.jpg%3Ftype%3Dw3%22&type=w2)“남향인가요?” 묻지 말고, 일조정보를 보세요**
+**![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2Fdata42%2F2009%2F4%2F6%2F67%2F2_naver_diary.jpg%3Ftype%3Dw3%22&type=w)“남향인가요?” 묻지 말고, 일조정보를 보세요**
 
 우리나라에서 집을 구할 때 중요한 것은 “남향이냐 아니냐” 입니다, 즉 얼마나 볕이 잘 드느냐를 보는 것인데, 이는 부동산앱에서도 필수 정보일 듯 했습니다. 그렇다면 나침반을 제공하면 될까요? 아니요. 그보다 좀 더 자세하고 정확한 정보는 없을까, 고민했습니다. 그래서 나온 것이 바로 일조, 태양의 움직임 정보입니다.  
 태양은 1년 365일 동쪽에서 떠서, 서쪽으로 지는 궤적을 그립니다. 그리고 또 특정 지점에서 관찰해보면 1년 동안의 태양 궤적은 동지에 가장 낮은 위치에 있고, 점차 위로 올라가 하지 때 가장 높이 떴다가 또 아래로 내려오기를 반복합니다. 그래서 생각이 났습니다. “특정 위치에서 오늘의 태양 궤적, 그리고 동지와 하지 때 각각의 태양 궤적 그래프를 보여주면 집 창문에 태양이 언제 지나가는지를 예측할 수 있지 않을까?”  
@@ -51,55 +51,55 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/20120220_160/naver_diary_1329704
 
 <위에서 노란색과 파란색 그래프가 보이죠? 노란색은 오늘 태양의 궤적을 보여줍니다. 이미 오전 7~9시 사이에 태양은 이 창문을 지나갔네요. 파란색은 동짓날의 태양궤적입니다. 태양이 가장 낮게 뜨는 동지에도 이 창문에서는 오전 8~9시 동안에 태양을 볼 수 있습니다. 태양이 가장 높게 뜨는 하지를 보여주는 빨간색 그래프가 보이지 않는 것으로 봐, 하지에는 이 창문에서 태양이 보이지 않는다는 것을 알 수 있습니다.>
 
-**![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2Fdata42%2F2009%2F4%2F6%2F211%2F3_naver_diary.jpg%3Ftype%3Dw3%22&type=w2) 튼튼한 기초체력, 맵 브라우징**
+**![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2Fdata42%2F2009%2F4%2F6%2F211%2F3_naver_diary.jpg%3Ftype%3Dw3%22&type=w) 튼튼한 기초체력, 맵 브라우징**
 
 부동산앱에서 지도가 같이 제공되는 것은 당연한 일이라고요? 하지만 저희가 알기로는 지도 기반으로 확인매물 정보를 제공하는 모바일 부동산앱은 전 세계에서 저희를 포함해서 2개 정도로 알고 있습니다. 지도 DB를 소유한 회사도 많지 않고, 지도를 모바일앱으로 제대로 개발하기도 쉽지 않아서 그런 듯 합니다. 하지만 저희는 PC웹 부동산서비스를 했던 노하우를 십분 살려, 앱에서도 마치 웹과 비슷한 지도 검색(맵 브라우징)이 가능하게 했습니다.
 
-![](https://mblogthumb-phinf.pstatic.net/data41/2009/3/19/33/slice_9_naver_blog.jpg?type=w210)  
+![](https://mblogthumb-phinf.pstatic.net/data41/2009/3/19/33/slice_9_naver_blog.jpg?type=w)  
 <네이버 부동산앱은 국내에서 유일하게 지도 기반으로 부동산 확인매물 정보를 제공하고 있습니다. 오른쪽 상단 버튼을 활용하면 거리뷰, 항공뷰도 모바일에서 볼 수 있고 실제거리 측정도 가능합니다. >
 
-![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2Fdata43%2F2009%2F4%2F6%2F24%2Fbullet_1_naver_diary.jpg%3Ftype%3Dw3%22&type=w2) **‘완성도’ 있는 앱을 위한 꼼꼼한 고민들**
+![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2Fdata43%2F2009%2F4%2F6%2F24%2Fbullet_1_naver_diary.jpg%3Ftype%3Dw3%22&type=w) **‘완성도’ 있는 앱을 위한 꼼꼼한 고민들**
 
-**![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2Fdata42%2F2009%2F4%2F6%2F299%2F1_naver_diary.jpg%3Ftype%3Dw3%22&type=w2) 어떻게 하면 속도를 빠르게 할 수 있을까**
+**![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2Fdata42%2F2009%2F4%2F6%2F299%2F1_naver_diary.jpg%3Ftype%3Dw3%22&type=w) 어떻게 하면 속도를 빠르게 할 수 있을까**
 
 여러분이 부동산앱을 실행하는 순간 바로 뜨는 지도는 앱에 저장돼 있는 것일까요? 아닙니다. 앱을 작동하는 순간 바로 네이버 부동산서버와 통신을 해서 갖고 오는 것입니다. 그럼, 부동산 매물 리스트는? 역시 서버와 통신을 통해 갖고 옵니다. 단지 정보는? 네, 통신을 해야 합니다. 하지만, 이렇게 부동산앱의 모든 콘텐츠를 서버와의 통신을 통해 갖고 오면 앱 구동 속도가 너무 느려지지 않을까요? 맞습니다. ‘앱의 작동 속도’는 아마 모든 앱개발자의 고민일 것입니다. 때문에 앱에 저장해 놓고 쓸 수 있는 정보는 없을까,란 고민을 할 수 밖에 없었습니다. 그 결과 정말 잘 변하지 않는 행정구역 법정동 정보는 앱에 넣기로 했습니다. 좀 사소한가요? 그렇지만, 이런 조그만 사항을 바꾸자 속도는 꽤 빨라졌습니다.
 
 <네이버 부동산앱은 시,군,구,동 등 법정동 정보를 앱 자체에 내장해 앱 구동 속도를 향상시켰습니다. >
 
-**![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2Fdata42%2F2009%2F4%2F6%2F67%2F2_naver_diary.jpg%3Ftype%3Dw3%22&type=w2)"으악, 앱이 자꾸 죽는다"**
+**![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2Fdata42%2F2009%2F4%2F6%2F67%2F2_naver_diary.jpg%3Ftype%3Dw3%22&type=w)"으악, 앱이 자꾸 죽는다"**
 
 앱은 어떨 때 죽을까요?(^^, 동작오류가 생길까요?) 네, 대표적인 사례가 너무 빠르게 화면의 이곳 저곳을 터치(선택) 할 때입니다. 이용자가 요청하는 명령을 앱이 처리하려다가 부하가 걸리게 되는 것이지요. 예를 들면, 분명 조금 전에 앱에서는 \[서울 종로구 명륜동\]에 있는 매물을 보여달라는 선택이 있어서 이 요청이 서버에 갔다 와서 그 결과를 보여주려는데 이용자는 \[경기 성남시 분당구\]를 선택하고 있다면? 앱은 서버에서 갖고 온 명륜동의 매물 검색결과를 보여줄 곳이 사라져서 헤매게 되고 결국 내부 충돌이 일어나, 이럴 때 앱은 종종 죽게 됩니다. ^^. 그럼 어떻게 해결해야 할까요? 개발초기에는 앱에서 일어나는 모든 명령을 바로바로 서버로 보냈습니다. 하지만 이렇게 앱이 자주 죽는 사례를 발견하고는, 지금은 앱에서 일어나는 모든 명령을 모아서 취소된 명령 말고 유효한 명령만을 내보내도록 정리를 했습니다. 그랬더니, 안정성이 높아졌습니다.(덜 죽어요~)
 
 <네이버 부동산앱은 앱 내부 기능충돌로 인한 앱정지 현상을 개선하기 위해 노력했습니다. >
 
-**![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2Fdata42%2F2009%2F4%2F6%2F211%2F3_naver_diary.jpg%3Ftype%3Dw3%22&type=w2) "이 폰은 왜 이렇게 뜨거워지나"**
+**![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2Fdata42%2F2009%2F4%2F6%2F211%2F3_naver_diary.jpg%3Ftype%3Dw3%22&type=w) "이 폰은 왜 이렇게 뜨거워지나"**
 
 또 다른 문제는 증강현실 화면을 확인하기 위해 카메라를 켜놨는데 아이폰이 자꾸자꾸 뜨거워지는 것이었습니다. 이유는? 증강현실 기능이 실행될 때 아이폰 자체에서 연산이 너무 많아졌기 때문입니다. 증강현실 기능에서는 아이폰에 내장된 엑셀레로미터(accelerometer)센서와 전자나침판이 아이폰의 방향과 기울어짐, 위치를 감지해 그 쪽에 있는 매물을 표시해주게 됩니다. 때문에 앱에서 증강현실 기능을 실현시킨 뒤 빠른 속도로 방향, 기울기를 바꾸다 보면 아이폰이 그 변화를 다 분석하고 반영하느라 내부연산이 늘어나면서 기계가 뜨거워지게 됩니다. 이때는 배터리도 빨리 닳게 된답니다. 이 문제는? 아이폰의 움직임이 많이 일어나도 최소한의 시간 이상이 되어야 그 변화를 측정하는 연산이 일어나도록 수정했답니다.
 
 <네이버 부동산앱에서는 증강현실기능 사용으로 인한 단말기 발열을 감소하기 위해서도 노력했습니다.>
 
-![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2Fdata43%2F2009%2F4%2F6%2F24%2Fbullet_1_naver_diary.jpg%3Ftype%3Dw3%22&type=w2) **더 나아지는 네이버 부동산앱을 위해**
+![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2Fdata43%2F2009%2F4%2F6%2F24%2Fbullet_1_naver_diary.jpg%3Ftype%3Dw3%22&type=w) **더 나아지는 네이버 부동산앱을 위해**
 
 네이버 부동산앱은 이런 고민과 개발과정을 통해 2011년 11월에 출시됐습니다. 모바일에서 맵 브라우징을 바탕으로 안정적인 증강현실 기능을 선보였다는 점에 대해 꽤 좋은 평가를 받고 있습니다. 어떤 분은 “부동산주인도 깜짝 놀란 부동산 서비스”라는 앱스토어 평을 올려주시기도 했답니다. ^^. 특히 웹에서의 부동산서비스는 주말 이용자가 감소하는데 모바일앱은 오히려 주말에 이용자가 증가하는 추이를 보여서 ‘이용자들의 틈새 수요를 충족시킨 앱이 아니었나’란 생각도 하고 있답니다. 저희는 올 봄에 안드로이드용 부동산앱 출시할 예정인데 더욱 편리한 앱을 만들도록 노력하겠습니다. 감사합니다.
 
-![](https://mblogthumb-phinf.pstatic.net/20120220_160/naver_diary_1329704465273Pd8gV_PNG/%BA%CE%B5%BF%BB%EA%BE%DB%BE%C6%C0%CC%C4%DC.png?type=w800)
+![](https://mblogthumb-phinf.pstatic.net/20120220_160/naver_diary_1329704465273Pd8gV_PNG/%BA%CE%B5%BF%BB%EA%BE%DB%BE%C6%C0%CC%C4%DC.png?type=w)
 
-![](https://mblogthumb-phinf.pstatic.net/20120220_113/naver_diary_1329704465530L8QWd_PNG/sticker02x22x.png?type=w800)
+![](https://mblogthumb-phinf.pstatic.net/20120220_113/naver_diary_1329704465530L8QWd_PNG/sticker02x22x.png?type=w)
 
 **\[네이버 모바일앱 제작이야기 시리즈\]**
 
-![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2F20101014_115%2Fnaver_diary_1287040206375IGChE_gif%2Fbullet_link_s_naver_diary.gif%3Ftype%3Dw3%22&type=w2)[오늘도 지도 타일을 갈아끼운다 - 네이버지도 모바일앱](http://naver_diary.blog.me/150133431229)
+![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2F20101014_115%2Fnaver_diary_1287040206375IGChE_gif%2Fbullet_link_s_naver_diary.gif%3Ftype%3Dw3%22&type=w)[오늘도 지도 타일을 갈아끼운다 - 네이버지도 모바일앱](http://naver_diary.blog.me/150133431229)
 
-![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2F20101014_115%2Fnaver_diary_1287040206375IGChE_gif%2Fbullet_link_s_naver_diary.gif%3Ftype%3Dw3%22&type=w2)[개발자 울리는 '주소록 백업앱'](http://naver_diary.blog.me/150132761879)
+![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2F20101014_115%2Fnaver_diary_1287040206375IGChE_gif%2Fbullet_link_s_naver_diary.gif%3Ftype%3Dw3%22&type=w)[개발자 울리는 '주소록 백업앱'](http://naver_diary.blog.me/150132761879)
 
 **\[네이버 부동산앱 다운로드 및 이용팁\]**
 
-![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2F20101014_115%2Fnaver_diary_1287040206375IGChE_gif%2Fbullet_link_s_naver_diary.gif%3Ftype%3Dw3%22&type=w2)[네이버 부동산 앱 출시](http://naver_diary.blog.me/150124808255)
+![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2F20101014_115%2Fnaver_diary_1287040206375IGChE_gif%2Fbullet_link_s_naver_diary.gif%3Ftype%3Dw3%22&type=w)[네이버 부동산 앱 출시](http://naver_diary.blog.me/150124808255)
 
-![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2F20101014_115%2Fnaver_diary_1287040206375IGChE_gif%2Fbullet_link_s_naver_diary.gif%3Ftype%3Dw3%22&type=w2)[네이버 부동산앱 설치 바로가기(아이폰용)](http://itunes.apple.com/kr/app/id481957114?mt=8)
+![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2F20101014_115%2Fnaver_diary_1287040206375IGChE_gif%2Fbullet_link_s_naver_diary.gif%3Ftype%3Dw3%22&type=w)[네이버 부동산앱 설치 바로가기(아이폰용)](http://itunes.apple.com/kr/app/id481957114?mt=8)
 
 \* 이 글을 네이버 다이어리 운영진 [미투데이](http://me2day.net/naver_diary)와 [트위터](http://twitter.com/naver_diary), [페이스북](http://facebook.com/naver.diary)을 통해서도 소개해드리고 있습니다.
 
 **작성** | 2012\. 02. 20 \_ **네이버다이어리운영진**
 
-![](https://mblogthumb-phinf.pstatic.net/data42/2009/4/2/101/email_naver_blog.jpg?type=w210)
+![](https://mblogthumb-phinf.pstatic.net/data42/2009/4/2/101/email_naver_blog.jpg?type=w)

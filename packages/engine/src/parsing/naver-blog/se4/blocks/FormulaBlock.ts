@@ -15,9 +15,19 @@ export class NaverSe4FormulaBlock extends LeafParserBlock {
     label: this.label,
     presets: [
       {
-        id: "default",
-        label: "기본",
-        template: "${display ? '$$\\n' + formula + '\\n$$' : '$' + formula + '$'}",
+        id: "display-math",
+        label: "표시 수식",
+        template: "${'$$\\n' + formula + '\\n$$'}",
+      },
+      {
+        id: "inline-math",
+        label: "인라인 수식",
+        template: "$${formula}$",
+      },
+      {
+        id: "math-fence",
+        label: "Math 코드 펜스",
+        template: "${'```math\\n' + formula + '\\n```'}",
       },
     ],
     props: {

@@ -8,16 +8,16 @@ category: 학교 도입사례∙후기
 categoryPath:
   - 수학대왕 클래스
   - 학교 도입사례∙후기
-thumbnail: https://mblogthumb-phinf.pstatic.net/MjAyNDExMjdfMjkw/MDAxNzMyNjg3MzA3MTUx.DkImcCZrHD38qWUjPHrynhEmHDf-a4Rte1M708cbX-gg.2lH7kJcuhydIrm19HrO0idDTQWv9oiXifHdAd_-swM8g.PNG/0-%BD%E6%B3%D7%C0%CF.png?type=w800
+thumbnail: https://mblogthumb-phinf.pstatic.net/MjAyNDExMjdfMjkw/MDAxNzMyNjg3MzA3MTUx.DkImcCZrHD38qWUjPHrynhEmHDf-a4Rte1M708cbX-gg.2lH7kJcuhydIrm19HrO0idDTQWv9oiXifHdAd_-swM8g.PNG/0-%BD%E6%B3%D7%C0%CF.png?type=w
 ---
 
 2024년 9월 29일, 대전 디지털교육 Meet Up Day가 대전 컨벤션센터에서 성황리에 열렸습니다. 수학대왕도 이번 행사에 참여하여, AI 기반 수학 학습 솔루션의 매력을 현장에 선보이며 주목을 받았습니다. 이 행사는 대전광역시 교육청과 교육부가 주최하고 한국교육학술정보원(KERIS)이 주관하여 디지털 교육의 미래와 에듀테크 솔루션의 발전을 조망하는 자리였습니다. 500여 명의 교사들이 참여한 가운데, 수학대왕은 맞춤형 학습과 학습 효율 증진을 목표로 하는 다양한 기능들을 선보였습니다.
 
-![](https://mblogthumb-phinf.pstatic.net/MjAyNDExMjdfMjkw/MDAxNzMyNjg3MzA3MTUx.DkImcCZrHD38qWUjPHrynhEmHDf-a4Rte1M708cbX-gg.2lH7kJcuhydIrm19HrO0idDTQWv9oiXifHdAd_-swM8g.PNG/0-%EC%8D%B8%EB%84%A4%EC%9D%BC.png?type=w800)
+![](https://mblogthumb-phinf.pstatic.net/MjAyNDExMjdfMjkw/MDAxNzMyNjg3MzA3MTUx.DkImcCZrHD38qWUjPHrynhEmHDf-a4Rte1M708cbX-gg.2lH7kJcuhydIrm19HrO0idDTQWv9oiXifHdAd_-swM8g.PNG/0-%EC%8D%B8%EB%84%A4%EC%9D%BC.png?type=w)
 
 ## 1.대전 디지털교육 밋업데이란? 대전 디지털교육 Meet Up Day란?
 
-![](https://mblogthumb-phinf.pstatic.net/MjAyNDExMjdfMTQ0/MDAxNzMyNjg3MzE3MzY1.tUhlrs5A6JyRI9v4yJqlCvYP_J-koYRg4stA_IQjpIog.BN_SdOlKVkmI5O7Fw6HwYMNzlQzoXOV6z1pzSym4DXUg.PNG/1-%EB%8C%80%EC%A0%84%EB%B0%8B%EC%97%85%EB%8D%B0%EC%9D%B4.png?type=w800)
+![](https://mblogthumb-phinf.pstatic.net/MjAyNDExMjdfMTQ0/MDAxNzMyNjg3MzE3MzY1.tUhlrs5A6JyRI9v4yJqlCvYP_J-koYRg4stA_IQjpIog.BN_SdOlKVkmI5O7Fw6HwYMNzlQzoXOV6z1pzSym4DXUg.PNG/1-%EB%8C%80%EC%A0%84%EB%B0%8B%EC%97%85%EB%8D%B0%EC%9D%B4.png?type=w)
 
 대전 디지털교육 Meet Up Day는 교사들과 디지털 교육 전문가들이 한자리에 모여, 디지털 기반 교육혁신을 위한 솔루션을 소개하고 교류하는 박람회입니다.
 
@@ -29,11 +29,11 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/MjAyNDExMjdfMjkw/MDAxNzMyNjg3MzA
 
 ‍
 
-![](https://mblogthumb-phinf.pstatic.net/MjAyNDExMjdfMTYy/MDAxNzMyNjg3MjQ4OTM3.Ynd-SNlXt31AXfIgGM2jdESe6sRXmnFO7hWZJXvrkrwg.v03Zv2TRKwfP9Z7xpNsgHMeBxp4gZcOR8xxp-s-2QUEg.PNG/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7_2024-11-22_%EC%98%A4%ED%9B%84_2.46.16.png?type=w800)
+![](https://mblogthumb-phinf.pstatic.net/MjAyNDExMjdfMTYy/MDAxNzMyNjg3MjQ4OTM3.Ynd-SNlXt31AXfIgGM2jdESe6sRXmnFO7hWZJXvrkrwg.v03Zv2TRKwfP9Z7xpNsgHMeBxp4gZcOR8xxp-s-2QUEg.PNG/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7_2024-11-22_%EC%98%A4%ED%9B%84_2.46.16.png?type=w)
 
 ## 2.수학대왕의 AI 코스웨어 – 맞춤형 학습 솔루션 수학대왕 클래스로 큰 호응
 
-![](https://mblogthumb-phinf.pstatic.net/MjAyNDExMjdfMjE4/MDAxNzMyNjg3MzI0NjEx.vTVtB7Wzu5FkJOZVyWtyoNir-koVVn-5lNlMOW01rd4g.CLfgTy4WRVe6ccJwKXfwIOQVL9vle2l0okkm4VtxSEog.PNG/2-%EC%88%98%ED%95%99%EB%8C%80%EC%99%95.png?type=w800)
+![](https://mblogthumb-phinf.pstatic.net/MjAyNDExMjdfMjE4/MDAxNzMyNjg3MzI0NjEx.vTVtB7Wzu5FkJOZVyWtyoNir-koVVn-5lNlMOW01rd4g.CLfgTy4WRVe6ccJwKXfwIOQVL9vle2l0okkm4VtxSEog.PNG/2-%EC%88%98%ED%95%99%EB%8C%80%EC%99%95.png?type=w)
 
 수학대왕은 Meet Up Day에서 AI 기반 수학 학습 프로그램을 체험 부스에서 선보이며, 참석자들에게 실시간 맞춤형 학습 경험을 제공했습니다. 수학대왕의 솔루션은 개별 학습자의 수준을 분석하여 맞춤형 문제와 학습 콘텐츠를 추천하는 특징을 가지고 있습니다. 박람회에서 수학대왕은 아래와 같은 주요 기능을 선보였습니다.
 
@@ -80,6 +80,6 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/MjAyNDExMjdfMjkw/MDAxNzMyNjg3MzA
 
 **No 1. AI코스웨어 수학대왕 CLASS**
 
-![](https://mblogthumb-phinf.pstatic.net/MjAyNDExMjdfMzUg/MDAxNzMyNjg3MjQ5MjE0.BphtKvDk4etzFDiZ8Zqctur44bt--w7dLfVmnhVzow0g.UMcHE6tjmzDlgRKI9IM5tYZrVjJmLz9a2Nq43lWroXgg.PNG/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7_2024-11-22_%EC%98%A4%ED%9B%84_2.46.16.png?type=w800)
+![](https://mblogthumb-phinf.pstatic.net/MjAyNDExMjdfMzUg/MDAxNzMyNjg3MjQ5MjE0.BphtKvDk4etzFDiZ8Zqctur44bt--w7dLfVmnhVzow0g.UMcHE6tjmzDlgRKI9IM5tYZrVjJmLz9a2Nq43lWroXgg.PNG/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7_2024-11-22_%EC%98%A4%ED%9B%84_2.46.16.png?type=w)
 
 #교육부 #22개정 #교육과정 #2025교육정책 #AI코스웨어 #클래스팅 #수학대왕 #매쓰홀릭 #매쓰플랫 #수학코스웨어 #문제은행 #매쓰프로 #코스웨어 #수학문제은행 #디지털교과서 #AIDT #수학대왕클래스

@@ -8,7 +8,6 @@ export const naverSe25Table = {
   blockIndex: 5,
   blockId: "table",
   blockLabel: "표",
-  group: "output",
   sourceUrl: "https://blog.naver.com/mym0404/223034929697",
   inspectPath: "0",
   inputHtml:

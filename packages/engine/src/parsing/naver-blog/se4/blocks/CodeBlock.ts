@@ -8,7 +8,9 @@ export class NaverSe4CodeBlock extends LeafParserBlock {
   override readonly label = "코드"
   override readonly templateDefinition = {
     label: this.label,
-    presets: [{ id: "default", label: "기본", template: "```${language ?? ''}\n${code}\n```" }],
+    presets: [
+      { id: "default", label: "코드 펜스", template: "```${language ?? ''}\n${code}\n```" },
+    ],
     props: {
       language: { label: "언어", type: "string?" },
       code: { label: "코드", type: "string" },

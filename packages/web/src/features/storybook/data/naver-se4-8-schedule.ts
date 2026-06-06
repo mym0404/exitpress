@@ -8,7 +8,6 @@ export const naverSe48Schedule = {
   blockIndex: 8,
   blockId: "schedule",
   blockLabel: "일정",
-  group: "output",
   sourceUrl: "https://blog.naver.com/mym0404/223034929697",
   inspectPath: "0",
   inputHtml:

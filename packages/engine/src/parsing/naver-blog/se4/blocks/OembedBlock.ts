@@ -1,11 +1,12 @@
 import { compactText } from "@exitpress/engine/shared/text/util/TextCompaction.js"
 import { load } from "cheerio"
 
+import type { ParsedBlockAsset } from "@exitpress/domain/parser/schema/Media.js"
+import type { ParsedBlock } from "@exitpress/domain/parser/schema/ParsedPost.js"
 import type { UnknownRecord } from "@exitpress/engine/shared/object/UnknownRecord.js"
 
 import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/ParserBlock.js"
 
-import { createLinkParagraphBlocks } from "../../common/LinkParagraph.js"
 import { LeafParserBlock } from "../../core/ParserBlock.js"
 
 export class NaverSe4OembedBlock extends LeafParserBlock {
@@ -13,9 +14,20 @@ export class NaverSe4OembedBlock extends LeafParserBlock {
   override readonly label = "임베드"
   override readonly templateDefinition = {
     label: this.label,
-    presets: [{ id: "default", label: "기본", template: "${text}" }],
+    presets: [
+      { id: "link", label: "링크", template: "[${title}](${url})" },
+      {
+        id: "link-description",
+        label: "링크와 설명",
+        template:
+          "${description ? '[' + title + '](' + url + ')\\n' + description : '[' + title + '](' + url + ')'}",
+      },
+    ],
     props: {
-      text: { label: "본문", type: "string" },
+      title: { label: "제목", type: "string" },
+      url: { label: "URL", type: "string" },
+      description: { label: "설명", type: "string" },
+      thumbnailUrl: { label: "썸네일 URL", type: "string?" },
     },
   } satisfies ParserBlockTemplateDefinition
 
@@ -42,13 +54,30 @@ export class NaverSe4OembedBlock extends LeafParserBlock {
       throw new Error("SE4 oEmbed block parsing failed.")
     }
 
-    return createLinkParagraphBlocks({
-      blockId,
-      title: compactText(data.title ?? "") || url,
-      description: compactText(data.description ?? ""),
-      url,
-      hasThumbnail: typeof data.thumbnailUrl === "string" && data.thumbnailUrl !== "",
-      resolveLinkUrl: options.resolveLinkUrl,
-    })
+    const thumbnailUrl =
+      typeof data.thumbnailUrl === "string" && data.thumbnailUrl ? data.thumbnailUrl : null
+
+    return [
+      {
+        blockId,
+        props: {
+          title: compactText(data.title ?? "") || url,
+          description: compactText(data.description ?? ""),
+          url: options.resolveLinkUrl ? options.resolveLinkUrl(url) : url,
+          thumbnailUrl,
+        },
+        ...(thumbnailUrl
+          ? {
+              assets: {
+                thumbnailUrl: {
+                  role: "thumbnail",
+                  sourceUrl: thumbnailUrl,
+                  required: false,
+                } satisfies ParsedBlockAsset,
+              },
+            }
+          : {}),
+      } satisfies ParsedBlock,
+    ]
   }
 }

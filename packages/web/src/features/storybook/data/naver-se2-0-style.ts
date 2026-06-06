@@ -8,7 +8,6 @@ export const naverSe20Style = {
   blockIndex: 0,
   blockId: "style",
   blockLabel: "HTML 스타일",
-  group: "auxiliary",
   sourceUrl: "https://blog.naver.com/anglekim3708/70180618808",
   inspectPath: "0.0",
   inputHtml:

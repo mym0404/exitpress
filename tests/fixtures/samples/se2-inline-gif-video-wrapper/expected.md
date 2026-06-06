@@ -8,14 +8,14 @@ category: Tip
 categoryPath:
   - Android
   - Tip
-thumbnail: https://mblogthumb-phinf.pstatic.net/MjAxODA4MjFfODMg/MDAxNTM0ODU2NTYxOTEy.Q3jKlJ6uudo9HZPYicqBADHAQQCQXLLrV9Q1GX446VYg.ZPw_cxlRzqpXK9QGFklOYstG4GHfo3Pkxqe-ou5krnEg.GIF.mym0404/doubleBuffering.gif?type=w800
+thumbnail: https://mblogthumb-phinf.pstatic.net/MjAxODA4MjFfODMg/MDAxNTM0ODU2NTYxOTEy.Q3jKlJ6uudo9HZPYicqBADHAQQCQXLLrV9Q1GX446VYg.ZPw_cxlRzqpXK9QGFklOYstG4GHfo3Pkxqe-ou5krnEg.GIF.mym0404/doubleBuffering.gif?type=w
 ---
 
 더블 버퍼링은 onDraw에서 호출되는 캔버스로 뷰에 그림을 그리면 그려지는 과정이 있기 때문에 화면이 깜빡거리는 현상이 발생한다.
 
 그러기 때문에 다른 캔버스로 다른 비트맵에 그림을 그려둔 후 딱 한번만 drawBitmap으로 모든걸 옮겨오면 더블버퍼링이다.
 
-![](https://mblogthumb-phinf.pstatic.net/MjAxODA4MjFfODMg/MDAxNTM0ODU2NTYxOTEy.Q3jKlJ6uudo9HZPYicqBADHAQQCQXLLrV9Q1GX446VYg.ZPw_cxlRzqpXK9QGFklOYstG4GHfo3Pkxqe-ou5krnEg.GIF.mym0404/doubleBuffering.gif?type=w210)
+![](https://mblogthumb-phinf.pstatic.net/MjAxODA4MjFfODMg/MDAxNTM0ODU2NTYxOTEy.Q3jKlJ6uudo9HZPYicqBADHAQQCQXLLrV9Q1GX446VYg.ZPw_cxlRzqpXK9QGFklOYstG4GHfo3Pkxqe-ou5krnEg.GIF.mym0404/doubleBuffering.gif?type=w)
 
 ```
 class CustomView extends View {

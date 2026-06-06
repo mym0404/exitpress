@@ -8,7 +8,7 @@ category: 명문이노시티 신축
 categoryPath:
   - My  Record
   - 명문이노시티 신축
-thumbnail: https://mblogthumb-phinf.pstatic.net/20160129_195/anglekim3708_14540404659779sLEH_GIF/%B7%A3%B4%F5%B8%B5.gif?type=w800
+thumbnail: https://mblogthumb-phinf.pstatic.net/20160129_195/anglekim3708_14540404659779sLEH_GIF/%B7%A3%B4%F5%B8%B5.gif?type=w
 ---
 
 명문 INNO CITY 빌딩 설계 계획도면 (확정안)  
@@ -30,7 +30,7 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/20160129_195/anglekim3708_145404
 
 명문 INNO CITY 빌딩 설계 계획도면 (확정안 동영상)
 
-![](https://mblogthumb-phinf.pstatic.net/20160129_195/anglekim3708_14540404659779sLEH_GIF/%B7%A3%B4%F5%B8%B5.gif?type=w800)
+![](https://mblogthumb-phinf.pstatic.net/20160129_195/anglekim3708_14540404659779sLEH_GIF/%B7%A3%B4%F5%B8%B5.gif?type=w)
 
 명문 INNO CITY 빌딩 설계 계획도면 (8안 그림 동영상)  
 대지면적 : 811.10 M2 (245.36평)  
@@ -46,4 +46,4 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/20160129_195/anglekim3708_145404
 외부마감재료 : 화강석, 스톤코트, 복합판넬  
 주차대수 : 근린생활시설 150 M2당 1대 (22.17대)
 
-![](https://mblogthumb-phinf.pstatic.net/20160406_96/anglekim3708_1459943981461m5lS3_GIF/%BB%F5%BA%BD%B0%F8%C0%CE%C1%DF%B0%B3%BB%E7%B9%AB%BC%D2.gif?type=w800)
+![](https://mblogthumb-phinf.pstatic.net/20160406_96/anglekim3708_1459943981461m5lS3_GIF/%BB%F5%BA%BD%B0%F8%C0%CE%C1%DF%B0%B3%BB%E7%B9%AB%BC%D2.gif?type=w)

@@ -1,8 +1,10 @@
 import { compactText } from "@exitpress/engine/shared/text/util/TextCompaction.js"
 
+import type { ParsedBlockAsset } from "@exitpress/domain/parser/schema/Media.js"
+import type { ParsedBlock } from "@exitpress/domain/parser/schema/ParsedPost.js"
+
 import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/ParserBlock.js"
 
-import { createLinkParagraphBlocks } from "../../common/LinkParagraph.js"
 import { parseJsonAttribute } from "../../core/JsonAttribute.js"
 import { LeafParserBlock } from "../../core/ParserBlock.js"
 
@@ -13,9 +15,26 @@ export class NaverSe3LinkCardBlock extends LeafParserBlock {
   override readonly label = "링크 카드"
   override readonly templateDefinition = {
     label: this.label,
-    presets: [{ id: "default", label: "기본", template: "${text}" }],
+    presets: [
+      { id: "link", label: "링크", template: "[${title}](${url})" },
+      {
+        id: "link-description",
+        label: "링크와 설명",
+        template:
+          "${description ? '[' + title + '](' + url + ')\\n' + description : '[' + title + '](' + url + ')'}",
+      },
+      {
+        id: "thumbnail-link",
+        label: "썸네일 링크",
+        template:
+          "${thumbnailUrl ? '![' + title + '](' + thumbnailUrl + ')\\n[' + title + '](' + url + ')' : '[' + title + '](' + url + ')'}",
+      },
+    ],
     props: {
-      text: { label: "본문", type: "string" },
+      title: { label: "제목", type: "string" },
+      url: { label: "URL", type: "string" },
+      description: { label: "설명", type: "string" },
+      thumbnailUrl: { label: "썸네일 URL", type: "string?" },
     },
   } satisfies ParserBlockTemplateDefinition
 
@@ -44,13 +63,29 @@ export class NaverSe3LinkCardBlock extends LeafParserBlock {
       .first()
       .text()
 
-    return createLinkParagraphBlocks({
-      blockId,
-      title: title || url,
-      description,
-      url,
-      hasThumbnail: Boolean(thumbnail.attr("data-lazy-src") ?? thumbnail.attr("src")),
-      resolveLinkUrl: options.resolveLinkUrl,
-    })
+    const thumbnailUrl = thumbnail.attr("data-lazy-src") ?? thumbnail.attr("src") ?? null
+
+    return [
+      {
+        blockId,
+        props: {
+          title: title || url,
+          description: compactText(description),
+          url: options.resolveLinkUrl ? options.resolveLinkUrl(url) : url,
+          thumbnailUrl,
+        },
+        ...(thumbnailUrl
+          ? {
+              assets: {
+                thumbnailUrl: {
+                  role: "thumbnail",
+                  sourceUrl: thumbnailUrl,
+                  required: false,
+                } satisfies ParsedBlockAsset,
+              },
+            }
+          : {}),
+      } satisfies ParsedBlock,
+    ]
   }
 }

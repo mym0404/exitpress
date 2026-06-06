@@ -8,7 +8,6 @@ export const naverSe421Material = {
   blockIndex: 21,
   blockId: "material",
   blockLabel: "자료 링크",
-  group: "output",
   sourceUrl: "https://blog.naver.com/mym0404/223034929697",
   inspectPath: "0",
   inputHtml:

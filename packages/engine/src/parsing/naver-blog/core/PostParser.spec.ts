@@ -58,7 +58,7 @@ describe("post-parser routing", () => {
     ])
   })
 
-  it("rewrites same-blog link card urls when they become paragraphs", () => {
+  it("rewrites same-blog link card urls", () => {
     const parsed = parsePostHtml({
       html: `
         <script>var data = { smartEditorVersion: 4 }</script>
@@ -80,7 +80,15 @@ describe("post-parser routing", () => {
     })
 
     expect(parsed.blocks).toEqual([
-      { blockId: "naver-se4:linkCard", props: { text: "[내부 카드](../card/index.md)" } },
+      {
+        blockId: "naver-se4:linkCard",
+        props: {
+          title: "내부 카드",
+          description: "",
+          url: "../card/index.md",
+          thumbnailUrl: null,
+        },
+      },
     ])
   })
 

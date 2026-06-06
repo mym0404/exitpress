@@ -6,9 +6,8 @@ export const naverSe411ImageGroup = {
   editorType: "naver-se4",
   editorLabel: "SmartEditor 4",
   blockIndex: 11,
-  blockId: "imageGroup",
+  blockId: "imageStrip",
   blockLabel: "이미지 스트립",
-  group: "output",
   sourceUrl: "https://blog.naver.com/anglekim3708/221958395128",
   inspectPath: "0",
   inputHtml:

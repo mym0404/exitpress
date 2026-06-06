@@ -8,7 +8,6 @@ export const naverSe413Sticker = {
   blockIndex: 13,
   blockId: "sticker",
   blockLabel: "스티커",
-  group: "output",
   sourceUrl: "https://blog.naver.com/lafleur7/223719242533",
   inspectPath: "0",
   inputHtml:

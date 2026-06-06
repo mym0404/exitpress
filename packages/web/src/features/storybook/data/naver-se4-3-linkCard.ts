@@ -8,7 +8,6 @@ export const naverSe43LinkCard = {
   blockIndex: 3,
   blockId: "linkCard",
   blockLabel: "링크 카드",
-  group: "output",
   sourceUrl: "https://blog.naver.com/mym0404/223034929697",
   inspectPath: "0",
   inputHtml:

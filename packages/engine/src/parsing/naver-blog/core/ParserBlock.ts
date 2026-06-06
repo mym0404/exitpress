@@ -29,7 +29,7 @@ export type ParserBlockConvertContext = ParserBlockContext & {
 
 export abstract class ParserBlock {
   abstract readonly id: string
-  readonly templateDefinition?: ParserBlockTemplateDefinition
+  abstract readonly templateDefinition: ParserBlockTemplateDefinition
   abstract readonly label: string
 
   abstract match(context: ParserBlockContext): boolean

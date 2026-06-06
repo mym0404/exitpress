@@ -8,7 +8,6 @@ export const naverSe26Container = {
   blockIndex: 6,
   blockId: "container",
   blockLabel: "중첩 컨테이너",
-  group: "auxiliary",
   sourceUrl: "https://blog.naver.com/mym0404/223034929697",
   inspectPath: "0",
   inputHtml: '<div id="viewTypeSelector"><div><hr /></div></div>',
