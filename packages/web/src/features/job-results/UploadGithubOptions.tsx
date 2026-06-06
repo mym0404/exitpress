@@ -20,7 +20,7 @@ export const UploadGithubOptions = ({
 
   return (
     <>
-      <div className="subtle-panel flex items-center gap-3 rounded-2xl px-4 py-3">
+      <div className="flex items-start gap-3 rounded-[var(--radius-md)] px-2 py-1.5 transition-colors hover:bg-accent/55">
         <Checkbox
           id="upload-github-use-jsdelivr"
           checked={githubUseJsDelivr}
