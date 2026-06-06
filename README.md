@@ -1,7 +1,3 @@
-<p align="left">
-  <img src="packages/web/public/brand/logo.png" alt="Exitpress logo" width="88" />
-</p>
-
 # Exitpress
 
 [![codecov](https://codecov.io/gh/mym0404/exitpress/graph/badge.svg)](https://codecov.io/gh/mym0404/exitpress)

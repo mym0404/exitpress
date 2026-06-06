@@ -4,6 +4,6 @@ name = "goodbye-naver-blog"
 
 [setup]
 script = '''
-corepack enable
+mise trust && mise install
 pnpm install
 '''
