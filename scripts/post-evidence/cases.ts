@@ -2,15 +2,25 @@ import { readFile } from "node:fs/promises"
 
 import type { EvidenceAssetProfile } from "./paths.js"
 
+import { allEvidenceAssetProfiles } from "./paths.js"
+
+const evidenceTargetPostKind = "post" as const
+const evidenceTargetInspectPathKind = "inspect-path" as const
+const allEvidenceTargetKinds = [evidenceTargetPostKind, evidenceTargetInspectPathKind] as const
+type EvidenceTargetKind = (typeof allEvidenceTargetKinds)[number]
+const evidenceCliHelpResult = "help" as const
+
+// Evidence capture target, either the full post or one inspect path.
 export type EvidenceTarget =
   | {
-      kind: "post"
+      kind: typeof evidenceTargetPostKind
     }
   | {
-      kind: "inspect-path"
+      kind: typeof evidenceTargetInspectPathKind
       path: string
     }
 
+// Input case for one post evidence capture.
 export type EvidenceCase = {
   blogId: string
   logNo: string
@@ -19,6 +29,7 @@ export type EvidenceCase = {
   optionsPath?: string
 }
 
+// Parsed CLI options for post evidence capture runs.
 export type EvidenceCliArgs = {
   cases: EvidenceCase[]
   outputDir?: string
@@ -44,6 +55,9 @@ const readValue = (args: string[], index: number) => {
 
   return value
 }
+
+const isEvidenceAssetProfile = (value: string): value is EvidenceAssetProfile =>
+  allEvidenceAssetProfiles.some((profile) => profile === value)
 
 const parseMetadataEntries = (entries: string[]) => {
   if (entries.length === 0) {
@@ -82,13 +96,13 @@ const assertString = (value: unknown, context: string) => {
 }
 
 const parseTarget = (value: unknown, context: string): EvidenceTarget => {
-  if (value === undefined || value === "post") {
-    return { kind: "post" }
+  if (value === undefined || value === evidenceTargetPostKind) {
+    return { kind: evidenceTargetPostKind }
   }
 
   if (typeof value === "string") {
     return {
-      kind: "inspect-path",
+      kind: evidenceTargetInspectPathKind,
       path: value,
     }
   }
@@ -96,11 +110,11 @@ const parseTarget = (value: unknown, context: string): EvidenceTarget => {
   const record = assertRecord(value, context)
   const kind = assertString(record.kind, `${context}.kind`)
 
-  if (kind === "post") {
-    return { kind: "post" }
+  if (kind === evidenceTargetPostKind) {
+    return { kind: evidenceTargetPostKind }
   }
 
-  if (kind === "inspect-path") {
+  if (kind === evidenceTargetInspectPathKind) {
     return {
       kind,
       path: assertString(record.path, `${context}.path`),
@@ -111,11 +125,11 @@ const parseTarget = (value: unknown, context: string): EvidenceTarget => {
 }
 
 const parseAssetProfile = (value: string | undefined): EvidenceAssetProfile => {
-  if (!value || value === "tmp") {
+  if (!value) {
     return "tmp"
   }
 
-  if (value === "readme" || value === "figure") {
+  if (isEvidenceAssetProfile(value)) {
     return value
   }
 
@@ -171,10 +185,10 @@ export const parseEvidenceCaseFile = async ({
 
 export const parseCapturePostEvidenceArgs = async (
   args: string[],
-): Promise<EvidenceCliArgs | "help"> => {
+): Promise<EvidenceCliArgs | typeof evidenceCliHelpResult> => {
   let blogId: string | undefined
   let logNo: string | undefined
-  let target: "post" | "inspect-path" = "post"
+  let target: EvidenceTargetKind = evidenceTargetPostKind
   let inspectPath: string | undefined
   let outputDir: string | undefined
   let optionsPath: string | undefined
@@ -187,7 +201,7 @@ export const parseCapturePostEvidenceArgs = async (
     const arg = args[index]
 
     if (arg === "--help" || arg === "-h") {
-      return "help"
+      return evidenceCliHelpResult
     }
 
     if (arg === "--blogId") {
@@ -211,11 +225,11 @@ export const parseCapturePostEvidenceArgs = async (
     if (arg === "--target") {
       const value = readValue(args, index)
 
-      if (value !== "post" && value !== "inspect-path") {
+      if (!allEvidenceTargetKinds.includes(value as EvidenceTargetKind)) {
         throw new Error(capturePostEvidenceUsage())
       }
 
-      target = value
+      target = value as EvidenceTargetKind
       index++
       continue
     }

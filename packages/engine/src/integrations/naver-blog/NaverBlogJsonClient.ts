@@ -1,5 +1,5 @@
-import * as HttpUtil from "@exitpress/engine/infra/http/HttpUtil.js"
-import { delay } from "@exitpress/engine/shared/async/AsyncUtils.js"
+import * as HttpRequests from "@exitpress/engine/infra/http/util/HttpRequests.js"
+import { delay } from "@exitpress/engine/shared/async/util/AsyncTasks.js"
 
 import { browserHeaders } from "./NaverBlogRequestHeaders.js"
 
@@ -24,7 +24,7 @@ export const fetchNaverBlogJson = async <Result>({
     let response: Response
 
     try {
-      response = await HttpUtil.fetchWithTimeout({
+      response = await HttpRequests.fetchWithTimeout({
         url,
         headers: browserHeaders({ blogId }),
         requestTimeoutMs,
@@ -32,7 +32,7 @@ export const fetchNaverBlogJson = async <Result>({
     } catch (error) {
       lastError = error instanceof Error ? error : new Error(String(error))
 
-      if (HttpUtil.shouldRetryRequestError(error)) {
+      if (HttpRequests.shouldRetryRequestError(error)) {
         continue
       }
 
@@ -42,7 +42,7 @@ export const fetchNaverBlogJson = async <Result>({
     if (!response.ok) {
       lastError = new Error(`API 요청 실패: ${response.status} ${response.statusText}`)
 
-      if (HttpUtil.shouldRetryStatus(response.status)) {
+      if (HttpRequests.shouldRetryStatus(response.status)) {
         continue
       }
 

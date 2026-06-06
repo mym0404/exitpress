@@ -2,7 +2,7 @@ import type {
   ExportOptions,
   FrontmatterFieldMeta,
   FrontmatterFieldName,
-} from "@exitpress/domain/export-options/Types.js"
+} from "@exitpress/domain/export-options/schema/ExportOptions.js"
 
 import { Alert, AlertDescription, AlertTitle } from "../../components/ui/Alert.js"
 import { Badge } from "../../components/ui/Badge.js"

@@ -2,7 +2,8 @@ import { defaultExportOptions } from "@exitpress/domain/export-options/ExportOpt
 import { createTestPath } from "@tests/support/test-paths.js"
 import { describe, expect, it } from "vitest"
 
-import type { ExportManifest, ExportRequest } from "@exitpress/domain/export-job/Types.js"
+import type { ExportManifest } from "@exitpress/domain/export-job/schema/ExportManifest.js"
+import type { ExportRequest } from "@exitpress/domain/export-job/schema/ExportRequest.js"
 
 import { JobStore } from "./JobStore.js"
 

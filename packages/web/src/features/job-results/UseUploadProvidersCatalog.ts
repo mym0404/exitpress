@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 
-import type { UploadProviderCatalogResponse } from "@exitpress/domain/upload/UploadProviderTypes.js"
+import type { UploadProviderCatalogResponse } from "@exitpress/domain/upload/schema/UploadProvider.js"
 
 import { fetchJson } from "../../lib/Api.js"
 

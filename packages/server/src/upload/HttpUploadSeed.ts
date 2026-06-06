@@ -1,4 +1,4 @@
-import type { ExportJobItem } from "@exitpress/domain/export-job/Types.js"
+import type { ExportJobItem } from "@exitpress/domain/export-job/schema/ExportJobState.js"
 import type { ImageUploadResult } from "@exitpress/engine/exporting/upload/ImageUploadPhase.js"
 
 export const buildSeededUploadResults = (items: ExportJobItem[]) =>

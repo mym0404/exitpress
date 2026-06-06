@@ -10,14 +10,16 @@ import {
 import { filterPostsByScope } from "@exitpress/domain/export-scope/ExportScope.js"
 import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react"
 
-import type { BlockScanJobState } from "@exitpress/domain/block-scan/Types.js"
-import type { ScanCacheMap, ScanResult } from "@exitpress/domain/blog/Types.js"
-import type { ExportJobState } from "@exitpress/domain/export-job/Types.js"
-import type { ExportOptions } from "@exitpress/domain/export-options/Types.js"
-import type { ThemePreference } from "@exitpress/domain/preferences/ThemePreference.js"
+import type { BlockScanJobState } from "@exitpress/domain/block-scan/schema/BlockScanJobState.js"
+import type { ScanCacheMap, ScanResult } from "@exitpress/domain/blog/schema/BlogScan.js"
+import type { ExportJobState } from "@exitpress/domain/export-job/schema/ExportJobState.js"
+import type { ExportOptions } from "@exitpress/domain/export-options/schema/ExportOptions.js"
+import type { ThemePreference } from "@exitpress/domain/preferences/schema/ThemePreference.js"
 
 import type { SetupStep, WizardStep } from "../features/common/shell/WizardFlow.js"
+import type { JobFilter } from "../features/job-results/JobResultsHelpers.js"
 import type { ResumeDialogState } from "../features/resume/ResumeState.js"
+import type { ScanStatusTone } from "../features/scan/BlogInputPanel.js"
 
 import { toast } from "../components/ui/Sonner.js"
 import { useBeforeUnloadWarning } from "../features/common/hooks/UseBeforeUnloadWarning.js"
@@ -62,6 +64,9 @@ const waitForBlockScanPoll = () =>
   new Promise((resolve) => {
     setTimeout(resolve, 250)
   })
+
+const allPostExportSteps = ["block-scan", "markdown-review"] as const
+type PostExportStep = (typeof allPostExportSteps)[number]
 
 const createErrorJobState = ({
   error,
@@ -154,17 +159,15 @@ const ExportApp = () => {
   )
   const [options, setOptions] = useState<ExportOptions>(fallbackDefaults.options)
   const [scanStatus, setScanStatus] = useState(defaultScanStatus)
-  const [scanStatusTone, setScanStatusTone] = useState<"default" | "error">("default")
+  const [scanStatusTone, setScanStatusTone] = useState<ScanStatusTone>("default")
   const [categoryStatus, setCategoryStatus] = useState(defaultCategoryStatus)
   const [categorySearch, setCategorySearch] = useState("")
   const [scanPending, setScanPending] = useState(false)
   const [setupStep, setSetupStep] = useState<SetupStep>("blog-input")
-  const [postExportStep, setPostExportStep] = useState<"block-scan" | "markdown-review" | null>(
-    null,
-  )
+  const [postExportStep, setPostExportStep] = useState<PostExportStep | null>(null)
   const [blockScanJob, setBlockScanJob] = useState<BlockScanJobState | null>(null)
   const [blockScanError, setBlockScanError] = useState<string | null>(null)
-  const [activeJobFilter, setActiveJobFilter] = useState<"all" | "success" | "failed">("all")
+  const [activeJobFilter, setActiveJobFilter] = useState<JobFilter>("all")
   const {
     job,
     submitting,

@@ -1,14 +1,14 @@
-import { renderParagraph } from "@exitpress/engine/markdown/utils/renderParagraph.js"
+import { renderParagraph } from "@exitpress/engine/markdown/util/renderParagraph.js"
 
 import type {
   ImageData,
-  ParsedBlock,
   ParsedBlockAsset,
-  ParserBlockOptions,
-  TableRow,
   VideoData,
-} from "@exitpress/domain/parser/Types.js"
-import type { TemplateValue } from "@exitpress/domain/template/Types.js"
+} from "@exitpress/domain/parser/schema/Media.js"
+import type { ParsedBlock } from "@exitpress/domain/parser/schema/ParsedPost.js"
+import type { ParserBlockOptions } from "@exitpress/domain/parser/schema/ParserBlockOptions.js"
+import type { TableRow } from "@exitpress/domain/parser/schema/TableRow.js"
+import type { TemplateValue } from "@exitpress/domain/template/schema/TemplateValue.js"
 
 const escapeTableCell = (value: string) =>
   value.replace(/\|/g, "\\|").replace(/\n+/g, "<br>").trim() || " "

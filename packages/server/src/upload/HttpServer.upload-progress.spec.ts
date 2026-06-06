@@ -15,7 +15,7 @@ import {
 import { createTestPath, createTestTempDir } from "@tests/support/test-paths.js"
 import { afterEach, describe, expect, it, vi } from "vitest"
 
-import type { UploadCandidate } from "@exitpress/domain/export-job/Types.js"
+import type { UploadCandidate } from "@exitpress/domain/export-job/schema/UploadState.js"
 
 let activeServer: ReturnType<typeof createTestHttpServer> | null = null
 

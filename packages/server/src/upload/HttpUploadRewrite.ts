@@ -7,7 +7,7 @@ import {
   isAbortOperationError,
   throwIfAborted,
 } from "@exitpress/engine/infra/runtime/AbortOperation.js"
-import { toErrorMessage } from "@exitpress/engine/shared/error/ErrorUtils.js"
+import { toErrorMessage } from "@exitpress/engine/shared/error/util/toErrorMessage.js"
 
 import type { ImageUploadResult } from "@exitpress/engine/exporting/upload/ImageUploadPhase.js"
 

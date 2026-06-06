@@ -1,7 +1,7 @@
 import { cloneExportOptions } from "@exitpress/domain/export-options/ExportOptions.js"
 import { describe, expect, it, vi } from "vitest"
 
-import type { ScanResult } from "@exitpress/domain/blog/Types.js"
+import type { ScanResult } from "@exitpress/domain/blog/schema/BlogScan.js"
 
 import { detectBlockTemplateKeys } from "./DetectedBlockTemplateScanner.js"
 

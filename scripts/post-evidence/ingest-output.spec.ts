@@ -3,7 +3,7 @@ import path from "node:path"
 
 import { describe, expect, it } from "vitest"
 
-import type { ExportManifest } from "@exitpress/domain/export-job/Types.js"
+import type { ExportManifest } from "@exitpress/domain/export-job/schema/ExportManifest.js"
 
 import { createTestTempDir } from "../../tests/support/test-paths.js"
 

@@ -1,4 +1,4 @@
-import type { ExportJobState } from "@exitpress/domain/export-job/Types.js"
+import type { ExportJobState } from "@exitpress/domain/export-job/schema/ExportJobState.js"
 import type { RefObject } from "react"
 
 import { CardDescription } from "../../components/ui/Card.js"

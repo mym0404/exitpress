@@ -5,12 +5,12 @@ import { NaverBlogFetcher } from "@exitpress/engine/integrations/naver-blog/Nave
 import { createHttpServer } from "@exitpress/server/http/HttpServer.js"
 import { vi } from "vitest"
 
-import type { ScanResult } from "@exitpress/domain/blog/Types.js"
-import type { ExportJobState } from "@exitpress/domain/export-job/Types.js"
+import type { ScanResult } from "@exitpress/domain/blog/schema/BlogScan.js"
+import type { ExportJobState } from "@exitpress/domain/export-job/schema/ExportJobState.js"
 import type {
   UploadProviderCatalogResponse,
   UploadProviderValue,
-} from "@exitpress/domain/upload/UploadProviderTypes.js"
+} from "@exitpress/domain/upload/schema/UploadProvider.js"
 
 import { createTestPath } from "../test-paths.js"
 

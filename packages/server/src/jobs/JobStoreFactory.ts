@@ -5,13 +5,14 @@ import { JOB_STATUSES, UPLOAD_STATUSES } from "@exitpress/domain/export-job/Expo
 import type {
   ExportJobItem,
   ExportJobState,
-  ExportManifest,
-  ExportRequest,
-} from "@exitpress/domain/export-job/Types.js"
+} from "@exitpress/domain/export-job/schema/ExportJobState.js"
+import type { ExportManifest } from "@exitpress/domain/export-job/schema/ExportManifest.js"
+import type { ExportRequest } from "@exitpress/domain/export-job/schema/ExportRequest.js"
 
 const getJobItemId = ({ outputPath, logNo }: { outputPath: string | null; logNo: string }) =>
   outputPath ?? `failed:${logNo}`
 
+// Converts persisted manifest posts back into polling job items.
 export const buildJobItemFromPost = (
   post: ExportManifest["posts"][number],
   updatedAt: string,
@@ -29,6 +30,7 @@ export const buildJobItemFromPost = (
   updatedAt,
 })
 
+// Creates the initial in-memory state before the export worker starts.
 export const createQueuedJobState = (request: ExportRequest): ExportJobState => ({
   id: randomUUID(),
   request,
@@ -56,6 +58,7 @@ export const createQueuedJobState = (request: ExportRequest): ExportJobState => 
   error: null,
 })
 
+// Rehydrates an export job from the manifest snapshot written beside output files.
 export const hydrateJobState = (manifest: ExportManifest): ExportJobState => {
   if (!manifest.job) {
     throw new Error("manifest job snapshot is missing")
@@ -80,6 +83,7 @@ export const hydrateJobState = (manifest: ExportManifest): ExportJobState => {
   }
 }
 
+// Counts upload candidates that already have uploaded local paths.
 export const countUploadedCandidates = ({
   item,
   uploadedLocalPaths,
@@ -92,6 +96,7 @@ export const countUploadedCandidates = ({
     0,
   )
 
+// Copies current job item upload data back into manifest posts.
 export const syncManifestPostsFromItems = ({
   manifest,
   items,

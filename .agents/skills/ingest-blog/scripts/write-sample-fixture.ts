@@ -3,17 +3,20 @@
 import { access, writeFile } from "node:fs/promises"
 import path from "node:path"
 
-import type { AssetRecord } from "../../../../src/domain/export-job/Types.js"
+import type { AssetRecord } from "../../../../packages/domain/src/export-job/schema/UploadState.js"
 
-import { extractBlogId } from "../../../../src/domain/blog/NaverUrl.js"
-import { defaultExportOptions } from "../../../../src/domain/export-options/ExportOptions.js"
-import { getCategoryForPost } from "../../../../src/exporting/paths/ExportPaths.js"
-import { ensureDir, resolveRepoPath } from "../../../../src/infra/node/FilePathUtils.js"
-import { NaverBlogFetcher } from "../../../../src/integrations/naver-blog/NaverBlogFetcher.js"
-import { renderMarkdownPost } from "../../../../src/markdown/utils/renderMarkdownPost.js"
-import { parsePostHtml } from "../../../../src/parsing/naver-blog/core/PostParser.js"
-import { createNaverBlogDefaultBlockTemplateMap } from "../../../../src/parsing/naver-blog/NaverBlog.js"
-import { toErrorMessage } from "../../../../src/shared/error/ErrorUtils.js"
+import { extractBlogId } from "../../../../packages/domain/src/blog/NaverUrl.js"
+import { defaultExportOptions } from "../../../../packages/domain/src/export-options/ExportOptions.js"
+import { getCategoryForPost } from "../../../../packages/engine/src/exporting/paths/ExportPaths.js"
+import {
+  ensureDir,
+  resolveRepoPath,
+} from "../../../../packages/engine/src/infra/node/util/FilePaths.js"
+import { NaverBlogFetcher } from "../../../../packages/engine/src/integrations/naver-blog/NaverBlogFetcher.js"
+import { renderMarkdownPost } from "../../../../packages/engine/src/markdown/util/renderMarkdownPost.js"
+import { parsePostHtml } from "../../../../packages/engine/src/parsing/naver-blog/core/PostParser.js"
+import { createNaverBlogDefaultBlockTemplateMap } from "../../../../packages/engine/src/parsing/naver-blog/NaverBlog.js"
+import { toErrorMessage } from "../../../../packages/engine/src/shared/error/util/toErrorMessage.js"
 
 type FixtureArgs = {
   blogId: string

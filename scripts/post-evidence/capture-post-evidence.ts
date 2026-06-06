@@ -1,6 +1,6 @@
 #!/usr/bin/env bun
 
-import { toErrorMessage } from "@exitpress/engine/shared/error/ErrorUtils.js"
+import { toErrorMessage } from "@exitpress/engine/shared/error/util/toErrorMessage.js"
 
 import { capturePostEvidence } from "./capture.js"
 import { capturePostEvidenceUsage, parseCapturePostEvidenceArgs } from "./cases.js"

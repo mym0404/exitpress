@@ -1,10 +1,10 @@
 import { RiArrowDownSLine } from "@remixicon/react"
 import { useEffect, useMemo, useState } from "react"
 
-import type { ThemePreference } from "@exitpress/domain/preferences/ThemePreference.js"
+import type { ThemePreference } from "@exitpress/domain/preferences/schema/ThemePreference.js"
 import type { ReactNode } from "react"
 
-import type { StorybookStory } from "./StorybookTypes.js"
+import type { StorybookStory } from "./schema/Storybook.js"
 
 import {
   Accordion,
@@ -340,6 +340,9 @@ const StoryTree = ({
   )
 }
 
+const allStorybookCodeTypes = ["html", "markdown"] as const
+type StorybookCodeType = (typeof allStorybookCodeTypes)[number]
+
 const CodePanel = ({
   title,
   children,
@@ -348,7 +351,7 @@ const CodePanel = ({
 }: {
   title: string
   children: string
-  codeType: "html" | "markdown"
+  codeType: StorybookCodeType
   compact?: boolean
 }) => (
   <Card variant="panel" className="overflow-hidden">

@@ -7,7 +7,7 @@ import {
   rewriteImageUploadPost,
   writeImageUploadManifestSnapshot,
 } from "@exitpress/engine/exporting/upload/ImageUploadRewriter.js"
-import { dedupeUploadCandidatesByLocalPath } from "@exitpress/engine/exporting/upload/UploadCandidateUtils.js"
+import { dedupeUploadCandidatesByLocalPath } from "@exitpress/engine/exporting/upload/util/dedupeUploadCandidatesByLocalPath.js"
 import {
   isAbortOperationError,
   throwIfAborted,

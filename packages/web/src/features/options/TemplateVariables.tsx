@@ -73,6 +73,9 @@ const linkTemplateVariableMeta: Record<
   },
 }
 
+const allTemplateVariableCardVariants = ["badge", "inline"] as const
+type TemplateVariableCardVariant = (typeof allTemplateVariableCardVariants)[number]
+
 export const TemplateVariableCards = ({
   keys,
   values,
@@ -82,7 +85,7 @@ export const TemplateVariableCards = ({
   keys: readonly (typeof postTemplateKeys)[number][]
   values: Partial<Record<(typeof postTemplateKeys)[number], string>>
   keyPrefix?: string
-  variant?: "badge" | "inline"
+  variant?: TemplateVariableCardVariant
 }) => (
   <div className="grid gap-3 md:grid-cols-2">
     {keys.map((key) => {

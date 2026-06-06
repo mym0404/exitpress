@@ -1,14 +1,16 @@
-import type { BlockScanJobState } from "@exitpress/domain/block-scan/Types.js"
-import type { PostSummary, ScanResult } from "@exitpress/domain/blog/Types.js"
-import type { ExportJobState } from "@exitpress/domain/export-job/Types.js"
-import type { ExportOptions } from "@exitpress/domain/export-options/Types.js"
+import type { BlockScanJobState } from "@exitpress/domain/block-scan/schema/BlockScanJobState.js"
+import type { PostSummary, ScanResult } from "@exitpress/domain/blog/schema/BlogScan.js"
+import type { ExportJobState } from "@exitpress/domain/export-job/schema/ExportJobState.js"
+import type { ExportOptions } from "@exitpress/domain/export-options/schema/ExportOptions.js"
 import type {
   UploadProviderCatalogResponse,
   UploadProviderFields,
-} from "@exitpress/domain/upload/UploadProviderTypes.js"
+} from "@exitpress/domain/upload/schema/UploadProvider.js"
 import type { Dispatch, SetStateAction } from "react"
 
 import type { WizardStep } from "../features/common/shell/WizardFlow.js"
+import type { JobFilter } from "../features/job-results/JobResultsHelpers.js"
+import type { ScanStatusTone } from "../features/scan/BlogInputPanel.js"
 import type { ExportBootstrapResponse } from "../lib/Api.js"
 
 import { Button } from "../components/ui/Button.js"
@@ -21,7 +23,7 @@ import { CategoryPanel } from "../features/scan/CategoryPanel.js"
 type AppStepViewProps = {
   currentStep: WizardStep
   job: ExportJobState | null
-  activeJobFilter: "all" | "success" | "failed"
+  activeJobFilter: JobFilter
   submitting: boolean
   uploadSubmitting: boolean
   uploadProviders: UploadProviderCatalogResponse
@@ -32,7 +34,7 @@ type AppStepViewProps = {
   blockScanJob: BlockScanJobState | null
   blockScanError: string | null
   scanStatus: string
-  scanStatusTone: "default" | "error"
+  scanStatusTone: ScanStatusTone
   activeScanResult: ScanResult | null
   selectedCategoryIds: number[]
   categorySearch: string
@@ -46,7 +48,7 @@ type AppStepViewProps = {
     PostSummary,
     "blogId" | "logNo" | "title" | "publishedAt" | "categoryName"
   > | null
-  setActiveJobFilter: Dispatch<SetStateAction<"all" | "success" | "failed">>
+  setActiveJobFilter: Dispatch<SetStateAction<JobFilter>>
   setCategorySearch: Dispatch<SetStateAction<string>>
   updateOptions: (updater: (current: ExportOptions) => ExportOptions) => void
   handleBlogInputChange: (value: string) => void

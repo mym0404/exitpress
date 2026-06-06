@@ -1,17 +1,25 @@
 import { DEFAULT_UPLOAD_PROVIDER_KEY } from "@exitpress/domain/upload/UploadProviderKeys.js"
 
-import type { ExportJobState } from "@exitpress/domain/export-job/Types.js"
+import type { ExportJobState } from "@exitpress/domain/export-job/schema/ExportJobState.js"
 import type {
   UploadProviderCatalogResponse,
   UploadProviderDefinition,
   UploadProviderFields,
-} from "@exitpress/domain/upload/UploadProviderTypes.js"
+} from "@exitpress/domain/upload/schema/UploadProvider.js"
 
 const INDEX_MARKDOWN_FILE = "index.md"
 
-export type JobFilter = "all" | "success" | "failed"
-export type JobResultsMode = "running" | "upload" | "result"
-type JobItemSeverity = "success" | "error"
+export const allJobFilters = ["all", "success", "failed"] as const
+export type JobFilter = (typeof allJobFilters)[number]
+
+export const allJobResultsModes = ["running", "upload", "result"] as const
+export type JobResultsMode = (typeof allJobResultsModes)[number]
+
+const allJobItemSeverities = ["success", "error"] as const
+type JobItemSeverity = (typeof allJobItemSeverities)[number]
+
+export const allUploadRowStatuses = ["pending", "partial", "complete", "failed"] as const
+export type UploadRowStatus = (typeof allUploadRowStatuses)[number]
 
 export const severityMeta = {
   success: {

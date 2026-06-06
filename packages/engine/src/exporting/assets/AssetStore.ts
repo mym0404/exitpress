@@ -3,10 +3,13 @@ import { writeFile } from "node:fs/promises"
 import path from "node:path"
 
 import { normalizeAssetUrl } from "@exitpress/domain/blog/NaverUrl.js"
-import { ensureDir, relativePathFrom } from "@exitpress/engine/infra/node/FilePathUtils.js"
+import { ensureDir, relativePathFrom } from "@exitpress/engine/infra/node/util/FilePaths.js"
 
-import type { AssetRecord } from "@exitpress/domain/export-job/Types.js"
-import type { ExportOptions } from "@exitpress/domain/export-options/Types.js"
+import type {
+  AssetRecord,
+  UploadCandidateKind,
+} from "@exitpress/domain/export-job/schema/UploadState.js"
+import type { ExportOptions } from "@exitpress/domain/export-options/schema/ExportOptions.js"
 
 import type { AssetCompressor } from "./AssetCompression.js"
 
@@ -60,7 +63,7 @@ export class AssetStore {
     sourceUrl,
     markdownFilePath,
   }: {
-    kind: "image" | "thumbnail"
+    kind: UploadCandidateKind
     sourceUrl: string
     markdownFilePath: string
   }) {

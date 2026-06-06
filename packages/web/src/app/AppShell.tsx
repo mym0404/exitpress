@@ -1,4 +1,4 @@
-import type { ThemePreference } from "@exitpress/domain/preferences/ThemePreference.js"
+import type { ThemePreference } from "@exitpress/domain/preferences/schema/ThemePreference.js"
 import type { ReactNode, RefObject } from "react"
 
 import type { SetupStep, WizardStep } from "../features/common/shell/WizardFlow.js"

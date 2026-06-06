@@ -2,10 +2,11 @@ import { JOB_STATUSES } from "@exitpress/domain/export-job/ExportJobState.js"
 import { sanitizePersistedExportOptions } from "@exitpress/domain/export-options/ExportOptions.js"
 import { RiArrowRightLine, RiDownload2Line, RiLoader4Line, RiRadarLine } from "@remixicon/react"
 
-import type { ScanResult } from "@exitpress/domain/blog/Types.js"
-import type { ExportJobState } from "@exitpress/domain/export-job/Types.js"
-import type { PartialExportOptions } from "@exitpress/domain/export-options/ExportOptions.js"
-import type { ExportOptions } from "@exitpress/domain/export-options/Types.js"
+import type { ScanResult } from "@exitpress/domain/blog/schema/BlogScan.js"
+import type { ExportJobState } from "@exitpress/domain/export-job/schema/ExportJobState.js"
+import type { PartialExportOptions } from "@exitpress/domain/export-options/schema/ExportOptions.js"
+import type { ExportOptions } from "@exitpress/domain/export-options/schema/ExportOptions.js"
+import type { ThemePreference } from "@exitpress/domain/preferences/schema/ThemePreference.js"
 
 import { exportOptionsStepMeta } from "../../options/ExportOptionsSteps.js"
 
@@ -19,14 +20,17 @@ export const setupSteps = [
   "diagnostics-options",
 ] as const
 
+const allWizardSteps = [
+  ...setupSteps,
+  "block-scan",
+  "markdown-review",
+  "running",
+  "upload",
+  "result",
+] as const
+
 export type SetupStep = (typeof setupSteps)[number]
-export type WizardStep =
-  | SetupStep
-  | "block-scan"
-  | "markdown-review"
-  | "running"
-  | "upload"
-  | "result"
+export type WizardStep = (typeof allWizardSteps)[number]
 
 type SummaryCard = {
   label: string
@@ -117,7 +121,7 @@ export const getPersistedUiStateSignature = ({
   themePreference,
 }: {
   options: ExportOptions | PartialExportOptions
-  themePreference: "dark" | "light"
+  themePreference: ThemePreference
 }) =>
   JSON.stringify({
     options: sanitizePersistedExportOptions(options),

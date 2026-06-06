@@ -1,6 +1,6 @@
 import { normalizeAssetUrl } from "@exitpress/domain/blog/NaverUrl.js"
 
-import type { ImageData } from "@exitpress/domain/parser/Types.js"
+import type { ImageData } from "@exitpress/domain/parser/schema/Media.js"
 import type { CheerioAPI } from "cheerio"
 
 import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/ParserBlock.js"
@@ -8,7 +8,7 @@ import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../co
 import { createImageBlocks } from "../../core/ParsedBlockOutput.js"
 import { LeafParserBlock } from "../../core/ParserBlock.js"
 
-import { hasOnlyTargetContent } from "./util/WrapperContent.js"
+import { hasOnlyTargetContent } from "./util/hasOnlyTargetContent.js"
 
 const getInlineGifVideoImages = ({
   $node,

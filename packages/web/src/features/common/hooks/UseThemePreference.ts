@@ -1,6 +1,6 @@
 import { useEffect } from "react"
 
-import type { ThemePreference } from "@exitpress/domain/preferences/ThemePreference.js"
+import type { ThemePreference } from "@exitpress/domain/preferences/schema/ThemePreference.js"
 
 export const useThemePreference = (themePreference: ThemePreference) => {
   useEffect(() => {

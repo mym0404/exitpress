@@ -1,4 +1,4 @@
-import type { ParsedBlock } from "@exitpress/domain/parser/Types.js"
+import type { ParsedBlock } from "@exitpress/domain/parser/schema/ParsedPost.js"
 import type { UnknownRecord } from "@exitpress/engine/shared/object/UnknownRecord.js"
 
 export type ParserBlockInspection = {

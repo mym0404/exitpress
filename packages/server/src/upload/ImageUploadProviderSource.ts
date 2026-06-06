@@ -1,7 +1,7 @@
 import type {
   UploadProviderCatalogResponse,
   UploadProviderFields,
-} from "@exitpress/domain/upload/UploadProviderTypes.js"
+} from "@exitpress/domain/upload/schema/UploadProvider.js"
 
 import { createCatalogFromRuntime, createRuntimeInstance } from "./ImageUploadRuntimeCatalog.js"
 import { normalizeProviderFieldsFromCatalog } from "./UploadProviderFieldNormalization.js"

@@ -4,16 +4,18 @@ import path from "node:path"
 
 import { extractBlogId } from "@exitpress/domain/blog/NaverUrl.js"
 import { resolveExportResumePhase } from "@exitpress/domain/export-job/ExportJobState.js"
-import { resolveRepoPath } from "@exitpress/engine/infra/node/FilePathUtils.js"
+import { resolveRepoPath } from "@exitpress/engine/infra/node/util/FilePaths.js"
 
-import type { ScanResult } from "@exitpress/domain/blog/Types.js"
+import type { ScanResult } from "@exitpress/domain/blog/schema/BlogScan.js"
 import type {
   ExportJobItem,
   ExportJobState,
+} from "@exitpress/domain/export-job/schema/ExportJobState.js"
+import type {
   ExportManifest,
   ExportManifestScanResult,
   PostManifestEntry,
-} from "@exitpress/domain/export-job/Types.js"
+} from "@exitpress/domain/export-job/schema/ExportManifest.js"
 
 const manifestFileName = "manifest.json"
 
@@ -79,6 +81,7 @@ const buildFallbackManifest = ({
 const getExportManifestPath = (outputDir: string) =>
   path.join(resolveRepoPath(outputDir), manifestFileName)
 
+// Reads a manifest when present and returns null for fresh output directories.
 export const readExportManifest = async (outputDir: string) => {
   try {
     const raw = await readFile(getExportManifestPath(outputDir), "utf8")
@@ -93,6 +96,7 @@ export const readExportManifest = async (outputDir: string) => {
   }
 }
 
+// Builds the manifest snapshot used by resume, upload, and UI bootstrap.
 export const buildResumableExportManifest = ({
   job,
   scanResult,
@@ -157,6 +161,7 @@ export const buildResumableExportManifest = ({
   }
 }
 
+// Writes manifest changes atomically to avoid partial resume state.
 export const writeExportManifest = async ({
   outputDir,
   manifest,

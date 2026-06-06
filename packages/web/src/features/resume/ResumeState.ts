@@ -1,8 +1,12 @@
-import type { ScanResult } from "@exitpress/domain/blog/Types.js"
-import type { ExportJobState, ExportResumeSummary } from "@exitpress/domain/export-job/Types.js"
+import type { ScanResult } from "@exitpress/domain/blog/schema/BlogScan.js"
+import type { ExportJobState } from "@exitpress/domain/export-job/schema/ExportJobState.js"
+import type { ExportResumeSummary } from "@exitpress/domain/export-job/schema/ExportManifest.js"
+
+export const allResumeDialogSources = ["bootstrap", "before-scan"] as const
+export type ResumeDialogSource = (typeof allResumeDialogSources)[number]
 
 export type ResumeDialogState = {
-  source: "bootstrap" | "before-scan"
+  source: ResumeDialogSource
   resumedJob: ExportJobState
   resumeSummary: ExportResumeSummary
   resumedScanResult: ScanResult | null

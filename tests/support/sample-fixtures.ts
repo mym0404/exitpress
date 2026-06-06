@@ -3,7 +3,7 @@ import path from "node:path"
 
 import { defaultExportOptions } from "@exitpress/domain/export-options/ExportOptions.js"
 import { NaverBlogFetcher } from "@exitpress/engine/integrations/naver-blog/NaverBlogFetcher.js"
-import { renderMarkdownPost } from "@exitpress/engine/markdown/utils/renderMarkdownPost.js"
+import { renderMarkdownPost } from "@exitpress/engine/markdown/util/renderMarkdownPost.js"
 import { parsePostHtml } from "@exitpress/engine/parsing/naver-blog/core/PostParser.js"
 import { createNaverBlogDefaultBlockTemplateMap } from "@exitpress/engine/parsing/naver-blog/NaverBlog.js"
 import { parse as parseYaml } from "yaml"

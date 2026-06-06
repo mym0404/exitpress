@@ -1,9 +1,10 @@
 import path from "node:path"
 
-import { toErrorMessage } from "@exitpress/engine/shared/error/ErrorUtils.js"
+import { toErrorMessage } from "@exitpress/engine/shared/error/util/toErrorMessage.js"
 
-import type { CategoryInfo, PostSummary } from "@exitpress/domain/blog/Types.js"
-import type { ExportJobItem, PostManifestEntry } from "@exitpress/domain/export-job/Types.js"
+import type { CategoryInfo, PostSummary } from "@exitpress/domain/blog/schema/BlogScan.js"
+import type { ExportJobItem } from "@exitpress/domain/export-job/schema/ExportJobState.js"
+import type { PostManifestEntry } from "@exitpress/domain/export-job/schema/ExportManifest.js"
 
 import type { createPostUploadSummary } from "../manifest/ExportManifestProgress.js"
 

@@ -1,6 +1,6 @@
-import { compactText } from "@exitpress/engine/shared/text/TextUtils.js"
+import { compactText } from "@exitpress/engine/shared/text/util/TextCompaction.js"
 
-import type { TableRow } from "@exitpress/domain/parser/Types.js"
+import type { TableRow } from "@exitpress/domain/parser/schema/TableRow.js"
 import type { CheerioAPI } from "cheerio"
 
 export const parseHtmlTable = ({ $, table }: { $: CheerioAPI; table: ReturnType<CheerioAPI> }) => {

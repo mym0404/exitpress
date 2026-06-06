@@ -2,7 +2,7 @@ import type {
   UploadProviderFieldDefinition,
   UploadProviderOptionValue,
   UploadProviderValue,
-} from "@exitpress/domain/upload/UploadProviderTypes.js"
+} from "@exitpress/domain/upload/schema/UploadProvider.js"
 
 const containsCjk = (value: string) => /[\u3040-\u30ff\u3400-\u9fff\uf900-\ufaff]/.test(value)
 

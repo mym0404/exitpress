@@ -1,4 +1,7 @@
-import type { ScanResult } from "@exitpress/domain/blog/Types.js"
+import { allCategoryModes } from "@exitpress/domain/export-options/schema/ExportOptions.js"
+
+import type { ScanResult } from "@exitpress/domain/blog/schema/BlogScan.js"
+import type { CategoryMode } from "@exitpress/domain/export-options/schema/ExportOptions.js"
 
 import { Badge } from "../../components/ui/Badge.js"
 import { Card, CardContent } from "../../components/ui/Card.js"
@@ -26,6 +29,9 @@ import { cn } from "../../lib/Cn.js"
 
 import { getCategoryCheckboxState, orderCategoriesHierarchically } from "./CategorySelection.js"
 
+const isCategoryMode = (value: string): value is CategoryMode =>
+  allCategoryModes.includes(value as CategoryMode)
+
 export const CategoryPanel = ({
   scanResult,
   selectedCategoryIds,
@@ -49,14 +55,14 @@ export const CategoryPanel = ({
   selectedCategoryIds: number[]
   categorySearch: string
   categoryStatus: string
-  categoryMode: "selected-and-descendants" | "exact-selected"
+  categoryMode: CategoryMode
   dateFrom: string | null
   dateTo: string | null
   selectedCount: number
   selectedPostCount: number
   totalPostCount: number
   onCategorySearchChange: (value: string) => void
-  onCategoryModeChange: (value: "selected-and-descendants" | "exact-selected") => void
+  onCategoryModeChange: (value: CategoryMode) => void
   onDateFromChange: (value: string | null) => void
   onDateToChange: (value: string | null) => void
   onSelectAll: () => void
@@ -90,9 +96,11 @@ export const CategoryPanel = ({
             <Select
               value={categoryMode}
               disabled={!scanResult}
-              onValueChange={(value) =>
-                onCategoryModeChange(value as "selected-and-descendants" | "exact-selected")
-              }
+              onValueChange={(value) => {
+                if (isCategoryMode(value)) {
+                  onCategoryModeChange(value)
+                }
+              }}
             >
               <SelectTrigger id="scope-categoryMode" data-value={categoryMode}>
                 <SelectValue placeholder="카테고리 포함 범위 선택" />

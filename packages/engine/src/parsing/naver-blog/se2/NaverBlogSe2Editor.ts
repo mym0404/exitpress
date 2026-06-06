@@ -1,6 +1,6 @@
-import { unique } from "@exitpress/engine/shared/collection/CollectionUtils.js"
+import { unique } from "@exitpress/engine/shared/collection/util/unique.js"
 
-import type { ParsedPost } from "@exitpress/domain/parser/Types.js"
+import type { ParsedPost } from "@exitpress/domain/parser/schema/ParsedPost.js"
 
 import type { BlogEditorParseInput } from "../core/BlogEditorParser.js"
 

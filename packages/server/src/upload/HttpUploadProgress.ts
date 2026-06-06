@@ -1,6 +1,7 @@
 import { UPLOAD_STATUSES } from "@exitpress/domain/export-job/ExportJobState.js"
 
-import type { ExportJobItem, ExportManifest } from "@exitpress/domain/export-job/Types.js"
+import type { ExportJobItem } from "@exitpress/domain/export-job/schema/ExportJobState.js"
+import type { ExportManifest } from "@exitpress/domain/export-job/schema/ExportManifest.js"
 
 import type { JobStore } from "../jobs/JobStore.js"
 

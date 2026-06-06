@@ -1,7 +1,7 @@
 import { useEffect } from "react"
 
-import type { PartialExportOptions } from "@exitpress/domain/export-options/ExportOptions.js"
-import type { ThemePreference } from "@exitpress/domain/preferences/ThemePreference.js"
+import type { PartialExportOptions } from "@exitpress/domain/export-options/schema/ExportOptions.js"
+import type { ThemePreference } from "@exitpress/domain/preferences/schema/ThemePreference.js"
 import type { MutableRefObject } from "react"
 
 import { postJsonNoContent } from "../../../lib/Api.js"

@@ -1,6 +1,6 @@
 import { JOB_STATUSES } from "@exitpress/domain/export-job/ExportJobState.js"
 
-import type { ExportJobState } from "@exitpress/domain/export-job/Types.js"
+import type { ExportJobState } from "@exitpress/domain/export-job/schema/ExportJobState.js"
 
 import { Button } from "../../components/ui/Button.js"
 import { Progress } from "../../components/ui/Progress.js"

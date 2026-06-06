@@ -1,5 +1,5 @@
 import { resolveParsedBlockAssetsForRender } from "@exitpress/engine/exporting/assets/ParsedBlockAssetResolver.js"
-import { renderBlockTemplates } from "@exitpress/engine/markdown/utils/renderBlockTemplates.js"
+import { renderBlockTemplates } from "@exitpress/engine/markdown/util/renderBlockTemplates.js"
 import { parsePostHtml } from "@exitpress/engine/parsing/naver-blog/core/PostParser.js"
 import { NaverBlog } from "@exitpress/engine/parsing/naver-blog/NaverBlog.js"
 import { createNaverBlogDefaultBlockTemplateMap } from "@exitpress/engine/parsing/naver-blog/NaverBlog.js"

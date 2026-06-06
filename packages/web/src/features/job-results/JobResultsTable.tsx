@@ -1,9 +1,9 @@
 import { RiExternalLinkLine, RiFileTextLine, RiFolderOpenLine, RiMore2Line } from "@remixicon/react"
 import { useRef, useState } from "react"
 
-import type { ExportJobState } from "@exitpress/domain/export-job/Types.js"
+import type { ExportJobState } from "@exitpress/domain/export-job/schema/ExportJobState.js"
 
-import type { JobFilter, JobResultsMode } from "./JobResultsHelpers.js"
+import type { JobFilter, JobResultsMode, UploadRowStatus } from "./JobResultsHelpers.js"
 
 import { Badge } from "../../components/ui/Badge.js"
 import { Button } from "../../components/ui/Button.js"
@@ -36,7 +36,7 @@ import {
   shouldShowUploadColumns,
 } from "./JobResultsHelpers.js"
 
-const uploadRowBadgeClass = (status: "pending" | "partial" | "complete" | "failed") =>
+const uploadRowBadgeClass = (status: UploadRowStatus) =>
   cn(
     "rounded-full border px-2.5 py-0.5",
     status === "pending"

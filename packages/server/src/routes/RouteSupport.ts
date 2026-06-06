@@ -1,4 +1,4 @@
-import { toErrorMessage } from "@exitpress/engine/shared/error/ErrorUtils.js"
+import { toErrorMessage } from "@exitpress/engine/shared/error/util/toErrorMessage.js"
 
 import type { IncomingMessage, ServerResponse } from "node:http"
 

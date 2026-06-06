@@ -8,18 +8,25 @@ import {
   optionDescriptions,
 } from "@exitpress/domain/export-options/ExportOptions.js"
 import { NaverBlog } from "@exitpress/engine/parsing/naver-blog/NaverBlog.js"
-import { mapConcurrent } from "@exitpress/engine/shared/async/AsyncUtils.js"
+import { mapConcurrent } from "@exitpress/engine/shared/async/util/AsyncTasks.js"
 import { createHttpServer } from "@exitpress/server/http/HttpServer.js"
 import { chromium } from "playwright"
 
-import type { ScanResult } from "@exitpress/domain/blog/Types.js"
+import type { ScanResult } from "@exitpress/domain/blog/schema/BlogScan.js"
+import type { ExportJobPollingConfig } from "@exitpress/domain/export-job/schema/ExportJobPollingConfig.js"
 import type {
   ExportJobItem,
-  ExportJobPollingConfig,
   ExportJobState,
-  ExportResumeSummary,
-} from "@exitpress/domain/export-job/Types.js"
-import type { UploadProviderCatalogResponse } from "@exitpress/domain/upload/UploadProviderTypes.js"
+} from "@exitpress/domain/export-job/schema/ExportJobState.js"
+import type { ExportResumeSummary } from "@exitpress/domain/export-job/schema/ExportManifest.js"
+import type {
+  UploadRewriteStatus,
+  UploadStatus,
+} from "@exitpress/domain/export-job/schema/UploadState.js"
+import type { ThemePreference } from "@exitpress/domain/preferences/schema/ThemePreference.js"
+import type { UploadProviderCatalogResponse } from "@exitpress/domain/upload/schema/UploadProvider.js"
+import type { WizardStep } from "@exitpress/web/features/common/shell/WizardFlow.js"
+import type { UploadRowStatus } from "@exitpress/web/features/job-results/JobResultsHelpers.js"
 
 import { createTestTempDir } from "../../support/test-paths.js"
 
@@ -43,6 +50,20 @@ const smokeJobPolling: ExportJobPollingConfig | undefined = smokeFast
       uploadBurstAttempts: 8,
     }
   : undefined
+const allResumeUploadStatuses = [
+  "upload-ready",
+  "uploading",
+  "upload-failed",
+  "upload-completed",
+] as const satisfies readonly UploadStatus[]
+type ResumeUploadStatus = (typeof allResumeUploadStatuses)[number]
+const allResumeScenarioSteps = [
+  "blog-input",
+  "running",
+  "upload",
+  "result",
+] as const satisfies readonly WizardStep[]
+type ResumeScenarioStep = (typeof allResumeScenarioSteps)[number]
 
 const buildJsonResponse = (body: unknown, status = 200) => ({
   status,
@@ -169,7 +190,7 @@ const buildUploadItem = ({
 }: {
   logNo: string
   uploadedCount: number
-  rewriteStatus: "pending" | "completed" | "failed"
+  rewriteStatus: UploadRewriteStatus
   updatedAt: string
 }): ExportJobItem => {
   const candidates = buildUploadCandidates(logNo)
@@ -287,15 +308,11 @@ const buildUploadJob = ({
   finishedAt,
 }: {
   jobId: string
-  status: "upload-ready" | "uploading" | "upload-failed" | "upload-completed"
+  status: ResumeUploadStatus
   resumeAvailable: boolean
   outputDir: string
   uploadedCounts: [number, number, number]
-  rewriteStatuses: [
-    "pending" | "completed" | "failed",
-    "pending" | "completed" | "failed",
-    "pending" | "completed" | "failed",
-  ]
+  rewriteStatuses: [UploadRewriteStatus, UploadRewriteStatus, UploadRewriteStatus]
   error: string | null
   finishedAt: string | null
 }): ExportJobState => {
@@ -457,12 +474,12 @@ const buildResumeSummary = (job: ExportJobState): ExportResumeSummary => ({
 
 type ResumeScenario = {
   id: string
-  step: "blog-input" | "running" | "upload" | "result"
+  step: ResumeScenarioStep
   bootstrap: {
     profile: "gfm"
     options: ReturnType<typeof defaultExportOptions>
     lastOutputDir: string
-    themePreference: "dark" | "light"
+    themePreference: ThemePreference
     resumedJob: ExportJobState | null
     resumeSummary: ExportResumeSummary | null
     resumedScanResult: ScanResult | null
@@ -544,7 +561,7 @@ const assertUploadRowStatus = async ({
 }: {
   page: import("playwright").Page
   rowId: string
-  expectedStatus: "pending" | "partial" | "complete" | "failed"
+  expectedStatus: UploadRowStatus
 }) => {
   const status = await page
     .locator(`[data-upload-row-id="${rowId}"]`)

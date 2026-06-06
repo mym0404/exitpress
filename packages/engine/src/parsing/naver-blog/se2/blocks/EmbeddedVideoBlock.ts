@@ -1,5 +1,5 @@
 import { normalizeAssetUrl } from "@exitpress/domain/blog/NaverUrl.js"
-import { compactText } from "@exitpress/engine/shared/text/TextUtils.js"
+import { compactText } from "@exitpress/engine/shared/text/util/TextCompaction.js"
 
 import type { CheerioAPI } from "cheerio"
 
@@ -8,7 +8,7 @@ import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../co
 import { createVideoBlock } from "../../core/ParsedBlockOutput.js"
 import { LeafParserBlock } from "../../core/ParserBlock.js"
 
-import { hasOnlyTargetContent } from "./util/WrapperContent.js"
+import { hasOnlyTargetContent } from "./util/hasOnlyTargetContent.js"
 
 const parseDimension = (value: string | undefined) => {
   const parsed = Number(value)

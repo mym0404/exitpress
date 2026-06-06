@@ -1,13 +1,13 @@
 import { sanitizeCategoryName } from "@exitpress/domain/blog/CategoryName.js"
 import { getSourceUrl, normalizeAssetUrl } from "@exitpress/domain/blog/NaverUrl.js"
-import * as HttpUtil from "@exitpress/engine/infra/http/HttpUtil.js"
+import * as HttpRequests from "@exitpress/engine/infra/http/util/HttpRequests.js"
 import { log } from "@exitpress/engine/infra/runtime/Logger.js"
-import { mapConcurrent } from "@exitpress/engine/shared/async/AsyncUtils.js"
-import { toKstDateTime } from "@exitpress/engine/shared/datetime/DateTimeUtils.js"
+import { mapConcurrent } from "@exitpress/engine/shared/async/util/AsyncTasks.js"
+import { toKstDateTime } from "@exitpress/engine/shared/datetime/util/toKstDateTime.js"
 
-import type { CategoryInfo, ScanResult } from "@exitpress/domain/blog/Types.js"
+import type { CategoryInfo, ScanResult } from "@exitpress/domain/blog/schema/BlogScan.js"
 
-import type { CategoryApiItem, PostApiItem } from "./NaverBlogApiTypes.js"
+import type { CategoryApiItem, PostApiItem } from "./schema/NaverBlogApi.js"
 
 import { fetchNaverBlogJson } from "./NaverBlogJsonClient.js"
 import { binaryHeaders, htmlHeaders } from "./NaverBlogRequestHeaders.js"
@@ -167,7 +167,7 @@ export class NaverBlogFetcher {
       return cachedHtml
     }
 
-    const response = await HttpUtil.fetchResponseWithRetry({
+    const response = await HttpRequests.fetchResponseWithRetry({
       url: `https://m.blog.naver.com/PostView.naver?blogId=${this.blogId}&logNo=${logNo}`,
       headers: htmlHeaders({
         blogId: this.blogId,
@@ -195,7 +195,7 @@ export class NaverBlogFetcher {
     sourceUrl: string
     destinationPath: string
   }) {
-    await HttpUtil.downloadBinary({
+    await HttpRequests.downloadBinary({
       sourceUrl: normalizeAssetUrl(sourceUrl),
       destinationPath,
       headers: binaryHeaders,
@@ -206,7 +206,7 @@ export class NaverBlogFetcher {
   }
 
   async fetchBinary({ sourceUrl }: { sourceUrl: string }) {
-    return HttpUtil.fetchBinary({
+    return HttpRequests.fetchBinary({
       sourceUrl: normalizeAssetUrl(sourceUrl),
       headers: binaryHeaders,
       failureLabel: "자산 다운로드 실패",

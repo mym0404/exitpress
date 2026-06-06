@@ -16,19 +16,20 @@ import {
   buildPostLinkTargets,
   createSameBlogPostLinkResolver,
 } from "@exitpress/engine/exporting/paths/PostLinkRewriter.js"
-import { ensureDir, resolveRepoPath } from "@exitpress/engine/infra/node/FilePathUtils.js"
+import { ensureDir, resolveRepoPath } from "@exitpress/engine/infra/node/util/FilePaths.js"
 import { NaverBlogFetcher } from "@exitpress/engine/integrations/naver-blog/NaverBlogFetcher.js"
-import { renderMarkdownPost } from "@exitpress/engine/markdown/utils/renderMarkdownPost.js"
+import { renderMarkdownPost } from "@exitpress/engine/markdown/util/renderMarkdownPost.js"
 import { parsePostHtmlWithBlockEvidence } from "@exitpress/engine/parsing/naver-blog/core/PostParser.js"
 import { createNaverBlogDefaultBlockTemplateMap } from "@exitpress/engine/parsing/naver-blog/NaverBlog.js"
 import { NaverBlog } from "@exitpress/engine/parsing/naver-blog/NaverBlog.js"
-import { mapConcurrent } from "@exitpress/engine/shared/async/AsyncUtils.js"
-import { toErrorMessage } from "@exitpress/engine/shared/error/ErrorUtils.js"
+import { mapConcurrent } from "@exitpress/engine/shared/async/util/AsyncTasks.js"
+import { toErrorMessage } from "@exitpress/engine/shared/error/util/toErrorMessage.js"
 import { chromium } from "playwright"
 
-import type { PostSummary, ScanResult } from "@exitpress/domain/blog/Types.js"
-import type { ExportOptions } from "@exitpress/domain/export-options/Types.js"
-import type { ParsedPost } from "@exitpress/domain/parser/Types.js"
+import type { PostSummary, ScanResult } from "@exitpress/domain/blog/schema/BlogScan.js"
+import type { UploadCandidateKind } from "@exitpress/domain/export-job/schema/UploadState.js"
+import type { ExportOptions } from "@exitpress/domain/export-options/schema/ExportOptions.js"
+import type { ParsedPost } from "@exitpress/domain/parser/schema/ParsedPost.js"
 import type { SinglePostFetcher } from "@exitpress/engine/exporting/post/SinglePostExport.js"
 import type { Browser } from "playwright"
 
@@ -48,6 +49,7 @@ import {
 } from "./paths.js"
 import { captureNaverPost } from "./playwright.js"
 
+// Evidence row produced for one captured Naver post target.
 export type EvidenceRowReport = {
   blogId: string
   logNo: string
@@ -60,6 +62,7 @@ export type EvidenceRowReport = {
   errors: string[]
 }
 
+// Full evidence capture report written beside generated Markdown sections.
 export type PostEvidenceReport = {
   outputDir: string
   evidencePath: string
@@ -100,7 +103,7 @@ const createRemoteAssetRecord = ({
   kind,
   sourceUrl,
 }: {
-  kind: "image" | "thumbnail"
+  kind: UploadCandidateKind
   sourceUrl: string
 }) => ({
   kind,

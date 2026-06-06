@@ -1,11 +1,11 @@
 import { isUploadActionableJob } from "@exitpress/domain/export-job/ExportJobState.js"
 import { useEffect, useRef, useState } from "react"
 
-import type { ExportJobState } from "@exitpress/domain/export-job/Types.js"
+import type { ExportJobState } from "@exitpress/domain/export-job/schema/ExportJobState.js"
 import type {
   UploadProviderCatalogResponse,
   UploadProviderFields,
-} from "@exitpress/domain/upload/UploadProviderTypes.js"
+} from "@exitpress/domain/upload/schema/UploadProvider.js"
 
 import type { JobFilter, JobResultsMode } from "./JobResultsHelpers.js"
 

@@ -3,7 +3,7 @@ import { useCallback } from "react"
 
 import type { ExportBootstrapResponse, ExportResumeLookupResponse } from "../../../lib/Api.js"
 
-import type { UseWizardActionsArgs } from "./UseWizardActionTypes.js"
+import type { UseWizardActionsArgs } from "./schema/WizardActions.js"
 
 import { toast } from "../../../components/ui/Sonner.js"
 import { postJson } from "../../../lib/Api.js"

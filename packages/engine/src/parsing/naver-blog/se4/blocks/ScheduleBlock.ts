@@ -1,4 +1,4 @@
-import { compactText } from "@exitpress/engine/shared/text/TextUtils.js"
+import { compactText } from "@exitpress/engine/shared/text/util/TextCompaction.js"
 
 import type { UnknownRecord } from "@exitpress/engine/shared/object/UnknownRecord.js"
 

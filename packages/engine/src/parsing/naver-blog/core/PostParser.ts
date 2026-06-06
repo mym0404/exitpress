@@ -1,7 +1,7 @@
-import { unique } from "@exitpress/engine/shared/collection/CollectionUtils.js"
+import { unique } from "@exitpress/engine/shared/collection/util/unique.js"
 import { load } from "cheerio"
 
-import type { ParserBlockOptions } from "@exitpress/domain/parser/Types.js"
+import type { ParserBlockOptions } from "@exitpress/domain/parser/schema/ParserBlockOptions.js"
 
 import type { ParserBlockParseEvidence } from "./ParserBlockDiagnostics.js"
 

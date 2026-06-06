@@ -5,13 +5,14 @@ import { NaverBlogSE4Editor } from "@exitpress/engine/parsing/naver-blog/se4/Nav
 import { load } from "cheerio"
 import { expect } from "vitest"
 
-import type { ExportOptions } from "@exitpress/domain/export-options/Types.js"
-import type { ParsedBlock, ParsedPost } from "@exitpress/domain/parser/Types.js"
-import type { BlockTemplateDefinition } from "@exitpress/domain/template/Types.js"
+import type { ExportOptions } from "@exitpress/domain/export-options/schema/ExportOptions.js"
+import type { ParsedBlock, ParsedPost } from "@exitpress/domain/parser/schema/ParsedPost.js"
+import type { BlockTemplateDefinition } from "@exitpress/domain/template/schema/BlockTemplateDefinition.js"
 
 const testOptions = defaultExportOptions()
 
-type EditorType = "naver-se2" | "naver-se3" | "naver-se4"
+const allEditorTypes = ["naver-se2", "naver-se3", "naver-se4"] as const
+type EditorType = (typeof allEditorTypes)[number]
 
 type ParserTestOptions = {
   blockOutputs?: ExportOptions["blockOutputs"]

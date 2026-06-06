@@ -11,8 +11,9 @@ import {
 import { createTestTempDir } from "@tests/support/test-paths.js"
 import { afterEach, describe, expect, it, vi } from "vitest"
 
-import type { ScanResult } from "@exitpress/domain/blog/Types.js"
-import type { ExportJobState, ExportManifest } from "@exitpress/domain/export-job/Types.js"
+import type { ScanResult } from "@exitpress/domain/blog/schema/BlogScan.js"
+import type { ExportJobState } from "@exitpress/domain/export-job/schema/ExportJobState.js"
+import type { ExportManifest } from "@exitpress/domain/export-job/schema/ExportManifest.js"
 
 let activeServer: ReturnType<typeof createTestHttpServer> | null = null
 

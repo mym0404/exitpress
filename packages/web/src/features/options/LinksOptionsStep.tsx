@@ -4,8 +4,8 @@ import {
   postTemplateKeys,
 } from "@exitpress/domain/export-paths/PostPathTemplate.js"
 
-import type { PostSummary } from "@exitpress/domain/blog/Types.js"
-import type { ExportOptions } from "@exitpress/domain/export-options/Types.js"
+import type { PostSummary } from "@exitpress/domain/blog/schema/BlogScan.js"
+import type { ExportOptions } from "@exitpress/domain/export-options/schema/ExportOptions.js"
 
 import { Input } from "../../components/ui/Input.js"
 

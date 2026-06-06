@@ -4,7 +4,7 @@ import path from "node:path"
 import { log } from "@exitpress/engine/infra/runtime/Logger.js"
 import { NaverBlogFetcher } from "@exitpress/engine/integrations/naver-blog/NaverBlogFetcher.js"
 
-import type { PostSummary, ScanResult } from "@exitpress/domain/blog/Types.js"
+import type { PostSummary, ScanResult } from "@exitpress/domain/blog/schema/BlogScan.js"
 import type { SinglePostFetcher } from "@exitpress/engine/exporting/post/SinglePostExport.js"
 
 type SinglePostMetadataCacheFile = {

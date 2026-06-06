@@ -18,8 +18,8 @@ import {
 import { createTestTempDir } from "@tests/support/test-paths.js"
 import { afterEach, describe, expect, it, vi } from "vitest"
 
-import type { ScanResult } from "@exitpress/domain/blog/Types.js"
-import type { UploadProviderCatalogResponse } from "@exitpress/domain/upload/UploadProviderTypes.js"
+import type { ScanResult } from "@exitpress/domain/blog/schema/BlogScan.js"
+import type { UploadProviderCatalogResponse } from "@exitpress/domain/upload/schema/UploadProvider.js"
 
 let activeServer: ReturnType<typeof createTestHttpServer> | null = null
 
@@ -43,7 +43,7 @@ const waitForBlockScanJob = async ({ baseUrl, jobId }: { baseUrl: string; jobId:
     const response = await fetch(`${baseUrl}/api/scan-blocks/jobs/${jobId}`)
     const job = (await response.json()) as {
       id: string
-      status: "queued" | "running" | "completed" | "failed"
+      status: import("@exitpress/domain/block-scan/schema/BlockScanJobState.js").BlockScanJobStatus
       total: number
       completed: number
       failed: number

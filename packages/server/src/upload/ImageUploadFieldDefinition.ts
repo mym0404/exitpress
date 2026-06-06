@@ -1,4 +1,4 @@
-import type { UploadProviderFieldDefinition } from "@exitpress/domain/upload/UploadProviderTypes.js"
+import type { UploadProviderFieldDefinition } from "@exitpress/domain/upload/schema/UploadProvider.js"
 
 import {
   inferInputType,

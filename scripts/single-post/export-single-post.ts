@@ -13,6 +13,7 @@ import { parseSinglePostCliArgs } from "./SinglePostArgs.js"
 import { readSinglePostOptions } from "./SinglePostOptions.js"
 import { renderSinglePostInspectSummary, renderSinglePostSummary } from "./SinglePostSummary.js"
 
+// Injectable dependencies keep the single-post CLI testable without shelling out.
 export type RunSinglePostCliDeps = {
   argv?: string[]
   readFile?: typeof readFile
@@ -24,6 +25,7 @@ export type RunSinglePostCliDeps = {
   stderrWrite?: (text: string) => void
 }
 
+// Runs the single-post export or inspect command from parsed CLI arguments.
 export const runSinglePostCli = async ({
   argv = process.argv.slice(2),
   readFile: readFileImpl = readFile,

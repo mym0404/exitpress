@@ -2,7 +2,7 @@ import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../co
 
 import { LeafParserBlock } from "../../core/ParserBlock.js"
 
-import { parseSe4ImageGroup } from "./util/ImageCollection.js"
+import { parseSe4ImageGroup } from "./util/parseSe4ImageGroup.js"
 
 export class NaverSe4ImageGroupBlock extends LeafParserBlock {
   override readonly id = "imageGroup"

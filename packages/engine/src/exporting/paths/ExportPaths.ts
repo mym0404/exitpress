@@ -4,8 +4,8 @@ import { sanitizeCategoryName } from "@exitpress/domain/blog/CategoryName.js"
 import { formatCategorySegment } from "@exitpress/domain/export-paths/PathFormat.js"
 import { buildPostFolderName } from "@exitpress/domain/export-paths/PostPathTemplate.js"
 
-import type { CategoryInfo, PostSummary } from "@exitpress/domain/blog/Types.js"
-import type { ExportOptions } from "@exitpress/domain/export-options/Types.js"
+import type { CategoryInfo, PostSummary } from "@exitpress/domain/blog/schema/BlogScan.js"
+import type { ExportOptions } from "@exitpress/domain/export-options/schema/ExportOptions.js"
 
 export const getCategoryForPost = ({
   categories,

@@ -1,7 +1,7 @@
 import { sanitizePersistedExportOptions } from "@exitpress/domain/export-options/ExportOptions.js"
 import { useEffect } from "react"
 
-import type { ThemePreference } from "@exitpress/domain/preferences/ThemePreference.js"
+import type { ThemePreference } from "@exitpress/domain/preferences/schema/ThemePreference.js"
 
 import type { ExportBootstrapResponse } from "../../../lib/Api.js"
 

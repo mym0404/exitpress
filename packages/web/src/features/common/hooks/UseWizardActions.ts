@@ -1,8 +1,8 @@
 import { useCallback } from "react"
 
-import type { UploadProviderFields } from "@exitpress/domain/upload/UploadProviderTypes.js"
+import type { UploadProviderFields } from "@exitpress/domain/upload/schema/UploadProvider.js"
 
-import type { UseWizardActionsArgs } from "./UseWizardActionTypes.js"
+import type { UseWizardActionsArgs } from "./schema/WizardActions.js"
 
 import { toast } from "../../../components/ui/Sonner.js"
 import { setupSteps } from "../shell/WizardFlow.js"

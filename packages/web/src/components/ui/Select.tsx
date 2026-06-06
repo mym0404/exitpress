@@ -5,6 +5,9 @@ import type * as React from "react"
 
 import { cn } from "../../lib/Cn.js"
 
+export const allSelectTriggerSizes = ["sm", "default"] as const
+export type SelectTriggerSize = (typeof allSelectTriggerSizes)[number]
+
 function Select({ ...props }: React.ComponentProps<typeof SelectPrimitive.Root>) {
   return <SelectPrimitive.Root data-slot="select" {...props} />
 }
@@ -23,7 +26,7 @@ function SelectTrigger({
   children,
   ...props
 }: React.ComponentProps<typeof SelectPrimitive.Trigger> & {
-  size?: "sm" | "default"
+  size?: SelectTriggerSize
 }) {
   return (
     <SelectPrimitive.Trigger

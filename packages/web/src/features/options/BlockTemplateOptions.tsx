@@ -1,5 +1,5 @@
-import type { ExportOptions } from "@exitpress/domain/export-options/Types.js"
-import type { BlockTemplateDefinition } from "@exitpress/domain/template/Types.js"
+import type { ExportOptions } from "@exitpress/domain/export-options/schema/ExportOptions.js"
+import type { BlockTemplateDefinition } from "@exitpress/domain/template/schema/BlockTemplateDefinition.js"
 
 import { BlockTemplateCard } from "./BlockTemplateCard.js"
 import { editorOutputCardClass } from "./OptionControls.js"

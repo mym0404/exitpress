@@ -1,4 +1,4 @@
-import type { TemplatePropDefinition } from "@exitpress/domain/template/Types.js"
+import type { TemplatePropDefinition } from "@exitpress/domain/template/schema/BlockTemplateDefinition.js"
 
 type TemplatePropCompletionContext = {
   explicit: boolean
