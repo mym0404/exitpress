@@ -21,6 +21,9 @@
 - Access, visibility, and permissions should be enforced in behavior rather than explained as decorative copy.
 - Long-running export/upload/resume states need clear progress and retry affordances.
 - Avoid adding helper text, badges, or labels solely to mirror implementation requirements.
+- Treat card-wrapped single form controls as an anti-pattern. A lone input, select, checkbox, radio, or small checkbox group should live in a plain field row or compact grid, not inside a bordered/shadowed card.
+- Use cards only when the surface is a distinct work area, repeated result item, table/list container, preview, editor, dialog, or status panel with enough content to justify its visual boundary.
+- Do not nest form cards inside a panel just to create spacing. Use grid gaps, section dividers, or inline rows before adding another wrapper.
 
 ## Verification
 - UI logic can use focused pure or hook tests.

@@ -11,10 +11,10 @@ import {
 } from "../../components/ui/Select.js"
 import { cn } from "../../lib/Cn.js"
 
-const optionFieldCardClass =
-  "field-card grid min-h-[6.25rem] content-start gap-1.5 self-start rounded-2xl px-3 py-3"
+const optionFieldCardClass = "grid min-h-0 content-start gap-1.5 self-start"
 const optionFieldPlainClass = "grid min-h-0 content-start gap-1.5 self-start"
-const checkFieldClass = "field-card flex w-full flex-col self-start rounded-2xl px-3 py-3"
+const checkFieldClass =
+  "flex w-full flex-col self-start rounded-[var(--radius-md)] px-2 py-1.5 transition-colors hover:bg-accent/55"
 const optionSectionClass = "option-section grid gap-4"
 export const optionEmbeddedPanelClass =
   "grid gap-3 rounded-xl border border-border bg-muted/20 px-3 py-3"
@@ -133,7 +133,7 @@ export const CheckField = ({
   <label
     className={cn(
       checkFieldClass,
-      compact ? "min-h-0 gap-2" : "min-h-[7.75rem] gap-3",
+      compact ? "min-h-0 gap-2" : "min-h-0 gap-2.5",
       disabled && "opacity-60",
     )}
     data-option-key={optionKey}
@@ -174,10 +174,7 @@ export const RadioField = ({
   onChange: () => void
   children?: ReactNode
 }) => (
-  <label
-    className={cn(checkFieldClass, checked && "shadow-[var(--focus-ring)]")}
-    data-option-key={optionKey}
-  >
+  <label className={cn(checkFieldClass, checked && "bg-accent/70")} data-option-key={optionKey}>
     <span className="check-head flex items-start gap-3">
       <input
         id={inputId}
@@ -197,7 +194,7 @@ export const RadioField = ({
         ) : null}
       </span>
     </span>
-    {children ? <div className="pt-3">{children}</div> : null}
+    {children ? <div className="pt-2">{children}</div> : null}
   </label>
 )
 
@@ -217,6 +214,6 @@ export const OptionSection = ({
         <p className="mt-0.5 text-[13px] leading-5 text-muted-foreground">{note}</p>
       </div>
     </div>
-    <div className="option-grid grid items-start gap-4 xl:grid-cols-2">{children}</div>
+    <div className="option-grid grid items-start gap-x-6 gap-y-3 xl:grid-cols-2">{children}</div>
   </section>
 )
