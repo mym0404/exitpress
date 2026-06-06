@@ -2,12 +2,20 @@ import { filterPostsByScope } from "@exitpress/domain/export-scope/ExportScope.j
 import { parsePostHtml } from "@exitpress/engine/parsing/naver-blog/core/PostParser.js"
 import { NaverBlog } from "@exitpress/engine/parsing/naver-blog/NaverBlog.js"
 import { mapConcurrent } from "@exitpress/engine/shared/async/util/AsyncTasks.js"
+import { load } from "cheerio"
 
 import type { ScanResult } from "@exitpress/domain/blog/schema/BlogScan.js"
 import type { ExportOptions } from "@exitpress/domain/export-options/schema/ExportOptions.js"
 import type { NaverBlogFetcher } from "@exitpress/engine/integrations/naver-blog/NaverBlogFetcher.js"
+import type { ParserBlockInspection } from "@exitpress/engine/parsing/naver-blog/core/ParserBlockDiagnostics.js"
 
 export const blockDetectionConcurrency = 3
+
+const flattenInspections = (inspections: ParserBlockInspection[]): ParserBlockInspection[] =>
+  inspections.flatMap((inspection) => [
+    inspection,
+    ...flattenInspections(inspection.children ?? []),
+  ])
 
 export const detectPostBlockTemplateKeys = ({
   html,
@@ -20,6 +28,7 @@ export const detectPostBlockTemplateKeys = ({
 }) => {
   const blog = new NaverBlog()
   const editor = blog.getEditorForHtml(html)
+  const $ = load(html)
   const parsedPost = parsePostHtml({
     html,
     sourceUrl,
@@ -27,8 +36,22 @@ export const detectPostBlockTemplateKeys = ({
       blockOutputs: options.blockOutputs,
     },
   })
-
-  const detectedBlockIds = new Set<string>(parsedPost.blocks.map((block) => block.blockId))
+  const inspectedBlockIds = editor
+    ? flattenInspections(
+        editor.inspect({
+          $,
+          sourceUrl,
+          tags: [],
+          options: {
+            blockOutputs: options.blockOutputs,
+          },
+        }),
+      ).flatMap((inspection) => inspection.matchedBlockId ?? [])
+    : []
+  const detectedBlockIds = new Set<string>([
+    ...parsedPost.blocks.map((block) => block.blockId),
+    ...inspectedBlockIds.map((blockId) => `${editor?.type}:${blockId}`),
+  ])
 
   return blog
     .getBlockTemplateDefinitions()

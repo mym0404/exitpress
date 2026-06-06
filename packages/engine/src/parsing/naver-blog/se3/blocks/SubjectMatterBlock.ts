@@ -18,7 +18,7 @@ export class NaverSe3SubjectMatterBlock extends LeafParserBlock {
     presets: [
       {
         id: "default",
-        label: "기본",
+        label: "이미지 또는 본문",
         template: "${(url ?? '') ? '![' + alt + '](' + url + ')' : text}",
       },
     ],

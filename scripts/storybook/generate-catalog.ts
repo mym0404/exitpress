@@ -66,11 +66,19 @@ const buildStorybookCatalog = (): StorybookEditorGroup[] => {
   const groups: StorybookEditorGroup[] = []
 
   storybookDefinitions.forEach((definition) => {
+    const templateDefinition =
+      blockTemplateDefinitionByKey[`${definition.editorType}:${definition.blockId}`]
+
+    if (!templateDefinition) {
+      throw new Error(
+        `Storybook block template definition is missing: ${definition.editorType}:${definition.blockId}`,
+      )
+    }
+
     const story = {
       ...definition,
       markdown: renderStoryMarkdown(definition),
-      templateDefinition:
-        blockTemplateDefinitionByKey[`${definition.editorType}:${definition.blockId}`],
+      templateDefinition,
     }
     const existingGroup = groups.find((group) => group.editorType === definition.editorType)
 

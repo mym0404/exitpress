@@ -44,7 +44,7 @@ const getParserBlockTemplateKey = ({
 }: {
   editorType: string
   block: ParserBlock
-}) => block.templateDefinition?.key ?? `${editorType}:${block.id}`
+}) => block.templateDefinition.key ?? `${editorType}:${block.id}`
 
 export abstract class BlogEditorParser {
   abstract readonly type: string
@@ -66,10 +66,6 @@ export abstract class BlogEditorParser {
 
     this.supportedBlocks.forEach((block) => {
       const templateDefinition = block.templateDefinition
-
-      if (!templateDefinition || templateDefinition.presets.length < 1) {
-        return
-      }
 
       const key = getParserBlockTemplateKey({ editorType: this.type, block })
 

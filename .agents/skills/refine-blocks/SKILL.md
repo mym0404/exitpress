@@ -86,11 +86,15 @@ Refinement criteria:
 - The editor family should keep mutually exclusive, justified parser block responsibilities.
 - A fallback block should not hide an unsupported concrete media, table, code, widget, or link-like component.
 - A matched node with meaningful content should emit AST output or throw; empty output is allowed only for explicit chrome, spacer, placeholder, or empty known component cases.
+- Every parser block should expose a `templateDefinition`; intentional no-output blocks use the `무시` preset with an empty template.
+- Link-like, media-like, schedule-like, map-like, file-like, and embedded components should expose structured props instead of an opaque `text` prop.
+- Blocks should be split when different content responsibilities require different prop contracts.
+- Block-specific parsed output construction and template strings should remain in the owning block file, not in shared helpers.
 - First-match ordering risks should be covered by focused specs with positive and near-miss cases.
 - Module or component data lookup should not cross into the next sibling component unless the editor format explicitly requires it.
-- Shared AST/output option families should have consistent output option behavior or a focused spec documenting the exception.
+- Shared parser contracts and template behavior should stay consistent or have a focused spec documenting the exception.
 - Aggressive refactoring is allowed when it makes these boundaries clearer, including modifying, merging, removing, or reordering existing blocks.
-- Keep the refactor scoped to parser block responsibility. Change renderer or AST contracts only when the parser block boundary cannot be made correct otherwise.
+- Keep the refactor scoped to parser block responsibility. Change renderer or shared parser contracts only when the parser block boundary cannot be made correct otherwise.
 
 Do not open an empty improvement PR. If no concrete refinement is needed, report that no follow-up PR was created and include the reason.
 
@@ -109,7 +113,6 @@ When refinement changes are needed:
 
 Before opening the improvement PR, all of these must pass:
 
-- `pnpm test:parser-blocks`
 - `pnpm check:local`
 - Fixture verification for the modified block or blocks
 

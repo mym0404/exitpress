@@ -2,18 +2,19 @@ import { autocompletion } from "@codemirror/autocomplete"
 import CodeMirror from "@uiw/react-codemirror"
 import { useMemo } from "react"
 
-import type { TemplatePropDefinition } from "@exitpress/domain/template/schema/BlockTemplateDefinition.js"
+import type {
+  BlockTemplatePreset,
+  TemplatePropDefinition,
+} from "@exitpress/domain/template/schema/BlockTemplateDefinition.js"
 import type { ComponentPropsWithoutRef } from "react"
 
 import { Badge } from "../../components/ui/Badge.js"
 import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../../components/ui/Select.js"
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../../components/ui/DropdownMenu.js"
 import { cn } from "../../lib/Cn.js"
 
 import {
@@ -21,22 +22,14 @@ import {
   type TemplatePropCompletionSyntax,
 } from "./TemplatePropAutocomplete.js"
 
-const customPresetValue = "__custom__"
 const allTemplateEditorSurfaces = ["card", "embedded"] as const
 type TemplateEditorSurface = (typeof allTemplateEditorSurfaces)[number]
-
-type TemplateEditorPreset = {
-  id: string
-  label: string
-  template: string
-}
 
 export const TemplateEditorCard = ({
   title,
   badge,
   editorId,
-  presetId,
-  presetSelectId,
+  presetButtonId,
   presets = [],
   props,
   value,
@@ -44,7 +37,7 @@ export const TemplateEditorCard = ({
   readOnly = false,
   minHeight = "9rem",
   surface = "card",
-  onPresetChange,
+  onPresetApply,
   onTemplateChange,
   className,
   ...sectionProps
@@ -52,16 +45,15 @@ export const TemplateEditorCard = ({
   title: string
   badge?: string
   editorId: string
-  presetId?: string
-  presetSelectId?: string
-  presets?: TemplateEditorPreset[]
+  presetButtonId?: string
+  presets?: BlockTemplatePreset[]
   props: Record<string, TemplatePropDefinition>
   value: string
   syntax?: TemplatePropCompletionSyntax
   readOnly?: boolean
   minHeight?: string
   surface?: TemplateEditorSurface
-  onPresetChange?: (presetId: string) => void
+  onPresetApply?: (template: string) => void
   onTemplateChange?: (template: string) => void
 }) => {
   const propEntries = Object.entries(props)
@@ -134,29 +126,27 @@ export const TemplateEditorCard = ({
               CODE
             </span>
             {presets.length > 0 ? (
-              <Select
-                value={presetId === customPresetValue ? undefined : presetId}
-                onValueChange={(nextPresetId) => onPresetChange?.(nextPresetId)}
-                disabled={readOnly && !onTemplateChange}
-              >
-                <SelectTrigger
-                  id={presetSelectId}
-                  size="sm"
-                  aria-label="Preset"
-                  className="h-8 w-40"
-                >
-                  <SelectValue placeholder="Custom" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    {presets.map((preset) => (
-                      <SelectItem key={preset.id} value={preset.id}>
-                        {preset.label}
-                      </SelectItem>
-                    ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild disabled={readOnly && !onTemplateChange}>
+                  <button
+                    id={presetButtonId}
+                    type="button"
+                    className="inline-flex h-8 shrink-0 items-center rounded-[var(--radius-sm)] border border-border bg-background px-3 text-sm font-medium text-foreground transition-colors hover:bg-accent hover:text-accent-foreground disabled:pointer-events-none disabled:opacity-45"
+                  >
+                    프리셋
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  {presets.map((preset) => (
+                    <DropdownMenuItem
+                      key={preset.id}
+                      onSelect={() => onPresetApply?.(preset.template)}
+                    >
+                      {preset.label}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
             ) : null}
           </div>
           <CodeMirror
@@ -181,5 +171,3 @@ export const TemplateEditorCard = ({
     </section>
   )
 }
-
-export const getCustomTemplatePresetValue = () => customPresetValue

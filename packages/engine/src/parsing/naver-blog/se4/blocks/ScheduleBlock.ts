@@ -1,11 +1,10 @@
 import { compactText } from "@exitpress/engine/shared/text/util/TextCompaction.js"
 
+import type { ParsedBlock } from "@exitpress/domain/parser/schema/ParsedPost.js"
 import type { UnknownRecord } from "@exitpress/engine/shared/object/UnknownRecord.js"
 
 import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/ParserBlock.js"
 
-import { createLinkParagraphBlocks } from "../../common/LinkParagraph.js"
-import { createParagraphBlock } from "../../core/ParsedBlockOutput.js"
 import { LeafParserBlock } from "../../core/ParserBlock.js"
 
 const readString = (record: UnknownRecord | undefined, key: string) => {
@@ -22,9 +21,19 @@ export class NaverSe4ScheduleBlock extends LeafParserBlock {
   override readonly label = "일정"
   override readonly templateDefinition = {
     label: this.label,
-    presets: [{ id: "default", label: "기본", template: "${text}" }],
+    presets: [
+      {
+        id: "schedule",
+        label: "일정",
+        template:
+          "${(url ? '[' + title + '](' + url + ')' : title) + (startAt ? '\\n' + startAt : '') + (endAt ? ' - ' + endAt : '')}",
+      },
+    ],
     props: {
-      text: { label: "본문", type: "string" },
+      title: { label: "제목", type: "string" },
+      startAt: { label: "시작", type: "string" },
+      endAt: { label: "종료", type: "string" },
+      url: { label: "URL", type: "string" },
     },
   } satisfies ParserBlockTemplateDefinition
 
@@ -41,21 +50,17 @@ export class NaverSe4ScheduleBlock extends LeafParserBlock {
     const data = isRecord(moduleData?.data) ? moduleData.data : undefined
     const title = compactText($node.find(".se-schedule-title-text").first().text())
     const url = $node.find("a.se-schedule-url[href]").first().attr("href") ?? ""
-    const description = readString(data, "startAt")
 
-    if (url) {
-      return createLinkParagraphBlocks({
+    return [
+      {
         blockId,
-        title: title || url,
-        description,
-        url,
-        hasThumbnail: false,
-        resolveLinkUrl: options.resolveLinkUrl,
-      })
-    }
-
-    return [title, description]
-      .filter(Boolean)
-      .map((text) => createParagraphBlock({ blockId, text }))
+        props: {
+          title: title || url,
+          startAt: readString(data, "startAt"),
+          endAt: readString(data, "endAt"),
+          url: url && options.resolveLinkUrl ? options.resolveLinkUrl(url) : url,
+        },
+      } satisfies ParsedBlock,
+    ]
   }
 }

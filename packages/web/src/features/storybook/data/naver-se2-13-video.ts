@@ -8,7 +8,6 @@ export const naverSe213Video = {
   blockIndex: 13,
   blockId: "video",
   blockLabel: "비디오",
-  group: "output",
   sourceUrl: "https://blog.naver.com/blogpeople/150173619413",
   inspectPath: "0",
   inputHtml:

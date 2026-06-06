@@ -15,7 +15,7 @@ export class NaverSe3QuoteBlock extends LeafParserBlock {
     presets: [
       {
         id: "default",
-        label: "기본",
+        label: "인용문",
         template: "> ${text}",
       },
     ],

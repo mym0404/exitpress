@@ -47,7 +47,9 @@ const EditableBlockTemplateCard = ({
   definition: BlockTemplateDefinition
   onOptionsChange: (updater: (current: ExportOptions) => ExportOptions) => void
 }) => {
-  const selectedTemplate = options.blockOutputs.templates[definition.key] ?? ""
+  const selectedTemplate = Object.hasOwn(options.blockOutputs.templates, definition.key)
+    ? options.blockOutputs.templates[definition.key]
+    : undefined
   const updateTemplate = (template: string) => {
     onOptionsChange((current) => {
       return {

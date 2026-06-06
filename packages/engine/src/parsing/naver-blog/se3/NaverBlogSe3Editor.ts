@@ -11,6 +11,7 @@ import { NaverSe3DividerBlock } from "./blocks/DividerBlock.js"
 import { NaverSe3DocumentTitleBlock } from "./blocks/DocumentTitleBlock.js"
 import { NaverSe3FileBlock } from "./blocks/FileBlock.js"
 import { NaverSe3ImageBlock } from "./blocks/ImageBlock.js"
+import { NaverSe3ImageStripBlock } from "./blocks/ImageStripBlock.js"
 import { NaverSe3LinkCardBlock } from "./blocks/LinkCardBlock.js"
 import { NaverSe3MapBlock } from "./blocks/MapBlock.js"
 import { NaverSe3MapTextBlock } from "./blocks/MapTextBlock.js"
@@ -36,6 +37,7 @@ export class NaverBlogSE3Editor extends BlogEditorParser {
     new NaverSe3VideoBlock(),
     new NaverSe3FileBlock(),
     new NaverSe3SubjectMatterBlock(),
+    new NaverSe3ImageStripBlock(),
     new NaverSe3ImageBlock(),
     new NaverSe3TextBlock(),
   ]

@@ -5,7 +5,7 @@ import type { StorybookDefinition } from "./StorybookDefinition.js"
 // Rendered Storybook case paired with its Markdown output.
 export type StorybookStory = StorybookDefinition & {
   markdown: string
-  templateDefinition?: BlockTemplateDefinition
+  templateDefinition: BlockTemplateDefinition
 }
 
 // Storybook cases grouped by Naver editor family for the UI.

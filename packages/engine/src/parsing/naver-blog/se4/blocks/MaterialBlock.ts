@@ -1,8 +1,10 @@
 import { compactText } from "@exitpress/engine/shared/text/util/TextCompaction.js"
 
+import type { ParsedBlockAsset } from "@exitpress/domain/parser/schema/Media.js"
+import type { ParsedBlock } from "@exitpress/domain/parser/schema/ParsedPost.js"
+
 import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/ParserBlock.js"
 
-import { createLinkParagraphBlocks } from "../../common/LinkParagraph.js"
 import { parseJsonAttribute } from "../../core/JsonAttribute.js"
 import { LeafParserBlock } from "../../core/ParserBlock.js"
 
@@ -13,9 +15,20 @@ export class NaverSe4MaterialBlock extends LeafParserBlock {
   override readonly label = "자료 링크"
   override readonly templateDefinition = {
     label: this.label,
-    presets: [{ id: "default", label: "기본", template: "${text}" }],
+    presets: [
+      { id: "link", label: "링크", template: "[${title}](${url})" },
+      {
+        id: "link-description",
+        label: "링크와 설명",
+        template:
+          "${description ? '[' + title + '](' + url + ')\\n' + description : '[' + title + '](' + url + ')'}",
+      },
+    ],
     props: {
-      text: { label: "본문", type: "string" },
+      title: { label: "제목", type: "string" },
+      url: { label: "URL", type: "string" },
+      description: { label: "설명", type: "string" },
+      thumbnailUrl: { label: "썸네일 URL", type: "string?" },
     },
   } satisfies ParserBlockTemplateDefinition
 
@@ -40,14 +53,28 @@ export class NaverSe4MaterialBlock extends LeafParserBlock {
         .filter(Boolean)
         .join(" / ")
 
-      return createLinkParagraphBlocks({
-        blockId,
-        title: compactText(customCard.find(".title").text()) || url,
-        description,
-        url,
-        hasThumbnail: Boolean(thumbnailSource),
-        resolveLinkUrl: options.resolveLinkUrl,
-      })
+      return [
+        {
+          blockId,
+          props: {
+            title: compactText(customCard.find(".title").text()) || url,
+            description,
+            url: options.resolveLinkUrl ? options.resolveLinkUrl(url) : url,
+            thumbnailUrl: thumbnailSource ?? null,
+          },
+          ...(thumbnailSource
+            ? {
+                assets: {
+                  thumbnailUrl: {
+                    role: "thumbnail",
+                    sourceUrl: thumbnailSource,
+                    required: false,
+                  } satisfies ParsedBlockAsset,
+                },
+              }
+            : {}),
+        } satisfies ParsedBlock,
+      ]
     }
 
     const materialLink = $node.find("a.se-module-material").first()
@@ -103,16 +130,30 @@ export class NaverSe4MaterialBlock extends LeafParserBlock {
       materialLink.find(".se-material-thumbnail-resource").attr("src") ??
       (typeof linkData?.thumbnail === "string" ? linkData.thumbnail : null)
 
-    return createLinkParagraphBlocks({
-      blockId,
-      title:
-        compactText(materialLink.find(".se-material-title").text()) ||
-        (typeof linkData?.title === "string" ? compactText(linkData.title) : "") ||
-        url,
-      description,
-      url,
-      hasThumbnail: Boolean(thumbnailSource),
-      resolveLinkUrl: options.resolveLinkUrl,
-    })
+    return [
+      {
+        blockId,
+        props: {
+          title:
+            compactText(materialLink.find(".se-material-title").text()) ||
+            (typeof linkData?.title === "string" ? compactText(linkData.title) : "") ||
+            url,
+          description,
+          url: options.resolveLinkUrl ? options.resolveLinkUrl(url) : url,
+          thumbnailUrl: thumbnailSource,
+        },
+        ...(thumbnailSource
+          ? {
+              assets: {
+                thumbnailUrl: {
+                  role: "thumbnail",
+                  sourceUrl: thumbnailSource,
+                  required: false,
+                } satisfies ParsedBlockAsset,
+              },
+            }
+          : {}),
+      } satisfies ParsedBlock,
+    ]
   }
 }

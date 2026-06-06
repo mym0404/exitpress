@@ -49,7 +49,7 @@ export const RunningProgressSection = ({
       {showResumeExportButton ? (
         <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[color-mix(in_srgb,var(--status-running-fg)_25%,transparent)] bg-[var(--status-running-bg)] px-4 py-3">
           <p className="info-copy text-sm leading-6">
-            이전 export 상태를 복구했습니다. 남은 글만 이어서 처리합니다.
+            이전 export 상태를 복구했습니다. 남은 글만 이어서 내보냅니다.
           </p>
           <Button
             id="resume-export-submit"
@@ -86,7 +86,7 @@ export const ExportSummarySection = ({ job }: { job: ExportJobState | null }) =>
 
     {job?.upload.status === "skipped" ? (
       <p className="text-sm leading-7 text-muted-foreground">
-        업로드할 로컬 이미지가 없어 내보내기만 완료되었습니다.
+        업로드할 로컬 이미지가 없어 내보내기만 끝났습니다.
       </p>
     ) : null}
   </section>

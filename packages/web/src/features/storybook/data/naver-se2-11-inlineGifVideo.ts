@@ -8,7 +8,6 @@ export const naverSe211InlineGifVideo = {
   blockIndex: 11,
   blockId: "inlineGifVideo",
   blockLabel: "인라인 GIF 비디오",
-  group: "output",
   sourceUrl: "https://blog.naver.com/anglekim3708/70170491705",
   inspectPath: "0",
   inputHtml:

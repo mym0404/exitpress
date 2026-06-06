@@ -39,8 +39,8 @@ export const ResumeDialogPanel = ({
         </DialogTitle>
         <DialogDescription>
           {resumeDialog?.source === "before-scan"
-            ? "이 경로에는 다시 불러올 수 있는 작업 상태가 남아 있습니다."
-            : "output 상태를 읽어 마지막 작업 화면으로 복구했습니다."}
+            ? "이 경로에 다시 불러올 작업 상태가 남아 있습니다."
+            : "output 상태를 읽어 마지막 작업 화면을 복구했습니다."}
         </DialogDescription>
       </DialogHeader>
       {resumeDialog ? (
@@ -69,8 +69,8 @@ export const ResumeDialogPanel = ({
           <Alert variant="destructive">
             <AlertTitle>초기화 주의</AlertTitle>
             <AlertDescription>
-              작업 초기화를 실행하면 <strong>{resumeDialog.resumeSummary.outputDir}</strong> 경로의
-              작업내역과 output 파일을 함께 삭제합니다.
+              작업을 초기화하면 <strong>{resumeDialog.resumeSummary.outputDir}</strong> 경로의 작업
+              내역과 output 파일을 함께 삭제합니다.
             </AlertDescription>
           </Alert>
         </div>

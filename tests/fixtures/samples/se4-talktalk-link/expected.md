@@ -8,7 +8,7 @@ category: 학습 내용
 categoryPath:
   - 게시판
   - 학습 내용
-thumbnail: https://mblogthumb-phinf.pstatic.net/MjAyNTAzMDdfNTIg/MDAxNzQxMzM1NjY1MTQz.qppGMZ1RinjHGcAXcn9gL7eAKN3mmW83D3OJGIcLPRgg.606p08T0EblKZl-A2P1kB-vjQviZQLVV2HySnsk0uusg.PNG/%EB%A0%88%EB%B2%A8%EC%97%85_%EA%B0%95%EC%9D%98_%ED%8F%AC%EC%8A%A4%ED%84%B0_(12).png?type=w800
+thumbnail: https://mblogthumb-phinf.pstatic.net/MjAyNTAzMDdfNTIg/MDAxNzQxMzM1NjY1MTQz.qppGMZ1RinjHGcAXcn9gL7eAKN3mmW83D3OJGIcLPRgg.606p08T0EblKZl-A2P1kB-vjQviZQLVV2HySnsk0uusg.PNG/%EB%A0%88%EB%B2%A8%EC%97%85_%EA%B0%95%EC%9D%98_%ED%8F%AC%EC%8A%A4%ED%84%B0_(12).png?type=w
 ---
 
 > 메모장처럼만 쓰는 노션?
@@ -17,7 +17,7 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/MjAyNTAzMDdfNTIg/MDAxNzQxMzM1NjY
 > 
 > 배워보세요!
 
-![](https://mblogthumb-phinf.pstatic.net/MjAyNTAzMDdfNTIg/MDAxNzQxMzM1NjY1MTQz.qppGMZ1RinjHGcAXcn9gL7eAKN3mmW83D3OJGIcLPRgg.606p08T0EblKZl-A2P1kB-vjQviZQLVV2HySnsk0uusg.PNG/%EB%A0%88%EB%B2%A8%EC%97%85_%EA%B0%95%EC%9D%98_%ED%8F%AC%EC%8A%A4%ED%84%B0_(12).png?type=w800)
+![](https://mblogthumb-phinf.pstatic.net/MjAyNTAzMDdfNTIg/MDAxNzQxMzM1NjY1MTQz.qppGMZ1RinjHGcAXcn9gL7eAKN3mmW83D3OJGIcLPRgg.606p08T0EblKZl-A2P1kB-vjQviZQLVV2HySnsk0uusg.PNG/%EB%A0%88%EB%B2%A8%EC%97%85_%EA%B0%95%EC%9D%98_%ED%8F%AC%EC%8A%A4%ED%84%B0_(12).png?type=w)
 
 안녕하세요, 날마다 성장하는 사람 **루앙데이**입니다. 😊
 
@@ -47,11 +47,11 @@ data 관리의 중요성이 더 커지고 있는 지금, Notion은 제대로만 
 
 <활용사례>
 
-![](https://mblogthumb-phinf.pstatic.net/MjAyNTAzMTBfMTkw/MDAxNzQxNTc2NzAyNjUw.Y7xsPBXsFhx-CXm5asLYiXkSZZ3FxkaomVPNmkVfpGgg.3cNlX5gVzrQ-v3VnI-NnztHTO5V55XMVzWHmBH2ERs0g.PNG/%EA%B7%B8%EB%A6%BC3.png?type=w800)
+![](https://mblogthumb-phinf.pstatic.net/MjAyNTAzMTBfMTkw/MDAxNzQxNTc2NzAyNjUw.Y7xsPBXsFhx-CXm5asLYiXkSZZ3FxkaomVPNmkVfpGgg.3cNlX5gVzrQ-v3VnI-NnztHTO5V55XMVzWHmBH2ERs0g.PNG/%EA%B7%B8%EB%A6%BC3.png?type=w)
 
-![](https://mblogthumb-phinf.pstatic.net/MjAyNTAzMTBfMjIw/MDAxNzQxNTc2NzAyNjI1.PI-eDRhL-9sKNyswVDF3yE7EbUao37khMuXEeWUjytog.PhL5hpfRB7qOYKaQ2VSoo9dPmmI2o6gryj87PA8vSwog.PNG/%EA%B7%B8%EB%A6%BC1.png?type=w800)
+![](https://mblogthumb-phinf.pstatic.net/MjAyNTAzMTBfMjIw/MDAxNzQxNTc2NzAyNjI1.PI-eDRhL-9sKNyswVDF3yE7EbUao37khMuXEeWUjytog.PhL5hpfRB7qOYKaQ2VSoo9dPmmI2o6gryj87PA8vSwog.PNG/%EA%B7%B8%EB%A6%BC1.png?type=w)
 
-![](https://mblogthumb-phinf.pstatic.net/MjAyNTAzMTBfMjg0/MDAxNzQxNTc2NzAyNjU4.K2u2acBlylx_ecKgHzgE2iwmu0lTzLrsW25TsqhzYKIg.BnXP7JhJJ_cvk7pdD-QBkP1PfooDmFAk0Er19eE1Gm4g.PNG/%EA%B7%B8%EB%A6%BC2.png?type=w800)
+![](https://mblogthumb-phinf.pstatic.net/MjAyNTAzMTBfMjg0/MDAxNzQxNTc2NzAyNjU4.K2u2acBlylx_ecKgHzgE2iwmu0lTzLrsW25TsqhzYKIg.BnXP7JhJJ_cvk7pdD-QBkP1PfooDmFAk0Er19eE1Gm4g.PNG/%EA%B7%B8%EB%A6%BC2.png?type=w)
 
 어떤 시스템 구축을 하느냐에 따라 다양하게 활용할 수 있는 것이 notion의 특징입니다.
 
@@ -59,7 +59,7 @@ data 관리의 중요성이 더 커지고 있는 지금, Notion은 제대로만 
 
 저는 지난 4년간 콘텐츠 크리에이터로 활동하며 SNS 마케팅, 디자인, 영상 편집 등 다양한 분야에서 전문성을 쌓아왔습니다.
 
-![](https://mblogthumb-phinf.pstatic.net/MjAyNTAzMDdfMjI0/MDAxNzQxMzM1OTEzNjIz.bHCtgsZQJvNd_G4VVVNm93OApxHz6SS7z3EvxR9URjEg.DxHycUq_5jdcAWRTxLrmI9MVcuxX65u6VVDOQmPhhUMg.PNG/%EB%A3%A8%EC%95%99%EB%8D%B0%EC%9D%B4.png?type=w800)
+![](https://mblogthumb-phinf.pstatic.net/MjAyNTAzMDdfMjI0/MDAxNzQxMzM1OTEzNjIz.bHCtgsZQJvNd_G4VVVNm93OApxHz6SS7z3EvxR9URjEg.DxHycUq_5jdcAWRTxLrmI9MVcuxX65u6VVDOQmPhhUMg.PNG/%EB%A3%A8%EC%95%99%EB%8D%B0%EC%9D%B4.png?type=w)
 
 **<무료 강의 일정>**
 
@@ -109,4 +109,4 @@ data 관리의 중요성이 더 커지고 있는 지금, Notion은 제대로만 
 
 **이제는 "제대로" 배우고 활용할 때 입니다.** 감사합니다.
 
-![](https://postfiles.pstatic.net/MjAyNDExMThfNjcg/MDAxNzMxOTE3NjUzNDEz.PdbmX3TwJrzL0_wb29OjMAeUPYuxJraai_nk3KaKbqYg.rc0D3rwxsyu_zWxW1E7JrqOl6BjZp9uhBb1TNxILqkgg.PNG/%EB%B8%94%EB%A1%9C%EA%B7%B8_%ED%95%98%EB%8B%A8_%EB%AA%85%ED%95%A8.png?type=w966)
+![](https://postfiles.pstatic.net/MjAyNDExMThfNjcg/MDAxNzMxOTE3NjUzNDEz.PdbmX3TwJrzL0_wb29OjMAeUPYuxJraai_nk3KaKbqYg.rc0D3rwxsyu_zWxW1E7JrqOl6BjZp9uhBb1TNxILqkgg.PNG/%EB%B8%94%EB%A1%9C%EA%B7%B8_%ED%95%98%EB%8B%A8_%EB%AA%85%ED%95%A8.png?type=w)

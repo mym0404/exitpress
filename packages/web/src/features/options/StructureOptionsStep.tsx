@@ -165,7 +165,7 @@ export const StructureOptionsStep = ({
           name="structure-postFolderNameMode"
           optionKey="structure-postFolderNameMode"
           label="기본 규칙으로 글 폴더 이름 만들기"
-          description="날짜 포함, logNo 포함, slug 규칙을 조합해서 만듭니다."
+          description="날짜, logNo, slug 규칙을 조합합니다."
           checked={options.structure.postFolderNameMode === "preset"}
           onChange={() =>
             onOptionsChange((current) => ({
@@ -220,7 +220,7 @@ export const StructureOptionsStep = ({
                 <div className="grid gap-1">
                   <span className="text-sm font-semibold text-foreground">실시간 폴더명 예시</span>
                   <p className="text-sm leading-6 text-muted-foreground">
-                    {structureTemplatePreviewPost.title} 글을 기준으로 바로 보여줍니다.
+                    {structureTemplatePreviewPost.title} 글을 예시로 바로 표시합니다.
                   </p>
                 </div>
 
@@ -253,7 +253,7 @@ export const StructureOptionsStep = ({
         <div className="grid gap-1">
           <span className="text-sm font-semibold text-foreground">예시 파일 트리</span>
           <p className="text-sm leading-6 text-muted-foreground">
-            현재 옵션 기준으로 여러 글이 저장되는 예시입니다.
+            현재 옵션으로 여러 글을 저장했을 때의 예시입니다.
           </p>
         </div>
         <div className="rounded-xl border border-border bg-muted/20 p-2">

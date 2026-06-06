@@ -8,7 +8,7 @@ category: 오차Zero프로젝트
 categoryPath:
   - ~2017
   - 오차Zero프로젝트
-thumbnail: https://mblogthumb-phinf.pstatic.net/20111013_298/naver_map_1318491167734isq4g_PNG/A.png?type=w800
+thumbnail: https://mblogthumb-phinf.pstatic.net/20111013_298/naver_map_1318491167734isq4g_PNG/A.png?type=w
 ---
 
 안녕하세요. 네이버 지도서비스입니다.
@@ -34,7 +34,7 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/20111013_298/naver_map_131849116
 
 이에 따라 동천동주민센터를 지도에 추가하였으니 참고해주세요.
 
-![](https://mblogthumb-phinf.pstatic.net/20111013_298/naver_map_1318491167734isq4g_PNG/A.png?type=w800)
+![](https://mblogthumb-phinf.pstatic.net/20111013_298/naver_map_1318491167734isq4g_PNG/A.png?type=w)
 
 **\[**씨네시티**u****CGV**청담씨네시티(2011년10월9일 개관)\]**
 

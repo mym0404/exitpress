@@ -1,5 +1,3 @@
-import { tableTemplate } from "@exitpress/domain/template/DefaultTemplates.js"
-
 import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/ParserBlock.js"
 
 import { parseHtmlTable } from "../../common/parseHtmlTable.js"
@@ -7,6 +5,9 @@ import { createTableBlock } from "../../core/ParsedBlockOutput.js"
 import { LeafParserBlock } from "../../core/ParserBlock.js"
 
 import { findInComponentRoot } from "./util/ComponentBoundary.js"
+
+const tableTemplate =
+  "${rows.length > 0 ? '| ' + rows[0].map((cell) => cell.text).join(' | ') + ' |\\n| ' + rows[0].map((cell) => '---').join(' | ') + ' |\\n' + rows.slice(1).map((row) => '| ' + row.map((cell) => cell.text).join(' | ') + ' |').join('\\n') : html}"
 
 export class NaverSe3TableBlock extends LeafParserBlock {
   override readonly id = "table"
@@ -16,7 +17,7 @@ export class NaverSe3TableBlock extends LeafParserBlock {
     presets: [
       {
         id: "default",
-        label: "기본",
+        label: "마크다운 표",
         template: tableTemplate,
       },
     ],

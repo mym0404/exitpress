@@ -39,13 +39,13 @@ export const useWizardActions = (args: UseWizardActionsArgs) => {
 
   const handleSubmit = useCallback(async () => {
     if (!activeScanResult) {
-      setCategoryStatus("먼저 스캔을 완료해야 합니다.")
+      setCategoryStatus("스캔을 먼저 완료하세요.")
       return
     }
 
     if (frontmatterValidationErrors.length > 0) {
       setSetupStep("frontmatter-options")
-      setCategoryStatus("Frontmatter alias 오류를 먼저 해결해야 합니다.")
+      setCategoryStatus("Frontmatter alias 오류를 먼저 해결하세요.")
       return
     }
 

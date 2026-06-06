@@ -58,7 +58,7 @@ export const UploadPanel = ({ mode, job }: UploadPanelProps) => {
 
       {job?.upload.status === "skipped" ? (
         <p className="text-sm leading-7 text-muted-foreground">
-          업로드할 로컬 이미지가 없어 내보내기만 완료되었습니다.
+          업로드할 로컬 이미지가 없어 내보내기만 끝났습니다.
         </p>
       ) : null}
 

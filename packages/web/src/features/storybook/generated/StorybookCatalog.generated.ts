@@ -13,12 +13,23 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
         blockIndex: 0,
         blockId: "documentTitle",
         blockLabel: "문서 제목",
-        group: "auxiliary",
         sourceUrl: "https://blog.naver.com/lafleur7/223719242533",
         inspectPath: "0",
         inputHtml:
           '<div id="viewTypeSelector">\n<div class="se-component se-documentTitle se-l-default " id="SE-b503402b-cdad-11ef-9679-dd6cfc3d4e8a">\n        <div class="se-component-content">\n            <div class="se-section se-section-documentTitle se-l-default se-section-align-left">\n                <!-- --> \n<div class="blog_category"><a href="/PostList.naver?blogId=lafleur7&amp;categoryNo=28&amp;logCode=0&amp;categoryName=%2B%EC%86%8C%EC%8A%A4%2C+%ED%8C%81#postlist_block" onclick="sendClickNlog(\'pst.board\', \'\');">+소스, 팁</a></div>\n<!--\n -->\n                <div class="se-module se-module-text se-title-text">\n                    <p class="se-text-paragraph se-text-paragraph-align-" style="" id="SE-b503402e-cdad-11ef-9679-bb0774c3d225"><span style="" class="se-fs- se-ff-" id="SE-d79f53dd-ce16-11ef-bcd4-2590344f662d"><!-- -->새알심 만들기 찹쌀가루 요리<!-- --></span></p>                </div>\n                <!-- -->\n<div class="blog_authorArea">\n\n\t<a href="/PostList.naver?blogId=lafleur7" class="blog_thumbnail" onclick="sendClickNlog(\'pst.writer\', \'\');">\n\n\t\t<span class="img"><img src="https://blogpfthumb-phinf.pstatic.net/MjAyMzA5MTNfMTI2/MDAxNjk0NTY3MzIxNDIz.Avy6iyepS1bP9sjWG4iF-K6wDcX5tDwSjvB1QoeCCqcg.P5H1qq7zlqJIMWMpVhTZOTDVXGj2mGx_M2bvOdkDR7Ug.JPEG.lafleur7/profileImage.jpg?type=s1" width="36" height="36" alt="프로필"></span>\n\t\t<span class="sim ico_thismonthblog"></span>\n\t</a>\n\n\t<div class="text_area">\n\t    <div class="blog_author">\n            <a href="/PostList.naver?blogId=lafleur7" onclick="sendClickNlog(\'pst.writer\', \'\');"><strong class="ell">윤스</strong></a>\n        </div>\n        <p class="blog_date">\n            2025. 1. 9. 0:10\n        </p>\n\t</div>\n</div>\n\n<div class="blog_btnArea">\n\t\t<a href="#" class="btn_buddyadd _buddyadd_default _add_buddy _param(lafleur7|false||/BuddyAddForm.naver) _returnFalse" isblackuser="false" onclick="sendClickNlog(\'pst.add\', \'\'); nmobileBaEventSender.buddyButtonClick(\'https://scv-blog.io.naver.com/jackpotlog/v1/logs\', \'__UNKNOWN__\', 21480606, 223719242533, \'X\');"><span class="sp"></span> 이웃추가</a>\n\n<!-- 본문 기타 기능 -->\n<div class="post_function_t1">\n<button type="button" class="btn_function _btn_tools" onclick="sendClickNlog(\'pst.func\', \'\');"><span class="sim">본문 기타 기능</span></button>\n\t<div class="lyr_post_function" id="_tools_layer" style="display:none">\n\t\t<ul>\n\t\t\t<li class="font_size">\n\t\t\t\t<strong class="blind">본문 폰트 크기 조정</strong>\n\t\t\t\t<button type="button" class="btn_font_s _smallFont  " id="moreSmall" onclick="sendClickNlog(\'pst.ftxts\', \'\');"><span class="sim">본문 폰트 크기 작게 보기</span></button>\n\t\t\t\t<button type="button" class="btn_font_b _bigFont  " id="moreBig" onclick="sendClickNlog(\'pst.ftxtl\', \'\');"><span class="sim">본문 폰트 크기 크게 보기</span></button>\n\t\t\t\t<span class="size  " id="font_size">가</span>\n\t\t\t</li>\n\t\t\t\t<li><a href="#" class="naver-splugin _returnFalse" onclick="sendClickNlog(\'pst.fshare\', \'Mblog.post\'); window.nsc=\'Mblog.post\';" data-style="standard" data-url="https://m.blog.naver.com/lafleur7/223719242533" data-title="새알심 만들기 찹쌀가루 요리" data-likeserviceid="BLOG" data-likecontentsid="lafleur7_223719242533" data-spic-cid="223719242533" data-logdomain="https://proxy.blog.naver.com/spi/v1/api/shareLog" data-canonical-url="https://m.blog.naver.com/lafleur7/223719242533" data-oninitialize="splugin_oninitialize();" data-friend-display="on" data-kakaostory-display="off" data-prevent-short-url="on">공유하기 <span class="share sim naver-splugin-c"></span>\n\t\t\t\t\t</a>\n\t\t\t\t</li>\n\t\t\t\t<li><a href="#" class="_copy_url _returnFalse" onclick="sendClickNlog(\'pst.furl\', \'\');">URL복사 <span class="copy sim"></span></a></li>\n\t\t\t\t<li><a href="#" class="_report _param(https://srp2.naver.com/report?svc=BLG&amp;exit=close&amp;ctype=AA01&amp;cwriterenc=JaE31Gw%2FVuGpVgfOiJypaZ8lXewQRSAEOFjgVF%2BOk9Y%3D&amp;ctitle=%EC%83%88%EC%95%8C%EC%8B%AC%20%EB%A7%8C%EB%93%A4%EA%B8%B0%20%EC%B0%B9%EC%8C%80%EA%B0%80%EB%A3%A8%20%EC%9A%94%EB%A6%AC&amp;cwriter=lafl****&amp;dark=disable&amp;memtype=Y&amp;env=mobile&amp;cnickname=lafl****&amp;vsvc=BLG&amp;cid=lafleur7%40%4021480606%40%40mylog%40%40223719242533&amp;returl=) _returnFalse" onclick="sendClickNlog(\'pst.report\', \'\');">신고하기 <span class="report sim"></span></a></li>\n\t\t\t</ul>\n\t\t</div>\n\t</div>\n</div>\n<!-- //본문 기타 기능 -->\n\n<!--\n -->\n            </div>\n        </div>\n    </div>\n</div>',
         markdown: "Markdown 출력 없음",
+        templateDefinition: {
+          label: "문서 제목",
+          presets: [
+            {
+              id: "ignore",
+              label: "무시",
+              template: "",
+            },
+          ],
+          props: {},
+          key: "naver-se4:documentTitle",
+        },
       },
       {
         storyKey: "naver-se4-1-formula",
@@ -28,7 +39,6 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
         blockIndex: 1,
         blockId: "formula",
         blockLabel: "수식",
-        group: "output",
         sourceUrl: "https://blog.naver.com/mym0404/223034929697",
         inspectPath: "0",
         inputHtml:
@@ -39,9 +49,19 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
           label: "수식",
           presets: [
             {
-              id: "default",
-              label: "기본",
-              template: "${display ? '$$\\n' + formula + '\\n$$' : '$' + formula + '$'}",
+              id: "display-math",
+              label: "표시 수식",
+              template: "${'$$\\n' + formula + '\\n$$'}",
+            },
+            {
+              id: "inline-math",
+              label: "인라인 수식",
+              template: "$${formula}$",
+            },
+            {
+              id: "math-fence",
+              label: "Math 코드 펜스",
+              template: "${'```math\\n' + formula + '\\n```'}",
             },
           ],
           props: {
@@ -65,7 +85,6 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
         blockIndex: 2,
         blockId: "code",
         blockLabel: "코드",
-        group: "output",
         sourceUrl: "https://blog.naver.com/mym0404/223034929697",
         inspectPath: "0",
         inputHtml:
@@ -77,7 +96,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
           presets: [
             {
               id: "default",
-              label: "기본",
+              label: "코드 펜스",
               template: "```${language ?? ''}\n${code}\n```",
             },
           ],
@@ -102,26 +121,48 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
         blockIndex: 3,
         blockId: "linkCard",
         blockLabel: "링크 카드",
-        group: "output",
         sourceUrl: "https://blog.naver.com/mym0404/223034929697",
         inspectPath: "0",
         inputHtml:
           '<div id="viewTypeSelector">\n<div class="se-component se-oglink se-l-text" id="SE-dda2c40b-616c-45ba-ab4c-5037aa379504">\n                    <div class="se-component-content">\n                        <div class="se-section se-section-oglink se-l-text se-section-align-">\n                            <div class="se-module se-module-oglink">\n                                <a href="https://www.acmicpc.net/problem/9942" class="se-oglink-info" target="_blank">\n                                    <div class="se-oglink-info-container">\n                                        <strong class="se-oglink-title">9942번: 하노이의 네 탑</strong>\n                                        <p class="se-oglink-summary">9942번 제출 맞힌 사람 숏코딩 재채점 결과 채점 현황 질문 게시판 하노이의 네 탑 다국어 시간 제한 메모리 제한 제출 정답 맞힌 사람 정답 비율 3 초 128 MB 724 204 151 32.059% 문제 하노이의 탑 이라는 유명한 문제가 있다. 하지만 이 문제는 너무 유명한 나머지 이제는 식상하다. 그러니까 이번엔 탑을 3개가 아닌 4개로 늘려서 생각해보자! N개의 원판과 4개의 막대가 있을 때, 즉 보조 막대가 한 개가 아닌 두 개이면 몇 번 움직여서 모든 원판을 끝의 원판으로 옮길 수 있을까? 4개의 막대를 이용해서 N개의...</p>\n                                        <p class="se-oglink-url">www.acmicpc.net</p>\n                                    </div>\n                                </a>\n                            </div>\n                        </div>\n                    </div>\n                    <script type="text/data" class="__se_module_data" data-module="{&quot;type&quot;:&quot;v2_oglink&quot;, &quot;id&quot; :&quot;SE-dda2c40b-616c-45ba-ab4c-5037aa379504&quot;, &quot;data&quot; : {&quot;link&quot; : &quot;https://www.acmicpc.net/problem/9942&quot;, &quot;isVideo&quot; : &quot;false&quot;, &quot;thumbnail&quot; : &quot;https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fonlinejudgeimages.s3-ap-northeast-1.amazonaws.com%2Fimages%2Fboj-og.png%22&amp;type=ff120&quot;}}"></script>\n                </div>\n</div>',
-        markdown:
-          "[9942번: 하노이의 네 탑](https://www.acmicpc.net/problem/9942)\n\n9942번 제출 맞힌 사람 숏코딩 재채점 결과 채점 현황 질문 게시판 하노이의 네 탑 다국어 시간 제한 메모리 제한 제출 정답 맞힌 사람 정답 비율 3 초 128 MB 724 204 151 32.059% 문제 하노이의 탑 이라는 유명한 문제가 있다. 하지만 이 문제는 너무 유명한 나머지 이제는 식상하다. 그러니까 이번엔 탑을 3개가 아닌 4개로 늘려서 생각해보자! N개의 원판과 4개의 막대가 있을 때, 즉 보조 막대가 한 개가 아닌 두 개이면 몇 번 움직여서 모든 원판을 끝의 원판으로 옮길 수 있을까? 4개의 막대를 이용해서 N개의...",
+        markdown: "[9942번: 하노이의 네 탑](https://www.acmicpc.net/problem/9942)",
         templateDefinition: {
           label: "링크 카드",
           presets: [
             {
-              id: "default",
-              label: "기본",
-              template: "${text}",
+              id: "link",
+              label: "링크",
+              template: "[${title}](${url})",
+            },
+            {
+              id: "link-description",
+              label: "링크와 설명",
+              template:
+                "${description ? '[' + title + '](' + url + ')\\n' + description : '[' + title + '](' + url + ')'}",
+            },
+            {
+              id: "thumbnail-link",
+              label: "썸네일 링크",
+              template:
+                "${thumbnailUrl ? '![' + title + '](' + thumbnailUrl + ')\\n[' + title + '](' + url + ')' : '[' + title + '](' + url + ')'}",
             },
           ],
           props: {
-            text: {
-              label: "본문",
+            title: {
+              label: "제목",
               type: "string",
+            },
+            url: {
+              label: "URL",
+              type: "string",
+            },
+            description: {
+              label: "설명",
+              type: "string",
+            },
+            thumbnailUrl: {
+              label: "썸네일 URL",
+              type: "string?",
             },
           },
           key: "naver-se4:linkCard",
@@ -135,7 +176,6 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
         blockIndex: 4,
         blockId: "file",
         blockLabel: "첨부파일",
-        group: "output",
         sourceUrl: "https://blog.naver.com/mym0404/223034929697",
         inspectPath: "0",
         inputHtml:
@@ -145,14 +185,22 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
           label: "첨부파일",
           presets: [
             {
-              id: "default",
-              label: "기본",
-              template: "${text}",
+              id: "file-link",
+              label: "파일 링크",
+              template: "[${fileName}${fileExtension}](${fileUrl})",
             },
           ],
           props: {
-            text: {
-              label: "본문",
+            fileName: {
+              label: "파일명",
+              type: "string",
+            },
+            fileExtension: {
+              label: "확장자",
+              type: "string",
+            },
+            fileUrl: {
+              label: "파일 URL",
               type: "string",
             },
           },
@@ -167,7 +215,6 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
         blockIndex: 5,
         blockId: "video",
         blockLabel: "비디오",
-        group: "output",
         sourceUrl: "https://blog.naver.com/anglekim3708/221958395128",
         inspectPath: "0",
         inputHtml:
@@ -178,7 +225,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
           presets: [
             {
               id: "default",
-              label: "기본",
+              label: "링크",
               template: "[${title}](${url})",
             },
           ],
@@ -190,6 +237,26 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
             url: {
               label: "URL",
               type: "string",
+            },
+            thumbnailUrl: {
+              label: "썸네일 URL",
+              type: "string?",
+            },
+            width: {
+              label: "너비",
+              type: "number?",
+            },
+            height: {
+              label: "높이",
+              type: "number?",
+            },
+            vid: {
+              label: "비디오 ID",
+              type: "string?",
+            },
+            inkey: {
+              label: "접근 키",
+              type: "string?",
             },
           },
           key: "naver-se4:video",
@@ -203,7 +270,6 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
         blockIndex: 6,
         blockId: "oembed",
         blockLabel: "임베드",
-        group: "output",
         sourceUrl: "https://blog.naver.com/mym0404/223034929697",
         inspectPath: "0",
         inputHtml:
@@ -213,15 +279,33 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
           label: "임베드",
           presets: [
             {
-              id: "default",
-              label: "기본",
-              template: "${text}",
+              id: "link",
+              label: "링크",
+              template: "[${title}](${url})",
+            },
+            {
+              id: "link-description",
+              label: "링크와 설명",
+              template:
+                "${description ? '[' + title + '](' + url + ')\\n' + description : '[' + title + '](' + url + ')'}",
             },
           ],
           props: {
-            text: {
-              label: "본문",
+            title: {
+              label: "제목",
               type: "string",
+            },
+            url: {
+              label: "URL",
+              type: "string",
+            },
+            description: {
+              label: "설명",
+              type: "string",
+            },
+            thumbnailUrl: {
+              label: "썸네일 URL",
+              type: "string?",
             },
           },
           key: "naver-se4:oembed",
@@ -235,25 +319,25 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
         blockIndex: 7,
         blockId: "map",
         blockLabel: "지도",
-        group: "output",
         sourceUrl: "https://blog.naver.com/mym0404/223034929697",
         inspectPath: "0",
         inputHtml:
           '<div id="viewTypeSelector">\n\n      <div class="se-component se-placesMap">\n        <script class="__se_module_data" data-module-v2=\'{"type":"v2_map","data":{"places":[{"name":"MJ Studio","address":"Seoul"}]}}\'></script>\n      </div>\n    \n</div>',
-        markdown: "[MJ Studio](https://map.naver.com/p/search/MJ%20Studio)\n\nSeoul",
+        markdown: "[MJ Studio](https://map.naver.com/p/search/MJ%20Studio)\nSeoul",
         templateDefinition: {
           label: "지도",
           presets: [
             {
-              id: "default",
-              label: "기본",
-              template: "${text}",
+              id: "place-links",
+              label: "장소 링크",
+              template:
+                "${places.map(place => '[' + place.name + '](' + place.url + ')' + (place.address ? '\\n' + place.address : '')).join('\\n\\n')}",
             },
           ],
           props: {
-            text: {
-              label: "본문",
-              type: "string",
+            places: {
+              label: "장소 목록",
+              type: "array",
             },
           },
           key: "naver-se4:map",
@@ -267,24 +351,36 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
         blockIndex: 8,
         blockId: "schedule",
         blockLabel: "일정",
-        group: "output",
         sourceUrl: "https://blog.naver.com/mym0404/223034929697",
         inspectPath: "0",
         inputHtml:
           '<div id="viewTypeSelector">\n\n      <div class="se-component se-schedule">\n        <script class="__se_module_data" data-module-v2=\'{"type":"v2_schedule","data":{"startAt":"2026-06-04"}}\'></script>\n        <strong class="se-schedule-title-text">Launch day</strong>\n        <a class="se-schedule-url" href="https://example.com/schedule">schedule</a>\n      </div>\n    \n</div>',
-        markdown: "[Launch day](https://example.com/schedule)\n\n2026-06-04",
+        markdown: "[Launch day](https://example.com/schedule)\n2026-06-04",
         templateDefinition: {
           label: "일정",
           presets: [
             {
-              id: "default",
-              label: "기본",
-              template: "${text}",
+              id: "schedule",
+              label: "일정",
+              template:
+                "${(url ? '[' + title + '](' + url + ')' : title) + (startAt ? '\\n' + startAt : '') + (endAt ? ' - ' + endAt : '')}",
             },
           ],
           props: {
-            text: {
-              label: "본문",
+            title: {
+              label: "제목",
+              type: "string",
+            },
+            startAt: {
+              label: "시작",
+              type: "string",
+            },
+            endAt: {
+              label: "종료",
+              type: "string",
+            },
+            url: {
+              label: "URL",
               type: "string",
             },
           },
@@ -299,7 +395,6 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
         blockIndex: 9,
         blockId: "talkTalk",
         blockLabel: "톡톡 링크",
-        group: "output",
         sourceUrl: "https://blog.naver.com/mym0404/223034929697",
         inspectPath: "0",
         inputHtml:
@@ -309,15 +404,27 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
           label: "톡톡 링크",
           presets: [
             {
-              id: "default",
-              label: "기본",
-              template: "${text}",
+              id: "link",
+              label: "링크",
+              template: "[${title}](${url})",
             },
           ],
           props: {
-            text: {
-              label: "본문",
+            title: {
+              label: "제목",
               type: "string",
+            },
+            url: {
+              label: "URL",
+              type: "string",
+            },
+            description: {
+              label: "설명",
+              type: "string",
+            },
+            thumbnailUrl: {
+              label: "썸네일 URL",
+              type: "string?",
             },
           },
           key: "naver-se4:talkTalk",
@@ -331,7 +438,6 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
         blockIndex: 10,
         blockId: "table",
         blockLabel: "표",
-        group: "output",
         sourceUrl: "https://blog.naver.com/goyamee/223511986798",
         inspectPath: "0",
         inputHtml:
@@ -343,7 +449,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
           presets: [
             {
               id: "default",
-              label: "기본",
+              label: "마크다운 표",
               template:
                 "${rows.length > 0 ? '| ' + rows[0].map((cell) => cell.text).join(' | ') + ' |\\n| ' + rows[0].map((cell) => '---').join(' | ') + ' |\\n' + rows.slice(1).map((row) => '| ' + row.map((cell) => cell.text).join(' | ') + ' |').join('\\n') : html}",
             },
@@ -371,9 +477,8 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
         editorType: "naver-se4",
         editorLabel: "SmartEditor 4",
         blockIndex: 11,
-        blockId: "imageGroup",
+        blockId: "imageStrip",
         blockLabel: "이미지 스트립",
-        group: "output",
         sourceUrl: "https://blog.naver.com/anglekim3708/221958395128",
         inspectPath: "0",
         inputHtml:
@@ -384,26 +489,19 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
           label: "이미지 스트립",
           presets: [
             {
-              id: "default",
-              label: "기본",
-              template: "![${alt}](${url})",
+              id: "strip-markdown",
+              label: "이미지 마크다운",
+              template:
+                "${images.map(image => image.caption ? '![' + image.alt + '](' + image.url + ')\\n' + image.caption : '![' + image.alt + '](' + image.url + ')').join('\\n\\n')}",
             },
           ],
           props: {
-            alt: {
-              label: "대체 텍스트",
-              type: "string",
-            },
-            url: {
-              label: "URL",
-              type: "string",
-            },
-            caption: {
-              label: "캡션",
-              type: "string?",
+            images: {
+              label: "이미지 목록",
+              type: "array",
             },
           },
-          key: "naver-se4:imageGroup",
+          key: "naver-se4:imageStrip",
         },
       },
       {
@@ -414,7 +512,6 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
         blockIndex: 12,
         blockId: "imageGroup",
         blockLabel: "이미지 그룹",
-        group: "output",
         sourceUrl: "https://blog.naver.com/goyamee/223511986798",
         inspectPath: "0",
         inputHtml:
@@ -422,26 +519,19 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
         markdown:
           "![](https://mblogthumb-phinf.pstatic.net/MjAyNDA3MTNfMTEy/MDAxNzIwODQ3NjgwMjUy.8vwel0sQ6SyZK3Y0l9OELRDipKfJhCxasdV6H889xEYg.MnKECgR-kbhwWFUzNLdsyT4n-I0HNuNakttC1-ERnJ8g.JPEG/SE-3f135254-41d6-4600-b238-b9b67e8fa640.jpg?type=w800)\n\n![](https://mblogthumb-phinf.pstatic.net/MjAyNDA3MTNfMjUz/MDAxNzIwODQ3Njg2OTcx.qM0gXdFKAXN77uBUzuoiFbDULb4mGQxBPJkz2sZdb-kg.pJX22_ux64Iw8pWjed1SDLhyg44bFuqif5R6fJzXJRsg.JPEG/SE-ab546165-8aec-435c-abec-f344b940093d.jpg?type=w800)\n\n![](https://mblogthumb-phinf.pstatic.net/MjAyNDA3MTNfMjA2/MDAxNzIwODQ3NjkzMTAy.1g_YdIPcECJvauD461Z0eb_njAfI9rOmQ7yEMtuyDngg.Bx00jmQs8JYPs1YJhNgOYdxG-amZNqttEnhWDy37Bpwg.JPEG/SE-f2744f3c-5051-4459-9c83-e2d27323def0.jpg?type=w800)\n\n![](https://mblogthumb-phinf.pstatic.net/MjAyNDA3MTNfMjgx/MDAxNzIwODQ3Njk4OTgx.Ot6OiYe8laHd3UDH-S9bzpJmm8N94HXzizaiACvqZM0g.xgiBNzg3G8wOHFWeUlKkYcwTZXseJZy59CQBDlyd7_Ug.JPEG/SE-b6eebe8d-2990-4a23-8ee8-d2757d5fd450.jpg?type=w800)\n\n![](https://mblogthumb-phinf.pstatic.net/MjAyNDA3MTNfMjYz/MDAxNzIwODQ3NzA2ODE2._82WcLonZEim7p1L83wRPyDB_iSIg2jYi-AK07fNpvcg.S0PhAeHXtZkvojpEY7Osag9FVfGsrF5BZwRm6rSQKaIg.JPEG/SE-bcdbd96a-3a1b-4aef-8bc1-14d57ae503b5.jpg?type=w800)\n\n![](https://mblogthumb-phinf.pstatic.net/MjAyNDA3MTNfMTEg/MDAxNzIwODQ3NzEzMDIy.dhAESYMJmSAijkVqc-9wg0gHzLman1JgDY1xZcyq7K8g.qCLKkS240L4O4aHk2yq1IZSnsJEEk3HLd_5VBee0jJ8g.JPEG/SE-486305c8-3b3a-4f21-ad79-1d30bbe5891c.jpg?type=w800)",
         templateDefinition: {
-          label: "이미지 스트립",
+          label: "이미지 그룹",
           presets: [
             {
-              id: "default",
-              label: "기본",
-              template: "![${alt}](${url})",
+              id: "gallery-markdown",
+              label: "이미지 마크다운",
+              template:
+                "${images.map(image => image.caption ? '![' + image.alt + '](' + image.url + ')\\n' + image.caption : '![' + image.alt + '](' + image.url + ')').join('\\n\\n')}",
             },
           ],
           props: {
-            alt: {
-              label: "대체 텍스트",
-              type: "string",
-            },
-            url: {
-              label: "URL",
-              type: "string",
-            },
-            caption: {
-              label: "캡션",
-              type: "string?",
+            images: {
+              label: "이미지 목록",
+              type: "array",
             },
           },
           key: "naver-se4:imageGroup",
@@ -455,7 +545,6 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
         blockIndex: 13,
         blockId: "sticker",
         blockLabel: "스티커",
-        group: "output",
         sourceUrl: "https://blog.naver.com/lafleur7/223719242533",
         inspectPath: "0",
         inputHtml:
@@ -466,7 +555,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
           presets: [
             {
               id: "default",
-              label: "기본",
+              label: "이미지 마크다운",
               template: "![${alt}](${url})",
             },
           ],
@@ -495,7 +584,6 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
         blockIndex: 14,
         blockId: "image",
         blockLabel: "이미지",
-        group: "output",
         sourceUrl: "https://blog.naver.com/lafleur7/223719242533",
         inspectPath: "0",
         inputHtml:
@@ -507,7 +595,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
           presets: [
             {
               id: "default",
-              label: "기본",
+              label: "이미지 마크다운",
               template: "![${alt}](${url})",
             },
           ],
@@ -536,7 +624,6 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
         blockIndex: 15,
         blockId: "wrappingParagraph",
         blockLabel: "감싸는 문단",
-        group: "output",
         sourceUrl: "https://blog.naver.com/anglekim3708/221585306972",
         inspectPath: "0",
         inputHtml:
@@ -548,7 +635,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
           presets: [
             {
               id: "default",
-              label: "기본",
+              label: "이미지 또는 본문",
               template: "${(url ?? '') ? '![' + alt + '](' + url + ')' : text}",
             },
           ],
@@ -581,7 +668,6 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
         blockIndex: 16,
         blockId: "heading",
         blockLabel: "제목",
-        group: "output",
         sourceUrl: "https://blog.naver.com/iammathking/223674688590",
         inspectPath: "0",
         inputHtml:
@@ -592,7 +678,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
           presets: [
             {
               id: "default",
-              label: "기본",
+              label: "2단계 제목",
               template: "## ${text}",
             },
           ],
@@ -613,7 +699,6 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
         blockIndex: 17,
         blockId: "divider",
         blockLabel: "구분선",
-        group: "output",
         sourceUrl: "https://blog.naver.com/mym0404/222655418367",
         inspectPath: "0",
         inputHtml:
@@ -624,7 +709,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
           presets: [
             {
               id: "default",
-              label: "기본",
+              label: "가로선",
               template: "---",
             },
           ],
@@ -640,7 +725,6 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
         blockIndex: 18,
         blockId: "quote",
         blockLabel: "인용문",
-        group: "output",
         sourceUrl: "https://blog.naver.com/lafleur7/223719242533",
         inspectPath: "0",
         inputHtml:
@@ -652,7 +736,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
           presets: [
             {
               id: "default",
-              label: "기본",
+              label: "인용문",
               template: "> ${text}",
             },
           ],
@@ -673,7 +757,6 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
         blockIndex: 19,
         blockId: "mrBlog",
         blockLabel: "블로그씨 질문",
-        group: "output",
         sourceUrl: "https://blog.naver.com/mym0404/222616669508",
         inspectPath: "0",
         inputHtml:
@@ -685,7 +768,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
           presets: [
             {
               id: "default",
-              label: "기본",
+              label: "인용문",
               template: "> ${text}",
             },
           ],
@@ -706,7 +789,6 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
         blockIndex: 20,
         blockId: "paragraph",
         blockLabel: "문단",
-        group: "output",
         sourceUrl: "https://blog.naver.com/lafleur7/223719242533",
         inspectPath: "0",
         inputHtml:
@@ -717,7 +799,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
           presets: [
             {
               id: "default",
-              label: "기본",
+              label: "본문",
               template: "${text}",
             },
           ],
@@ -738,25 +820,42 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
         blockIndex: 21,
         blockId: "material",
         blockLabel: "자료 링크",
-        group: "output",
         sourceUrl: "https://blog.naver.com/mym0404/223034929697",
         inspectPath: "0",
         inputHtml:
           '<div id="viewTypeSelector">\n\n    <div class="se-component se-material">\n      <a class="se-module-material" href="https://example.com/material" data-linkdata=\'{"link":"https://example.com/material"}\'>\n        <span class="se-material-title">자료 링크</span>\n        <span class="se-material-detail">\n          <span class="se-material-detail-title">type</span>\n          <span class="se-material-detail-description">reference</span>\n        </span>\n      </a>\n    </div>\n  \n</div>',
-        markdown: "[자료 링크](https://example.com/material)\n\ntype: reference",
+        markdown: "[자료 링크](https://example.com/material)",
         templateDefinition: {
           label: "자료 링크",
           presets: [
             {
-              id: "default",
-              label: "기본",
-              template: "${text}",
+              id: "link",
+              label: "링크",
+              template: "[${title}](${url})",
+            },
+            {
+              id: "link-description",
+              label: "링크와 설명",
+              template:
+                "${description ? '[' + title + '](' + url + ')\\n' + description : '[' + title + '](' + url + ')'}",
             },
           ],
           props: {
-            text: {
-              label: "본문",
+            title: {
+              label: "제목",
               type: "string",
+            },
+            url: {
+              label: "URL",
+              type: "string",
+            },
+            description: {
+              label: "설명",
+              type: "string",
+            },
+            thumbnailUrl: {
+              label: "썸네일 URL",
+              type: "string?",
             },
           },
           key: "naver-se4:material",
@@ -776,12 +875,23 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
         blockIndex: 0,
         blockId: "documentTitle",
         blockLabel: "문서 제목",
-        group: "auxiliary",
         sourceUrl: "https://blog.naver.com/anglekim3708/220612289536",
         inspectPath: "0",
         inputHtml:
           '<div id="viewTypeSelector">\n  <div class="se_component_wrap sect_dsc">\n<div class="se_component se_documentTitle documentTitle_blog  is-fill">\n    <div class="se_sectionArea is-fill se_align-left">\n        <!-- --> \n<div class="blog_category"><a href="/PostList.naver?blogId=anglekim3708&amp;categoryNo=37&amp;logCode=0&amp;categoryName=%EB%AA%85%EB%AC%B8%EC%9D%B4%EB%85%B8%EC%8B%9C%ED%8B%B0+%EC%8B%A0%EC%B6%95#postlist_block" onclick="sendClickNlog(\'pst.board\', \'\');">명문이노시티 신축</a></div>\n<!--\n -->\n        <!-- SE_DOC_HEADER_TITLE_TOP-->\n     \t<div id="SEDOC-1482557688517-1432979758_se_doc_title_top" class="se_doc_title_top"></div>\n        <div class="se_editArea">\n        \t<div class="se_viewArea se_ff_nanumgothic se_fs_D1">\n\t            <div class="se_editView se_title">\n\t                <div class="se_textView">\n                        <h3 class="se_textarea">\n                            <!-- -->명문 INNO CITY 빌딩 설계 계획도면 (확정안)<!-- -->\n                            \n                        </h3>\n\t                </div>\n\t            </div>\n\t        </div>\n        </div><!-- SE_DOC_HEADER_TITLE_MIDDLE-->\n        <div id="SEDOC-1482557688517-1432979758_se_doc_title_middle" class="se_doc_title_middle"></div>\n        <!-- SE_DOC_HEADER_CONTENTS_START -->\n        <!-- -->\n<div class="blog_authorArea">\n\n\t<a href="/PostList.naver?blogId=anglekim3708" class="blog_thumbnail" onclick="sendClickNlog(\'pst.writer\', \'\');">\n\n\t\t<span class="img"><img src="https://blogpfthumb-phinf.pstatic.net/20130622_125/anglekim3708_1371881165271yw26M_JPEG/telepho.jpg?type=s1" width="36" height="36" alt="프로필"></span>\n\t</a>\n\n\t<div class="text_area">\n\t    <div class="blog_author">\n            <a href="/PostList.naver?blogId=anglekim3708" onclick="sendClickNlog(\'pst.writer\', \'\');"><strong class="ell">영국신사</strong></a>\n        </div>\n        <p class="blog_date">\n            2016. 1. 29. 12:49\n        </p>\n\t</div>\n</div>\n\n<div class="blog_btnArea">\n\t\t<a href="#" class="btn_buddyadd _buddyadd_default _add_buddy _param(anglekim3708|false||/BuddyAddForm.naver) _returnFalse" isblackuser="false" onclick="sendClickNlog(\'pst.add\', \'\'); nmobileBaEventSender.buddyButtonClick(\'https://scv-blog.io.naver.com/jackpotlog/v1/logs\', \'__UNKNOWN__\', 63078587, 220612289536, \'X\');"><span class="sp"></span> 이웃추가</a>\n\n<!-- 본문 기타 기능 -->\n<div class="post_function_t1">\n<button type="button" class="btn_function _btn_tools" onclick="sendClickNlog(\'pst.func\', \'\');"><span class="sim">본문 기타 기능</span></button>\n\t<div class="lyr_post_function" id="_tools_layer" style="display:none">\n\t\t<ul>\n\t\t\t<li class="font_size">\n\t\t\t\t<strong class="blind">본문 폰트 크기 조정</strong>\n\t\t\t\t<button type="button" class="btn_font_s _smallFont  " id="moreSmall" onclick="sendClickNlog(\'pst.ftxts\', \'\');"><span class="sim">본문 폰트 크기 작게 보기</span></button>\n\t\t\t\t<button type="button" class="btn_font_b _bigFont  " id="moreBig" onclick="sendClickNlog(\'pst.ftxtl\', \'\');"><span class="sim">본문 폰트 크기 크게 보기</span></button>\n\t\t\t\t<span class="size  " id="font_size">가</span>\n\t\t\t</li>\n\t\t\t\t<li><a href="#" class="naver-splugin _returnFalse" onclick="sendClickNlog(\'pst.fshare\', \'Mblog.post\'); window.nsc=\'Mblog.post\';" data-style="standard" data-url="https://m.blog.naver.com/anglekim3708/220612289536" data-title="명문 INNO CITY 빌딩 설계 계획도면 (확정안)" data-likeserviceid="BLOG" data-likecontentsid="anglekim3708_220612289536" data-spic-cid="220612289536" data-logdomain="https://proxy.blog.naver.com/spi/v1/api/shareLog" data-canonical-url="https://m.blog.naver.com/anglekim3708/220612289536" data-oninitialize="splugin_oninitialize();" data-friend-display="on" data-kakaostory-display="off" data-prevent-short-url="on">공유하기 <span class="share sim naver-splugin-c"></span>\n\t\t\t\t\t</a>\n\t\t\t\t</li>\n\t\t\t\t<li><a href="#" class="_copy_url _returnFalse" onclick="sendClickNlog(\'pst.furl\', \'\');">URL복사 <span class="copy sim"></span></a></li>\n\t\t\t\t<li><a href="#" class="_report _param(https://srp2.naver.com/report?svc=BLG&amp;exit=close&amp;ctype=AA01&amp;cwriterenc=Dd%2Fk2tK4X6gSXzQwNMEzASEvNYj13U2kf67nb7Ts7%2Fk%3D&amp;ctitle=%EB%AA%85%EB%AC%B8%20INNO%20CITY%20%EB%B9%8C%EB%94%A9%20%EC%84%A4%EA%B3%84%20%EA%B3%84%ED%9A%8D%EB%8F%84%EB%A9%B4%20(%ED%99%95%EC%A0%95%EC%95%88)&amp;cwriter=angl********&amp;dark=disable&amp;memtype=Y&amp;env=mobile&amp;cnickname=angl********&amp;vsvc=BLG&amp;cid=anglekim3708%40%4063078587%40%40mylog%40%40220612289536&amp;returl=) _returnFalse" onclick="sendClickNlog(\'pst.report\', \'\');">신고하기 <span class="report sim"></span></a></li>\n\t\t\t</ul>\n\t\t</div>\n\t</div>\n</div>\n<!-- //본문 기타 기능 -->\n\n<!--\n -->\n        <!-- SE_DOC_HEADER_CONTENTS_END -->\n        <!-- SE_DOC_HEADER_TITLE_BOTTOM-->\n        <div id="SEDOC-1482557688517-1432979758_se_doc_title_bottom" class="se_doc_title_bottom"></div>\n    </div>\n</div>\n  </div>\n</div>',
         markdown: "Markdown 출력 없음",
+        templateDefinition: {
+          label: "문서 제목",
+          presets: [
+            {
+              id: "ignore",
+              label: "무시",
+              template: "",
+            },
+          ],
+          props: {},
+          key: "naver-se3:documentTitle",
+        },
       },
       {
         storyKey: "naver-se3-1-divider",
@@ -791,7 +901,6 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
         blockIndex: 1,
         blockId: "divider",
         blockLabel: "구분선",
-        group: "output",
         sourceUrl: "https://blog.naver.com/blogpeople/220957996267",
         inspectPath: "0",
         inputHtml:
@@ -802,7 +911,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
           presets: [
             {
               id: "default",
-              label: "기본",
+              label: "가로선",
               template: "---",
             },
           ],
@@ -818,7 +927,6 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
         blockIndex: 2,
         blockId: "table",
         blockLabel: "표",
-        group: "output",
         sourceUrl: "https://blog.naver.com/sekishin/221290869775",
         inspectPath: "0",
         inputHtml:
@@ -830,7 +938,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
           presets: [
             {
               id: "default",
-              label: "기본",
+              label: "마크다운 표",
               template:
                 "${rows.length > 0 ? '| ' + rows[0].map((cell) => cell.text).join(' | ') + ' |\\n| ' + rows[0].map((cell) => '---').join(' | ') + ' |\\n' + rows.slice(1).map((row) => '| ' + row.map((cell) => cell.text).join(' | ') + ' |').join('\\n') : html}",
             },
@@ -860,7 +968,6 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
         blockIndex: 3,
         blockId: "quote",
         blockLabel: "인용문",
-        group: "output",
         sourceUrl: "https://blog.naver.com/blogpeople/220957996267",
         inspectPath: "0",
         inputHtml:
@@ -871,7 +978,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
           presets: [
             {
               id: "default",
-              label: "기본",
+              label: "인용문",
               template: "> ${text}",
             },
           ],
@@ -892,7 +999,6 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
         blockIndex: 4,
         blockId: "code",
         blockLabel: "코드",
-        group: "output",
         sourceUrl: "https://blog.naver.com/yuyyulee/221079465686",
         inspectPath: "0",
         inputHtml:
@@ -904,7 +1010,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
           presets: [
             {
               id: "default",
-              label: "기본",
+              label: "코드 펜스",
               template: "```${language ?? ''}\n${code}\n```",
             },
           ],
@@ -929,7 +1035,6 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
         blockIndex: 5,
         blockId: "linkCard",
         blockLabel: "링크 카드",
-        group: "output",
         sourceUrl: "https://blog.naver.com/showeclatkorea/221024168393",
         inspectPath: "0",
         inputHtml:
@@ -939,15 +1044,39 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
           label: "링크 카드",
           presets: [
             {
-              id: "default",
-              label: "기본",
-              template: "${text}",
+              id: "link",
+              label: "링크",
+              template: "[${title}](${url})",
+            },
+            {
+              id: "link-description",
+              label: "링크와 설명",
+              template:
+                "${description ? '[' + title + '](' + url + ')\\n' + description : '[' + title + '](' + url + ')'}",
+            },
+            {
+              id: "thumbnail-link",
+              label: "썸네일 링크",
+              template:
+                "${thumbnailUrl ? '![' + title + '](' + thumbnailUrl + ')\\n[' + title + '](' + url + ')' : '[' + title + '](' + url + ')'}",
             },
           ],
           props: {
-            text: {
-              label: "본문",
+            title: {
+              label: "제목",
               type: "string",
+            },
+            url: {
+              label: "URL",
+              type: "string",
+            },
+            description: {
+              label: "설명",
+              type: "string",
+            },
+            thumbnailUrl: {
+              label: "썸네일 URL",
+              type: "string?",
             },
           },
           key: "naver-se3:linkCard",
@@ -961,26 +1090,26 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
         blockIndex: 6,
         blockId: "map",
         blockLabel: "지도",
-        group: "output",
         sourceUrl: "https://blog.naver.com/naver_diary/221367365894",
         inspectPath: "0",
         inputHtml:
           '<div id="viewTypeSelector">\n  <div class="se_component_wrap sect_dsc">\n<div class="se_component se_map default">\n\t\t\t<div class="se_sectionArea se_align-left">\n\t\t\t\t<div class="se_editArea" id="SEDOC-1541052665759--374856453_map_0" data-attachment-id="MN5xBiyxVxksfwZi_FDz4qJc6FLk">\n\t\t\t\t\t<div class="se_viewArea">\n\t\t\t\t\t\t<div class="se_mediaArea">\n\t\t\t\t\t\t\t<img width="100%" src="https://simg.pstatic.net/static.map/image?version=1.1&amp;center=127.755719,35.2871336&amp;level=12&amp;w=886&amp;h=415&amp;baselayer=default&amp;markers=type,default,127.755719,35.2871336&amp;caller=naver_se3_blog&amp;scale=1&amp;dataversion=178.41">\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class="se_caption_group is-contact">\n\t\t\t\t\t\t\t<div class="se_map_article">\n\t\t\t\t\t\t\t\t\t<div class="se_title_area">\n\t\t\t\t\t\t\t\t\t\t<div class="se_title">지리산 청강원</div>\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t<div class="se_address">경상남도 산청군 시천면 지리산대로 578-54</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class="se_info_btn"><div class="se_map_saving">\n\t\t\t\t\t\t\t\t<a href="#" class="se_btn_map_saving">저장</a>\n\t\t\t\t\t\t\t\t<div class="se_map_saving_guide">\n\t\t\t\t\t\t\t\t\t<span class="se_allow_top"></span>\n\t\t\t\t\t\t\t\t\t<div class="se_map_saving_message">\n\t\t\t\t\t\t\t\t\t\t관심 장소를 <span class="se_place">MY플레이스</span>에 저장할 수 있어요.\n\t\t\t\t\t\t\t\t\t\t<a href="#" class="se_btn_close"><span class="blind">팝업 닫기</span></a>\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t<div class="se_map_saving_complete">\n\t\t\t\t\t\t\t\t\t<span class="se_allow_top"></span>\n\t\t\t\t\t\t\t\t\t<div class="se_map_saving_message">\n\t\t\t\t\t\t\t\t\t\t\'내 장소\' 폴더에 저장했습니다.<br>\n\t\t\t\t\t\t\t\t\t\t<a href="https://m.store.naver.com/myplace/home?from=ugc" class="se_link_place" onclick="(function(){if(typeof clickcr === \'function\') {clickcr(this, \'end.placemy\', \'\', \'\', event);} else if (typeof nclk === \'function\') {nclk(this, \'amp.placemy\', \'\', \'\', event);}})();">MY플레이스 가기</a>\n\t\t\t\t\t\t\t\t\t\t<a href="#" class="se_btn_close"><span class="blind">팝업 닫기</span></a>\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t<a href="#" class="btn_tel">전화</a>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<a onclick="return false;" href="#end" target="_blank" class="se_map_link __se_link" data-linktype="map" data-linkdata="{&quot;eventTarget&quot;:&quot;placeDesc&quot;,&quot;didSearch&quot;:&quot;true&quot;,&quot;searchEngine&quot;:&quot;NAVER&quot;,&quot;locationId&quot;:&quot;36246483&quot;,&quot;latitude&quot;:&quot;35.2871336&quot;,&quot;markerLatitude&quot;:&quot;35.2871336&quot;,&quot;markerLongitude&quot;:&quot;127.755719&quot;,&quot;title&quot;:&quot;지리산 청강원&quot;,&quot;longitude&quot;:&quot;127.755719&quot;}">상세보기</a>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<script type="text/data" id="SEDOC-1541052665759--374856453_map_0_map_view_link">\n\t\t\t\t<a onclick="return false;" href="#bSize" style="display:none" target="_blank" class="se_map_link __se_link" data-linktype="map" data-linkdata="{&quot;eventTarget&quot;:&quot;button&quot;,&quot;didSearch&quot;:&quot;true&quot;,&quot;searchEngine&quot;:&quot;NAVER&quot;,&quot;locationId&quot;:&quot;36246483&quot;,&quot;latitude&quot;:&quot;35.2871336&quot;,&quot;markerLatitude&quot;:&quot;35.2871336&quot;,&quot;markerLongitude&quot;:&quot;127.755719&quot;,&quot;title&quot;:&quot;지리산 청강원&quot;,&quot;longitude&quot;:&quot;127.755719&quot;}">지도보기</a>\n\t\t\t\t</script>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n  </div>\n</div>',
         markdown:
-          "[지리산 청강원](https://map.naver.com/p/search/%EC%A7%80%EB%A6%AC%EC%82%B0%20%EC%B2%AD%EA%B0%95%EC%9B%90)\n\n경상남도 산청군 시천면 지리산대로 578-54",
+          "[지리산 청강원](https://map.naver.com/p/search/%EC%A7%80%EB%A6%AC%EC%82%B0%20%EC%B2%AD%EA%B0%95%EC%9B%90)\n경상남도 산청군 시천면 지리산대로 578-54",
         templateDefinition: {
           label: "지도",
           presets: [
             {
-              id: "default",
-              label: "기본",
-              template: "${text}",
+              id: "place-links",
+              label: "장소 링크",
+              template:
+                "${places.map(place => '[' + place.name + '](' + place.url + ')' + (place.address ? '\\n' + place.address : '')).join('\\n\\n')}",
             },
           ],
           props: {
-            text: {
-              label: "본문",
-              type: "string",
+            places: {
+              label: "장소 목록",
+              type: "array",
             },
           },
           key: "naver-se3:map",
@@ -994,26 +1123,26 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
         blockIndex: 7,
         blockId: "mapText",
         blockLabel: "텍스트 지도",
-        group: "output",
         sourceUrl: "https://blog.naver.com/naver_diary/221380275038",
         inspectPath: "0",
         inputHtml:
           '<div id="viewTypeSelector">\n  <div class="se_component_wrap sect_dsc">\n<div class="se_component se_map map_text">\n\t\t\t<div class="se_sectionArea se_align-left">\n\t\t\t\t<div class="se_editArea" id="SEDOC-1540885861483--1025892601_map_0">\n\t\t\t\t\t<div class="se_viewArea">\n\t\t\t\t\t\t<div class="se_caption_group is-contact">\n\t\t\t\t\t\t\t<i class="ico_map_text"></i>\n\t\t\t\t\t\t\t<div class="se_map_article">\n\t\t\t\t\t\t\t\t\t<div class="se_title_area">\n\t\t\t\t\t\t\t\t\t\t<div class="se_title">\n\t\t\t\t\t\t\t\t\t\t\t슬지네찐빵 슬지제빵소\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t<div class="se_address">전라북도 부안군 진서면 청자로 1076 슬지제빵소</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<a onclick="return false;" href="#end" target="_blank" class="se_map_link __se_link" data-linktype="map" data-linkdata="{&quot;eventTarget&quot; : &quot;placeDesc&quot;, &quot;searchEngine&quot; : &quot;NAVER&quot;, &quot;locationId&quot; : &quot;310430508&quot;, &quot;didSearch&quot; : &quot;true&quot;, &quot;longitude&quot; : &quot;126.6182931&quot;, &quot;latitude&quot; : &quot;35.5947383&quot;, &quot;title&quot; : &quot;슬지네찐빵 슬지제빵소&quot;, &quot;markerLongitude&quot; : &quot;126.6182931&quot;, &quot;markerLatitude&quot; : &quot;35.5947383&quot;}">지도보기</a>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n  </div>\n</div>',
         markdown:
-          "[슬지네찐빵 슬지제빵소](https://map.naver.com/p/search/%EC%8A%AC%EC%A7%80%EB%84%A4%EC%B0%90%EB%B9%B5%20%EC%8A%AC%EC%A7%80%EC%A0%9C%EB%B9%B5%EC%86%8C)\n\n전라북도 부안군 진서면 청자로 1076 슬지제빵소",
+          "[슬지네찐빵 슬지제빵소](https://map.naver.com/p/search/%EC%8A%AC%EC%A7%80%EB%84%A4%EC%B0%90%EB%B9%B5%20%EC%8A%AC%EC%A7%80%EC%A0%9C%EB%B9%B5%EC%86%8C)\n전라북도 부안군 진서면 청자로 1076 슬지제빵소",
         templateDefinition: {
           label: "텍스트 지도",
           presets: [
             {
-              id: "default",
-              label: "기본",
-              template: "${text}",
+              id: "place-links",
+              label: "장소 링크",
+              template:
+                "${places.map(place => '[' + place.name + '](' + place.url + ')' + (place.address ? '\\n' + place.address : '')).join('\\n\\n')}",
             },
           ],
           props: {
-            text: {
-              label: "본문",
-              type: "string",
+            places: {
+              label: "장소 목록",
+              type: "array",
             },
           },
           key: "naver-se3:mapText",
@@ -1027,7 +1156,6 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
         blockIndex: 8,
         blockId: "video",
         blockLabel: "비디오",
-        group: "output",
         sourceUrl: "https://blog.naver.com/blogpeople/220957996267",
         inspectPath: "0",
         inputHtml:
@@ -1038,7 +1166,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
           presets: [
             {
               id: "default",
-              label: "기본",
+              label: "링크",
               template: "[${title}](${url})",
             },
           ],
@@ -1050,6 +1178,26 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
             url: {
               label: "URL",
               type: "string",
+            },
+            thumbnailUrl: {
+              label: "썸네일 URL",
+              type: "string?",
+            },
+            width: {
+              label: "너비",
+              type: "number?",
+            },
+            height: {
+              label: "높이",
+              type: "number?",
+            },
+            vid: {
+              label: "비디오 ID",
+              type: "string?",
+            },
+            inkey: {
+              label: "접근 키",
+              type: "string?",
             },
           },
           key: "naver-se3:video",
@@ -1063,7 +1211,6 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
         blockIndex: 9,
         blockId: "file",
         blockLabel: "첨부파일",
-        group: "output",
         sourceUrl: "https://blog.naver.com/mym0404/223034929697",
         inspectPath: "0",
         inputHtml:
@@ -1073,14 +1220,22 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
           label: "첨부파일",
           presets: [
             {
-              id: "default",
-              label: "기본",
-              template: "${text}",
+              id: "file-link",
+              label: "파일 링크",
+              template: "[${fileName}${fileExtension}](${fileUrl})",
             },
           ],
           props: {
-            text: {
-              label: "본문",
+            fileName: {
+              label: "파일명",
+              type: "string",
+            },
+            fileExtension: {
+              label: "확장자",
+              type: "string",
+            },
+            fileUrl: {
+              label: "파일 URL",
               type: "string",
             },
           },
@@ -1095,7 +1250,6 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
         blockIndex: 10,
         blockId: "subjectMatter",
         blockLabel: "소재 카드",
-        group: "output",
         sourceUrl: "https://blog.naver.com/dlwkdlf/221298156647",
         inspectPath: "0",
         inputHtml:
@@ -1107,7 +1261,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
           presets: [
             {
               id: "default",
-              label: "기본",
+              label: "이미지 또는 본문",
               template: "${(url ?? '') ? '![' + alt + '](' + url + ')' : text}",
             },
           ],
@@ -1140,7 +1294,6 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
         blockIndex: 11,
         blockId: "image",
         blockLabel: "이미지",
-        group: "output",
         sourceUrl: "https://blog.naver.com/blogpeople/220957996267",
         inspectPath: "0",
         inputHtml:
@@ -1152,7 +1305,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
           presets: [
             {
               id: "default",
-              label: "기본",
+              label: "이미지 마크다운",
               template: "![${alt}](${url})",
             },
           ],
@@ -1181,7 +1334,6 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
         blockIndex: 12,
         blockId: "paragraph",
         blockLabel: "문단",
-        group: "output",
         sourceUrl: "https://blog.naver.com/blogpeople/220957996267",
         inspectPath: "0",
         inputHtml:
@@ -1193,7 +1345,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
           presets: [
             {
               id: "default",
-              label: "기본",
+              label: "본문",
               template: "${text}",
             },
           ],
@@ -1220,13 +1372,24 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
         blockIndex: 0,
         blockId: "style",
         blockLabel: "HTML 스타일",
-        group: "auxiliary",
         sourceUrl: "https://blog.naver.com/anglekim3708/70180618808",
         inspectPath: "0.0",
         inputHtml:
           '<div id="viewTypeSelector"><div align="center"><style>@media all and (min-width:116px){#_video1 iframe{width:76px !important;height:90px !important}}</style><span id="_video1" class="_outerVideo"><iframe src="http://api.v.daum.net/widget2?nid=51574241&amp;__authenticIframe=true" width="76" height="90" frameborder="0" allowfullscreen=""></iframe></span>&nbsp;&nbsp; <style>@media all and (min-width:116px){#_video2 iframe{width:76px !important;height:90px !important}}</style><span id="_video2" class="_outerVideo"><iframe src="http://api.v.daum.net/widget2?nid=51574241&amp;__authenticIframe=true" width="76" height="90" frameborder="0" allowfullscreen=""></iframe></span>&nbsp;<br style="" _foo="CLEAR: both">&nbsp;</div></div>',
         markdown:
           "[Video](http://api.v.daum.net/widget2?nid=51574241&__authenticIframe=true)\n\n[Video](http://api.v.daum.net/widget2?nid=51574241&__authenticIframe=true)",
+        templateDefinition: {
+          label: "HTML 스타일",
+          presets: [
+            {
+              id: "ignore",
+              label: "무시",
+              template: "",
+            },
+          ],
+          props: {},
+          key: "naver-se2:style",
+        },
       },
       {
         storyKey: "naver-se2-1-comment",
@@ -1236,13 +1399,24 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
         blockIndex: 1,
         blockId: "comment",
         blockLabel: "HTML 주석",
-        group: "auxiliary",
         sourceUrl: "https://blog.naver.com/anglekim3708/70187292476",
         inspectPath: "0.1",
         inputHtml:
           '<div id="viewTypeSelector"><div class="__se_object" s_type="db" s_subtype="music" style="display: block;  " jsonvalue="%7B%22genre%22%3A%22%EB%B0%9C%EB%9D%BC%EB%93%9C(%EA%B5%AD%EB%82%B4)%22%2C%22thumb%22%3A%22https%3A%2F%2Fimage.music.naver.com%2Falbum%2F95%2F000%2F081%2F81020.jpg%22%2C%22genreCode%22%3A%221%22%2C%22code%22%3A%2281020%22%2C%22id%22%3A%2281020%22%2C%22mode%22%3A%22music%22%2C%22type%22%3A5%2C%22genreText%22%3A%22%22%2C%22title%22%3A%22%EC%98%A4%EC%A0%95%EC%84%A0%EA%B3%A8%EB%93%A0%EB%8F%85%EC%A7%91%22%7D">\n\n \n \n\n<!-- Not Allowed Attribute Filtered ( 굴림="굴림" gulim="Gulim" applegothic="AppleGothic" applemyungjo="AppleMyungjo" sans-serif="Sans-serif") --><table style="background: rgb(53, 53, 53); width: 548px; height: 131px; text-align: left; line-height: 12px; font-family: 돋움,Dotum,;" border="0" cellspacing="0" cellpadding="0"><tbody><tr><td align="left" valign="top" style="padding: 17px 0px; width: 131px;"><a class="con_link" href="http://music.naver.com/album/index.nhn?albumId=81020" target="_blank"><img src="https://image.music.naver.com/album/95/000/081/81020.jpg" class="__se_object" s_type="attachment" s_subtype="image" style="vertical-align: top;" width="131" height="131" border="0" jsonvalue="%7B%7D" alt="오정선골든독집"></a></td><td valign="top" style="padding: 19px 19px 13px; width: 379px;">\n  <p style="margin: 0px; line-height: 20px; font-size: 16px; font-weight: bold; white-space: nowrap;"><a class="con_link" style="color: rgb(255, 255, 255); letter-spacing: -1px; text-decoration: none;" href="http://music.naver.com/album/index.nhn?albumId=81020" target="_blank">오정선골든독집</a></p>\n  <dl style="margin: 12px 0px 0px; line-height: 1.5em; overflow: hidden; font-size: 12px; _zoom: 1;">\n  <dt style="width: 56px; color: rgb(102, 102, 102); float: left; _margin-right: -5px;">아티스트</dt>\n  <dd style="margin: 0px; color: rgb(204, 204, 204); overflow: hidden; _zoom: 1;">오정선</dd>\n  <dt style="width: 32px; color: rgb(102, 102, 102); float: left; _margin-right: -5px;">발매</dt>\n  <dd style="margin: 0px; color: rgb(204, 204, 204); overflow: hidden; _zoom: 1;">1979.03.01, 한국음원제작자협회</dd>\n  <dt style="width: 32px; color: rgb(102, 102, 102); float: left; _margin-right: -5px;">장르</dt>\n  <dd style="margin: 0px; color: rgb(204, 204, 204); overflow: hidden; _zoom: 1;">발라드(국내)</dd>\n  </dl>\n  <p style="margin: 5px 0px 0px; line-height: 12px; font-size: 12px;">\n   <a class="con_link" style="color: rgb(102, 102, 102); line-height: 14px; text-decoration: underline;" href="http://music.naver.com/albumreview/index.nhn?albumId=81020&amp;loc=album" target="_blank">리뷰보기</a>\n  </p>\n </td></tr></tbody></table>\n\n\n        <!--__se_object_end --></div></div>',
         markdown:
           "|   | 오정선골든독집 아티스트 오정선 발매 1979.03.01, 한국음원제작자협회 장르 발라드(국내) 리뷰보기 |\n| --- | --- |",
+        templateDefinition: {
+          label: "HTML 주석",
+          presets: [
+            {
+              id: "ignore",
+              label: "무시",
+              template: "",
+            },
+          ],
+          props: {},
+          key: "naver-se2:comment",
+        },
       },
       {
         storyKey: "naver-se2-2-paragraph",
@@ -1252,7 +1426,6 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
         blockIndex: 2,
         blockId: "paragraph",
         blockLabel: "문단",
-        group: "output",
         sourceUrl: "https://blog.naver.com/mym0404/221504285266",
         inspectPath: "0.0",
         inputHtml:
@@ -1264,7 +1437,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
           presets: [
             {
               id: "default",
-              label: "기본",
+              label: "본문",
               template: "${text}",
             },
           ],
@@ -1285,7 +1458,6 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
         blockIndex: 3,
         blockId: "bookWidget",
         blockLabel: "책 위젯",
-        group: "output",
         sourceUrl: "https://blog.naver.com/anglekim3708/70170204249",
         inspectPath: "0",
         inputHtml:
@@ -1297,7 +1469,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
           presets: [
             {
               id: "default",
-              label: "기본",
+              label: "이미지 또는 본문",
               template: "${(url ?? '') ? '![' + alt + '](' + url + ')' : text}",
             },
           ],
@@ -1330,7 +1502,6 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
         blockIndex: 4,
         blockId: "code",
         blockLabel: "코드",
-        group: "output",
         sourceUrl: "https://blog.naver.com/mym0404/223034929697",
         inspectPath: "0",
         inputHtml: '<div id="viewTypeSelector"><pre>const value = 1</pre></div>',
@@ -1340,7 +1511,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
           presets: [
             {
               id: "default",
-              label: "기본",
+              label: "코드 펜스",
               template: "```${language ?? ''}\n${code}\n```",
             },
           ],
@@ -1365,7 +1536,6 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
         blockIndex: 5,
         blockId: "table",
         blockLabel: "표",
-        group: "output",
         sourceUrl: "https://blog.naver.com/mym0404/223034929697",
         inspectPath: "0",
         inputHtml:
@@ -1376,7 +1546,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
           presets: [
             {
               id: "default",
-              label: "기본",
+              label: "마크다운 표",
               template:
                 "${rows.length > 0 ? '| ' + rows[0].map((cell) => cell.text).join(' | ') + ' |\\n| ' + rows[0].map((cell) => '---').join(' | ') + ' |\\n' + rows.slice(1).map((row) => '| ' + row.map((cell) => cell.text).join(' | ') + ' |').join('\\n') : html}",
             },
@@ -1406,11 +1576,22 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
         blockIndex: 6,
         blockId: "container",
         blockLabel: "중첩 컨테이너",
-        group: "auxiliary",
         sourceUrl: "https://blog.naver.com/mym0404/223034929697",
         inspectPath: "0",
         inputHtml: '<div id="viewTypeSelector"><div><hr /></div></div>',
         markdown: "---",
+        templateDefinition: {
+          label: "중첩 컨테이너",
+          presets: [
+            {
+              id: "ignore",
+              label: "무시",
+              template: "",
+            },
+          ],
+          props: {},
+          key: "naver-se2:container",
+        },
       },
       {
         storyKey: "naver-se2-7-divider",
@@ -1420,7 +1601,6 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
         blockIndex: 7,
         blockId: "divider",
         blockLabel: "구분선",
-        group: "output",
         sourceUrl: "https://blog.naver.com/mym0404/223034929697",
         inspectPath: "0",
         inputHtml: '<div id="viewTypeSelector"><hr /></div>',
@@ -1430,7 +1610,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
           presets: [
             {
               id: "default",
-              label: "기본",
+              label: "가로선",
               template: "---",
             },
           ],
@@ -1446,11 +1626,22 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
         blockIndex: 8,
         blockId: "lineBreak",
         blockLabel: "줄바꿈",
-        group: "auxiliary",
         sourceUrl: "https://blog.naver.com/mym0404/223034929697",
         inspectPath: "0",
         inputHtml: '<div id="viewTypeSelector"><br /></div>',
         markdown: "Markdown 출력 없음",
+        templateDefinition: {
+          label: "줄바꿈",
+          presets: [
+            {
+              id: "ignore",
+              label: "무시",
+              template: "",
+            },
+          ],
+          props: {},
+          key: "naver-se2:lineBreak",
+        },
       },
       {
         storyKey: "naver-se2-9-quote",
@@ -1460,7 +1651,6 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
         blockIndex: 9,
         blockId: "quote",
         blockLabel: "인용문",
-        group: "output",
         sourceUrl: "https://blog.naver.com/mym0404/223034929697",
         inspectPath: "0",
         inputHtml: '<div id="viewTypeSelector"><blockquote><p>Quoted line</p></blockquote></div>',
@@ -1470,7 +1660,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
           presets: [
             {
               id: "default",
-              label: "기본",
+              label: "인용문",
               template: "> ${text}",
             },
           ],
@@ -1491,7 +1681,6 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
         blockIndex: 10,
         blockId: "heading",
         blockLabel: "제목",
-        group: "output",
         sourceUrl: "https://blog.naver.com/mym0404/223034929697",
         inspectPath: "0",
         inputHtml: '<div id="viewTypeSelector"><h2>Section title</h2></div>',
@@ -1501,7 +1690,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
           presets: [
             {
               id: "default",
-              label: "기본",
+              label: "2단계 제목",
               template: "## ${text}",
             },
           ],
@@ -1522,7 +1711,6 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
         blockIndex: 11,
         blockId: "inlineGifVideo",
         blockLabel: "인라인 GIF 비디오",
-        group: "output",
         sourceUrl: "https://blog.naver.com/anglekim3708/70170491705",
         inspectPath: "0",
         inputHtml:
@@ -1534,7 +1722,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
           presets: [
             {
               id: "default",
-              label: "기본",
+              label: "이미지 마크다운",
               template: "![${alt}](${url})",
             },
           ],
@@ -1563,7 +1751,6 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
         blockIndex: 12,
         blockId: "poll",
         blockLabel: "투표",
-        group: "output",
         sourceUrl: "https://blog.naver.com/anglekim3708/70170491705",
         inspectPath: "0",
         inputHtml:
@@ -1575,7 +1762,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
           presets: [
             {
               id: "default",
-              label: "기본",
+              label: "본문",
               template: "${text}",
             },
           ],
@@ -1596,7 +1783,6 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
         blockIndex: 13,
         blockId: "video",
         blockLabel: "비디오",
-        group: "output",
         sourceUrl: "https://blog.naver.com/blogpeople/150173619413",
         inspectPath: "0",
         inputHtml:
@@ -1608,7 +1794,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
           presets: [
             {
               id: "default",
-              label: "기본",
+              label: "링크",
               template: "[${title}](${url})",
             },
           ],
@@ -1633,7 +1819,6 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
         blockIndex: 14,
         blockId: "image",
         blockLabel: "이미지",
-        group: "output",
         sourceUrl: "https://blog.naver.com/mym0404/221504285266",
         inspectPath: "0",
         inputHtml:
@@ -1645,7 +1830,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
           presets: [
             {
               id: "default",
-              label: "기본",
+              label: "이미지 마크다운",
               template: "![${alt}](${url})",
             },
           ],
@@ -1674,11 +1859,22 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
         blockIndex: 15,
         blockId: "spacer",
         blockLabel: "빈 줄",
-        group: "auxiliary",
         sourceUrl: "https://blog.naver.com/mym0404/221504285266",
         inspectPath: "0",
         inputHtml: '<div id="viewTypeSelector"><p><br></p></div>',
         markdown: "Markdown 출력 없음",
+        templateDefinition: {
+          label: "빈 줄",
+          presets: [
+            {
+              id: "ignore",
+              label: "무시",
+              template: "",
+            },
+          ],
+          props: {},
+          key: "naver-se2:spacer",
+        },
       },
       {
         storyKey: "naver-se2-16-paragraph",
@@ -1688,7 +1884,6 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
         blockIndex: 16,
         blockId: "paragraph",
         blockLabel: "문단",
-        group: "output",
         sourceUrl: "https://blog.naver.com/mym0404/221504285266",
         inspectPath: "0",
         inputHtml:
@@ -1700,7 +1895,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
           presets: [
             {
               id: "default",
-              label: "기본",
+              label: "본문",
               template: "${text}",
             },
           ],

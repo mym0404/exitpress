@@ -380,10 +380,6 @@ const StoryTemplateCard = ({ story }: { story: StorybookStory }) => {
     setTemplate("")
   }, [story.storyKey])
 
-  if (!story.templateDefinition) {
-    return null
-  }
-
   return (
     <BlockTemplateCard
       key={story.storyKey}
@@ -411,9 +407,6 @@ const StoryPreview = ({ story }: { story: StorybookStory }) => {
         </Badge>
         <Badge variant="outline" className="px-3 py-1 text-sm">
           {story.editorLabel} / {story.blockId}
-        </Badge>
-        <Badge variant={story.group === "auxiliary" ? "idle" : "running"} className="px-3 py-1">
-          {story.group === "auxiliary" ? "Auxiliary" : "Output"}
         </Badge>
       </div>
 

@@ -20,14 +20,12 @@
 
 ## Focused Commands
 - `mise exec -- pnpm format`: apply Oxfmt formatting/import sorting.
-- `mise exec -- pnpm test:parser-blocks`: parser block specs.
 - `mise exec -- pnpm test:coverage`: Vitest with V8 coverage thresholds.
 - `mise exec -- pnpm storybook:generate`: regenerate committed Storybook catalog.
 
 ## What Each Layer Proves
 - Typecheck proves moved imports, shared contracts, and cross-package type compatibility.
-- Offline tests prove pure logic, parser, renderer, server, hook, and generated catalog behavior.
-- Parser block tests prove editor block conversion through parser dispatch.
+- Offline tests prove pure logic, parser block conversion, renderer, server, hook, and generated catalog behavior.
 - Storybook check proves generated catalog matches current parser/renderer output.
 - Smoke UI proves browser workflow behavior with mocked APIs, including provider setup, test upload, automatic upload progress, uploaded result links, and no manual upload POST.
 - Network tests prove live Naver fetch and external upload behavior when environment and secrets are available, including automatic upload and Markdown URL rewrite.
@@ -40,7 +38,7 @@
 
 ## Task Loops
 - Moving or deleting files requires typecheck and `check:unused`.
-- Parser changes require parser block or offline tests depending on scope.
+- Parser changes require offline tests.
 - Export, manifest, upload, resume, or UI state changes require smoke UI.
 - Upload e2e changes must keep both mock smoke and live upload harnesses aligned with the current export-triggered upload flow.
 - Live fetch/upload changes require the matching network command when the environment supports it.

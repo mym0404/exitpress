@@ -46,7 +46,7 @@ const toTitleCaseLabel = (value: string) =>
     .join(" ")
 
 export const getProviderDescription = ({ key, label }: { key: string; label: string }) =>
-  providerDescriptionMap[key] ?? `${label}로 이미지를 업로드합니다.`
+  providerDescriptionMap[key] ?? `이미지를 ${label}로 업로드합니다.`
 
 const getCommonFieldMetadata = (key: string) => commonFieldMetadata[key] ?? null
 
@@ -112,7 +112,7 @@ const normalizeFieldDescription = ({
     fieldKey: key,
   })?.description ??
   getCommonFieldMetadata(key)?.description ??
-  (inputType === "checkbox" ? `${label} 옵션입니다.` : `${label} 값을 입력합니다.`)
+  (inputType === "checkbox" ? `${label} 옵션입니다.` : `${label} 값을 입력하세요.`)
 
 const normalizeFieldPlaceholder = ({
   providerKey,

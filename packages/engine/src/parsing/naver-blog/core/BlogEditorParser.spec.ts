@@ -2,7 +2,11 @@ import { describe, expect, it } from "vitest"
 
 import type { ParsedPost } from "@exitpress/domain/parser/schema/ParsedPost.js"
 
-import type { ParserBlockContext, ParserBlockConvertContext } from "./ParserBlock.js"
+import type {
+  ParserBlockContext,
+  ParserBlockConvertContext,
+  ParserBlockTemplateDefinition,
+} from "./ParserBlock.js"
 
 import { BlogEditorParser, type BlogEditorParseInput } from "./BlogEditorParser.js"
 import { LeafParserBlock } from "./ParserBlock.js"
@@ -10,6 +14,11 @@ import { LeafParserBlock } from "./ParserBlock.js"
 class TemplateLessParagraphBlock extends LeafParserBlock {
   override readonly id = "paragraph"
   override readonly label = "문단"
+  override readonly templateDefinition = {
+    label: this.label,
+    presets: [{ id: "ignore", label: "무시", template: "" }],
+    props: {},
+  } satisfies ParserBlockTemplateDefinition
 
   override match(_context: ParserBlockContext) {
     return false
@@ -39,9 +48,16 @@ class TemplateLessEditor extends BlogEditorParser {
 }
 
 describe("BlogEditorParser", () => {
-  it("does not create block template presets for blocks without template definitions", () => {
+  it("keeps empty block templates in the block template catalog", () => {
     const editor = new TemplateLessEditor()
 
-    expect(editor.getBlockTemplateDefinitions()).toEqual([])
+    expect(editor.getBlockTemplateDefinitions()).toEqual([
+      {
+        key: "template-less:paragraph",
+        label: "문단",
+        presets: [{ id: "ignore", label: "무시", template: "" }],
+        props: {},
+      },
+    ])
   })
 })

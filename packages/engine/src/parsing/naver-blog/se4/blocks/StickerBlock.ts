@@ -11,7 +11,7 @@ export class NaverSe4StickerBlock extends LeafParserBlock {
   override readonly label = "스티커"
   override readonly templateDefinition = {
     label: this.label,
-    presets: [{ id: "default", label: "기본", template: "![${alt}](${url})" }],
+    presets: [{ id: "default", label: "이미지 마크다운", template: "![${alt}](${url})" }],
     props: {
       alt: { label: "대체 텍스트", type: "string" },
       url: { label: "URL", type: "string" },

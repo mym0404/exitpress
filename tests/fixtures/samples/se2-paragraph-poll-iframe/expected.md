@@ -7,10 +7,10 @@ publishedAt: 2015-10-07T00:00:00+09:00
 category: 블로그 이벤트
 categoryPath:
   - 블로그 이벤트
-thumbnail: https://blogthumb.pstatic.net/20151006_38/blogpeople_1444132521014Wyo0l_PNG/%BA%ED%B7%CE%B1%D7_%C3%DF%BC%AE_%B9%E9%C0%CF%C0%E5_%C0%CC%BA%A5%C6%AE_%BB%F3%B4%DC1psd.png?type=w2
+thumbnail: https://blogthumb.pstatic.net/20151006_38/blogpeople_1444132521014Wyo0l_PNG/%BA%ED%B7%CE%B1%D7_%C3%DF%BC%AE_%B9%E9%C0%CF%C0%E5_%C0%CC%BA%A5%C6%AE_%BB%F3%B4%DC1psd.png?type=w
 ---
 
-![](https://mblogthumb-phinf.pstatic.net/20151006_38/blogpeople_1444132521014Wyo0l_PNG/%BA%ED%B7%CE%B1%D7_%C3%DF%BC%AE_%B9%E9%C0%CF%C0%E5_%C0%CC%BA%A5%C6%AE_%BB%F3%B4%DC1psd.png?type=w800)
+![](https://mblogthumb-phinf.pstatic.net/20151006_38/blogpeople_1444132521014Wyo0l_PNG/%BA%ED%B7%CE%B1%D7_%C3%DF%BC%AE_%B9%E9%C0%CF%C0%E5_%C0%CC%BA%A5%C6%AE_%BB%F3%B4%DC1psd.png?type=w)
 
 **조선팔도의 글쟁이들..**
 

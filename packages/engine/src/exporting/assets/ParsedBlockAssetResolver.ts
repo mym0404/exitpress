@@ -22,6 +22,62 @@ const cloneTemplateValue = (value: TemplateValue): TemplateValue => {
   return value
 }
 
+const setTemplateValueAtPath = ({
+  props,
+  path,
+  value,
+}: {
+  props: Record<string, TemplateValue>
+  path: string
+  value: TemplateValue
+}) => {
+  const segments = path.split(".").filter(Boolean)
+  const lastSegment = segments.at(-1)
+
+  if (!lastSegment) {
+    return false
+  }
+
+  let target: TemplateValue = props
+
+  for (const segment of segments.slice(0, -1)) {
+    if (Array.isArray(target)) {
+      const index = Number(segment)
+
+      if (!Number.isInteger(index)) {
+        return false
+      }
+
+      target = target[index]
+      continue
+    }
+
+    if (!target || typeof target !== "object") {
+      return false
+    }
+
+    target = target[segment]
+  }
+
+  if (Array.isArray(target)) {
+    const index = Number(lastSegment)
+
+    if (!Number.isInteger(index)) {
+      return false
+    }
+
+    target[index] = value
+    return true
+  }
+
+  if (!target || typeof target !== "object") {
+    return false
+  }
+
+  target[lastSegment] = value
+  return true
+}
+
 export const resolveParsedBlockAssetsForRender = async ({
   blocks,
   resolveAsset,
@@ -47,7 +103,14 @@ export const resolveParsedBlockAssetsForRender = async ({
         continue
       }
 
-      props[propName] = resolved.reference
+      if (!setTemplateValueAtPath({ props, path: propName, value: resolved.reference })) {
+        if (asset.required) {
+          omitBlock = true
+        }
+
+        continue
+      }
+
       assetRecords.push(resolved.record)
     }
 

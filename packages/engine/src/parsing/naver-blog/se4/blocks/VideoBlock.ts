@@ -15,13 +15,18 @@ export class NaverSe4VideoBlock extends LeafParserBlock {
     presets: [
       {
         id: "default",
-        label: "기본",
+        label: "링크",
         template: "[${title}](${url})",
       },
     ],
     props: {
       title: { label: "제목", type: "string" },
       url: { label: "URL", type: "string" },
+      thumbnailUrl: { label: "썸네일 URL", type: "string?" },
+      width: { label: "너비", type: "number?" },
+      height: { label: "높이", type: "number?" },
+      vid: { label: "비디오 ID", type: "string?" },
+      inkey: { label: "접근 키", type: "string?" },
     },
   } satisfies ParserBlockTemplateDefinition
 

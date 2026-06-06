@@ -1,8 +1,9 @@
 import { compactText } from "@exitpress/engine/shared/text/util/TextCompaction.js"
 
+import type { ParsedBlock } from "@exitpress/domain/parser/schema/ParsedPost.js"
+
 import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/ParserBlock.js"
 
-import { createLinkParagraphBlocks } from "../../common/LinkParagraph.js"
 import { parseJsonAttribute } from "../../core/JsonAttribute.js"
 import { LeafParserBlock } from "../../core/ParserBlock.js"
 
@@ -14,9 +15,16 @@ export class NaverSe4MapBlock extends LeafParserBlock {
   override readonly label = "지도"
   override readonly templateDefinition = {
     label: this.label,
-    presets: [{ id: "default", label: "기본", template: "${text}" }],
+    presets: [
+      {
+        id: "place-links",
+        label: "장소 링크",
+        template:
+          "${places.map(place => '[' + place.name + '](' + place.url + ')' + (place.address ? '\\n' + place.address : '')).join('\\n\\n')}",
+      },
+    ],
     props: {
-      text: { label: "본문", type: "string" },
+      places: { label: "장소 목록", type: "array" },
     },
   } satisfies ParserBlockTemplateDefinition
 
@@ -49,21 +57,27 @@ export class NaverSe4MapBlock extends LeafParserBlock {
         return []
       }
 
-      return createLinkParagraphBlocks({
-        blockId,
-        title,
-        description,
-        url:
-          typeof place.bookingUrl === "string" && place.bookingUrl.trim()
-            ? place.bookingUrl.trim()
-            : buildNaverMapSearchUrl(title),
-        hasThumbnail: false,
-        resolveLinkUrl: options.resolveLinkUrl,
-      })
+      const url =
+        typeof place.bookingUrl === "string" && place.bookingUrl.trim()
+          ? place.bookingUrl.trim()
+          : buildNaverMapSearchUrl(title)
+
+      return {
+        name: title,
+        address: description,
+        url: options.resolveLinkUrl ? options.resolveLinkUrl(url) : url,
+      }
     })
 
     if (placesFromModule.length > 0) {
-      return placesFromModule
+      return [
+        {
+          blockId,
+          props: {
+            places: placesFromModule,
+          },
+        } satisfies ParsedBlock,
+      ]
     }
 
     const mapLinks = $node.find("a.se-map-info")
@@ -81,23 +95,31 @@ export class NaverSe4MapBlock extends LeafParserBlock {
         return []
       }
 
-      return createLinkParagraphBlocks({
-        blockId,
-        title,
-        description,
-        url:
-          typeof linkData?.bookingUrl === "string" && linkData.bookingUrl.trim()
-            ? linkData.bookingUrl.trim()
-            : buildNaverMapSearchUrl(title),
-        hasThumbnail: false,
-        resolveLinkUrl: options.resolveLinkUrl,
-      })
+      const url =
+        typeof linkData?.bookingUrl === "string" && linkData.bookingUrl.trim()
+          ? linkData.bookingUrl.trim()
+          : buildNaverMapSearchUrl(title)
+
+      return {
+        name: title,
+        address: description,
+        url: options.resolveLinkUrl ? options.resolveLinkUrl(url) : url,
+      }
     })
 
     if (blocks.length === 0 && (data.places?.length || mapLinks.length > 0)) {
       throw new Error("SE4 map block parsing failed.")
     }
 
-    return blocks
+    return blocks.length > 0
+      ? [
+          {
+            blockId,
+            props: {
+              places: blocks,
+            },
+          } satisfies ParsedBlock,
+        ]
+      : []
   }
 }

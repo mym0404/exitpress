@@ -157,7 +157,7 @@ const uploadProviderCatalog: UploadProviderCatalogResponse = {
     {
       key: "github",
       label: "GitHub",
-      description: "리포지토리에 이미지를 커밋하고 URL로 사용합니다.",
+      description: "리포지토리에 이미지를 커밋해 URL로 씁니다.",
       fields: [
         {
           key: "repo",
@@ -189,7 +189,7 @@ const uploadProviderCatalog: UploadProviderCatalogResponse = {
         {
           key: "token",
           label: "Token",
-          description: "서비스 API 접근용 토큰을 입력합니다.",
+          description: "서비스 API 접근용 토큰입니다.",
           inputType: "password",
           required: true,
           defaultValue: null,
@@ -544,7 +544,7 @@ const createUploadCompletedJob = () =>
       },
       {
         timestamp: uploadTimelineTimestamps.finishedAt,
-        message: "Image Upload와 결과 치환이 완료되었습니다.",
+        message: "Image Upload와 결과 치환이 끝났습니다.",
       },
     ],
   })

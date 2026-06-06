@@ -118,7 +118,7 @@ describe("createImageUploadProviderSource", () => {
     ])
     expect(catalog.providers[0]).toMatchObject({
       key: "github",
-      description: "리포지토리에 이미지를 커밋하고 URL로 사용합니다.",
+      description: "리포지토리에 이미지를 커밋해 URL로 씁니다.",
       fields: [
         {
           key: "repo",
@@ -129,7 +129,7 @@ describe("createImageUploadProviderSource", () => {
         {
           key: "token",
           label: "Token",
-          description: "서비스 API 접근용 토큰을 입력합니다.",
+          description: "서비스 API 접근용 토큰입니다.",
         },
       ],
     })
@@ -141,13 +141,13 @@ describe("createImageUploadProviderSource", () => {
         {
           key: "secretId",
           label: "Secret ID",
-          description: "서비스에서 발급한 secret ID를 입력합니다.",
+          description: "서비스에서 발급한 secret ID입니다.",
           inputType: "password",
         },
         {
           key: "permission",
           label: "Permission",
-          description: "이미지 공개 범위 또는 접근 권한을 선택합니다.",
+          description: "이미지 공개 범위 또는 접근 권한을 고릅니다.",
           inputType: "select",
           defaultValue: 0,
         },
@@ -161,7 +161,7 @@ describe("createImageUploadProviderSource", () => {
         {
           key: "slim",
           label: "Slim",
-          description: "COS 이미지 처리 압축 옵션을 함께 사용합니다.",
+          description: "COS 이미지 처리 압축 옵션을 함께 씁니다.",
           inputType: "checkbox",
           defaultValue: false,
         },
@@ -170,12 +170,12 @@ describe("createImageUploadProviderSource", () => {
     expect(catalog.providers[2]).toMatchObject({
       key: "mystorage",
       label: "Mystorage",
-      description: "Mystorage로 이미지를 업로드합니다.",
+      description: "이미지를 Mystorage로 업로드합니다.",
       fields: [
         {
           key: "fooBar",
           label: "Foo Bar",
-          description: "Foo Bar 값을 입력합니다.",
+          description: "Foo Bar 값을 입력하세요.",
           placeholder: "",
         },
       ],

@@ -217,7 +217,7 @@ export const AppStepView = ({
           <Progress value={progressValue} />
         </div>
         <p className="text-sm text-muted-foreground">
-          {blockScanError ?? "선택한 글에서 필요한 Markdown 옵션을 확인하고 있습니다."}
+          {blockScanError ?? "선택한 글에서 필요한 Markdown 옵션을 확인 중입니다."}
         </p>
         {blockScanError ? (
           <div className="flex flex-wrap justify-end gap-2">

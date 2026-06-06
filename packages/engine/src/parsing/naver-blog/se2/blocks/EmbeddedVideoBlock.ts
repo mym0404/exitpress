@@ -124,7 +124,7 @@ export class NaverSe2EmbeddedVideoBlock extends LeafParserBlock {
     presets: [
       {
         id: "default",
-        label: "기본",
+        label: "링크",
         template: "[${title}](${url})",
       },
     ],

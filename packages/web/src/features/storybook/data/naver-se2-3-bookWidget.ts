@@ -8,7 +8,6 @@ export const naverSe23BookWidget = {
   blockIndex: 3,
   blockId: "bookWidget",
   blockLabel: "책 위젯",
-  group: "output",
   sourceUrl: "https://blog.naver.com/anglekim3708/70170204249",
   inspectPath: "0",
   inputHtml:

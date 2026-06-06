@@ -8,7 +8,6 @@ export const naverSe30DocumentTitle = {
   blockIndex: 0,
   blockId: "documentTitle",
   blockLabel: "문서 제목",
-  group: "auxiliary",
   sourceUrl: "https://blog.naver.com/anglekim3708/220612289536",
   inspectPath: "0",
   inputHtml:

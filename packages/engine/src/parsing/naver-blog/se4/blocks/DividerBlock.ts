@@ -8,7 +8,7 @@ export class NaverSe4DividerBlock extends LeafParserBlock {
   override readonly label = "구분선"
   override readonly templateDefinition = {
     label: this.label,
-    presets: [{ id: "default", label: "기본", template: "---" }],
+    presets: [{ id: "default", label: "가로선", template: "---" }],
     props: {},
   } satisfies ParserBlockTemplateDefinition
 

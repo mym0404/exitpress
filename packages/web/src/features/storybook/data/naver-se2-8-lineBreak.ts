@@ -8,7 +8,6 @@ export const naverSe28LineBreak = {
   blockIndex: 8,
   blockId: "lineBreak",
   blockLabel: "줄바꿈",
-  group: "auxiliary",
   sourceUrl: "https://blog.naver.com/mym0404/223034929697",
   inspectPath: "0",
   inputHtml: '<div id="viewTypeSelector"><br /></div>',

@@ -8,7 +8,6 @@ export const naverSe24Code = {
   blockIndex: 4,
   blockId: "code",
   blockLabel: "코드",
-  group: "output",
   sourceUrl: "https://blog.naver.com/mym0404/223034929697",
   inspectPath: "0",
   inputHtml: '<div id="viewTypeSelector"><pre>const value = 1</pre></div>',

@@ -56,7 +56,20 @@ const toLegacyOriginalSourceUrl = (block: ParsedBlock) => {
   return block.blockId.startsWith("naver-se4:") ? sourceUrl : null
 }
 
+const formatLegacyLink = ({ title, url }: { title: unknown; url: unknown }) =>
+  `[${String(title || url)}](${String(url)})`
+
+const toLegacyDescriptionParagraphs = (description: unknown, url: unknown) =>
+  String(description ?? "")
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .filter((line) => line !== url && !/^[()]+$/.test(line))
+    .map((text) => ({ type: "paragraph", text }))
+
 const toLegacyBlock = (block: ParsedBlock) => {
+  const blockType = block.blockId.split(":").at(-1) ?? block.blockId
+
   if ("code" in block.props) {
     return {
       type: "code",
@@ -115,7 +128,74 @@ const toLegacyBlock = (block: ParsedBlock) => {
     }
   }
 
-  if ("title" in block.props && "url" in block.props && "thumbnailUrl" in block.props) {
+  if ("fileName" in block.props && "fileUrl" in block.props) {
+    return {
+      type: "paragraph",
+      text: formatLegacyLink({
+        title: `${String(block.props.fileName)}${String(block.props.fileExtension ?? "")}`,
+        url: block.props.fileUrl,
+      }),
+    }
+  }
+
+  if ("places" in block.props) {
+    const places = Array.isArray(block.props.places) ? block.props.places : []
+
+    return places.flatMap((place) => {
+      if (!place || typeof place !== "object") {
+        return []
+      }
+
+      const name = "name" in place ? place.name : ""
+      const url = "url" in place ? place.url : ""
+      const address = "address" in place ? place.address : ""
+
+      return [
+        {
+          type: "paragraph",
+          text: formatLegacyLink({ title: name, url }),
+        },
+        ...(address ? [{ type: "paragraph", text: String(address) }] : []),
+      ]
+    })
+  }
+
+  if (blockType === "schedule") {
+    return [
+      {
+        type: "paragraph",
+        text: block.props.url
+          ? formatLegacyLink({ title: block.props.title, url: block.props.url })
+          : String(block.props.title),
+      },
+      ...(block.props.startAt ? [{ type: "paragraph", text: String(block.props.startAt) }] : []),
+    ]
+  }
+
+  if (
+    ["linkCard", "material", "oembed", "talkTalk"].includes(blockType) &&
+    "title" in block.props &&
+    "url" in block.props
+  ) {
+    return [
+      {
+        type: "paragraph",
+        text: formatLegacyLink({ title: block.props.title, url: block.props.url }),
+      },
+      ...(block.props.thumbnailUrl
+        ? []
+        : toLegacyDescriptionParagraphs(block.props.description, block.props.url)),
+    ]
+  }
+
+  if ("images" in block.props) {
+    return {
+      type: blockType,
+      images: block.props.images,
+    }
+  }
+
+  if (blockType === "video" && "title" in block.props && "url" in block.props) {
     return {
       type: "video",
       video: {
@@ -161,23 +241,36 @@ const toLegacyBlock = (block: ParsedBlock) => {
 }
 
 export const toLegacyBlocks = (blocks: ParsedBlock[]) => {
-  const legacyBlocks = blocks.map(toLegacyBlock)
+  const legacyEntries = blocks.flatMap((block) => {
+    const legacy = toLegacyBlock(block)
+    const values = Array.isArray(legacy) ? legacy : [legacy]
+
+    return values.map((value) => ({
+      block,
+      value,
+    }))
+  })
+  const legacyBlocks = legacyEntries.map((entry) => entry.value)
 
   return legacyBlocks.flatMap((block, index) => {
     if (block.type !== "image") {
       return [block]
     }
 
-    const originalBlock = blocks[index]
+    const originalBlock = legacyEntries[index]?.block
 
-    if (originalBlock && index > 0 && blocks[index - 1]?.blockId === originalBlock.blockId) {
+    if (
+      originalBlock &&
+      index > 0 &&
+      legacyEntries[index - 1]?.block.blockId === originalBlock.blockId
+    ) {
       return []
     }
 
     let consecutiveImageBlockCount = 0
 
     while (
-      blocks[index + consecutiveImageBlockCount]?.blockId === originalBlock?.blockId &&
+      legacyEntries[index + consecutiveImageBlockCount]?.block.blockId === originalBlock?.blockId &&
       legacyBlocks[index + consecutiveImageBlockCount]?.type === "image"
     ) {
       consecutiveImageBlockCount += 1
@@ -198,8 +291,9 @@ export const toLegacyBlocks = (blocks: ParsedBlock[]) => {
         type: "imageGroup",
         images: legacyBlocks
           .slice(index, index + imageBlockCount)
-          .filter((candidate) => candidate.type === "image")
-          .map((candidate) => candidate.image),
+          .flatMap((candidate) =>
+            candidate.type === "image" && "image" in candidate ? [candidate.image] : [],
+          ),
       },
     ]
   })

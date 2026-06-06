@@ -1,5 +1,4 @@
 import { defaultExportOptions } from "@exitpress/domain/export-options/ExportOptions.js"
-import { tableTemplate } from "@exitpress/domain/template/DefaultTemplates.js"
 import { createTestPath } from "@tests/support/test-paths.js"
 import { describe, expect, it } from "vitest"
 
@@ -13,6 +12,8 @@ import type { ParsedPost } from "@exitpress/domain/parser/schema/ParsedPost.js"
 import { renderMarkdownPost } from "./renderMarkdownPost.js"
 
 const markdownFilePath = createTestPath("markdown-renderer", "posts", "test.md")
+const tableTemplate =
+  "${rows.length > 0 ? '| ' + rows[0].map((cell) => cell.text).join(' | ') + ' |\\n| ' + rows[0].map((cell) => '---').join(' | ') + ' |\\n' + rows.slice(1).map((row) => '| ' + row.map((cell) => cell.text).join(' | ') + ' |').join('\\n') : html}"
 
 const category: CategoryInfo = {
   id: 1,

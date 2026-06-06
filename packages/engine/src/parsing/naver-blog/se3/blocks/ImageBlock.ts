@@ -75,7 +75,7 @@ export class NaverSe3ImageBlock extends LeafParserBlock {
     presets: [
       {
         id: "default",
-        label: "기본",
+        label: "이미지 마크다운",
         template: "![${alt}](${url})",
       },
     ],
@@ -88,9 +88,7 @@ export class NaverSe3ImageBlock extends LeafParserBlock {
 
   override match({ $, $node }: ParserBlockContext) {
     return (
-      ($node.hasClass("se_image") ||
-        $node.hasClass("se_sticker") ||
-        $node.hasClass("se_imageStrip")) &&
+      ($node.hasClass("se_image") || $node.hasClass("se_sticker")) &&
       getStandaloneImageContent({ $, $component: $node }).images.length > 0
     )
   }

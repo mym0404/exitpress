@@ -8,7 +8,6 @@ export const naverSe36Map = {
   blockIndex: 6,
   blockId: "map",
   blockLabel: "지도",
-  group: "output",
   sourceUrl: "https://blog.naver.com/naver_diary/221367365894",
   inspectPath: "0",
   inputHtml:

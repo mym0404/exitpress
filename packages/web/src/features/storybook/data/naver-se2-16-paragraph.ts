@@ -8,7 +8,6 @@ export const naverSe216Paragraph = {
   blockIndex: 16,
   blockId: "paragraph",
   blockLabel: "문단",
-  group: "output",
   sourceUrl: "https://blog.naver.com/mym0404/221504285266",
   inspectPath: "0",
   inputHtml:

@@ -20,7 +20,7 @@ export const UploadGithubOptions = ({
 
   return (
     <>
-      <div className="subtle-panel flex items-center gap-3 rounded-2xl px-4 py-3">
+      <div className="flex items-start gap-3 rounded-[var(--radius-md)] px-2 py-1.5 transition-colors hover:bg-accent/55">
         <Checkbox
           id="upload-github-use-jsdelivr"
           checked={githubUseJsDelivr}
@@ -45,7 +45,7 @@ export const UploadGithubOptions = ({
           >
             {githubUseJsDelivr
               ? githubJsDelivrUrl || "Repository를 입력하면 jsDelivr 주소를 만듭니다."
-              : "기본 GitHub 업로드 URL을 사용합니다."}
+              : "기본 GitHub 업로드 URL을 씁니다."}
           </span>
         </span>
       </div>
@@ -68,7 +68,7 @@ export const UploadGithubOptions = ({
             id="upload-github-jsdelivr-preview-description"
             className="text-sm leading-6 text-muted-foreground"
           >
-            jsDelivr 주소는 제출 시 Custom URL로 자동 적용됩니다.
+            제출하면 jsDelivr 주소가 Custom URL로 자동 적용됩니다.
           </span>
         </div>
       ) : null}

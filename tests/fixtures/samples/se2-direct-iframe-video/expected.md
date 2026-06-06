@@ -7,16 +7,16 @@ publishedAt: 2013-08-09T15:51:02+09:00
 category: 블로그 새소식
 categoryPath:
   - 블로그 새소식
-thumbnail: https://mblogthumb-phinf.pstatic.net/20130809_143/blogpeople_1376024307856VX5zC_PNG/2.png?type=w800
+thumbnail: https://mblogthumb-phinf.pstatic.net/20130809_143/blogpeople_1376024307856VX5zC_PNG/2.png?type=w
 ---
 
 동남아보다 더 더운 요즘입니다. 다들 여름 휴가 다녀오셨나요?
 
-![](https://mblogthumb-phinf.pstatic.net/20130809_143/blogpeople_1376024307856VX5zC_PNG/2.png?type=w800)
+![](https://mblogthumb-phinf.pstatic.net/20130809_143/blogpeople_1376024307856VX5zC_PNG/2.png?type=w)
 
-![](https://mblogthumb-phinf.pstatic.net/20130809_56/blogpeople_1376024307976pOezj_PNG/1.png?type=w800)
+![](https://mblogthumb-phinf.pstatic.net/20130809_56/blogpeople_1376024307976pOezj_PNG/1.png?type=w)
 
-![](https://mblogthumb-phinf.pstatic.net/20130809_214/blogpeople_1376024308100hhmyN_PNG/3.png?type=w800)
+![](https://mblogthumb-phinf.pstatic.net/20130809_214/blogpeople_1376024308100hhmyN_PNG/3.png?type=w)
 
 N드라이브에서 잠자고 있는 여름 휴가 사진, 지난 여행 사진,
 
@@ -42,12 +42,12 @@ N드라이브에서 잠자고 있는 여름 휴가 사진, 지난 여행 사진,
 
 [지금 블로그 전용 앨범 뷰어 만들러 가기 >](http://photo.ndrive.naver.com/)
 
-![](https://mblogthumb-phinf.pstatic.net/20130809_133/blogpeople_1376024600448cfG1q_PNG/nd_2.PNG?type=w800)
+![](https://mblogthumb-phinf.pstatic.net/20130809_133/blogpeople_1376024600448cfG1q_PNG/nd_2.PNG?type=w)
 
 **그리고! 우리나라와 세계 곳곳의 발자취를 사진과 함께 지도 첨부로 꼭꼭 남기시는 것도 잊지마세요!**
 
 아래 편집 화면에서 \[국내\] 혹은 \[해외\]를 클릭해주세요.
 
-![](https://mblogthumb-phinf.pstatic.net/20130809_58/blogpeople_1376030924863plEFu_PNG/%C7%D8%BF%DC%C1%F6%B5%B5.PNG?type=w800)
+![](https://mblogthumb-phinf.pstatic.net/20130809_58/blogpeople_1376030924863plEFu_PNG/%C7%D8%BF%DC%C1%F6%B5%B5.PNG?type=w)
 
 이제 블로그 앨범 뷰어로 아름답고 우아한 포스팅을 즐겨보세요!

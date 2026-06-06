@@ -8,7 +8,6 @@ export const naverSe33Quote = {
   blockIndex: 3,
   blockId: "quote",
   blockLabel: "인용문",
-  group: "output",
   sourceUrl: "https://blog.naver.com/blogpeople/220957996267",
   inspectPath: "0",
   inputHtml:

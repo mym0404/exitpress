@@ -23,7 +23,7 @@ export class NaverSe4ImageBlock extends LeafParserBlock {
     presets: [
       {
         id: "default",
-        label: "기본",
+        label: "이미지 마크다운",
         template: "![${alt}](${url})",
       },
     ],

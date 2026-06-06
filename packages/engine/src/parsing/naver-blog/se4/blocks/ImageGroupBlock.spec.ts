@@ -21,18 +21,14 @@ describe("NaverSe4ImageGroupBlock", () => {
         type: "imageGroup",
         images: [
           {
-            sourceUrl: "https://example.com/one.png",
-            originalSourceUrl: "https://example.com/one.png",
+            url: "https://example.com/one.png",
             alt: "one",
             caption: "shared caption",
-            mediaKind: "image",
           },
           {
-            sourceUrl: "https://example.com/two.png",
-            originalSourceUrl: "https://example.com/two.png",
+            url: "https://example.com/two.png",
             alt: "two",
             caption: "shared caption",
-            mediaKind: "image",
           },
         ],
       },
@@ -54,11 +50,9 @@ describe("NaverSe4ImageGroupBlock", () => {
         type: "imageGroup",
         images: [
           {
-            sourceUrl: "https://example.com/group.png",
-            originalSourceUrl: "https://example.com/group.png",
+            url: "https://example.com/group.png",
             alt: "group",
             caption: null,
-            mediaKind: "image",
           },
         ],
       },

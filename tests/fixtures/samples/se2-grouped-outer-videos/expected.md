@@ -8,10 +8,10 @@ category: 뒷북치는 IT
 categoryPath:
   - Life Style
   - 뒷북치는 IT
-thumbnail: https://mblogthumb-phinf.pstatic.net/20140317_141/anglekim3708_1395039086506wSj9n_JPEG/%C6%C4%B8%C1-3.jpg?type=w800
+thumbnail: https://mblogthumb-phinf.pstatic.net/20140317_141/anglekim3708_1395039086506wSj9n_JPEG/%C6%C4%B8%C1-3.jpg?type=w
 ---
 
-![](https://mblogthumb-phinf.pstatic.net/20140329_235/anglekim3708_1396075298612vBnmc_JPEG/CAM00615.jpg?type=w800)
+![](https://mblogthumb-phinf.pstatic.net/20140329_235/anglekim3708_1396075298612vBnmc_JPEG/CAM00615.jpg?type=w)
 
 **금융감독원**
 
@@ -60,7 +60,7 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/20140317_141/anglekim3708_139503
 
 불시에 13억원이 무단 이체됨
 
-![](https://mblogthumb-phinf.pstatic.net/20140317_141/anglekim3708_1395039086506wSj9n_JPEG/%C6%C4%B8%C1-3.jpg?type=w800)
+![](https://mblogthumb-phinf.pstatic.net/20140317_141/anglekim3708_1395039086506wSj9n_JPEG/%C6%C4%B8%C1-3.jpg?type=w)
 
 파밍캅 이란? \[경남지방경찰청에서 배포함\]
 
@@ -81,7 +81,7 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/20140317_141/anglekim3708_139503
 
 대응할 수 없으므로 반드시 위 예방법을 준수하기시 바랍니다.
 
-![](https://mblogthumb-phinf.pstatic.net/20140317_36/anglekim3708_1395039086833UJN3b_JPEG/%C6%C4%B9%D6-2.jpg?type=w800)
+![](https://mblogthumb-phinf.pstatic.net/20140317_36/anglekim3708_1395039086833UJN3b_JPEG/%C6%C4%B9%D6-2.jpg?type=w)
 
 기능개선
 
@@ -102,4 +102,4 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/20140317_141/anglekim3708_139503
 
 [http://www.gnpolice.go.kr/gnpolice/page.do?MENU\_ID=US08](http://www.gnpolice.go.kr/gnpolice/page.do?MENU_ID=US08)
 
-![](https://mblogthumb-phinf.pstatic.net/20140317_272/anglekim3708_1395039155186SQvbW_JPEG/%B0%E6%B3%B2%C1%F6%B9%E6%B0%E6%C2%FB%C3%BB.jpg?type=w800)
+![](https://mblogthumb-phinf.pstatic.net/20140317_272/anglekim3708_1395039155186SQvbW_JPEG/%B0%E6%B3%B2%C1%F6%B9%E6%B0%E6%C2%FB%C3%BB.jpg?type=w)

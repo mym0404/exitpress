@@ -20,7 +20,6 @@
     "gh:update-branches": "bun scripts/maintenance/update-open-pr-branches.ts",
     "test": "vitest run --configLoader runner --silent",
     "test:coverage": "vitest run --configLoader runner --silent --coverage",
-    "test:parser-blocks": "vitest run --config vitest.parser-blocks.config.ts --silent",
     "test:offline": "vitest run --configLoader runner --silent",
     "test:network": "pnpm build:ui && bun tests/e2e/run-ui-live-resume-export.ts && bun tests/e2e/run-ui-live-resume-export.ts --case se2-table && bun tests/e2e/run-ui-live-upload.ts",
     "test:network:resume-export": "bun tests/e2e/run-ui-live-resume-export.ts",

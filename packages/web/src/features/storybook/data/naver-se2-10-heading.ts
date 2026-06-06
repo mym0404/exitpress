@@ -8,7 +8,6 @@ export const naverSe210Heading = {
   blockIndex: 10,
   blockId: "heading",
   blockLabel: "제목",
-  group: "output",
   sourceUrl: "https://blog.naver.com/mym0404/223034929697",
   inspectPath: "0",
   inputHtml: '<div id="viewTypeSelector"><h2>Section title</h2></div>',

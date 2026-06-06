@@ -7,10 +7,10 @@ publishedAt: 2024-06-02T22:14:53+09:00
 category: 리뷰로그
 categoryPath:
   - 리뷰로그
-thumbnail: https://mblogthumb-phinf.pstatic.net/MjAyNDA2MDJfMTcy/MDAxNzE3MzI3MjAyMDEx.wT8l1x2qZYw6my4ukQX3So0ggo1lT5O-yd3erbhSwWAg.iCMUXnYDL-WZ4bfy_ytaohmWeaDwxbfW6StNZJpEoBEg.JPEG/1.jpg?type=w800
+thumbnail: https://mblogthumb-phinf.pstatic.net/MjAyNDA2MDJfMTcy/MDAxNzE3MzI3MjAyMDEx.wT8l1x2qZYw6my4ukQX3So0ggo1lT5O-yd3erbhSwWAg.iCMUXnYDL-WZ4bfy_ytaohmWeaDwxbfW6StNZJpEoBEg.JPEG/1.jpg?type=w
 ---
 
-![](https://mblogthumb-phinf.pstatic.net/MjAyNDA2MDJfMTcy/MDAxNzE3MzI3MjAyMDEx.wT8l1x2qZYw6my4ukQX3So0ggo1lT5O-yd3erbhSwWAg.iCMUXnYDL-WZ4bfy_ytaohmWeaDwxbfW6StNZJpEoBEg.JPEG/1.jpg?type=w800)
+![](https://mblogthumb-phinf.pstatic.net/MjAyNDA2MDJfMTcy/MDAxNzE3MzI3MjAyMDEx.wT8l1x2qZYw6my4ukQX3So0ggo1lT5O-yd3erbhSwWAg.iCMUXnYDL-WZ4bfy_ytaohmWeaDwxbfW6StNZJpEoBEg.JPEG/1.jpg?type=w)
 
 생각이 많은 요즘이라 전에 사용했던 노트를 다시 보게 되었습니다
 
