@@ -29,6 +29,6 @@
 - When a block parses list-like content, expose a structured array prop and keep nested asset paths resolvable through asset metadata.
 
 ## Verification
-- Parser block changes require focused parser block tests and the offline suite.
+- Parser block changes require offline tests that cover the changed block behavior.
 - Parser routing changes require the offline suite.
 - Storybook catalog changes require catalog generation/check commands plus Storybook tests.

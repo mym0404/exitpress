@@ -113,7 +113,6 @@ When refinement changes are needed:
 
 Before opening the improvement PR, all of these must pass:
 
-- `pnpm test:parser-blocks`
 - `pnpm check:local`
 - Fixture verification for the modified block or blocks
 
