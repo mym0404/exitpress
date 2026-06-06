@@ -19,14 +19,16 @@ export type TemplatePropDefinition = {
   type: TemplatePropType
 }
 
+export type BlockTemplatePreset = {
+  id: string
+  label: string
+  template: string
+}
+
 // A block template describes renderer presets and available interpolation props.
 export type BlockTemplateDefinition = {
   key: string
   label: string
-  presets: {
-    id: string
-    label: string
-    template: string
-  }[]
+  presets: [BlockTemplatePreset, ...BlockTemplatePreset[]]
   props: Record<string, TemplatePropDefinition>
 }

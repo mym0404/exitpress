@@ -1,17 +1,31 @@
+import { compactText } from "@exitpress/engine/shared/text/util/TextCompaction.js"
+
+import type { ParsedBlock } from "@exitpress/domain/parser/schema/ParsedPost.js"
+
 import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/ParserBlock.js"
 
 import { LeafParserBlock } from "../../core/ParserBlock.js"
 
-import { convertSe3MapPlace } from "./util/ComponentBoundary.js"
+import { findInComponentRoot } from "./util/ComponentBoundary.js"
+
+const buildNaverMapSearchUrl = (query: string) =>
+  `https://map.naver.com/p/search/${encodeURIComponent(query)}`
 
 export class NaverSe3MapTextBlock extends LeafParserBlock {
   override readonly id = "mapText"
   override readonly label = "텍스트 지도"
   override readonly templateDefinition = {
     label: this.label,
-    presets: [{ id: "default", label: "기본", template: "${text}" }],
+    presets: [
+      {
+        id: "place-links",
+        label: "장소 링크",
+        template:
+          "${places.map(place => '[' + place.name + '](' + place.url + ')' + (place.address ? '\\n' + place.address : '')).join('\\n\\n')}",
+      },
+    ],
     props: {
-      text: { label: "본문", type: "string" },
+      places: { label: "장소 목록", type: "array" },
     },
   } satisfies ParserBlockTemplateDefinition
 
@@ -20,6 +34,36 @@ export class NaverSe3MapTextBlock extends LeafParserBlock {
   }
 
   override convert({ $, $node, blockId, options }: Parameters<LeafParserBlock["convert"]>[0]) {
-    return convertSe3MapPlace({ $, $node, blockId, options })
+    const name = compactText(
+      findInComponentRoot({ $, $component: $node, selector: ".se_title" })
+        .first()
+        .contents()
+        .first()
+        .text(),
+    )
+    const address = compactText(
+      findInComponentRoot({ $, $component: $node, selector: ".se_address" }).first().text(),
+    )
+
+    if (!name) {
+      throw new Error("SE3 map block parsing failed.")
+    }
+
+    const url = buildNaverMapSearchUrl(name)
+
+    return [
+      {
+        blockId,
+        props: {
+          places: [
+            {
+              name,
+              address,
+              url: options.resolveLinkUrl ? options.resolveLinkUrl(url) : url,
+            },
+          ],
+        },
+      } satisfies ParsedBlock,
+    ]
   }
 }

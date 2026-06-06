@@ -8,7 +8,6 @@ export const naverSe416Heading = {
   blockIndex: 16,
   blockId: "heading",
   blockLabel: "제목",
-  group: "output",
   sourceUrl: "https://blog.naver.com/iammathking/223674688590",
   inspectPath: "0",
   inputHtml:

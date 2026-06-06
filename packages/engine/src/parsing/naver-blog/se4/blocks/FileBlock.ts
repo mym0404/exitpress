@@ -1,10 +1,10 @@
 import { compactText } from "@exitpress/engine/shared/text/util/TextCompaction.js"
 
+import type { ParsedBlock } from "@exitpress/domain/parser/schema/ParsedPost.js"
 import type { UnknownRecord } from "@exitpress/engine/shared/object/UnknownRecord.js"
 
 import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/ParserBlock.js"
 
-import { createLinkParagraphBlocks } from "../../common/LinkParagraph.js"
 import { LeafParserBlock } from "../../core/ParserBlock.js"
 
 export class NaverSe4FileBlock extends LeafParserBlock {
@@ -12,9 +12,17 @@ export class NaverSe4FileBlock extends LeafParserBlock {
   override readonly label = "첨부파일"
   override readonly templateDefinition = {
     label: this.label,
-    presets: [{ id: "default", label: "기본", template: "${text}" }],
+    presets: [
+      {
+        id: "file-link",
+        label: "파일 링크",
+        template: "[${fileName}${fileExtension}](${fileUrl})",
+      },
+    ],
     props: {
-      text: { label: "본문", type: "string" },
+      fileName: { label: "파일명", type: "string" },
+      fileExtension: { label: "확장자", type: "string" },
+      fileUrl: { label: "파일 URL", type: "string" },
     },
   } satisfies ParserBlockTemplateDefinition
 
@@ -37,18 +45,15 @@ export class NaverSe4FileBlock extends LeafParserBlock {
       throw new Error("SE4 file block parsing failed.")
     }
 
-    const title = [
-      compactText($node.find(".se-file-name").text()),
-      compactText($node.find(".se-file-extension").text()),
-    ].join("")
-
-    return createLinkParagraphBlocks({
-      blockId,
-      title: title || url,
-      description: "",
-      url,
-      hasThumbnail: false,
-      resolveLinkUrl: options.resolveLinkUrl,
-    })
+    return [
+      {
+        blockId,
+        props: {
+          fileName: compactText($node.find(".se-file-name").text()) || url,
+          fileExtension: compactText($node.find(".se-file-extension").text()),
+          fileUrl: options.resolveLinkUrl ? options.resolveLinkUrl(url) : url,
+        },
+      } satisfies ParsedBlock,
+    ]
   }
 }

@@ -7,7 +7,7 @@ publishedAt: 2018-09-07T17:19:19+09:00
 category: ಇ중국어공부ಇ
 categoryPath:
   - ಇ중국어공부ಇ
-thumbnail: https://mblogthumb-phinf.pstatic.net/MjAxODA5MDdfMTQ4/MDAxNTM2MzA3OTYwMzMy.MlnwdOqi_AHLWMVGTdewLK0l3j2IaBMaSI06XwJ95Iwg.TWHtBTh5i-RbpOeUDAvYQK9iFfJR9I_tmnVgqcfeVygg.JPEG.izozi5704/IMG_1140.jpg?type=w800
+thumbnail: https://mblogthumb-phinf.pstatic.net/MjAxODA5MDdfMTQ4/MDAxNTM2MzA3OTYwMzMy.MlnwdOqi_AHLWMVGTdewLK0l3j2IaBMaSI06XwJ95Iwg.TWHtBTh5i-RbpOeUDAvYQK9iFfJR9I_tmnVgqcfeVygg.JPEG.izozi5704/IMG_1140.jpg?type=w
 ---
 
 HSK 5급을 딸려고 했는데 미루고 미루다가  
@@ -24,16 +24,14 @@ HSK 5급을 딸려고 했는데 미루고 미루다가
 
 [首页--汉语考试服务网](http://www.chinesetest.cn/index.do)
 
-简体中文 | English | 日本語 | 한국어 | Français | Русский | Español 登录 注册   顶部 模拟考试 资源中心 Oral Test 常见问题 在线提问 考试报名 2018年考试日期 查看考试计划 查看考试计划 查看考试计划 查看考试计划 查看考试计划 考生登录 考点登录 用户名 密码 验证码 取回密码 成绩查询 成绩报告查询 准考证号 姓名 验证码 新闻公告 更多 关于公示2018年国内HSK考点作为孔子学院奖学金.. (2018-03-27) 2018年度汉考国际科研基金项目申报通知.. (2018-06-25) 关于2018年6月违规考点处...
-
 여기서 확인 할 수 있다
 
-![](https://mblogthumb-phinf.pstatic.net/MjAxODA5MDdfMTE5/MDAxNTM2MzA3OTYwMjM3.uxkBiBlMZaVmmFlnrV7OPowTpmiX0x5P9nwX8j53R2Yg.NUtcTE2B7GD2Xy0ldId7R9R75cuKxj8QFpNHoSd5a4sg.JPEG.izozi5704/IMG_1444.jpg?type=w800)
+![](https://mblogthumb-phinf.pstatic.net/MjAxODA5MDdfMTE5/MDAxNTM2MzA3OTYwMjM3.uxkBiBlMZaVmmFlnrV7OPowTpmiX0x5P9nwX8j53R2Yg.NUtcTE2B7GD2Xy0ldId7R9R75cuKxj8QFpNHoSd5a4sg.JPEG.izozi5704/IMG_1444.jpg?type=w)
 
 여기에 수험번호 적고 이름 적고  
 옆에 나와있는 확인번호 적으면 끝 😊
 
-![](https://mblogthumb-phinf.pstatic.net/MjAxODA5MDdfMTQ4/MDAxNTM2MzA3OTYwMzMy.MlnwdOqi_AHLWMVGTdewLK0l3j2IaBMaSI06XwJ95Iwg.TWHtBTh5i-RbpOeUDAvYQK9iFfJR9I_tmnVgqcfeVygg.JPEG.izozi5704/IMG_1140.jpg?type=w800)
+![](https://mblogthumb-phinf.pstatic.net/MjAxODA5MDdfMTQ4/MDAxNTM2MzA3OTYwMzMy.MlnwdOqi_AHLWMVGTdewLK0l3j2IaBMaSI06XwJ95Iwg.TWHtBTh5i-RbpOeUDAvYQK9iFfJR9I_tmnVgqcfeVygg.JPEG.izozi5704/IMG_1140.jpg?type=w)
 
 솔직히 너무 걱정했는데 합격해서 너무 기쁨  
 사실 18일도 공부안하고  
@@ -75,7 +73,7 @@ HSK 5급을 딸려고 했는데 미루고 미루다가
 성적은 잘 오르는것같댜  
 <공부방법>
 
-![](https://mblogthumb-phinf.pstatic.net/MjAxODA5MDdfODgg/MDAxNTM2MzA4MzU4MTI4.R2weAjj_8qtLp0ywNcrYc7SqFfMn3269fnd8UimwZh0g.x5V4I8fqrDULm2pqIQ7KdbFW7o3LQkkMqpxkp1S2M3sg.JPEG.izozi5704/output_1000559249.jpg?type=w800)
+![](https://mblogthumb-phinf.pstatic.net/MjAxODA5MDdfODgg/MDAxNTM2MzA4MzU4MTI4.R2weAjj_8qtLp0ywNcrYc7SqFfMn3269fnd8UimwZh0g.x5V4I8fqrDULm2pqIQ7KdbFW7o3LQkkMqpxkp1S2M3sg.JPEG.izozi5704/output_1000559249.jpg?type=w)
 
 일단 처음에는 hsk하는 사람들은  
 다 가지고 있다는 한권으로 끝내기..  
@@ -91,9 +89,9 @@ HSK 5급을 딸려고 했는데 미루고 미루다가
 동그라미 치거나 그런건 안했다  
 그냥 눈으로만 보고 풀려고 노력했다
 
-![](https://mblogthumb-phinf.pstatic.net/MjAxODA5MDdfNzIg/MDAxNTM2MzA4MzU4MzAx.oT6rohnxA-ScUU1B36Mvk0iFEhJC-qtFADlFM3oZd5Mg.CYpsAAjQxHAbdnBh5mqnzm5iZOLPwLIjDPaE-ww5Fn0g.JPEG.izozi5704/output_3682293976.jpg?type=w800)
+![](https://mblogthumb-phinf.pstatic.net/MjAxODA5MDdfNzIg/MDAxNTM2MzA4MzU4MzAx.oT6rohnxA-ScUU1B36Mvk0iFEhJC-qtFADlFM3oZd5Mg.CYpsAAjQxHAbdnBh5mqnzm5iZOLPwLIjDPaE-ww5Fn0g.JPEG.izozi5704/output_3682293976.jpg?type=w)
 
-![](https://mblogthumb-phinf.pstatic.net/MjAxODA5MDdfNzYg/MDAxNTM2MzA4MzU5MjIy.twxnoCK7Xqcx2WLVSqv6wWSIwJUMTf_CPQwy-y977o0g.BAf9GsFnRo725D__JOLiLvQkENsAr7QaAx4h4CB-FA4g.JPEG.izozi5704/output_181825356.jpg?type=w800)
+![](https://mblogthumb-phinf.pstatic.net/MjAxODA5MDdfNzYg/MDAxNTM2MzA4MzU5MjIy.twxnoCK7Xqcx2WLVSqv6wWSIwJUMTf_CPQwy-y977o0g.BAf9GsFnRo725D__JOLiLvQkENsAr7QaAx4h4CB-FA4g.JPEG.izozi5704/output_181825356.jpg?type=w)
 
 그리고 실전서는 이거 두개 풀었다  
 저 북경대新HSK모의고사는 사람들이  

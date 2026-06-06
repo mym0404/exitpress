@@ -8,7 +8,6 @@ export const naverSe415WrappingParagraph = {
   blockIndex: 15,
   blockId: "wrappingParagraph",
   blockLabel: "감싸는 문단",
-  group: "output",
   sourceUrl: "https://blog.naver.com/anglekim3708/221585306972",
   inspectPath: "0",
   inputHtml:

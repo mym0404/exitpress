@@ -1,8 +1,9 @@
 import { compactText } from "@exitpress/engine/shared/text/util/TextCompaction.js"
 
+import type { ParsedBlock } from "@exitpress/domain/parser/schema/ParsedPost.js"
+
 import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/ParserBlock.js"
 
-import { createLinkParagraphBlocks } from "../../common/LinkParagraph.js"
 import { LeafParserBlock } from "../../core/ParserBlock.js"
 
 export class NaverSe4TalkTalkBlock extends LeafParserBlock {
@@ -10,9 +11,12 @@ export class NaverSe4TalkTalkBlock extends LeafParserBlock {
   override readonly label = "톡톡 링크"
   override readonly templateDefinition = {
     label: this.label,
-    presets: [{ id: "default", label: "기본", template: "${text}" }],
+    presets: [{ id: "link", label: "링크", template: "[${title}](${url})" }],
     props: {
-      text: { label: "본문", type: "string" },
+      title: { label: "제목", type: "string" },
+      url: { label: "URL", type: "string" },
+      description: { label: "설명", type: "string" },
+      thumbnailUrl: { label: "썸네일 URL", type: "string?" },
     },
   } satisfies ParserBlockTemplateDefinition
 
@@ -28,13 +32,16 @@ export class NaverSe4TalkTalkBlock extends LeafParserBlock {
       throw new Error("SE4 TalkTalk block parsing failed.")
     }
 
-    return createLinkParagraphBlocks({
-      blockId,
-      title: compactText($node.find(".se-talktalk-banner-text").text()) || url,
-      description: "",
-      url,
-      hasThumbnail: false,
-      resolveLinkUrl: options.resolveLinkUrl,
-    })
+    return [
+      {
+        blockId,
+        props: {
+          title: compactText($node.find(".se-talktalk-banner-text").text()) || url,
+          url: options.resolveLinkUrl ? options.resolveLinkUrl(url) : url,
+          description: "",
+          thumbnailUrl: null,
+        },
+      } satisfies ParsedBlock,
+    ]
   }
 }

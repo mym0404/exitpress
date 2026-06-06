@@ -8,7 +8,6 @@ export const naverSe215Spacer = {
   blockIndex: 15,
   blockId: "spacer",
   blockLabel: "빈 줄",
-  group: "auxiliary",
   sourceUrl: "https://blog.naver.com/mym0404/221504285266",
   inspectPath: "0",
   inputHtml: '<div id="viewTypeSelector"><p><br></p></div>',

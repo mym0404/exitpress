@@ -225,17 +225,22 @@ For a focused support-unit PR:
 
 - Keep changes scoped to the editor family that produced the failure.
 - Prefer extending an existing block when the DOM is the same content family.
-- Add a new block only when the HTML has a distinct responsibility.
+- Add a new block when the HTML has a distinct user-visible content responsibility or requires a different prop contract.
 - Register a new block directly in the editor `supportedBlocks` list.
-- When adding a new block, add `outputOptions` if the block leaves a user-selectable Markdown output format choice.
+- Every parser block must define `templateDefinition`.
+- Blocks that intentionally emit no Markdown use the `무시` preset with an empty template.
+- Template presets must describe meaningful output shapes. Do not use generic labels.
+- Parser blocks should expose structured props that name the content they parse. Do not reduce link-like, media-like, schedule-like, map-like, file-like, or embedded components to a single opaque `text` prop.
+- If one block can only parse the right props for one content shape by weakening another shape, split the parser block.
 - Do not add a registry, compatibility re-export, broad fallback parser, or catch-all block.
-- Do not change renderer or AST types unless the failed content cannot fit an existing AST block.
-- If a new AST block type is unavoidable, update shared types, renderer, exporter behavior, focused tests, fixtures, and cross-cutting knowledge together.
+- Do not move block-specific parsing, output construction, or template strings into shared helpers. Keep them in the owning block file even when this duplicates a small template or object shape.
+- Do not change renderer, shared parser contracts, or generic template evaluation unless the failed content cannot fit the current contracts.
+- If a shared contract change is unavoidable, update shared types, renderer/exporter behavior, focused tests, fixtures, and cross-cutting knowledge together.
 - Keep the PR file shape predictable from the chosen strategy:
   - Existing-block edit: touch the owning block file, its adjacent spec, and one representative sample fixture.
   - New-block addition: add the new block file, its adjacent spec, the owning editor registration, and one representative sample fixture.
   - Evidence assets may be included when the report or PR body needs committed `figure` images.
-- Do not touch renderer, exporter, shared AST types, UI, workflow, broad helpers, or knowledge unless the focused failed HTML cannot be represented through existing contracts.
+- Do not touch renderer, exporter, shared parser contracts, UI, workflow, broad helpers, or knowledge unless the focused failed HTML cannot be represented through existing contracts.
 - If the necessary diff does not match the expected file shape, keep the wider change directly tied to the focused failure and document the reason in the report.
 
 ## Fixture Rules

@@ -2,7 +2,7 @@ import { parseSe4Blocks } from "@tests/support/parser-test-utils.js"
 import { describe, expect, it } from "vitest"
 
 describe("NaverSe4ImageStripBlock", () => {
-  it("parses image strip components into imageGroup blocks", () => {
+  it("parses image strip components into imageStrip blocks", () => {
     const parsed = parseSe4Blocks(`
       <div class="se-component se-imageStrip se-imageStrip2 se-l-default">
         <div class="se-module se-module-image">
@@ -20,21 +20,17 @@ describe("NaverSe4ImageStripBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "imageGroup",
+        type: "imageStrip",
         images: [
           {
-            sourceUrl: "https://example.com/strip-1.png",
-            originalSourceUrl: "https://example.com/strip-1.png",
+            url: "https://example.com/strip-1.png",
             alt: "",
             caption: null,
-            mediaKind: "image",
           },
           {
-            sourceUrl: "https://example.com/strip-2.png",
-            originalSourceUrl: "https://example.com/strip-2.png",
+            url: "https://example.com/strip-2.png",
             alt: "",
             caption: null,
-            mediaKind: "image",
           },
         ],
       },

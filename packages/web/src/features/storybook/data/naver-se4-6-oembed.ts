@@ -8,7 +8,6 @@ export const naverSe46Oembed = {
   blockIndex: 6,
   blockId: "oembed",
   blockLabel: "임베드",
-  group: "output",
   sourceUrl: "https://blog.naver.com/mym0404/223034929697",
   inspectPath: "0",
   inputHtml:

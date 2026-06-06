@@ -14,6 +14,7 @@ describe("parser block catalog", () => {
       "naver-se2",
     ])
     expect(templateDefinitions.map((definition) => definition.key)).toEqual([
+      "naver-se4:documentTitle",
       "naver-se4:formula",
       "naver-se4:code",
       "naver-se4:linkCard",
@@ -24,6 +25,7 @@ describe("parser block catalog", () => {
       "naver-se4:schedule",
       "naver-se4:talkTalk",
       "naver-se4:table",
+      "naver-se4:imageStrip",
       "naver-se4:imageGroup",
       "naver-se4:sticker",
       "naver-se4:image",
@@ -34,6 +36,7 @@ describe("parser block catalog", () => {
       "naver-se4:mrBlog",
       "naver-se4:paragraph",
       "naver-se4:material",
+      "naver-se3:documentTitle",
       "naver-se3:divider",
       "naver-se3:table",
       "naver-se3:quote",
@@ -44,23 +47,38 @@ describe("parser block catalog", () => {
       "naver-se3:video",
       "naver-se3:file",
       "naver-se3:subjectMatter",
+      "naver-se3:imageStrip",
       "naver-se3:image",
       "naver-se3:paragraph",
+      "naver-se2:style",
+      "naver-se2:comment",
       "naver-se2:paragraph",
       "naver-se2:bookWidget",
       "naver-se2:code",
       "naver-se2:table",
+      "naver-se2:container",
       "naver-se2:divider",
+      "naver-se2:lineBreak",
       "naver-se2:quote",
       "naver-se2:heading",
       "naver-se2:inlineGifVideo",
       "naver-se2:poll",
       "naver-se2:video",
       "naver-se2:image",
+      "naver-se2:spacer",
     ])
     expect(templateDefinitions.every((definition) => definition.presets.length >= 1)).toBe(true)
     expect(
       templateDefinitions.every((definition) => Object.keys(definition.props).length >= 0),
     ).toBe(true)
+    expect(templateDefinitions.every((definition) => definition.presets[0]?.label !== "기본")).toBe(
+      true,
+    )
+    expect(
+      templateDefinitions.find((definition) => definition.key === "naver-se4:documentTitle"),
+    ).toMatchObject({
+      presets: [{ id: "ignore", label: "무시", template: "" }],
+      props: {},
+    })
   })
 })

@@ -8,7 +8,6 @@ export const naverSe419MrBlog = {
   blockIndex: 19,
   blockId: "mrBlog",
   blockLabel: "블로그씨 질문",
-  group: "output",
   sourceUrl: "https://blog.naver.com/mym0404/222616669508",
   inspectPath: "0",
   inputHtml:

@@ -7,10 +7,10 @@ publishedAt: 2024-06-16T09:14:01+09:00
 category: 오늘의 이야기
 categoryPath:
   - 오늘의 이야기
-thumbnail: https://mblogthumb-phinf.pstatic.net/MjAyNDA2MTZfMjM0/MDAxNzE4NDg0MzczOTgw.mzSce4Pavfe2LFtbHVFSOhsiTZpklaTIFe787QCOsJ8g.QnWBGbCJAwSgGd82YavGGO9SHwwLBxgU6EYsUvz7a-cg.PNG/%B5%F0%C1%F6%C5%D0%B0%E6%C1%A6.png?type=w800
+thumbnail: https://mblogthumb-phinf.pstatic.net/MjAyNDA2MTZfMjM0/MDAxNzE4NDg0MzczOTgw.mzSce4Pavfe2LFtbHVFSOhsiTZpklaTIFe787QCOsJ8g.QnWBGbCJAwSgGd82YavGGO9SHwwLBxgU6EYsUvz7a-cg.PNG/%B5%F0%C1%F6%C5%D0%B0%E6%C1%A6.png?type=w
 ---
 
-![](https://mblogthumb-phinf.pstatic.net/MjAyNDA2MTZfMjg0/MDAxNzE4NDg5NjQ5OTUz.GbZMDuxBD0QvUHSFIMNydejioeKBMVFKzqT0062HQtsg.wVLnUFeif2Y6B7nFQTiIJGPyBXcUcVKxdlHXfVP0oeYg.PNG/%ED%8A%B8%EB%A6%AC%EC%8C%A4.png?type=w800)
+![](https://mblogthumb-phinf.pstatic.net/MjAyNDA2MTZfMjg0/MDAxNzE4NDg5NjQ5OTUz.GbZMDuxBD0QvUHSFIMNydejioeKBMVFKzqT0062HQtsg.wVLnUFeif2Y6B7nFQTiIJGPyBXcUcVKxdlHXfVP0oeYg.PNG/%ED%8A%B8%EB%A6%AC%EC%8C%A4.png?type=w)
 
 6월 15일 토요일 사람들이 많을 시간 2시에
 
@@ -26,13 +26,13 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/MjAyNDA2MTZfMjM0/MDAxNzE4NDg0Mzc
 
 주된 내용은 트리쌤쌤의 개인 성장 스토리와 디지털 경제 이야기입니다
 
-![](https://mblogthumb-phinf.pstatic.net/MjAyNDA2MTZfNDQg/MDAxNzE4NDkxMDcyNDAw.J6kurFIzZiq0NJ1ovtsHi0j80zxTEdiTa0M8rGF2VOIg.4VmhHv54_hMg0rG75C3UzVw_eBc1gi_qR6YSDMNw7HMg.PNG/SE-917a8501-9fa7-4a2e-a923-e8d874f0d2f4.png?type=w800)
+![](https://mblogthumb-phinf.pstatic.net/MjAyNDA2MTZfNDQg/MDAxNzE4NDkxMDcyNDAw.J6kurFIzZiq0NJ1ovtsHi0j80zxTEdiTa0M8rGF2VOIg.4VmhHv54_hMg0rG75C3UzVw_eBc1gi_qR6YSDMNw7HMg.PNG/SE-917a8501-9fa7-4a2e-a923-e8d874f0d2f4.png?type=w)
 
 ```javascript
 N 잡러로 하신 일들입니다 정말 열심히 사셨지요 현재의 모습을 대변합니다
 ```
 
-![](https://mblogthumb-phinf.pstatic.net/MjAyNDA2MTZfMjM0/MDAxNzE4NDg0MzczOTgw.mzSce4Pavfe2LFtbHVFSOhsiTZpklaTIFe787QCOsJ8g.QnWBGbCJAwSgGd82YavGGO9SHwwLBxgU6EYsUvz7a-cg.PNG/%EB%94%94%EC%A7%80%ED%84%B8%EA%B2%BD%EC%A0%9C.png?type=w800)
+![](https://mblogthumb-phinf.pstatic.net/MjAyNDA2MTZfMjM0/MDAxNzE4NDg0MzczOTgw.mzSce4Pavfe2LFtbHVFSOhsiTZpklaTIFe787QCOsJ8g.QnWBGbCJAwSgGd82YavGGO9SHwwLBxgU6EYsUvz7a-cg.PNG/%EB%94%94%EC%A7%80%ED%84%B8%EA%B2%BD%EC%A0%9C.png?type=w)
 
 > **디지털 경제를 이해해야 하는 이유는?**
 
@@ -50,15 +50,15 @@ N 잡러로 하신 일들입니다 정말 열심히 사셨지요 현재의 모�
 
 단, 시스템이라는 체계는 필수
 
-![](https://mblogthumb-phinf.pstatic.net/MjAyNDA2MTZfMSAg/MDAxNzE4NDkyNjExNzI4.srjyW3uUT3kYYqUtEWkc6RawhhPe0S6qyxN9jSMnZxAg.lpnrJThJFgNtsQEvZwtSiDtnvr8wVknuRDMF8g-0O2sg.PNG/image.png?type=w800)
+![](https://mblogthumb-phinf.pstatic.net/MjAyNDA2MTZfMSAg/MDAxNzE4NDkyNjExNzI4.srjyW3uUT3kYYqUtEWkc6RawhhPe0S6qyxN9jSMnZxAg.lpnrJThJFgNtsQEvZwtSiDtnvr8wVknuRDMF8g-0O2sg.PNG/image.png?type=w)
 
 > 대규모 단일 네트워크를 구축하라
 
 어떻게 구축 효과를 만들어서 경쟁자들에게 진입장벽을 만들 것인가
 
-![](https://mblogthumb-phinf.pstatic.net/MjAyNDA2MTZfMTk3/MDAxNzE4NDkyOTA2MDU0.wRZDIRXDeErW9rah_4XpPBzL5VeEFrtZEITpdPKwdwsg.UJp-tvcxMgQBSnzhyRSElJgdg0_EKRhMi2dw7IVb4KYg.PNG/image.png?type=w800)
+![](https://mblogthumb-phinf.pstatic.net/MjAyNDA2MTZfMTk3/MDAxNzE4NDkyOTA2MDU0.wRZDIRXDeErW9rah_4XpPBzL5VeEFrtZEITpdPKwdwsg.UJp-tvcxMgQBSnzhyRSElJgdg0_EKRhMi2dw7IVb4KYg.PNG/image.png?type=w)
 
-![](https://mblogthumb-phinf.pstatic.net/MjAyNDA2MTZfMjc3/MDAxNzE4NDkzMDQ3NjU4.0oua1nYcbXlgnqCxyNgysQjOUHJm6s6Lo2iAZt6jFb0g._XIRgidFPCAYPKNqaB2W_z1V0QG_iiwhVQnqeajMRjgg.PNG/image.png?type=w800)
+![](https://mblogthumb-phinf.pstatic.net/MjAyNDA2MTZfMjc3/MDAxNzE4NDkzMDQ3NjU4.0oua1nYcbXlgnqCxyNgysQjOUHJm6s6Lo2iAZt6jFb0g._XIRgidFPCAYPKNqaB2W_z1V0QG_iiwhVQnqeajMRjgg.PNG/image.png?type=w)
 
 > 희소성보다는 풍요의 법칙에 따라 움직여
 
@@ -68,7 +68,7 @@ N 잡러로 하신 일들입니다 정말 열심히 사셨지요 현재의 모�
 
 오래된 것들은 가격이 떨어질 수밖에 없다
 
-![](https://mblogthumb-phinf.pstatic.net/MjAyNDA2MTZfMTQx/MDAxNzE4NDk1MTcyODAw.yS74PtMBDEKsYoCiXhN0EVqKmoosWFkm67GiSSSM6i4g.E7UVixG-JUd3PkvgTHFR9Vah4qQETRcHESA4uml57bYg.PNG/image.png?type=w800)
+![](https://mblogthumb-phinf.pstatic.net/MjAyNDA2MTZfMTQx/MDAxNzE4NDk1MTcyODAw.yS74PtMBDEKsYoCiXhN0EVqKmoosWFkm67GiSSSM6i4g.E7UVixG-JUd3PkvgTHFR9Vah4qQETRcHESA4uml57bYg.PNG/image.png?type=w)
 
 > 먼저 네트워크의 가치를 키워
 
@@ -84,19 +84,19 @@ N 잡러로 하신 일들입니다 정말 열심히 사셨지요 현재의 모�
 
 > 지구 전체를 무대로 사유하고 활동하라
 
-![](https://mblogthumb-phinf.pstatic.net/MjAyNDA2MTZfMTAw/MDAxNzE4NDk1NjYzMDk5.koJrU7QUTZ3nlwJc2oM7tSyNbMW6Lnhnzup3t23YdVEg.EbYC6QU2WyewBXcbm7t2Ufy2UnOuMJuecib7Jeu6fh0g.PNG/image.png?type=w800)
+![](https://mblogthumb-phinf.pstatic.net/MjAyNDA2MTZfMTAw/MDAxNzE4NDk1NjYzMDk5.koJrU7QUTZ3nlwJc2oM7tSyNbMW6Lnhnzup3t23YdVEg.EbYC6QU2WyewBXcbm7t2Ufy2UnOuMJuecib7Jeu6fh0g.PNG/image.png?type=w)
 
 > 조화가 아니라 흐름에 투자하라
 
-![](https://mblogthumb-phinf.pstatic.net/MjAyNDA2MTZfMjIz/MDAxNzE4NDk1NzU0OTI0.UJg3XZjsYifCsjlnTPI9Fqx7O0-SXPcQyyYyuVFrCFwg.Q9f8ZtvWPQDbXc1KDk_E7OiB3Hwt3-VPR2iuUSTmPeog.PNG/image.png?type=w800)
+![](https://mblogthumb-phinf.pstatic.net/MjAyNDA2MTZfMjIz/MDAxNzE4NDk1NzU0OTI0.UJg3XZjsYifCsjlnTPI9Fqx7O0-SXPcQyyYyuVFrCFwg.Q9f8ZtvWPQDbXc1KDk_E7OiB3Hwt3-VPR2iuUSTmPeog.PNG/image.png?type=w)
 
 > 기술로 시작해서 신뢰로 끝내
 
-![](https://mblogthumb-phinf.pstatic.net/MjAyNDA2MTZfMjY5/MDAxNzE4NDk1OTI5NDY2.ZSQ7hJArRYvMLGj_rYpXw39EnOPLGSUCFxcmmg0tM9wg.prsjcohJSC3q1msYLmRTzUDJcr1BTwfhy_EesBnxMhAg.PNG/image.png?type=w800)
+![](https://mblogthumb-phinf.pstatic.net/MjAyNDA2MTZfMjY5/MDAxNzE4NDk1OTI5NDY2.ZSQ7hJArRYvMLGj_rYpXw39EnOPLGSUCFxcmmg0tM9wg.prsjcohJSC3q1msYLmRTzUDJcr1BTwfhy_EesBnxMhAg.PNG/image.png?type=w)
 
 > 효율성보다는 기회를 택하라
 
-![](https://mblogthumb-phinf.pstatic.net/MjAyNDA2MTZfMjM1/MDAxNzE4NDk2MDM2Mzcy.XiMaUzdNWGiCVQN3FbqP2vXcvNaYhcD5YzsSpap4GVcg.nbsJpMrT5YETETpotfrM-UKtU7YHcxoN3MeP_4dhuzkg.PNG/image.png?type=w800)
+![](https://mblogthumb-phinf.pstatic.net/MjAyNDA2MTZfMjM1/MDAxNzE4NDk2MDM2Mzcy.XiMaUzdNWGiCVQN3FbqP2vXcvNaYhcD5YzsSpap4GVcg.nbsJpMrT5YETETpotfrM-UKtU7YHcxoN3MeP_4dhuzkg.PNG/image.png?type=w)
 
 **3시간의 알찬 교육을 듣고**
 

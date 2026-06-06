@@ -8,7 +8,6 @@ export const naverSe41Formula = {
   blockIndex: 1,
   blockId: "formula",
   blockLabel: "수식",
-  group: "output",
   sourceUrl: "https://blog.naver.com/mym0404/223034929697",
   inspectPath: "0",
   inputHtml:

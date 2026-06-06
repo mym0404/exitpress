@@ -8,7 +8,6 @@ export const naverSe412ImageGroup = {
   blockIndex: 12,
   blockId: "imageGroup",
   blockLabel: "이미지 그룹",
-  group: "output",
   sourceUrl: "https://blog.naver.com/goyamee/223511986798",
   inspectPath: "0",
   inputHtml:

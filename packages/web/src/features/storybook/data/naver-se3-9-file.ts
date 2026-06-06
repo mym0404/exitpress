@@ -8,7 +8,6 @@ export const naverSe39File = {
   blockIndex: 9,
   blockId: "file",
   blockLabel: "첨부파일",
-  group: "output",
   sourceUrl: "https://blog.naver.com/mym0404/223034929697",
   inspectPath: "0",
   inputHtml:

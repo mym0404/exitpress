@@ -8,7 +8,7 @@ category: 네이버 피플
 categoryPath:
   - 네이버 인사이드
   - 네이버 피플
-thumbnail: https://mblogthumb-phinf.pstatic.net/20100826_135/naver_diary_1282815041285XQPaz_jpg/%B1%E8%BF%B5%C7%CF_%B0%AD%BF%AC_03_naver_diary.jpg?type=w800
+thumbnail: https://mblogthumb-phinf.pstatic.net/20100826_135/naver_diary_1282815041285XQPaz_jpg/%B1%E8%BF%B5%C7%CF_%B0%AD%BF%AC_03_naver_diary.jpg?type=w
 ---
 
 **글을 ‘잘’ 쓴다는 것은 ‘과연’ 무엇인가?**
@@ -23,7 +23,7 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/20100826_135/naver_diary_1282815
 
 우리 이웃 블로거들이 그 꿈에 한걸음 더 다가갈 수 있었던, 김영하 작가의 강연기부 현장입니다.
 
-![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2Fdata43%2F2009%2F4%2F6%2F24%2Fbullet_1_naver_diary.jpg%3Ftype%3Dw3%22&type=w2)**어떤 글이 잘 쓴 글일까요?**
+![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2Fdata43%2F2009%2F4%2F6%2F24%2Fbullet_1_naver_diary.jpg%3Ftype%3Dw3%22&type=w)**어떤 글이 잘 쓴 글일까요?**
 
 “어떤 글이 잘 쓴 글일까요?”
 
@@ -48,11 +48,11 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/20100826_135/naver_diary_1282815
 |   |
 | --- |
 
-![](https://mblogthumb-phinf.pstatic.net/data41/2009/3/19/33/slice_9_naver_blog.jpg?type=w210)  
+![](https://mblogthumb-phinf.pstatic.net/data41/2009/3/19/33/slice_9_naver_blog.jpg?type=w)  
 <'재미난 강연' 중인 김영하 작가\>
 
-![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2Fdata43%2F2009%2F4%2F6%2F24%2Fbullet_1_naver_diary.jpg%3Ftype%3Dw3%22&type=w2) **여긴 남고다.**  
-![](https://mblogthumb-phinf.pstatic.net/data41/2009/3/25/283/slice_naver_blog.jpg?type=w210)고대 그리스 수사학에서는 설득력 있는 연설(글)을 이렇게 말한다고 합니다. 즐겁게 하거나, 감동을 주거나, 유용한 정보가 있거나! 수사학…흠… 마음이 어려워지기 시작합니다.  
+![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2Fdata43%2F2009%2F4%2F6%2F24%2Fbullet_1_naver_diary.jpg%3Ftype%3Dw3%22&type=w) **여긴 남고다.**  
+![](https://mblogthumb-phinf.pstatic.net/data41/2009/3/25/283/slice_naver_blog.jpg?type=w)고대 그리스 수사학에서는 설득력 있는 연설(글)을 이렇게 말한다고 합니다. 즐겁게 하거나, 감동을 주거나, 유용한 정보가 있거나! 수사학…흠… 마음이 어려워지기 시작합니다.  
 아리스토텔레스는 이렇게 정의했다고 하고요. 파토스,에토스,로고스가 있는 글이 잘 쓴 글이다. 감정적으로 다른 사람들의 반응을 즉각 이끌어 내는 것이 파토스이고, 말하는 사람의 인격과 삶을 통해서 글에 힘이 실리는 것이 에토스, 로고스는 대략 짐작할 수 있습니다. 네, 논리입니다. 말이 되냐 안 되냐를 말하는 것이죠. 강의의 수준이 어느 정도였는지 궁금하신 분들, 이 정도로 소개하면 될까요? ^^ 파토스와 에토스와 로고스를 들으면서, 저녁을 안 먹고 온 것이 더 새록새록 해 지고 끝나고 파스타나 먹을까 하는 마음의 소리는 저에게만 들린 걸까요? ^^; 하지만 프리젠테이션 화면에 띄워진 시 한 편으로 분위기는 반전됩니다.
 
 **제목 : 남고**
@@ -71,11 +71,11 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/20100826_135/naver_diary_1282815
 |   |
 | --- |
 
-![](https://mblogthumb-phinf.pstatic.net/data41/2009/3/19/33/slice_9_naver_blog.jpg?type=w210)  
+![](https://mblogthumb-phinf.pstatic.net/data41/2009/3/19/33/slice_9_naver_blog.jpg?type=w)  
 <강연을 청취하고 있는 블로거들\>
 
-![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2Fdata43%2F2009%2F4%2F6%2F24%2Fbullet_1_naver_diary.jpg%3Ftype%3Dw3%22&type=w2) **내 안의 괴물과 만나라**  
-![](https://mblogthumb-phinf.pstatic.net/data41/2009/3/25/283/slice_naver_blog.jpg?type=w210)  
+![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2Fdata43%2F2009%2F4%2F6%2F24%2Fbullet_1_naver_diary.jpg%3Ftype%3Dw3%22&type=w) **내 안의 괴물과 만나라**  
+![](https://mblogthumb-phinf.pstatic.net/data41/2009/3/25/283/slice_naver_blog.jpg?type=w)  
 영화제작자 제리브룩하이머는 이렇게 말했다고 합니다.  
 **‘우리는 운송업에 종사하고 있다. 우리는 한 극장에서 다른 극장으로 관객들을 이동시키는 일을 하고 있다.’**
 
@@ -91,11 +91,11 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/20100826_135/naver_diary_1282815
 |   |
 | --- |
 
-![](https://mblogthumb-phinf.pstatic.net/data41/2009/3/19/33/slice_9_naver_blog.jpg?type=w210)  
+![](https://mblogthumb-phinf.pstatic.net/data41/2009/3/19/33/slice_9_naver_blog.jpg?type=w)  
 <강연 중인 김영하 작가\>
 
-![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2Fdata43%2F2009%2F4%2F6%2F24%2Fbullet_1_naver_diary.jpg%3Ftype%3Dw3%22&type=w2) **첫 거짓말, 그 환상적이고 마법 같은 순간**  
-![](https://mblogthumb-phinf.pstatic.net/data41/2009/3/25/283/slice_naver_blog.jpg?type=w210)그럼 내 안의 깊숙한 곳. 거기로 찾아 들어가 괴물과 만났다면, 그 이후에는요? 강연이 무르익으면서 많은 물음표들이 각자의 머리위로 풍선처럼 떠오르는 게 보이는 것 같았습니다. 프리젠테이션 화면에 한 문장이 띄워졌습니다.
+![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2Fdata43%2F2009%2F4%2F6%2F24%2Fbullet_1_naver_diary.jpg%3Ftype%3Dw3%22&type=w) **첫 거짓말, 그 환상적이고 마법 같은 순간**  
+![](https://mblogthumb-phinf.pstatic.net/data41/2009/3/25/283/slice_naver_blog.jpg?type=w)그럼 내 안의 깊숙한 곳. 거기로 찾아 들어가 괴물과 만났다면, 그 이후에는요? 강연이 무르익으면서 많은 물음표들이 각자의 머리위로 풍선처럼 떠오르는 게 보이는 것 같았습니다. 프리젠테이션 화면에 한 문장이 띄워졌습니다.
 
 **어느날 아침 그레고르 잠자가 불안한 꿈에서 깨어났을 때 그는 침대 속에서 한 마리의 흉측한 갑충으로 변해 있는 자신의 모습을 발견했다.**
 
@@ -110,7 +110,7 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/20100826_135/naver_diary_1282815
 |   |
 | --- |
 
-![](https://mblogthumb-phinf.pstatic.net/data41/2009/3/19/33/slice_9_naver_blog.jpg?type=w210)  
+![](https://mblogthumb-phinf.pstatic.net/data41/2009/3/19/33/slice_9_naver_blog.jpg?type=w)  
 <강연에 몰입한 블로거들\>
 
 아이가 처음 거짓말을 하는 순간. 엄마는 겁이 납니다. 이러다 우리 아이가 거짓말쟁이에 문제아가 되는 건 아닐까… 김영하 작가의 생각은 다릅니다.  
@@ -142,14 +142,14 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/20100826_135/naver_diary_1282815
 |   |
 | --- |
 
-![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2Fdata43%2F2009%2F4%2F6%2F24%2Fbullet_1_naver_diary.jpg%3Ftype%3Dw3%22&type=w2) **김영하 작가의 재능기부, 유엔난민기구 표창 받아**  
-![](https://mblogthumb-phinf.pstatic.net/data41/2009/3/25/283/slice_naver_blog.jpg?type=w210)  
+![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2Fdata43%2F2009%2F4%2F6%2F24%2Fbullet_1_naver_diary.jpg%3Ftype%3Dw3%22&type=w) **김영하 작가의 재능기부, 유엔난민기구 표창 받아**  
+![](https://mblogthumb-phinf.pstatic.net/data41/2009/3/25/283/slice_naver_blog.jpg?type=w)  
 이날 강연이 있기 전, 유엔난민기구(UNHCR) 앤 메리 캠벨 한국대표님이 깜짝 방문하셨는데요. 재능기부를 통해 아이티 난민을 지원해 준 김영하 작가와 콩 기부자들에게 감사의 뜻을 담아 감사패를 전달했습니다.
 
 |   |
 | --- |
 
-![](https://mblogthumb-phinf.pstatic.net/data41/2009/3/19/33/slice_9_naver_blog.jpg?type=w210)  
+![](https://mblogthumb-phinf.pstatic.net/data41/2009/3/19/33/slice_9_naver_blog.jpg?type=w)  
 <앤 메리 캠벨 유엔난민기구 한국대표(좌), 감사패를 수상한 김영하 작가(우)\>
 
 |   |
@@ -162,18 +162,18 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/20100826_135/naver_diary_1282815
 |   |
 | --- |
 
-**![](https://mblogthumb-phinf.pstatic.net/data41/2009/3/17/83/bullet_3_naver_blog.jpg?type=w210) 김영하의 강연 동영상**
+**![](https://mblogthumb-phinf.pstatic.net/data41/2009/3/17/83/bullet_3_naver_blog.jpg?type=w) 김영하의 강연 동영상**
 
-![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2F20101014_115%2Fnaver_diary_1287040206375IGChE_gif%2Fbullet_link_s_naver_diary.gif%3Ftype%3Dw3%22&type=w2)[강연 1](http://blog.naver.com/story_xpress/90099040790)  
-![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2F20101014_115%2Fnaver_diary_1287040206375IGChE_gif%2Fbullet_link_s_naver_diary.gif%3Ftype%3Dw3%22&type=w2)[강연 2](http://blog.naver.com/story_xpress/90099044772)  
-![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2F20101014_115%2Fnaver_diary_1287040206375IGChE_gif%2Fbullet_link_s_naver_diary.gif%3Ftype%3Dw3%22&type=w2)[강연 3](http://blog.naver.com/story_xpress/90099044815)  
-![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2F20101014_115%2Fnaver_diary_1287040206375IGChE_gif%2Fbullet_link_s_naver_diary.gif%3Ftype%3Dw3%22&type=w2)[강연 4](http://blog.naver.com/story_xpress/90099044838)
+![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2F20101014_115%2Fnaver_diary_1287040206375IGChE_gif%2Fbullet_link_s_naver_diary.gif%3Ftype%3Dw3%22&type=w)[강연 1](http://blog.naver.com/story_xpress/90099040790)  
+![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2F20101014_115%2Fnaver_diary_1287040206375IGChE_gif%2Fbullet_link_s_naver_diary.gif%3Ftype%3Dw3%22&type=w)[강연 2](http://blog.naver.com/story_xpress/90099044772)  
+![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2F20101014_115%2Fnaver_diary_1287040206375IGChE_gif%2Fbullet_link_s_naver_diary.gif%3Ftype%3Dw3%22&type=w)[강연 3](http://blog.naver.com/story_xpress/90099044815)  
+![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2F20101014_115%2Fnaver_diary_1287040206375IGChE_gif%2Fbullet_link_s_naver_diary.gif%3Ftype%3Dw3%22&type=w)[강연 4](http://blog.naver.com/story_xpress/90099044838)
 
-![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2F20101014_115%2Fnaver_diary_1287040206375IGChE_gif%2Fbullet_link_s_naver_diary.gif%3Ftype%3Dw3%22&type=w2)[인터뷰 및 현장 스케치 영상](http://blog.naver.com/story_xpress/90099039939)
+![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2F20101014_115%2Fnaver_diary_1287040206375IGChE_gif%2Fbullet_link_s_naver_diary.gif%3Ftype%3Dw3%22&type=w)[인터뷰 및 현장 스케치 영상](http://blog.naver.com/story_xpress/90099039939)
 
-**![](https://mblogthumb-phinf.pstatic.net/data41/2009/3/17/83/bullet_3_naver_blog.jpg?type=w210) [김영하의 스토리특급 바로가기](http://blog.naver.com/story_xpress)**
+**![](https://mblogthumb-phinf.pstatic.net/data41/2009/3/17/83/bullet_3_naver_blog.jpg?type=w) [김영하의 스토리특급 바로가기](http://blog.naver.com/story_xpress)**
 
-**![](https://mblogthumb-phinf.pstatic.net/data41/2009/3/17/83/bullet_3_naver_blog.jpg?type=w210) [김영하의](http://fund.happybean.naver.com/759281) [아이티 지진 피해복구를 위한 콩저금통](http://fund.happybean.naver.com/759281)**
+**![](https://mblogthumb-phinf.pstatic.net/data41/2009/3/17/83/bullet_3_naver_blog.jpg?type=w) [김영하의](http://fund.happybean.naver.com/759281) [아이티 지진 피해복구를 위한 콩저금통](http://fund.happybean.naver.com/759281)**
 
 \* 이 글을 네이버 다이어리 운영진 [미투데이](http://me2day.net/naver_diary)와 [트위터](http://twitter.com/naver_diary), [페이스북](http://facebook.com/naver.diary)을 통해서도 소개해드리고 있습니다.
 
@@ -183,7 +183,7 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/20100826_135/naver_diary_1282815
 
 **작성** | 2010년 08월 26일 목요일 \_ 네이버 다이어리 **운영진 /** 사진제공 : UN난민기구, 고이고이 님
 
-![](https://mblogthumb-phinf.pstatic.net/data42/2009/4/2/101/email_naver_blog.jpg?type=w210)
+![](https://mblogthumb-phinf.pstatic.net/data42/2009/4/2/101/email_naver_blog.jpg?type=w)
 
 |   |
 | --- |

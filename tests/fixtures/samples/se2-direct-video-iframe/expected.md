@@ -8,12 +8,12 @@ category: 자동차 정비
 categoryPath:
   - 자동차 정보
   - 자동차 정비
-thumbnail: https://mblogthumb-phinf.pstatic.net/20130314_59/anglekim3708_136322793013182lNW_JPEG/bloter_net_-2.jpg?type=w800
+thumbnail: https://mblogthumb-phinf.pstatic.net/20130314_59/anglekim3708_136322793013182lNW_JPEG/bloter_net_-2.jpg?type=w
 ---
 
 스마트폰이 차량 진단용 ‘트립컴퓨터’로
 
-![](https://mblogthumb-phinf.pstatic.net/20130314_59/anglekim3708_136322793013182lNW_JPEG/bloter_net_-2.jpg?type=w800)
+![](https://mblogthumb-phinf.pstatic.net/20130314_59/anglekim3708_136322793013182lNW_JPEG/bloter_net_-2.jpg?type=w)
 
 [Video](https://www.youtube-nocookie.com/embed/_AyXNeRbpRk?hl=ko_KR&version=3&__authenticIframe=true)
 
@@ -45,7 +45,7 @@ your smartphone and makes driving safer, more efficient, and fun.
 
 정확 하겠다. 요즘들어서야 조금씩 더 많은 정보를 제공하기 시작했다.
 
-![](https://mblogthumb-phinf.pstatic.net/20130314_74/anglekim3708_13632279298736KnbC_JPEG/bloter_net_-1.jpg?type=w800)
+![](https://mblogthumb-phinf.pstatic.net/20130314_74/anglekim3708_13632279298736KnbC_JPEG/bloter_net_-1.jpg?type=w)
 
 꼭 요즘 차량이 아니더라도 차량 안에는 많은 센서가 달려 있고, 이 센서들이 뽑아내는 데이터를
 
@@ -57,7 +57,7 @@ your smartphone and makes driving safer, more efficient, and fun.
 
 장치다.
 
-![](https://mblogthumb-phinf.pstatic.net/20130314_216/anglekim3708_1363227930358Pw0ga_JPEG/bloter_net_-3.jpg?type=w800)
+![](https://mblogthumb-phinf.pstatic.net/20130314_216/anglekim3708_1363227930358Pw0ga_JPEG/bloter_net_-3.jpg?type=w)
 
 요즘 나오는 자동차의 트립컴퓨터는 이 중에서 운전자에게 필요한 정보를 알려준다. 엔진오일의
 
@@ -79,4 +79,4 @@ your smartphone and makes driving safer, more efficient, and fun.
 
 [http://www.bloter.net/archives/146513](http://www.bloter.net/archives/146513)
 
-![](https://mblogthumb-phinf.pstatic.net/20130314_298/anglekim3708_1363227397556dBy5M_JPEG/bloter_net.jpg?type=w800)
+![](https://mblogthumb-phinf.pstatic.net/20130314_298/anglekim3708_1363227397556dBy5M_JPEG/bloter_net.jpg?type=w)

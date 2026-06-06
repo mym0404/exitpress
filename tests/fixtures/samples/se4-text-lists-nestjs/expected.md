@@ -7,14 +7,14 @@ publishedAt: 2023-01-21T02:38:27+09:00
 category: NestJS
 categoryPath:
   - NestJS
-thumbnail: https://mblogthumb-phinf.pstatic.net/MjAyMzAxMjFfMTcw/MDAxNjc0MjM1Nzk4NzM3.j9xBOnc9ZEYJEjD181utsKj5wRIponNfcL93vCNx204g.c1mi5mJ6YAtuirjyqmyMnDXvwFCcc9IDVIx4MEuEkT0g.JPEG.mym0404/nestjs.jpeg?type=w800
+thumbnail: https://mblogthumb-phinf.pstatic.net/MjAyMzAxMjFfMTcw/MDAxNjc0MjM1Nzk4NzM3.j9xBOnc9ZEYJEjD181utsKj5wRIponNfcL93vCNx204g.c1mi5mJ6YAtuirjyqmyMnDXvwFCcc9IDVIx4MEuEkT0g.JPEG.mym0404/nestjs.jpeg?type=w
 ---
 
 바빠서 공부할 시간은 많이 없는데 대략 공부를 시작해서 독스부터 천천히 읽고있다.
 
 지금까지 읽은 부분은 OVERVIEW 부분이다.
 
-![](https://mblogthumb-phinf.pstatic.net/MjAyMzAxMjFfNTUg/MDAxNjc0MjM1ODU3Mzkz.NmVEff2Zn6WnyyucbOGg3h2djc3LtXSAQPWROyFvUDog.fnpg_7aiAiGa32izgsxiasANsdgvhhwsJfQPyWsgbHEg.PNG.mym0404/SE-4676f277-1a30-4c6d-97f1-884f4936b76a.png?type=w800)
+![](https://mblogthumb-phinf.pstatic.net/MjAyMzAxMjFfNTUg/MDAxNjc0MjM1ODU3Mzkz.NmVEff2Zn6WnyyucbOGg3h2djc3LtXSAQPWROyFvUDog.fnpg_7aiAiGa32izgsxiasANsdgvhhwsJfQPyWsgbHEg.PNG.mym0404/SE-4676f277-1a30-4c6d-97f1-884f4936b76a.png?type=w)
 
 일단 느낀점을 말하자면 구성이 좋다이다.
 

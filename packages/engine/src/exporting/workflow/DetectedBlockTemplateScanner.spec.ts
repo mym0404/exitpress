@@ -80,6 +80,11 @@ const createSe4Html = (componentHtml: string) => `
 `
 
 const se4ImageHtml = createSe4Html(`
+  <div class="se-component se-documentTitle">
+    <div class="se-module se-module-text se-title-text">
+      <p>Post title</p>
+    </div>
+  </div>
   <div class="se-component se-image">
     <a class="se-module-image-link" data-linkdata='{"src":"https://example.com/image.png"}'>
       <img src="https://example.com/image.png" alt="diagram" />
@@ -117,9 +122,29 @@ describe("detectBlockTemplateKeys", () => {
           fetchPostHtml,
         },
       }),
-    ).resolves.toEqual(["naver-se4:image"])
+    ).resolves.toEqual(["naver-se4:documentTitle", "naver-se4:image"])
     expect(fetchPostHtml).toHaveBeenCalledTimes(2)
     expect(fetchPostHtml.mock.calls.map(([logNo]) => logNo).sort()).toEqual(["1", "3"])
     expect(fetchPostHtml).not.toHaveBeenCalledWith("2")
+  })
+
+  it("detects template keys for matched blocks that render no parsed output", async () => {
+    const options = cloneExportOptions({
+      scope: {
+        categoryIds: [1],
+        categoryMode: "exact-selected",
+      },
+    })
+    const fetchPostHtml = vi.fn(async () => se4ImageHtml)
+
+    await expect(
+      detectBlockTemplateKeys({
+        scanResult,
+        options,
+        fetcher: {
+          fetchPostHtml,
+        },
+      }),
+    ).resolves.toEqual(["naver-se4:documentTitle", "naver-se4:image"])
   })
 })

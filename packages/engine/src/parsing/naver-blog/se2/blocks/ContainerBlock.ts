@@ -2,7 +2,7 @@ import { compactText } from "@exitpress/engine/shared/text/util/TextCompaction.j
 
 import type { CheerioAPI } from "cheerio"
 
-import type { ParserBlockContext } from "../../core/ParserBlock.js"
+import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/ParserBlock.js"
 
 import { ContainerParserBlock } from "../../core/ParserBlock.js"
 
@@ -100,6 +100,11 @@ export const isSpacerBlock = ({
 export class NaverSe2ContainerBlock extends ContainerParserBlock {
   override readonly id = "container"
   override readonly label = "중첩 컨테이너"
+  override readonly templateDefinition = {
+    label: this.label,
+    presets: [{ id: "ignore", label: "무시", template: "" }],
+    props: {},
+  } satisfies ParserBlockTemplateDefinition
 
   override match({ $, node, $node, matchLeafNode }: ParserBlockContext) {
     return (

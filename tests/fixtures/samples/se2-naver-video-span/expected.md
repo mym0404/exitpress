@@ -7,7 +7,7 @@ publishedAt: 2015-10-27T19:19:53+09:00
 category: 서비스
 categoryPath:
   - 서비스
-thumbnail: https://mblogthumb-phinf.pstatic.net/20151027_132/naver_search_1445940622801ltQmt_PNG/TV%BC%D3%C0%CC%BB%F3%C7%B0.png?type=w800
+thumbnail: https://mblogthumb-phinf.pstatic.net/20151027_132/naver_search_1445940622801ltQmt_PNG/TV%BC%D3%C0%CC%BB%F3%C7%B0.png?type=w
 ---
 
 **#검색\_꿀팁**
@@ -42,7 +42,7 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/20151027_132/naver_search_144594
 
 최근 회차에서 입고 사용한 아이템 정보를 알려드립니다.
 
-![](https://mblogthumb-phinf.pstatic.net/20151027_132/naver_search_1445940622801ltQmt_PNG/TV%BC%D3%C0%CC%BB%F3%C7%B0.png?type=w800)
+![](https://mblogthumb-phinf.pstatic.net/20151027_132/naver_search_1445940622801ltQmt_PNG/TV%BC%D3%C0%CC%BB%F3%C7%B0.png?type=w)
 
 ![](https://storep-phinf.pstatic.net/puuung_01/original_25.png?type=p100_100)
 
@@ -58,7 +58,7 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/20151027_132/naver_search_144594
 
 드라마 속 연예인 패션부터 따라해 보는 것 은 어떨까요 :)
 
-![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2F20150807_168%2Fnaver_search_14389376370726JcFF_PNG%2Fprofile_322.png%3Ftype%3Dw2%22&type=w2)
+![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2F20150807_168%2Fnaver_search_14389376370726JcFF_PNG%2Fprofile_322.png%3Ftype%3Dw2%22&type=w)
 
 여러분이 직접 경험하신 똑똑한 검색을 나누고 싶으세요?
 

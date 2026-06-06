@@ -8,7 +8,6 @@ export const naverSe49TalkTalk = {
   blockIndex: 9,
   blockId: "talkTalk",
   blockLabel: "톡톡 링크",
-  group: "output",
   sourceUrl: "https://blog.naver.com/mym0404/223034929697",
   inspectPath: "0",
   inputHtml:

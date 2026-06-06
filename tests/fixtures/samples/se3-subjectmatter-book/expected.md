@@ -7,10 +7,10 @@ publishedAt: 2018-06-13T20:21:00+09:00
 category: 책
 categoryPath:
   - 책
-thumbnail: https://bookthumb-phinf.pstatic.net/cover/108/442/10844211.jpg?type=w150&udate=20160809
+thumbnail: https://bookthumb-phinf.pstatic.net/cover/108/442/10844211.jpg?type=w&udate=20160809
 ---
 
-![](https://bookthumb-phinf.pstatic.net/cover/108/442/10844211.jpg?type=w150&udate=20160809)
+![](https://bookthumb-phinf.pstatic.net/cover/108/442/10844211.jpg?type=w&udate=20160809)
 
 **캐스터브리지의 시장**  
 저자: 토마스 하디  
