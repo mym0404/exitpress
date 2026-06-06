@@ -1,5 +1,5 @@
 <p align="left">
-  <img src="public/brand/logo.png" alt="Exitpress logo" width="88" />
+  <img src="packages/web/public/brand/logo.png" alt="Exitpress logo" width="88" />
 </p>
 
 # Exitpress
@@ -12,7 +12,7 @@ Exitpress는 공개 블로그 글을 스캔해 Markdown, frontmatter, 로컬 자
 
 [Demo](https://mym0404.github.io/exitpress/storybook/)
 
-![Exitpress Open Graph image](public/brand/og-image.jpg)
+![Exitpress Open Graph image](packages/web/public/brand/og-image.jpg)
 
 ## 내 블로그의 특정 블록이 파싱되지 않아요
 
