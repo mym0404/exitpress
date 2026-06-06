@@ -15,12 +15,12 @@ export class NaverSe4OembedBlock extends LeafParserBlock {
   override readonly templateDefinition = {
     label: this.label,
     presets: [
-      { id: "link", label: "링크", template: "[${title}](${url})" },
+      { id: "link", label: "링크", template: "{{ `[${title}](${url})` }}" },
       {
         id: "link-description",
         label: "링크와 설명",
         template:
-          "${description ? '[' + title + '](' + url + ')\\n' + description : '[' + title + '](' + url + ')'}",
+          "{{ description ? `[${title}](${url})\\n${description}` : `[${title}](${url})` }}",
       },
     ],
     props: {

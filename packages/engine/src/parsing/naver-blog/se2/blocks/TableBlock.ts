@@ -8,7 +8,7 @@ import { LeafParserBlock } from "../../core/ParserBlock.js"
 const toParagraphBlockId = (blockId: string) =>
   blockId.replace(/:table$/, ":paragraph").replace(/^table$/, "paragraph")
 const tableTemplate =
-  "${rows.length > 0 ? '| ' + rows[0].map((cell) => cell.text).join(' | ') + ' |\\n| ' + rows[0].map((cell) => '---').join(' | ') + ' |\\n' + rows.slice(1).map((row) => '| ' + row.map((cell) => cell.text).join(' | ') + ' |').join('\\n') : html}"
+  "{{ rows.length > 0 ? `| ${rows[0].map((cell) => cell.text).join(' | ')} |\\n| ${rows[0].map((cell) => '---').join(' | ')} |\\n${rows.slice(1).map((row) => '| ' + row.map((cell) => cell.text).join(' | ') + ' |').join('\\n')}` : html }}"
 
 export class NaverSe2TableBlock extends LeafParserBlock {
   override readonly id = "table"

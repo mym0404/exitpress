@@ -13,12 +13,9 @@ const allowedTopLevelOptionKeys = [
 const allowedScopeKeys = ["categoryIds", "categoryMode", "dateFrom", "dateTo"] as const
 const allowedStructureKeys = [
   "groupByCategory",
-  "includeDateInPostFolderName",
-  "includeLogNoInPostFolderName",
   "slugStyle",
   "slugWhitespace",
-  "postFolderNameMode",
-  "postFolderNameCustomTemplate",
+  "postFolderNameTemplate",
 ] as const
 const allowedFrontmatterKeys = ["enabled", "fields", "aliases"] as const
 const allowedFrontmatterFieldKeys = [
@@ -49,7 +46,6 @@ const allowedLinksKeys = ["sameBlogPostMode", "sameBlogPostCustomUrlTemplate"] a
 const categoryModes = ["selected-and-descendants", "exact-selected"] as const
 const slugStyles = ["kebab", "snake", "keep-title"] as const
 const slugWhitespaces = ["dash", "underscore", "keep-space"] as const
-const postFolderNameModes = ["preset", "custom-template"] as const
 const imageHandlingModes = ["download", "remote", "download-and-upload"] as const
 const stickerAssetModes = ["ignore", "download-original"] as const
 const thumbnailSources = ["post-list-first", "first-body-image", "none"] as const
@@ -192,22 +188,6 @@ const validateStructureOptions = (value: unknown, optionsPath: string) => {
     structure.groupByCategory = groupByCategory
   }
 
-  if ("includeDateInPostFolderName" in value) {
-    const includeDateInPostFolderName = value.includeDateInPostFolderName
-    assertBoolean(includeDateInPostFolderName, "structure.includeDateInPostFolderName", optionsPath)
-    structure.includeDateInPostFolderName = includeDateInPostFolderName
-  }
-
-  if ("includeLogNoInPostFolderName" in value) {
-    const includeLogNoInPostFolderName = value.includeLogNoInPostFolderName
-    assertBoolean(
-      includeLogNoInPostFolderName,
-      "structure.includeLogNoInPostFolderName",
-      optionsPath,
-    )
-    structure.includeLogNoInPostFolderName = includeLogNoInPostFolderName
-  }
-
   if ("slugStyle" in value) {
     const slugStyle = value.slugStyle
     assertEnum(slugStyle, slugStyles, "structure.slugStyle", optionsPath)
@@ -220,20 +200,10 @@ const validateStructureOptions = (value: unknown, optionsPath: string) => {
     structure.slugWhitespace = slugWhitespace
   }
 
-  if ("postFolderNameMode" in value) {
-    const postFolderNameMode = value.postFolderNameMode
-    assertEnum(postFolderNameMode, postFolderNameModes, "structure.postFolderNameMode", optionsPath)
-    structure.postFolderNameMode = postFolderNameMode
-  }
-
-  if ("postFolderNameCustomTemplate" in value) {
-    const postFolderNameCustomTemplate = value.postFolderNameCustomTemplate
-    assertString(
-      postFolderNameCustomTemplate,
-      "structure.postFolderNameCustomTemplate",
-      optionsPath,
-    )
-    structure.postFolderNameCustomTemplate = postFolderNameCustomTemplate
+  if ("postFolderNameTemplate" in value) {
+    const postFolderNameTemplate = value.postFolderNameTemplate
+    assertString(postFolderNameTemplate, "structure.postFolderNameTemplate", optionsPath)
+    structure.postFolderNameTemplate = postFolderNameTemplate
   }
 
   return structure

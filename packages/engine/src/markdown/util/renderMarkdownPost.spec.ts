@@ -13,7 +13,7 @@ import { renderMarkdownPost } from "./renderMarkdownPost.js"
 
 const markdownFilePath = createTestPath("markdown-renderer", "posts", "test.md")
 const tableTemplate =
-  "${rows.length > 0 ? '| ' + rows[0].map((cell) => cell.text).join(' | ') + ' |\\n| ' + rows[0].map((cell) => '---').join(' | ') + ' |\\n' + rows.slice(1).map((row) => '| ' + row.map((cell) => cell.text).join(' | ') + ' |').join('\\n') : html}"
+  "{{ rows.length > 0 ? `| ${rows[0].map((cell) => cell.text).join(' | ')} |\\n| ${rows[0].map((cell) => '---').join(' | ')} |\\n${rows.slice(1).map((row) => '| ' + row.map((cell) => cell.text).join(' | ') + ' |').join('\\n')}` : html }}"
 
 const category: CategoryInfo = {
   id: 1,
@@ -38,10 +38,10 @@ const post: PostSummary = {
 }
 
 const defaultBlockTemplates = {
-  "naver-se4:paragraph": "${text}",
-  "naver-se4:quote": "> ${text}",
-  "naver-se4:image": "![${alt}](${url})",
-  "naver-se4:video": "[${title}](${url})",
+  "naver-se4:paragraph": "{{ text }}",
+  "naver-se4:quote": "> {{ text }}",
+  "naver-se4:image": "{{ `![${alt}](${url})` }}",
+  "naver-se4:video": "{{ `[${title}](${url})` }}",
   "naver-se4:table": tableTemplate,
 }
 
@@ -118,7 +118,7 @@ describe("renderMarkdownPost", () => {
 
   it("uses custom templates by blockId", async () => {
     const options = defaultExportOptions()
-    options.blockOutputs.templates["naver-se4:paragraph"] = "CUSTOM ${text}"
+    options.blockOutputs.templates["naver-se4:paragraph"] = "CUSTOM {{ text }}"
 
     const rendered = await render({
       options,

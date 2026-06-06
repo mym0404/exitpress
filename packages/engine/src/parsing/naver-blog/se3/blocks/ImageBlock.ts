@@ -76,7 +76,7 @@ export class NaverSe3ImageBlock extends LeafParserBlock {
       {
         id: "default",
         label: "이미지 마크다운",
-        template: "![${alt}](${url})",
+        template: "{{ `![${alt}](${url})` }}",
       },
     ],
     props: {

@@ -11,7 +11,7 @@ export class NaverSe2TextElementBlock extends LeafParserBlock {
   override readonly label = "문단"
   override readonly templateDefinition = {
     label: this.label,
-    presets: [{ id: "default", label: "본문", template: "${text}" }],
+    presets: [{ id: "default", label: "본문", template: "{{ text }}" }],
     props: {
       text: { label: "본문", type: "string" },
     },

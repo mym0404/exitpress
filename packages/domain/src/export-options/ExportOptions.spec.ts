@@ -35,13 +35,13 @@ describe("export options", () => {
     expect(options.links.sameBlogPostCustomUrlTemplate).toBe("")
     expect(options.blockOutputs.templates).toEqual({})
     expect(options.structure.groupByCategory).toBe(true)
-    expect(options.structure.includeDateInPostFolderName).toBe(true)
-    expect(options.structure.includeLogNoInPostFolderName).toBe(false)
     expect(options.structure.slugStyle).toBe("snake")
     expect(options.structure.slugWhitespace).toBe("underscore")
-    expect(options.structure.postFolderNameMode).toBe("preset")
-    expect(options.structure.postFolderNameCustomTemplate).toBe("")
+    expect(options.structure.postFolderNameTemplate).toBe("{{ date }}-{{ slug }}")
     expect(Object.hasOwn(options.structure, "postDirectoryName")).toBe(false)
+    expect(Object.hasOwn(options.structure, "postFolderNameMode")).toBe(false)
+    expect(Object.hasOwn(options.structure, "includeDateInPostFolderName")).toBe(false)
+    expect(Object.hasOwn(options.structure, "includeLogNoInPostFolderName")).toBe(false)
     expect(Object.hasOwn(options.assets, "assetPathMode")).toBe(false)
   })
 
@@ -49,30 +49,32 @@ describe("export options", () => {
     const options = cloneExportOptions({
       blockOutputs: {
         templates: {
-          "naver-se4:image": "![${alt}](${url})",
+          "naver-se4:image": "{{ `![${alt}](${url})` }}",
         },
       },
     })
 
     expect(options.blockOutputs.templates).toEqual({
-      "naver-se4:image": "![${alt}](${url})",
+      "naver-se4:image": "{{ `![${alt}](${url})` }}",
     })
   })
 
   it("keeps block output templates from persisted options", () => {
     const sanitized = sanitizePersistedExportOptions(
-      JSON.parse(`{
-        "blockOutputs": {
-          "templates": {
-            "naver-se4:image": "![\${alt}](\${url})",
-            "naver-se4:code": 123
-          }
-        }
-      }`),
+      JSON.parse(
+        JSON.stringify({
+          blockOutputs: {
+            templates: {
+              "naver-se4:image": "{{ `![${alt}](${url})` }}",
+              "naver-se4:code": 123,
+            },
+          },
+        }),
+      ),
     )
 
     expect(sanitized.blockOutputs?.templates).toEqual({
-      "naver-se4:image": "![${alt}](${url})",
+      "naver-se4:image": "{{ `![${alt}](${url})` }}",
     })
   })
 
@@ -155,16 +157,14 @@ describe("export options", () => {
       structure: {
         slugStyle: "kebab",
         slugWhitespace: "dash",
-        postFolderNameMode: "custom-template",
-        postFolderNameCustomTemplate: "{date}-{slug}",
+        postFolderNameTemplate: "{{ date }}-{{ slug }}",
       },
     })
 
     expect(sanitized.structure).toEqual({
       slugStyle: "kebab",
       slugWhitespace: "dash",
-      postFolderNameMode: "custom-template",
-      postFolderNameCustomTemplate: "{date}-{slug}",
+      postFolderNameTemplate: "{{ date }}-{{ slug }}",
     })
   })
 
@@ -237,19 +237,18 @@ describe("export options", () => {
     expect(optionDescriptions["structure-slugStyle"]).toContain("카테고리")
     expect(optionDescriptions["structure-slugWhitespace"]).toContain("공백")
     expect(optionDescriptions["structure-slugWhitespace"]).toContain("카테고리")
-    expect(optionDescriptions["structure-postFolderNameMode"]).toContain("커스텀 템플릿")
-    expect(optionDescriptions["structure-postFolderNameCustomTemplate"]).toContain("{slug}")
+    expect(optionDescriptions["structure-postFolderNameTemplate"]).toContain("{{ slug }}")
     expect(optionDescriptions["assets-imageHandlingMode"]).toContain("업로드")
     expect(optionDescriptions["assets-compressionEnabled"]).toContain("압축")
     expect(optionDescriptions["assets-downloadFailureMode"]).toContain("원본 URL")
     expect(optionDescriptions["assets-stickerAssetMode"]).toContain("플랫폼 스티커")
     expect(optionDescriptions["links-sameBlogPostMode"]).toContain("같은 블로그")
-    expect(optionDescriptions["links-sameBlogPostCustomUrlTemplate"]).toContain("{slug}")
-    expect(optionDescriptions["links-sameBlogPostCustomUrlTemplate"]).toContain("{category}")
-    expect(optionDescriptions["links-sameBlogPostCustomUrlTemplate"]).toContain("{title}")
-    expect(optionDescriptions["links-sameBlogPostCustomUrlTemplate"]).toContain("{date}")
-    expect(optionDescriptions["links-sameBlogPostCustomUrlTemplate"]).toContain("{YYYY}")
-    expect(optionDescriptions["structure-postFolderNameCustomTemplate"]).toContain("{MM}")
+    expect(optionDescriptions["links-sameBlogPostCustomUrlTemplate"]).toContain("{{ slug }}")
+    expect(optionDescriptions["links-sameBlogPostCustomUrlTemplate"]).toContain("{{ category }}")
+    expect(optionDescriptions["links-sameBlogPostCustomUrlTemplate"]).toContain("{{ title }}")
+    expect(optionDescriptions["links-sameBlogPostCustomUrlTemplate"]).toContain("{{ date }}")
+    expect(optionDescriptions["links-sameBlogPostCustomUrlTemplate"]).toContain("{{ YYYY }}")
+    expect(optionDescriptions["structure-postFolderNameTemplate"]).toContain("{{ MM }}")
     expect(optionDescriptions["assets-assetPathMode"]).toBeUndefined()
   })
 })

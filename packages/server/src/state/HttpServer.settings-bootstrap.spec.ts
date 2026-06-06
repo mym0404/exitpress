@@ -263,8 +263,7 @@ describe("http server settings bootstrap", () => {
             groupByCategory: boolean
             slugStyle: string
             slugWhitespace: string
-            postFolderNameMode: string
-            postFolderNameCustomTemplate: string
+            postFolderNameTemplate: string
           }
           frontmatter: {
             aliases: {
@@ -281,8 +280,7 @@ describe("http server settings bootstrap", () => {
       expect(body.options.structure.groupByCategory).toBe(false)
       expect(body.options.structure.slugStyle).toBe("snake")
       expect(body.options.structure.slugWhitespace).toBe("underscore")
-      expect(body.options.structure.postFolderNameMode).toBe("preset")
-      expect(body.options.structure.postFolderNameCustomTemplate).toBe("")
+      expect(body.options.structure.postFolderNameTemplate).toBe("{{ date }}-{{ slug }}")
       expect(body.options.frontmatter.aliases.title).toBe("postTitle")
       expect(body.lastOutputDir).toBe("./output")
     } finally {

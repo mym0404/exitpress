@@ -6,13 +6,13 @@ describe("renderBlockTemplates", () => {
   it("renders plain text and expressions from props", () => {
     const markdown = renderBlockTemplates([
       {
-        template: "## ${title}",
+        template: "## {{ title }}",
         props: {
           title: "Hello",
         },
       },
       {
-        template: "![${alt}](${url})",
+        template: "{{ `![${alt}](${url})` }}",
         props: {
           alt: "cover",
           url: "assets/cover.png",
@@ -27,17 +27,52 @@ describe("renderBlockTemplates", () => {
     expect(() =>
       renderBlockTemplates([
         {
-          template: "${missing}",
+          template: "{{ missing }}",
           props: {},
         },
       ]),
     ).toThrow(/missing identifier/)
   })
 
+  it("renders literal delimiters from string literals", () => {
+    const markdown = renderBlockTemplates([
+      {
+        template: "{{ '{{}}' }}",
+        props: {},
+      },
+    ])
+
+    expect(markdown).toBe("{{}}")
+  })
+
+  it("ignores closing delimiters inside string literals", () => {
+    const markdown = renderBlockTemplates([
+      {
+        template: "{{ 'before }} after' }}",
+        props: {},
+      },
+    ])
+
+    expect(markdown).toBe("before }} after")
+  })
+
+  it("fails when an expression is not closed", () => {
+    expect(() =>
+      renderBlockTemplates([
+        {
+          template: "{{ title",
+          props: {
+            title: "Hello",
+          },
+        },
+      ]),
+    ).toThrow(/unterminated template expression/)
+  })
+
   it("preserves the line prefix for multiline expression values", () => {
     const markdown = renderBlockTemplates([
       {
-        template: "> ${text}",
+        template: "> {{ text }}",
         props: {
           text: "First line\nSecond line",
         },

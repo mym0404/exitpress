@@ -27,7 +27,7 @@ export default defineConfig({
   },
   build: {
     outDir: path.join(repoRootDir, "dist/client"),
-    emptyOutDir: false,
+    emptyOutDir: true,
     chunkSizeWarningLimit: 900,
   },
 })

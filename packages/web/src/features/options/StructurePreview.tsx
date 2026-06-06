@@ -7,6 +7,8 @@ import type { SVGProps } from "react"
 import { Collapsible, CollapsibleContent } from "../../components/ui/Collapsible.js"
 import { cn } from "../../lib/Cn.js"
 
+import { getTemplatePreview } from "./TemplatePreview.js"
+
 type StructurePreviewTreeNode =
   | {
       kind: "file"
@@ -53,18 +55,21 @@ const appendStructurePreviewPost = ({
 }) => {
   const postTree: StructurePreviewTreeNode = {
     kind: "folder",
-    name: buildPostFolderName({
-      post: {
-        blogId: "mym0404",
-        logNo: post.logNo,
-        title: post.title,
-        publishedAt: post.publishedAt,
-        categoryName: post.categoryPath.at(-1),
-      },
-      options: {
-        structure: options,
-      },
-    }),
+    name:
+      getTemplatePreview(() =>
+        buildPostFolderName({
+          post: {
+            blogId: "mym0404",
+            logNo: post.logNo,
+            title: post.title,
+            publishedAt: post.publishedAt,
+            categoryName: post.categoryPath.at(-1),
+          },
+          options: {
+            structure: options,
+          },
+        }),
+      ) ?? post.logNo,
     defaultOpen: true,
     items: [
       {
@@ -243,8 +248,12 @@ export const StructurePreviewTree = ({
         </span>
       </div>
       <CollapsibleContent className="grid gap-0.5 border-l border-border pl-2.5">
-        {node.items.map((child) => (
-          <StructurePreviewTree key={`${node.name}:${child.name}`} node={child} depth={depth + 1} />
+        {node.items.map((child, index) => (
+          <StructurePreviewTree
+            key={`${node.name}:${child.name}:${index}`}
+            node={child}
+            depth={depth + 1}
+          />
         ))}
       </CollapsibleContent>
     </Collapsible>

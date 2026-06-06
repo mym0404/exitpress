@@ -11,7 +11,7 @@ import { LeafParserBlock } from "../../core/ParserBlock.js"
 import { findInComponentRoot, textOutsideNestedComponents } from "./util/ComponentBoundary.js"
 
 const imageStripTemplate =
-  "${images.map(image => image.caption ? '![' + image.alt + '](' + image.url + ')\\n' + image.caption : '![' + image.alt + '](' + image.url + ')').join('\\n\\n')}"
+  "{{ images.map(image => image.caption ? `![${image.alt}](${image.url})\\n${image.caption}` : `![${image.alt}](${image.url})`).join('\\n\\n') }}"
 const toParagraphBlockId = (blockId: string) =>
   blockId.replace(/:imageStrip$/, ":paragraph").replace(/^imageStrip$/, "paragraph")
 

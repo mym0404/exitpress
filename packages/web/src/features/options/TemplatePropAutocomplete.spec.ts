@@ -5,22 +5,15 @@ import { createTemplatePropCompletionSource } from "./TemplatePropAutocomplete.j
 const getCompletionLabels = ({
   template,
   cursor = template.length,
-  syntax = "dollar-brace",
 }: {
   template: string
   cursor?: number
-  syntax?: "dollar-brace" | "brace"
 }) => {
-  const source = createTemplatePropCompletionSource(
-    {
-      caption: { label: "캡션", type: "string?" },
-      slug: { label: "Slug", type: "string" },
-      url: { label: "URL", type: "string" },
-    },
-    {
-      syntax,
-    },
-  )
+  const source = createTemplatePropCompletionSource({
+    caption: { label: "캡션", type: "string?" },
+    slug: { label: "Slug", type: "string" },
+    url: { label: "URL", type: "string" },
+  })
 
   return (
     source({
@@ -37,18 +30,11 @@ const getCompletionLabels = ({
 
 describe("createTemplatePropCompletionSource", () => {
   it("suggests matching props inside template expressions", () => {
-    expect(getCompletionLabels({ template: "![${c" })).toEqual(["caption"])
-  })
-
-  it("suggests matching props inside brace template variables", () => {
-    expect(getCompletionLabels({ template: "https://blog/{s", syntax: "brace" })).toEqual(["slug"])
+    expect(getCompletionLabels({ template: "{{ c" })).toEqual(["caption"])
   })
 
   it("does not suggest props outside template expressions", () => {
     expect(getCompletionLabels({ template: "caption" })).toEqual([])
-    expect(getCompletionLabels({ template: "![${caption}] text" })).toEqual([])
-    expect(getCompletionLabels({ template: "https://blog/{slug}/post", syntax: "brace" })).toEqual(
-      [],
-    )
+    expect(getCompletionLabels({ template: "{{ caption }} text" })).toEqual([])
   })
 })

@@ -20,7 +20,7 @@ export class NaverSe4MapBlock extends LeafParserBlock {
         id: "place-links",
         label: "장소 링크",
         template:
-          "${places.map(place => '[' + place.name + '](' + place.url + ')' + (place.address ? '\\n' + place.address : '')).join('\\n\\n')}",
+          "{{ places.map(place => place.address ? `[${place.name}](${place.url})\\n${place.address}` : `[${place.name}](${place.url})`).join('\\n\\n') }}",
       },
     ],
     props: {

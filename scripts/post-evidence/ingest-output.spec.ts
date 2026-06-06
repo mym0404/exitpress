@@ -21,12 +21,9 @@ const createManifest = (overrides: Partial<ExportManifest> = {}): ExportManifest
     },
     structure: {
       groupByCategory: true,
-      includeDateInPostFolderName: true,
-      includeLogNoInPostFolderName: false,
       slugStyle: "snake",
       slugWhitespace: "underscore",
-      postFolderNameMode: "preset",
-      postFolderNameCustomTemplate: "",
+      postFolderNameTemplate: "{{ date }}-{{ slug }}",
     },
     frontmatter: {
       enabled: true,

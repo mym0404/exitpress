@@ -75,7 +75,7 @@ export class NaverSe3VideoBlock extends LeafParserBlock {
       {
         id: "default",
         label: "링크",
-        template: "[${title}](${url})",
+        template: "{{ `[${title}](${url})` }}",
       },
     ],
     props: {

@@ -120,7 +120,7 @@ describe("post-link-rewriter", () => {
         links: {
           sameBlogPostMode: "custom-url",
           sameBlogPostCustomUrlTemplate:
-            "https://myblog/{category}/{title}/{YYYY}/{MM}/{DD}/{YY}/{M}/{D}/{blogId}/{logNo}/{slug}",
+            "https://myblog/{{ category }}/{{ title }}/{{ YYYY }}/{{ MM }}/{{ DD }}/{{ YY }}/{{ M }}/{{ D }}/{{ blogId }}/{{ logNo }}/{{ slug }}",
         },
       },
       targets,
@@ -137,8 +137,7 @@ describe("post-link-rewriter", () => {
   it("uses custom post folder name templates for relative export paths", () => {
     const options = defaultExportOptions()
 
-    options.structure.postFolderNameMode = "custom-template"
-    options.structure.postFolderNameCustomTemplate = "{year}_{month}_{logNo}_{slug}"
+    options.structure.postFolderNameTemplate = "{{ year }}_{{ month }}_{{ logNo }}_{{ slug }}"
 
     const targets = buildPostLinkTargets({
       outputDir: testExportDir,

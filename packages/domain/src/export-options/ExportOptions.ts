@@ -125,12 +125,9 @@ export const sanitizePersistedExportOptions = (
   if (options?.structure) {
     sanitized.structure = {
       groupByCategory: options.structure.groupByCategory,
-      includeDateInPostFolderName: options.structure.includeDateInPostFolderName,
-      includeLogNoInPostFolderName: options.structure.includeLogNoInPostFolderName,
       slugStyle: options.structure.slugStyle,
       slugWhitespace: options.structure.slugWhitespace,
-      postFolderNameMode: options.structure.postFolderNameMode,
-      postFolderNameCustomTemplate: options.structure.postFolderNameCustomTemplate,
+      postFolderNameTemplate: options.structure.postFolderNameTemplate,
     }
 
     Object.keys(sanitized.structure).forEach((key) => {

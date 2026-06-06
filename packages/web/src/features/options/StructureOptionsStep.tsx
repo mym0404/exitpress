@@ -9,7 +9,6 @@ import {
   OptionSection,
   OptionSelectField,
   optionEmbeddedPanelClass,
-  RadioField,
 } from "./OptionControls.js"
 import { postTemplatePropDefinitions } from "./PostTemplateProps.js"
 import {
@@ -18,6 +17,7 @@ import {
   structurePreviewSample,
 } from "./StructurePreview.js"
 import { TemplateEditorCard } from "./TemplateEditorCard.js"
+import { getTemplatePreview } from "./TemplatePreview.js"
 
 export const StructureOptionsStep = ({
   outputDir,
@@ -37,15 +37,17 @@ export const StructureOptionsStep = ({
     publishedAt: structurePreviewSample.posts[0]?.publishedAt ?? "2026-04-11T04:00:00.000Z",
     categoryName: structurePreviewSample.posts[0]?.categoryPath.at(-1) ?? "React",
   }
-  const postFolderNameTemplate = options.structure.postFolderNameCustomTemplate.trim()
+  const postFolderNameTemplate = options.structure.postFolderNameTemplate.trim()
   const postFolderNamePreview =
     postFolderNameTemplate &&
-    buildPostFolderName({
-      post: structureTemplatePreviewPost,
-      options: {
-        structure: options.structure,
-      },
-    })
+    getTemplatePreview(() =>
+      buildPostFolderName({
+        post: structureTemplatePreviewPost,
+        options: {
+          structure: options.structure,
+        },
+      }),
+    )
   const structurePreviewTree = buildStructurePreviewTree({
     outputDir,
     options,
@@ -65,42 +67,6 @@ export const StructureOptionsStep = ({
             structure: {
               ...current.structure,
               groupByCategory: checked,
-            },
-          }))
-        }
-      />
-
-      <CheckField
-        inputId="structure-includeDateInPostFolderName"
-        optionKey="structure-includeDateInPostFolderName"
-        label="글 폴더 이름에 날짜 포함"
-        description={description("structure-includeDateInPostFolderName")}
-        checked={options.structure.includeDateInPostFolderName}
-        disabled={options.structure.postFolderNameMode === "custom-template"}
-        onChange={(checked) =>
-          onOptionsChange((current) => ({
-            ...current,
-            structure: {
-              ...current.structure,
-              includeDateInPostFolderName: checked,
-            },
-          }))
-        }
-      />
-
-      <CheckField
-        inputId="structure-includeLogNoInPostFolderName"
-        optionKey="structure-includeLogNoInPostFolderName"
-        label="글 폴더 이름에 logNo 포함"
-        description={description("structure-includeLogNoInPostFolderName")}
-        checked={options.structure.includeLogNoInPostFolderName}
-        disabled={options.structure.postFolderNameMode === "custom-template"}
-        onChange={(checked) =>
-          onOptionsChange((current) => ({
-            ...current,
-            structure: {
-              ...current.structure,
-              includeLogNoInPostFolderName: checked,
             },
           }))
         }
@@ -159,91 +125,43 @@ export const StructureOptionsStep = ({
         />
       </OptionField>
 
-      <div className="grid gap-4 xl:col-span-2">
-        <RadioField
-          inputId="structure-postFolderNameMode-preset"
-          name="structure-postFolderNameMode"
-          optionKey="structure-postFolderNameMode"
-          label="기본 규칙으로 글 폴더 이름 만들기"
-          description="날짜, logNo, slug 규칙을 조합합니다."
-          checked={options.structure.postFolderNameMode === "preset"}
-          onChange={() =>
+      <div className="grid gap-3 xl:col-span-2">
+        <TemplateEditorCard
+          title="폴더명 템플릿"
+          editorId="structure-postFolderNameTemplate"
+          props={postTemplatePropDefinitions}
+          value={options.structure.postFolderNameTemplate}
+          minHeight="6.5rem"
+          surface="embedded"
+          onTemplateChange={(postFolderNameTemplate) =>
             onOptionsChange((current) => ({
               ...current,
               structure: {
                 ...current.structure,
-                postFolderNameMode: "preset",
+                postFolderNameTemplate,
               },
             }))
           }
         />
 
-        <RadioField
-          inputId="structure-postFolderNameMode-custom-template"
-          name="structure-postFolderNameMode"
-          optionKey="structure-postFolderNameMode"
-          label="템플릿으로 글 폴더 이름 직접 구성"
-          description={description("structure-postFolderNameMode")}
-          checked={options.structure.postFolderNameMode === "custom-template"}
-          onChange={() =>
-            onOptionsChange((current) => ({
-              ...current,
-              structure: {
-                ...current.structure,
-                postFolderNameMode: "custom-template",
-              },
-            }))
-          }
-        >
-          {options.structure.postFolderNameMode === "custom-template" ? (
-            <div className="grid gap-3 pl-7">
-              <TemplateEditorCard
-                title="폴더명 템플릿"
-                editorId="structure-postFolderNameCustomTemplate"
-                props={postTemplatePropDefinitions}
-                value={options.structure.postFolderNameCustomTemplate}
-                syntax="brace"
-                minHeight="6.5rem"
-                surface="embedded"
-                onTemplateChange={(postFolderNameCustomTemplate) =>
-                  onOptionsChange((current) => ({
-                    ...current,
-                    structure: {
-                      ...current.structure,
-                      postFolderNameCustomTemplate,
-                    },
-                  }))
-                }
-              />
+        <div className={optionEmbeddedPanelClass}>
+          <div className="grid gap-1">
+            <span className="text-sm font-semibold text-foreground">실시간 폴더명 예시</span>
+            <p className="text-sm leading-6 text-muted-foreground">
+              {structureTemplatePreviewPost.title} 글을 예시로 바로 표시합니다.
+            </p>
+          </div>
 
-              <div className={optionEmbeddedPanelClass}>
-                <div className="grid gap-1">
-                  <span className="text-sm font-semibold text-foreground">실시간 폴더명 예시</span>
-                  <p className="text-sm leading-6 text-muted-foreground">
-                    {structureTemplatePreviewPost.title} 글을 예시로 바로 표시합니다.
-                  </p>
-                </div>
-
-                <div className="grid gap-2 text-sm leading-6 text-muted-foreground">
-                  <span>현재 템플릿</span>
-                  <code className="code-surface break-all px-3 py-2 font-mono text-[0.8125rem] text-foreground">
-                    {postFolderNameTemplate || "(비어 있음)"}
-                  </code>
-                </div>
-
-                <div className="grid gap-2 text-sm leading-6 text-muted-foreground">
-                  <span>폴더 이름 결과</span>
-                  <code
-                    id="structure-postFolderNameCustomTemplatePreview"
-                    className="code-surface-inverse break-all px-3 py-2 font-mono text-[0.8125rem]"
-                  >
-                    {postFolderNamePreview ?? "템플릿을 입력하면 결과가 여기에서 바로 바뀝니다."}
-                  </code>
-                </div>
-              </div>
-            </div>
-          ) : null}
-        </RadioField>
+          <div className="grid gap-2 text-sm leading-6 text-muted-foreground">
+            <span>폴더 이름 결과</span>
+            <code
+              id="structure-postFolderNameTemplatePreview"
+              className="code-surface-inverse break-all px-3 py-2 font-mono text-[0.8125rem]"
+            >
+              {postFolderNamePreview ?? "템플릿을 입력하면 결과가 여기에서 바로 바뀝니다."}
+            </code>
+          </div>
+        </div>
       </div>
 
       <div

@@ -26,7 +26,7 @@ export class NaverSe4ScheduleBlock extends LeafParserBlock {
         id: "schedule",
         label: "일정",
         template:
-          "${(url ? '[' + title + '](' + url + ')' : title) + (startAt ? '\\n' + startAt : '') + (endAt ? ' - ' + endAt : '')}",
+          "{{ (url ? `[${title}](${url})` : title) + (startAt ? `\\n${startAt}` : '') + (endAt ? ` - ${endAt}` : '') }}",
       },
     ],
     props: {

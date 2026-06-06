@@ -15,7 +15,7 @@ export class NaverSe4HeadingBlock extends LeafParserBlock {
       {
         id: "default",
         label: "2단계 제목",
-        template: "## ${text}",
+        template: "## {{ text }}",
       },
     ],
     props: {

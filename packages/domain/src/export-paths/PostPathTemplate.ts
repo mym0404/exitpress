@@ -1,6 +1,8 @@
 import type { PostSummary } from "../blog/schema/BlogScan.js"
 import type { ExportOptions } from "../export-options/schema/ExportOptions.js"
 
+import { renderTemplateExpressions } from "../template/util/renderTemplateExpressions.js"
+
 import {
   formatCategorySegment,
   formatTitleSegment,
@@ -29,9 +31,6 @@ export const postTemplateKeys = [
 type PostTemplateKey = (typeof postTemplateKeys)[number]
 
 type PostTemplateValues = Record<PostTemplateKey, string>
-
-const postTemplatePattern =
-  /\$?\{(slug|category|title|logNo|blogId|date|year|YYYY|YY|month|MM|M|day|DD|D)\}/g
 
 export const buildPostTemplateValues = ({
   post,
@@ -80,7 +79,7 @@ export const applyPostTemplate = ({
 }: {
   template: string
   values: PostTemplateValues
-}) => template.replace(postTemplatePattern, (_, key: PostTemplateKey) => values[key])
+}) => renderTemplateExpressions({ template, props: values })
 
 export const buildPostFolderName = ({
   post,
@@ -91,41 +90,21 @@ export const buildPostFolderName = ({
   }
   options: Pick<ExportOptions, "structure">
 }) => {
-  if (options.structure.postFolderNameMode === "custom-template") {
-    const template = options.structure.postFolderNameCustomTemplate.trim()
+  const template = options.structure.postFolderNameTemplate.trim()
 
-    if (template) {
-      return (
-        sanitizePathSegment(
-          applyPostTemplate({
-            template,
-            values: buildPostTemplateValues({
-              post,
-              options,
-            }),
-          }),
-        ) || post.logNo
-      )
-    }
+  if (!template) {
+    return post.logNo
   }
 
-  const nameParts: string[] = []
-
-  if (options.structure.includeDateInPostFolderName) {
-    nameParts.push(getDateSlug(post.publishedAt))
-  }
-
-  if (options.structure.includeLogNoInPostFolderName) {
-    nameParts.push(post.logNo)
-  }
-
-  nameParts.push(
-    formatTitleSegment({
-      value: post.title,
-      slugStyle: options.structure.slugStyle,
-      slugWhitespace: options.structure.slugWhitespace,
-    }),
+  return (
+    sanitizePathSegment(
+      applyPostTemplate({
+        template,
+        values: buildPostTemplateValues({
+          post,
+          options,
+        }),
+      }),
+    ) || post.logNo
   )
-
-  return nameParts.filter(Boolean).join("-") || post.logNo
 }

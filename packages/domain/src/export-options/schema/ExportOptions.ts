@@ -26,10 +26,6 @@ export const allCategoryModes = ["selected-and-descendants", "exact-selected"] a
 // Category selection mode used when filtering scanned posts.
 export type CategoryMode = (typeof allCategoryModes)[number]
 
-export const allPostFolderNameModes = ["preset", "custom-template"] as const
-// Source of the folder name template for each exported post.
-export type PostFolderNameMode = (typeof allPostFolderNameModes)[number]
-
 export const allImageHandlingModes = ["download", "remote", "download-and-upload"] as const
 // Asset strategy for body images and thumbnails.
 export type ImageHandlingMode = (typeof allImageHandlingModes)[number]
@@ -67,12 +63,9 @@ export type ExportOptions = {
   }
   structure: {
     groupByCategory: boolean
-    includeDateInPostFolderName: boolean
-    includeLogNoInPostFolderName: boolean
     slugStyle: SlugStyle
     slugWhitespace: SlugWhitespace
-    postFolderNameMode: PostFolderNameMode
-    postFolderNameCustomTemplate: string
+    postFolderNameTemplate: string
   }
   frontmatter: {
     enabled: boolean

@@ -9,6 +9,7 @@ import type { ExportOptions } from "@exitpress/domain/export-options/schema/Expo
 import { OptionSection, optionEmbeddedPanelClass, RadioField } from "./OptionControls.js"
 import { postTemplatePropDefinitions } from "./PostTemplateProps.js"
 import { TemplateEditorCard } from "./TemplateEditorCard.js"
+import { getTemplatePreview } from "./TemplatePreview.js"
 
 export const LinksOptionsStep = ({
   options,
@@ -33,10 +34,12 @@ export const LinksOptionsStep = ({
   const customUrlTemplate = options.links.sameBlogPostCustomUrlTemplate.trim()
   const customUrlPreview =
     linkTemplatePreviewValues && customUrlTemplate
-      ? applyPostTemplate({
-          template: customUrlTemplate,
-          values: linkTemplatePreviewValues,
-        })
+      ? getTemplatePreview(() =>
+          applyPostTemplate({
+            template: customUrlTemplate,
+            values: linkTemplatePreviewValues,
+          }),
+        )
       : null
 
   return (
@@ -84,7 +87,6 @@ export const LinksOptionsStep = ({
                 editorId="links-sameBlogPostCustomUrlTemplate"
                 props={postTemplatePropDefinitions}
                 value={options.links.sameBlogPostCustomUrlTemplate}
-                syntax="brace"
                 minHeight="6.5rem"
                 surface="embedded"
                 onTemplateChange={(sameBlogPostCustomUrlTemplate) =>
@@ -106,13 +108,6 @@ export const LinksOptionsStep = ({
                       ? `${linkTemplatePreviewPost.title} 글을 예시로 바로 표시합니다.`
                       : "선택 범위에 글이 있으면 여기에서 실제 변환 결과를 바로 표시합니다."}
                   </p>
-                </div>
-
-                <div className="grid gap-2 text-sm leading-6 text-muted-foreground">
-                  <span>현재 템플릿</span>
-                  <code className="code-surface break-all px-3 py-2 font-mono text-[0.8125rem] text-foreground">
-                    {customUrlTemplate || "(비어 있음)"}
-                  </code>
                 </div>
 
                 <div className="grid gap-2 text-sm leading-6 text-muted-foreground">

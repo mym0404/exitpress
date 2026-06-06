@@ -11,7 +11,7 @@ export class NaverSe4TalkTalkBlock extends LeafParserBlock {
   override readonly label = "톡톡 링크"
   override readonly templateDefinition = {
     label: this.label,
-    presets: [{ id: "link", label: "링크", template: "[${title}](${url})" }],
+    presets: [{ id: "link", label: "링크", template: "{{ `[${title}](${url})` }}" }],
     props: {
       title: { label: "제목", type: "string" },
       url: { label: "URL", type: "string" },

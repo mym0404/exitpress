@@ -43,7 +43,7 @@ describe("post-path-template", () => {
     })
   })
 
-  it("keeps the preset folder naming rule by default", () => {
+  it("builds folder names from the default template", () => {
     const options = defaultExportOptions()
 
     expect(
@@ -57,8 +57,7 @@ describe("post-path-template", () => {
   it("builds folder names from custom templates", () => {
     const options = defaultExportOptions()
 
-    options.structure.postFolderNameMode = "custom-template"
-    options.structure.postFolderNameCustomTemplate = "{year}_{month}_{logNo}_{slug}"
+    options.structure.postFolderNameTemplate = "{{ year }}_{{ month }}_{{ logNo }}_{{ slug }}"
 
     expect(
       buildPostFolderName({
@@ -68,20 +67,6 @@ describe("post-path-template", () => {
     ).toBe("2026_04_223034929697_첫_글")
   })
 
-  it("does not keep dollar prefixes from dollar-brace custom templates", () => {
-    const options = defaultExportOptions()
-
-    options.structure.postFolderNameMode = "custom-template"
-    options.structure.postFolderNameCustomTemplate = "${date}-${logNo}"
-
-    expect(
-      buildPostFolderName({
-        post: samplePost,
-        options,
-      }),
-    ).toBe("2026-04-11-223034929697")
-  })
-
   it("sanitizes custom template results into a safe single folder name", () => {
     expect(
       buildPostFolderName({
@@ -89,8 +74,7 @@ describe("post-path-template", () => {
         options: {
           structure: {
             ...defaultExportOptions().structure,
-            postFolderNameMode: "custom-template",
-            postFolderNameCustomTemplate: "{date}/{slug}",
+            postFolderNameTemplate: "{{ date }}/{{ slug }}",
           },
         },
       }),
@@ -100,7 +84,7 @@ describe("post-path-template", () => {
   it("replaces variables in post templates", () => {
     expect(
       applyPostTemplate({
-        template: "{category}/{YYYY}/{MM}/{DD}/{YY}/{M}/{D}/{slug}",
+        template: "{{ category }}/{{ YYYY }}/{{ MM }}/{{ DD }}/{{ YY }}/{{ M }}/{{ D }}/{{ slug }}",
         values: buildPostTemplateValues({
           post: samplePost,
           options: defaultExportOptions(),

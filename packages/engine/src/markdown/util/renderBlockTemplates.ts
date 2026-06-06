@@ -1,8 +1,6 @@
-import { evaluateTemplateExpression } from "@exitpress/domain/template/util/evaluateTemplateExpression.js"
+import { renderTemplateExpressions } from "@exitpress/domain/template/util/renderTemplateExpressions.js"
 
 import type { TemplateValue } from "@exitpress/domain/template/schema/TemplateValue.js"
-
-const templateExpressionPattern = /\$\{([^{}]+)\}/g
 
 const getLinePrefix = ({ template, offset }: { template: string; offset: number }) => {
   const lineStart = template.lastIndexOf("\n", offset - 1) + 1
@@ -39,13 +37,16 @@ type TemplateBlock = {
 }
 
 const renderBlockTemplate = ({ template, props }: TemplateBlock) =>
-  template.replace(templateExpressionPattern, (_match, expression: string, offset: number) =>
-    formatExpressionValue({
-      value: evaluateTemplateExpression(expression.trim(), props),
-      template,
-      offset,
-    }),
-  )
+  renderTemplateExpressions({
+    template,
+    props,
+    formatValue: ({ value, template, offset }) =>
+      formatExpressionValue({
+        value,
+        template,
+        offset,
+      }),
+  })
 
 // Renders parsed blocks through their selected markdown templates.
 export const renderBlockTemplates = (blocks: TemplateBlock[]) =>

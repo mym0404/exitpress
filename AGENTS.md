@@ -45,9 +45,10 @@
 - Do not preserve legacy compatibility shims unless the user explicitly asks for backward compatibility.
 
 ## Validation Routes
-- `mise exec -- pnpm check:local`: default local baseline after ordinary code changes.
+- `mise exec -- pnpm check:full`: default local baseline after ordinary code changes; use narrower commands only for repetitive inner-loop checks or when the environment blocks full execution.
+- `mise exec -- pnpm check:local`: format, lint, typecheck, Storybook check, and offline tests without browser smoke.
 - `mise exec -- pnpm check:unused`: dead-code and unused export baseline; run after deleting, moving, or renaming code.
-- `mise exec -- pnpm smoke:ui`: mock browser UI flows; run for UI state, export, resume, upload, or route changes.
+- `mise exec -- pnpm smoke:ui`: mock browser UI flows; run for user-visible web, server API, export, resume, upload, routing, static asset, or job-state changes.
 - `mise exec -- pnpm test:network`: live fetch/upload e2e; requires network and upload credentials.
 - Full validation details and blind spots live in `.agents/knowledge/verification.md`.
 

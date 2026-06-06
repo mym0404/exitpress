@@ -199,7 +199,7 @@ describe("single-post cli", () => {
       JSON.stringify({
         blockOutputs: {
           templates: {
-            "naver-se4:image": "![${alt}](${url})",
+            "naver-se4:image": "{{ `![${alt}](${url})` }}",
           },
         },
       }),
@@ -252,7 +252,7 @@ describe("single-post cli", () => {
       expect(exportSinglePost).toHaveBeenCalledTimes(1)
       expect(
         exportSinglePost.mock.calls[0][0].options.blockOutputs.templates["naver-se4:image"],
-      ).toBe("![${alt}](${url})")
+      ).toBe("{{ `![${alt}](${url})` }}")
       expect(stdoutWrite).not.toHaveBeenCalled()
       expect(stderrWrite).toHaveBeenCalledWith(
         [
@@ -460,7 +460,7 @@ describe("single-post cli", () => {
       JSON.stringify({
         blockOutputs: {
           templates: {
-            image: "![${alt}](${url})",
+            image: "{{ `![${alt}](${url})` }}",
           },
         },
       }),

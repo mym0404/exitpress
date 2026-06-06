@@ -51,17 +51,17 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
             {
               id: "display-math",
               label: "표시 수식",
-              template: "${'$$\\n' + formula + '\\n$$'}",
+              template: "{{ `$$\\n${formula}\\n$$` }}",
             },
             {
               id: "inline-math",
               label: "인라인 수식",
-              template: "$${formula}$",
+              template: "{{ `$${formula}$` }}",
             },
             {
               id: "math-fence",
               label: "Math 코드 펜스",
-              template: "${'```math\\n' + formula + '\\n```'}",
+              template: "{{ `\\`\\`\\`math\\n${formula}\\n\\`\\`\\`` }}",
             },
           ],
           props: {
@@ -97,7 +97,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
             {
               id: "default",
               label: "코드 펜스",
-              template: "```${language ?? ''}\n${code}\n```",
+              template: "{{ `\\`\\`\\`${language ?? ''}\n${code}\n\\`\\`\\`` }}",
             },
           ],
           props: {
@@ -132,19 +132,19 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
             {
               id: "link",
               label: "링크",
-              template: "[${title}](${url})",
+              template: "{{ `[${title}](${url})` }}",
             },
             {
               id: "link-description",
               label: "링크와 설명",
               template:
-                "${description ? '[' + title + '](' + url + ')\\n' + description : '[' + title + '](' + url + ')'}",
+                "{{ description ? `[${title}](${url})\\n${description}` : `[${title}](${url})` }}",
             },
             {
               id: "thumbnail-link",
               label: "썸네일 링크",
               template:
-                "${thumbnailUrl ? '![' + title + '](' + thumbnailUrl + ')\\n[' + title + '](' + url + ')' : '[' + title + '](' + url + ')'}",
+                "{{ thumbnailUrl ? `![${title}](${thumbnailUrl})\\n[${title}](${url})` : `[${title}](${url})` }}",
             },
           ],
           props: {
@@ -187,7 +187,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
             {
               id: "file-link",
               label: "파일 링크",
-              template: "[${fileName}${fileExtension}](${fileUrl})",
+              template: "{{ `[${fileName}${fileExtension}](${fileUrl})` }}",
             },
           ],
           props: {
@@ -226,7 +226,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
             {
               id: "default",
               label: "링크",
-              template: "[${title}](${url})",
+              template: "{{ `[${title}](${url})` }}",
             },
           ],
           props: {
@@ -281,13 +281,13 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
             {
               id: "link",
               label: "링크",
-              template: "[${title}](${url})",
+              template: "{{ `[${title}](${url})` }}",
             },
             {
               id: "link-description",
               label: "링크와 설명",
               template:
-                "${description ? '[' + title + '](' + url + ')\\n' + description : '[' + title + '](' + url + ')'}",
+                "{{ description ? `[${title}](${url})\\n${description}` : `[${title}](${url})` }}",
             },
           ],
           props: {
@@ -331,7 +331,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
               id: "place-links",
               label: "장소 링크",
               template:
-                "${places.map(place => '[' + place.name + '](' + place.url + ')' + (place.address ? '\\n' + place.address : '')).join('\\n\\n')}",
+                "{{ places.map(place => place.address ? `[${place.name}](${place.url})\\n${place.address}` : `[${place.name}](${place.url})`).join('\\n\\n') }}",
             },
           ],
           props: {
@@ -363,7 +363,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
               id: "schedule",
               label: "일정",
               template:
-                "${(url ? '[' + title + '](' + url + ')' : title) + (startAt ? '\\n' + startAt : '') + (endAt ? ' - ' + endAt : '')}",
+                "{{ (url ? `[${title}](${url})` : title) + (startAt ? `\\n${startAt}` : '') + (endAt ? ` - ${endAt}` : '') }}",
             },
           ],
           props: {
@@ -406,7 +406,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
             {
               id: "link",
               label: "링크",
-              template: "[${title}](${url})",
+              template: "{{ `[${title}](${url})` }}",
             },
           ],
           props: {
@@ -451,7 +451,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
               id: "default",
               label: "마크다운 표",
               template:
-                "${rows.length > 0 ? '| ' + rows[0].map((cell) => cell.text).join(' | ') + ' |\\n| ' + rows[0].map((cell) => '---').join(' | ') + ' |\\n' + rows.slice(1).map((row) => '| ' + row.map((cell) => cell.text).join(' | ') + ' |').join('\\n') : html}",
+                "{{ rows.length > 0 ? `| ${rows[0].map((cell) => cell.text).join(' | ')} |\\n| ${rows[0].map((cell) => '---').join(' | ')} |\\n${rows.slice(1).map((row) => '| ' + row.map((cell) => cell.text).join(' | ') + ' |').join('\\n')}` : html }}",
             },
           ],
           props: {
@@ -492,7 +492,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
               id: "strip-markdown",
               label: "이미지 마크다운",
               template:
-                "${images.map(image => image.caption ? '![' + image.alt + '](' + image.url + ')\\n' + image.caption : '![' + image.alt + '](' + image.url + ')').join('\\n\\n')}",
+                "{{ images.map(image => image.caption ? `![${image.alt}](${image.url})\\n${image.caption}` : `![${image.alt}](${image.url})`).join('\\n\\n') }}",
             },
           ],
           props: {
@@ -525,7 +525,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
               id: "gallery-markdown",
               label: "이미지 마크다운",
               template:
-                "${images.map(image => image.caption ? '![' + image.alt + '](' + image.url + ')\\n' + image.caption : '![' + image.alt + '](' + image.url + ')').join('\\n\\n')}",
+                "{{ images.map(image => image.caption ? `![${image.alt}](${image.url})\\n${image.caption}` : `![${image.alt}](${image.url})`).join('\\n\\n') }}",
             },
           ],
           props: {
@@ -556,7 +556,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
             {
               id: "default",
               label: "이미지 마크다운",
-              template: "![${alt}](${url})",
+              template: "{{ `![${alt}](${url})` }}",
             },
           ],
           props: {
@@ -596,7 +596,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
             {
               id: "default",
               label: "이미지 마크다운",
-              template: "![${alt}](${url})",
+              template: "{{ `![${alt}](${url})` }}",
             },
           ],
           props: {
@@ -636,7 +636,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
             {
               id: "default",
               label: "이미지 또는 본문",
-              template: "${(url ?? '') ? '![' + alt + '](' + url + ')' : text}",
+              template: "{{ (url ?? '') ? `![${alt}](${url})` : text }}",
             },
           ],
           props: {
@@ -679,7 +679,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
             {
               id: "default",
               label: "2단계 제목",
-              template: "## ${text}",
+              template: "## {{ text }}",
             },
           ],
           props: {
@@ -737,7 +737,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
             {
               id: "default",
               label: "인용문",
-              template: "> ${text}",
+              template: "> {{ text }}",
             },
           ],
           props: {
@@ -769,7 +769,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
             {
               id: "default",
               label: "인용문",
-              template: "> ${text}",
+              template: "> {{ text }}",
             },
           ],
           props: {
@@ -800,7 +800,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
             {
               id: "default",
               label: "본문",
-              template: "${text}",
+              template: "{{ text }}",
             },
           ],
           props: {
@@ -831,13 +831,13 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
             {
               id: "link",
               label: "링크",
-              template: "[${title}](${url})",
+              template: "{{ `[${title}](${url})` }}",
             },
             {
               id: "link-description",
               label: "링크와 설명",
               template:
-                "${description ? '[' + title + '](' + url + ')\\n' + description : '[' + title + '](' + url + ')'}",
+                "{{ description ? `[${title}](${url})\\n${description}` : `[${title}](${url})` }}",
             },
           ],
           props: {
@@ -940,7 +940,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
               id: "default",
               label: "마크다운 표",
               template:
-                "${rows.length > 0 ? '| ' + rows[0].map((cell) => cell.text).join(' | ') + ' |\\n| ' + rows[0].map((cell) => '---').join(' | ') + ' |\\n' + rows.slice(1).map((row) => '| ' + row.map((cell) => cell.text).join(' | ') + ' |').join('\\n') : html}",
+                "{{ rows.length > 0 ? `| ${rows[0].map((cell) => cell.text).join(' | ')} |\\n| ${rows[0].map((cell) => '---').join(' | ')} |\\n${rows.slice(1).map((row) => '| ' + row.map((cell) => cell.text).join(' | ') + ' |').join('\\n')}` : html }}",
             },
           ],
           props: {
@@ -979,7 +979,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
             {
               id: "default",
               label: "인용문",
-              template: "> ${text}",
+              template: "> {{ text }}",
             },
           ],
           props: {
@@ -1011,7 +1011,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
             {
               id: "default",
               label: "코드 펜스",
-              template: "```${language ?? ''}\n${code}\n```",
+              template: "{{ `\\`\\`\\`${language ?? ''}\n${code}\n\\`\\`\\`` }}",
             },
           ],
           props: {
@@ -1046,19 +1046,19 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
             {
               id: "link",
               label: "링크",
-              template: "[${title}](${url})",
+              template: "{{ `[${title}](${url})` }}",
             },
             {
               id: "link-description",
               label: "링크와 설명",
               template:
-                "${description ? '[' + title + '](' + url + ')\\n' + description : '[' + title + '](' + url + ')'}",
+                "{{ description ? `[${title}](${url})\\n${description}` : `[${title}](${url})` }}",
             },
             {
               id: "thumbnail-link",
               label: "썸네일 링크",
               template:
-                "${thumbnailUrl ? '![' + title + '](' + thumbnailUrl + ')\\n[' + title + '](' + url + ')' : '[' + title + '](' + url + ')'}",
+                "{{ thumbnailUrl ? `![${title}](${thumbnailUrl})\\n[${title}](${url})` : `[${title}](${url})` }}",
             },
           ],
           props: {
@@ -1103,7 +1103,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
               id: "place-links",
               label: "장소 링크",
               template:
-                "${places.map(place => '[' + place.name + '](' + place.url + ')' + (place.address ? '\\n' + place.address : '')).join('\\n\\n')}",
+                "{{ places.map(place => place.address ? `[${place.name}](${place.url})\\n${place.address}` : `[${place.name}](${place.url})`).join('\\n\\n') }}",
             },
           ],
           props: {
@@ -1136,7 +1136,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
               id: "place-links",
               label: "장소 링크",
               template:
-                "${places.map(place => '[' + place.name + '](' + place.url + ')' + (place.address ? '\\n' + place.address : '')).join('\\n\\n')}",
+                "{{ places.map(place => place.address ? `[${place.name}](${place.url})\\n${place.address}` : `[${place.name}](${place.url})`).join('\\n\\n') }}",
             },
           ],
           props: {
@@ -1167,7 +1167,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
             {
               id: "default",
               label: "링크",
-              template: "[${title}](${url})",
+              template: "{{ `[${title}](${url})` }}",
             },
           ],
           props: {
@@ -1222,7 +1222,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
             {
               id: "file-link",
               label: "파일 링크",
-              template: "[${fileName}${fileExtension}](${fileUrl})",
+              template: "{{ `[${fileName}${fileExtension}](${fileUrl})` }}",
             },
           ],
           props: {
@@ -1262,7 +1262,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
             {
               id: "default",
               label: "이미지 또는 본문",
-              template: "${(url ?? '') ? '![' + alt + '](' + url + ')' : text}",
+              template: "{{ (url ?? '') ? `![${alt}](${url})` : text }}",
             },
           ],
           props: {
@@ -1306,7 +1306,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
             {
               id: "default",
               label: "이미지 마크다운",
-              template: "![${alt}](${url})",
+              template: "{{ `![${alt}](${url})` }}",
             },
           ],
           props: {
@@ -1346,7 +1346,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
             {
               id: "default",
               label: "본문",
-              template: "${text}",
+              template: "{{ text }}",
             },
           ],
           props: {
@@ -1438,7 +1438,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
             {
               id: "default",
               label: "본문",
-              template: "${text}",
+              template: "{{ text }}",
             },
           ],
           props: {
@@ -1470,7 +1470,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
             {
               id: "default",
               label: "이미지 또는 본문",
-              template: "${(url ?? '') ? '![' + alt + '](' + url + ')' : text}",
+              template: "{{ (url ?? '') ? `![${alt}](${url})` : text }}",
             },
           ],
           props: {
@@ -1512,7 +1512,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
             {
               id: "default",
               label: "코드 펜스",
-              template: "```${language ?? ''}\n${code}\n```",
+              template: "{{ `\\`\\`\\`${language ?? ''}\n${code}\n\\`\\`\\`` }}",
             },
           ],
           props: {
@@ -1548,7 +1548,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
               id: "default",
               label: "마크다운 표",
               template:
-                "${rows.length > 0 ? '| ' + rows[0].map((cell) => cell.text).join(' | ') + ' |\\n| ' + rows[0].map((cell) => '---').join(' | ') + ' |\\n' + rows.slice(1).map((row) => '| ' + row.map((cell) => cell.text).join(' | ') + ' |').join('\\n') : html}",
+                "{{ rows.length > 0 ? `| ${rows[0].map((cell) => cell.text).join(' | ')} |\\n| ${rows[0].map((cell) => '---').join(' | ')} |\\n${rows.slice(1).map((row) => '| ' + row.map((cell) => cell.text).join(' | ') + ' |').join('\\n')}` : html }}",
             },
           ],
           props: {
@@ -1661,7 +1661,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
             {
               id: "default",
               label: "인용문",
-              template: "> ${text}",
+              template: "> {{ text }}",
             },
           ],
           props: {
@@ -1691,7 +1691,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
             {
               id: "default",
               label: "2단계 제목",
-              template: "## ${text}",
+              template: "## {{ text }}",
             },
           ],
           props: {
@@ -1723,7 +1723,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
             {
               id: "default",
               label: "이미지 마크다운",
-              template: "![${alt}](${url})",
+              template: "{{ `![${alt}](${url})` }}",
             },
           ],
           props: {
@@ -1763,7 +1763,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
             {
               id: "default",
               label: "본문",
-              template: "${text}",
+              template: "{{ text }}",
             },
           ],
           props: {
@@ -1795,7 +1795,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
             {
               id: "default",
               label: "링크",
-              template: "[${title}](${url})",
+              template: "{{ `[${title}](${url})` }}",
             },
           ],
           props: {
@@ -1831,7 +1831,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
             {
               id: "default",
               label: "이미지 마크다운",
-              template: "![${alt}](${url})",
+              template: "{{ `![${alt}](${url})` }}",
             },
           ],
           props: {
@@ -1896,7 +1896,7 @@ export const generatedStorybookCatalog: StorybookEditorGroup[] = [
             {
               id: "default",
               label: "본문",
-              template: "${text}",
+              template: "{{ text }}",
             },
           ],
           props: {

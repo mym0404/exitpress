@@ -8,7 +8,7 @@ import { LeafParserBlock } from "../../core/ParserBlock.js"
 import { parseImageLink, se4ImageLinkSelector } from "./util/ImageLink.js"
 
 const imageStripTemplate =
-  "${images.map(image => image.caption ? '![' + image.alt + '](' + image.url + ')\\n' + image.caption : '![' + image.alt + '](' + image.url + ')').join('\\n\\n')}"
+  "{{ images.map(image => image.caption ? `![${image.alt}](${image.url})\\n${image.caption}` : `![${image.alt}](${image.url})`).join('\\n\\n') }}"
 
 export class NaverSe4ImageStripBlock extends LeafParserBlock {
   override readonly id = "imageStrip"

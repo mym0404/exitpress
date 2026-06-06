@@ -17,7 +17,7 @@ export class NaverSe3FileBlock extends LeafParserBlock {
       {
         id: "file-link",
         label: "파일 링크",
-        template: "[${fileName}${fileExtension}](${fileUrl})",
+        template: "{{ `[${fileName}${fileExtension}](${fileUrl})` }}",
       },
     ],
     props: {

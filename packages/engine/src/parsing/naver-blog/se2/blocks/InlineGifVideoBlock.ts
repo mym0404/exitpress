@@ -71,7 +71,7 @@ export class NaverSe2InlineGifVideoBlock extends LeafParserBlock {
   override readonly label = "인라인 GIF 비디오"
   override readonly templateDefinition = {
     label: this.label,
-    presets: [{ id: "default", label: "이미지 마크다운", template: "![${alt}](${url})" }],
+    presets: [{ id: "default", label: "이미지 마크다운", template: "{{ `![${alt}](${url})` }}" }],
     props: {
       alt: { label: "대체 텍스트", type: "string" },
       url: { label: "URL", type: "string" },

@@ -49,7 +49,7 @@ describe("http server settings persist", () => {
           structure: {
             groupByCategory: boolean
             slugStyle: string
-            postFolderNameMode: string
+            postFolderNameTemplate: string
           }
           scope: {
             categoryIds: number[]
@@ -61,7 +61,7 @@ describe("http server settings persist", () => {
       expect(response.status).toBe(200)
       expect(body.options.structure.groupByCategory).toBe(true)
       expect(body.options.structure.slugStyle).toBe("snake")
-      expect(body.options.structure.postFolderNameMode).toBe("preset")
+      expect(body.options.structure.postFolderNameTemplate).toBe("{{ date }}-{{ slug }}")
       expect(body.options.scope.categoryIds).toEqual([])
       expect(body.lastOutputDir).toBe("./output")
     } finally {
@@ -96,8 +96,7 @@ describe("http server settings persist", () => {
               groupByCategory: false,
               slugStyle: "kebab",
               slugWhitespace: "dash",
-              postFolderNameMode: "custom-template",
-              postFolderNameCustomTemplate: "{date}-{slug}",
+              postFolderNameTemplate: "{{ date }}-{{ slug }}",
             },
           },
         }),
@@ -115,8 +114,7 @@ describe("http server settings persist", () => {
             groupByCategory?: boolean
             slugStyle?: string
             slugWhitespace?: string
-            postFolderNameMode?: string
-            postFolderNameCustomTemplate?: string
+            postFolderNameTemplate?: string
           }
         }
         lastOutputDir?: string
@@ -133,8 +131,7 @@ describe("http server settings persist", () => {
         groupByCategory: false,
         slugStyle: "kebab",
         slugWhitespace: "dash",
-        postFolderNameMode: "custom-template",
-        postFolderNameCustomTemplate: "{date}-{slug}",
+        postFolderNameTemplate: "{{ date }}-{{ slug }}",
       })
       expect(saved.lastOutputDir).toBe("./output")
     } finally {
@@ -152,9 +149,9 @@ describe("http server settings persist", () => {
         options: {
           blockOutputs: {
             templates: {
-              "naver-se4:linkCard": "${text}",
-              "naver-se4:file": "[${fileName}${fileExtension}](${fileUrl})",
-              "naver-se4:missing": "${title}",
+              "naver-se4:linkCard": "{{ text }}",
+              "naver-se4:file": "{{ `[${fileName}${fileExtension}](${fileUrl})` }}",
+              "naver-se4:missing": "{{ title }}",
             },
           },
         },
@@ -179,7 +176,7 @@ describe("http server settings persist", () => {
 
       expect(response.status).toBe(200)
       expect(body.options.blockOutputs.templates).toEqual({
-        "naver-se4:file": "[${fileName}${fileExtension}](${fileUrl})",
+        "naver-se4:file": "{{ `[${fileName}${fileExtension}](${fileUrl})` }}",
       })
     } finally {
       await rm(rootDir, { recursive: true, force: true })

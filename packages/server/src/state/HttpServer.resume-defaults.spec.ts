@@ -76,8 +76,7 @@ describe("http server resume defaults", () => {
             groupByCategory: boolean
             slugStyle: string
             slugWhitespace: string
-            postFolderNameMode: string
-            postFolderNameCustomTemplate: string
+            postFolderNameTemplate: string
           }
           blockOutputs: {
             templates: Record<string, string>
@@ -101,8 +100,7 @@ describe("http server resume defaults", () => {
       expect(body.options.structure.groupByCategory).toBe(true)
       expect(body.options.structure.slugStyle).toBe("snake")
       expect(body.options.structure.slugWhitespace).toBe("underscore")
-      expect(body.options.structure.postFolderNameMode).toBe("preset")
-      expect(body.options.structure.postFolderNameCustomTemplate).toBe("")
+      expect(body.options.structure.postFolderNameTemplate).toBe("{{ date }}-{{ slug }}")
       expect(body.options.blockOutputs.templates).toEqual({})
       expect(body.options.assets.stickerAssetMode).toBe("ignore")
       expect(body.lastOutputDir).toBe(outputDir)

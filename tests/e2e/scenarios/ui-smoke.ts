@@ -686,6 +686,224 @@ const fillCodeMirror = async ({
   await page.locator(`${editor} [contenteditable="true"]`).fill(value)
 }
 
+const assertTemplateEditorRuntime = async ({
+  page,
+  editor,
+}: {
+  page: import("playwright").Page
+  editor: string
+}) => {
+  const state = await page.evaluate((editor) => {
+    const root = document.querySelector(editor)
+    const cmEditor = root?.querySelector(".cm-editor")
+    const content = root?.querySelector(".cm-content")
+    const scroller = root?.querySelector(".cm-scroller")
+    const gutters = root?.querySelector(".cm-gutters")
+
+    if (!cmEditor || !content || !scroller) {
+      return null
+    }
+
+    const editorStyle = getComputedStyle(cmEditor)
+    const contentStyle = getComputedStyle(content)
+    const scrollerStyle = getComputedStyle(scroller)
+
+    return {
+      background: editorStyle.backgroundColor,
+      contentMinHeight: contentStyle.minHeight,
+      hasGutters: gutters !== null,
+      scrollerMinHeight: scrollerStyle.minHeight,
+      text: content.textContent,
+    }
+  }, editor)
+
+  if (!state) {
+    throw new Error("template code editor did not render")
+  }
+
+  if (state.background !== "rgb(13, 17, 23)") {
+    throw new Error(`template code editor should use GitHub dark, got ${state.background}`)
+  }
+
+  if (state.contentMinHeight === "0px" || state.scrollerMinHeight === "0px") {
+    throw new Error("template code editor min height did not apply")
+  }
+
+  if (state.hasGutters) {
+    throw new Error("template code editor should not render line number gutters")
+  }
+
+  const clickTarget = await page.evaluate((editor) => {
+    const content = document.querySelector(`${editor} .cm-content`)
+
+    if (!content) {
+      return null
+    }
+
+    const rect = content.getBoundingClientRect()
+
+    return {
+      x: rect.left + Math.min(rect.width / 2, 80),
+      y: rect.top + Math.min(rect.height - 4, 48),
+    }
+  }, editor)
+
+  if (!clickTarget) {
+    throw new Error("template code editor content did not render")
+  }
+
+  const scrollBeforeClick = await page.evaluate(() => window.scrollY)
+  await page.mouse.click(clickTarget.x, clickTarget.y)
+  await page.waitForFunction(
+    (editor) => {
+      const content = document.querySelector(`${editor} .cm-content`)
+      const cmEditor = document.querySelector(`${editor} .cm-editor`)
+
+      return (
+        document.activeElement === content ||
+        cmEditor?.contains(document.activeElement) === true ||
+        cmEditor?.classList.contains("cm-focused") === true
+      )
+    },
+    editor,
+    { timeout: 1000 },
+  )
+  await page.waitForTimeout(250)
+  const clickState = await page.evaluate((editor) => {
+    const content = document.querySelector(`${editor} .cm-content`)
+    const cmEditor = document.querySelector(`${editor} .cm-editor`)
+
+    return {
+      activeIsEditor:
+        document.activeElement === content ||
+        cmEditor?.contains(document.activeElement) === true ||
+        cmEditor?.classList.contains("cm-focused") === true,
+      hasActiveLine: document.querySelector(`${editor} .cm-activeLine`) !== null,
+      scrollY: window.scrollY,
+    }
+  }, editor)
+
+  if (!clickState.activeIsEditor) {
+    throw new Error("template code editor did not focus after click")
+  }
+
+  if (clickState.hasActiveLine) {
+    throw new Error("template code editor should not highlight the active line")
+  }
+
+  if (Math.abs(clickState.scrollY - scrollBeforeClick) > 2) {
+    throw new Error(
+      `template code editor click changed page scroll: before=${scrollBeforeClick}, after=${clickState.scrollY}`,
+    )
+  }
+}
+
+const assertNoTemplateEcho = async ({
+  page,
+  editor,
+  value,
+}: {
+  page: import("playwright").Page
+  editor: string
+  value: string
+}) => {
+  const currentTemplateLabelCount = await page.getByText("현재 템플릿", { exact: true }).count()
+
+  if (currentTemplateLabelCount > 0) {
+    throw new Error("template value should not be repeated with a current-template label")
+  }
+
+  const hasEchoedCode = await page.evaluate(
+    ({ editor, value }) => {
+      const root = document.querySelector(editor)
+      const isVisible = (element: Element) => {
+        const style = getComputedStyle(element)
+
+        return (
+          style.display !== "none" &&
+          style.visibility !== "hidden" &&
+          element.getClientRects().length > 0
+        )
+      }
+
+      return Array.from(document.querySelectorAll("code")).some(
+        (element) =>
+          !root?.contains(element) && isVisible(element) && element.textContent?.trim() === value,
+      )
+    },
+    { editor, value },
+  )
+
+  if (hasEchoedCode) {
+    throw new Error("template value should not be echoed in a code block outside the editor")
+  }
+}
+
+const assertTemplateAutocompletePanel = async ({
+  page,
+  editor,
+}: {
+  page: import("playwright").Page
+  editor: string
+}) => {
+  await page.locator(`${editor} [contenteditable="true"]`).click()
+  await page.keyboard.press(process.platform === "darwin" ? "Meta+A" : "Control+A")
+  await page.keyboard.type("{{ s")
+  await page.waitForSelector(".cm-tooltip-autocomplete")
+
+  const panel = await page.evaluate(() => {
+    const tooltip = document.querySelector(".cm-tooltip-autocomplete")
+    const selected = tooltip?.querySelector("li[aria-selected]")
+    const icon = tooltip?.querySelector(".cm-completionIcon")
+
+    if (!tooltip || !selected) {
+      return null
+    }
+
+    const tooltipStyle = getComputedStyle(tooltip)
+    const selectedStyle = getComputedStyle(selected)
+    const iconStyle = icon ? getComputedStyle(icon) : undefined
+
+    return {
+      background: tooltipStyle.backgroundColor,
+      borderRadius: tooltipStyle.borderRadius,
+      iconDisplay: iconStyle?.display ?? "none",
+      labelText: tooltip.querySelector(".cm-completionLabel")?.textContent,
+      selectedBackground: selectedStyle.backgroundColor,
+    }
+  })
+
+  if (!panel) {
+    throw new Error("template autocomplete panel did not render")
+  }
+
+  if (panel.background !== "rgb(22, 27, 34)") {
+    throw new Error(
+      `template autocomplete background should be polished dark, got ${panel.background}`,
+    )
+  }
+
+  if (panel.selectedBackground !== "rgb(38, 48, 65)") {
+    throw new Error(
+      `template autocomplete selected row should use refined highlight, got ${panel.selectedBackground}`,
+    )
+  }
+
+  if (panel.borderRadius === "0px") {
+    throw new Error("template autocomplete panel should have rounded corners")
+  }
+
+  if (panel.iconDisplay !== "none") {
+    throw new Error("template autocomplete should hide rough default completion icons")
+  }
+
+  if (panel.labelText !== "slug") {
+    throw new Error(`template autocomplete should suggest matching props, got ${panel.labelText}`)
+  }
+
+  await page.keyboard.press("Escape")
+}
+
 const assertUploadRowStatus = async ({
   page,
   rowId,
@@ -1189,18 +1407,51 @@ const run = async () => {
     })
 
     await page.click("#structure-groupByCategory")
-    await page.click("#structure-postFolderNameMode-custom-template")
     await fillCodeMirror({
       page,
-      editor: "#structure-postFolderNameCustomTemplate",
-      value: "{date}-{slug}",
+      editor: "#structure-postFolderNameTemplate",
+      value: "{{ date }}-{{ slug }}",
+    })
+    await assertTemplateEditorRuntime({
+      page,
+      editor: "#structure-postFolderNameTemplate",
+    })
+    await assertTemplateAutocompletePanel({
+      page,
+      editor: "#structure-postFolderNameTemplate",
+    })
+    await fillCodeMirror({
+      page,
+      editor: "#structure-postFolderNameTemplate",
+      value: "{{ date }}-{{ slug }}",
+    })
+    await assertNoTemplateEcho({
+      page,
+      editor: "#structure-postFolderNameTemplate",
+      value: "{{ date }}-{{ slug }}",
     })
 
-    const folderNamePreview = page.locator("#structure-postFolderNameCustomTemplatePreview")
+    const folderNamePreview = page.locator("#structure-postFolderNameTemplatePreview")
 
     if (!(await folderNamePreview.textContent())?.includes("2026-04-11-")) {
       throw new Error("custom folder template preview did not update")
     }
+
+    await fillCodeMirror({
+      page,
+      editor: "#structure-postFolderNameTemplate",
+      value: "{{",
+    })
+
+    if (!(await page.locator("#structure-file-tree-preview").isVisible())) {
+      throw new Error("custom folder template preview crashed on incomplete expression")
+    }
+
+    await fillCodeMirror({
+      page,
+      editor: "#structure-postFolderNameTemplate",
+      value: "{{ date }}-{{ slug }}",
+    })
 
     await page.click('button:has-text("Frontmatter 설정")')
     await waitForStepView({
@@ -1473,7 +1724,22 @@ const run = async () => {
     await fillCodeMirror({
       page,
       editor: "#links-sameBlogPostCustomUrlTemplate",
-      value: "https://myblog/{slug}",
+      value: "{{",
+    })
+
+    if (!(await page.locator("#links-sameBlogPostCustomUrlPreview").isVisible())) {
+      throw new Error("custom link template preview crashed on incomplete expression")
+    }
+
+    await fillCodeMirror({
+      page,
+      editor: "#links-sameBlogPostCustomUrlTemplate",
+      value: "https://myblog/{{ slug }}",
+    })
+    await assertNoTemplateEcho({
+      page,
+      editor: "#links-sameBlogPostCustomUrlTemplate",
+      value: "https://myblog/{{ slug }}",
     })
 
     const livePreview = page.locator("#links-sameBlogPostCustomUrlPreview")
@@ -1512,6 +1778,30 @@ const run = async () => {
       )
     }
 
+    await page
+      .locator('[data-template-code-section] button[aria-label="템플릿 문법 도움말"]')
+      .first()
+      .click()
+    const templateHelpDialog = page.locator('[role="dialog"]')
+    const templateHelpText = await templateHelpDialog.textContent()
+
+    if (!templateHelpText?.includes("{{ title }}")) {
+      throw new Error("template syntax help dialog did not open")
+    }
+
+    await templateHelpDialog.locator('[data-slot="dialog-footer"] button:has-text("닫기")').click()
+
+    const intermediateBlockTemplateSettingsSavePromise = waitForBlockTemplateSettingsSave({
+      page,
+      baseUrl,
+    })
+    await fillCodeMirror({
+      page,
+      editor: "#block-template-editor-naver-se4-image",
+      value: "{{ alt }}",
+    })
+    await intermediateBlockTemplateSettingsSavePromise
+
     const blockTemplateSettingsSavePromise = waitForBlockTemplateSettingsSave({
       page,
       baseUrl,
@@ -1519,7 +1809,7 @@ const run = async () => {
     await fillCodeMirror({
       page,
       editor: "#block-template-editor-naver-se4-image",
-      value: "![${alt}](${url})",
+      value: "{{ `![${alt}](${url})` }}",
     })
     await blockTemplateSettingsSavePromise
 

@@ -1,3 +1,4 @@
+import { getTemplateExpressions } from "@exitpress/domain/template/util/renderTemplateExpressions.js"
 import { describe, expect, it } from "vitest"
 
 import { NaverBlog } from "./NaverBlog.js"
@@ -79,6 +80,34 @@ describe("parser block catalog", () => {
     ).toMatchObject({
       presets: [{ id: "ignore", label: "무시", template: "" }],
       props: {},
+    })
+  })
+
+  it("keeps block preset interpolation inside double-brace expressions", () => {
+    const templateDefinitions = new NaverBlog().getBlockTemplateDefinitions()
+
+    templateDefinitions.forEach((definition) => {
+      definition.presets.forEach((preset) => {
+        const expressions = getTemplateExpressions(preset.template)
+
+        if (Object.keys(definition.props).length > 0 && preset.template.trim()) {
+          expect(
+            expressions.length,
+            `${definition.key}:${preset.id} should use {{ expression }} template syntax`,
+          ).toBeGreaterThan(0)
+        }
+
+        Array.from(preset.template.matchAll(/\$\{/g)).forEach((match) => {
+          const offset = match.index ?? -1
+
+          expect(
+            expressions.some(
+              (expression) => expression.offset <= offset && offset < expression.endOffset,
+            ),
+            `${definition.key}:${preset.id} has legacy interpolation outside {{ expression }}`,
+          ).toBe(true)
+        })
+      })
     })
   })
 })

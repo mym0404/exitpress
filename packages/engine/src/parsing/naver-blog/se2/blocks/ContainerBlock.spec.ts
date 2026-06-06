@@ -19,7 +19,7 @@ class CustomSectionLeafBlock extends LeafParserBlock {
   override readonly label = "Custom section"
   override readonly templateDefinition = {
     label: this.label,
-    presets: [{ id: "paragraph", label: "본문", template: "${text}" }],
+    presets: [{ id: "paragraph", label: "본문", template: "{{ text }}" }],
     props: {
       text: { label: "본문", type: "string" },
     },

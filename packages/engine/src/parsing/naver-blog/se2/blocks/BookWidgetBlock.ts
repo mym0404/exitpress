@@ -102,7 +102,7 @@ export class NaverSe2BookWidgetBlock extends LeafParserBlock {
       {
         id: "default",
         label: "이미지 또는 본문",
-        template: "${(url ?? '') ? '![' + alt + '](' + url + ')' : text}",
+        template: "{{ (url ?? '') ? `![${alt}](${url})` : text }}",
       },
     ],
     props: {

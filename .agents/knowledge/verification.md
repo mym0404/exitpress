@@ -15,7 +15,7 @@
 - `mise exec -- pnpm check:local`: format, lint, typecheck, Storybook check, and offline tests.
 - `mise exec -- pnpm check:unused`: unused source/test/script diagnostics.
 - `mise exec -- pnpm smoke:ui`: mock browser scan/export/provider-test/automatic-upload/resume workflow.
-- `mise exec -- pnpm check:full`: local baseline plus mock browser smoke UI.
+- `mise exec -- pnpm check:full`: default local baseline for ordinary code changes; runs `check:local` plus mock browser smoke UI.
 - `mise exec -- pnpm test:network`: live resume export, live SE2 table export, and live upload e2e.
 
 ## Focused Commands
@@ -24,6 +24,7 @@
 - `mise exec -- pnpm storybook:generate`: regenerate committed Storybook catalog.
 
 ## What Each Layer Proves
+- Check full is the normal final local proof after code changes unless the task is docs-only, a repeated inner-loop check, or blocked by environment, secrets, or runtime cost.
 - Typecheck proves moved imports, shared contracts, and cross-package type compatibility.
 - Offline tests prove pure logic, parser block conversion, renderer, server, hook, and generated catalog behavior.
 - Storybook check proves generated catalog matches current parser/renderer output.
@@ -37,8 +38,10 @@
 - Coverage does not replace behavior-specific parser/export/server/smoke checks.
 
 ## Task Loops
+- Use focused commands while iterating only when the same class of check would otherwise be repeated frequently; finish with `check:full` when the change can affect runtime behavior.
+- Documentation-only knowledge edits do not need browser smoke; verify routed paths, command existence, and changed Markdown content.
 - Moving or deleting files requires typecheck and `check:unused`.
 - Parser changes require offline tests.
-- Export, manifest, upload, resume, or UI state changes require smoke UI.
+- Export, manifest, upload, resume, UI state, server API, routing, static asset serving, or job-state changes require smoke UI.
 - Upload e2e changes must keep both mock smoke and live upload harnesses aligned with the current export-triggered upload flow.
 - Live fetch/upload changes require the matching network command when the environment supports it.

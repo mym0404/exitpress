@@ -5,28 +5,35 @@ import {
   cloneExportOptions,
   sanitizePersistedExportOptions,
 } from "@exitpress/domain/export-options/ExportOptions.js"
+import { renderTemplateExpressions } from "@exitpress/domain/template/util/renderTemplateExpressions.js"
 
 import type { ScanCacheMap } from "@exitpress/domain/blog/schema/BlogScan.js"
 import type { PartialExportOptions } from "@exitpress/domain/export-options/schema/ExportOptions.js"
 import type { ThemePreference } from "@exitpress/domain/preferences/schema/ThemePreference.js"
-import type { BlockTemplateDefinition } from "@exitpress/domain/template/schema/BlockTemplateDefinition.js"
+import type {
+  BlockTemplateDefinition,
+  TemplatePropDefinition,
+} from "@exitpress/domain/template/schema/BlockTemplateDefinition.js"
+import type { TemplateValue } from "@exitpress/domain/template/schema/TemplateValue.js"
 
-const templateExpressionPattern = /\$\{([^{}]+)\}/g
-const templateStringPattern = /(["'`])(?:\\.|(?!\1).)*\1/g
-const rootIdentifierPattern = /(?<![.\w$])([A-Za-z_$][\w$]*)/g
-const reservedTemplateIdentifiers = new Set(["false", "null", "true", "undefined"])
+const getSampleTemplateValue = (prop: TemplatePropDefinition): TemplateValue => {
+  if (prop.type.startsWith("number")) {
+    return 1
+  }
 
-const getTemplateExpressionRootIdentifiers = (expression: string) => {
-  const withoutStrings = expression.replace(templateStringPattern, "")
-  const arrowParams = new Set(
-    [...withoutStrings.matchAll(/\b([A-Za-z_$][\w$]*)\s*=>/g)].map((match) => match[1]!),
-  )
+  if (prop.type.startsWith("boolean")) {
+    return true
+  }
 
-  return [...withoutStrings.matchAll(rootIdentifierPattern)]
-    .map((match) => match[1]!)
-    .filter(
-      (identifier) => !arrowParams.has(identifier) && !reservedTemplateIdentifiers.has(identifier),
-    )
+  if (prop.type.startsWith("array")) {
+    return []
+  }
+
+  if (prop.type.startsWith("object")) {
+    return {}
+  }
+
+  return "value"
 }
 
 const templateMatchesDefinition = ({
@@ -36,15 +43,14 @@ const templateMatchesDefinition = ({
   template: string
   definition: BlockTemplateDefinition
 }) => {
-  const propNames = new Set(Object.keys(definition.props))
+  const props = Object.fromEntries(
+    Object.entries(definition.props).map(([key, prop]) => [key, getSampleTemplateValue(prop)]),
+  )
 
-  for (const match of template.matchAll(templateExpressionPattern)) {
-    const expression = match[1] ?? ""
-    const identifiers = getTemplateExpressionRootIdentifiers(expression)
-
-    if (identifiers.some((identifier) => !propNames.has(identifier))) {
-      return false
-    }
+  try {
+    renderTemplateExpressions({ template, props })
+  } catch {
+    return false
   }
 
   return true

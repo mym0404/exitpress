@@ -17,17 +17,17 @@ export class NaverSe4FormulaBlock extends LeafParserBlock {
       {
         id: "display-math",
         label: "표시 수식",
-        template: "${'$$\\n' + formula + '\\n$$'}",
+        template: "{{ `$$\\n${formula}\\n$$` }}",
       },
       {
         id: "inline-math",
         label: "인라인 수식",
-        template: "$${formula}$",
+        template: "{{ `$${formula}$` }}",
       },
       {
         id: "math-fence",
         label: "Math 코드 펜스",
-        template: "${'```math\\n' + formula + '\\n```'}",
+        template: "{{ `\\`\\`\\`math\\n${formula}\\n\\`\\`\\`` }}",
       },
     ],
     props: {

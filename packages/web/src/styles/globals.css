@@ -332,12 +332,6 @@ pre,
   border-radius: var(--radius-md);
 }
 
-.template-code-editor .cm-content,
-.template-code-editor .cm-gutters {
-  font-size: 0.8125rem;
-  line-height: 1.55;
-}
-
 .block-output-preview-surface {
   border-color: color-mix(in srgb, var(--primary) 42%, var(--border));
   background: color-mix(in srgb, var(--primary) 16%, var(--muted));
