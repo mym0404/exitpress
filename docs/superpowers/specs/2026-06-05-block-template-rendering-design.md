@@ -429,7 +429,7 @@ book widget props 예:
 8. E2E smoke와 sample fixtures: 새 end-to-end 흐름 기준으로 마지막에 갱신한다.
 
 ## 검증 명령
-- parser block 계약 변경은 `pnpm test:parser-blocks`로 확인한다.
+- parser block 계약 변경은 `pnpm test:offline`로 확인한다.
 - evaluator 작업 중에는 focused template renderer spec을 실행한다.
 - 저장소 코드 변경 뒤에는 `pnpm check:local`을 실행한다.
 - template editor UI 변경 뒤에는 `pnpm smoke:ui`를 실행한다.

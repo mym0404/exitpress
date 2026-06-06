@@ -24,6 +24,6 @@
 - Do not add parser inventories to knowledge docs; code and tests are the source of truth.
 
 ## Verification
-- Parser block changes require focused parser block tests and the offline suite.
+- Parser block changes require offline tests that cover the changed block behavior.
 - Parser routing changes require the offline suite.
 - Storybook catalog changes require catalog generation/check commands plus Storybook tests.

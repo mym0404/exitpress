@@ -27,6 +27,6 @@
 - Keep unsupported behavior observable through diagnostics and evidence tools.
 
 ## Verification
-- Block implementation changes require parser block tests.
+- Block implementation changes require offline tests that cover the changed block behavior.
 - Output contract changes require offline tests and Storybook catalog checks.
 - Fixture changes must prove current live HTML still matches expected Markdown.

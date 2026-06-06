@@ -276,7 +276,6 @@ bun scripts/post-evidence/capture-post-evidence.ts --help
 For parser/block changes:
 
 ```bash
-pnpm test:parser-blocks
 pnpm test:offline
 pnpm check:local
 ```
