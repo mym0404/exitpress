@@ -1,0 +1,199 @@
+import { createHash } from "node:crypto"
+import { writeFile } from "node:fs/promises"
+import path from "node:path"
+
+import { normalizeAssetUrl } from "@exitpress/domain/blog/NaverUrl.js"
+import { ensureDir, relativePathFrom } from "@exitpress/engine/infra/node/FilePathUtils.js"
+
+import type { AssetRecord } from "@exitpress/domain/export-job/Types.js"
+import type { ExportOptions } from "@exitpress/domain/export-options/Types.js"
+
+import type { AssetCompressor } from "./AssetCompression.js"
+
+import {
+  compressWithSharp,
+  extensionFromContentType,
+  extensionFromUrl,
+  isCompressionSafeMimeType,
+} from "./AssetCompression.js"
+
+type AssetBinary = {
+  bytes: Buffer
+  contentType: string | null
+}
+
+type AssetDownloader = {
+  downloadBinary: (input: { sourceUrl: string; destinationPath: string }) => Promise<void>
+  fetchBinary?: (input: { sourceUrl: string }) => Promise<AssetBinary>
+}
+
+const normalizeOutputPath = (value: string) => value.split(path.sep).join("/")
+
+export class AssetStore {
+  readonly outputDir: string
+  readonly downloader: AssetDownloader
+  readonly options: Pick<ExportOptions, "assets" | "structure">
+  readonly cache = new Map<string, string>()
+  readonly sourceUrlCache = new Map<string, string>()
+  readonly inFlightSourceUrlCache = new Map<string, Promise<string>>()
+  readonly compressImage: AssetCompressor
+
+  constructor({
+    outputDir,
+    downloader,
+    options,
+    compressImage,
+  }: {
+    outputDir: string
+    downloader: AssetDownloader
+    options: Pick<ExportOptions, "assets" | "structure">
+    compressImage?: AssetCompressor
+  }) {
+    this.outputDir = outputDir
+    this.downloader = downloader
+    this.options = options
+    this.compressImage = compressImage ?? compressWithSharp
+  }
+
+  async saveAsset({
+    kind,
+    sourceUrl,
+    markdownFilePath,
+  }: {
+    kind: "image" | "thumbnail"
+    sourceUrl: string
+    markdownFilePath: string
+  }) {
+    const normalizedSourceUrl = normalizeAssetUrl(sourceUrl)
+
+    const shouldDownload =
+      this.options.assets.imageHandlingMode !== "remote" &&
+      ((kind === "image" && this.options.assets.downloadImages) ||
+        (kind === "thumbnail" && this.options.assets.downloadThumbnails))
+
+    if (!shouldDownload) {
+      return {
+        kind,
+        sourceUrl: normalizedSourceUrl,
+        reference: normalizedSourceUrl,
+        relativePath: null,
+        storageMode: "remote",
+        uploadCandidate: null,
+      } satisfies AssetRecord
+    }
+
+    if (!this.downloader.fetchBinary) {
+      throw new Error("로컬 자산 저장을 지원하는 fetchBinary downloader가 필요합니다.")
+    }
+
+    const cachedBySourceUrl = this.sourceUrlCache.get(normalizedSourceUrl)
+
+    if (cachedBySourceUrl) {
+      const relativePath = relativePathFrom({
+        from: markdownFilePath,
+        to: cachedBySourceUrl,
+      })
+
+      return {
+        kind,
+        sourceUrl: normalizedSourceUrl,
+        reference: relativePath,
+        relativePath,
+        storageMode: "relative",
+        uploadCandidate: {
+          kind,
+          sourceUrl: normalizedSourceUrl,
+          localPath: normalizeOutputPath(path.relative(this.outputDir, cachedBySourceUrl)),
+          markdownReference: relativePath,
+        },
+      } satisfies AssetRecord
+    }
+
+    const absolutePath = await this.getOrCreateLocalAssetPath(normalizedSourceUrl)
+
+    const relativePath = relativePathFrom({
+      from: markdownFilePath,
+      to: absolutePath,
+    })
+
+    return {
+      kind,
+      sourceUrl: normalizedSourceUrl,
+      reference: relativePath,
+      relativePath,
+      storageMode: "relative",
+      uploadCandidate: {
+        kind,
+        sourceUrl: normalizedSourceUrl,
+        localPath: normalizeOutputPath(path.relative(this.outputDir, absolutePath)),
+        markdownReference: relativePath,
+      },
+    } satisfies AssetRecord
+  }
+
+  private async getOrCreateLocalAssetPath(normalizedSourceUrl: string) {
+    const cachedAbsolutePath = this.sourceUrlCache.get(normalizedSourceUrl)
+
+    if (cachedAbsolutePath) {
+      return cachedAbsolutePath
+    }
+
+    const inFlightAbsolutePath = this.inFlightSourceUrlCache.get(normalizedSourceUrl)
+
+    if (inFlightAbsolutePath) {
+      return inFlightAbsolutePath
+    }
+
+    const absolutePathPromise = (async () => {
+      const binary = await this.downloader.fetchBinary!({
+        sourceUrl: normalizedSourceUrl,
+      })
+      const contentHash = createHash("sha256").update(binary.bytes).digest("hex")
+      const cachedByHash = this.cache.get(contentHash)
+
+      if (cachedByHash) {
+        this.sourceUrlCache.set(normalizedSourceUrl, cachedByHash)
+        return cachedByHash
+      }
+
+      const extension =
+        extensionFromContentType(binary.contentType) ?? extensionFromUrl(normalizedSourceUrl)
+      const absolutePath = path.join(this.outputDir, "public", `${contentHash}${extension}`)
+
+      await ensureDir(path.dirname(absolutePath))
+
+      if (this.options.assets.compressionEnabled) {
+        if (isCompressionSafeMimeType(binary.contentType, normalizedSourceUrl)) {
+          try {
+            const compressedBytes = await this.compressImage({
+              bytes: binary.bytes,
+              contentType: binary.contentType,
+              sourceUrl: normalizedSourceUrl,
+            })
+
+            await writeFile(absolutePath, compressedBytes)
+          } catch {
+            await writeFile(absolutePath, binary.bytes)
+          }
+        } else {
+          await writeFile(absolutePath, binary.bytes)
+        }
+      } else {
+        await writeFile(absolutePath, binary.bytes)
+      }
+
+      this.cache.set(contentHash, absolutePath)
+      this.sourceUrlCache.set(normalizedSourceUrl, absolutePath)
+
+      return absolutePath
+    })()
+
+    this.inFlightSourceUrlCache.set(normalizedSourceUrl, absolutePathPromise)
+
+    try {
+      return await absolutePathPromise
+    } finally {
+      this.inFlightSourceUrlCache.delete(normalizedSourceUrl)
+    }
+  }
+}

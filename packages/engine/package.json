@@ -1,0 +1,28 @@
+{
+  "name": "@exitpress/engine",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./*.js": {
+      "types": "./src/*.ts",
+      "default": "./src/*.ts"
+    }
+  },
+  "dependencies": {
+    "@exitpress/domain": "workspace:*",
+    "cheerio": "catalog:",
+    "domhandler": "catalog:",
+    "piclist": "catalog:",
+    "sharp": "catalog:",
+    "turndown": "catalog:",
+    "turndown-plugin-gfm": "catalog:",
+    "yaml": "catalog:"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "@types/turndown": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}

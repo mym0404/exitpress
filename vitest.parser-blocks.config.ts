@@ -8,14 +8,19 @@ const rootDir = fileURLToPath(new URL(".", import.meta.url))
 export default defineConfig({
   resolve: {
     alias: {
-      "@": path.join(rootDir, "src/ui"),
+      "@": path.join(rootDir, "packages/web/src"),
+      "@exitpress/domain": path.join(rootDir, "packages/domain/src"),
+      "@exitpress/engine": path.join(rootDir, "packages/engine/src"),
+      "@exitpress/server": path.join(rootDir, "packages/server/src"),
+      "@exitpress/web": path.join(rootDir, "packages/web/src"),
+      "@tests": path.join(rootDir, "tests"),
     },
   },
   test: {
     include: [
-      "src/parsing/naver-blog/se2/**/*.spec.ts",
-      "src/parsing/naver-blog/se3/**/*.spec.ts",
-      "src/parsing/naver-blog/se4/**/*.spec.ts",
+      "packages/engine/src/parsing/naver-blog/se2/**/*.spec.ts",
+      "packages/engine/src/parsing/naver-blog/se3/**/*.spec.ts",
+      "packages/engine/src/parsing/naver-blog/se4/**/*.spec.ts",
     ],
   },
 })

@@ -32,4 +32,4 @@
 
 ## Verification
 - `mise exec -- pnpm test:offline`: runs sample fixture live-fetch regression with the rest of the Vitest suite.
-- `mise exec -- pnpm check:local`: includes typecheck and sample fixture live-fetch regression.
+- `mise exec -- pnpm check:local`: includes typecheck, Storybook catalog check, and sample fixture live-fetch regression.

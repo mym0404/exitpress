@@ -4,7 +4,7 @@
 - `download-and-upload` finishes export first, then keeps the same job and enters `upload-ready -> uploading -> upload-completed | upload-failed`.
 - Post-export upload input is collected in the result panel as `providerKey + providerFields`; it is not stored as an export option.
 - `providerFields` values are scalar `string | number | boolean`.
-- Upload provider catalog comes from the installed PicList runtime and is normalized for UI display by `src/server/upload/ImageUploadProviderSource.ts`.
+- Upload provider catalog comes from the installed PicList runtime and is normalized for UI display by `packages/server/src/upload/ImageUploadProviderSource.ts`.
 - GitHub upload with jsDelivr enabled locks `customUrl` and derives `https://cdn.jsdelivr.net/gh/<repo>@<branch>`; empty branch omits `@<branch>`.
 
 ## Progress Semantics
@@ -17,14 +17,14 @@
 - If no upload candidates exist, `download-and-upload` closes as completed with skipped upload semantics instead of entering upload.
 
 ## Resume Source Of Truth
-- `src/server/jobs/ExportJobManifest.ts` reads and writes `manifest.json` as the recovery source.
+- `packages/server/src/jobs/ExportJobManifest.ts` reads and writes `manifest.json` as the recovery source.
 - `manifest.json.job` carries request, status, phase, progress, upload snapshot, scan result, summary, timestamps, and optional error.
-- `src/server/http/HttpServer.ts` hydrates bootstrap state from the last output directory's `manifest.json`.
-- `src/server/jobs/JobStore.ts` keeps upload counters, item-level upload counters, and rewrite status in polling payloads.
+- `packages/server/src/http/HttpServer.ts` hydrates bootstrap state from the last output directory's `manifest.json`.
+- `packages/server/src/jobs/JobStore.ts` keeps upload counters, item-level upload counters, and rewrite status in polling payloads.
 
 ## Current Risk Seam
 - Fast live upload can finish before 1-second polling observes intermediate `uploading` state.
-- `src/server/jobs/JobStore.ts` and `src/ui/features/job-results/JobResultsPanel.tsx` preserve the last upload snapshot so the result stage still shows progress evidence after completion.
+- `packages/server/src/jobs/JobStore.ts` and `packages/web/src/features/job-results/JobResultsPanel.tsx` preserve the last upload snapshot so the result stage still shows progress evidence after completion.
 - `tests/e2e/run-ui-live-upload.ts` uses run-unique GitHub paths so live upload evidence is not hidden by a reused path.
 
 ## Verification

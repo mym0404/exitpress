@@ -2,12 +2,12 @@ import { existsSync, readFileSync } from "node:fs"
 import { mkdir, readFile, rm, writeFile } from "node:fs/promises"
 import path from "node:path"
 
+import { createHttpServer } from "@exitpress/server/http/HttpServer.js"
 import { chromium } from "playwright"
 
-import type { ScanResult } from "../../../src/domain/blog/Types.js"
-import type { ExportJobState, PostManifestEntry } from "../../../src/domain/export-job/Types.js"
+import type { ScanResult } from "@exitpress/domain/blog/Types.js"
+import type { ExportJobState, PostManifestEntry } from "@exitpress/domain/export-job/Types.js"
 
-import { createHttpServer } from "../../../src/server/http/HttpServer.js"
 import { createTestTempDir } from "../../support/test-paths.js"
 
 const blogId = "mym0404"

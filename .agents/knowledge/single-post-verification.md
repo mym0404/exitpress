@@ -46,5 +46,5 @@ bun scripts/single-post/export-single-post.ts \
 - `scripts/single-post/SinglePostArgs.ts`
 - `scripts/single-post/SinglePostOptions.ts`
 - `scripts/single-post/SinglePostSummary.ts`
-- `src/exporting/post/SinglePostInspect.ts`
-- `src/exporting/post/SinglePostExport.ts`
+- `packages/engine/src/exporting/post/SinglePostInspect.ts`
+- `packages/engine/src/exporting/post/SinglePostExport.ts`

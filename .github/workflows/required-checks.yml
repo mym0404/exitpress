@@ -44,6 +44,9 @@ jobs:
       - name: Run typecheck
         run: pnpm typecheck
 
+      - name: Run Storybook catalog check
+        run: pnpm storybook:check
+
       - name: Run UI smoke
         timeout-minutes: 10
         run: pnpm smoke:ui

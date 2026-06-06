@@ -1,0 +1,193 @@
+import { useCallback } from "react"
+
+import type { ScanCacheMap, ScanResult } from "@exitpress/domain/blog/Types.js"
+import type { ExportOptions } from "@exitpress/domain/export-options/Types.js"
+import type { Dispatch, MutableRefObject, SetStateAction } from "react"
+
+import type { SetupStep } from "../features/common/shell/WizardFlow.js"
+import type { ResumeDialogState } from "../features/resume/ResumeState.js"
+import type { ExportBootstrapResponse } from "../lib/Api.js"
+
+import {
+  defaultCategoryStatus,
+  defaultScanStatus,
+  normalizeOutputDir,
+  restoredCategoryFallbackStatus,
+  restoredCategoryStatus,
+  restoredScanStatus,
+} from "../features/scan/ScanStatus.js"
+
+export const useAppResumeBootstrap = ({
+  hydrateJob,
+  setDefaults,
+  setOptions,
+  setOutputDir,
+  setBlogIdOrUrl,
+  setCategorySearch,
+  setSetupStep,
+  setActiveJobFilter,
+  setScanPending,
+  setScanCache,
+  setCategoryStatus,
+  setThemePreference,
+  setResumeDialog,
+  setNeutralScanStatus,
+  hasUserInteractedRef,
+  lastNotifiedJobKeyRef,
+}: {
+  hydrateJob: (nextJob: ExportBootstrapResponse["resumedJob"]) => void
+  setDefaults: Dispatch<SetStateAction<ExportBootstrapResponse>>
+  setOptions: Dispatch<SetStateAction<ExportOptions>>
+  setOutputDir: Dispatch<SetStateAction<string>>
+  setBlogIdOrUrl: Dispatch<SetStateAction<string>>
+  setCategorySearch: Dispatch<SetStateAction<string>>
+  setSetupStep: Dispatch<SetStateAction<SetupStep>>
+  setActiveJobFilter: Dispatch<SetStateAction<"all" | "success" | "failed">>
+  setScanPending: Dispatch<SetStateAction<boolean>>
+  setScanCache: Dispatch<SetStateAction<ScanCacheMap>>
+  setCategoryStatus: Dispatch<SetStateAction<string>>
+  setThemePreference: Dispatch<SetStateAction<ExportBootstrapResponse["themePreference"]>>
+  setResumeDialog: Dispatch<SetStateAction<ResumeDialogState | null>>
+  setNeutralScanStatus: (message: string) => void
+  hasUserInteractedRef: MutableRefObject<boolean>
+  lastNotifiedJobKeyRef: MutableRefObject<string | null>
+}) => {
+  const applyResumedState = useCallback(
+    ({
+      source,
+      resumedJob,
+      resumeSummary,
+      resumedScanResult,
+    }: {
+      source: ResumeDialogState["source"]
+      resumedJob: NonNullable<ExportBootstrapResponse["resumedJob"]>
+      resumeSummary: NonNullable<ExportBootstrapResponse["resumeSummary"]>
+      resumedScanResult: ScanResult | null
+    }) => {
+      setDefaults((current) => ({
+        ...current,
+        lastOutputDir: resumedJob.request.outputDir,
+        resumedJob,
+        resumeSummary,
+        resumedScanResult,
+      }))
+      setOptions(resumedJob.request.options)
+      setOutputDir(normalizeOutputDir(resumedJob.request.outputDir))
+      setBlogIdOrUrl(resumedJob.request.blogIdOrUrl)
+      setCategorySearch("")
+      setSetupStep("blog-input")
+      setActiveJobFilter("all")
+      setScanPending(false)
+
+      if (resumedScanResult) {
+        setScanCache((current) => ({
+          ...current,
+          [resumedScanResult.blogId]: resumedScanResult,
+        }))
+        setNeutralScanStatus(`${resumedScanResult.blogId} 스캔 결과 재개`)
+        setCategoryStatus(restoredCategoryStatus)
+      } else {
+        setScanCache({})
+        setNeutralScanStatus(restoredScanStatus)
+        setCategoryStatus(restoredCategoryFallbackStatus)
+      }
+
+      lastNotifiedJobKeyRef.current = `${resumedJob.id}:${resumedJob.status}:${resumedJob.finishedAt ?? ""}`
+      hydrateJob(resumedJob)
+      setResumeDialog(
+        source === "bootstrap" ? { source, resumedJob, resumeSummary, resumedScanResult } : null,
+      )
+    },
+    [
+      hydrateJob,
+      lastNotifiedJobKeyRef,
+      setActiveJobFilter,
+      setBlogIdOrUrl,
+      setCategorySearch,
+      setCategoryStatus,
+      setDefaults,
+      setNeutralScanStatus,
+      setOptions,
+      setOutputDir,
+      setResumeDialog,
+      setScanCache,
+      setScanPending,
+      setSetupStep,
+    ],
+  )
+
+  const applyBootstrapState = useCallback(
+    (nextDefaults: ExportBootstrapResponse) => {
+      setDefaults(nextDefaults)
+      setThemePreference(nextDefaults.themePreference)
+
+      if (
+        hasUserInteractedRef.current &&
+        !nextDefaults.resumedJob &&
+        !nextDefaults.resumedScanResult
+      ) {
+        return
+      }
+
+      setOptions(nextDefaults.resumedJob?.request.options ?? nextDefaults.options)
+      setOutputDir(
+        normalizeOutputDir(
+          nextDefaults.resumedJob?.request.outputDir ?? nextDefaults.lastOutputDir,
+        ),
+      )
+      setBlogIdOrUrl(nextDefaults.resumedJob?.request.blogIdOrUrl ?? "")
+      setCategorySearch("")
+      setSetupStep("blog-input")
+      setActiveJobFilter("all")
+      setScanPending(false)
+
+      if (nextDefaults.resumedScanResult) {
+        setScanCache({ [nextDefaults.resumedScanResult.blogId]: nextDefaults.resumedScanResult })
+        setNeutralScanStatus(`${nextDefaults.resumedScanResult.blogId} 스캔 결과 재개`)
+        setCategoryStatus(restoredCategoryStatus)
+      } else {
+        setScanCache({})
+        setNeutralScanStatus(defaultScanStatus)
+        setCategoryStatus(defaultCategoryStatus)
+      }
+
+      if (nextDefaults.resumedJob && nextDefaults.resumeSummary) {
+        applyResumedState({
+          source: "bootstrap",
+          resumedJob: nextDefaults.resumedJob,
+          resumeSummary: nextDefaults.resumeSummary,
+          resumedScanResult: nextDefaults.resumedScanResult,
+        })
+        return
+      }
+
+      lastNotifiedJobKeyRef.current = null
+      hydrateJob(null)
+      setResumeDialog(null)
+    },
+    [
+      applyResumedState,
+      hasUserInteractedRef,
+      hydrateJob,
+      lastNotifiedJobKeyRef,
+      setActiveJobFilter,
+      setBlogIdOrUrl,
+      setCategorySearch,
+      setCategoryStatus,
+      setDefaults,
+      setNeutralScanStatus,
+      setOptions,
+      setOutputDir,
+      setResumeDialog,
+      setScanCache,
+      setScanPending,
+      setSetupStep,
+      setThemePreference,
+    ],
+  )
+
+  return {
+    applyBootstrapState,
+    applyResumedState,
+  }
+}

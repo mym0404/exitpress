@@ -1,15 +1,14 @@
 import { readdir } from "node:fs/promises"
 import path from "node:path"
 
+import { defaultExportOptions } from "@exitpress/domain/export-options/ExportOptions.js"
+import { NaverBlogFetcher } from "@exitpress/engine/integrations/naver-blog/NaverBlogFetcher.js"
+import { renderMarkdownPost } from "@exitpress/engine/markdown/utils/renderMarkdownPost.js"
+import { parsePostHtml } from "@exitpress/engine/parsing/naver-blog/core/PostParser.js"
+import { createNaverBlogDefaultBlockTemplateMap } from "@exitpress/engine/parsing/naver-blog/NaverBlog.js"
 import { parse as parseYaml } from "yaml"
 
-import type { NaverBlogFetcherCache } from "../../src/integrations/naver-blog/NaverBlogFetcher.js"
-
-import { defaultExportOptions } from "../../src/domain/export-options/ExportOptions.js"
-import { NaverBlogFetcher } from "../../src/integrations/naver-blog/NaverBlogFetcher.js"
-import { renderMarkdownPost } from "../../src/markdown/utils/renderMarkdownPost.js"
-import { parsePostHtml } from "../../src/parsing/naver-blog/core/PostParser.js"
-import { createNaverBlogDefaultBlockTemplateMap } from "../../src/parsing/naver-blog/NaverBlog.js"
+import type { NaverBlogFetcherCache } from "@exitpress/engine/integrations/naver-blog/NaverBlogFetcher.js"
 
 import { ensureHarnessDir, pathExists, readUtf8, repoPath, writeUtf8 } from "./e2e/paths.js"
 

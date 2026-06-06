@@ -4,9 +4,9 @@ import { mkdir, readFile, writeFile } from "node:fs/promises"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
 
-import { cloneExportOptions } from "../../src/domain/export-options/ExportOptions.js"
-import { exportSinglePost } from "../../src/exporting/post/SinglePostExport.js"
-import { inspectSinglePost } from "../../src/exporting/post/SinglePostInspect.js"
+import { cloneExportOptions } from "@exitpress/domain/export-options/ExportOptions.js"
+import { exportSinglePost } from "@exitpress/engine/exporting/post/SinglePostExport.js"
+import { inspectSinglePost } from "@exitpress/engine/exporting/post/SinglePostInspect.js"
 
 import { createSinglePostMetadataCachingFetcher } from "./MetadataCache.js"
 import { parseSinglePostCliArgs } from "./SinglePostArgs.js"

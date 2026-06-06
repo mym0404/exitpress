@@ -6,7 +6,12 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/ui/*"]
+      "@/*": ["packages/web/src/*"],
+      "@exitpress/domain/*": ["packages/domain/src/*"],
+      "@exitpress/engine/*": ["packages/engine/src/*"],
+      "@exitpress/server/*": ["packages/server/src/*"],
+      "@exitpress/web/*": ["packages/web/src/*"],
+      "@tests/*": ["tests/*"]
     },
     "strict": true,
     "esModuleInterop": true,
@@ -20,13 +25,13 @@
     "rootDir": "."
   },
   "include": [
-    "src/**/*.ts",
-    "src/**/*.tsx",
-    "src/**/*.d.ts",
+    "packages/**/*.ts",
+    "packages/**/*.tsx",
+    "packages/**/*.d.ts",
     "scripts/**/*.ts",
     "tests/**/*.ts",
     "tests/**/*.tsx",
-    "vite.config.ts",
-    "vite.pages.config.ts"
+    "packages/web/vite.config.ts",
+    "packages/web/vite.pages.config.ts"
   ]
 }

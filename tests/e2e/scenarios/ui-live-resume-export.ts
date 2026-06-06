@@ -3,13 +3,14 @@ import { readFile, rm } from "node:fs/promises"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
 
+import { defaultExportOptions } from "@exitpress/domain/export-options/ExportOptions.js"
+
 import type { ChildProcessWithoutNullStreams } from "node:child_process"
 
-import type { ScanResult } from "../../../src/domain/blog/Types.js"
-import type { ExportJobState, ExportManifest } from "../../../src/domain/export-job/Types.js"
-import type { ExportOptions } from "../../../src/domain/export-options/Types.js"
+import type { ScanResult } from "@exitpress/domain/blog/Types.js"
+import type { ExportJobState, ExportManifest } from "@exitpress/domain/export-job/Types.js"
+import type { ExportOptions } from "@exitpress/domain/export-options/Types.js"
 
-import { defaultExportOptions } from "../../../src/domain/export-options/ExportOptions.js"
 import { createTestTempDir } from "../../support/test-paths.js"
 
 const repoRoot = fileURLToPath(new URL("../../../", import.meta.url))

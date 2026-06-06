@@ -1,6 +1,6 @@
 import path from "node:path"
 
-import { ensureDir, resolveRepoPath } from "../../src/infra/node/FilePathUtils.js"
+import { ensureDir, resolveRepoPath } from "@exitpress/engine/infra/node/FilePathUtils.js"
 
 export type EvidenceAssetProfile = "readme" | "figure" | "tmp"
 

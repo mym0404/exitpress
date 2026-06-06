@@ -1,0 +1,20 @@
+{
+  "name": "@exitpress/domain",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./*.js": {
+      "types": "./src/*.ts",
+      "default": "./src/*.ts"
+    }
+  },
+  "dependencies": {
+    "@oxc-parser/binding-wasm32-wasi": "catalog:",
+    "oxc-parser": "catalog:"
+  },
+  "devDependencies": {
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}

@@ -2,7 +2,7 @@
 
 ## Repo-Specific Priorities
 - Prefer current code, tests, and package scripts over stale docs.
-- Keep runtime code in `src/`. Fixture lists, coverage reports, harness metadata, and generated evidence stay outside runtime code.
+- Keep runtime code in `packages/{web,server,domain,engine}/src`. Fixture lists, coverage reports, harness metadata, and generated evidence stay outside runtime code.
 - Parser, renderer, exporter, server, and UI contracts should stay visible in code or tests when they are mechanical.
 - Commit, push, and PR creation require explicit user request.
 
@@ -19,8 +19,8 @@
 ## TypeScript
 - The repo is strict TypeScript with NodeNext ESM.
 - Use `.js` extensions in TS imports where NodeNext runtime imports require them.
-- Keep types with the domain that owns the shape, such as `src/domain/parser/Types.ts`, `src/domain/blog/Types.ts`, `src/domain/export-options/Types.ts`, `src/domain/export-job/Types.ts`, and `src/domain/upload/UploadProviderTypes.ts`.
-- Keep parser block output behavior aligned across `ParserBlock.templateDefinition`, editor `supportedBlocks` arrays, `ExportOptions.blockOutputs`, and `src/parsing/naver-blog/core/BlogParser.ts`.
+- Keep types with the domain that owns the shape, such as `packages/domain/src/parser/Types.ts`, `packages/domain/src/blog/Types.ts`, `packages/domain/src/export-options/Types.ts`, `packages/domain/src/export-job/Types.ts`, and `packages/domain/src/upload/UploadProviderTypes.ts`.
+- Keep parser block output behavior aligned across `ParserBlock.templateDefinition`, editor `supportedBlocks` arrays, `ExportOptions.blockOutputs`, and `packages/engine/src/parsing/naver-blog/core/BlogParser.ts`.
 - This project does not preserve local schema backward compatibility unless explicitly requested. When an option/state contract changes, prefer the current schema and remove stale aliases or migration paths.
 - Prefer `type` aliases for object shapes, unions, and inferred helper types; do not introduce `interface` unless an external API requires it.
 - Do not keep one-use type aliases for short unions or object shapes unless the name carries domain meaning or multiple modules consume the type.
@@ -29,7 +29,8 @@
 - Use `Record<Union, Value>` when a map should stay exhaustive over a known union.
 
 ## Runtime Modules
-- Keep runtime ownership under `src/domain`, `src/shared`, `src/infra`, `src/integrations`, `src/parsing`, `src/markdown`, `src/exporting`, `src/server`, and `src/ui`; choose the domain boundary before the technical file type.
+- Keep runtime ownership under `packages/domain`, `packages/engine`, `packages/server`, and `packages/web`; choose the domain boundary before the technical file type.
+- Keep dependency direction as `web -> domain`, `server -> domain, engine`, and `engine -> domain`. Web runtime must not import engine.
 - Use classes for stateful services, editors, and parser blocks that own dependencies, caches, or shared behavior.
 - Use `readonly` fields for constructor dependencies and long-lived state that should not be reassigned.
 - Use `private` methods for internal multi-step class logic.
@@ -50,14 +51,14 @@
 - Keep display-only date formatting in focused common helpers instead of duplicating formatter setup.
 
 ## UI Code
-- `src/ui/components/ui/*` is the shadcn primitive layer. Prefer feature composition, tokens, or helper classes before changing primitives.
+- `packages/web/src/components/ui/*` is the shadcn primitive layer. Prefer feature composition, tokens, or helper classes before changing primitives.
 - Use the `@/*` UI alias configured in `vite.config.ts` and `tsconfig.json`.
 - UI tests should prefer user behavior, accessibility state, API contract, and visible text over className or computed-style assertions.
 - Do not add native `<select>` for new dropdowns; use the existing shadcn `Select`.
 - Do not mix icon sets; use `@remixicon/react`.
-- Keep UI feature code under `src/ui/features/{domain}`.
-- Keep cross-feature UI shell, hooks, and status helpers under `src/ui/features/common`.
-- Keep primitive wrappers under `src/ui/components/ui`; do not move feature-specific behavior into primitives.
+- Keep UI feature code under `packages/web/src/features/{domain}`.
+- Keep cross-feature UI shell, hooks, and status helpers under `packages/web/src/features/common`.
+- Keep primitive wrappers under `packages/web/src/components/ui`; do not move feature-specific behavior into primitives.
 
 ## Server And Harness
 - User `mise exec -- pnpm dev` owns the normal development server path.

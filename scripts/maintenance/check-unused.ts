@@ -67,12 +67,12 @@ const allowedKnipFileEntries: Record<string, string> = {
   "tests/e2e/scenarios/ui-smoke.ts": "spawned through smoke suite entrypoint",
   "tests/e2e/run-ui-resume-smoke.ts": "spawned by smoke suite",
   "tests/e2e/run-ui-smoke.ts": "spawned by smoke suite",
-  "vite.pages.config.ts": "GitHub Pages Storybook build config entrypoint",
+  "packages/web/vite.pages.config.ts": "GitHub Pages Storybook build config entrypoint",
   "vitest.parser-blocks.config.ts": "parser block coverage config entrypoint",
 }
 const allowedKnipExports: Record<string, string> = {
   "scripts/single-post/export-single-post.ts:runSinglePostExportCli": "script entrypoint alias",
-  "src/parsing/naver-blog/core/PostParser.ts:parsePostHtmlWithBlockEvidence":
+  "packages/engine/src/parsing/naver-blog/core/PostParser.ts:parsePostHtmlWithBlockEvidence":
     "manual evidence capture CLI dependency",
   "scripts/post-evidence/cases.ts:capturePostEvidenceUsage":
     "manual evidence capture CLI dependency",

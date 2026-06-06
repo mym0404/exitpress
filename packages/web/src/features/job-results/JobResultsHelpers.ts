@@ -1,0 +1,214 @@
+import { DEFAULT_UPLOAD_PROVIDER_KEY } from "@exitpress/domain/upload/UploadProviderKeys.js"
+
+import type { ExportJobState } from "@exitpress/domain/export-job/Types.js"
+import type {
+  UploadProviderCatalogResponse,
+  UploadProviderDefinition,
+  UploadProviderFields,
+} from "@exitpress/domain/upload/UploadProviderTypes.js"
+
+const INDEX_MARKDOWN_FILE = "index.md"
+
+export type JobFilter = "all" | "success" | "failed"
+export type JobResultsMode = "running" | "upload" | "result"
+type JobItemSeverity = "success" | "error"
+
+export const severityMeta = {
+  success: {
+    badge: "secondary" as const,
+    label: "성공",
+  },
+  error: {
+    badge: "destructive" as const,
+    label: "실패",
+  },
+}
+
+export const panelCopy: Record<JobResultsMode, { title: string; description: string }> = {
+  running: {
+    title: "실행 중",
+    description: "",
+  },
+  upload: {
+    title: "Image Upload",
+    description: "",
+  },
+  result: {
+    title: "결과",
+    description: "",
+  },
+}
+
+export const getPreferredDefaultProviderKey = (catalog: UploadProviderCatalogResponse) =>
+  catalog.providers.find((provider) => provider.key === DEFAULT_UPLOAD_PROVIDER_KEY)?.key ??
+  catalog.defaultProviderKey ??
+  catalog.providers[0]?.key ??
+  ""
+
+export const buildInitialProviderFields = (
+  provider: UploadProviderDefinition | null,
+): UploadProviderFields =>
+  Object.fromEntries(
+    (provider?.fields ?? []).map((field) => {
+      if (field.inputType === "checkbox") {
+        return [field.key, field.defaultValue === true]
+      }
+
+      if (
+        field.inputType === "select" &&
+        field.required &&
+        (field.defaultValue === null || field.defaultValue === undefined)
+      ) {
+        return [field.key, String(field.options?.[0]?.value ?? "")]
+      }
+
+      if (field.defaultValue === null || field.defaultValue === undefined) {
+        return [field.key, ""]
+      }
+
+      return [field.key, String(field.defaultValue)]
+    }),
+  )
+
+export const buildInitialProviderFieldMap = (catalog: UploadProviderCatalogResponse) =>
+  Object.fromEntries(
+    catalog.providers.map((provider) => [provider.key, buildInitialProviderFields(provider)]),
+  ) as Record<string, UploadProviderFields>
+
+export const buildGitHubJsDelivrCustomUrl = ({
+  repo,
+  branch,
+}: {
+  repo: string
+  branch: string
+}) => {
+  const normalizedRepo = repo.trim().replace(/^\/+|\/+$/g, "")
+  const normalizedBranch = branch.trim()
+
+  if (!normalizedRepo) {
+    return ""
+  }
+
+  return `https://cdn.jsdelivr.net/gh/${normalizedRepo}${normalizedBranch ? `@${normalizedBranch}` : ""}`
+}
+
+export const buildJobItemSeverity = (item: ExportJobState["items"][number]): JobItemSeverity => {
+  if (item.status === "failed" || item.error) {
+    return "error"
+  }
+
+  return "success"
+}
+
+export const getJobItems = (job: ExportJobState | null) => {
+  if (!job || !Array.isArray(job.items)) {
+    return []
+  }
+
+  return job.items
+}
+
+export const buildJobItemPathMeta = (
+  item: Pick<ExportJobState["items"][number], "logNo" | "outputPath">,
+) => {
+  const pathSegments = item.outputPath?.split("/").filter(Boolean) ?? []
+
+  if (pathSegments.length === 0) {
+    return {
+      fileLabel: `${item.logNo}.diagnostics`,
+    }
+  }
+
+  const fileName = pathSegments.at(-1) ?? `${item.logNo}.diagnostics`
+  const isIndexMarkdown = fileName === INDEX_MARKDOWN_FILE
+  const postFolderName = isIndexMarkdown ? pathSegments.at(-2) : null
+
+  return {
+    fileLabel: postFolderName || fileName,
+  }
+}
+
+const normalizeLocalPath = (value: string) => value.replace(/\\/g, "/").replace(/\/{2,}/g, "/")
+
+export const buildLocalOutputPath = ({
+  outputDir,
+  outputPath,
+}: {
+  outputDir: string
+  outputPath: string | null
+}) => {
+  if (!outputPath) {
+    return null
+  }
+
+  const normalizedOutputDir = normalizeLocalPath(outputDir.trim()).replace(/\/$/, "")
+  const normalizedOutputPath = normalizeLocalPath(outputPath).replace(/^\.\//, "")
+
+  if (!normalizedOutputDir) {
+    return normalizedOutputPath
+  }
+
+  return normalizeLocalPath(`${normalizedOutputDir}/${normalizedOutputPath}`)
+}
+
+export const toProgressValue = (completed: number, total: number) =>
+  total > 0 ? Math.round((completed / total) * 100) : 0
+
+export const buildUploadRowStatus = ({
+  jobStatus,
+  item,
+}: {
+  jobStatus: ExportJobState["status"] | undefined
+  item: ExportJobState["items"][number]
+}) => {
+  if (item.upload.rewriteStatus === "completed") {
+    return {
+      key: "complete",
+      label: "완료",
+    } as const
+  }
+
+  if (item.upload.rewriteStatus === "failed" || jobStatus === "upload-failed") {
+    return {
+      key: "failed",
+      label: "실패",
+    } as const
+  }
+
+  if (item.upload.uploadedCount <= 0) {
+    return {
+      key: "pending",
+      label: "대기",
+    } as const
+  }
+
+  return {
+    key: item.upload.uploadedCount < item.upload.candidateCount ? "partial" : "complete",
+    label: item.upload.uploadedCount < item.upload.candidateCount ? "부분 완료" : "완료",
+  } as const
+}
+
+export const shouldShowUploadColumns = (job: ExportJobState | null) =>
+  job?.request.options.assets.imageHandlingMode === "download-and-upload" ||
+  job?.upload.status !== "not-requested"
+
+export const buildUploadedLinkMeta = (item: ExportJobState["items"][number]) =>
+  (Array.isArray(item.upload.uploadedUrls) ? item.upload.uploadedUrls : []).reduce<
+    Array<{ label: string; url: string }>
+  >((entries, url, index) => {
+    try {
+      const parsed = new URL(url)
+
+      if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
+        return entries
+      }
+    } catch {
+      return entries
+    }
+
+    entries.push({
+      label: `#${index + 1}`,
+      url,
+    })
+    return entries
+  }, [])

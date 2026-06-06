@@ -8,7 +8,12 @@ const rootDir = fileURLToPath(new URL(".", import.meta.url))
 export default defineConfig({
   resolve: {
     alias: {
-      "@": path.join(rootDir, "src/ui"),
+      "@": path.join(rootDir, "packages/web/src"),
+      "@exitpress/domain": path.join(rootDir, "packages/domain/src"),
+      "@exitpress/engine": path.join(rootDir, "packages/engine/src"),
+      "@exitpress/server": path.join(rootDir, "packages/server/src"),
+      "@exitpress/web": path.join(rootDir, "packages/web/src"),
+      "@tests": path.join(rootDir, "tests"),
     },
   },
   test: {
@@ -16,18 +21,13 @@ export default defineConfig({
       provider: "v8",
       reporter: ["text", "json-summary", "lcov"],
       include: [
-        "src/domain/**/*.ts",
-        "src/exporting/**/*.ts",
-        "src/infra/**/*.ts",
-        "src/integrations/**/*.ts",
-        "src/markdown/**/*.ts",
-        "src/parsing/**/*.ts",
-        "src/shared/**/*.ts",
-        "src/server/**/*.ts",
-        "src/ui/**/*.ts",
-        "src/ui/**/*.tsx",
+        "packages/domain/src/**/*.ts",
+        "packages/engine/src/**/*.ts",
+        "packages/server/src/**/*.ts",
+        "packages/web/src/**/*.ts",
+        "packages/web/src/**/*.tsx",
       ],
-      exclude: ["src/ui/Main.tsx", "**/*.spec.ts", "**/*.spec.tsx", "tests/**"],
+      exclude: ["packages/web/src/Main.tsx", "**/*.spec.ts", "**/*.spec.tsx", "tests/**"],
       thresholds: {
         lines: 90,
         functions: 90,

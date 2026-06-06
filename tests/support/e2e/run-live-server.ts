@@ -1,5 +1,5 @@
-import { NaverBlogFetcher } from "../../../src/integrations/naver-blog/NaverBlogFetcher.js"
-import { createHttpServer } from "../../../src/server/http/HttpServer.js"
+import { NaverBlogFetcher } from "@exitpress/engine/integrations/naver-blog/NaverBlogFetcher.js"
+import { createHttpServer } from "@exitpress/server/http/HttpServer.js"
 
 const wait = (ms: number) =>
   new Promise<void>((resolve) => {

@@ -1,0 +1,50 @@
+{
+  "name": "@exitpress/web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./*.js": {
+      "types": "./src/*.ts",
+      "default": "./src/*.ts"
+    },
+    "./*.css": "./src/*.css"
+  },
+  "scripts": {
+    "build": "vite build --config vite.config.ts",
+    "build:pages": "vite build --config vite.pages.config.ts"
+  },
+  "dependencies": {
+    "@codemirror/autocomplete": "catalog:",
+    "@exitpress/domain": "workspace:*",
+    "@radix-ui/react-scroll-area": "catalog:",
+    "@radix-ui/react-slot": "catalog:",
+    "@remixicon/react": "catalog:",
+    "@uiw/react-codemirror": "catalog:",
+    "class-variance-authority": "catalog:",
+    "clsx": "catalog:",
+    "radix-ui": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "sonner": "catalog:",
+    "tailwind-merge": "catalog:"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "catalog:",
+    "@testing-library/dom": "catalog:",
+    "@testing-library/jest-dom": "catalog:",
+    "@testing-library/react": "catalog:",
+    "@testing-library/user-event": "catalog:",
+    "@types/jsdom": "catalog:",
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "@vitejs/plugin-react": "catalog:",
+    "cheerio": "catalog:",
+    "jsdom": "catalog:",
+    "tailwindcss": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:",
+    "vitest": "catalog:"
+  }
+}

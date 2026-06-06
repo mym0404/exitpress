@@ -1,5 +1,5 @@
-import type { SinglePostInspectDiagnostics } from "../../src/exporting/post/SinglePostInspect.js"
-import type { ParserBlockInspection } from "../../src/parsing/naver-blog/core/ParserBlockDiagnostics.js"
+import type { SinglePostInspectDiagnostics } from "@exitpress/engine/exporting/post/SinglePostInspect.js"
+import type { ParserBlockInspection } from "@exitpress/engine/parsing/naver-blog/core/ParserBlockDiagnostics.js"
 
 export const renderSinglePostSummary = ({
   blogId,

@@ -1,10 +1,10 @@
 import { readdir, readFile } from "node:fs/promises"
 import path from "node:path"
 
-import type { ExportManifest, PostManifestEntry } from "../../src/domain/export-job/Types.js"
+import { extractBlogId } from "@exitpress/domain/blog/NaverUrl.js"
+import { resolveRepoPath } from "@exitpress/engine/infra/node/FilePathUtils.js"
 
-import { extractBlogId } from "../../src/domain/blog/NaverUrl.js"
-import { resolveRepoPath } from "../../src/infra/node/FilePathUtils.js"
+import type { ExportManifest, PostManifestEntry } from "@exitpress/domain/export-job/Types.js"
 
 export type ReusableIngestOutput = {
   outputDir: string

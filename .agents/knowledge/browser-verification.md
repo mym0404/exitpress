@@ -17,7 +17,7 @@
 - Upload reaches `upload-completed`, `upload-failed`, or the requested intermediate state.
 - Desktop/mobile layout has no obvious horizontal overflow, clipping, or unreadable contrast.
 - Storybook checks should confirm the rendered `Input HTML`, `Source Capture`, and `Markdown` areas describe the same source block.
-- Storybook capture images should resolve from bundled `src/ui/features/storybook/assets` URLs in development or built asset URLs in production.
+- Storybook capture images should resolve from bundled `packages/web/src/features/storybook/assets` URLs in development or built asset URLs in production.
 
 ## Record
 - URL and viewport.

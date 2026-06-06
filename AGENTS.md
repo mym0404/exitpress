@@ -18,54 +18,47 @@
 |-- .agents/
 |   |-- knowledge/                    # repo-local evergreen knowledge
 |   `-- skills/ingest-blog/           # repo-local parser coverage workflow
-|-- src/
-|   |-- Server.ts                     # local server entrypoint
-|   |-- domain/                       # parser, blog, export option/job, upload contracts
-|   |-- shared/                       # runtime-neutral collection, text, date, error helpers
-|   |-- infra/                        # Node, HTTP, runtime adapters
-|   |-- integrations/naver-blog/      # current Naver Blog API and HTML fetch boundary
-|   |-- parsing/naver-blog/           # parser core plus SE2, SE3, SE4 families
-|   |-- markdown/                     # parsed block to Markdown renderer
-|   |-- exporting/                    # workflow, post, assets, paths, upload
-|   |-- server/                       # HTTP API, jobs, local state, upload catalog
-|   `-- ui/
-|       |-- app/                       # React route shell and wizard/storybook entry selection
-|       |-- features/storybook/        # static Storybook catalog, preview UI, and bundled capture assets
-|       |-- features/common/           # shell, hooks, and shared wizard/status UI
-|       `-- styles/                    # global tokens and theme CSS
+|-- packages/
+|   |-- web/                          # React/Vite UI, Storybook route, generated catalog, UI assets
+|   |-- server/                       # local server entrypoint, HTTP API, jobs, state, upload catalog
+|   |-- domain/                       # UI/server/engine shared contracts and pure option/path logic
+|   `-- engine/                       # Naver fetcher, parser, Markdown renderer, exporter, assets/upload workflow
 |-- scripts/
 |   |-- single-post/                  # single post export CLI
 |   |-- post-evidence/                # evidence capture/render helpers
+|   |-- storybook/                    # generated Storybook catalog writer/checker
 |   `-- maintenance/                  # repository maintenance CLIs
 |-- tests/
 |   |-- e2e/                          # Playwright/Bun UI and live harnesses
 |   |-- fixtures/samples/             # public sample expected outputs
 |   `-- support/                      # fixture, server, and test-path helpers
-|-- public/brand/                     # UI brand assets
 |-- mise.toml                         # tool runtime versions
 |-- .oxfmtrc.json                     # Oxfmt formatting and import sorting config
 |-- .oxlintrc.json                    # Oxlint lint config
 |-- .github/workflows/required-checks.yml
 |-- .github/workflows/pages.yml       # Storybook-only GitHub Pages deployment
-`-- package.json                      # repo-native commands
+|-- pnpm-workspace.yaml               # packages/* workspace and dependency catalog
+`-- package.json                      # root repo-native commands
 ```
 
 ## Runtime And Architecture
-- 서버 시작점은 `src/Server.ts`, HTTP API는 `src/server/http/HttpServer.ts`다.
-- export 파이프라인은 `src/exporting/workflow/NaverBlogExporter.ts`에서 `fetch -> parse -> review -> render -> write -> manifest` 순서로 따라간다.
-- parser seam은 `src/parsing/naver-blog/core/PostParser.ts`, `src/parsing/naver-blog/NaverBlog.ts`, `src/parsing/naver-blog/core/*`, `src/parsing/naver-blog/se2|se3|se4/*`다.
-- UI 셸은 `src/ui/app/App.tsx`, 공용 shell/hook/status는 `src/ui/features/common/*`, Storybook page와 capture asset은 `src/ui/features/storybook/*`, 전역 토큰은 `src/ui/styles/globals.css`다.
+- 서버 시작점은 `packages/server/src/Server.ts`, HTTP API는 `packages/server/src/http/HttpServer.ts`다.
+- export 파이프라인은 `packages/engine/src/exporting/workflow/NaverBlogExporter.ts`에서 `fetch -> parse -> review -> render -> write -> manifest` 순서로 따라간다.
+- parser seam은 `packages/engine/src/parsing/naver-blog/core/PostParser.ts`, `packages/engine/src/parsing/naver-blog/NaverBlog.ts`, `packages/engine/src/parsing/naver-blog/core/*`, `packages/engine/src/parsing/naver-blog/se2|se3|se4/*`다.
+- UI 셸은 `packages/web/src/app/App.tsx`, 공용 shell/hook/status는 `packages/web/src/features/common/*`, Storybook page와 capture asset은 `packages/web/src/features/storybook/*`, 전역 토큰은 `packages/web/src/styles/globals.css`다.
+- 의존 방향은 `web -> domain`, `server -> domain, engine`, `engine -> domain`이다. UI runtime은 `engine`을 import하지 않는다.
+- Storybook 카탈로그는 `scripts/storybook/generate-catalog.ts`가 engine으로 만든 `packages/web/src/features/storybook/generated/StorybookCatalog.generated.ts`를 커밋 대상으로 유지한다.
 
 ## Design System
 - UI 기준은 `.agents/knowledge/DESIGN.md`다.
-- theme/token source of truth는 `src/ui/styles/globals.css`, primitive layer는 `src/ui/components/ui/*`다.
+- theme/token source of truth는 `packages/web/src/styles/globals.css`, primitive layer는 `packages/web/src/components/ui/*`다.
 - dark-first single-column wizard, shadcn primitive 우선, 아이콘은 `@remixicon/react`만 유지한다.
 
 ## Operating Rules
 - source of truth 우선순위는 사용자 지시, 루트 `AGENTS.md`, 코드/설정/테스트, `.agents/knowledge/*.md`, reference 문서다.
 - 영속 UI 설정과 서버 파일 캐시는 `.cache/` 아래에 저장한다. 임시 테스트, harness, 런타임 config 파일은 repo-local `tmp/` 아래에 둔다.
 - AI agent, test, harness가 서버를 띄울 때는 사용자 `mise exec -- pnpm dev`와 공유 `.cache/export-ui-settings.json`을 피하고, 별도 `EXITPRESS_SETTINGS_PATH`, `EXITPRESS_SCAN_CACHE_PATH`, repo-local `tmp/`, 비기본 `PORT` 또는 `listen(0)`을 쓴다.
-- GitHub Pages는 repository settings에서 GitHub Actions source를 사용하고, `vite.pages.config.ts`의 `/exitpress/storybook/` base로 Storybook route만 배포한다.
+- GitHub Pages는 repository settings에서 GitHub Actions source를 사용하고, `packages/web/vite.pages.config.ts`의 `/exitpress/storybook/` base로 Storybook route만 배포한다.
 - README, ingest report, PR 설명에 쓰는 evidence section 계약은 `.agents/knowledge/post-evidence.md`를 따른다.
 - commit, push, PR 생성은 사용자가 명시적으로 요청한 경우에만 수행한다.
 
@@ -73,11 +66,13 @@
 - `mise exec -- pnpm format`: Oxfmt formatter와 import sorting을 적용한다. 구조 변경이나 대량 import 수정 중간에 실행한다.
 - `mise exec -- pnpm check:fmt`: Oxfmt formatting과 import sorting 기준선이다.
 - `mise exec -- pnpm check:lint`: Oxlint lint 기준선이다.
-- `mise exec -- pnpm check:local`: 저장소 파일 변경 뒤 기본 기준선이다. `check:fmt`, `check:lint`, `typecheck`, `test:offline`을 실행한다. 샘플 fixture 테스트는 live Naver HTML을 캐시하며 필요 시 네트워크를 쓴다.
+- `mise exec -- pnpm check:local`: 저장소 파일 변경 뒤 기본 기준선이다. `check:fmt`, `check:lint`, `typecheck`, `storybook:check`, `test:offline`을 실행한다. 샘플 fixture 테스트는 live Naver HTML을 캐시하며 필요 시 네트워크를 쓴다.
 - `mise exec -- pnpm check:unused`: source, test, script 코드의 dead code 기준선이다. `check:local`에는 포함되지 않는다.
 - `mise exec -- pnpm check:full`: `check:local`에 Playwright smoke UI를 더한 넓은 로컬 회귀다.
 - `mise exec -- pnpm smoke:ui`: mock 기반 UI 흐름과 복구 경로를 확인한다. 코어 사용자 흐름이나 상태 전이를 바꾼 뒤 실행한다.
-- `mise exec -- pnpm exec vite build --config vite.pages.config.ts`: GitHub Pages용 Storybook 정적 산출물을 `dist/pages/storybook`에 만든다.
+- `mise exec -- pnpm storybook:generate`: Storybook 입력 HTML을 engine으로 렌더링해 generated catalog 파일을 갱신한다.
+- `mise exec -- pnpm storybook:check`: generated Storybook catalog가 현재 parser/renderer 결과와 같은지 확인한다.
+- `mise exec -- pnpm --filter @exitpress/web build:pages`: GitHub Pages용 Storybook 정적 산출물을 `dist/pages/storybook`에 만든다.
 - `mise exec -- pnpm test:network`: live resume export, SE2 table resume export, live upload e2e를 순서대로 실행한다. 외부 네트워크와 upload secret이 필요하고 remote state를 만든다.
 - 검증 명령이 실패하면 현재 작업이 만든 회귀인지 먼저 본다. 현재 작업 때문이면 고치고, 기존 상태나 다른 변경 때문이면 실패 명령과 영향 범위를 보고한다.
 

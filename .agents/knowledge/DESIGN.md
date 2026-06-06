@@ -1,12 +1,12 @@
 # Design System
 
 ## Source Of Truth
-- Global tokens, theme variables, helper surfaces, and font declarations live in `src/ui/styles/globals.css`.
-- UI primitives live in `src/ui/components/ui/*`.
-- UI shell and common hooks live in `src/ui/features/common/*`.
-- Feature composition lives under `src/ui/features/scan`, `src/ui/features/options`, `src/ui/features/job-results`, `src/ui/features/resume`, and `src/ui/features/storybook`.
-- Brand assets live in `public/brand`.
-- Storybook capture assets live in `src/ui/features/storybook/assets`.
+- Global tokens, theme variables, helper surfaces, and font declarations live in `packages/web/src/styles/globals.css`.
+- UI primitives live in `packages/web/src/components/ui/*`.
+- UI shell and common hooks live in `packages/web/src/features/common/*`.
+- Feature composition lives under `packages/web/src/features/scan`, `packages/web/src/features/options`, `packages/web/src/features/job-results`, `packages/web/src/features/resume`, and `packages/web/src/features/storybook`.
+- Brand assets live in `packages/web/public/brand`.
+- Storybook capture assets live in `packages/web/src/features/storybook/assets`.
 
 ## Visual Direction
 - The default theme is dark; light is a companion theme.
@@ -35,8 +35,8 @@
 - New icons must come from `@remixicon/react`.
 
 ## Feature Contracts
-- The wizard step model stays in `src/ui/app/App.tsx` and common shell files.
-- `/storybook` is a static Storybook surface and must not load export defaults or start export wizard bootstrap.
+- The wizard step model stays in `packages/web/src/app/App.tsx` and common shell files.
+- `/storybook` is a static Storybook surface and must read the generated catalog without importing parser, renderer, or export wizard bootstrap code.
 - Storybook navigation follows `Editor -> Block` and reflects every parser block from `supportedBlocks`.
 - The top wizard header should show stage context without duplicating long instructions inside each step.
 - Feature files should own layout and composition; primitives and tokens own repeated visual language.
@@ -57,5 +57,6 @@
 
 ## Verification
 - `mise exec -- pnpm build:ui`: Vite build and token/primitive compile signal.
-- `mise exec -- pnpm check:local`: typecheck and offline tests.
+- `mise exec -- pnpm storybook:check`: generated Storybook catalog freshness signal.
+- `mise exec -- pnpm check:local`: typecheck, Storybook catalog check, and offline tests.
 - `mise exec -- pnpm smoke:ui`: dark default render, light persistence, category/export/upload flow, result table, resume dialog, and recovery path.

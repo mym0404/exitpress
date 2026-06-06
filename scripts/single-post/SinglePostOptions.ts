@@ -1,6 +1,6 @@
-import type { ExportOptions } from "../../src/domain/export-options/Types.js"
+import { defaultExportOptions } from "@exitpress/domain/export-options/ExportOptions.js"
 
-import { defaultExportOptions } from "../../src/domain/export-options/ExportOptions.js"
+import type { ExportOptions } from "@exitpress/domain/export-options/Types.js"
 
 const allowedTopLevelOptionKeys = [
   "scope",

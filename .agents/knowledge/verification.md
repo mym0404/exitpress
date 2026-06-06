@@ -11,7 +11,7 @@
 ## Primary Commands
 - `mise exec -- pnpm check:fmt`: `oxfmt --check ...`. Runs the repository formatting and import sorting baseline.
 - `mise exec -- pnpm check:lint`: `oxlint ...`. Runs the repository lint baseline.
-- `mise exec -- pnpm check:local`: package baseline after ordinary repository file changes. It runs format, lint, typecheck, and offline tests.
+- `mise exec -- pnpm check:local`: package baseline after ordinary repository file changes. It runs format, lint, typecheck, Storybook catalog check, and offline tests.
 - `mise exec -- pnpm check:unused`: `bun scripts/maintenance/check-unused.ts`. Run when removing, exporting, moving, or intentionally keeping source/test/script code that may be unused. This command is not part of `check:local`.
 - `mise exec -- pnpm check:full`: `check:local` plus UI smoke. Run when user flow, UI state, exporter output, or shared runtime behavior may be affected.
 - `mise exec -- pnpm smoke:ui`: builds UI, then runs mock-based scan, export, upload, theme persistence, and resume UI.
@@ -21,25 +21,27 @@
 ## Focused Commands
 - `mise exec -- pnpm format`: applies Oxfmt formatter output and import sorting during multi-step edits.
 - `mise exec -- pnpm typecheck`: TypeScript contract check only.
+- `mise exec -- pnpm storybook:generate`: regenerates `packages/web/src/features/storybook/generated/StorybookCatalog.generated.ts` from Storybook input HTML through the engine parser and renderer.
+- `mise exec -- pnpm storybook:check`: recomputes the Storybook generated catalog and fails if the committed file is stale.
 - `mise exec -- pnpm test:offline`: Vitest suite. Sample fixture tests fetch live Naver post HTML before comparing expected output, using the sample cache only outside CI.
-- `mise exec -- pnpm test:parser-blocks`: focused parser block spec run for `src/parsing/naver-blog/se*/blocks` behavior.
+- `mise exec -- pnpm test:parser-blocks`: focused parser block spec run for `packages/engine/src/parsing/naver-blog/se*/blocks` behavior.
 - `mise exec -- pnpm test:network:resume-export`: live Naver resume export without upload.
 - `mise exec -- pnpm test:network:resume-export:se2-table`: live SE2 table resume export range.
 - `mise exec -- pnpm test:network:upload`: live browser UI export and GitHub upload through PicList runtime.
 - `mise exec -- pnpm dev`: user-facing HMR server on the default development port. Harnesses should not reuse it.
-- `mise exec -- pnpm start`: builds UI and serves `dist/client` through `src/Server.ts`.
+- `mise exec -- pnpm start`: builds UI and serves `dist/client` through `packages/server/src/Server.ts`.
 - `bun scripts/maintenance/update-open-pr-branches.ts --help`: GitHub PR branch update CLI surface check. `mise exec -- pnpm gh:update-branches` changes remote PR branches through `gh pr update-branch`.
 - `bun scripts/post-evidence/capture-post-evidence.ts --help`: post evidence CLI surface check. Live smoke cases may open Playwright and Naver mobile pages. Evidence section behavior is documented in `.agents/knowledge/post-evidence.md`.
 
 ## Parser Block Unit Test
-- Parser block specs live beside parser block implementations under `src/parsing/naver-blog/se2/blocks/*`, `src/parsing/naver-blog/se3/blocks/*`, and `src/parsing/naver-blog/se4/blocks/*`.
+- Parser block specs live beside parser block implementations under `packages/engine/src/parsing/naver-blog/se2/blocks/*`, `packages/engine/src/parsing/naver-blog/se3/blocks/*`, and `packages/engine/src/parsing/naver-blog/se4/blocks/*`.
 - Each parser block spec file covers one parser block responsibility through the real `NaverBlogSE*Editor.parse()` dispatch path.
 - Each parser block spec that owns configurable block output options includes an `applies every output option` test that verifies every exposed option through parser dispatch.
 - Shared parser fixture helpers live only in `tests/support/parser-test-utils.ts`.
-- `src/parsing/naver-blog/core/PostParser.spec.ts` covers parser routing, tag extraction, same-blog link rewrite, and editor-specific output selection behavior.
+- `packages/engine/src/parsing/naver-blog/core/PostParser.spec.ts` covers parser routing, tag extraction, same-blog link rewrite, and editor-specific output selection behavior.
 - Parser block implementation changes require `mise exec -- pnpm test:parser-blocks` and `mise exec -- pnpm test:offline`.
 - Parser routing changes require `mise exec -- pnpm test:offline`.
-- Storybook catalog, definition, or capture asset changes require the Storybook catalog test and Storybook route unit test. The catalog test verifies every story has input HTML, a matching parser inspection path, rendered Markdown, and a bundled capture asset.
+- Storybook catalog, definition, or capture asset changes require `mise exec -- pnpm storybook:check`, the Storybook catalog test, and Storybook route unit test. The catalog test verifies every story has input HTML, a matching parser inspection path, generated Markdown, and a bundled capture asset.
 
 ## Unused Code Verification
 - `mise exec -- pnpm check:unused` succeeds only when `scripts/maintenance/check-unused.ts` reports no unresolved `knip`, `tsc noUnused`, or `tsserver` unused diagnostics.
@@ -61,7 +63,7 @@
 - CI uses `mise.toml` versions: Node.js 24.16.0, pnpm 11.5.1, and Bun 1.3.14.
 - CI installs tools through `jdx/mise-action`, then runs pnpm scripts from the mise-managed PATH.
 - CI restores the Playwright browser cache keyed by the installed Playwright version, then runs `pnpm exec playwright install --with-deps --only-shell chromium`.
-- CI runs `pnpm check:fmt`, `pnpm check:lint`, `pnpm typecheck`, `pnpm smoke:ui`, `pnpm test:coverage`, then uploads `coverage/lcov.info` to Codecov. CI does not run `pnpm test:offline` separately because `pnpm test:coverage` already runs the full Vitest suite.
+- CI runs `pnpm check:fmt`, `pnpm check:lint`, `pnpm typecheck`, `pnpm storybook:check`, `pnpm smoke:ui`, `pnpm test:coverage`, then uploads `coverage/lcov.info` to Codecov. CI does not run `pnpm test:offline` separately because `pnpm test:coverage` already runs the full Vitest suite.
 
 ## Task Loops
 - Run `mise exec -- pnpm format` during multi-step edits before the validation command when formatting or imports may have drifted.

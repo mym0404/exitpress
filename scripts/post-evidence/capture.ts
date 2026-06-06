@@ -2,38 +2,40 @@ import { createHash } from "node:crypto"
 import { readFile, writeFile } from "node:fs/promises"
 import path from "node:path"
 
+import { extractBlogId } from "@exitpress/domain/blog/NaverUrl.js"
+import {
+  cloneExportOptions,
+  defaultExportOptions,
+} from "@exitpress/domain/export-options/ExportOptions.js"
+import { AssetStore } from "@exitpress/engine/exporting/assets/AssetStore.js"
+import {
+  buildMarkdownFilePath,
+  getCategoryForPost,
+} from "@exitpress/engine/exporting/paths/ExportPaths.js"
+import {
+  buildPostLinkTargets,
+  createSameBlogPostLinkResolver,
+} from "@exitpress/engine/exporting/paths/PostLinkRewriter.js"
+import { ensureDir, resolveRepoPath } from "@exitpress/engine/infra/node/FilePathUtils.js"
+import { NaverBlogFetcher } from "@exitpress/engine/integrations/naver-blog/NaverBlogFetcher.js"
+import { renderMarkdownPost } from "@exitpress/engine/markdown/utils/renderMarkdownPost.js"
+import { parsePostHtmlWithBlockEvidence } from "@exitpress/engine/parsing/naver-blog/core/PostParser.js"
+import { createNaverBlogDefaultBlockTemplateMap } from "@exitpress/engine/parsing/naver-blog/NaverBlog.js"
+import { NaverBlog } from "@exitpress/engine/parsing/naver-blog/NaverBlog.js"
+import { mapConcurrent } from "@exitpress/engine/shared/async/AsyncUtils.js"
+import { toErrorMessage } from "@exitpress/engine/shared/error/ErrorUtils.js"
 import { chromium } from "playwright"
 
+import type { PostSummary, ScanResult } from "@exitpress/domain/blog/Types.js"
+import type { ExportOptions } from "@exitpress/domain/export-options/Types.js"
+import type { ParsedPost } from "@exitpress/domain/parser/Types.js"
+import type { SinglePostFetcher } from "@exitpress/engine/exporting/post/SinglePostExport.js"
 import type { Browser } from "playwright"
-
-import type { PostSummary, ScanResult } from "../../src/domain/blog/Types.js"
-import type { ExportOptions } from "../../src/domain/export-options/Types.js"
-import type { ParsedPost } from "../../src/domain/parser/Types.js"
-import type { SinglePostFetcher } from "../../src/exporting/post/SinglePostExport.js"
 
 import type { EvidenceCase } from "./cases.js"
 import type { EvidenceMarkdownSection } from "./evidence.js"
 import type { EvidenceAssetProfile } from "./paths.js"
 
-import { extractBlogId } from "../../src/domain/blog/NaverUrl.js"
-import {
-  cloneExportOptions,
-  defaultExportOptions,
-} from "../../src/domain/export-options/ExportOptions.js"
-import { AssetStore } from "../../src/exporting/assets/AssetStore.js"
-import { buildMarkdownFilePath, getCategoryForPost } from "../../src/exporting/paths/ExportPaths.js"
-import {
-  buildPostLinkTargets,
-  createSameBlogPostLinkResolver,
-} from "../../src/exporting/paths/PostLinkRewriter.js"
-import { ensureDir, resolveRepoPath } from "../../src/infra/node/FilePathUtils.js"
-import { NaverBlogFetcher } from "../../src/integrations/naver-blog/NaverBlogFetcher.js"
-import { renderMarkdownPost } from "../../src/markdown/utils/renderMarkdownPost.js"
-import { parsePostHtmlWithBlockEvidence } from "../../src/parsing/naver-blog/core/PostParser.js"
-import { createNaverBlogDefaultBlockTemplateMap } from "../../src/parsing/naver-blog/NaverBlog.js"
-import { NaverBlog } from "../../src/parsing/naver-blog/NaverBlog.js"
-import { mapConcurrent } from "../../src/shared/async/AsyncUtils.js"
-import { toErrorMessage } from "../../src/shared/error/ErrorUtils.js"
 import { createSinglePostMetadataCachingFetcher } from "../single-post/MetadataCache.js"
 import { readSinglePostOptions } from "../single-post/SinglePostOptions.js"
 

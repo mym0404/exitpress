@@ -1,11 +1,11 @@
 import { mkdir, writeFile as writeFileDefault } from "node:fs/promises"
 import path from "node:path"
 
-import type { PostSummary, ScanResult } from "../../src/domain/blog/Types.js"
-import type { SinglePostFetcher } from "../../src/exporting/post/SinglePostExport.js"
+import { log } from "@exitpress/engine/infra/runtime/Logger.js"
+import { NaverBlogFetcher } from "@exitpress/engine/integrations/naver-blog/NaverBlogFetcher.js"
 
-import { log } from "../../src/infra/runtime/Logger.js"
-import { NaverBlogFetcher } from "../../src/integrations/naver-blog/NaverBlogFetcher.js"
+import type { PostSummary, ScanResult } from "@exitpress/domain/blog/Types.js"
+import type { SinglePostFetcher } from "@exitpress/engine/exporting/post/SinglePostExport.js"
 
 type SinglePostMetadataCacheFile = {
   blogId: string

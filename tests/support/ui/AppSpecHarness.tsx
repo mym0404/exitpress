@@ -1,22 +1,22 @@
 // @vitest-environment jsdom
 
-import { cleanup, render, screen, waitFor } from "@testing-library/react"
-import { userEvent } from "@testing-library/user-event"
-import { afterEach, beforeEach, expect, vi } from "vitest"
-import "@testing-library/jest-dom/vitest"
-
-import type { ScanResult } from "../../../src/domain/blog/Types.js"
-import type { ExportJobState } from "../../../src/domain/export-job/Types.js"
-import type { UploadProviderCatalogResponse } from "../../../src/domain/upload/UploadProviderTypes.js"
-
 import {
   defaultExportOptions,
   frontmatterFieldMeta,
   frontmatterFieldOrder,
   optionDescriptions,
-} from "../../../src/domain/export-options/ExportOptions.js"
-import { NaverBlog } from "../../../src/parsing/naver-blog/NaverBlog.js"
-import { App } from "../../../src/ui/app/App.js"
+} from "@exitpress/domain/export-options/ExportOptions.js"
+import { NaverBlog } from "@exitpress/engine/parsing/naver-blog/NaverBlog.js"
+import { App } from "@exitpress/web/app/App.js"
+import "@testing-library/jest-dom/vitest"
+import { cleanup, render, screen, waitFor } from "@testing-library/react"
+import { userEvent } from "@testing-library/user-event"
+import { afterEach, beforeEach, expect, vi } from "vitest"
+
+import type { ScanResult } from "@exitpress/domain/blog/Types.js"
+import type { ExportJobState } from "@exitpress/domain/export-job/Types.js"
+import type { UploadProviderCatalogResponse } from "@exitpress/domain/upload/UploadProviderTypes.js"
+
 import { createTestPath } from "../test-paths.js"
 
 export const testOutputDir = createTestPath("ui-app", "output")
