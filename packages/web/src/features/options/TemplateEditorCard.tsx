@@ -95,14 +95,14 @@ export const TemplateEditorCard = ({
                 <div
                   key={key}
                   className={cn(
-                    "grid min-w-0 grid-cols-[minmax(5rem,0.6fr)_minmax(0,1fr)_auto] items-center gap-3 px-3 py-2.5",
+                    "grid min-w-0 grid-cols-[max-content_minmax(0,1fr)_max-content] items-center gap-3 px-3 py-2.5",
                     index > 0 && "border-t border-border",
                     index % 2 === 1 && "sm:border-l",
                     index === 1 && "sm:border-t-0",
                   )}
                   data-template-prop={key}
                 >
-                  <span className="min-w-0 truncate font-mono text-sm font-semibold text-[color:var(--status-ready-fg)]">
+                  <span className="whitespace-nowrap font-mono text-sm font-semibold text-[color:var(--status-ready-fg)]">
                     {key}
                   </span>
                   <span className="min-w-0 truncate text-sm font-medium text-foreground">

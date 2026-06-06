@@ -31,7 +31,7 @@ type PostTemplateKey = (typeof postTemplateKeys)[number]
 type PostTemplateValues = Record<PostTemplateKey, string>
 
 const postTemplatePattern =
-  /\{(slug|category|title|logNo|blogId|date|year|YYYY|YY|month|MM|M|day|DD|D)\}/g
+  /\$?\{(slug|category|title|logNo|blogId|date|year|YYYY|YY|month|MM|M|day|DD|D)\}/g
 
 export const buildPostTemplateValues = ({
   post,

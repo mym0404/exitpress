@@ -68,6 +68,20 @@ describe("post-path-template", () => {
     ).toBe("2026_04_223034929697_첫_글")
   })
 
+  it("does not keep dollar prefixes from dollar-brace custom templates", () => {
+    const options = defaultExportOptions()
+
+    options.structure.postFolderNameMode = "custom-template"
+    options.structure.postFolderNameCustomTemplate = "${date}-${logNo}"
+
+    expect(
+      buildPostFolderName({
+        post: samplePost,
+        options,
+      }),
+    ).toBe("2026-04-11-223034929697")
+  })
+
   it("sanitizes custom template results into a safe single folder name", () => {
     expect(
       buildPostFolderName({
