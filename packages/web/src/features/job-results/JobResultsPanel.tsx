@@ -1,11 +1,6 @@
-import { isUploadActionableJob } from "@exitpress/domain/export-job/ExportJobState.js"
 import { useEffect, useRef, useState } from "react"
 
 import type { ExportJobState } from "@exitpress/domain/export-job/schema/ExportJobState.js"
-import type {
-  UploadProviderCatalogResponse,
-  UploadProviderFields,
-} from "@exitpress/domain/upload/schema/UploadProvider.js"
 
 import type { JobFilter, JobResultsMode } from "./JobResultsHelpers.js"
 
@@ -24,32 +19,20 @@ export const JobResultsPanel = ({
   job,
   activeJobFilter,
   resumeSubmitting,
-  uploadSubmitting,
-  uploadProviders,
-  uploadProviderError,
   onFilterChange,
   onResumeExport,
-  onUploadStart,
 }: {
   mode: JobResultsMode
   job: ExportJobState | null
   activeJobFilter: JobFilter
   resumeSubmitting: boolean
-  uploadSubmitting: boolean
-  uploadProviders: UploadProviderCatalogResponse
-  uploadProviderError: string | null
   onFilterChange: (filter: JobFilter) => void
   onResumeExport: () => Promise<void> | void
-  onUploadStart: (input: {
-    providerKey: string
-    providerFields: UploadProviderFields
-  }) => Promise<void> | void
 }) => {
   const logsScrollAreaRef = useRef<HTMLDivElement | null>(null)
   const [previewPendingIds, setPreviewPendingIds] = useState<string[]>([])
   const showUploadPanel =
     (mode === "upload" || mode === "result") && (job?.upload.candidateCount ?? 0) > 0
-  const showUploadForm = mode === "upload" && isUploadActionableJob(job)
   const showExportSummary = mode === "upload" || mode === "result"
   const showExportResults = mode === "running" || mode === "upload" || mode === "result"
   const latestLogSignature = (() => {
@@ -138,17 +121,7 @@ export const JobResultsPanel = ({
             />
           ) : null}
 
-          {showUploadPanel ? (
-            <UploadPanel
-              mode={mode}
-              job={job}
-              showUploadForm={showUploadForm}
-              uploadSubmitting={uploadSubmitting}
-              uploadProviders={uploadProviders}
-              uploadProviderError={uploadProviderError}
-              onUploadStart={onUploadStart}
-            />
-          ) : null}
+          {showUploadPanel ? <UploadPanel mode={mode} job={job} /> : null}
 
           {showExportSummary ? <ExportSummarySection job={job} /> : null}
 

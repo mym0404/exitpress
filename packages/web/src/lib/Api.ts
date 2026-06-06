@@ -117,13 +117,3 @@ export const postSameOriginJson = async <T>(
 
   return responseBody
 }
-
-export const postUploadJson = <T>(input: RequestInfo | URL, body: unknown) =>
-  fetchJson<T>(input, {
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
-      "x-requested-with": "XMLHttpRequest",
-    },
-    body: JSON.stringify(body),
-  })

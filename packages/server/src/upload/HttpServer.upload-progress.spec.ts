@@ -86,19 +86,23 @@ describe("http server upload progress", () => {
           blogIdOrUrl: "https://blog.naver.com/mym0404",
           outputDir,
           options,
+          uploadProvider: createUploadPayload({
+            repo: "owner/name",
+            token: "ghp_export_upload_token",
+          }),
         }),
       })
       const exportBody = (await exportResponse.json()) as {
         jobId: string
       }
 
-      await waitForJob({
-        baseUrl,
-        jobId: exportBody.jobId,
-        accept: (job) => job.status === "upload-ready",
-      })
+      await started
 
-      const uploadResponse = await fetch(`${baseUrl}/api/export/${exportBody.jobId}/upload`, {
+      const uploadingResponse = await fetch(`${baseUrl}/api/export/${exportBody.jobId}`)
+      const uploadingJob = (await uploadingResponse.json()) as {
+        status: string
+      }
+      const manualUploadResponse = await fetch(`${baseUrl}/api/export/${exportBody.jobId}/upload`, {
         method: "POST",
         headers: {
           "content-type": "application/json",
@@ -108,13 +112,15 @@ describe("http server upload progress", () => {
         body: JSON.stringify(
           createUploadPayload({
             repo: "owner/name",
-            token: "ghp_test_upload_token",
+            token: "ghp_manual_race_token",
           }),
         ),
       })
 
-      expect(uploadResponse.status).toBe(202)
-      await started
+      expect(uploadingResponse.status).toBe(200)
+      expect(uploadingJob.status).toBe("uploading")
+      expect(manualUploadResponse.status).toBe(404)
+      expect(uploadPhaseRunner).toHaveBeenCalledTimes(1)
 
       const resetResponse = await fetch(`${baseUrl}/api/export-reset`, {
         method: "POST",
@@ -196,32 +202,15 @@ describe("http server upload progress", () => {
         blogIdOrUrl: "https://blog.naver.com/mym0404",
         outputDir: createTestPath("http-server", "upload-progress-output"),
         options,
+        uploadProvider: createUploadPayload({
+          repo: "owner/name",
+          token: "ghp_export_upload_token",
+        }),
       }),
     })
     const exportBody = (await exportResponse.json()) as {
       jobId: string
     }
-
-    await waitForJob({
-      baseUrl,
-      jobId: exportBody.jobId,
-      accept: (job) => job.status === "upload-ready",
-    })
-
-    const uploadResponse = await fetch(`${baseUrl}/api/export/${exportBody.jobId}/upload`, {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-        origin: baseUrl,
-        "x-requested-with": "XMLHttpRequest",
-      },
-      body: JSON.stringify(
-        createUploadPayload({
-          repo: "owner/name",
-          token: "ghp_upload_progress",
-        }),
-      ),
-    })
 
     const uploadingJob = await waitForJob({
       baseUrl,
@@ -229,7 +218,6 @@ describe("http server upload progress", () => {
       accept: (job) => job.status === "uploading" && job.upload.uploadedCount === 1,
     })
 
-    expect(uploadResponse.status).toBe(202)
     expect(uploadingJob.upload.status).toBe("uploading")
     expect(uploadingJob.upload.uploadedCount).toBe(1)
     expect(uploadingJob.items[0]?.upload.uploadedCount).toBe(1)
@@ -280,41 +268,25 @@ describe("http server upload progress", () => {
         blogIdOrUrl: "https://blog.naver.com/mym0404",
         outputDir: createTestPath("http-server", "rewrite-failure-output"),
         options,
+        uploadProvider: createUploadPayload({
+          repo: "owner/name",
+          token: "ghp_export_upload_token",
+        }),
       }),
     })
     const exportBody = (await exportResponse.json()) as {
       jobId: string
     }
 
-    await waitForJob({
-      baseUrl,
-      jobId: exportBody.jobId,
-      accept: (job) => job.status === "upload-ready",
-    })
-
-    const uploadResponse = await fetch(`${baseUrl}/api/export/${exportBody.jobId}/upload`, {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-        origin: baseUrl,
-        "x-requested-with": "XMLHttpRequest",
-      },
-      body: JSON.stringify(
-        createUploadPayload({
-          repo: "owner/name",
-          token: "ghp_rewrite_failure",
-        }),
-      ),
-    })
     const failedJob = await waitForJob({
       baseUrl,
       jobId: exportBody.jobId,
-      accept: (job) => job.status === "upload-failed",
+      accept: (job) => job.status === "failed",
     })
 
-    expect(uploadResponse.status).toBe(202)
     expect(uploadPhaseRunner).toHaveBeenCalledTimes(1)
     expect(postUploadRewriter).toHaveBeenCalledTimes(1)
+    expect(failedJob.upload.status).toBe("upload-failed")
     expect(failedJob.upload.uploadedCount).toBe(failedJob.upload.candidateCount)
     expect(failedJob.upload.failedCount).toBe(0)
     expect(failedJob.items[0]?.upload.uploadedCount).toBe(failedJob.items[0]?.upload.candidateCount)

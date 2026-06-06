@@ -13,8 +13,9 @@
 ## What To Check
 - Requested buttons, inputs, dialogs, filters, tables, progress, and upload state actually work on screen.
 - UI state matches API response or `manifest.json` state.
-- Export reaches `completed` or `upload-ready` as expected.
-- Upload reaches `upload-completed`, `upload-failed`, or the requested intermediate state.
+- Export reaches `completed`, `failed`, `upload-completed`, or `upload-failed` as expected.
+- `download-and-upload` shows provider setup before export and upload progress after export starts.
+- Restored upload states show existing progress without re-submitting provider credentials.
 - Desktop/mobile layout has no obvious horizontal overflow, clipping, or unreadable contrast.
 - Storybook checks should confirm the rendered `Input HTML`, `Source Capture`, and `Markdown` areas describe the same source block.
 - Storybook capture images should resolve from bundled `packages/web/src/features/storybook/assets` URLs in development or built asset URLs in production.

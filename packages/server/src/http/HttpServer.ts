@@ -21,7 +21,6 @@ import { openLocalPathWithSystem } from "../routes/LocalFileService.js"
 import { createHttpServerState } from "../state/HttpServerState.js"
 import { createPostHtmlCache } from "../state/PostHtmlCache.js"
 import { createBrowserAppResponder } from "../static/BrowserApp.js"
-import { createHttpUploadJobRunner } from "../upload/HttpUploadJobRunner.js"
 import { createImageUploadProviderSource } from "../upload/ImageUploadProviderSource.js"
 
 import { sendJson } from "./HttpResponse.js"
@@ -77,14 +76,9 @@ export const createHttpServer = ({
     jobStore,
     jobScanResults: state.jobScanResults,
     postHtmlCache,
-  })
-  const uploadJobRunner = createHttpUploadJobRunner({
-    jobStore,
     uploadPhaseRunner,
     postUploadRewriter,
     manifestSnapshotWriter,
-    flushManifestPersist: exportJobRunner.flushManifestPersist,
-    scheduleJobManifestPersist: exportJobRunner.scheduleJobManifestPersist,
   })
   const browserApp = createBrowserAppResponder({
     httpServerRef: () => httpServer,
@@ -95,7 +89,7 @@ export const createHttpServer = ({
     blockScanJobRunner,
     exportJobRunner,
     postHtmlCache,
-    uploadJobRunner,
+    uploadPhaseRunner,
     uploadProviderSource,
     openLocalPath,
   })

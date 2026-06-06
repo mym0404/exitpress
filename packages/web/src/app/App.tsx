@@ -1,8 +1,4 @@
-import {
-  isUploadActionableJob,
-  JOB_STATUSES,
-  UPLOAD_STATUSES,
-} from "@exitpress/domain/export-job/ExportJobState.js"
+import { JOB_STATUSES, UPLOAD_STATUSES } from "@exitpress/domain/export-job/ExportJobState.js"
 import {
   sanitizePersistedExportOptions,
   validateFrontmatterAliases,
@@ -20,6 +16,7 @@ import type { SetupStep, WizardStep } from "../features/common/shell/WizardFlow.
 import type { JobFilter } from "../features/job-results/JobResultsHelpers.js"
 import type { ResumeDialogState } from "../features/resume/ResumeState.js"
 import type { ScanStatusTone } from "../features/scan/BlogInputPanel.js"
+import type { UploadProviderSettingsValue } from "../features/upload/UploadProviderSettingsForm.js"
 
 import { toast } from "../components/ui/Sonner.js"
 import { useBeforeUnloadWarning } from "../features/common/hooks/UseBeforeUnloadWarning.js"
@@ -42,7 +39,7 @@ import {
   defaultScanStatus,
   normalizeOutputDir,
 } from "../features/scan/ScanStatus.js"
-import { fetchJson, postJson } from "../lib/Api.js"
+import { fetchJson, postJson, postSameOriginJson } from "../lib/Api.js"
 import { getAppRoute } from "../lib/AppRoutes.js"
 
 import { fallbackDefaults } from "./AppDefaults.js"
@@ -164,23 +161,22 @@ const ExportApp = () => {
   const [categorySearch, setCategorySearch] = useState("")
   const [scanPending, setScanPending] = useState(false)
   const [setupStep, setSetupStep] = useState<SetupStep>("blog-input")
+  const [uploadProviderSettings, setUploadProviderSettings] =
+    useState<UploadProviderSettingsValue | null>(null)
+  const [uploadProviderSettingsReady, setUploadProviderSettingsReady] = useState(false)
+  const [uploadProviderStepMessage, setUploadProviderStepMessage] = useState<string | null>(null)
+  const [testUploadSubmitting, setTestUploadSubmitting] = useState(false)
+  const [testUploadResult, setTestUploadResult] = useState<string | null>(null)
+  const [testUploadError, setTestUploadError] = useState<string | null>(null)
   const [postExportStep, setPostExportStep] = useState<PostExportStep | null>(null)
   const [blockScanJob, setBlockScanJob] = useState<BlockScanJobState | null>(null)
   const [blockScanError, setBlockScanError] = useState<string | null>(null)
   const [activeJobFilter, setActiveJobFilter] = useState<JobFilter>("all")
-  const {
-    job,
-    submitting,
-    uploadSubmitting,
-    hydrateJob,
-    resumeJob,
-    setJob,
-    startJob,
-    startUpload,
-  } = useExportJob()
+  const { job, submitting, hydrateJob, resumeJob, setJob, startJob } = useExportJob()
 
   const lastNotifiedJobKeyRef = useRef<string | null>(null)
   const blockScanRequestIdRef = useRef(0)
+  const testUploadRequestVersionRef = useRef(0)
   const stepViewRef = useRef<HTMLElement | null>(null)
   const previousStepRef = useRef<string | null>(null)
   const persistedUiStateSignatureRef = useRef<string | null>(null)
@@ -264,18 +260,17 @@ const ExportApp = () => {
       setupStep,
       jobStatus: job?.status,
       submitting,
-      uploadSubmitting,
     })
 
     return resolvedStep === setupStep && postExportStep
       ? postExportStep
       : (resolvedStep as WizardStep)
-  }, [job?.status, postExportStep, setupStep, submitting, uploadSubmitting])
+  }, [job?.status, postExportStep, setupStep, submitting])
   const isSetupStep = currentStep === setupStep
 
   const { uploadProviders, uploadProviderError } = useUploadProvidersCatalog({
     jobId: job?.id,
-    shouldLoad: isUploadActionableJob(job),
+    shouldLoad: isSetupStep && options.assets.imageHandlingMode === "download-and-upload",
   })
 
   useThemePreference(themePreference)
@@ -322,6 +317,24 @@ const ExportApp = () => {
     setOptions((current) => updater(current))
   }, [])
 
+  const invalidateTestUpload = useCallback(() => {
+    testUploadRequestVersionRef.current += 1
+    setTestUploadSubmitting(false)
+    setTestUploadResult(null)
+    setTestUploadError(null)
+  }, [])
+
+  useEffect(() => {
+    if (options.assets.imageHandlingMode === "download-and-upload") {
+      return
+    }
+
+    setUploadProviderSettings(null)
+    setUploadProviderSettingsReady(false)
+    setUploadProviderStepMessage(null)
+    invalidateTestUpload()
+  }, [invalidateTestUpload, options.assets.imageHandlingMode])
+
   const startExportWithScanResult = useCallback(
     async (scanResult: ScanResult) => {
       setActiveJobFilter("all")
@@ -332,6 +345,11 @@ const ExportApp = () => {
           outputDir: normalizeOutputDir(outputDir),
           options,
           scanResult,
+          uploadProvider:
+            options.assets.imageHandlingMode === "download-and-upload" &&
+            uploadProviderSettingsReady
+              ? (uploadProviderSettings ?? undefined)
+              : undefined,
         })
         setPostExportStep(null)
         toast.success("내보내기 작업을 등록했습니다.", {
@@ -355,8 +373,56 @@ const ExportApp = () => {
         })
       }
     },
-    [currentScanTarget, options, outputDir, scopedPostCount, setJob, startJob],
+    [
+      currentScanTarget,
+      options,
+      outputDir,
+      scopedPostCount,
+      setJob,
+      startJob,
+      uploadProviderSettings,
+      uploadProviderSettingsReady,
+    ],
   )
+
+  const handleTestUpload = useCallback(async (value: UploadProviderSettingsValue) => {
+    const requestVersion = testUploadRequestVersionRef.current + 1
+    testUploadRequestVersionRef.current = requestVersion
+    setTestUploadSubmitting(true)
+    setTestUploadResult(null)
+    setTestUploadError(null)
+
+    try {
+      const response = await postSameOriginJson<{ uploadedUrl: string }>(
+        "/api/upload-providers/test",
+        value,
+      )
+
+      if (testUploadRequestVersionRef.current !== requestVersion) {
+        return
+      }
+
+      setTestUploadResult(response.uploadedUrl)
+    } catch (error) {
+      if (testUploadRequestVersionRef.current !== requestVersion) {
+        return
+      }
+
+      setTestUploadError(error instanceof Error ? error.message : String(error))
+    } finally {
+      if (testUploadRequestVersionRef.current === requestVersion) {
+        setTestUploadSubmitting(false)
+      }
+    }
+  }, [])
+
+  const handleUploadProviderSettingsReadyChange = useCallback((ready: boolean) => {
+    setUploadProviderSettingsReady(ready)
+
+    if (ready) {
+      setUploadProviderStepMessage(null)
+    }
+  }, [])
 
   const startBlockScan = useCallback(async () => {
     if (!activeScanResult?.posts) {
@@ -489,7 +555,6 @@ const ExportApp = () => {
     handleCategoryToggle,
     handleSelectAllCategories,
     handleClearAllCategories,
-    handleUpload,
     handleRestoreResume,
     handleResumeExport,
     handleResetResume,
@@ -506,11 +571,11 @@ const ExportApp = () => {
     scanCache,
     scopedPostCount,
     options,
+    uploadProviderSettingsReady,
     resumeDialog,
     frontmatterValidationErrors,
     updateOptions,
     startBlockScan,
-    startUpload,
     resumeJob,
     hydrateJob,
     applyResumedState,
@@ -520,6 +585,7 @@ const ExportApp = () => {
     setScanCache,
     setScanPending,
     setCategoryStatus,
+    setUploadProviderStepMessage,
     setCategorySearch,
     setSetupStep,
     setActiveJobFilter,
@@ -586,9 +652,12 @@ const ExportApp = () => {
         job={job}
         activeJobFilter={activeJobFilter}
         submitting={submitting}
-        uploadSubmitting={uploadSubmitting}
         uploadProviders={uploadProviders}
         uploadProviderError={uploadProviderError}
+        uploadProviderStepMessage={uploadProviderStepMessage}
+        testUploadSubmitting={testUploadSubmitting}
+        testUploadResult={testUploadResult}
+        testUploadError={testUploadError}
         blogIdOrUrl={blogIdOrUrl}
         outputDir={outputDir}
         scanPending={scanPending}
@@ -615,8 +684,14 @@ const ExportApp = () => {
         handleSelectAllCategories={handleSelectAllCategories}
         handleClearAllCategories={handleClearAllCategories}
         handleCategoryToggle={handleCategoryToggle}
+        handleUploadProviderSettingsChange={(value) => {
+          setUploadProviderSettings(value)
+          setUploadProviderStepMessage(null)
+          invalidateTestUpload()
+        }}
+        handleUploadProviderSettingsReadyChange={handleUploadProviderSettingsReadyChange}
+        handleTestUpload={handleTestUpload}
         handleResumeExport={handleResumeExport}
-        handleUpload={handleUpload}
         handleRetryBlockScan={startBlockScan}
         handleBackFromBlockScan={goBackFromBlockScan}
         handleConfirmMarkdownReview={confirmMarkdownAndStartExport}

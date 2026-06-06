@@ -4,6 +4,7 @@ import { RiArrowRightLine, RiDownload2Line, RiLoader4Line, RiRadarLine } from "@
 
 import type { ScanResult } from "@exitpress/domain/blog/schema/BlogScan.js"
 import type { ExportJobState } from "@exitpress/domain/export-job/schema/ExportJobState.js"
+import type { ImageHandlingMode } from "@exitpress/domain/export-options/schema/ExportOptions.js"
 import type { PartialExportOptions } from "@exitpress/domain/export-options/schema/ExportOptions.js"
 import type { ExportOptions } from "@exitpress/domain/export-options/schema/ExportOptions.js"
 import type { ThemePreference } from "@exitpress/domain/preferences/schema/ThemePreference.js"
@@ -16,6 +17,7 @@ export const setupSteps = [
   "structure-options",
   "frontmatter-options",
   "assets-options",
+  "upload-provider-options",
   "links-options",
   "diagnostics-options",
 ] as const
@@ -86,6 +88,10 @@ export const stepMeta: Record<WizardStep, { title: string; description: string }
     title: exportOptionsStepMeta.assets.title,
     description: "이미지와 썸네일을 저장하거나 원본 URL로 유지할지 정합니다.",
   },
+  "upload-provider-options": {
+    title: "Image Upload 설정",
+    description: "내보낸 이미지를 올릴 Provider와 인증 정보를 입력합니다.",
+  },
   "links-options": {
     title: exportOptionsStepMeta.links.title,
     description: "같은 블로그 글 링크를 export 결과 기준으로 바꿀지 정합니다.",
@@ -128,23 +134,54 @@ export const getPersistedUiStateSignature = ({
     themePreference,
   })
 
+export const getNextSetupStep = ({
+  setupStep,
+  imageHandlingMode,
+}: {
+  setupStep: SetupStep
+  imageHandlingMode: ImageHandlingMode
+}) => {
+  if (setupStep === "assets-options") {
+    return imageHandlingMode === "download-and-upload" ? "upload-provider-options" : "links-options"
+  }
+
+  const nextStep = setupSteps[setupSteps.indexOf(setupStep) + 1]
+
+  return nextStep ?? setupStep
+}
+
+export const getPreviousSetupStep = ({
+  setupStep,
+  imageHandlingMode,
+}: {
+  setupStep: SetupStep
+  imageHandlingMode: ImageHandlingMode
+}) => {
+  if (setupStep === "links-options") {
+    return imageHandlingMode === "download-and-upload"
+      ? "upload-provider-options"
+      : "assets-options"
+  }
+
+  const previousStep = setupSteps[setupSteps.indexOf(setupStep) - 1]
+
+  return previousStep ?? setupStep
+}
+
 export const resolveWizardStep = ({
   setupStep,
   jobStatus,
   submitting,
-  uploadSubmitting,
 }: {
   setupStep: string
   jobStatus: ExportJobState["status"] | undefined
   submitting: boolean
-  uploadSubmitting: boolean
 }) => {
   if (submitting || jobStatus === JOB_STATUSES.QUEUED || jobStatus === JOB_STATUSES.RUNNING) {
     return "running"
   }
 
   if (
-    uploadSubmitting ||
     jobStatus === JOB_STATUSES.UPLOAD_READY ||
     jobStatus === JOB_STATUSES.UPLOADING ||
     jobStatus === JOB_STATUSES.UPLOAD_FAILED
@@ -240,6 +277,8 @@ export const getNextButtonLabel = ({
     case "frontmatter-options":
       return "Assets 설정"
     case "assets-options":
+      return "다음"
+    case "upload-provider-options":
       return "Link 처리"
     case "links-options":
       return "진단 설정"

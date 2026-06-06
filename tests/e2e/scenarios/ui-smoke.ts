@@ -482,30 +482,6 @@ const createRunningJob = () =>
     ],
   })
 
-const createUploadReadyJob = () =>
-  buildUploadJob({
-    jobStatus: "upload-ready",
-    uploadStatus: "upload-ready",
-    perItemUploadedCounts: uploadCounts.map((count) => count.pending),
-    progress: {
-      total: uploadTargetCount,
-      completed: uploadTargetCount,
-      failed: 0,
-    },
-    finishedAt: null,
-    error: null,
-    logs: [
-      {
-        timestamp: uploadTimelineTimestamps.createdAt,
-        message: "작업을 큐에 등록했습니다.",
-      },
-      {
-        timestamp: uploadTimelineTimestamps.startedAt,
-        message: "내보내기를 완료했고 이미지 업로드 대기 상태입니다.",
-      },
-    ],
-  })
-
 const createPartialUploadingJob = () =>
   buildUploadJob({
     jobStatus: "uploading",
@@ -547,33 +523,6 @@ const createRewritePendingJob = () =>
         message: "문서 치환 시작: NestJS/2026-04-11-223034929700/index.md",
       },
     ],
-  })
-
-const createUploadFailedJob = () =>
-  buildUploadJob({
-    jobStatus: "upload-failed",
-    uploadStatus: "upload-failed",
-    perItemUploadedCounts: uploadCounts.map((count) => count.partial),
-    progress: {
-      total: uploadTargetCount,
-      completed: uploadTargetCount,
-      failed: 0,
-    },
-    finishedAt: null,
-    error: "Image upload failed.",
-    logs: [
-      {
-        timestamp: uploadTimelineTimestamps.partialAt,
-        message: "이미지 업로드 진행률을 갱신했습니다.",
-      },
-      {
-        timestamp: uploadTimelineTimestamps.rewriteAt,
-        message: "Image upload failed.",
-      },
-    ],
-    perItemRewriteStatuses: uploadCounts.map((count, index) =>
-      index === 0 && count.partial === uploadCandidatesPerPost ? "completed" : "failed",
-    ),
   })
 
 const createUploadCompletedJob = () =>
@@ -843,22 +792,37 @@ const run = async () => {
 
   const mockState: {
     scanRequestCount: number
-    uploadAttempt: 0 | 1 | 2
     jobFetchCount: number
+    manualUploadRequestCount: number
     themePreference: ThemePreference
     exportOptions: ExportOptions | null
-    uploadPayload: null | {
+    testUploadPayload: null | {
+      providerKey: string
+      providerFields: Record<string, UploadProviderValue>
+    }
+    exportUploadProvider: null | {
       providerKey: string
       providerFields: Record<string, UploadProviderValue>
     }
   } = {
     scanRequestCount: 0,
-    uploadAttempt: 0,
     jobFetchCount: 0,
+    manualUploadRequestCount: 0,
     themePreference: "dark",
     exportOptions: null,
-    uploadPayload: null,
+    testUploadPayload: null,
+    exportUploadProvider: null,
   }
+
+  const manualUploadRoutePattern = /\/api\/export\/[^/]+\/upload$/
+
+  page.on("request", (request) => {
+    const url = new URL(request.url())
+
+    if (request.method() === "POST" && manualUploadRoutePattern.test(url.pathname)) {
+      mockState.manualUploadRequestCount += 1
+    }
+  })
 
   await page.route("**/api/**", async (route) => {
     const request = route.request()
@@ -906,6 +870,37 @@ const run = async () => {
       return
     }
 
+    if (pathname === "/api/upload-providers/test" && request.method() === "POST") {
+      const body = request.postDataJSON() as {
+        providerKey?: string
+        providerFields?: Record<string, UploadProviderValue>
+      }
+
+      if (!body.providerKey || !body.providerFields) {
+        await route.fulfill(
+          buildJsonResponse(
+            {
+              error: "providerKey와 providerFields는 필수입니다.",
+            },
+            400,
+          ),
+        )
+        return
+      }
+
+      mockState.testUploadPayload = {
+        providerKey: body.providerKey,
+        providerFields: body.providerFields,
+      }
+
+      await route.fulfill(
+        buildJsonResponse({
+          uploadedUrl: "https://cdn.example.com/test-upload.png",
+        }),
+      )
+      return
+    }
+
     if (pathname === "/api/export-resume/lookup" && request.method() === "POST") {
       await route.fulfill(
         buildJsonResponse({
@@ -946,6 +941,10 @@ const run = async () => {
     if (pathname === "/api/export" && request.method() === "POST") {
       const body = request.postDataJSON() as {
         options?: ExportOptions
+        uploadProvider?: {
+          providerKey?: string
+          providerFields?: Record<string, UploadProviderValue>
+        }
       }
       const templates = body.options?.blockOutputs.templates ?? {}
 
@@ -957,10 +956,25 @@ const run = async () => {
         throw new Error("export payload included old block-type-only output option key")
       }
 
-      mockState.uploadAttempt = 0
+      const uploadProvider = body.uploadProvider
+      const providerFields = uploadProvider?.providerFields
+
+      if (
+        !uploadProvider ||
+        !providerFields ||
+        uploadProvider.providerKey !== "github" ||
+        providerFields.repo !== "owner/name" ||
+        providerFields.token !== "placeholder-token"
+      ) {
+        throw new Error("export request did not submit the structured upload provider payload")
+      }
+
       mockState.jobFetchCount = 0
       mockState.exportOptions = body.options ?? null
-      mockState.uploadPayload = null
+      mockState.exportUploadProvider = {
+        providerKey: uploadProvider.providerKey,
+        providerFields,
+      }
       await route.fulfill(
         buildJsonResponse(
           {
@@ -975,92 +989,34 @@ const run = async () => {
     if (pathname === "/api/export/job-smoke" && request.method() === "GET") {
       mockState.jobFetchCount += 1
 
-      if (mockState.uploadAttempt === 0) {
-        const nextJob =
-          mockState.jobFetchCount <= smokeJobFetchLimits.exportRunningMax
-            ? createRunningJob()
-            : createUploadReadyJob()
-
-        await route.fulfill(
-          buildJsonResponse(
-            applyCurrentExportOptions(
-              applyCurrentOutputDir(nextJob, outputDir),
-              mockState.exportOptions,
-            ),
-          ),
-        )
-        return
-      }
-
+      const uploadingStartFetch = smokeJobFetchLimits.exportRunningMax
+      const rewriteStartFetch = uploadingStartFetch + smokeJobFetchLimits.uploadPartialMax
+      const completedStartFetch = rewriteStartFetch + smokeJobFetchLimits.rewritePendingMax
       const nextJob =
-        mockState.uploadAttempt === 1
-          ? applyCurrentOutputDir(
-              mockState.jobFetchCount <= smokeJobFetchLimits.uploadPartialMax
-                ? createPartialUploadingJob()
-                : createUploadFailedJob(),
-              outputDir,
-            )
-          : applyCurrentOutputDir(
-              mockState.jobFetchCount <= smokeJobFetchLimits.rewritePendingMax
-                ? createRewritePendingJob()
-                : createUploadCompletedJob(),
-              outputDir,
-            )
-
-      await route.fulfill(
-        buildJsonResponse(applyCurrentExportOptions(nextJob, mockState.exportOptions)),
-      )
-      return
-    }
-
-    if (pathname === "/api/export/job-smoke/upload" && request.method() === "POST") {
-      const body = request.postDataJSON() as {
-        providerKey?: string
-        providerFields?: Record<string, UploadProviderValue>
-      }
-
-      if (!body.providerKey || !body.providerFields) {
-        await route.fulfill(
-          buildJsonResponse(
-            {
-              error: "providerKey와 providerFields는 필수입니다.",
-            },
-            400,
-          ),
-        )
-        return
-      }
-
-      mockState.uploadAttempt = mockState.uploadAttempt === 0 ? 1 : 2
-      mockState.jobFetchCount = 0
-      mockState.uploadPayload = {
-        providerKey: body.providerKey,
-        providerFields: body.providerFields,
-      }
+        mockState.jobFetchCount <= uploadingStartFetch
+          ? createRunningJob()
+          : mockState.jobFetchCount <= rewriteStartFetch
+            ? createPartialUploadingJob()
+            : mockState.jobFetchCount <= completedStartFetch
+              ? createRewritePendingJob()
+              : createUploadCompletedJob()
 
       await route.fulfill(
         buildJsonResponse(
-          {
-            jobId: "job-smoke",
-            status: "uploading",
-          },
-          202,
+          applyCurrentExportOptions(
+            applyCurrentOutputDir(nextJob, outputDir),
+            mockState.exportOptions,
+          ),
         ),
       )
       return
     }
 
     if (pathname === "/api/export/job-smoke/manifest" && request.method() === "GET") {
-      const manifest =
-        mockState.uploadAttempt === 2
-          ? applyCurrentExportOptions(
-              applyCurrentOutputDir(createUploadCompletedJob(), outputDir),
-              mockState.exportOptions,
-            ).manifest
-          : applyCurrentExportOptions(
-              applyCurrentOutputDir(createUploadReadyJob(), outputDir),
-              mockState.exportOptions,
-            ).manifest
+      const manifest = applyCurrentExportOptions(
+        applyCurrentOutputDir(createUploadCompletedJob(), outputDir),
+        mockState.exportOptions,
+      ).manifest
 
       await route.fulfill(buildJsonResponse(manifest))
       return
@@ -1303,6 +1259,52 @@ const run = async () => {
       throw new Error("export button should stay hidden inside the Assets tab")
     }
 
+    await page.click('button:has-text("다음")')
+    await waitForStepView({
+      page,
+      step: "upload-provider-options",
+    })
+
+    await page.waitForSelector("#upload-providerKey")
+    await page.waitForSelector("#upload-providerField-repo")
+    await page.waitForSelector("#upload-providerField-token")
+
+    const providerValue = await selectTriggerValue({
+      page,
+      selector: "#upload-providerKey",
+    })
+
+    if (providerValue !== "github") {
+      throw new Error("upload provider default did not stay on github")
+    }
+
+    await page.fill("#upload-providerField-repo", "owner/name")
+    await page.fill("#upload-providerField-token", "placeholder-token")
+
+    const testUploadResponsePromise = page.waitForResponse(
+      (response) =>
+        response.url() === `${baseUrl}/api/upload-providers/test` &&
+        response.request().method() === "POST",
+      { timeout: responseTimeoutMs },
+    )
+
+    await page.getByRole("button", { name: "테스트 업로드" }).click()
+    const testUploadResponse = await testUploadResponsePromise
+
+    if (testUploadResponse.status() !== 200) {
+      throw new Error(`test upload request failed: ${testUploadResponse.status()}`)
+    }
+
+    if (
+      mockState.testUploadPayload?.providerKey !== "github" ||
+      mockState.testUploadPayload.providerFields.repo !== "owner/name" ||
+      mockState.testUploadPayload.providerFields.token !== "placeholder-token"
+    ) {
+      throw new Error("test upload request did not submit the provider payload")
+    }
+
+    await page.waitForSelector("text=https://cdn.example.com/test-upload.png")
+
     await page.click('button:has-text("Link 처리")')
     await waitForStepView({
       page,
@@ -1329,6 +1331,11 @@ const run = async () => {
     await waitForStepView({
       page,
       step: "links-options",
+    })
+    await page.click('button:has-text("이전")')
+    await waitForStepView({
+      page,
+      step: "upload-provider-options",
     })
     await page.click('button:has-text("이전")')
     await waitForStepView({
@@ -1432,6 +1439,29 @@ const run = async () => {
       throw new Error("upload form should not appear inside the Assets tab")
     }
 
+    await page.click('button:has-text("다음")')
+    await waitForStepView({
+      page,
+      step: "upload-provider-options",
+    })
+
+    await page.fill("#upload-providerField-repo", "owner/name")
+    await page.fill("#upload-providerField-token", "placeholder-token")
+
+    const finalTestUploadResponsePromise = page.waitForResponse(
+      (response) =>
+        response.url() === `${baseUrl}/api/upload-providers/test` &&
+        response.request().method() === "POST",
+      { timeout: responseTimeoutMs },
+    )
+
+    await page.getByRole("button", { name: "테스트 업로드" }).click()
+    const finalTestUploadResponse = await finalTestUploadResponsePromise
+
+    if (finalTestUploadResponse.status() !== 200) {
+      throw new Error(`final test upload request failed: ${finalTestUploadResponse.status()}`)
+    }
+
     await page.click('button:has-text("Link 처리")')
     await waitForStepView({
       page,
@@ -1528,8 +1558,8 @@ const run = async () => {
     await waitForJobStatus({
       page,
       timeoutMs: 90_000,
-      accept: (status) => status === "upload-ready",
-      timeoutLabel: "UI upload-ready state",
+      accept: (status) => status === "uploading",
+      timeoutLabel: "UI automatic uploading state",
     })
 
     const setupPanelsHidden = await page.evaluate(() => {
@@ -1541,68 +1571,12 @@ const run = async () => {
     }
 
     await page.waitForSelector("#job-file-tree table")
-    await page.waitForSelector("#upload-providerKey")
-    await page.waitForSelector("#upload-providerField-repo")
-    await page.waitForSelector("#upload-providerField-token")
-
-    const uploadSectionText = await page.locator("#status-panel").textContent()
-
-    if (!uploadSectionText?.includes("업로드 시작")) {
-      throw new Error("upload-ready panel did not expose the upload action")
-    }
 
     const uploadTargetRow = await page.locator("#job-file-tree tbody tr").first().textContent()
 
     if (!uploadTargetRow?.includes("NestJS 업로드 플로우 점검")) {
       throw new Error("upload target table did not render the expected post")
     }
-
-    if ((await readProgressValue({ page, selector: "#upload-progress" })) !== 0) {
-      throw new Error("upload-ready state did not start from zero progress")
-    }
-
-    await assertUploadRowStatus({
-      page,
-      rowId: "NestJS/2026-04-11-223034929700/index.md",
-      expectedStatus: "pending",
-    })
-    const providerValue = await selectTriggerValue({
-      page,
-      selector: "#upload-providerKey",
-    })
-
-    if (providerValue !== "github") {
-      throw new Error("upload provider default did not stay on github")
-    }
-
-    await page.fill("#upload-providerField-repo", "owner/name")
-    await page.fill("#upload-providerField-token", "placeholder-invalid-token")
-
-    debugLog("waitForResponse", "uploadResponsePromise")
-    const uploadResponsePromise = page.waitForResponse(
-      (response) =>
-        response.url() === `${baseUrl}/api/export/${jobId}/upload` &&
-        response.request().method() === "POST",
-      { timeout: responseTimeoutMs },
-    )
-
-    await page.click("#upload-submit")
-    await uploadResponsePromise
-
-    if (
-      mockState.uploadPayload?.providerKey !== "github" ||
-      mockState.uploadPayload.providerFields.repo !== "owner/name" ||
-      mockState.uploadPayload.providerFields.token !== "placeholder-invalid-token"
-    ) {
-      throw new Error("upload request did not submit the structured placeholder provider payload")
-    }
-
-    await waitForJobStatus({
-      page,
-      timeoutMs: 10_000,
-      accept: (status) => status === "uploading",
-      timeoutLabel: "UI uploading state",
-    })
 
     if ((await page.locator("#upload-providerKey").count()) !== 0) {
       throw new Error("uploading state should hide the upload form")
@@ -1633,74 +1607,27 @@ const run = async () => {
       throw new Error("partial uploading state did not expose intermediate progress")
     }
 
-    await waitForJobStatus({
-      page,
-      timeoutMs: 90_000,
-      accept: (status) => status === "upload-failed",
-      timeoutLabel: "UI upload-failed state",
-    })
-
-    await page.waitForSelector("#upload-providerKey")
-    await page.waitForSelector("#upload-providerField-repo")
-    await page.waitForSelector("#upload-providerField-token")
-
-    const failedUploadMessage = await page.locator("#status-panel").textContent()
-
-    if (!failedUploadMessage?.includes("Image upload failed.")) {
-      throw new Error("upload-failed state did not keep the retry message visible")
-    }
-
-    const failedRows = await page.locator('[data-upload-row-status="failed"]').count()
-    const completedRows = await page.locator('[data-upload-row-status="complete"]').count()
-
-    if (failedRows !== uploadTargetCount - 1 || completedRows !== 1) {
-      throw new Error("upload-failed state did not preserve completed rows")
-    }
-
-    const retainedRepo = await page.locator("#upload-providerField-repo").inputValue()
-    const retainedToken = await page.locator("#upload-providerField-token").inputValue()
-
-    if (retainedRepo !== "owner/name" || retainedToken !== "placeholder-invalid-token") {
-      throw new Error("upload-failed retry form did not preserve the previous provider values")
-    }
-
     await page.setViewportSize(mobileViewport)
     await page.waitForTimeout(150)
     await page.setViewportSize(desktopViewport)
     await page.waitForTimeout(150)
-    await page.fill("#upload-providerField-token", "placeholder-fixed-token")
-
-    debugLog("waitForResponse", "retryUploadResponsePromise")
-    const retryUploadResponsePromise = page.waitForResponse(
-      (response) =>
-        response.url() === `${baseUrl}/api/export/${jobId}/upload` &&
-        response.request().method() === "POST",
-      { timeout: responseTimeoutMs },
-    )
-
-    await page.click("#upload-submit")
-    await retryUploadResponsePromise
-
-    if (
-      mockState.uploadPayload?.providerKey !== "github" ||
-      mockState.uploadPayload.providerFields.repo !== "owner/name" ||
-      String(mockState.uploadPayload.providerFields.token) !== "placeholder-fixed-token"
-    ) {
-      throw new Error("upload retry did not submit the corrected placeholder provider payload")
-    }
 
     await page.waitForFunction(
       () => document.querySelector("#status-text")?.getAttribute("data-status") === "uploading",
       undefined,
       { timeout: 10_000 },
     )
-    await page.waitForFunction(() => {
-      const progress = Number(
-        document.querySelector("#upload-progress")?.getAttribute("aria-valuenow") ?? "0",
-      )
+    await page.waitForFunction(
+      () => {
+        const progress = Number(
+          document.querySelector("#upload-progress")?.getAttribute("aria-valuenow") ?? "0",
+        )
 
-      return progress >= 95
-    })
+        return progress >= 95
+      },
+      undefined,
+      { timeout: 10_000 },
+    )
 
     const rewritePendingProgress = await readProgressValue({
       page,
@@ -1741,6 +1668,7 @@ const run = async () => {
       options: ExportOptions
       posts: Array<{
         outputPath: string | null
+        assetPaths: string[]
       }>
     }
     const summaryText = await page.locator("#summary").textContent()
@@ -1764,6 +1692,23 @@ const run = async () => {
       throw new Error("manifest did not reflect upload completion")
     }
 
+    const firstCompletedPost = manifest.posts.find((post) => post.outputPath)
+
+    if (!firstCompletedPost?.assetPaths.some((assetPath) => assetPath.startsWith("https://"))) {
+      throw new Error("manifest did not expose uploaded URLs after automatic upload")
+    }
+
+    await page.waitForSelector('#job-file-tree a[href^="https://cdn.example.com/"]', {
+      timeout: 10_000,
+    })
+    const visibleUploadedLinks = await page
+      .locator('#job-file-tree a[href^="https://cdn.example.com/"]')
+      .evaluateAll((links) => links.map((link) => (link as HTMLAnchorElement).href))
+
+    if (visibleUploadedLinks.length === 0) {
+      throw new Error("result file tree did not expose uploaded asset URLs")
+    }
+
     if (typeof manifest.options.blockOutputs.templates["naver-se4:image"] !== "string") {
       throw new Error("manifest did not preserve the naver-se4 image template")
     }
@@ -1780,6 +1725,10 @@ const run = async () => {
 
     if (await page.locator("#upload-providerKey").count()) {
       throw new Error("result step should not expose upload credentials")
+    }
+
+    if (mockState.manualUploadRequestCount !== 0) {
+      throw new Error("normal upload flow sent a manual upload POST")
     }
 
     await page.waitForSelector("#job-file-tree [data-job-item-id]")

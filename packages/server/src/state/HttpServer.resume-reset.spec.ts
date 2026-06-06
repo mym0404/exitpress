@@ -8,6 +8,7 @@ import {
   baseScanResult,
   cleanupTestServerRoots,
   createTestHttpServer,
+  createUploadPayload,
   startServer,
 } from "@tests/support/server/HttpServerSpecHarness.js"
 import { createTestTempDir } from "@tests/support/test-paths.js"
@@ -196,6 +197,10 @@ describe("http server resume reset", () => {
           blogIdOrUrl: "https://blog.naver.com/mym0404",
           outputDir,
           options: defaultExportOptions(),
+          uploadProvider: createUploadPayload({
+            repo: "owner/name",
+            token: "ghp_export_upload_token",
+          }),
         }),
       })
       const exportBody = (await exportResponse.json()) as {

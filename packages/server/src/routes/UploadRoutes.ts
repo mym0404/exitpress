@@ -1,9 +1,11 @@
-import { isUploadActionableJob, JOB_STATUSES } from "@exitpress/domain/export-job/ExportJobState.js"
+import type { UploadProviderFields } from "@exitpress/domain/upload/schema/UploadProvider.js"
 
 import type { ApiRouteContext, ApiRouteRequest } from "./ApiRouteContext.js"
 
 import { parseJsonBody, sendJson } from "../http/HttpResponse.js"
-import { normalizeUploaderConfig } from "../upload/HttpUploadConfig.js"
+import { normalizeUploaderConfig, sanitizeUploadError } from "../upload/HttpUploadConfig.js"
+import { runUploadProviderTest } from "../upload/HttpUploadProviderTest.js"
+import { createHttpUploadTestAsset } from "../upload/HttpUploadTestAsset.js"
 
 import {
   rejectNonJson,
@@ -11,8 +13,11 @@ import {
   sanitizeUploadProviderCatalogError,
 } from "./RouteSupport.js"
 
+const uploadProviderRequiredError = "providerKey와 providerFields는 필수입니다."
+const uploadProviderValidationError = "업로드 provider 설정을 확인하지 못했습니다."
+
 export const handleUploadRoutes =
-  ({ jobStore, exportJobRunner, uploadJobRunner, uploadProviderSource }: ApiRouteContext) =>
+  ({ uploadPhaseRunner, uploadProviderSource }: ApiRouteContext) =>
   async ({ request, response, method, url }: ApiRouteRequest) => {
     if (method === "GET" && url.pathname === "/api/upload-providers") {
       try {
@@ -27,70 +32,61 @@ export const handleUploadRoutes =
       return true
     }
 
-    const uploadMatch = url.pathname.match(/^\/api\/export\/([^/]+)\/upload$/)
+    if (method === "POST" && url.pathname === "/api/upload-providers/test") {
+      if (rejectNonJson(request, response) || rejectNonSameOrigin(request, response)) {
+        return true
+      }
 
-    if (method !== "POST" || !uploadMatch?.[1]) {
-      return false
-    }
+      const payload = await parseJsonBody<{
+        providerKey?: unknown
+        providerFields?: unknown
+      }>(request)
 
-    if (rejectNonJson(request, response) || rejectNonSameOrigin(request, response)) {
-      return true
-    }
+      const providerKey = typeof payload.providerKey === "string" ? payload.providerKey.trim() : ""
+      let providerFields: UploadProviderFields | null = null
 
-    const job = jobStore.get(uploadMatch[1])
+      try {
+        providerFields = providerKey
+          ? await uploadProviderSource.normalizeProviderFields(providerKey, payload.providerFields)
+          : null
+      } catch {
+        sendJson({ response, statusCode: 400, body: { error: uploadProviderValidationError } })
+        return true
+      }
 
-    if (!job?.manifest) {
-      sendJson({ response, statusCode: 404, body: { error: "job not found" } })
-      return true
-    }
+      if (!providerKey || !providerFields) {
+        sendJson({
+          response,
+          statusCode: 400,
+          body: { error: uploadProviderRequiredError },
+        })
+        return true
+      }
 
-    if (!isUploadActionableJob(job)) {
-      sendJson({
-        response,
-        statusCode: 409,
-        body: { error: "업로드 가능한 상태의 작업이 아닙니다." },
-      })
-      return true
-    }
+      const testAsset = await createHttpUploadTestAsset()
+      let statusCode = 200
+      let body: { uploadedUrl: string } | { error: string }
 
-    if (
-      job.request.options.assets.imageHandlingMode !== "download-and-upload" ||
-      job.upload.candidateCount === 0
-    ) {
-      sendJson({ response, statusCode: 409, body: { error: "업로드 대상이 없는 작업입니다." } })
-      return true
-    }
-
-    const payload = await parseJsonBody<{
-      providerKey?: string
-      providerFields?: unknown
-    }>(request)
-
-    const providerKey = payload.providerKey?.trim()
-    const providerFields = providerKey
-      ? await uploadProviderSource.normalizeProviderFields(providerKey, payload.providerFields)
-      : null
-
-    if (!providerKey || !providerFields) {
-      sendJson({
-        response,
-        statusCode: 400,
-        body: { error: "providerKey와 providerFields는 필수입니다." },
-      })
-      return true
-    }
-
-    void exportJobRunner.startTrackedJobTask({
-      jobId: job.id,
-      run: (signal) =>
-        uploadJobRunner.runUploadForJob({
-          jobId: job.id,
+      try {
+        const uploadedUrl = await runUploadProviderTest({
+          uploadPhaseRunner,
+          outputDir: testAsset.outputDir,
+          candidate: testAsset.candidate,
           uploaderKey: providerKey,
           uploaderConfig: normalizeUploaderConfig({ uploaderKey: providerKey, providerFields }),
-          signal,
-        }),
-    })
+        })
 
-    sendJson({ response, statusCode: 202, body: { jobId: job.id, status: JOB_STATUSES.UPLOADING } })
-    return true
+        body = { uploadedUrl }
+      } catch (error) {
+        statusCode = 502
+        body = { error: sanitizeUploadError({ error, providerFields }) }
+      } finally {
+        await testAsset.remove()
+      }
+
+      sendJson({ response, statusCode, body })
+      return true
+    }
+
+    return false
   }
