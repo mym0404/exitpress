@@ -1,29 +1,23 @@
 import { getDefaultSlugWhitespace } from "@exitpress/domain/export-options/ExportOptions.js"
-import {
-  buildPostFolderName,
-  buildPostTemplateValues,
-  postTemplateKeys,
-} from "@exitpress/domain/export-paths/PostPathTemplate.js"
+import { buildPostFolderName } from "@exitpress/domain/export-paths/PostPathTemplate.js"
 
 import type { ExportOptions } from "@exitpress/domain/export-options/schema/ExportOptions.js"
-
-import { Input } from "../../components/ui/Input.js"
 
 import {
   CheckField,
   OptionField,
   OptionSection,
   OptionSelectField,
-  optionEmbeddedFieldClass,
   optionEmbeddedPanelClass,
   RadioField,
 } from "./OptionControls.js"
+import { postTemplatePropDefinitions } from "./PostTemplateProps.js"
 import {
   buildStructurePreviewTree,
   StructurePreviewTree,
   structurePreviewSample,
 } from "./StructurePreview.js"
-import { TemplateVariableCards } from "./TemplateVariables.js"
+import { TemplateEditorCard } from "./TemplateEditorCard.js"
 
 export const StructureOptionsStep = ({
   outputDir,
@@ -43,10 +37,6 @@ export const StructureOptionsStep = ({
     publishedAt: structurePreviewSample.posts[0]?.publishedAt ?? "2026-04-11T04:00:00.000Z",
     categoryName: structurePreviewSample.posts[0]?.categoryPath.at(-1) ?? "React",
   }
-  const structureTemplatePreviewValues = buildPostTemplateValues({
-    post: structureTemplatePreviewPost,
-    options,
-  })
   const postFolderNameTemplate = options.structure.postFolderNameCustomTemplate.trim()
   const postFolderNamePreview =
     postFolderNameTemplate &&
@@ -207,29 +197,24 @@ export const StructureOptionsStep = ({
         >
           {options.structure.postFolderNameMode === "custom-template" ? (
             <div className="grid gap-3 pl-7">
-              <label className={optionEmbeddedFieldClass}>
-                <span className="text-sm font-semibold text-foreground">폴더명 템플릿</span>
-                <Input
-                  id="structure-postFolderNameCustomTemplate"
-                  value={options.structure.postFolderNameCustomTemplate}
-                  placeholder="{date}-{slug}"
-                  onChange={(event) =>
-                    onOptionsChange((current) => ({
-                      ...current,
-                      structure: {
-                        ...current.structure,
-                        postFolderNameCustomTemplate: event.target.value,
-                      },
-                    }))
-                  }
-                />
-                <small className="field-help text-sm leading-6">
-                  결과는 한 폴더 이름으로 정리됩니다. 예:{" "}
-                  <span className="font-mono text-foreground">
-                    {"{date}"}-{"{category}"}-{"{slug}"}
-                  </span>
-                </small>
-              </label>
+              <TemplateEditorCard
+                title="폴더명 템플릿"
+                editorId="structure-postFolderNameCustomTemplate"
+                props={postTemplatePropDefinitions}
+                value={options.structure.postFolderNameCustomTemplate}
+                syntax="brace"
+                minHeight="6.5rem"
+                surface="embedded"
+                onTemplateChange={(postFolderNameCustomTemplate) =>
+                  onOptionsChange((current) => ({
+                    ...current,
+                    structure: {
+                      ...current.structure,
+                      postFolderNameCustomTemplate,
+                    },
+                  }))
+                }
+              />
 
               <div className={optionEmbeddedPanelClass}>
                 <div className="grid gap-1">
@@ -255,22 +240,6 @@ export const StructureOptionsStep = ({
                     {postFolderNamePreview ?? "템플릿을 입력하면 결과가 여기에서 바로 바뀝니다."}
                   </code>
                 </div>
-              </div>
-
-              <div className={optionEmbeddedPanelClass}>
-                <div className="grid gap-1">
-                  <span className="text-sm font-semibold text-foreground">사용 가능한 변수</span>
-                  <p className="text-sm leading-6 text-muted-foreground">
-                    아래 값은 구조 예시 글 하나를 기준으로 바로 계산합니다.
-                  </p>
-                </div>
-
-                <TemplateVariableCards
-                  keys={postTemplateKeys}
-                  keyPrefix="structure"
-                  values={structureTemplatePreviewValues}
-                  variant="inline"
-                />
               </div>
             </div>
           ) : null}

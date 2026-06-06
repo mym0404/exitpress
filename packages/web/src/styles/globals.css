@@ -328,8 +328,14 @@ pre,
 .code-surface-inverse {
   border: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
   background: color-mix(in srgb, var(--foreground) 96%, var(--background));
-  color: color-mix(in srgb, var(--background) 96%, white);
+  color: color-mix(in srgb, white 96%, var(--background));
   border-radius: var(--radius-md);
+}
+
+.template-code-editor .cm-content,
+.template-code-editor .cm-gutters {
+  font-size: 0.8125rem;
+  line-height: 1.55;
 }
 
 .block-output-preview-surface {

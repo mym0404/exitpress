@@ -725,6 +725,18 @@ const chooseSelectOption = async ({
   await page.locator(`[data-slot="select-item"][data-value="${value}"]`).click()
 }
 
+const fillCodeMirror = async ({
+  page,
+  editor,
+  value,
+}: {
+  page: import("playwright").Page
+  editor: string
+  value: string
+}) => {
+  await page.locator(`${editor} [contenteditable="true"]`).fill(value)
+}
+
 const assertUploadRowStatus = async ({
   page,
   rowId,
@@ -1221,6 +1233,19 @@ const run = async () => {
     })
 
     await page.click("#structure-groupByCategory")
+    await page.click("#structure-postFolderNameMode-custom-template")
+    await fillCodeMirror({
+      page,
+      editor: "#structure-postFolderNameCustomTemplate",
+      value: "{date}-{slug}",
+    })
+
+    const folderNamePreview = page.locator("#structure-postFolderNameCustomTemplatePreview")
+
+    if (!(await folderNamePreview.textContent())?.includes("2026-04-11-")) {
+      throw new Error("custom folder template preview did not update")
+    }
+
     await page.click('button:has-text("Frontmatter 설정")')
     await waitForStepView({
       page,
@@ -1415,7 +1440,11 @@ const run = async () => {
 
     await page.waitForSelector("#links-sameBlogPostMode-custom-url")
     await page.click("#links-sameBlogPostMode-custom-url")
-    await page.fill("#links-sameBlogPostCustomUrlTemplate", "https://myblog/{slug}")
+    await fillCodeMirror({
+      page,
+      editor: "#links-sameBlogPostCustomUrlTemplate",
+      value: "https://myblog/{slug}",
+    })
 
     const livePreview = page.locator("#links-sameBlogPostCustomUrlPreview")
 
@@ -1457,9 +1486,11 @@ const run = async () => {
       page,
       baseUrl,
     })
-    await page
-      .locator('#block-template-editor-naver-se4-image [contenteditable="true"]')
-      .fill("![${alt}](${url})")
+    await fillCodeMirror({
+      page,
+      editor: "#block-template-editor-naver-se4-image",
+      value: "![${alt}](${url})",
+    })
     await blockTemplateSettingsSavePromise
 
     debugLog("waitForResponse", "exportResponsePromise")

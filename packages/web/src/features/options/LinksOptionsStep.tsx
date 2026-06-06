@@ -1,21 +1,14 @@
 import {
   applyPostTemplate,
   buildPostTemplateValues,
-  postTemplateKeys,
 } from "@exitpress/domain/export-paths/PostPathTemplate.js"
 
 import type { PostSummary } from "@exitpress/domain/blog/schema/BlogScan.js"
 import type { ExportOptions } from "@exitpress/domain/export-options/schema/ExportOptions.js"
 
-import { Input } from "../../components/ui/Input.js"
-
-import {
-  OptionSection,
-  optionEmbeddedFieldClass,
-  optionEmbeddedPanelClass,
-  RadioField,
-} from "./OptionControls.js"
-import { TemplateVariableCards } from "./TemplateVariables.js"
+import { OptionSection, optionEmbeddedPanelClass, RadioField } from "./OptionControls.js"
+import { postTemplatePropDefinitions } from "./PostTemplateProps.js"
+import { TemplateEditorCard } from "./TemplateEditorCard.js"
 
 export const LinksOptionsStep = ({
   options,
@@ -89,29 +82,24 @@ export const LinksOptionsStep = ({
         >
           {options.links.sameBlogPostMode === "custom-url" ? (
             <div className="grid gap-3 pl-7">
-              <label className={optionEmbeddedFieldClass}>
-                <span className="text-sm font-semibold text-foreground">URL 템플릿</span>
-                <Input
-                  id="links-sameBlogPostCustomUrlTemplate"
-                  value={options.links.sameBlogPostCustomUrlTemplate}
-                  placeholder="https://myblog/{slug}"
-                  onChange={(event) =>
-                    onOptionsChange((current) => ({
-                      ...current,
-                      links: {
-                        ...current.links,
-                        sameBlogPostCustomUrlTemplate: event.target.value,
-                      },
-                    }))
-                  }
-                />
-                <small className="field-help text-sm leading-6">
-                  지원 변수만 치환됩니다. 예:{" "}
-                  <span className="font-mono text-foreground">
-                    https://myblog/{"{category}"}/{"{title}"}
-                  </span>
-                </small>
-              </label>
+              <TemplateEditorCard
+                title="URL 템플릿"
+                editorId="links-sameBlogPostCustomUrlTemplate"
+                props={postTemplatePropDefinitions}
+                value={options.links.sameBlogPostCustomUrlTemplate}
+                syntax="brace"
+                minHeight="6.5rem"
+                surface="embedded"
+                onTemplateChange={(sameBlogPostCustomUrlTemplate) =>
+                  onOptionsChange((current) => ({
+                    ...current,
+                    links: {
+                      ...current.links,
+                      sameBlogPostCustomUrlTemplate,
+                    },
+                  }))
+                }
+              />
 
               <div className={optionEmbeddedPanelClass}>
                 <div className="grid gap-1">
@@ -139,20 +127,6 @@ export const LinksOptionsStep = ({
                     {customUrlPreview ?? "템플릿을 입력하면 결과가 여기에서 바로 바뀝니다."}
                   </code>
                 </div>
-              </div>
-
-              <div className={optionEmbeddedPanelClass}>
-                <div className="grid gap-1">
-                  <span className="text-sm font-semibold text-foreground">사용 가능한 변수</span>
-                  <p className="text-sm leading-6 text-muted-foreground">
-                    아래 값은 현재 선택 범위 안의 글 하나를 예시로 바로 계산합니다.
-                  </p>
-                </div>
-
-                <TemplateVariableCards
-                  keys={postTemplateKeys}
-                  values={linkTemplatePreviewValues ?? {}}
-                />
               </div>
             </div>
           ) : null}
