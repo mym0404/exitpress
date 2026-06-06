@@ -16,10 +16,21 @@ type TemplatePropCompletion = {
   detail: string
 }
 
-const expressionOpen = "${"
+const allTemplatePropCompletionSyntaxes = ["dollar-brace", "brace"] as const
+export type TemplatePropCompletionSyntax = (typeof allTemplatePropCompletionSyntaxes)[number]
+
 const propKeyPattern = /^[A-Za-z_][A-Za-z0-9_]*$/
 
-const findExpressionStart = ({ source, cursor }: { source: string; cursor: number }) => {
+const findTemplateVariableStart = ({
+  source,
+  cursor,
+  syntax,
+}: {
+  source: string
+  cursor: number
+  syntax: TemplatePropCompletionSyntax
+}) => {
+  const expressionOpen = syntax === "dollar-brace" ? "${" : "{"
   const openIndex = source.lastIndexOf(expressionOpen, cursor)
 
   if (openIndex === -1) {
@@ -35,6 +46,7 @@ const findExpressionStart = ({ source, cursor }: { source: string; cursor: numbe
 
 export const createTemplatePropCompletionSource = (
   props: Record<string, TemplatePropDefinition>,
+  { syntax = "dollar-brace" }: { syntax?: TemplatePropCompletionSyntax } = {},
 ) => {
   const options: TemplatePropCompletion[] = Object.entries(props).map(([key, prop]) => ({
     label: key,
@@ -44,9 +56,10 @@ export const createTemplatePropCompletionSource = (
 
   return (context: TemplatePropCompletionContext) => {
     const source = context.state.doc.sliceString(0, context.pos)
-    const expressionStart = findExpressionStart({
+    const expressionStart = findTemplateVariableStart({
       source,
       cursor: context.pos,
+      syntax,
     })
 
     if (expressionStart === undefined) {

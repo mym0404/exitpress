@@ -16,12 +16,8 @@ const optionFieldCardClass =
 const optionFieldPlainClass = "grid min-h-0 content-start gap-1.5 self-start"
 const checkFieldClass = "field-card flex w-full flex-col self-start rounded-2xl px-3 py-3"
 const optionSectionClass = "option-section grid gap-4"
-export const optionEmbeddedFieldClass =
-  "field grid min-h-0 gap-2 rounded-xl border border-border bg-muted/20 px-3 py-3"
 export const optionEmbeddedPanelClass =
   "grid gap-3 rounded-xl border border-border bg-muted/20 px-3 py-3"
-export const optionEmbeddedTileClass =
-  "grid gap-2 rounded-lg border border-border bg-background/30 px-3 py-3"
 export const editorOutputCardClass = "field-card grid gap-4 rounded-2xl px-4 py-4 xl:col-span-2"
 
 const allOptionFieldSurfaces = ["card", "plain"] as const
