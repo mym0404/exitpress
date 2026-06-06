@@ -182,7 +182,7 @@ export const createHttpUploadJobRunner = ({
         manifest: completedManifest,
         items: completedJob.items,
       })
-      jobStore.appendLog(jobId, "Image Upload와 결과 치환이 완료되었습니다.")
+      jobStore.appendLog(jobId, "Image Upload와 결과 치환이 끝났습니다.")
       await flushManifestPersist(jobId)
     } catch (error) {
       if (error instanceof ImageUploadPhaseError) {

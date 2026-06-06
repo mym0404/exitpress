@@ -40,13 +40,13 @@ export const useWizardActions = (args: UseWizardActionsArgs) => {
 
   const handleSubmit = useCallback(async () => {
     if (!activeScanResult) {
-      setCategoryStatus("먼저 스캔을 완료해야 합니다.")
+      setCategoryStatus("스캔을 먼저 완료하세요.")
       return
     }
 
     if (frontmatterValidationErrors.length > 0) {
       setSetupStep("frontmatter-options")
-      setCategoryStatus("Frontmatter alias 오류를 먼저 해결해야 합니다.")
+      setCategoryStatus("Frontmatter alias 오류를 먼저 해결하세요.")
       return
     }
 
@@ -75,7 +75,7 @@ export const useWizardActions = (args: UseWizardActionsArgs) => {
           providerFields,
         })
         toast("Image Upload를 시작했습니다.", {
-          description: "현재 단계에서 진행률을 확인할 수 있습니다.",
+          description: "현재 단계에 진행률이 표시됩니다.",
         })
       } catch (error) {
         const message = error instanceof Error ? error.message : String(error)

@@ -143,7 +143,7 @@ export class NaverBlogExporter {
       )
     }
 
-    log(`필터 적용 후 export 대상 글 수: ${filteredPosts.length}`)
+    log(`필터 적용 후 내보낼 글 수: ${filteredPosts.length}`)
     if (pendingPosts.length !== filteredPosts.length) {
       log(
         `이전 진행 상태 복구: 완료 ${filteredPosts.length - pendingPosts.length}개, 남음 ${pendingPosts.length}개`,

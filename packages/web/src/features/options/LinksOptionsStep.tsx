@@ -40,10 +40,7 @@ export const LinksOptionsStep = ({
       : null
 
   return (
-    <OptionSection
-      title="같은 블로그 글 링크"
-      note="현재 export 중인 블로그 안의 다른 글 링크 처리 규칙"
-    >
+    <OptionSection title="같은 블로그 글 링크" note="현재 내보내는 블로그 안의 다른 글 링크 규칙">
       <div className="grid gap-4 xl:col-span-2">
         <RadioField
           inputId="links-sameBlogPostMode-keep-source"
@@ -67,7 +64,7 @@ export const LinksOptionsStep = ({
           inputId="links-sameBlogPostMode-custom-url"
           name="links-sameBlogPostMode"
           optionKey="links-sameBlogPostMode"
-          label="export 대상 글이면 커스텀 URL로 바꾸기"
+          label="내보낼 글이면 커스텀 URL로 바꾸기"
           description={description("links-sameBlogPostMode")}
           checked={options.links.sameBlogPostMode === "custom-url"}
           onChange={() =>
@@ -106,8 +103,8 @@ export const LinksOptionsStep = ({
                   <span className="text-sm font-semibold text-foreground">실시간 변환 예시</span>
                   <p className="text-sm leading-6 text-muted-foreground">
                     {linkTemplatePreviewPost
-                      ? `${linkTemplatePreviewPost.title} 글을 기준으로 바로 보여줍니다.`
-                      : "선택 범위에 글이 있으면 여기에서 실제 변환 결과를 바로 보여줍니다."}
+                      ? `${linkTemplatePreviewPost.title} 글을 예시로 바로 표시합니다.`
+                      : "선택 범위에 글이 있으면 여기에서 실제 변환 결과를 바로 표시합니다."}
                   </p>
                 </div>
 
@@ -136,8 +133,8 @@ export const LinksOptionsStep = ({
           inputId="links-sameBlogPostMode-relative-filepath"
           name="links-sameBlogPostMode"
           optionKey="links-sameBlogPostMode"
-          label="export 결과 기준 상대경로 filepath로 바꾸기"
-          description="같이 export 된 다른 글이면 현재 Markdown 파일 위치 기준 상대경로로 바꿉니다."
+          label="내보낸 결과 기준 상대경로 filepath로 바꾸기"
+          description="함께 내보낸 다른 글이면 현재 Markdown 파일 위치의 상대경로로 바꿉니다."
           checked={options.links.sameBlogPostMode === "relative-filepath"}
           onChange={() =>
             onOptionsChange((current) => ({

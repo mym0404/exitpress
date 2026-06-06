@@ -360,7 +360,7 @@ const ExportApp = () => {
 
   const startBlockScan = useCallback(async () => {
     if (!activeScanResult?.posts) {
-      setCategoryStatus("먼저 스캔을 완료해야 합니다.")
+      setCategoryStatus("스캔을 먼저 완료하세요.")
       return
     }
 
@@ -466,7 +466,7 @@ const ExportApp = () => {
 
   const confirmMarkdownAndStartExport = useCallback(async () => {
     if (!activeScanResult) {
-      setCategoryStatus("먼저 스캔을 완료해야 합니다.")
+      setCategoryStatus("스캔을 먼저 완료하세요.")
       return
     }
 
