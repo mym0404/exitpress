@@ -29,7 +29,7 @@
 - `ParsedPost`는 `tags`와 `blocks`를 반환한다.
 - `blocks`는 `blockId`, `props`, 선택적 `assets`를 가진 렌더 대상 block이다.
 - `assets`의 key는 렌더 전에 치환할 top-level prop 이름이다.
-- Markdown 본문 렌더링은 `blockId`로 template 문자열을 찾고 `props`를 `packages/engine/src/markdown/BlockTemplateRenderer.ts`에 넘긴다.
+- Markdown 본문 렌더링은 `blockId`로 template 문자열을 찾고 `props`를 `packages/engine/src/markdown/utils/renderBlockTemplates.ts`에 넘긴다.
 - Inspect/evidence 도구가 source path를 필요로 할 때는 별도 parser helper가 block evidence를 함께 반환한다. 이 값은 디버깅과 리포트용이며 export manifest나 Markdown 도메인 모델에 저장하지 않는다.
 
 ## File Structure Rules
