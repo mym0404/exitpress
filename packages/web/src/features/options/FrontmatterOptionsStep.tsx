@@ -98,9 +98,8 @@ export const FrontmatterOptionsStep = ({
           <div
             key={fieldName}
             className={cn(
-              "frontmatter-row field-card grid content-start gap-3 self-start rounded-2xl px-3 py-3",
-              hasError &&
-                "border-[color-mix(in_srgb,var(--status-error-fg)_26%,transparent)] shadow-[var(--panel-shadow-border),0_0_0_1px_color-mix(in_srgb,var(--status-error-fg)_12%,transparent)]",
+              "frontmatter-row grid content-start gap-3 self-start rounded-[var(--radius-md)] px-2 py-2 transition-colors hover:bg-accent/45",
+              hasError && "bg-[var(--status-error-bg)] text-[var(--status-error-fg)]",
             )}
             data-frontmatter-field={fieldName}
             data-state={hasError ? "error" : "default"}
