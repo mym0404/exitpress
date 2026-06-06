@@ -14,7 +14,7 @@ import { createTestTempDir } from "../../support/test-paths.js"
 const blogId = "mym0404"
 const targetLogNo = "222990202785"
 const uploadRepo = "mym0404/ia2"
-const uploadBranch = "master"
+const uploadBranch = "main"
 const uploadPath = `exitpress-live/${Date.now()}`
 const responseTimeoutMs = 240_000
 const githubApiBaseUrl = "https://api.github.com"
