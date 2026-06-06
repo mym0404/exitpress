@@ -902,23 +902,13 @@ const run = async () => {
       },
     },
     {
-      id: "upload-ready-restores-upload-step-without-auto-start",
+      id: "upload-ready-restores-upload-step-without-manual-start",
       step: "upload",
       bootstrap: createBootstrap({
         lastOutputDir: uploadReadyOutputDir,
         resumedJob: uploadReadyJob,
       }),
       handleRequest: ({ pathname, method }) => {
-        if (pathname === "/api/export/job-upload-ready/upload" && method === "POST") {
-          return buildJsonResponse(
-            {
-              jobId: "job-upload-ready",
-              status: "uploading",
-            },
-            202,
-          )
-        }
-
         if (pathname === "/api/export/job-upload-ready" && method === "GET") {
           return buildJsonResponse(uploadReadyJob)
         }
@@ -936,7 +926,7 @@ const run = async () => {
         }
 
         await closeDialog(page)
-        await page.waitForSelector("#upload-providerKey", {
+        await page.waitForSelector("#job-file-tree table", {
           timeout: responseTimeoutMs,
         })
         await assertUploadRowStatus({
@@ -945,25 +935,17 @@ const run = async () => {
           expectedStatus: "pending",
         })
 
-        const uploadButtonText = await page.locator("#upload-submit").textContent()
-
-        if (!uploadButtonText?.includes("업로드 시작")) {
-          throw new Error(`unexpected upload-ready button text: ${uploadButtonText ?? "null"}`)
+        if ((await page.locator("#upload-providerKey").count()) !== 0) {
+          throw new Error("upload-ready restore should not expose upload credentials")
         }
 
-        await page.fill("#upload-providerField-repo", "owner/repo")
-        await page.fill("#upload-providerField-token", "token-value")
-        await page.click("#upload-submit")
-
-        if (Number(state.uploadRequestCount) !== 1) {
-          throw new Error(
-            `expected one upload request from upload-ready, got ${state.uploadRequestCount}`,
-          )
+        if (Number(state.uploadRequestCount) !== 0) {
+          throw new Error(`upload-ready restore sent upload requests: ${state.uploadRequestCount}`)
         }
       },
     },
     {
-      id: "uploading-resume-restores-progress-and-manual-continue",
+      id: "uploading-resume-restores-progress-without-manual-continue",
       step: "upload",
       bootstrap: createBootstrap({
         lastOutputDir: uploadingOutputDir,
@@ -973,16 +955,6 @@ const run = async () => {
         if (pathname === "/api/export/job-uploading" && method === "GET") {
           return buildJsonResponse(
             state.uploadRequestCount === 0 ? uploadingResumableJob : uploadingActiveJob,
-          )
-        }
-
-        if (pathname === "/api/export/job-uploading/upload" && method === "POST") {
-          return buildJsonResponse(
-            {
-              jobId: "job-uploading",
-              status: "uploading",
-            },
-            202,
           )
         }
 
@@ -999,7 +971,7 @@ const run = async () => {
         }
 
         await closeDialog(page)
-        await page.waitForSelector("#upload-providerKey", {
+        await page.waitForSelector("#job-file-tree table", {
           timeout: responseTimeoutMs,
         })
         await assertUploadRowStatus({
@@ -1018,24 +990,12 @@ const run = async () => {
           expectedStatus: "pending",
         })
 
-        const uploadButtonText = await page.locator("#upload-submit").textContent()
-
-        if (!uploadButtonText?.includes("남은 업로드 계속")) {
-          throw new Error(`unexpected uploading resume button text: ${uploadButtonText ?? "null"}`)
+        if ((await page.locator("#upload-providerKey").count()) !== 0) {
+          throw new Error("uploading restore should not expose upload credentials")
         }
 
-        await page.fill("#upload-providerField-repo", "owner/repo")
-        await page.fill("#upload-providerField-token", "token-value")
-        await page.click("#upload-submit")
-        await page.locator("#upload-providerKey").waitFor({
-          state: "hidden",
-          timeout: responseTimeoutMs,
-        })
-
-        if (Number(state.uploadRequestCount) !== 1) {
-          throw new Error(
-            `expected one manual upload continue request, got ${state.uploadRequestCount}`,
-          )
+        if (Number(state.uploadRequestCount) !== 0) {
+          throw new Error(`uploading restore sent upload requests: ${state.uploadRequestCount}`)
         }
       },
     },
@@ -1051,16 +1011,6 @@ const run = async () => {
           return buildJsonResponse(uploadFailedJob)
         }
 
-        if (pathname === "/api/export/job-upload-failed/upload" && method === "POST") {
-          return buildJsonResponse(
-            {
-              jobId: "job-upload-failed",
-              status: "uploading",
-            },
-            202,
-          )
-        }
-
         return null
       },
       assert: async ({ page, state }) => {
@@ -1074,7 +1024,7 @@ const run = async () => {
         }
 
         await closeDialog(page)
-        await page.waitForSelector("#upload-providerKey", {
+        await page.waitForSelector("#job-file-tree table", {
           timeout: responseTimeoutMs,
         })
         await page.waitForSelector("text=Image upload failed.", {
@@ -1096,12 +1046,12 @@ const run = async () => {
           expectedStatus: "failed",
         })
 
-        await page.fill("#upload-providerField-repo", "owner/repo")
-        await page.fill("#upload-providerField-token", "token-value")
-        await page.click("#upload-submit")
+        if ((await page.locator("#upload-providerKey").count()) !== 0) {
+          throw new Error("upload-failed restore should not expose upload credentials")
+        }
 
-        if (Number(state.uploadRequestCount) !== 1) {
-          throw new Error(`expected one retry upload request, got ${state.uploadRequestCount}`)
+        if (Number(state.uploadRequestCount) !== 0) {
+          throw new Error(`upload-failed restore sent upload requests: ${state.uploadRequestCount}`)
         }
       },
     },

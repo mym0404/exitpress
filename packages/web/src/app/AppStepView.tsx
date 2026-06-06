@@ -2,21 +2,20 @@ import type { BlockScanJobState } from "@exitpress/domain/block-scan/schema/Bloc
 import type { PostSummary, ScanResult } from "@exitpress/domain/blog/schema/BlogScan.js"
 import type { ExportJobState } from "@exitpress/domain/export-job/schema/ExportJobState.js"
 import type { ExportOptions } from "@exitpress/domain/export-options/schema/ExportOptions.js"
-import type {
-  UploadProviderCatalogResponse,
-  UploadProviderFields,
-} from "@exitpress/domain/upload/schema/UploadProvider.js"
+import type { UploadProviderCatalogResponse } from "@exitpress/domain/upload/schema/UploadProvider.js"
 import type { Dispatch, SetStateAction } from "react"
 
 import type { WizardStep } from "../features/common/shell/WizardFlow.js"
 import type { JobFilter } from "../features/job-results/JobResultsHelpers.js"
 import type { ScanStatusTone } from "../features/scan/BlogInputPanel.js"
+import type { UploadProviderSettingsValue } from "../features/upload/UploadProviderSettingsForm.js"
 import type { ExportBootstrapResponse } from "../lib/Api.js"
 
 import { Button } from "../components/ui/Button.js"
 import { Progress } from "../components/ui/Progress.js"
 import { JobResultsPanel } from "../features/job-results/JobResultsPanel.js"
 import { ExportOptionsPanel } from "../features/options/ExportOptionsPanel.js"
+import { UploadProviderOptionsStep } from "../features/options/UploadProviderOptionsStep.js"
 import { BlogInputPanel } from "../features/scan/BlogInputPanel.js"
 import { CategoryPanel } from "../features/scan/CategoryPanel.js"
 
@@ -25,9 +24,12 @@ type AppStepViewProps = {
   job: ExportJobState | null
   activeJobFilter: JobFilter
   submitting: boolean
-  uploadSubmitting: boolean
   uploadProviders: UploadProviderCatalogResponse
   uploadProviderError: string | null
+  uploadProviderStepMessage: string | null
+  testUploadSubmitting: boolean
+  testUploadResult: string | null
+  testUploadError: string | null
   blogIdOrUrl: string
   outputDir: string
   scanPending: boolean
@@ -57,11 +59,10 @@ type AppStepViewProps = {
   handleSelectAllCategories: () => void
   handleClearAllCategories: () => void
   handleCategoryToggle: (categoryId: number, checked: boolean) => void
+  handleUploadProviderSettingsChange: (value: UploadProviderSettingsValue) => void
+  handleUploadProviderSettingsReadyChange: (ready: boolean) => void
+  handleTestUpload: (value: UploadProviderSettingsValue) => Promise<void> | void
   handleResumeExport: () => Promise<void> | void
-  handleUpload: (input: {
-    providerKey: string
-    providerFields: UploadProviderFields
-  }) => Promise<void> | void
   handleRetryBlockScan: () => Promise<void> | void
   handleBackFromBlockScan: () => void
   handleConfirmMarkdownReview: () => Promise<void> | void
@@ -72,9 +73,12 @@ export const AppStepView = ({
   job,
   activeJobFilter,
   submitting,
-  uploadSubmitting,
   uploadProviders,
   uploadProviderError,
+  uploadProviderStepMessage,
+  testUploadSubmitting,
+  testUploadResult,
+  testUploadError,
   blogIdOrUrl,
   outputDir,
   scanPending,
@@ -101,8 +105,10 @@ export const AppStepView = ({
   handleSelectAllCategories,
   handleClearAllCategories,
   handleCategoryToggle,
+  handleUploadProviderSettingsChange,
+  handleUploadProviderSettingsReadyChange,
+  handleTestUpload,
   handleResumeExport,
-  handleUpload,
   handleRetryBlockScan,
   handleBackFromBlockScan,
   handleConfirmMarkdownReview,
@@ -122,12 +128,8 @@ export const AppStepView = ({
         job={job}
         activeJobFilter={activeJobFilter}
         resumeSubmitting={submitting}
-        uploadSubmitting={uploadSubmitting}
-        uploadProviders={uploadProviders}
-        uploadProviderError={uploadProviderError}
         onFilterChange={setActiveJobFilter}
         onResumeExport={handleResumeExport}
-        onUploadStart={handleUpload}
       />
     )
   }
@@ -255,6 +257,22 @@ export const AppStepView = ({
           </Button>
         </div>
       </>
+    )
+  }
+
+  if (currentStep === "upload-provider-options") {
+    return (
+      <UploadProviderOptionsStep
+        uploadProviders={uploadProviders}
+        uploadProviderError={uploadProviderError}
+        stepMessage={uploadProviderStepMessage}
+        testUploadSubmitting={testUploadSubmitting}
+        testUploadResult={testUploadResult}
+        testUploadError={testUploadError}
+        onChange={handleUploadProviderSettingsChange}
+        onReadyChange={handleUploadProviderSettingsReadyChange}
+        onTestUpload={handleTestUpload}
+      />
     )
   }
 

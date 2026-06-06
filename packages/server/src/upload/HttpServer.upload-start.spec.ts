@@ -1,17 +1,20 @@
-import { defaultExportOptions } from "@exitpress/domain/export-options/ExportOptions.js"
+import { access, readFile } from "node:fs/promises"
+import path from "node:path"
+
 import {
   cleanupTestServerRoots,
+  createUploadReadyJob,
   createTestHttpServer,
   createUploadPayload,
-  mockFetcher,
   startServer,
-  uploadHtml,
-  waitForJob,
 } from "@tests/support/server/HttpServerSpecHarness.js"
 import { createTestPath } from "@tests/support/test-paths.js"
 import { afterEach, describe, expect, it, vi } from "vitest"
 
 import type { UploadCandidate } from "@exitpress/domain/export-job/schema/UploadState.js"
+import type { UploadProviderFields } from "@exitpress/domain/upload/schema/UploadProvider.js"
+
+import { JobStore } from "../jobs/JobStore.js"
 
 let activeServer: ReturnType<typeof createTestHttpServer> | null = null
 
@@ -36,255 +39,246 @@ afterEach(async () => {
 })
 
 describe("http server upload start", () => {
-  it("accepts same-origin upload actions for upload-ready jobs without persisting provider fields", async () => {
+  it("tests an upload provider with a temporary PNG without creating job state", async () => {
+    let assetPath: string | null = null
+    const jobStore = new JobStore()
+    const normalizedFields = {
+      branch: "main",
+      enabled: false,
+      path: " nested/path ",
+      retryLimit: 0,
+      repo: "owner/name",
+      token: "ghp_test_upload_token",
+    } satisfies UploadProviderFields
     const uploadPhaseRunner = vi.fn(
       async ({
+        outputDir,
         candidates,
         uploaderConfig,
       }: {
+        outputDir: string
         candidates: UploadCandidate[]
         uploaderConfig: Record<string, unknown>
       }) => {
         expect(candidates).toHaveLength(1)
-        expect(candidates[0]?.localPath).toMatch(/^public\/[a-f0-9]{64}\.png$/)
-        expect(uploaderConfig).toMatchObject({
-          branch: "main",
-          repo: "owner/name",
-          token: "ghp_test_upload_token",
-          customUrl: "https://cdn.jsdelivr.net/gh/mym0404/ia2@main",
-        })
-        expect(uploaderConfig).not.toHaveProperty("path")
+        const candidate = candidates[0]!
 
-        return candidates.map((candidate) => ({
-          candidate,
-          uploadedUrl: `https://cdn.example.com/${candidate.localPath}`,
-        }))
-      },
-    )
+        assetPath = path.join(outputDir, candidate.localPath)
+        const bytes = await readFile(assetPath)
 
-    mockFetcher({
-      html: uploadHtml,
-      thumbnailUrl: "https://example.com/thumb.png",
-    })
-
-    activeServer = createTestHttpServer({
-      uploadPhaseRunner,
-    })
-    const baseUrl = await startServer(activeServer)
-    const options = defaultExportOptions()
-
-    options.assets.imageHandlingMode = "download-and-upload"
-
-    const exportResponse = await fetch(`${baseUrl}/api/export`, {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({
-        blogIdOrUrl: "https://blog.naver.com/mym0404",
-        outputDir: createTestPath("http-server", "upload-ready-output"),
-        options,
-      }),
-    })
-    const exportBody = (await exportResponse.json()) as {
-      jobId: string
-    }
-    const readyJob = await waitForJob({
-      baseUrl,
-      jobId: exportBody.jobId,
-      accept: (job) => job.status === "upload-ready",
-    })
-
-    expect(readyJob.upload.status).toBe("upload-ready")
-    expect(readyJob.upload.candidateCount).toBe(1)
-
-    const uploadResponse = await fetch(`${baseUrl}/api/export/${exportBody.jobId}/upload`, {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-        origin: baseUrl,
-        "x-requested-with": "XMLHttpRequest",
-      },
-      body: JSON.stringify(
-        createUploadPayload({
-          branch: "main",
-          repo: "owner/name",
-          path: "/",
-          token: "ghp_test_upload_token",
-          customUrl: "https://cdn.jsdelivr.net/gh/mym0404/ia2@main",
-        }),
-      ),
-    })
-    const completedJob = await waitForJob({
-      baseUrl,
-      jobId: exportBody.jobId,
-      accept: (job) => job.status === "upload-completed",
-    })
-    const serializedJob = JSON.stringify(completedJob)
-
-    expect(uploadResponse.status).toBe(202)
-    expect(uploadPhaseRunner).toHaveBeenCalledTimes(1)
-    expect(completedJob.upload.status).toBe("upload-completed")
-    expect(completedJob.upload.uploadedCount).toBe(completedJob.upload.candidateCount)
-    expect(completedJob.items[0]?.upload.uploadedUrls).toHaveLength(1)
-    expect(completedJob.items[0]?.upload.uploadedUrls[0]).toMatch(
-      /^https:\/\/cdn\.example\.com\/public\/[a-f0-9]{64}\.png$/,
-    )
-    expect(completedJob.items[0]).not.toHaveProperty("externalPreviewUrl")
-    expect(serializedJob).not.toContain("providerFields")
-    expect(serializedJob).not.toContain("ghp_test_upload_token")
-    expect(serializedJob).not.toContain("owner/name")
-  })
-
-  it("preserves false and 0 in normalized provider fields", async () => {
-    const uploadPhaseRunner = vi.fn(
-      async ({
-        candidates,
-        uploaderConfig,
-      }: {
-        candidates: UploadCandidate[]
-        uploaderConfig: Record<string, unknown>
-      }) => {
+        expect(bytes.subarray(0, 8)).toEqual(
+          Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
+        )
         expect(uploaderConfig).toEqual({
-          permission: 0,
-          port: 0,
-          secretId: "secret-id-123",
-          slim: false,
+          branch: "main",
+          enabled: false,
+          path: "nested/path",
+          retryLimit: 0,
+          repo: "owner/name",
+          token: "ghp_test_upload_token",
         })
 
-        return candidates.map((candidate) => ({
-          candidate,
-          uploadedUrl: `https://cdn.example.com/${candidate.localPath}`,
-        }))
+        return [
+          {
+            candidate,
+            uploadedUrl: "https://cdn.example.com/test-upload.png",
+          },
+        ]
       },
     )
 
-    mockFetcher({
-      html: uploadHtml,
-      thumbnailUrl: "https://example.com/thumb.png",
-    })
-
     activeServer = createTestHttpServer({
+      jobStore,
       uploadPhaseRunner,
+      uploadProviderSource: {
+        getCatalog: vi.fn(),
+        normalizeProviderFields: vi.fn(async (providerKey: string) =>
+          providerKey === "github" ? normalizedFields : null,
+        ),
+      },
     })
     const baseUrl = await startServer(activeServer)
-    const options = defaultExportOptions()
 
-    options.assets.imageHandlingMode = "download-and-upload"
-
-    const exportResponse = await fetch(`${baseUrl}/api/export`, {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({
-        blogIdOrUrl: "https://blog.naver.com/mym0404",
-        outputDir: createTestPath("http-server", "upload-provider-scalars-output"),
-        options,
-      }),
-    })
-    const exportBody = (await exportResponse.json()) as {
-      jobId: string
-    }
-
-    await waitForJob({
-      baseUrl,
-      jobId: exportBody.jobId,
-      accept: (job) => job.status === "upload-ready",
-    })
-
-    const uploadResponse = await fetch(`${baseUrl}/api/export/${exportBody.jobId}/upload`, {
+    const response = await fetch(`${baseUrl}/api/upload-providers/test`, {
       method: "POST",
       headers: {
         "content-type": "application/json",
         origin: baseUrl,
         "x-requested-with": "XMLHttpRequest",
       },
-      body: JSON.stringify(
-        createUploadPayload(
-          {
-            permission: 0,
-            port: 0,
-            secretId: "secret-id-123",
-            slim: false,
-          },
-          "tcyun",
-        ),
-      ),
+      body: JSON.stringify({
+        providerKey: " github ",
+        providerFields: normalizedFields,
+      }),
     })
+    const body = (await response.json()) as {
+      uploadedUrl: string
+    }
 
-    expect(uploadResponse.status).toBe(202)
-    await vi.waitFor(() => {
-      expect(uploadPhaseRunner).toHaveBeenCalledTimes(1)
-    })
+    expect(response.status).toBe(200)
+    expect(body.uploadedUrl).toBe("https://cdn.example.com/test-upload.png")
+    expect(uploadPhaseRunner).toHaveBeenCalledTimes(1)
+    expect(jobStore.jobs.size).toBe(0)
+    expect(assetPath).not.toBeNull()
+    await expect(access(assetPath!)).rejects.toThrow("ENOENT")
   })
 
-  it("redacts only string provider fields in upload failures", async () => {
+  it("sanitizes upload provider test failures", async () => {
+    const normalizedFields = {
+      permission: 0,
+      secretId: "secret-id-xyz",
+      slim: false,
+    } satisfies UploadProviderFields
     const uploadPhaseRunner = vi.fn().mockRejectedValueOnce(new Error("secret-id-xyz false 0"))
 
-    mockFetcher({
-      html: uploadHtml,
-      thumbnailUrl: "https://example.com/thumb.png",
-    })
-
     activeServer = createTestHttpServer({
       uploadPhaseRunner,
+      uploadProviderSource: {
+        getCatalog: vi.fn(),
+        normalizeProviderFields: vi.fn(async () => normalizedFields),
+      },
     })
     const baseUrl = await startServer(activeServer)
-    const options = defaultExportOptions()
 
-    options.assets.imageHandlingMode = "download-and-upload"
-
-    const exportResponse = await fetch(`${baseUrl}/api/export`, {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({
-        blogIdOrUrl: "https://blog.naver.com/mym0404",
-        outputDir: createTestPath("http-server", "upload-provider-redaction-output"),
-        options,
-      }),
-    })
-    const exportBody = (await exportResponse.json()) as {
-      jobId: string
-    }
-
-    await waitForJob({
-      baseUrl,
-      jobId: exportBody.jobId,
-      accept: (job) => job.status === "upload-ready",
-    })
-
-    const uploadResponse = await fetch(`${baseUrl}/api/export/${exportBody.jobId}/upload`, {
+    const response = await fetch(`${baseUrl}/api/upload-providers/test`, {
       method: "POST",
       headers: {
         "content-type": "application/json",
         origin: baseUrl,
         "x-requested-with": "XMLHttpRequest",
       },
-      body: JSON.stringify(
-        createUploadPayload(
-          {
-            permission: 0,
-            port: 0,
-            secretId: "secret-id-xyz",
-            slim: false,
-          },
-          "tcyun",
-        ),
-      ),
+      body: JSON.stringify({
+        providerKey: "tcyun",
+        providerFields: normalizedFields,
+      }),
     })
-    const failedJob = await waitForJob({
-      baseUrl,
-      jobId: exportBody.jobId,
-      accept: (job) => job.status === "upload-failed",
+    const body = (await response.json()) as {
+      error: string
+    }
+
+    expect(response.status).toBe(502)
+    expect(body.error).toContain("[redacted]")
+    expect(body.error).toContain("false")
+    expect(body.error).toContain("0")
+    expect(body.error).not.toContain("secret-id-xyz")
+  })
+
+  it("hides provider values when upload provider test normalization fails", async () => {
+    const secretValue = "ghp_test_normalize_secret"
+    const uploadPhaseRunner = vi.fn()
+
+    activeServer = createTestHttpServer({
+      uploadPhaseRunner,
+      uploadProviderSource: {
+        getCatalog: vi.fn(),
+        normalizeProviderFields: vi.fn(async () => {
+          throw new Error(`invalid token ${secretValue}`)
+        }),
+      },
+    })
+    const baseUrl = await startServer(activeServer)
+
+    const response = await fetch(`${baseUrl}/api/upload-providers/test`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        origin: baseUrl,
+        "x-requested-with": "XMLHttpRequest",
+      },
+      body: JSON.stringify({
+        providerKey: "github",
+        providerFields: {
+          repo: "owner/name",
+          token: secretValue,
+        },
+      }),
+    })
+    const body = (await response.json()) as {
+      error: string
+    }
+
+    expect(response.status).toBe(400)
+    expect(body.error).toContain("업로드 provider 설정")
+    expect(body.error).not.toContain(secretValue)
+    expect(body.error).not.toContain("owner/name")
+    expect(uploadPhaseRunner).not.toHaveBeenCalled()
+  })
+
+  it("rejects non-json upload provider test requests", async () => {
+    const uploadPhaseRunner = vi.fn()
+
+    activeServer = createTestHttpServer({
+      uploadPhaseRunner,
+    })
+    const baseUrl = await startServer(activeServer)
+
+    const response = await fetch(`${baseUrl}/api/upload-providers/test`, {
+      method: "POST",
+      headers: {
+        origin: baseUrl,
+        "x-requested-with": "XMLHttpRequest",
+      },
+      body: "providerKey=github",
+    })
+    const body = (await response.json()) as {
+      error: string
+    }
+
+    expect(response.status).toBe(415)
+    expect(body.error).toContain("application/json")
+    expect(uploadPhaseRunner).not.toHaveBeenCalled()
+  })
+
+  it("rejects non-same-origin upload provider test requests", async () => {
+    const uploadPhaseRunner = vi.fn()
+
+    activeServer = createTestHttpServer({
+      uploadPhaseRunner,
+    })
+    const baseUrl = await startServer(activeServer)
+
+    const response = await fetch(`${baseUrl}/api/upload-providers/test`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        origin: "https://evil.example",
+      },
+      body: JSON.stringify(createUploadPayload({ repo: "owner/name" })),
+    })
+    const body = (await response.json()) as {
+      error: string
+    }
+
+    expect(response.status).toBe(403)
+    expect(body.error).toContain("same-origin")
+    expect(uploadPhaseRunner).not.toHaveBeenCalled()
+  })
+
+  it("does not expose a manual upload start route", async () => {
+    const jobStore = new JobStore()
+    const uploadPhaseRunner = vi.fn()
+    const job = await createUploadReadyJob({
+      jobStore,
+      outputDir: createTestPath("http-server", "manual-upload-route-output"),
     })
 
-    expect(uploadResponse.status).toBe(202)
-    expect(failedJob.error).toContain("[redacted]")
-    expect(failedJob.error).toContain("false")
-    expect(failedJob.error).toContain("0")
-    expect(failedJob.error).not.toContain("secret-id-xyz")
+    activeServer = createTestHttpServer({
+      jobStore,
+      uploadPhaseRunner,
+    })
+    const baseUrl = await startServer(activeServer)
+
+    const uploadResponse = await fetch(`${baseUrl}/api/export/${job.id}/upload`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        origin: baseUrl,
+        "x-requested-with": "XMLHttpRequest",
+      },
+      body: JSON.stringify(createUploadPayload({ repo: "owner/name" })),
+    })
+
+    expect(uploadResponse.status).toBe(404)
+    expect(uploadPhaseRunner).not.toHaveBeenCalled()
   })
 })

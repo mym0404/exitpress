@@ -1,4 +1,4 @@
-import { mkdir, readFile, rm, writeFile } from "node:fs/promises"
+import { access, mkdir, readFile, rm, writeFile } from "node:fs/promises"
 import path from "node:path"
 import { setTimeout as delay } from "node:timers/promises"
 
@@ -11,7 +11,10 @@ import {
   createOversizedPreviewMarkdown,
   createPosts,
   createTestHttpServer,
+  createUploadPayload,
+  mockFetcher,
   startServer,
+  textOnlyHtml,
   uploadHtml,
   waitForJob,
 } from "@tests/support/server/HttpServerSpecHarness.js"
@@ -19,7 +22,12 @@ import { createTestTempDir } from "@tests/support/test-paths.js"
 import { afterEach, describe, expect, it, vi } from "vitest"
 
 import type { ScanResult } from "@exitpress/domain/blog/schema/BlogScan.js"
-import type { UploadProviderCatalogResponse } from "@exitpress/domain/upload/schema/UploadProvider.js"
+import type {
+  UploadProviderCatalogResponse,
+  UploadProviderFields,
+} from "@exitpress/domain/upload/schema/UploadProvider.js"
+
+import { JobStore } from "../jobs/JobStore.js"
 
 let activeServer: ReturnType<typeof createTestHttpServer> | null = null
 
@@ -85,6 +93,250 @@ afterEach(async () => {
 })
 
 describe("http server local routes", () => {
+  it("rejects download-and-upload exports without provider settings before mutating output", async () => {
+    const rootDir = await createTestTempDir("export-provider-required-")
+    const outputDir = path.join(rootDir, "output")
+    const sentinelPath = path.join(outputDir, "keep.txt")
+    const jobStore = new JobStore()
+    const options = defaultExportOptions()
+
+    options.assets.imageHandlingMode = "download-and-upload"
+
+    await mkdir(outputDir, { recursive: true })
+    await writeFile(sentinelPath, "keep")
+
+    activeServer = createTestHttpServer({
+      jobStore,
+    })
+    const baseUrl = await startServer(activeServer)
+
+    const response = await fetch(`${baseUrl}/api/export`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        blogIdOrUrl: "https://blog.naver.com/mym0404",
+        outputDir,
+        options,
+      }),
+    })
+    const body = (await response.json()) as {
+      error: string
+    }
+
+    expect(response.status).toBe(400)
+    expect(body.error).toContain("업로드 provider 설정이 필요합니다")
+    expect(jobStore.jobs.size).toBe(0)
+    await expect(access(sentinelPath)).resolves.toBeUndefined()
+    await removeDirWithRetry(rootDir)
+  })
+
+  it("rejects malformed upload provider keys without mutating output", async () => {
+    const rootDir = await createTestTempDir("export-provider-malformed-")
+    const outputDir = path.join(rootDir, "output")
+    const sentinelPath = path.join(outputDir, "keep.txt")
+    const jobStore = new JobStore()
+    const options = defaultExportOptions()
+
+    options.assets.imageHandlingMode = "download-and-upload"
+
+    await mkdir(outputDir, { recursive: true })
+    await writeFile(sentinelPath, "keep")
+
+    activeServer = createTestHttpServer({
+      jobStore,
+    })
+    const baseUrl = await startServer(activeServer)
+
+    const response = await fetch(`${baseUrl}/api/export`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        blogIdOrUrl: "https://blog.naver.com/mym0404",
+        outputDir,
+        options,
+        uploadProvider: {
+          providerKey: 1,
+          providerFields: {
+            token: "ghp_malformed_secret",
+          },
+        },
+      }),
+    })
+    const body = (await response.json()) as {
+      error: string
+    }
+
+    expect(response.status).toBe(400)
+    expect(body.error).toContain("업로드 provider 설정이 필요합니다")
+    expect(body.error).not.toContain("ghp_malformed_secret")
+    expect(jobStore.jobs.size).toBe(0)
+    await expect(access(sentinelPath)).resolves.toBeUndefined()
+    await removeDirWithRetry(rootDir)
+  })
+
+  it("normalizes upload provider fields without storing them in export job state", async () => {
+    const jobStore = new JobStore()
+    const options = defaultExportOptions()
+    const rawProviderFields = {
+      repo: " owner/name ",
+      token: " ghp_export_secret ",
+    }
+    const normalizedProviderFields = {
+      repo: "owner/name",
+      token: "ghp_export_secret",
+    } satisfies UploadProviderFields
+    const outputDir = await createTestTempDir("export-provider-normalized-")
+    const uploadProviderSource = {
+      getCatalog: vi.fn(),
+      normalizeProviderFields: vi.fn(async () => normalizedProviderFields),
+    }
+
+    options.assets.imageHandlingMode = "download-and-upload"
+    mockFetcher({
+      html: textOnlyHtml,
+      thumbnailUrl: null,
+    })
+
+    activeServer = createTestHttpServer({
+      jobStore,
+      uploadProviderSource,
+    })
+    const baseUrl = await startServer(activeServer)
+
+    const response = await fetch(`${baseUrl}/api/export`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        blogIdOrUrl: "https://blog.naver.com/mym0404",
+        outputDir,
+        options,
+        uploadProvider: {
+          providerKey: " github ",
+          providerFields: rawProviderFields,
+        },
+      }),
+    })
+    const body = (await response.json()) as {
+      jobId: string
+    }
+
+    expect(response.status).toBe(202)
+    expect(uploadProviderSource.normalizeProviderFields).toHaveBeenCalledWith(
+      "github",
+      rawProviderFields,
+    )
+    const completedJob = await waitForJob({
+      baseUrl,
+      jobId: body.jobId,
+      accept: (job) =>
+        job.status === "completed" || job.status === "failed" || job.status === "upload-ready",
+    })
+    const serializedJob = JSON.stringify(completedJob)
+    const serializedManifest = await readFile(path.join(outputDir, "manifest.json"), "utf8")
+
+    expect(jobStore.get(body.jobId)?.request.uploadProvider).toBeUndefined()
+    expect(serializedJob).not.toContain("uploadProvider")
+    expect(serializedJob).not.toContain("ghp_export_secret")
+    expect(serializedJob).not.toContain("owner/name")
+    expect(serializedManifest).not.toContain("uploadProvider")
+    expect(serializedManifest).not.toContain("ghp_export_secret")
+    expect(serializedManifest).not.toContain("owner/name")
+    await removeDirWithRetry(outputDir)
+  })
+
+  it("rejects upload providers for non-upload export modes", async () => {
+    const jobStore = new JobStore()
+    const options = defaultExportOptions()
+    const outputDir = await createTestTempDir("export-provider-non-upload-")
+    const uploadProviderSource = {
+      getCatalog: vi.fn(),
+      normalizeProviderFields: vi.fn(),
+    }
+
+    options.assets.imageHandlingMode = "remote"
+
+    activeServer = createTestHttpServer({
+      jobStore,
+      uploadProviderSource,
+    })
+    const baseUrl = await startServer(activeServer)
+
+    const response = await fetch(`${baseUrl}/api/export`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        blogIdOrUrl: "https://blog.naver.com/mym0404",
+        outputDir,
+        options,
+        uploadProvider: createUploadPayload({
+          repo: "owner/name",
+          token: "ghp_unexpected_provider",
+        }),
+      }),
+    })
+    const body = (await response.json()) as {
+      error: string
+    }
+
+    expect(response.status).toBe(400)
+    expect(body.error).toContain("download-and-upload")
+    expect(uploadProviderSource.normalizeProviderFields).not.toHaveBeenCalled()
+    expect(jobStore.jobs.size).toBe(0)
+    await removeDirWithRetry(outputDir)
+  })
+
+  it("does not leak provider values when export provider normalization fails", async () => {
+    const secretValue = "ghp_export_secret_leak"
+    const options = defaultExportOptions()
+    const outputDir = await createTestTempDir("export-provider-failure-")
+    const uploadProviderSource = {
+      getCatalog: vi.fn(),
+      normalizeProviderFields: vi.fn(async () => {
+        throw new Error(`invalid token ${secretValue}`)
+      }),
+    }
+
+    options.assets.imageHandlingMode = "download-and-upload"
+
+    activeServer = createTestHttpServer({
+      uploadProviderSource,
+    })
+    const baseUrl = await startServer(activeServer)
+
+    const response = await fetch(`${baseUrl}/api/export`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        blogIdOrUrl: "https://blog.naver.com/mym0404",
+        outputDir,
+        options,
+        uploadProvider: createUploadPayload({
+          repo: "owner/name",
+          token: secretValue,
+        }),
+      }),
+    })
+    const body = (await response.json()) as {
+      error: string
+    }
+
+    expect(response.status).toBe(400)
+    expect(body.error).toContain("업로드 provider 설정")
+    expect(body.error).not.toContain(secretValue)
+    expect(body.error).not.toContain("owner/name")
+    await removeDirWithRetry(outputDir)
+  })
+
   it("returns the runtime-backed upload provider catalog", async () => {
     activeServer = createTestHttpServer()
     const baseUrl = await startServer(activeServer)

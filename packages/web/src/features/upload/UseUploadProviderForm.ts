@@ -1,31 +1,92 @@
-import { UPLOAD_PROVIDER_KEYS } from "@exitpress/domain/upload/UploadProviderKeys.js"
+import {
+  DEFAULT_UPLOAD_PROVIDER_KEY,
+  UPLOAD_PROVIDER_KEYS,
+} from "@exitpress/domain/upload/UploadProviderKeys.js"
 import { useEffect, useState } from "react"
 
 import type {
   UploadProviderCatalogResponse,
+  UploadProviderDefinition,
   UploadProviderFields,
 } from "@exitpress/domain/upload/schema/UploadProvider.js"
 
 import type { ProviderUiState } from "./UploadProviderFormRules.js"
 
-import {
-  buildGitHubJsDelivrCustomUrl,
-  buildInitialProviderFieldMap,
-  buildInitialProviderFields,
-  getPreferredDefaultProviderKey,
-} from "./JobResultsHelpers.js"
 import { buildInitialProviderUiState } from "./UploadProviderFormRules.js"
 
-const buildInitialProviderUiStateMap = (catalog: UploadProviderCatalogResponse) =>
+export const buildInitialProviderFields = (
+  provider: UploadProviderDefinition | null,
+): UploadProviderFields =>
   Object.fromEntries(
-    catalog.providers.map((provider) => [provider.key, buildInitialProviderUiState()]),
-  ) as Record<string, ProviderUiState>
+    (provider?.fields ?? []).map((field) => {
+      if (field.inputType === "checkbox") {
+        return [field.key, field.defaultValue === true]
+      }
+
+      if (
+        field.inputType === "select" &&
+        field.required &&
+        (field.defaultValue === null || field.defaultValue === undefined)
+      ) {
+        return [field.key, String(field.options?.[0]?.value ?? "")]
+      }
+
+      if (field.defaultValue === null || field.defaultValue === undefined) {
+        return [field.key, ""]
+      }
+
+      return [field.key, String(field.defaultValue)]
+    }),
+  )
+
+const buildInitialProviderFieldMap = (catalog: UploadProviderCatalogResponse) => {
+  const fieldsByProvider: Record<string, UploadProviderFields> = {}
+
+  for (const provider of catalog.providers) {
+    fieldsByProvider[provider.key] = buildInitialProviderFields(provider)
+  }
+
+  return fieldsByProvider
+}
+
+const buildInitialProviderUiStateMap = (catalog: UploadProviderCatalogResponse) => {
+  const uiStateByProvider: Record<string, ProviderUiState> = {}
+
+  for (const provider of catalog.providers) {
+    uiStateByProvider[provider.key] = buildInitialProviderUiState()
+  }
+
+  return uiStateByProvider
+}
+
+const getPreferredDefaultProviderKey = (catalog: UploadProviderCatalogResponse) =>
+  catalog.providers.find((provider) => provider.key === DEFAULT_UPLOAD_PROVIDER_KEY)?.key ??
+  catalog.defaultProviderKey ??
+  catalog.providers[0]?.key ??
+  ""
+
+export const buildGitHubJsDelivrCustomUrl = ({
+  repo,
+  branch,
+}: {
+  repo: string
+  branch: string
+}) => {
+  const normalizedRepo = repo.trim().replace(/^\/+|\/+$/g, "")
+  const normalizedBranch = branch.trim()
+
+  if (!normalizedRepo) {
+    return ""
+  }
+
+  return `https://cdn.jsdelivr.net/gh/${normalizedRepo}${normalizedBranch ? `@${normalizedBranch}` : ""}`
+}
 
 export const useUploadProviderForm = ({
-  jobId,
+  resetKey,
   uploadProviders,
 }: {
-  jobId: string | undefined
+  resetKey: string | undefined
   uploadProviders: UploadProviderCatalogResponse
 }) => {
   const [providerKey, setProviderKey] = useState(() =>
@@ -39,14 +100,14 @@ export const useUploadProviderForm = ({
   )
 
   useEffect(() => {
-    if (!jobId) {
+    if (!resetKey) {
       return
     }
 
     setProviderKey(getPreferredDefaultProviderKey(uploadProviders))
     setProviderFieldMap(buildInitialProviderFieldMap(uploadProviders))
     setProviderUiStateMap(buildInitialProviderUiStateMap(uploadProviders))
-  }, [jobId, uploadProviders])
+  }, [resetKey, uploadProviders])
 
   const activeProviderDefinition =
     uploadProviders.providers.find((provider) => provider.key === providerKey) ?? null

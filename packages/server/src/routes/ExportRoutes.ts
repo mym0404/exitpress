@@ -5,7 +5,10 @@ import { NaverBlogFetcher } from "@exitpress/engine/integrations/naver-blog/Nave
 import { toErrorMessage } from "@exitpress/engine/shared/error/util/toErrorMessage.js"
 
 import type { ScanResult } from "@exitpress/domain/blog/schema/BlogScan.js"
-import type { ExportRequest } from "@exitpress/domain/export-job/schema/ExportRequest.js"
+import type {
+  ExportRequest,
+  ExportUploadProviderRequest,
+} from "@exitpress/domain/export-job/schema/ExportRequest.js"
 import type { PartialExportOptions } from "@exitpress/domain/export-options/schema/ExportOptions.js"
 
 import type { ApiRouteContext, ApiRouteRequest } from "./ApiRouteContext.js"
@@ -16,8 +19,20 @@ const parseJsonPayload = async <T>(request: ApiRouteRequest["request"]) => {
   return JSON.parse(await readBody(request)) as T
 }
 
+const uploadProviderRequiredError =
+  "다운로드 후 업로드 모드에서는 업로드 provider 설정이 필요합니다."
+const uploadProviderModeError =
+  "uploadProvider는 download-and-upload 모드에서만 사용할 수 있습니다."
+const uploadProviderValidationError = "업로드 provider 설정을 확인하지 못했습니다."
+
 export const handleExportRoutes =
-  ({ jobStore, state, blockScanJobRunner, exportJobRunner }: ApiRouteContext) =>
+  ({
+    jobStore,
+    state,
+    blockScanJobRunner,
+    exportJobRunner,
+    uploadProviderSource,
+  }: ApiRouteContext) =>
   async ({ request, response, method, url }: ApiRouteRequest) => {
     if (method === "POST" && url.pathname === "/api/scan") {
       const payload = await parseJsonPayload<{ blogIdOrUrl?: string; forceRefresh?: boolean }>(
@@ -116,6 +131,10 @@ export const handleExportRoutes =
         outputDir?: string
         options?: PartialExportOptions
         scanResult?: ScanResult
+        uploadProvider?: {
+          providerKey?: string
+          providerFields?: unknown
+        }
       }>(request)
 
       if (!payload.blogIdOrUrl?.trim() || !payload.outputDir?.trim()) {
@@ -127,19 +146,60 @@ export const handleExportRoutes =
         return true
       }
 
-      let exportRequest: ExportRequest
+      let options: ReturnType<typeof state.cloneOptions>
 
       try {
-        exportRequest = {
-          blogIdOrUrl: payload.blogIdOrUrl.trim(),
-          outputDir: payload.outputDir.trim(),
-          profile: "gfm",
-          options: state.cloneOptions(payload.options),
-        }
+        options = state.cloneOptions(payload.options)
       } catch (error) {
         sendJson({ response, statusCode: 400, body: { error: toErrorMessage(error) } })
         return true
       }
+
+      const imageHandlingMode = options.assets.imageHandlingMode
+      let uploadProvider: ExportUploadProviderRequest | undefined
+
+      if (imageHandlingMode === "download-and-upload") {
+        const providerKey =
+          typeof payload.uploadProvider?.providerKey === "string"
+            ? payload.uploadProvider.providerKey.trim()
+            : ""
+
+        if (!providerKey) {
+          sendJson({ response, statusCode: 400, body: { error: uploadProviderRequiredError } })
+          return true
+        }
+
+        try {
+          const providerFields = await uploadProviderSource.normalizeProviderFields(
+            providerKey,
+            payload.uploadProvider?.providerFields,
+          )
+
+          if (!providerFields) {
+            sendJson({ response, statusCode: 400, body: { error: uploadProviderRequiredError } })
+            return true
+          }
+
+          uploadProvider = {
+            providerKey,
+            providerFields,
+          }
+        } catch {
+          sendJson({ response, statusCode: 400, body: { error: uploadProviderValidationError } })
+          return true
+        }
+      } else if (payload.uploadProvider !== undefined) {
+        sendJson({ response, statusCode: 400, body: { error: uploadProviderModeError } })
+        return true
+      }
+
+      const exportRequest: ExportRequest = {
+        blogIdOrUrl: payload.blogIdOrUrl.trim(),
+        outputDir: payload.outputDir.trim(),
+        profile: "gfm",
+        options,
+      }
+      const runnerRequest = uploadProvider ? { ...exportRequest, uploadProvider } : exportRequest
 
       await recreateDir(resolveRepoPath(exportRequest.outputDir))
       await state.writeLastOutputDir(exportRequest.outputDir)
@@ -153,7 +213,7 @@ export const handleExportRoutes =
         run: (signal) =>
           exportJobRunner.runExport({
             jobId: job.id,
-            request: exportRequest,
+            request: runnerRequest,
             cachedScanResult: payload.scanResult ?? null,
             signal,
           }),

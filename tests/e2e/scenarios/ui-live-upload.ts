@@ -476,6 +476,7 @@ const run = async () => {
   const captureDir = getCaptureDir()
   const consoleErrors: string[] = []
   const pageErrors: string[] = []
+  let manualUploadPostCount = 0
   const liveEvidence: {
     branch: string
     beforeSha?: string
@@ -494,6 +495,13 @@ const run = async () => {
   })
   page.on("pageerror", (error) => {
     pageErrors.push(error.message)
+  })
+  page.on("request", (request) => {
+    const url = new URL(request.url())
+
+    if (request.method() === "POST" && /\/api\/export\/[^/]+\/upload$/.test(url.pathname)) {
+      manualUploadPostCount += 1
+    }
   })
 
   try {
@@ -594,6 +602,68 @@ const run = async () => {
       trigger: "#assets-imageHandlingMode",
       value: "download-and-upload",
     })
+
+    await clickWizardButton({
+      page,
+      label: "다음",
+    })
+    await waitForStepView({
+      page,
+      step: "upload-provider-options",
+    })
+
+    await page.fill("#upload-providerField-repo", uploadRepo)
+    await page.fill("#upload-providerField-branch", config.branch)
+    await page.fill("#upload-providerField-path", uploadPath)
+    await page.fill("#upload-providerField-token", config.token)
+
+    const testUploadRequestPromise = page.waitForRequest(
+      (request) =>
+        request.url() === `${baseUrl}/api/upload-providers/test` && request.method() === "POST",
+      { timeout: responseTimeoutMs },
+    )
+    const testUploadResponsePromise = page.waitForResponse(
+      (response) =>
+        response.url() === `${baseUrl}/api/upload-providers/test` &&
+        response.request().method() === "POST",
+      { timeout: responseTimeoutMs },
+    )
+
+    await page.getByRole("button", { name: "테스트 업로드" }).click()
+    const testUploadRequest = await testUploadRequestPromise
+    const testUploadResponse = await testUploadResponsePromise
+    const testUploadPayload = testUploadRequest.postDataJSON() as {
+      providerKey: string
+      providerFields: Record<string, string>
+    }
+
+    if (testUploadResponse.status() !== 200) {
+      throw new Error(`test upload request failed: ${testUploadResponse.status()}`)
+    }
+
+    if (
+      testUploadPayload.providerKey !== "github" ||
+      testUploadPayload.providerFields.repo !== uploadRepo ||
+      testUploadPayload.providerFields.branch !== config.branch ||
+      testUploadPayload.providerFields.path !== uploadPath ||
+      testUploadPayload.providerFields.token !== config.token
+    ) {
+      throw new Error("browser test upload payload did not match the expected GitHub config")
+    }
+
+    const testUploadBody = (await testUploadResponse.json()) as {
+      uploadedUrl?: string
+    }
+
+    if (!testUploadBody.uploadedUrl?.startsWith("http")) {
+      throw new Error("test upload response did not include an uploaded URL")
+    }
+
+    await page.waitForSelector(`text=${testUploadBody.uploadedUrl}`)
+
+    const branchHeadBeforeUpload = await getBranchHeadSha(config)
+    liveEvidence.beforeSha = branchHeadBeforeUpload
+
     await clickWizardButton({
       page,
       label: "Link 처리",
@@ -657,11 +727,18 @@ const run = async () => {
           imageHandlingMode: string
         }
       }
+      uploadProvider?: {
+        providerKey: string
+        providerFields: Record<string, string>
+      }
     }
 
     if (exportResponse.status() !== 202) {
       throw new Error(`export request failed: ${exportResponse.status()}`)
     }
+
+    const exportUploadProvider = exportPayload.uploadProvider
+    const exportUploadProviderFields = exportUploadProvider?.providerFields
 
     if (
       exportPayload.blogIdOrUrl !== blogId ||
@@ -671,7 +748,14 @@ const run = async () => {
       exportPayload.options.scope.dateTo !== scopedDate ||
       exportPayload.options.scope.categoryIds.length !== 1 ||
       exportPayload.options.scope.categoryIds[0] !== targetCategory.id ||
-      exportPayload.options.assets.imageHandlingMode !== "download-and-upload"
+      exportPayload.options.assets.imageHandlingMode !== "download-and-upload" ||
+      !exportUploadProvider ||
+      !exportUploadProviderFields ||
+      exportUploadProvider.providerKey !== "github" ||
+      exportUploadProviderFields.repo !== uploadRepo ||
+      exportUploadProviderFields.branch !== config.branch ||
+      exportUploadProviderFields.path !== uploadPath ||
+      exportUploadProviderFields.token !== config.token
     ) {
       throw new Error("browser export payload did not match the expected scoped upload request")
     }
@@ -685,78 +769,15 @@ const run = async () => {
       throw new Error("export response did not return a jobId")
     }
 
-    await waitForStatus({
-      page,
-      status: "upload-ready",
-    })
+    await page.waitForFunction(
+      () => {
+        const status = document.querySelector("#status-text")?.getAttribute("data-status")
 
-    const readyJob = await fetchJson<ExportJobState>(`${baseUrl}/api/export/${jobId}`)
-    const readyItem = readyJob.items.find((item) => item.logNo === targetLogNo)
-
-    if (!readyItem?.outputPath) {
-      throw new Error("upload-ready job did not expose the target markdown path")
-    }
-
-    if (readyItem.upload.candidateCount <= 0) {
-      throw new Error("upload-ready job did not expose upload candidates")
-    }
-
-    const markdownPath = path.join(outputDir, readyItem.outputPath)
-    const markdownBeforeUpload = await readFile(markdownPath, "utf8")
-
-    for (const candidate of readyItem.upload.candidates) {
-      if (!markdownBeforeUpload.includes(candidate.markdownReference)) {
-        throw new Error(
-          `markdown did not contain pre-upload reference: ${candidate.markdownReference}`,
-        )
-      }
-    }
-
-    const branchHeadBeforeUpload = await getBranchHeadSha(config)
-    liveEvidence.beforeSha = branchHeadBeforeUpload
-    const uploadRequestPromise = page.waitForRequest(
-      (request) =>
-        request.url() === `${baseUrl}/api/export/${jobId}/upload` && request.method() === "POST",
+        return status === "uploading" || status === "upload-completed"
+      },
+      undefined,
       { timeout: responseTimeoutMs },
     )
-    const uploadResponsePromise = page.waitForResponse(
-      (response) =>
-        response.url() === `${baseUrl}/api/export/${jobId}/upload` &&
-        response.request().method() === "POST",
-      { timeout: responseTimeoutMs },
-    )
-
-    await page.fill("#upload-providerField-repo", uploadRepo)
-    await page.fill("#upload-providerField-branch", config.branch)
-    await page.fill("#upload-providerField-path", uploadPath)
-    await page.fill("#upload-providerField-token", config.token)
-    await page.click("#upload-submit")
-
-    const uploadRequest = await uploadRequestPromise
-    const uploadResponse = await uploadResponsePromise
-    const uploadPayload = uploadRequest.postDataJSON() as {
-      providerKey: string
-      providerFields: Record<string, string>
-    }
-
-    if (uploadResponse.status() !== 202) {
-      throw new Error(`upload request failed: ${uploadResponse.status()}`)
-    }
-
-    if (
-      uploadPayload.providerKey !== "github" ||
-      uploadPayload.providerFields.repo !== uploadRepo ||
-      uploadPayload.providerFields.branch !== config.branch ||
-      uploadPayload.providerFields.path !== uploadPath ||
-      uploadPayload.providerFields.token !== config.token
-    ) {
-      throw new Error("browser upload payload did not match the expected GitHub config")
-    }
-
-    await waitForStatus({
-      page,
-      status: "uploading",
-    })
 
     const partialState = await waitForObservedUploadState({
       page,
@@ -878,6 +899,7 @@ const run = async () => {
       posts: PostManifestEntry[]
     }>(`${baseUrl}/api/export/${jobId}/manifest`)
     const completedPost = manifest.posts.find((post) => post.logNo === targetLogNo)
+    const completedItem = completedJob.items.find((item) => item.logNo === targetLogNo)
 
     if (completedJob.upload.status !== "upload-completed") {
       throw new Error(`job did not reach upload-completed: ${completedJob.upload.status}`)
@@ -893,6 +915,10 @@ const run = async () => {
 
     if (!completedPost || completedPost.assetPaths.length === 0) {
       throw new Error("completed manifest did not contain uploaded asset URLs")
+    }
+
+    if (!completedItem?.outputPath || completedItem.upload.candidates.length === 0) {
+      throw new Error("completed job did not expose the target markdown path and upload candidates")
     }
 
     for (const assetPath of completedPost.assetPaths) {
@@ -913,9 +939,10 @@ const run = async () => {
       }
     }
 
+    const markdownPath = path.join(outputDir, completedItem.outputPath)
     const markdownAfterUpload = await readFile(markdownPath, "utf8")
 
-    for (const candidate of readyItem.upload.candidates) {
+    for (const candidate of completedItem.upload.candidates) {
       if (markdownAfterUpload.includes(candidate.markdownReference)) {
         throw new Error(
           `markdown still contains pre-upload reference: ${candidate.markdownReference}`,
@@ -1001,6 +1028,10 @@ const run = async () => {
       context,
       imageUrl: completedPost.assetPaths[0]!,
     })
+
+    if (manualUploadPostCount !== 0) {
+      throw new Error("normal live upload flow sent a manual upload POST")
+    }
 
     if (consoleErrors.length > 0) {
       throw new Error(`browser console error: ${consoleErrors[0]}`)

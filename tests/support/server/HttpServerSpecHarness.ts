@@ -1,16 +1,20 @@
-import { rm } from "node:fs/promises"
+import { mkdir, rm, writeFile } from "node:fs/promises"
 import path from "node:path"
 
+import { defaultExportOptions } from "@exitpress/domain/export-options/ExportOptions.js"
 import { NaverBlogFetcher } from "@exitpress/engine/integrations/naver-blog/NaverBlogFetcher.js"
 import { createHttpServer } from "@exitpress/server/http/HttpServer.js"
 import { vi } from "vitest"
 
 import type { ScanResult } from "@exitpress/domain/blog/schema/BlogScan.js"
 import type { ExportJobState } from "@exitpress/domain/export-job/schema/ExportJobState.js"
+import type { ExportManifest } from "@exitpress/domain/export-job/schema/ExportManifest.js"
+import type { ExportRequest } from "@exitpress/domain/export-job/schema/ExportRequest.js"
 import type {
   UploadProviderCatalogResponse,
   UploadProviderValue,
 } from "@exitpress/domain/upload/schema/UploadProvider.js"
+import type { JobStore } from "@exitpress/server/jobs/JobStore.js"
 
 import { createTestPath } from "../test-paths.js"
 
@@ -387,6 +391,100 @@ export const createUploadPayload = (
   providerKey,
   providerFields,
 })
+
+export const createUploadReadyJob = async ({
+  jobStore,
+  outputDir,
+}: {
+  jobStore: JobStore
+  outputDir: string
+}) => {
+  const options = defaultExportOptions()
+  const localPath = "public/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.png"
+  const outputPath = "posts/test/index.md"
+  const request: ExportRequest = {
+    blogIdOrUrl: "https://blog.naver.com/mym0404",
+    outputDir,
+    profile: "gfm",
+    options: {
+      ...options,
+      assets: {
+        ...options.assets,
+        imageHandlingMode: "download-and-upload",
+      },
+    },
+  }
+  const upload = {
+    status: "upload-ready" as const,
+    eligiblePostCount: 1,
+    candidateCount: 1,
+    uploadedCount: 0,
+    failedCount: 0,
+    terminalReason: null,
+  }
+  const postUpload = {
+    eligible: true,
+    candidateCount: 1,
+    uploadedCount: 0,
+    failedCount: 0,
+    candidates: [
+      {
+        kind: "image" as const,
+        sourceUrl: "https://example.com/image.png",
+        localPath,
+        markdownReference: localPath,
+      },
+    ],
+    uploadedUrls: [],
+    rewriteStatus: "pending" as const,
+    rewrittenAt: null,
+  }
+  const manifest: ExportManifest = {
+    blogId: "mym0404",
+    profile: "gfm",
+    options: request.options,
+    selectedCategoryIds: request.options.scope.categoryIds,
+    startedAt: "2026-04-21T00:00:00.000Z",
+    finishedAt: "2026-04-21T00:00:01.000Z",
+    totalPosts: 1,
+    successCount: 1,
+    failureCount: 0,
+    upload,
+    categories: baseScanResult.categories,
+    posts: [
+      {
+        logNo: "223034929697",
+        title: "테스트 글",
+        source: "https://blog.naver.com/mym0404/223034929697",
+        category: {
+          id: 84,
+          name: "PS 알고리즘, 팁",
+          path: ["PS 알고리즘, 팁"],
+        },
+        status: "success",
+        outputPath,
+        assetPaths: [localPath],
+        upload: postUpload,
+        error: null,
+      },
+    ],
+  }
+
+  await mkdir(path.join(outputDir, path.dirname(outputPath)), {
+    recursive: true,
+  })
+  await mkdir(path.join(outputDir, path.dirname(localPath)), {
+    recursive: true,
+  })
+  await writeFile(path.join(outputDir, outputPath), `![diagram](${localPath})`, "utf8")
+  await writeFile(path.join(outputDir, localPath), Buffer.from("image"))
+
+  const job = jobStore.create(request)
+
+  jobStore.completeExport(job.id, manifest)
+
+  return job
+}
 
 export const cleanupTestServerRoots = async () => {
   await Promise.all(

@@ -14,7 +14,7 @@
 - `mise exec -- pnpm test:offline`: full Vitest suite.
 - `mise exec -- pnpm check:local`: format, lint, typecheck, Storybook check, and offline tests.
 - `mise exec -- pnpm check:unused`: unused source/test/script diagnostics.
-- `mise exec -- pnpm smoke:ui`: mock browser scan/export/upload/resume workflow.
+- `mise exec -- pnpm smoke:ui`: mock browser scan/export/provider-test/automatic-upload/resume workflow.
 - `mise exec -- pnpm check:full`: local baseline plus mock browser smoke UI.
 - `mise exec -- pnpm test:network`: live resume export, live SE2 table export, and live upload e2e.
 
@@ -27,8 +27,8 @@
 - Typecheck proves moved imports, shared contracts, and cross-package type compatibility.
 - Offline tests prove pure logic, parser block conversion, renderer, server, hook, and generated catalog behavior.
 - Storybook check proves generated catalog matches current parser/renderer output.
-- Smoke UI proves browser workflow behavior with mocked APIs.
-- Network tests prove live Naver fetch and external upload behavior when environment and secrets are available.
+- Smoke UI proves browser workflow behavior with mocked APIs, including provider setup, test upload, automatic upload progress, uploaded result links, and no manual upload POST.
+- Network tests prove live Naver fetch and external upload behavior when environment and secrets are available, including automatic upload and Markdown URL rewrite.
 
 ## Blind Spots
 - Smoke UI does not prove live Naver or remote upload behavior.
@@ -40,4 +40,5 @@
 - Moving or deleting files requires typecheck and `check:unused`.
 - Parser changes require offline tests.
 - Export, manifest, upload, resume, or UI state changes require smoke UI.
+- Upload e2e changes must keep both mock smoke and live upload harnesses aligned with the current export-triggered upload flow.
 - Live fetch/upload changes require the matching network command when the environment supports it.

@@ -1,3 +1,9 @@
+import { UPLOAD_STATUSES } from "@exitpress/domain/export-job/ExportJobState.js"
+import { runImageUploadPhase } from "@exitpress/engine/exporting/upload/ImageUploadPhase.js"
+import {
+  rewriteImageUploadPost,
+  writeImageUploadManifestSnapshot,
+} from "@exitpress/engine/exporting/upload/ImageUploadRewriter.js"
 import { NaverBlogExporter } from "@exitpress/engine/exporting/workflow/NaverBlogExporter.js"
 import {
   isAbortOperationError,
@@ -12,6 +18,9 @@ import type { NaverBlogFetcherCache } from "@exitpress/engine/integrations/naver
 
 import type { JobStore } from "./JobStore.js"
 
+import { normalizeUploaderConfig } from "../upload/HttpUploadConfig.js"
+import { runUploadForJob } from "../upload/HttpUploadJob.js"
+
 import { createCoalescedTaskRunner } from "./CoalescedTaskRunner.js"
 import { buildResumableExportManifest, writeExportManifest } from "./ExportJobManifest.js"
 
@@ -23,10 +32,16 @@ export const createHttpExportJobRunner = ({
   jobStore,
   jobScanResults,
   postHtmlCache,
+  uploadPhaseRunner = runImageUploadPhase,
+  postUploadRewriter = rewriteImageUploadPost,
+  manifestSnapshotWriter = writeImageUploadManifestSnapshot,
 }: {
   jobStore: JobStore
   jobScanResults: Map<string, ScanResult | null>
   postHtmlCache?: NaverBlogFetcherCache
+  uploadPhaseRunner?: typeof runImageUploadPhase
+  postUploadRewriter?: typeof rewriteImageUploadPost
+  manifestSnapshotWriter?: typeof writeImageUploadManifestSnapshot
 }) => {
   const activeJobTasks = new Map<
     string,
@@ -154,8 +169,39 @@ export const createHttpExportJobRunner = ({
       throwIfAborted(signal)
 
       jobStore.completeExport(jobId, manifest)
-      scheduleJobManifestPersist(jobId)
-      await manifestPersistRunner.flush(jobId)
+      const completedJob = jobStore.get(jobId)
+
+      if (completedJob?.upload.status !== UPLOAD_STATUSES.UPLOAD_READY) {
+        scheduleJobManifestPersist(jobId)
+        await manifestPersistRunner.flush(jobId)
+        return
+      }
+
+      if (!request.uploadProvider) {
+        const message = "다운로드 후 업로드 설정이 없어 작업을 완료할 수 없습니다."
+
+        jobStore.appendLog(jobId, message)
+        jobStore.fail(jobId, message)
+        await manifestPersistRunner.flush(jobId)
+        return
+      }
+
+      await runUploadForJob({
+        jobStore,
+        uploadPhaseRunner,
+        postUploadRewriter,
+        manifestSnapshotWriter,
+        flushManifestPersist: (nextJobId) => manifestPersistRunner.flush(nextJobId),
+        scheduleJobManifestPersist,
+        failJobOnError: true,
+        jobId,
+        uploaderKey: request.uploadProvider.providerKey,
+        uploaderConfig: normalizeUploaderConfig({
+          uploaderKey: request.uploadProvider.providerKey,
+          providerFields: request.uploadProvider.providerFields,
+        }),
+        signal,
+      })
     } catch (error) {
       const message = isAbortOperationError(error)
         ? "작업이 초기화되어 중단되었습니다."

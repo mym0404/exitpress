@@ -10,8 +10,8 @@
 - Scan starts from the server API and delegates Naver retrieval to the engine.
 - Parser routing chooses the matching editor implementation and converts supported editor blocks into parsed blocks.
 - Renderer turns parsed blocks and templates into Markdown, resolves assets, and produces manifest-ready asset records.
-- Export workflow writes Markdown/assets, updates job progress, persists resume data, and optionally prepares upload/rewrite phases.
-- Web reads bootstrap/defaults, drives scan/options/export/upload actions through HTTP APIs, and displays progress from polled job state.
+- Export workflow writes Markdown/assets, updates job progress, persists resume data, and runs automatic upload/rewrite phases when `download-and-upload` is selected.
+- Web reads bootstrap/defaults, drives scan/options/provider-test/export actions through HTTP APIs, and displays progress from polled job state.
 
 ## Boundaries
 - Web runtime may import domain contracts and pure helpers only.

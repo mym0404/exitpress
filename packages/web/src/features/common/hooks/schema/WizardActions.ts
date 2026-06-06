@@ -3,7 +3,6 @@ import type { ExportJobState } from "@exitpress/domain/export-job/schema/ExportJ
 import type { sanitizePersistedExportOptions } from "@exitpress/domain/export-options/ExportOptions.js"
 import type { ExportOptions } from "@exitpress/domain/export-options/schema/ExportOptions.js"
 import type { ThemePreference } from "@exitpress/domain/preferences/schema/ThemePreference.js"
-import type { UploadProviderFields } from "@exitpress/domain/upload/schema/UploadProvider.js"
 import type { Dispatch, SetStateAction } from "react"
 
 import type { ExportBootstrapResponse } from "../../../../lib/Api.js"
@@ -22,14 +21,11 @@ export type UseWizardActionsArgs = {
   scanCache: Record<string, ScanResult>
   scopedPostCount: number
   options: ExportOptions
+  uploadProviderSettingsReady: boolean
   resumeDialog: ResumeDialogState | null
   frontmatterValidationErrors: string[]
   updateOptions: (updater: (current: ExportOptions) => ExportOptions) => void
   startBlockScan: () => Promise<void>
-  startUpload: (args: {
-    providerKey: string
-    providerFields: UploadProviderFields
-  }) => Promise<unknown>
   resumeJob: () => Promise<unknown>
   hydrateJob: (job: ExportBootstrapResponse["resumedJob"]) => void
   applyResumedState: (args: {
@@ -44,6 +40,7 @@ export type UseWizardActionsArgs = {
   setScanCache: Dispatch<SetStateAction<Record<string, ScanResult>>>
   setScanPending: (value: boolean) => void
   setCategoryStatus: (value: string) => void
+  setUploadProviderStepMessage: (value: string | null) => void
   setCategorySearch: (value: string) => void
   setSetupStep: (value: SetupStep) => void
   setActiveJobFilter: (value: JobFilter) => void

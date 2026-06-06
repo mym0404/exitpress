@@ -1,3 +1,6 @@
+import { readFile } from "node:fs/promises"
+import path from "node:path"
+
 import { defaultExportOptions } from "@exitpress/domain/export-options/ExportOptions.js"
 import { NaverBlogFetcher } from "@exitpress/engine/integrations/naver-blog/NaverBlogFetcher.js"
 import {
@@ -42,6 +45,68 @@ afterEach(async () => {
 })
 
 describe("http server upload rewrite", () => {
+  it("automatically uploads and rewrites markdown and manifest during export", async () => {
+    const outputDir = createTestPath("http-server", "auto-upload-rewrite-output")
+    const uploadPhaseRunner = vi.fn(async ({ candidates }: { candidates: UploadCandidate[] }) =>
+      candidates.map((candidate) => ({
+        candidate,
+        uploadedUrl: `https://cdn.example.com/${candidate.localPath}`,
+      })),
+    )
+
+    mockFetcher({
+      html: uploadHtml,
+      thumbnailUrl: "https://example.com/thumb.png",
+    })
+
+    activeServer = createTestHttpServer({
+      uploadPhaseRunner,
+    })
+    const baseUrl = await startServer(activeServer)
+    const options = defaultExportOptions()
+
+    options.assets.imageHandlingMode = "download-and-upload"
+
+    const exportResponse = await fetch(`${baseUrl}/api/export`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        blogIdOrUrl: "https://blog.naver.com/mym0404",
+        outputDir,
+        options,
+        uploadProvider: createUploadPayload({
+          repo: "owner/name",
+          token: "ghp_export_upload_token",
+        }),
+      }),
+    })
+    const exportBody = (await exportResponse.json()) as {
+      jobId: string
+    }
+    const completedJob = await waitForJob({
+      baseUrl,
+      jobId: exportBody.jobId,
+      accept: (job) => job.status === "upload-completed",
+    })
+    const outputPath = completedJob.items[0]?.outputPath
+    const localPath = uploadPhaseRunner.mock.calls[0]?.[0].candidates[0]?.localPath
+    const uploadedUrl = `https://cdn.example.com/${localPath}`
+    const markdown = await readFile(path.join(outputDir, outputPath!), "utf8")
+    const manifest = await readFile(path.join(outputDir, "manifest.json"), "utf8")
+
+    expect(uploadPhaseRunner).toHaveBeenCalledTimes(1)
+    expect(localPath).toBeTruthy()
+    expect(markdown).toContain(uploadedUrl)
+    expect(markdown).not.toContain(`](${localPath})`)
+    expect(markdown).not.toContain(`thumbnail: ${localPath}`)
+    expect(manifest).toContain(uploadedUrl)
+    expect(manifest).not.toContain("ghp_export_upload_token")
+    expect(manifest).not.toContain("owner/name")
+    expect(completedJob.upload.uploadedCount).toBe(completedJob.upload.candidateCount)
+  })
+
   it("keeps earlier rewritten posts completed when a later ready post rewrite fails", async () => {
     const scanResult: ScanResult = {
       ...baseScanResult,
@@ -162,41 +227,25 @@ describe("http server upload rewrite", () => {
         blogIdOrUrl: "https://blog.naver.com/mym0404",
         outputDir: createTestPath("http-server", "batch-rewrite-failure-output"),
         options,
+        uploadProvider: createUploadPayload({
+          repo: "owner/name",
+          token: "ghp_export_upload_token",
+        }),
       }),
     })
     const exportBody = (await exportResponse.json()) as {
       jobId: string
     }
 
-    await waitForJob({
-      baseUrl,
-      jobId: exportBody.jobId,
-      accept: (job) => job.status === "upload-ready",
-    })
-
-    const uploadResponse = await fetch(`${baseUrl}/api/export/${exportBody.jobId}/upload`, {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-        origin: baseUrl,
-        "x-requested-with": "XMLHttpRequest",
-      },
-      body: JSON.stringify(
-        createUploadPayload({
-          repo: "owner/name",
-          token: "ghp_rewrite_batch_failure",
-        }),
-      ),
-    })
     const failedJob = await waitForJob({
       baseUrl,
       jobId: exportBody.jobId,
-      accept: (job) => job.status === "upload-failed",
+      accept: (job) => job.status === "failed",
     })
 
-    expect(uploadResponse.status).toBe(202)
     expect(postUploadRewriter).toHaveBeenCalledTimes(2)
     expect(manifestSnapshotWriter).toHaveBeenCalledTimes(1)
+    expect(failedJob.upload.status).toBe("upload-failed")
     expect(failedJob.items[0]?.upload.rewriteStatus).toBe("completed")
     expect(failedJob.items[0]?.upload.failedCount).toBe(0)
     expect(failedJob.items[1]?.upload.rewriteStatus).toBe("failed")
@@ -226,6 +275,10 @@ describe("http server upload rewrite", () => {
         blogIdOrUrl: "https://blog.naver.com/mym0404",
         outputDir: createTestPath("http-server", "zero-candidates-output"),
         options,
+        uploadProvider: createUploadPayload({
+          repo: "owner/name",
+          token: "ghp_export_upload_token",
+        }),
       }),
     })
     const exportBody = (await exportResponse.json()) as {
@@ -236,18 +289,7 @@ describe("http server upload rewrite", () => {
       jobId: exportBody.jobId,
       accept: (job) => job.status === "completed",
     })
-    const uploadResponse = await fetch(`${baseUrl}/api/export/${exportBody.jobId}/upload`, {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-        origin: baseUrl,
-        "x-requested-with": "XMLHttpRequest",
-      },
-      body: JSON.stringify(createUploadPayload({ repo: "owner/name" })),
-    })
-
     expect(completedJob.upload.status).toBe("skipped")
     expect(completedJob.upload.terminalReason).toBe("skipped-no-candidates")
-    expect(uploadResponse.status).toBe(409)
   })
 })

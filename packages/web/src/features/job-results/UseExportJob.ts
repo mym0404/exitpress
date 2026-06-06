@@ -1,8 +1,4 @@
-import {
-  isTerminalJobStatus,
-  JOB_STATUSES,
-  UPLOAD_STATUSES,
-} from "@exitpress/domain/export-job/ExportJobState.js"
+import { isTerminalJobStatus, JOB_STATUSES } from "@exitpress/domain/export-job/ExportJobState.js"
 import { useCallback, useEffect, useRef, useState } from "react"
 
 import type { ScanResult } from "@exitpress/domain/blog/schema/BlogScan.js"
@@ -11,7 +7,7 @@ import type { ExportJobState } from "@exitpress/domain/export-job/schema/ExportJ
 import type { ExportOptions } from "@exitpress/domain/export-options/schema/ExportOptions.js"
 import type { UploadProviderFields } from "@exitpress/domain/upload/schema/UploadProvider.js"
 
-import { fetchJson, postJson, postUploadJson } from "../../lib/Api.js"
+import { fetchJson, postJson } from "../../lib/Api.js"
 
 type UploadProviderInput = {
   providerKey: string
@@ -62,12 +58,10 @@ export const useExportJob = () => {
   const [jobId, setJobId] = useState<string | null>(null)
   const [job, setJob] = useState<ExportJobState | null>(null)
   const [submitting, setSubmitting] = useState(false)
-  const [uploadSubmitting, setUploadSubmitting] = useState(false)
   const [pollVersion, setPollVersion] = useState(0)
   const restartPollingRef = useRef(false)
   const displayedJobRef = useRef<ExportJobState | null>(null)
-  const { defaultPollMs, fastPollMs, uploadBurstAttempts, uploadBurstPollMs } =
-    getExportJobPollingConfig()
+  const { defaultPollMs, fastPollMs } = getExportJobPollingConfig()
 
   useEffect(() => {
     if (!jobId) {
@@ -129,14 +123,15 @@ export const useExportJob = () => {
       outputDir,
       options,
       scanResult,
+      uploadProvider,
     }: {
       blogIdOrUrl: string
       outputDir: string
       options: ExportOptions
       scanResult?: ScanResult | null
+      uploadProvider?: UploadProviderInput
     }) => {
       setSubmitting(true)
-      setUploadSubmitting(false)
       displayedJobRef.current = null
       setJob(null)
 
@@ -146,6 +141,7 @@ export const useExportJob = () => {
           outputDir,
           options,
           scanResult,
+          ...(uploadProvider ? { uploadProvider } : {}),
         })
 
         setJobId(response.jobId)
@@ -155,87 +151,6 @@ export const useExportJob = () => {
       }
     },
     [],
-  )
-
-  const startUpload = useCallback(
-    async ({ providerKey, providerFields }: UploadProviderInput) => {
-      if (!jobId) {
-        throw new Error("업로드할 작업이 없습니다.")
-      }
-
-      const previousJob = job
-      let uploadAccepted = false
-
-      setUploadSubmitting(true)
-      setJob((current) =>
-        current
-          ? {
-              ...current,
-              status: JOB_STATUSES.UPLOADING,
-              upload: {
-                ...current.upload,
-                status: UPLOAD_STATUSES.UPLOADING,
-              },
-            }
-          : current,
-      )
-      displayedJobRef.current = previousJob
-        ? {
-            ...previousJob,
-            status: JOB_STATUSES.UPLOADING,
-            resumeAvailable: false,
-            upload: {
-              ...previousJob.upload,
-              status: UPLOAD_STATUSES.UPLOADING,
-            },
-          }
-        : previousJob
-
-      try {
-        const response = await postUploadJson<{ jobId: string; status: string }>(
-          `/api/export/${jobId}/upload`,
-          {
-            providerKey,
-            providerFields,
-          },
-        )
-        uploadAccepted = true
-        restartPollingRef.current = true
-        setPollVersion((current) => current + 1)
-        let nextJob: ExportJobState | null = null
-
-        for (let attempt = 0; attempt < uploadBurstAttempts; attempt += 1) {
-          nextJob = await fetchJson<ExportJobState>(`/api/export/${jobId}`)
-          displayedJobRef.current = nextJob
-          setJob(nextJob)
-
-          const shouldKeepBurstPolling =
-            nextJob.status === JOB_STATUSES.UPLOAD_READY ||
-            (nextJob.status === JOB_STATUSES.UPLOADING &&
-              nextJob.upload.uploadedCount <= 0 &&
-              nextJob.upload.candidateCount > 0)
-
-          if (!shouldKeepBurstPolling) {
-            break
-          }
-
-          await new Promise<void>((resolve) => {
-            window.setTimeout(resolve, uploadBurstPollMs)
-          })
-        }
-
-        return response
-      } catch (error) {
-        if (!uploadAccepted) {
-          displayedJobRef.current = previousJob
-          setJob(previousJob)
-        }
-        throw error
-      } finally {
-        setUploadSubmitting(false)
-      }
-    },
-    [job, jobId, uploadBurstAttempts, uploadBurstPollMs],
   )
 
   const resumeJob = useCallback(async () => {
@@ -278,11 +193,9 @@ export const useExportJob = () => {
     job,
     jobId,
     submitting,
-    uploadSubmitting,
     hydrateJob,
     resumeJob,
     setJob,
     startJob,
-    startUpload,
   }
 }
