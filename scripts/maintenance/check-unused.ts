@@ -68,7 +68,6 @@ const allowedKnipFileEntries: Record<string, string> = {
   "tests/e2e/run-ui-resume-smoke.ts": "spawned by smoke suite",
   "tests/e2e/run-ui-smoke.ts": "spawned by smoke suite",
   "packages/web/vite.pages.config.ts": "GitHub Pages Storybook build config entrypoint",
-  "vitest.parser-blocks.config.ts": "parser block coverage config entrypoint",
   "packages/web/src/components/ui/Skeleton.tsx": "shadcn primitive kept for composition",
   "packages/web/src/components/ui/Tabs.tsx": "shadcn primitive kept for composition",
 }
