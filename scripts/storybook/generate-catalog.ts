@@ -3,7 +3,7 @@ import { mkdir, readFile, writeFile } from "node:fs/promises"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
 
-import { renderBlockTemplates } from "@exitpress/engine/markdown/utils/renderBlockTemplates.js"
+import { renderBlockTemplates } from "@exitpress/engine/markdown/util/renderBlockTemplates.js"
 import { parsePostHtml } from "@exitpress/engine/parsing/naver-blog/core/PostParser.js"
 import {
   createNaverBlogDefaultBlockTemplateMap,
@@ -11,9 +11,9 @@ import {
 } from "@exitpress/engine/parsing/naver-blog/NaverBlog.js"
 import { storybookDefinitions } from "@exitpress/web/features/storybook/data/StorybookDefinitions.js"
 
-import type { ParsedBlock } from "@exitpress/domain/parser/Types.js"
-import type { StorybookDefinition } from "@exitpress/web/features/storybook/data/StorybookDefinition.js"
-import type { StorybookEditorGroup } from "@exitpress/web/features/storybook/StorybookTypes.js"
+import type { ParsedBlock } from "@exitpress/domain/parser/schema/ParsedPost.js"
+import type { StorybookEditorGroup } from "@exitpress/web/features/storybook/schema/Storybook.js"
+import type { StorybookDefinition } from "@exitpress/web/features/storybook/schema/StorybookDefinition.js"
 
 const repoRoot = fileURLToPath(new URL("../..", import.meta.url))
 const outputPath = path.join(
@@ -90,7 +90,7 @@ const buildStorybookCatalog = (): StorybookEditorGroup[] => {
 }
 
 const serializeCatalog = (catalog: StorybookEditorGroup[]) =>
-  `import type { StorybookEditorGroup } from "../StorybookTypes.js"
+  `import type { StorybookEditorGroup } from "../schema/Storybook.js"
 
 export const generatedStorybookCatalog: StorybookEditorGroup[] = ${JSON.stringify(catalog, null, 2)}
 `

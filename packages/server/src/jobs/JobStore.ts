@@ -3,9 +3,9 @@ import { JOB_STATUSES, UPLOAD_STATUSES } from "@exitpress/domain/export-job/Expo
 import type {
   ExportJobItem,
   ExportJobState,
-  ExportManifest,
-  ExportRequest,
-} from "@exitpress/domain/export-job/Types.js"
+} from "@exitpress/domain/export-job/schema/ExportJobState.js"
+import type { ExportManifest } from "@exitpress/domain/export-job/schema/ExportManifest.js"
+import type { ExportRequest } from "@exitpress/domain/export-job/schema/ExportRequest.js"
 
 import {
   buildJobItemFromPost,

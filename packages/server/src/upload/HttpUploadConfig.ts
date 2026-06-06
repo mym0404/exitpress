@@ -1,7 +1,7 @@
 import { UPLOAD_PROVIDER_KEYS } from "@exitpress/domain/upload/UploadProviderKeys.js"
-import { toErrorMessage } from "@exitpress/engine/shared/error/ErrorUtils.js"
+import { toErrorMessage } from "@exitpress/engine/shared/error/util/toErrorMessage.js"
 
-import type { UploadProviderFields } from "@exitpress/domain/upload/UploadProviderTypes.js"
+import type { UploadProviderFields } from "@exitpress/domain/upload/schema/UploadProvider.js"
 
 export const normalizeUploaderConfig = ({
   uploaderKey,

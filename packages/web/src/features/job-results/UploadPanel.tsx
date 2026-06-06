@@ -1,11 +1,11 @@
 import { JOB_STATUSES } from "@exitpress/domain/export-job/ExportJobState.js"
 import { UPLOAD_PROVIDER_KEYS } from "@exitpress/domain/upload/UploadProviderKeys.js"
 
-import type { ExportJobState } from "@exitpress/domain/export-job/Types.js"
+import type { ExportJobState } from "@exitpress/domain/export-job/schema/ExportJobState.js"
 import type {
   UploadProviderCatalogResponse,
   UploadProviderFields,
-} from "@exitpress/domain/upload/UploadProviderTypes.js"
+} from "@exitpress/domain/upload/schema/UploadProvider.js"
 
 import type { JobResultsMode } from "./JobResultsHelpers.js"
 

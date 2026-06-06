@@ -1,4 +1,4 @@
-import type { StorybookDefinition } from "./StorybookDefinition.js"
+import type { StorybookDefinition } from "../schema/StorybookDefinition.js"
 
 export const naverSe213Video = {
   storyKey: "naver-se2-13-video",

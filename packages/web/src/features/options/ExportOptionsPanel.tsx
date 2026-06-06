@@ -1,10 +1,10 @@
-import type { PostSummary } from "@exitpress/domain/blog/Types.js"
+import type { PostSummary } from "@exitpress/domain/blog/schema/BlogScan.js"
 import type {
   ExportOptions,
   FrontmatterFieldMeta,
   FrontmatterFieldName,
-} from "@exitpress/domain/export-options/Types.js"
-import type { BlockTemplateDefinition } from "@exitpress/domain/template/Types.js"
+} from "@exitpress/domain/export-options/schema/ExportOptions.js"
+import type { BlockTemplateDefinition } from "@exitpress/domain/template/schema/BlockTemplateDefinition.js"
 import type { ReactNode } from "react"
 
 import type { ExportOptionsStep } from "./ExportOptionsSteps.js"

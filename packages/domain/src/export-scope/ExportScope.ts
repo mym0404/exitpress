@@ -1,5 +1,5 @@
-import type { CategoryInfo, PostSummary } from "@exitpress/domain/blog/Types.js"
-import type { ExportOptions } from "@exitpress/domain/export-options/Types.js"
+import type { CategoryInfo, PostSummary } from "../blog/schema/BlogScan.js"
+import type { ExportOptions } from "../export-options/schema/ExportOptions.js"
 
 export const resolveSelectedCategoryIds = ({
   categories,

@@ -1,5 +1,5 @@
 import { normalizeAssetUrl } from "@exitpress/domain/blog/NaverUrl.js"
-import { compactText } from "@exitpress/engine/shared/text/TextUtils.js"
+import { compactText } from "@exitpress/engine/shared/text/util/TextCompaction.js"
 
 import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/ParserBlock.js"
 

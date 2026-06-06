@@ -4,16 +4,17 @@ import {
   detectPostBlockTemplateKeys,
 } from "@exitpress/engine/exporting/workflow/DetectedBlockTemplateScanner.js"
 import { NaverBlogFetcher } from "@exitpress/engine/integrations/naver-blog/NaverBlogFetcher.js"
-import { mapConcurrent } from "@exitpress/engine/shared/async/AsyncUtils.js"
-import { toErrorMessage } from "@exitpress/engine/shared/error/ErrorUtils.js"
+import { mapConcurrent } from "@exitpress/engine/shared/async/util/AsyncTasks.js"
+import { toErrorMessage } from "@exitpress/engine/shared/error/util/toErrorMessage.js"
 
-import type { ScanResult } from "@exitpress/domain/blog/Types.js"
-import type { ExportOptions } from "@exitpress/domain/export-options/Types.js"
-import type { BlockTemplateDefinition } from "@exitpress/domain/template/Types.js"
+import type { ScanResult } from "@exitpress/domain/blog/schema/BlogScan.js"
+import type { ExportOptions } from "@exitpress/domain/export-options/schema/ExportOptions.js"
+import type { BlockTemplateDefinition } from "@exitpress/domain/template/schema/BlockTemplateDefinition.js"
 import type { NaverBlogFetcherCache } from "@exitpress/engine/integrations/naver-blog/NaverBlogFetcher.js"
 
 import type { BlockScanJobStore } from "./BlockScanJobStore.js"
 
+// Runtime controller for parser block discovery jobs.
 export type BlockScanJobRunner = ReturnType<typeof createBlockScanJobRunner>
 
 const sortDetectedKeys = ({
@@ -34,6 +35,7 @@ const sortDetectedKeys = ({
   )
 }
 
+// Scans selected posts to detect which block template options are needed.
 export const createBlockScanJobRunner = ({
   jobStore,
   blockTemplateDefinitions,

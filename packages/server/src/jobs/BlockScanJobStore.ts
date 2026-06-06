@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto"
 
-import type { BlockScanJobState } from "@exitpress/domain/block-scan/Types.js"
+import type { BlockScanJobState } from "@exitpress/domain/block-scan/schema/BlockScanJobState.js"
 
 const cloneJob = (job: BlockScanJobState): BlockScanJobState => ({
   ...job,

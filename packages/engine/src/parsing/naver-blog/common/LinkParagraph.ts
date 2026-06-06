@@ -1,4 +1,4 @@
-import { compactMarkdownText } from "@exitpress/engine/shared/text/TextUtils.js"
+import { compactMarkdownText } from "@exitpress/engine/shared/text/util/TextCompaction.js"
 
 import { createParagraphBlock } from "../core/ParsedBlockOutput.js"
 

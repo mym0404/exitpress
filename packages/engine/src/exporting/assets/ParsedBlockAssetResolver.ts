@@ -1,6 +1,7 @@
-import type { AssetRecord } from "@exitpress/domain/export-job/Types.js"
-import type { ParsedBlock, ParsedBlockAsset } from "@exitpress/domain/parser/Types.js"
-import type { TemplateValue } from "@exitpress/domain/template/Types.js"
+import type { AssetRecord } from "@exitpress/domain/export-job/schema/UploadState.js"
+import type { ParsedBlockAsset } from "@exitpress/domain/parser/schema/Media.js"
+import type { ParsedBlock } from "@exitpress/domain/parser/schema/ParsedPost.js"
+import type { TemplateValue } from "@exitpress/domain/template/schema/TemplateValue.js"
 
 type ResolveAsset = (input: { role: ParsedBlockAsset["role"]; sourceUrl: string }) => Promise<{
   reference: string

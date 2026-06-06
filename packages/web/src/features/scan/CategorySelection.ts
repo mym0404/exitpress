@@ -1,4 +1,7 @@
-import type { CategoryInfo } from "@exitpress/domain/blog/Types.js"
+import type { CategoryInfo } from "@exitpress/domain/blog/schema/BlogScan.js"
+
+const checkboxIndeterminateState = "indeterminate" as const
+type CategoryCheckboxState = boolean | typeof checkboxIndeterminateState
 
 const buildCategoryRelations = (categories: CategoryInfo[]) => {
   const categoryMap = new Map(categories.map((category) => [category.id, category]))
@@ -85,7 +88,7 @@ export const getCategoryCheckboxState = ({
   categories: CategoryInfo[]
   selectedIds: number[]
   categoryId: number
-}): boolean | "indeterminate" => {
+}): CategoryCheckboxState => {
   const relations = buildCategoryRelations(categories)
   const selectedSet = new Set(selectedIds)
 
@@ -98,7 +101,7 @@ export const getCategoryCheckboxState = ({
   )
 
   return descendantIds.some((descendantId) => selectedSet.has(descendantId))
-    ? "indeterminate"
+    ? checkboxIndeterminateState
     : false
 }
 

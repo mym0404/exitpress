@@ -2,8 +2,8 @@ import { defaultExportOptions } from "@exitpress/domain/export-options/ExportOpt
 import { createTestPath } from "@tests/support/test-paths.js"
 import { describe, expect, it } from "vitest"
 
-import type { ScanResult } from "@exitpress/domain/blog/Types.js"
-import type { ExportJobState } from "@exitpress/domain/export-job/Types.js"
+import type { ScanResult } from "@exitpress/domain/blog/schema/BlogScan.js"
+import type { ExportJobState } from "@exitpress/domain/export-job/schema/ExportJobState.js"
 
 import { buildResumableExportManifest } from "./ExportJobManifest.js"
 

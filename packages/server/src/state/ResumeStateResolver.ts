@@ -1,8 +1,6 @@
-import type { ScanCacheMap, ScanResult } from "@exitpress/domain/blog/Types.js"
-import type {
-  ExportJobState,
-  ExportManifestScanResult,
-} from "@exitpress/domain/export-job/Types.js"
+import type { ScanCacheMap, ScanResult } from "@exitpress/domain/blog/schema/BlogScan.js"
+import type { ExportJobState } from "@exitpress/domain/export-job/schema/ExportJobState.js"
+import type { ExportManifestScanResult } from "@exitpress/domain/export-job/schema/ExportManifest.js"
 
 const toTimestamp = (value: string | null | undefined) => {
   if (!value) {
@@ -14,6 +12,7 @@ const toTimestamp = (value: string | null | undefined) => {
   return Number.isNaN(timestamp) ? 0 : timestamp
 }
 
+// Finds the newest observable activity timestamp for an in-memory job.
 export const getJobActivityTimestamp = (job: ExportJobState) =>
   Math.max(
     toTimestamp(job.createdAt),
@@ -24,8 +23,10 @@ export const getJobActivityTimestamp = (job: ExportJobState) =>
     ...job.items.map((item) => toTimestamp(item.updatedAt)),
   )
 
+// Normalizes manifest update timestamps for resume ordering.
 export const getManifestJobTimestamp = (updatedAt: string) => toTimestamp(updatedAt)
 
+// Reconstructs the best available scan result from manifest and cache data.
 export const resolveResumedScanResult = ({
   manifestBlogId,
   manifestCategories,

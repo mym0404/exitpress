@@ -2,7 +2,7 @@ import { autocompletion } from "@codemirror/autocomplete"
 import CodeMirror from "@uiw/react-codemirror"
 import { useMemo } from "react"
 
-import type { BlockTemplateDefinition } from "@exitpress/domain/template/Types.js"
+import type { BlockTemplateDefinition } from "@exitpress/domain/template/schema/BlockTemplateDefinition.js"
 
 import { Badge } from "../../components/ui/Badge.js"
 import {

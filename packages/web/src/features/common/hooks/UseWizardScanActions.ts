@@ -1,10 +1,10 @@
 import { useCallback } from "react"
 
-import type { ScanResult } from "@exitpress/domain/blog/Types.js"
+import type { ScanResult } from "@exitpress/domain/blog/schema/BlogScan.js"
 
 import type { ExportResumeLookupResponse } from "../../../lib/Api.js"
 
-import type { WizardScanActionsArgs } from "./UseWizardActionTypes.js"
+import type { WizardScanActionsArgs } from "./schema/WizardActions.js"
 
 import { toast } from "../../../components/ui/Sonner.js"
 import { postJson } from "../../../lib/Api.js"

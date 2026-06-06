@@ -2,10 +2,10 @@ import {
   applyPostTemplate as applySameBlogPostCustomUrlTemplate,
   buildPostTemplateValues as buildSameBlogPostTemplateValues,
 } from "@exitpress/domain/export-paths/PostPathTemplate.js"
-import { relativePathFrom } from "@exitpress/engine/infra/node/FilePathUtils.js"
+import { relativePathFrom } from "@exitpress/engine/infra/node/util/FilePaths.js"
 
-import type { CategoryInfo, PostSummary } from "@exitpress/domain/blog/Types.js"
-import type { ExportOptions } from "@exitpress/domain/export-options/Types.js"
+import type { CategoryInfo, PostSummary } from "@exitpress/domain/blog/schema/BlogScan.js"
+import type { ExportOptions } from "@exitpress/domain/export-options/schema/ExportOptions.js"
 
 import { buildMarkdownFilePath, getCategoryForPost } from "./ExportPaths.js"
 

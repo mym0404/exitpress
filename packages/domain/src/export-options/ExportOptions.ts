@@ -1,4 +1,8 @@
-import type { ExportOptions, FrontmatterFieldName } from "./Types.js"
+import type {
+  ExportOptions,
+  FrontmatterFieldName,
+  PartialExportOptions,
+} from "./schema/ExportOptions.js"
 
 import { defaultExportOptions as createDefaultExportOptions } from "./DefaultExportOptions.js"
 import {
@@ -6,21 +10,6 @@ import {
   frontmatterFieldOrder as configuredFrontmatterFieldOrder,
 } from "./FrontmatterFields.js"
 import { optionDescriptions as configuredOptionDescriptions } from "./OptionDescriptions.js"
-
-export type PartialExportOptions = {
-  scope?: Partial<ExportOptions["scope"]>
-  structure?: Partial<ExportOptions["structure"]>
-  frontmatter?: {
-    enabled?: boolean
-    fields?: Partial<Record<FrontmatterFieldName, boolean>>
-    aliases?: Partial<Record<FrontmatterFieldName, string>>
-  }
-  blockOutputs?: {
-    templates?: Partial<Record<string, string>>
-  }
-  assets?: Partial<ExportOptions["assets"]>
-  links?: Partial<ExportOptions["links"]>
-}
 
 export const frontmatterFieldOrder = configuredFrontmatterFieldOrder
 

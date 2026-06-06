@@ -1,5 +1,6 @@
-import type { ParsedBlock, ParserBlockOptions } from "@exitpress/domain/parser/Types.js"
-import type { BlockTemplateDefinition } from "@exitpress/domain/template/Types.js"
+import type { ParsedBlock } from "@exitpress/domain/parser/schema/ParsedPost.js"
+import type { ParserBlockOptions } from "@exitpress/domain/parser/schema/ParserBlockOptions.js"
+import type { BlockTemplateDefinition } from "@exitpress/domain/template/schema/BlockTemplateDefinition.js"
 import type { UnknownRecord } from "@exitpress/engine/shared/object/UnknownRecord.js"
 import type { Cheerio, CheerioAPI } from "cheerio"
 import type { AnyNode } from "domhandler"

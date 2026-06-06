@@ -1,6 +1,6 @@
-import { compactText } from "@exitpress/engine/shared/text/TextUtils.js"
+import { compactText } from "@exitpress/engine/shared/text/util/TextCompaction.js"
 
-import type { ParserBlockOptions } from "@exitpress/domain/parser/Types.js"
+import type { ParserBlockOptions } from "@exitpress/domain/parser/schema/ParserBlockOptions.js"
 import type { UnknownRecord } from "@exitpress/engine/shared/object/UnknownRecord.js"
 import type { CheerioAPI } from "cheerio"
 import type { AnyNode } from "domhandler"

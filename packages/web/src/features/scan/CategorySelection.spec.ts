@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 
-import type { CategoryInfo } from "@exitpress/domain/blog/Types.js"
+import type { CategoryInfo } from "@exitpress/domain/blog/schema/BlogScan.js"
 
 import {
   getCategoryCheckboxState,

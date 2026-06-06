@@ -6,10 +6,10 @@ import {
   sanitizePersistedExportOptions,
 } from "@exitpress/domain/export-options/ExportOptions.js"
 
-import type { ScanCacheMap } from "@exitpress/domain/blog/Types.js"
-import type { PartialExportOptions } from "@exitpress/domain/export-options/ExportOptions.js"
-import type { ThemePreference } from "@exitpress/domain/preferences/ThemePreference.js"
-import type { BlockTemplateDefinition } from "@exitpress/domain/template/Types.js"
+import type { ScanCacheMap } from "@exitpress/domain/blog/schema/BlogScan.js"
+import type { PartialExportOptions } from "@exitpress/domain/export-options/schema/ExportOptions.js"
+import type { ThemePreference } from "@exitpress/domain/preferences/schema/ThemePreference.js"
+import type { BlockTemplateDefinition } from "@exitpress/domain/template/schema/BlockTemplateDefinition.js"
 
 export const readScanCacheFile = async ({ scanCachePath }: { scanCachePath: string }) => {
   try {

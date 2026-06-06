@@ -2,7 +2,7 @@ import type {
   UploadProviderCatalogResponse,
   UploadProviderFieldDefinition,
   UploadProviderValue,
-} from "@exitpress/domain/upload/UploadProviderTypes.js"
+} from "@exitpress/domain/upload/schema/UploadProvider.js"
 import type { UnknownRecord } from "@exitpress/engine/shared/object/UnknownRecord.js"
 
 const coerceCheckboxValue = (rawValue: unknown) => {

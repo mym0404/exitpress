@@ -1,7 +1,7 @@
 import { JOB_STATUSES } from "@exitpress/domain/export-job/ExportJobState.js"
 import { useEffect } from "react"
 
-import type { ExportJobState } from "@exitpress/domain/export-job/Types.js"
+import type { ExportJobState } from "@exitpress/domain/export-job/schema/ExportJobState.js"
 import type { MutableRefObject } from "react"
 
 import { toast } from "../../components/ui/Sonner.js"

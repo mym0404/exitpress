@@ -1,14 +1,14 @@
 import { writeFile } from "node:fs/promises"
 import path from "node:path"
 
-import { ensureDir } from "@exitpress/engine/infra/node/FilePathUtils.js"
+import { ensureDir } from "@exitpress/engine/infra/node/util/FilePaths.js"
 import { throwIfAborted } from "@exitpress/engine/infra/runtime/AbortOperation.js"
-import { renderMarkdownPost } from "@exitpress/engine/markdown/utils/renderMarkdownPost.js"
+import { renderMarkdownPost } from "@exitpress/engine/markdown/util/renderMarkdownPost.js"
 import { parsePostHtml } from "@exitpress/engine/parsing/naver-blog/core/PostParser.js"
 import { createNaverBlogDefaultBlockTemplateMap } from "@exitpress/engine/parsing/naver-blog/NaverBlog.js"
 
-import type { PostSummary } from "@exitpress/domain/blog/Types.js"
-import type { ExportOptions } from "@exitpress/domain/export-options/Types.js"
+import type { PostSummary } from "@exitpress/domain/blog/schema/BlogScan.js"
+import type { ExportOptions } from "@exitpress/domain/export-options/schema/ExportOptions.js"
 import type { NaverBlogFetcher } from "@exitpress/engine/integrations/naver-blog/NaverBlogFetcher.js"
 
 import type { AssetStore } from "../assets/AssetStore.js"
@@ -17,7 +17,7 @@ import type { buildPostLinkTargets } from "../paths/PostLinkRewriter.js"
 import { createPostUploadSummary } from "../manifest/ExportManifestProgress.js"
 import { buildMarkdownFilePath, getCategoryForPost } from "../paths/ExportPaths.js"
 import { createSameBlogPostLinkResolver } from "../paths/PostLinkRewriter.js"
-import { dedupeUploadCandidatesByLocalPath } from "../upload/UploadCandidateUtils.js"
+import { dedupeUploadCandidatesByLocalPath } from "../upload/util/dedupeUploadCandidatesByLocalPath.js"
 
 import { createSuccessPostResult } from "./PostExportResult.js"
 

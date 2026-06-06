@@ -1,4 +1,4 @@
-import { convertHtmlToMarkdown } from "@exitpress/engine/markdown/utils/convertHtmlToMarkdown.js"
+import { convertHtmlToMarkdown } from "@exitpress/engine/markdown/util/convertHtmlToMarkdown.js"
 
 import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/ParserBlock.js"
 

@@ -1,6 +1,6 @@
 import { normalizeAssetUrl } from "@exitpress/domain/blog/NaverUrl.js"
 
-import type { ImageData } from "@exitpress/domain/parser/Types.js"
+import type { ImageData } from "@exitpress/domain/parser/schema/Media.js"
 import type { CheerioAPI } from "cheerio"
 
 import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/ParserBlock.js"

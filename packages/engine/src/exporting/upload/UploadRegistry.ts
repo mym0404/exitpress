@@ -1,7 +1,7 @@
 import type {
   UploadRegistryEntry,
   UploadRegistrySnapshot,
-} from "@exitpress/domain/template/Types.js"
+} from "@exitpress/domain/template/schema/UploadRegistry.js"
 
 type UploadAsset = (input: { uploadKey: string; localPath: string }) => Promise<{
   uploadedUrl: string

@@ -1,6 +1,6 @@
 import { sanitizeCategoryName } from "@exitpress/domain/blog/CategoryName.js"
 
-import type { SlugStyle, SlugWhitespace } from "@exitpress/domain/export-options/Types.js"
+import type { SlugStyle, SlugWhitespace } from "../export-options/schema/ExportOptions.js"
 
 const invalidPathCharacterPattern = /[<>:"/\\|?*\u0000-\u001f]/g
 const multipleDashPattern = /-+/g

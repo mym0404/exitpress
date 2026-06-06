@@ -1,4 +1,4 @@
-import { compactText } from "@exitpress/engine/shared/text/TextUtils.js"
+import { compactText } from "@exitpress/engine/shared/text/util/TextCompaction.js"
 
 import type { Cheerio, CheerioAPI } from "cheerio"
 import type { AnyNode } from "domhandler"
@@ -7,6 +7,7 @@ import type { ParserBlockContext } from "../../../core/ParserBlock.js"
 
 import { createLinkParagraphBlocks } from "../../../common/LinkParagraph.js"
 
+// Finds nodes that belong to the current SE3 component, not nested components.
 export const findInComponentRoot = ({
   $,
   $component,
@@ -25,6 +26,7 @@ export const findInComponentRoot = ({
   })
 }
 
+// Extracts text from the current component while ignoring nested component bodies.
 export const textOutsideNestedComponents = ({
   $component,
   selector,
@@ -47,6 +49,7 @@ export const textOutsideNestedComponents = ({
 const buildNaverMapSearchUrl = (query: string) =>
   `https://map.naver.com/p/search/${encodeURIComponent(query)}`
 
+// Converts SE3 place widgets into plain link paragraph blocks.
 export const convertSe3MapPlace = ({
   $,
   $node,

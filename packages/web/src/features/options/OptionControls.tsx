@@ -24,6 +24,9 @@ export const optionEmbeddedTileClass =
   "grid gap-2 rounded-lg border border-border bg-background/30 px-3 py-3"
 export const editorOutputCardClass = "field-card grid gap-4 rounded-2xl px-4 py-4 xl:col-span-2"
 
+const allOptionFieldSurfaces = ["card", "plain"] as const
+type OptionFieldSurface = (typeof allOptionFieldSurfaces)[number]
+
 type SelectOption = {
   value: string
   label: string
@@ -45,7 +48,7 @@ export const OptionField = ({
   description?: string
   children: ReactNode
   disabled?: boolean
-  surface?: "card" | "plain"
+  surface?: OptionFieldSurface
 }) => (
   <div
     className={cn(

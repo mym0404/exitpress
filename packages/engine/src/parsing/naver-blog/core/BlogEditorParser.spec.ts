@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 
-import type { ParsedPost } from "@exitpress/domain/parser/Types.js"
+import type { ParsedPost } from "@exitpress/domain/parser/schema/ParsedPost.js"
 
 import type { ParserBlockContext, ParserBlockConvertContext } from "./ParserBlock.js"
 

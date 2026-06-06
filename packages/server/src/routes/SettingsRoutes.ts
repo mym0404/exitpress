@@ -1,7 +1,7 @@
 import { sanitizePersistedExportOptions } from "@exitpress/domain/export-options/ExportOptions.js"
-import { toErrorMessage } from "@exitpress/engine/shared/error/ErrorUtils.js"
+import { toErrorMessage } from "@exitpress/engine/shared/error/util/toErrorMessage.js"
 
-import type { PartialExportOptions } from "@exitpress/domain/export-options/ExportOptions.js"
+import type { PartialExportOptions } from "@exitpress/domain/export-options/schema/ExportOptions.js"
 
 import type { ApiRouteContext, ApiRouteRequest } from "./ApiRouteContext.js"
 

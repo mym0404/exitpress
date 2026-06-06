@@ -5,10 +5,13 @@ import type {
   UploadProviderFieldDefinition,
   UploadProviderFields,
   UploadProviderValue,
-} from "@exitpress/domain/upload/UploadProviderTypes.js"
+} from "@exitpress/domain/upload/schema/UploadProvider.js"
+
+export const allAlistAuthModes = ["token", "account"] as const
+export type AlistAuthMode = (typeof allAlistAuthModes)[number]
 
 export type ProviderUiState = {
-  alistAuthMode: "token" | "account"
+  alistAuthMode: AlistAuthMode
   githubUseJsDelivr: boolean
 }
 

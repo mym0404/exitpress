@@ -7,9 +7,10 @@ import { defaultExportOptions } from "@exitpress/domain/export-options/ExportOpt
 
 import type { ChildProcessWithoutNullStreams } from "node:child_process"
 
-import type { ScanResult } from "@exitpress/domain/blog/Types.js"
-import type { ExportJobState, ExportManifest } from "@exitpress/domain/export-job/Types.js"
-import type { ExportOptions } from "@exitpress/domain/export-options/Types.js"
+import type { ScanResult } from "@exitpress/domain/blog/schema/BlogScan.js"
+import type { ExportJobState } from "@exitpress/domain/export-job/schema/ExportJobState.js"
+import type { ExportManifest } from "@exitpress/domain/export-job/schema/ExportManifest.js"
+import type { ExportOptions } from "@exitpress/domain/export-options/schema/ExportOptions.js"
 
 import { createTestTempDir } from "../../support/test-paths.js"
 

@@ -6,7 +6,7 @@ import {
   writeImageUploadManifestSnapshot,
 } from "@exitpress/engine/exporting/upload/ImageUploadRewriter.js"
 import { NaverBlog } from "@exitpress/engine/parsing/naver-blog/NaverBlog.js"
-import { toErrorMessage } from "@exitpress/engine/shared/error/ErrorUtils.js"
+import { toErrorMessage } from "@exitpress/engine/shared/error/util/toErrorMessage.js"
 
 import type { Server as NodeHttpServer } from "node:http"
 
@@ -33,6 +33,7 @@ import {
   defaultThemePreference,
 } from "./ServerPaths.js"
 
+// Builds the local HTTP server with injectable stores and side-effect runners for tests.
 export const createHttpServer = ({
   jobStore = new JobStore(),
   uploadPhaseRunner = runImageUploadPhase,

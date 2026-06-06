@@ -1,16 +1,14 @@
-import type { ScanResult } from "@exitpress/domain/blog/Types.js"
-import type {
-  ExportJobPollingConfig,
-  ExportJobState,
-  ExportResumeSummary,
-} from "@exitpress/domain/export-job/Types.js"
+import type { ScanResult } from "@exitpress/domain/blog/schema/BlogScan.js"
+import type { ExportJobPollingConfig } from "@exitpress/domain/export-job/schema/ExportJobPollingConfig.js"
+import type { ExportJobState } from "@exitpress/domain/export-job/schema/ExportJobState.js"
+import type { ExportResumeSummary } from "@exitpress/domain/export-job/schema/ExportManifest.js"
 import type {
   ExportOptions,
   FrontmatterFieldMeta,
   FrontmatterFieldName,
-} from "@exitpress/domain/export-options/Types.js"
-import type { ThemePreference } from "@exitpress/domain/preferences/ThemePreference.js"
-import type { BlockTemplateDefinition } from "@exitpress/domain/template/Types.js"
+} from "@exitpress/domain/export-options/schema/ExportOptions.js"
+import type { ThemePreference } from "@exitpress/domain/preferences/schema/ThemePreference.js"
+import type { BlockTemplateDefinition } from "@exitpress/domain/template/schema/BlockTemplateDefinition.js"
 
 export type ExportBootstrapResponse = {
   profile: "gfm"

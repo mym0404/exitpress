@@ -1,12 +1,13 @@
 import { execFile } from "node:child_process"
 import path from "node:path"
 
-import { resolveRepoPath } from "@exitpress/engine/infra/node/FilePathUtils.js"
+import { resolveRepoPath } from "@exitpress/engine/infra/node/util/FilePaths.js"
 
 import type { IncomingMessage } from "node:http"
 
 const TEMP_OUTPUT_ROOTS = ["/tmp", "/private/tmp"] as const
 
+// Accepts local file actions only from same-origin XHR requests.
 export const isSameOriginUploadRequest = (request: IncomingMessage) => {
   if (request.headers["x-requested-with"] !== "XMLHttpRequest") {
     return false
@@ -26,6 +27,7 @@ export const isSameOriginUploadRequest = (request: IncomingMessage) => {
   }
 }
 
+// Checks path containment after resolving relative path traversal.
 export const isPathInsideRoot = ({
   rootPath,
   targetPath,
@@ -38,6 +40,7 @@ export const isPathInsideRoot = ({
   return relativePath === "" || (!relativePath.startsWith("..") && !path.isAbsolute(relativePath))
 }
 
+// Resolves a requested output file against the configured output root.
 export const resolveLocalOutputTargetPath = ({
   outputDir,
   outputPath,
@@ -54,6 +57,7 @@ export const resolveLocalOutputTargetPath = ({
   }
 }
 
+// Detects temporary resume output directories that should not be opened as final output.
 export const isTemporaryResumeOutputDir = (outputDir: string) => {
   const trimmedOutputDir = outputDir.trim()
 
@@ -71,6 +75,7 @@ export const isTemporaryResumeOutputDir = (outputDir: string) => {
   )
 }
 
+// Opens a local output path using the platform default file handler.
 export const openLocalPathWithSystem = async (targetPath: string) => {
   await new Promise<void>((resolve, reject) => {
     const [command, args]: [string, string[]] =

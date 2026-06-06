@@ -2,7 +2,7 @@ import { defaultExportOptions } from "@exitpress/domain/export-options/ExportOpt
 import { createTestPath } from "@tests/support/test-paths.js"
 import { describe, expect, it } from "vitest"
 
-import type { CategoryInfo, PostSummary } from "@exitpress/domain/blog/Types.js"
+import type { CategoryInfo, PostSummary } from "@exitpress/domain/blog/schema/BlogScan.js"
 
 import {
   buildPostLinkTargets,

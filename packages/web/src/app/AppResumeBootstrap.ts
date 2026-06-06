@@ -1,10 +1,11 @@
 import { useCallback } from "react"
 
-import type { ScanCacheMap, ScanResult } from "@exitpress/domain/blog/Types.js"
-import type { ExportOptions } from "@exitpress/domain/export-options/Types.js"
+import type { ScanCacheMap, ScanResult } from "@exitpress/domain/blog/schema/BlogScan.js"
+import type { ExportOptions } from "@exitpress/domain/export-options/schema/ExportOptions.js"
 import type { Dispatch, MutableRefObject, SetStateAction } from "react"
 
 import type { SetupStep } from "../features/common/shell/WizardFlow.js"
+import type { JobFilter } from "../features/job-results/JobResultsHelpers.js"
 import type { ResumeDialogState } from "../features/resume/ResumeState.js"
 import type { ExportBootstrapResponse } from "../lib/Api.js"
 
@@ -42,7 +43,7 @@ export const useAppResumeBootstrap = ({
   setBlogIdOrUrl: Dispatch<SetStateAction<string>>
   setCategorySearch: Dispatch<SetStateAction<string>>
   setSetupStep: Dispatch<SetStateAction<SetupStep>>
-  setActiveJobFilter: Dispatch<SetStateAction<"all" | "success" | "failed">>
+  setActiveJobFilter: Dispatch<SetStateAction<JobFilter>>
   setScanPending: Dispatch<SetStateAction<boolean>>
   setScanCache: Dispatch<SetStateAction<ScanCacheMap>>
   setCategoryStatus: Dispatch<SetStateAction<string>>

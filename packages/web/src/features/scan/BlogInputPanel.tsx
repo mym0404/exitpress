@@ -4,6 +4,9 @@ import { Field, FieldDescription, FieldGroup, FieldLabel } from "../../component
 import { Input } from "../../components/ui/Input.js"
 import { cn } from "../../lib/Cn.js"
 
+const allScanStatusTones = ["default", "error"] as const
+export type ScanStatusTone = (typeof allScanStatusTones)[number]
+
 export const BlogInputPanel = ({
   blogIdOrUrl,
   outputDir,
@@ -18,7 +21,7 @@ export const BlogInputPanel = ({
   outputDir: string
   scanPending: boolean
   scanStatus: string
-  scanStatusTone: "default" | "error"
+  scanStatusTone: ScanStatusTone
   onBlogIdOrUrlChange: (value: string) => void
   onOutputDirChange: (value: string) => void
   onOutputDirBlur: () => void

@@ -1,5 +1,5 @@
-import { convertHtmlToMarkdown } from "@exitpress/engine/markdown/utils/convertHtmlToMarkdown.js"
-import { compactText } from "@exitpress/engine/shared/text/TextUtils.js"
+import { convertHtmlToMarkdown } from "@exitpress/engine/markdown/util/convertHtmlToMarkdown.js"
+import { compactText } from "@exitpress/engine/shared/text/util/TextCompaction.js"
 
 import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/ParserBlock.js"
 

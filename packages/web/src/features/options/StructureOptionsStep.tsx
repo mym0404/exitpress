@@ -5,7 +5,7 @@ import {
   postTemplateKeys,
 } from "@exitpress/domain/export-paths/PostPathTemplate.js"
 
-import type { ExportOptions } from "@exitpress/domain/export-options/Types.js"
+import type { ExportOptions } from "@exitpress/domain/export-options/schema/ExportOptions.js"
 
 import { Input } from "../../components/ui/Input.js"
 

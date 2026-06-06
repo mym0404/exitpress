@@ -6,10 +6,10 @@ import {
   parsePostHtml,
 } from "@exitpress/engine/parsing/naver-blog/core/PostParser.js"
 import { NaverBlog } from "@exitpress/engine/parsing/naver-blog/NaverBlog.js"
-import { toErrorMessage } from "@exitpress/engine/shared/error/ErrorUtils.js"
+import { toErrorMessage } from "@exitpress/engine/shared/error/util/toErrorMessage.js"
 import { load } from "cheerio"
 
-import type { ExportOptions } from "@exitpress/domain/export-options/Types.js"
+import type { ExportOptions } from "@exitpress/domain/export-options/schema/ExportOptions.js"
 import type { ParserBlockInspection } from "@exitpress/engine/parsing/naver-blog/core/ParserBlockDiagnostics.js"
 
 type SinglePostInspectFetcher = {

@@ -1,7 +1,7 @@
 import { createTestPath } from "@tests/support/test-paths.js"
 import { describe, expect, it, vi } from "vitest"
 
-import type { UploadCandidate } from "@exitpress/domain/export-job/Types.js"
+import type { UploadCandidate } from "@exitpress/domain/export-job/schema/UploadState.js"
 
 import type { ImageUploadProgress } from "./ImageUploadPhase.js"
 

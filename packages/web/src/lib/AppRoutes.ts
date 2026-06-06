@@ -1,4 +1,5 @@
-type AppRoute = "export" | "storybook"
+export const allAppRoutes = ["export", "storybook"] as const
+type AppRoute = (typeof allAppRoutes)[number]
 
 const storybookPathname = "/storybook"
 

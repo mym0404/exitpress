@@ -1,4 +1,4 @@
-import type { ExportOptions } from "@exitpress/domain/export-options/Types.js"
+import type { ExportOptions } from "@exitpress/domain/export-options/schema/ExportOptions.js"
 
 import { OptionField, OptionSection, OptionSelectField } from "./OptionControls.js"
 

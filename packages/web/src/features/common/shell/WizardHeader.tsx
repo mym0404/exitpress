@@ -7,7 +7,7 @@ import {
   RiSunLine,
 } from "@remixicon/react"
 
-import type { ThemePreference } from "@exitpress/domain/preferences/ThemePreference.js"
+import type { ThemePreference } from "@exitpress/domain/preferences/schema/ThemePreference.js"
 
 import { Badge } from "../../../components/ui/Badge.js"
 import { Button } from "../../../components/ui/Button.js"

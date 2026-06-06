@@ -1,5 +1,5 @@
-import type { ScanResult } from "@exitpress/domain/blog/Types.js"
-import type { ExportJobState } from "@exitpress/domain/export-job/Types.js"
+import type { ScanResult } from "@exitpress/domain/blog/schema/BlogScan.js"
+import type { ExportJobState } from "@exitpress/domain/export-job/schema/ExportJobState.js"
 
 import type { SetupStep, WizardStep } from "../features/common/shell/WizardFlow.js"
 

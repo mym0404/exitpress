@@ -1,7 +1,7 @@
 import { formatCategorySegment } from "@exitpress/domain/export-paths/PathFormat.js"
 import { buildPostFolderName } from "@exitpress/domain/export-paths/PostPathTemplate.js"
 
-import type { ExportOptions } from "@exitpress/domain/export-options/Types.js"
+import type { ExportOptions } from "@exitpress/domain/export-options/schema/ExportOptions.js"
 import type { SVGProps } from "react"
 
 import { Collapsible, CollapsibleContent } from "../../components/ui/Collapsible.js"

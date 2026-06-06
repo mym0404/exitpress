@@ -1,4 +1,4 @@
-import type { StorybookEditorGroup } from "../StorybookTypes.js"
+import type { StorybookEditorGroup } from "../schema/Storybook.js"
 
 export const generatedStorybookCatalog: StorybookEditorGroup[] = [
   {

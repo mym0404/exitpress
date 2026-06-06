@@ -1,9 +1,9 @@
 import path from "node:path"
 
 import { DEFAULT_OUTPUT_DIR } from "@exitpress/domain/export-options/ExportDefaults.js"
-import { resolveRepoPath } from "@exitpress/engine/infra/node/FilePathUtils.js"
+import { resolveRepoPath } from "@exitpress/engine/infra/node/util/FilePaths.js"
 
-import type { ThemePreference } from "@exitpress/domain/preferences/ThemePreference.js"
+import type { ThemePreference } from "@exitpress/domain/preferences/schema/ThemePreference.js"
 
 export const builtClientRoot = resolveRepoPath("dist/client")
 export const devIndexPath = resolveRepoPath("packages/web/index.html")

@@ -1,4 +1,6 @@
-import type { ExportJobState, ExportResumePhase, JobStatus, UploadStatus } from "./Types.js"
+import type { ExportJobState, JobStatus } from "./schema/ExportJobState.js"
+import type { ExportResumePhase } from "./schema/ExportManifest.js"
+import type { UploadStatus } from "./schema/UploadState.js"
 
 export const JOB_STATUSES = {
   COMPLETED: "completed",

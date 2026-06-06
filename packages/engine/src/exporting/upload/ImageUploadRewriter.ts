@@ -3,11 +3,11 @@ import path from "node:path"
 
 import { UPLOAD_STATUSES } from "@exitpress/domain/export-job/ExportJobState.js"
 
+import type { ExportJobItem } from "@exitpress/domain/export-job/schema/ExportJobState.js"
 import type {
-  ExportJobItem,
   ExportManifest,
   PostManifestEntry,
-} from "@exitpress/domain/export-job/Types.js"
+} from "@exitpress/domain/export-job/schema/ExportManifest.js"
 
 import type { FileOps } from "./AtomicFileWrite.js"
 import type { ImageUploadResult } from "./ImageUploadPhase.js"

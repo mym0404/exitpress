@@ -1,13 +1,13 @@
 import path from "node:path"
 
 import { DEFAULT_UPLOAD_PROVIDER_KEY } from "@exitpress/domain/upload/UploadProviderKeys.js"
-import { ensureDir, getProjectTempPath } from "@exitpress/engine/infra/node/FilePathUtils.js"
+import { ensureDir, getProjectTempPath } from "@exitpress/engine/infra/node/util/FilePaths.js"
 
 import type {
   UploadProviderCatalogResponse,
   UploadProviderDefinition,
   UploadProviderFieldDefinition,
-} from "@exitpress/domain/upload/UploadProviderTypes.js"
+} from "@exitpress/domain/upload/schema/UploadProvider.js"
 
 import type { RuntimePluginField } from "./ImageUploadFieldDefinition.js"
 

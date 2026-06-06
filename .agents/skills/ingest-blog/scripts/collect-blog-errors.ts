@@ -3,18 +3,29 @@
 import { readdir, readFile, writeFile } from "node:fs/promises"
 import path from "node:path"
 
-import type { EvidenceCase } from "../../../../scripts/post-evidence/cases.js"
-import type { ReusableIngestOutput } from "../../../../scripts/post-evidence/ingest-output.js"
-import type { ScanResult } from "../../../../src/domain/blog/Types.js"
+import type { ScanResult } from "../../../../packages/domain/src/blog/schema/BlogScan.js"
+import type { ExportJobItem } from "../../../../packages/domain/src/export-job/schema/ExportJobState.js"
 import type {
-  ExportJobItem,
   ExportManifest,
   PostManifestEntry,
-} from "../../../../src/domain/export-job/Types.js"
-import type { SinglePostInspectDiagnostics } from "../../../../src/exporting/post/SinglePostInspect.js"
+} from "../../../../packages/domain/src/export-job/schema/ExportManifest.js"
+import type { SinglePostInspectDiagnostics } from "../../../../packages/engine/src/exporting/post/SinglePostInspect.js"
+import type { EvidenceCase } from "../../../../scripts/post-evidence/cases.js"
+import type { ReusableIngestOutput } from "../../../../scripts/post-evidence/ingest-output.js"
 
 import type { SupportUnitFailureGroup } from "./lib/ingest-focus.js"
 
+import { extractBlogId } from "../../../../packages/domain/src/blog/NaverUrl.js"
+import { defaultExportOptions } from "../../../../packages/domain/src/export-options/ExportOptions.js"
+import { inspectSinglePost } from "../../../../packages/engine/src/exporting/post/SinglePostInspect.js"
+import { NaverBlogExporter } from "../../../../packages/engine/src/exporting/workflow/NaverBlogExporter.js"
+import {
+  ensureDir,
+  resolveRepoPath,
+} from "../../../../packages/engine/src/infra/node/util/FilePaths.js"
+import { runWithLogSink } from "../../../../packages/engine/src/infra/runtime/Logger.js"
+import { NaverBlogFetcher } from "../../../../packages/engine/src/integrations/naver-blog/NaverBlogFetcher.js"
+import { toErrorMessage } from "../../../../packages/engine/src/shared/error/util/toErrorMessage.js"
 import {
   capturePostEvidence,
   createEvidenceMarkdownSections,
@@ -24,14 +35,6 @@ import {
   findLatestReusableIngestOutput,
   loadReusableIngestOutput,
 } from "../../../../scripts/post-evidence/ingest-output.js"
-import { extractBlogId } from "../../../../src/domain/blog/NaverUrl.js"
-import { defaultExportOptions } from "../../../../src/domain/export-options/ExportOptions.js"
-import { inspectSinglePost } from "../../../../src/exporting/post/SinglePostInspect.js"
-import { NaverBlogExporter } from "../../../../src/exporting/workflow/NaverBlogExporter.js"
-import { ensureDir, resolveRepoPath } from "../../../../src/infra/node/FilePathUtils.js"
-import { runWithLogSink } from "../../../../src/infra/runtime/Logger.js"
-import { NaverBlogFetcher } from "../../../../src/integrations/naver-blog/NaverBlogFetcher.js"
-import { toErrorMessage } from "../../../../src/shared/error/ErrorUtils.js"
 
 import { mergeSupportUnitFailureGroups, selectFocusedSupportUnit } from "./lib/ingest-focus.js"
 import { createSupportUnit } from "./lib/ingest-support-units.js"
@@ -95,6 +98,9 @@ type FailureGroup = {
   }
   logNos: string[]
 }
+
+const allIngestReuseModes = ["full", "rerun-failures", "completed-no-failures"] as const
+type IngestReuseMode = (typeof allIngestReuseModes)[number]
 
 const usage = () => `Usage:
   bun .agents/skills/ingest-blog/scripts/collect-blog-errors.ts --blogId <blogId> [--outputDir tmp/harness/ingest-blog/<runId>]
@@ -672,7 +678,7 @@ const renderIngestReportMarkdown = ({
   outputDir: string
   reuse: {
     used: boolean
-    mode: "full" | "rerun-failures" | "completed-no-failures"
+    mode: IngestReuseMode
     sourceOutputDir: string | null
     previousFailureCount: number
   }
@@ -953,7 +959,7 @@ const run = async () => {
     throw new Error(`재사용 가능한 완료 output을 찾지 못했습니다: ${blogId}`)
   }
 
-  const reuseMode: "full" | "rerun-failures" | "completed-no-failures" =
+  const reuseMode: IngestReuseMode =
     reusableOutput && reusableOutput.failedPosts.length === 0
       ? "completed-no-failures"
       : reusableOutput

@@ -11,12 +11,19 @@ import { NaverBlog } from "@exitpress/engine/parsing/naver-blog/NaverBlog.js"
 import { createHttpServer } from "@exitpress/server/http/HttpServer.js"
 import { chromium } from "playwright"
 
-import type { ExportJobPollingConfig } from "@exitpress/domain/export-job/Types.js"
-import type { ExportOptions } from "@exitpress/domain/export-options/Types.js"
+import type { ExportJobPollingConfig } from "@exitpress/domain/export-job/schema/ExportJobPollingConfig.js"
+import type { JobStatus } from "@exitpress/domain/export-job/schema/ExportJobState.js"
+import type {
+  UploadRewriteStatus,
+  UploadStatus,
+} from "@exitpress/domain/export-job/schema/UploadState.js"
+import type { ExportOptions } from "@exitpress/domain/export-options/schema/ExportOptions.js"
+import type { ThemePreference } from "@exitpress/domain/preferences/schema/ThemePreference.js"
 import type {
   UploadProviderCatalogResponse,
   UploadProviderValue,
-} from "@exitpress/domain/upload/UploadProviderTypes.js"
+} from "@exitpress/domain/upload/schema/UploadProvider.js"
+import type { UploadRowStatus } from "@exitpress/web/features/job-results/JobResultsHelpers.js"
 
 import { createTestPath, createTestTempDir } from "../../support/test-paths.js"
 
@@ -104,7 +111,7 @@ const waitForExportSettingsSave = ({
 }: {
   page: import("playwright").Page
   baseUrl: string
-  expectedThemePreference: "dark" | "light"
+  expectedThemePreference: ThemePreference
 }) =>
   page.waitForRequest(
     (request) => {
@@ -283,7 +290,7 @@ const buildUploadItem = ({
   uploadedCount: number
   assetPaths: string[]
   updatedAt: string
-  rewriteStatus: "pending" | "completed" | "failed"
+  rewriteStatus: UploadRewriteStatus
   rewrittenAt: string | null
 }) => {
   const logNo = `223034929${String(700 + index).padStart(3, "0")}`
@@ -360,13 +367,8 @@ const buildUploadJob = ({
   logs,
   perItemRewriteStatuses,
 }: {
-  jobStatus: "running" | "upload-ready" | "uploading" | "upload-failed" | "upload-completed"
-  uploadStatus:
-    | "not-requested"
-    | "upload-ready"
-    | "uploading"
-    | "upload-failed"
-    | "upload-completed"
+  jobStatus: JobStatus
+  uploadStatus: UploadStatus
   perItemUploadedCounts: number[]
   progress: {
     total: number
@@ -379,7 +381,7 @@ const buildUploadJob = ({
     timestamp: string
     message: string
   }>
-  perItemRewriteStatuses?: Array<"pending" | "completed" | "failed">
+  perItemRewriteStatuses?: UploadRewriteStatus[]
 }) => {
   const items = perItemUploadedCounts.map((uploadedCount, index) => {
     const rewriteStatus =
@@ -730,7 +732,7 @@ const assertUploadRowStatus = async ({
 }: {
   page: import("playwright").Page
   rowId: string
-  expectedStatus: "pending" | "partial" | "complete" | "failed"
+  expectedStatus: UploadRowStatus
 }) => {
   const status = await page
     .locator(`[data-upload-row-id="${rowId}"]`)
@@ -831,7 +833,7 @@ const run = async () => {
     scanRequestCount: number
     uploadAttempt: 0 | 1 | 2
     jobFetchCount: number
-    themePreference: "dark" | "light"
+    themePreference: ThemePreference
     exportOptions: ExportOptions | null
     uploadPayload: null | {
       providerKey: string
@@ -873,7 +875,7 @@ const run = async () => {
 
     if (pathname === "/api/export-settings" && request.method() === "POST") {
       const body = request.postDataJSON() as {
-        themePreference?: "dark" | "light"
+        themePreference?: ThemePreference
       }
 
       if (body.themePreference === "dark" || body.themePreference === "light") {

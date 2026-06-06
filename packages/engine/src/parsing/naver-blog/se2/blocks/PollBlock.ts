@@ -1,12 +1,12 @@
 import { normalizeAssetUrl } from "@exitpress/domain/blog/NaverUrl.js"
-import { compactText } from "@exitpress/engine/shared/text/TextUtils.js"
+import { compactText } from "@exitpress/engine/shared/text/util/TextCompaction.js"
 
 import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/ParserBlock.js"
 
 import { createParagraphBlock } from "../../core/ParsedBlockOutput.js"
 import { LeafParserBlock } from "../../core/ParserBlock.js"
 
-import { hasOnlyTargetContent } from "./util/WrapperContent.js"
+import { hasOnlyTargetContent } from "./util/hasOnlyTargetContent.js"
 
 const getPollLink = ({ $node }: Pick<ParserBlockContext, "$node">) => {
   if (!$node.is("div, p")) {

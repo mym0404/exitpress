@@ -1,4 +1,4 @@
-import type { FrontmatterFieldMeta, FrontmatterFieldName } from "./Types.js"
+import type { FrontmatterFieldMeta, FrontmatterFieldName } from "./schema/ExportOptions.js"
 
 export const frontmatterFieldOrder: FrontmatterFieldName[] = [
   "title",

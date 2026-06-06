@@ -5,8 +5,8 @@ import { act, renderHook, waitFor } from "@testing-library/react"
 import { createTestPath } from "@tests/support/test-paths.js"
 import { afterEach, describe, expect, it, vi } from "vitest"
 
-import type { ScanResult } from "@exitpress/domain/blog/Types.js"
-import type { ExportJobState } from "@exitpress/domain/export-job/Types.js"
+import type { ScanResult } from "@exitpress/domain/blog/schema/BlogScan.js"
+import type { ExportJobState } from "@exitpress/domain/export-job/schema/ExportJobState.js"
 
 import { fetchJson, postJson, postUploadJson } from "../../lib/Api.js"
 

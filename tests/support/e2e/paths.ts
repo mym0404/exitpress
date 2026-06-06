@@ -7,8 +7,10 @@ const here = path.dirname(fileURLToPath(import.meta.url))
 
 const repoRoot = path.resolve(here, "../../..")
 
+// Resolves paths from the repository root for e2e harness files.
 export const repoPath = (...segments: string[]) => path.join(repoRoot, ...segments)
 
+// Checks file existence without throwing for missing paths.
 export const pathExists = async (targetPath: string) => {
   try {
     await access(targetPath, constants.F_OK)
@@ -18,8 +20,10 @@ export const pathExists = async (targetPath: string) => {
   }
 }
 
+// Reads UTF-8 fixture or harness files.
 export const readUtf8 = (targetPath: string) => readFile(targetPath, "utf8")
 
+// Writes UTF-8 harness files, creating parent directories first.
 export const writeUtf8 = async ({
   targetPath,
   content,
@@ -33,6 +37,7 @@ export const writeUtf8 = async ({
   await writeFile(targetPath, content)
 }
 
+// Creates a repo-local temporary directory for e2e runs.
 export const ensureHarnessDir = async (...segments: string[]) => {
   const targetPath = repoPath("tmp", "harness", ...segments)
   await mkdir(targetPath, {

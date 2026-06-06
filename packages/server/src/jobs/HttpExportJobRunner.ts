@@ -4,10 +4,10 @@ import {
   throwIfAborted,
 } from "@exitpress/engine/infra/runtime/AbortOperation.js"
 import { runWithLogSink } from "@exitpress/engine/infra/runtime/Logger.js"
-import { toErrorMessage } from "@exitpress/engine/shared/error/ErrorUtils.js"
+import { toErrorMessage } from "@exitpress/engine/shared/error/util/toErrorMessage.js"
 
-import type { ScanResult } from "@exitpress/domain/blog/Types.js"
-import type { ExportRequest } from "@exitpress/domain/export-job/Types.js"
+import type { ScanResult } from "@exitpress/domain/blog/schema/BlogScan.js"
+import type { ExportRequest } from "@exitpress/domain/export-job/schema/ExportRequest.js"
 import type { NaverBlogFetcherCache } from "@exitpress/engine/integrations/naver-blog/NaverBlogFetcher.js"
 
 import type { JobStore } from "./JobStore.js"
@@ -15,8 +15,10 @@ import type { JobStore } from "./JobStore.js"
 import { createCoalescedTaskRunner } from "./CoalescedTaskRunner.js"
 import { buildResumableExportManifest, writeExportManifest } from "./ExportJobManifest.js"
 
+// Runtime controller for export jobs and manifest persistence.
 export type HttpExportJobRunner = ReturnType<typeof createHttpExportJobRunner>
 
+// Starts and tracks export jobs while keeping resumable manifests up to date.
 export const createHttpExportJobRunner = ({
   jobStore,
   jobScanResults,

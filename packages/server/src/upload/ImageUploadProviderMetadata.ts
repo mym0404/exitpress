@@ -3,7 +3,7 @@ import {
   UPLOAD_PROVIDER_KEYS,
 } from "@exitpress/domain/upload/UploadProviderKeys.js"
 
-import type { UploadProviderFieldDefinition } from "@exitpress/domain/upload/UploadProviderTypes.js"
+import type { UploadProviderFieldDefinition } from "@exitpress/domain/upload/schema/UploadProvider.js"
 
 export const providerLabelMap: Record<string, string> = {
   [UPLOAD_PROVIDER_KEYS.ADVANCED]: "Advanced Custom",

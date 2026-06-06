@@ -1,11 +1,11 @@
 import { extractBlogId } from "@exitpress/domain/blog/NaverUrl.js"
 import { cloneExportOptions } from "@exitpress/domain/export-options/ExportOptions.js"
 import { isPostWithinScope } from "@exitpress/domain/export-scope/ExportScope.js"
-import { recreateDir, resolveRepoPath } from "@exitpress/engine/infra/node/FilePathUtils.js"
+import { recreateDir, resolveRepoPath } from "@exitpress/engine/infra/node/util/FilePaths.js"
 import { NaverBlogFetcher } from "@exitpress/engine/integrations/naver-blog/NaverBlogFetcher.js"
 
-import type { PostSummary, ScanResult } from "@exitpress/domain/blog/Types.js"
-import type { ExportOptions } from "@exitpress/domain/export-options/Types.js"
+import type { PostSummary, ScanResult } from "@exitpress/domain/blog/schema/BlogScan.js"
+import type { ExportOptions } from "@exitpress/domain/export-options/schema/ExportOptions.js"
 
 import { AssetStore } from "../assets/AssetStore.js"
 import { buildPostLinkTargets } from "../paths/PostLinkRewriter.js"

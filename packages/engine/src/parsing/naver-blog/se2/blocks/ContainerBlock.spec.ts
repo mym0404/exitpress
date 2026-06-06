@@ -3,7 +3,7 @@ import { parseSe2Blocks } from "@tests/support/parser-test-utils.js"
 import { load } from "cheerio"
 import { describe, expect, it } from "vitest"
 
-import type { ParsedPost } from "@exitpress/domain/parser/Types.js"
+import type { ParsedPost } from "@exitpress/domain/parser/schema/ParsedPost.js"
 
 import { BlogEditorParser } from "../../core/BlogEditorParser.js"
 import { createParagraphBlock } from "../../core/ParsedBlockOutput.js"

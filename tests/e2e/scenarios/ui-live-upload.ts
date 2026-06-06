@@ -5,15 +5,16 @@ import path from "node:path"
 import { createHttpServer } from "@exitpress/server/http/HttpServer.js"
 import { chromium } from "playwright"
 
-import type { ScanResult } from "@exitpress/domain/blog/Types.js"
-import type { ExportJobState, PostManifestEntry } from "@exitpress/domain/export-job/Types.js"
+import type { ScanResult } from "@exitpress/domain/blog/schema/BlogScan.js"
+import type { ExportJobState } from "@exitpress/domain/export-job/schema/ExportJobState.js"
+import type { PostManifestEntry } from "@exitpress/domain/export-job/schema/ExportManifest.js"
 
 import { createTestTempDir } from "../../support/test-paths.js"
 
 const blogId = "mym0404"
 const targetLogNo = "222990202785"
-const uploadRepo = "mym0404/image-archive"
-const uploadBranch = "master"
+const uploadRepo = "mym0404/ia2"
+const uploadBranch = "main"
 const uploadPath = `exitpress-live/${Date.now()}`
 const responseTimeoutMs = 240_000
 const githubApiBaseUrl = "https://api.github.com"
@@ -901,7 +902,7 @@ const run = async () => {
         throw new Error(`uploaded asset is not an http(s) URL: ${assetPath}`)
       }
 
-      if (!assetPath.includes("image-archive")) {
+      if (!assetPath.includes("ia2")) {
         throw new Error(`uploaded asset URL does not point at ${uploadRepo}: ${assetPath}`)
       }
 

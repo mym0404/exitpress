@@ -1,6 +1,6 @@
 import { DEFAULT_OUTPUT_DIR } from "@exitpress/domain/export-options/ExportDefaults.js"
 
-import type { ScanResult } from "@exitpress/domain/blog/Types.js"
+import type { ScanResult } from "@exitpress/domain/blog/schema/BlogScan.js"
 
 export const defaultOutputDir = DEFAULT_OUTPUT_DIR
 export const defaultScanStatus = "블로그를 아직 스캔하지 않았습니다."

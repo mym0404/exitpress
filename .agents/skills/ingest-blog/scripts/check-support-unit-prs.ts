@@ -7,7 +7,7 @@ import { promisify } from "node:util"
 
 import type { SupportUnitClaimPullRequest } from "./lib/ingest-pr-check.js"
 
-import { resolveRepoPath } from "../../../../src/infra/node/FilePathUtils.js"
+import { resolveRepoPath } from "../../../../packages/engine/src/infra/node/util/FilePaths.js"
 
 import { createSupportUnitPrCheck, extractDiscoveredSupportUnits } from "./lib/ingest-pr-check.js"
 

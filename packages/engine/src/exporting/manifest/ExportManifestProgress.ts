@@ -1,11 +1,9 @@
 import { UPLOAD_STATUSES } from "@exitpress/domain/export-job/ExportJobState.js"
 
-import type { ScanResult } from "@exitpress/domain/blog/Types.js"
-import type {
-  ExportManifest,
-  ExportRequest,
-  UploadCandidate,
-} from "@exitpress/domain/export-job/Types.js"
+import type { ScanResult } from "@exitpress/domain/blog/schema/BlogScan.js"
+import type { ExportManifest } from "@exitpress/domain/export-job/schema/ExportManifest.js"
+import type { ExportRequest } from "@exitpress/domain/export-job/schema/ExportRequest.js"
+import type { UploadCandidate } from "@exitpress/domain/export-job/schema/UploadState.js"
 
 export type ExportProgressState = {
   completed: number

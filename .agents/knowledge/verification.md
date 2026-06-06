@@ -3,75 +3,43 @@
 ## Source Of Truth
 - Package scripts live in `package.json`.
 - CI lives in `.github/workflows/required-checks.yml`.
-- UI smoke and live harnesses live in `tests/e2e/*`.
-- Sample fixture regression lives in `tests/support/sample-fixtures.spec.ts` and `tests/support/sample-fixtures.ts`.
-- Test and harness temporary paths are rooted through `tests/support/test-paths.ts` under repo-local `tmp/`.
-- Tool versions come from `mise.toml`; local agent commands should run package scripts through `mise exec -- pnpm ...` so they do not use a Corepack-provided `pnpm` wrapper from PATH.
+- Tool versions live in `mise.toml`.
+- Run local package scripts through `mise exec -- pnpm ...`.
 
 ## Primary Commands
-- `mise exec -- pnpm check:fmt`: `oxfmt --check ...`. Runs the repository formatting and import sorting baseline.
-- `mise exec -- pnpm check:lint`: `oxlint ...`. Runs the repository lint baseline.
-- `mise exec -- pnpm check:local`: package baseline after ordinary repository file changes. It runs format, lint, typecheck, Storybook catalog check, and offline tests.
-- `mise exec -- pnpm check:unused`: `bun scripts/maintenance/check-unused.ts`. Run when removing, exporting, moving, or intentionally keeping source/test/script code that may be unused. This command is not part of `check:local`.
-- `mise exec -- pnpm check:full`: `check:local` plus UI smoke. Run when user flow, UI state, exporter output, or shared runtime behavior may be affected.
-- `mise exec -- pnpm smoke:ui`: builds UI, then runs mock-based scan, export, upload, theme persistence, and resume UI.
-- `mise exec -- pnpm test:network`: builds UI once, then runs live resume export, SE2 table resume export, and live upload e2e. It needs external network and upload credentials and creates remote state.
-- `mise exec -- pnpm test:coverage`: runs the full Vitest suite once with V8 coverage and enforces global coverage thresholds.
+- `mise exec -- pnpm check:fmt`: format and import order check.
+- `mise exec -- pnpm check:lint`: Oxlint baseline.
+- `mise exec -- pnpm typecheck`: TypeScript contract check.
+- `mise exec -- pnpm storybook:check`: generated Storybook catalog freshness check.
+- `mise exec -- pnpm test:offline`: full Vitest suite.
+- `mise exec -- pnpm check:local`: format, lint, typecheck, Storybook check, and offline tests.
+- `mise exec -- pnpm check:unused`: unused source/test/script diagnostics.
+- `mise exec -- pnpm smoke:ui`: mock browser scan/export/upload/resume workflow.
+- `mise exec -- pnpm check:full`: local baseline plus mock browser smoke UI.
+- `mise exec -- pnpm test:network`: live resume export, live SE2 table export, and live upload e2e.
 
 ## Focused Commands
-- `mise exec -- pnpm format`: applies Oxfmt formatter output and import sorting during multi-step edits.
-- `mise exec -- pnpm typecheck`: TypeScript contract check only.
-- `mise exec -- pnpm storybook:generate`: regenerates `packages/web/src/features/storybook/generated/StorybookCatalog.generated.ts` from Storybook input HTML through the engine parser and renderer.
-- `mise exec -- pnpm storybook:check`: recomputes the Storybook generated catalog and fails if the committed file is stale.
-- `mise exec -- pnpm test:offline`: Vitest suite. Sample fixture tests fetch live Naver post HTML before comparing expected output, using the sample cache only outside CI.
-- `mise exec -- pnpm test:parser-blocks`: focused parser block spec run for `packages/engine/src/parsing/naver-blog/se*/blocks` behavior.
-- `mise exec -- pnpm test:network:resume-export`: live Naver resume export without upload.
-- `mise exec -- pnpm test:network:resume-export:se2-table`: live SE2 table resume export range.
-- `mise exec -- pnpm test:network:upload`: live browser UI export and GitHub upload through PicList runtime.
-- `mise exec -- pnpm dev`: user-facing HMR server on the default development port. Harnesses should not reuse it.
-- `mise exec -- pnpm start`: builds UI and serves `dist/client` through `packages/server/src/Server.ts`.
-- `bun scripts/maintenance/update-open-pr-branches.ts --help`: GitHub PR branch update CLI surface check. `mise exec -- pnpm gh:update-branches` changes remote PR branches through `gh pr update-branch`.
-- `bun scripts/post-evidence/capture-post-evidence.ts --help`: post evidence CLI surface check. Live smoke cases may open Playwright and Naver mobile pages. Evidence section behavior is documented in `.agents/knowledge/post-evidence.md`.
+- `mise exec -- pnpm format`: apply Oxfmt formatting/import sorting.
+- `mise exec -- pnpm test:parser-blocks`: parser block specs.
+- `mise exec -- pnpm test:coverage`: Vitest with V8 coverage thresholds.
+- `mise exec -- pnpm storybook:generate`: regenerate committed Storybook catalog.
 
-## Parser Block Unit Test
-- Parser block specs live beside parser block implementations under `packages/engine/src/parsing/naver-blog/se2/blocks/*`, `packages/engine/src/parsing/naver-blog/se3/blocks/*`, and `packages/engine/src/parsing/naver-blog/se4/blocks/*`.
-- Each parser block spec file covers one parser block responsibility through the real `NaverBlogSE*Editor.parse()` dispatch path.
-- Each parser block spec that owns configurable block output options includes an `applies every output option` test that verifies every exposed option through parser dispatch.
-- Shared parser fixture helpers live only in `tests/support/parser-test-utils.ts`.
-- `packages/engine/src/parsing/naver-blog/core/PostParser.spec.ts` covers parser routing, tag extraction, same-blog link rewrite, and editor-specific output selection behavior.
-- Parser block implementation changes require `mise exec -- pnpm test:parser-blocks` and `mise exec -- pnpm test:offline`.
-- Parser routing changes require `mise exec -- pnpm test:offline`.
-- Storybook catalog, definition, or capture asset changes require `mise exec -- pnpm storybook:check`, the Storybook catalog test, and Storybook route unit test. The catalog test verifies every story has input HTML, a matching parser inspection path, generated Markdown, and a bundled capture asset.
+## What Each Layer Proves
+- Typecheck proves moved imports, shared contracts, and cross-package type compatibility.
+- Offline tests prove pure logic, parser, renderer, server, hook, and generated catalog behavior.
+- Parser block tests prove editor block conversion through parser dispatch.
+- Storybook check proves generated catalog matches current parser/renderer output.
+- Smoke UI proves browser workflow behavior with mocked APIs.
+- Network tests prove live Naver fetch and external upload behavior when environment and secrets are available.
 
-## Unused Code Verification
-- `mise exec -- pnpm check:unused` succeeds only when `scripts/maintenance/check-unused.ts` reports no unresolved `knip`, `tsc noUnused`, or `tsserver` unused diagnostics.
-- The command combines `knip`, TypeScript no-unused diagnostics, and tsserver diagnostics; exact analyzer flags and allowlists live in `scripts/maintenance/check-unused.ts`.
-- Static false positives are allowed only inside that script when the file or export is a real runtime entrypoint that static analysis cannot see.
-- The command covers source/test/script dead code. It does not check unused package dependencies because the `knip` invocation intentionally excludes dependency categories.
-- A syntax or type error in the TypeScript project can make `check:unused` fail before dead-code cleanup is meaningful; restore the type baseline first, then interpret unused diagnostics.
-
-## Coverage And Blind Spots
-- Sample fixtures prove current code matches live Naver post HTML for the recorded fixture URLs. They do not use committed source HTML snapshots.
-- `mise exec -- pnpm check:unused` proves no known unused source/test/script items remain under its configured analyzers and allowlists, but it does not prove runtime reachability for dynamic external integrations.
-- `mise exec -- pnpm smoke:ui` uses mock flows and does not prove live Naver fetch or external upload behavior.
-- `mise exec -- pnpm test:network:resume-export` proves live fetch and resume export, but not external upload.
-- `mise exec -- pnpm test:network:upload` is the only bundled command that proves external upload state. It creates remote state.
-- CI does not run network e2e, so live resume and external upload are proven only by explicit `mise exec -- pnpm test:network:*` runs.
-
-## CI
-- `.github/workflows/required-checks.yml` runs on non-draft pull requests.
-- CI uses `mise.toml` versions: Node.js 24.16.0, pnpm 11.5.1, and Bun 1.3.14.
-- CI installs tools through `jdx/mise-action`, then runs pnpm scripts from the mise-managed PATH.
-- CI restores the Playwright browser cache keyed by the installed Playwright version, then runs `pnpm exec playwright install --with-deps --only-shell chromium`.
-- CI runs `pnpm check:fmt`, `pnpm check:lint`, `pnpm typecheck`, `pnpm storybook:check`, `pnpm smoke:ui`, `pnpm test:coverage`, then uploads `coverage/lcov.info` to Codecov. CI does not run `pnpm test:offline` separately because `pnpm test:coverage` already runs the full Vitest suite.
+## Blind Spots
+- Smoke UI does not prove live Naver or remote upload behavior.
+- Network upload creates remote state and depends on credentials.
+- CI does not run network e2e.
+- Coverage does not replace behavior-specific parser/export/server/smoke checks.
 
 ## Task Loops
-- Run `mise exec -- pnpm format` during multi-step edits before the validation command when formatting or imports may have drifted.
-- Knowledge-only changes still need path and command spot checks. Run `mise exec -- pnpm check:local` when practical.
-- Dead-code cleanup needs `mise exec -- pnpm check:unused`; use `mise exec -- pnpm check:local` separately for the normal type and test baseline.
-- Parser block changes need `mise exec -- pnpm test:parser-blocks` and `mise exec -- pnpm test:offline`.
-- Editor dispatch or sample fixture changes need `mise exec -- pnpm test:offline` at minimum.
-- Evidence capture or ingest report changes need the relevant CLI `--help`, focused unit tests for evidence/reuse helpers, and at least one full-post or inspect-path smoke case when network/browser access is part of the changed behavior. Evidence section errors are report errors, so verify the generated `errorCount` or `evidenceErrorCount` before treating the report as complete.
-- Exporter, renderer, manifest, upload, resume, or UI state changes need `mise exec -- pnpm smoke:ui`.
-- Live resume or upload changes need the matching `mise exec -- pnpm test:network:*` command.
-- If a command fails, compare the failure to the current diff before changing code. Report unrelated existing failures without calling them pass.
+- Moving or deleting files requires typecheck and `check:unused`.
+- Parser changes require parser block or offline tests depending on scope.
+- Export, manifest, upload, resume, or UI state changes require smoke UI.
+- Live fetch/upload changes require the matching network command when the environment supports it.

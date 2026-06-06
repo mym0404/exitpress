@@ -5,10 +5,11 @@ import {
 } from "@exitpress/domain/export-job/ExportJobState.js"
 import { useCallback, useEffect, useRef, useState } from "react"
 
-import type { ScanResult } from "@exitpress/domain/blog/Types.js"
-import type { ExportJobPollingConfig, ExportJobState } from "@exitpress/domain/export-job/Types.js"
-import type { ExportOptions } from "@exitpress/domain/export-options/Types.js"
-import type { UploadProviderFields } from "@exitpress/domain/upload/UploadProviderTypes.js"
+import type { ScanResult } from "@exitpress/domain/blog/schema/BlogScan.js"
+import type { ExportJobPollingConfig } from "@exitpress/domain/export-job/schema/ExportJobPollingConfig.js"
+import type { ExportJobState } from "@exitpress/domain/export-job/schema/ExportJobState.js"
+import type { ExportOptions } from "@exitpress/domain/export-options/schema/ExportOptions.js"
+import type { UploadProviderFields } from "@exitpress/domain/upload/schema/UploadProvider.js"
 
 import { fetchJson, postJson, postUploadJson } from "../../lib/Api.js"
 

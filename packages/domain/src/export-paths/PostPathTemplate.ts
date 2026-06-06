@@ -1,5 +1,5 @@
-import type { PostSummary } from "@exitpress/domain/blog/Types.js"
-import type { ExportOptions } from "@exitpress/domain/export-options/Types.js"
+import type { PostSummary } from "../blog/schema/BlogScan.js"
+import type { ExportOptions } from "../export-options/schema/ExportOptions.js"
 
 import {
   formatCategorySegment,

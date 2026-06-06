@@ -1,4 +1,4 @@
-import type { ExportOptions } from "./Types.js"
+import type { ExportOptions } from "./schema/ExportOptions.js"
 
 export const defaultExportOptions = (): ExportOptions => ({
   scope: {

@@ -1,13 +1,14 @@
 import { normalizeAssetUrl } from "@exitpress/domain/blog/NaverUrl.js"
-import { compactText } from "@exitpress/engine/shared/text/TextUtils.js"
+import { compactText } from "@exitpress/engine/shared/text/util/TextCompaction.js"
 
-import type { ImageData } from "@exitpress/domain/parser/Types.js"
+import type { ImageData } from "@exitpress/domain/parser/schema/Media.js"
 import type { CheerioAPI } from "cheerio"
 
 import { parseJsonAttribute } from "../../../core/JsonAttribute.js"
 
 export const se4ImageLinkSelector = "a.se-module-image-link, a.__se_image_link"
 
+// Parses SE4 image link wrappers into normalized image metadata.
 export const parseImageLink = ($link: ReturnType<CheerioAPI>) => {
   const linkData = parseJsonAttribute($link.attr("data-linkdata"))
   const imageNode = $link.find("img").first()

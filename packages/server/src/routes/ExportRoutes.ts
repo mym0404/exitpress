@@ -1,12 +1,12 @@
 import { extractBlogId } from "@exitpress/domain/blog/NaverUrl.js"
 import { JOB_STATUSES } from "@exitpress/domain/export-job/ExportJobState.js"
-import { recreateDir, resolveRepoPath } from "@exitpress/engine/infra/node/FilePathUtils.js"
+import { recreateDir, resolveRepoPath } from "@exitpress/engine/infra/node/util/FilePaths.js"
 import { NaverBlogFetcher } from "@exitpress/engine/integrations/naver-blog/NaverBlogFetcher.js"
-import { toErrorMessage } from "@exitpress/engine/shared/error/ErrorUtils.js"
+import { toErrorMessage } from "@exitpress/engine/shared/error/util/toErrorMessage.js"
 
-import type { ScanResult } from "@exitpress/domain/blog/Types.js"
-import type { ExportRequest } from "@exitpress/domain/export-job/Types.js"
-import type { PartialExportOptions } from "@exitpress/domain/export-options/ExportOptions.js"
+import type { ScanResult } from "@exitpress/domain/blog/schema/BlogScan.js"
+import type { ExportRequest } from "@exitpress/domain/export-job/schema/ExportRequest.js"
+import type { PartialExportOptions } from "@exitpress/domain/export-options/schema/ExportOptions.js"
 
 import type { ApiRouteContext, ApiRouteRequest } from "./ApiRouteContext.js"
 
