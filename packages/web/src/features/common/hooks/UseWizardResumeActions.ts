@@ -58,7 +58,7 @@ export const useWizardResumeActions = ({
       })
 
       if (!restored.resumedJob || !restored.resumeSummary) {
-        throw new Error("불러올 수 있는 작업 상태를 찾지 못했습니다.")
+        throw new Error("불러올 작업 상태를 찾지 못했습니다.")
       }
 
       applyResumedState({
@@ -68,7 +68,7 @@ export const useWizardResumeActions = ({
         resumedScanResult: restored.resumedScanResult,
       })
       toast.success("이전 작업을 다시 불러왔습니다.", {
-        description: `${restored.resumeSummary.outputDir} 작업 상태를 복구했습니다.`,
+        description: `${restored.resumeSummary.outputDir} 작업 상태를 되살렸습니다.`,
       })
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error)
@@ -84,7 +84,7 @@ export const useWizardResumeActions = ({
     try {
       await resumeJob()
       toast("남은 내보내기를 다시 시작했습니다.", {
-        description: "이전 진행 상태를 이어서 처리합니다.",
+        description: "이전 상태부터 이어서 내보냅니다.",
       })
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error)
@@ -122,7 +122,7 @@ export const useWizardResumeActions = ({
       }
 
       toast.success("이전 작업을 초기화했습니다.", {
-        description: `${resumeDialog.resumeSummary.outputDir} 작업내역을 삭제했습니다.`,
+        description: `${resumeDialog.resumeSummary.outputDir} 작업 내역을 삭제했습니다.`,
       })
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error)

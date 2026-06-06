@@ -60,7 +60,7 @@ export const FrontmatterOptionsStep = ({
           </span>
           <p className="frontmatter-description text-sm leading-6">
             {frontmatterValidationErrors.length > 0
-              ? "중복되거나 비어 있는 alias를 먼저 정리해야 내보내기를 진행할 수 있습니다."
+              ? "중복되거나 비어 있는 alias를 먼저 정리한 뒤 내보내세요."
               : "현재 frontmatter alias 구성이 유효합니다."}
           </p>
         </div>

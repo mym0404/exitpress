@@ -180,7 +180,7 @@ export const UploadPanel = ({
                   <div className="subtle-panel grid gap-2 rounded-2xl px-4 py-3 sm:col-span-2">
                     <span className="text-sm font-semibold text-foreground">Authentication</span>
                     <span className="text-sm leading-6 text-muted-foreground">
-                      AList는 Token 또는 계정 인증 중 하나만 사용합니다.
+                      AList 인증 방식은 Token 또는 계정 중 하나입니다.
                     </span>
                     <ToggleGroup
                       type="single"
@@ -410,7 +410,7 @@ export const UploadPanel = ({
 
       {job?.upload.status === "skipped" ? (
         <p className="text-sm leading-7 text-muted-foreground">
-          업로드할 로컬 이미지가 없어 내보내기만 완료되었습니다.
+          업로드할 로컬 이미지가 없어 내보내기만 끝났습니다.
         </p>
       ) : null}
 

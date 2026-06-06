@@ -28,7 +28,7 @@ export const providerDescriptionMap: Record<string, string> = {
   [UPLOAD_PROVIDER_KEYS.ALIST]: "AList 스토리지 경로로 이미지를 업로드합니다.",
   [UPLOAD_PROVIDER_KEYS.ALIYUN]: "Aliyun OSS 버킷에 이미지를 업로드합니다.",
   [UPLOAD_PROVIDER_KEYS.AWS_S3]: "S3 호환 버킷에 이미지를 업로드합니다.",
-  [UPLOAD_PROVIDER_KEYS.GITHUB]: "리포지토리에 이미지를 커밋하고 URL로 사용합니다.",
+  [UPLOAD_PROVIDER_KEYS.GITHUB]: "리포지토리에 이미지를 커밋해 URL로 씁니다.",
   [UPLOAD_PROVIDER_KEYS.IMGUR]: "Imgur 계정 또는 익명 업로드로 이미지를 보관합니다.",
   [UPLOAD_PROVIDER_KEYS.LOCAL]: "현재 머신의 로컬 경로에 이미지를 저장합니다.",
   [UPLOAD_PROVIDER_KEYS.LSKY]: "Lsky Pro 이미지 호스팅 서버로 업로드합니다.",
@@ -48,60 +48,60 @@ type UploadFieldMetadata = Partial<
 export const commonFieldMetadata: Record<string, UploadFieldMetadata> = {
   accessKeyId: {
     label: "Access Key ID",
-    description: "서비스에서 발급한 access key ID를 입력합니다.",
+    description: "서비스에서 발급한 access key ID입니다.",
     placeholder: "AKIAxxxxxxxxxxxxx",
   },
   accessKeyID: {
     label: "Access Key ID",
-    description: "서비스에서 발급한 access key ID를 입력합니다.",
+    description: "서비스에서 발급한 access key ID입니다.",
     placeholder: "AKIAxxxxxxxxxxxxx",
   },
   accessKeySecret: {
     label: "Access Key Secret",
-    description: "서비스에서 발급한 secret key를 입력합니다.",
+    description: "서비스에서 발급한 secret key입니다.",
     placeholder: "xxxxxxxxxx",
   },
   accessToken: {
     label: "Access Token",
-    description: "서비스 API 접근용 access token을 입력합니다.",
+    description: "서비스 API 접근용 access token입니다.",
     placeholder: "token_xxx",
   },
   acl: {
     label: "ACL",
-    description: "업로드된 객체의 공개 권한 범위를 선택합니다.",
+    description: "업로드된 객체의 공개 권한 범위를 고릅니다.",
   },
   album: {
     label: "Album",
-    description: "이미지를 넣을 앨범 이름이나 ID를 입력합니다.",
+    description: "이미지를 넣을 앨범 이름이나 ID입니다.",
     placeholder: "example-album",
   },
   albumId: {
     label: "Album ID",
-    description: "업로드에 사용할 앨범 ID를 입력합니다.",
+    description: "업로드에 쓸 앨범 ID입니다.",
     placeholder: "1",
   },
   antiLeechToken: {
     label: "Anti-Leech Token",
-    description: "원본 서비스의 도메인 보호 토큰을 입력합니다.",
+    description: "원본 서비스의 도메인 보호 토큰입니다.",
     placeholder: "token_xxx",
   },
   appId: {
     label: "App ID",
-    description: "스토리지 서비스의 앱 ID를 입력합니다.",
+    description: "스토리지 서비스의 앱 ID입니다.",
     placeholder: "1234567890",
   },
   area: {
     label: "Area",
-    description: "버킷이 속한 리전 코드를 입력합니다.",
+    description: "버킷이 속한 리전 코드입니다.",
     placeholder: "ap-seoul",
   },
   authType: {
     label: "Auth Type",
-    description: "WebDAV 인증 방식을 선택합니다.",
+    description: "WebDAV 인증 방식을 고릅니다.",
   },
   body: {
     label: "Body",
-    description: "추가로 보낼 JSON body를 입력합니다.",
+    description: "추가로 보낼 JSON body입니다.",
     placeholder: '{"key":"value"}',
   },
   branch: {
@@ -121,7 +121,7 @@ export const commonFieldMetadata: Record<string, UploadFieldMetadata> = {
   },
   clientId: {
     label: "Client ID",
-    description: "서비스에서 발급한 client ID를 입력합니다.",
+    description: "서비스에서 발급한 client ID입니다.",
     placeholder: "client_id_xxx",
   },
   configName: {
@@ -131,17 +131,17 @@ export const commonFieldMetadata: Record<string, UploadFieldMetadata> = {
   },
   customPrefix: {
     label: "Custom Prefix",
-    description: "응답 URL 앞에 붙일 고정 주소가 있으면 입력합니다.",
+    description: "응답 URL 앞에 붙일 고정 주소입니다.",
     placeholder: "https://cdn.example.com/",
   },
   customUrl: {
     label: "Custom URL",
-    description: "최종 파일 URL을 직접 덮어쓸 때 사용합니다.",
+    description: "최종 파일 URL을 직접 덮어쓸 때 씁니다.",
     placeholder: "https://cdn.example.com",
   },
   dirMode: {
     label: "Dir Mode",
-    description: "업로드된 디렉터리에 적용할 권한 값을 입력합니다.",
+    description: "업로드된 디렉터리에 적용할 권한 값입니다.",
     placeholder: "0775",
   },
   disableBucketPrefixToURL: {
@@ -155,12 +155,12 @@ export const commonFieldMetadata: Record<string, UploadFieldMetadata> = {
   },
   expireTime: {
     label: "Expire Time",
-    description: "서명 URL 만료 시간을 초 단위로 입력합니다.",
+    description: "서명 URL 만료 시간입니다. 초 단위로 씁니다.",
     placeholder: "3600",
   },
   fileMode: {
     label: "File Mode",
-    description: "업로드된 파일에 적용할 권한 값을 입력합니다.",
+    description: "업로드된 파일에 적용할 권한 값입니다.",
     placeholder: "0664",
   },
   fileUser: {
@@ -175,7 +175,7 @@ export const commonFieldMetadata: Record<string, UploadFieldMetadata> = {
   },
   headers: {
     label: "Headers",
-    description: "추가로 보낼 HTTP 헤더를 JSON 형태로 입력합니다.",
+    description: "추가로 보낼 HTTP 헤더입니다. JSON 형태로 씁니다.",
     placeholder: '{"Content-Type":"multipart/form-data"}',
   },
   host: {
@@ -189,17 +189,17 @@ export const commonFieldMetadata: Record<string, UploadFieldMetadata> = {
   },
   operator: {
     label: "Operator",
-    description: "서비스 로그인용 운영자 계정을 입력합니다.",
+    description: "서비스 로그인용 운영자 계정입니다.",
     placeholder: "operator-name",
   },
   options: {
     label: "Options",
-    description: "서비스별 이미지 처리 옵션이나 쿼리를 입력합니다.",
+    description: "서비스별 이미지 처리 옵션이나 쿼리입니다.",
     placeholder: "?imageMogr2/thumbnail/800x",
   },
   passphrase: {
     label: "Passphrase",
-    description: "개인 키에 암호가 걸려 있으면 입력합니다.",
+    description: "개인 키에 암호가 걸려 있을 때 씁니다.",
     placeholder: "passphrase",
   },
   password: {
@@ -214,11 +214,11 @@ export const commonFieldMetadata: Record<string, UploadFieldMetadata> = {
   },
   pathStyleAccess: {
     label: "Path Style Access",
-    description: "S3 URL을 path style 방식으로 생성합니다.",
+    description: "S3 URL을 path style 방식으로 만듭니다.",
   },
   permission: {
     label: "Permission",
-    description: "이미지 공개 범위 또는 접근 권한을 선택합니다.",
+    description: "이미지 공개 범위 또는 접근 권한을 고릅니다.",
   },
   picbed: {
     label: "PicBed",
@@ -242,7 +242,7 @@ export const commonFieldMetadata: Record<string, UploadFieldMetadata> = {
   },
   region: {
     label: "Region",
-    description: "서비스 리전 코드를 입력합니다.",
+    description: "서비스 리전 코드입니다.",
     placeholder: "us-east-1",
   },
   rejectUnauthorized: {
@@ -261,27 +261,27 @@ export const commonFieldMetadata: Record<string, UploadFieldMetadata> = {
   },
   secretAccessKey: {
     label: "Secret Access Key",
-    description: "서비스에서 발급한 secret access key를 입력합니다.",
+    description: "서비스에서 발급한 secret access key입니다.",
     placeholder: "xxxxxxxxxx",
   },
   secretId: {
     label: "Secret ID",
-    description: "서비스에서 발급한 secret ID를 입력합니다.",
+    description: "서비스에서 발급한 secret ID입니다.",
     placeholder: "secret-id-xxx",
   },
   secretKey: {
     label: "Secret Key",
-    description: "서비스에서 발급한 secret key를 입력합니다.",
+    description: "서비스에서 발급한 secret key입니다.",
     placeholder: "secret-key-xxx",
   },
   serverKey: {
     label: "Server Key",
-    description: "업로드 서버 인증 키가 있으면 입력합니다.",
+    description: "업로드 서버 인증 키입니다.",
     placeholder: "server-key",
   },
   slim: {
     label: "Slim",
-    description: "서비스가 지원하는 압축 옵션을 함께 사용합니다.",
+    description: "서비스가 지원하는 압축 옵션을 함께 씁니다.",
   },
   sslEnabled: {
     label: "Use SSL",
@@ -289,12 +289,12 @@ export const commonFieldMetadata: Record<string, UploadFieldMetadata> = {
   },
   strategyId: {
     label: "Strategy ID",
-    description: "Lsky Pro 전략 ID를 입력합니다.",
+    description: "Lsky Pro 전략 ID입니다.",
     placeholder: "1",
   },
   token: {
     label: "Token",
-    description: "서비스 API 접근용 토큰을 입력합니다.",
+    description: "서비스 API 접근용 토큰입니다.",
     placeholder: "token_xxx",
   },
   uploadPath: {
@@ -324,7 +324,7 @@ export const commonFieldMetadata: Record<string, UploadFieldMetadata> = {
   },
   version: {
     label: "Version",
-    description: "연동에 사용할 서비스 버전을 선택합니다.",
+    description: "연동에 사용할 서비스 버전을 고릅니다.",
   },
   webPath: {
     label: "Web Path",
@@ -351,14 +351,14 @@ export const providerFieldMetadataMap: Record<string, Record<string, UploadField
       placeholder: "https://alist.example.com",
     },
     token: {
-      description: "Token 인증을 사용할 때 입력합니다.",
+      description: "Token 인증에 쓸 값입니다.",
       placeholder: "alist_token_xxx",
     },
     username: {
-      description: "계정 인증을 사용할 때 사용자 이름을 입력합니다.",
+      description: "계정 인증에 쓸 사용자 이름입니다.",
     },
     password: {
-      description: "계정 인증을 사용할 때 비밀번호를 입력합니다.",
+      description: "계정 인증에 쓸 비밀번호입니다.",
     },
   },
   [UPLOAD_PROVIDER_KEYS.AWS_S3]: {
@@ -379,7 +379,7 @@ export const providerFieldMetadataMap: Record<string, Record<string, UploadField
   },
   [UPLOAD_PROVIDER_KEYS.LSKY]: {
     version: {
-      description: "Lsky Pro 서버 버전을 선택합니다.",
+      description: "Lsky Pro 서버 버전을 고릅니다.",
     },
   },
   [UPLOAD_PROVIDER_KEYS.PICLIST]: {
@@ -398,10 +398,10 @@ export const providerFieldMetadataMap: Record<string, Record<string, UploadField
   [UPLOAD_PROVIDER_KEYS.TCYUN]: {
     version: {
       label: "COS Version",
-      description: "Tencent COS SDK 버전을 선택합니다.",
+      description: "Tencent COS SDK 버전을 고릅니다.",
     },
     slim: {
-      description: "COS 이미지 처리 압축 옵션을 함께 사용합니다.",
+      description: "COS 이미지 처리 압축 옵션을 함께 씁니다.",
     },
   },
   webdavplist: {

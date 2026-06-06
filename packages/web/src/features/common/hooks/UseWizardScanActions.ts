@@ -65,7 +65,7 @@ export const useWizardScanActions = ({
       if (!forceRefresh && !skipResumeLookup) {
         setScanPending(true)
         setNeutralScanStatus("기존 작업 상태를 확인하는 중입니다.")
-        setCategoryStatus("출력 경로의 manifest.json 상태를 확인하는 중입니다.")
+        setCategoryStatus("출력 경로의 manifest.json을 확인하는 중입니다.")
 
         try {
           const resumed = await postJson<ExportResumeLookupResponse>("/api/export-resume/lookup", {
@@ -83,8 +83,8 @@ export const useWizardScanActions = ({
 
           if (nextResumeDialog) {
             setResumeDialog(nextResumeDialog)
-            setNeutralScanStatus("이 경로에서 이어서 불러올 작업을 찾았습니다.")
-            setCategoryStatus("작업 초기화 또는 불러오기 중 하나를 선택하세요.")
+            setNeutralScanStatus("이 경로에 이어서 불러올 작업이 있습니다.")
+            setCategoryStatus("작업 초기화나 불러오기를 선택하세요.")
             return false
           }
         } catch (error) {
@@ -101,7 +101,7 @@ export const useWizardScanActions = ({
       }
 
       if (activeScanResult && !forceRefresh) {
-        setNeutralScanStatus(`${activeScanResult.blogId} 스캔 결과를 재사용합니다.`)
+        setNeutralScanStatus(`${activeScanResult.blogId} 스캔 결과를 다시 씁니다.`)
         setCategoryStatus(readyCategoryStatus)
         setCategorySearch("")
         setOptions((current) => ({
@@ -151,7 +151,7 @@ export const useWizardScanActions = ({
           },
         }))
         setSetupStep("category-selection")
-        toast.success("카테고리 스캔이 완료되었습니다.", {
+        toast.success("카테고리 스캔이 끝났습니다.", {
           description: `${nextScanResult.totalPostCount}개 글과 ${nextScanResult.categories.length}개 카테고리를 불러왔습니다.`,
         })
 
@@ -190,7 +190,7 @@ export const useWizardScanActions = ({
       setSetupStep("blog-input")
 
       if (value.trim() && scanCache[value.trim()]) {
-        setNeutralScanStatus("캐시된 카테고리를 다시 사용할 수 있습니다.")
+        setNeutralScanStatus("저장된 카테고리를 다시 쓸 수 있습니다.")
         setCategoryStatus(readyCategoryStatus)
         return
       }

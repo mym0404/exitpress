@@ -13,63 +13,63 @@ const linkTemplateVariableMeta: Record<
 > = {
   slug: {
     label: "{slug}",
-    description: "제목을 현재 slug 규칙에 맞춰 바꾼 값입니다.",
+    description: "제목을 현재 slug 규칙에 맞춘 값입니다.",
   },
   category: {
     label: "{category}",
-    description: "카테고리 이름을 현재 slug 규칙에 맞춰 바꾼 값입니다.",
+    description: "카테고리 이름을 현재 slug 규칙에 맞춘 값입니다.",
   },
   title: {
     label: "{title}",
-    description: "제목만 path-safe 값으로 넣습니다.",
+    description: "제목만 path-safe 값으로 씁니다.",
   },
   logNo: {
     label: "{logNo}",
-    description: "원본 글 번호를 그대로 넣습니다.",
+    description: "원본 글 번호를 그대로 씁니다.",
   },
   blogId: {
     label: "{blogId}",
-    description: "현재 export 중인 블로그 ID를 넣습니다.",
+    description: "현재 내보내는 블로그 ID입니다.",
   },
   date: {
     label: "{date}",
-    description: "발행일을 YYYY-MM-DD 형식으로 넣습니다.",
+    description: "발행일을 YYYY-MM-DD 형식으로 쓴 값입니다.",
   },
   year: {
     label: "{year}",
-    description: "발행 연도를 4자리로 넣습니다.",
+    description: "발행 연도를 4자리로 쓴 값입니다.",
   },
   YYYY: {
     label: "{YYYY}",
-    description: "발행 연도를 4자리로 넣습니다.",
+    description: "발행 연도를 4자리로 쓴 값입니다.",
   },
   YY: {
     label: "{YY}",
-    description: "발행 연도 뒤 2자리만 넣습니다.",
+    description: "발행 연도 뒤 2자리만 쓴 값입니다.",
   },
   month: {
     label: "{month}",
-    description: "발행 월을 2자리로 넣습니다.",
+    description: "발행 월을 2자리로 쓴 값입니다.",
   },
   MM: {
     label: "{MM}",
-    description: "발행 월을 2자리로 넣습니다.",
+    description: "발행 월을 2자리로 쓴 값입니다.",
   },
   M: {
     label: "{M}",
-    description: "발행 월을 1~12 숫자로 넣습니다.",
+    description: "발행 월을 1~12 숫자로 쓴 값입니다.",
   },
   day: {
     label: "{day}",
-    description: "발행 일을 2자리로 넣습니다.",
+    description: "발행 일을 2자리로 쓴 값입니다.",
   },
   DD: {
     label: "{DD}",
-    description: "발행 일을 2자리로 넣습니다.",
+    description: "발행 일을 2자리로 쓴 값입니다.",
   },
   D: {
     label: "{D}",
-    description: "발행 일을 1~31 숫자로 넣습니다.",
+    description: "발행 일을 1~31 숫자로 쓴 값입니다.",
   },
 }
 

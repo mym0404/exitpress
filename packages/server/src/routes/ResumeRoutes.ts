@@ -111,7 +111,7 @@ export const handleResumeRoutes =
       sendJson({
         response,
         statusCode: 404,
-        body: { error: "불러올 수 있는 작업 상태를 찾지 못했습니다." },
+        body: { error: "불러올 작업 상태를 찾지 못했습니다." },
       })
       return true
     }

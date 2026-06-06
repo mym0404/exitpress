@@ -93,7 +93,7 @@ export const getUploadProviderFieldRule = ({
     return {
       ...baseRule,
       disabled: true,
-      disabledReason: "Path Style Access를 켜야 이 옵션을 사용할 수 있습니다.",
+      disabledReason: "Path Style Access를 켜야 이 옵션이 활성화됩니다.",
     }
   }
 
@@ -105,7 +105,7 @@ export const getUploadProviderFieldRule = ({
     return {
       ...baseRule,
       disabled: true,
-      disabledReason: "Lsky Pro V2를 선택한 경우에만 Album ID를 사용할 수 있습니다.",
+      disabledReason: "Lsky Pro V2를 선택해야 Album ID가 활성화됩니다.",
     }
   }
 
@@ -113,7 +113,7 @@ export const getUploadProviderFieldRule = ({
     return {
       ...baseRule,
       disabled: true,
-      disabledReason: "Private Key를 입력하면 Passphrase를 사용할 수 있습니다.",
+      disabledReason: "Private Key를 입력해야 Passphrase가 활성화됩니다.",
     }
   }
 

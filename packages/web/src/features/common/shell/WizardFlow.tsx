@@ -88,7 +88,7 @@ export const stepMeta: Record<WizardStep, { title: string; description: string }
   },
   "links-options": {
     title: exportOptionsStepMeta.links.title,
-    description: "같은 블로그 글 링크를 export 결과 기준으로 바꿀지 정합니다.",
+    description: "같은 블로그 글 링크를 내보낸 결과에 맞춰 바꿀지 정합니다.",
   },
   "diagnostics-options": {
     title: exportOptionsStepMeta.diagnostics.title,
@@ -104,11 +104,11 @@ export const stepMeta: Record<WizardStep, { title: string; description: string }
   },
   running: {
     title: "실행 중",
-    description: "선택한 글을 Markdown과 자산 파일로 내보내는 중입니다.",
+    description: "선택한 글을 Markdown과 자산 파일로 내보내고 있습니다.",
   },
   upload: {
     title: "Image Upload",
-    description: "내보낸 자산을 이미지 호스팅 대상으로 업로드합니다.",
+    description: "내보낸 자산을 이미지 호스팅에 업로드합니다.",
   },
   result: {
     title: "결과",
