@@ -6,6 +6,8 @@ import {
 import type { PostSummary } from "@exitpress/domain/blog/schema/BlogScan.js"
 import type { ExportOptions } from "@exitpress/domain/export-options/schema/ExportOptions.js"
 
+import { cn } from "../../lib/Cn.js"
+
 import { OptionSection, optionEmbeddedPanelClass, RadioField } from "./OptionControls.js"
 import { postTemplatePropDefinitions } from "./PostTemplateProps.js"
 import { TemplateEditorCard } from "./TemplateEditorCard.js"
@@ -114,9 +116,17 @@ export const LinksOptionsStep = ({
                   <span>변환 결과</span>
                   <code
                     id="links-sameBlogPostCustomUrlPreview"
-                    className="code-surface-inverse break-all px-3 py-2 font-mono text-[0.8125rem]"
+                    role={customUrlPreview?.status === "error" ? "alert" : undefined}
+                    className={cn(
+                      "code-surface-inverse break-all px-3 py-2 font-mono text-[0.8125rem]",
+                      customUrlPreview?.status === "error" &&
+                        "border-[color-mix(in_srgb,var(--status-error-fg)_26%,transparent)] bg-[var(--status-error-bg)] text-[var(--status-error-fg)]",
+                    )}
                   >
-                    {customUrlPreview ?? "템플릿을 입력하면 결과가 여기에서 바로 바뀝니다."}
+                    {customUrlPreview?.status === "success"
+                      ? customUrlPreview.text
+                      : (customUrlPreview?.message ??
+                        "템플릿을 입력하면 결과가 여기에서 바로 바뀝니다.")}
                   </code>
                 </div>
               </div>

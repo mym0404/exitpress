@@ -4,14 +4,20 @@ import { getTemplatePreview } from "./TemplatePreview.js"
 
 describe("getTemplatePreview", () => {
   it("returns rendered preview text", () => {
-    expect(getTemplatePreview(() => "2026-04-11-first-post")).toBe("2026-04-11-first-post")
+    expect(getTemplatePreview(() => "2026-04-11-first-post")).toEqual({
+      status: "success",
+      text: "2026-04-11-first-post",
+    })
   })
 
-  it("keeps the UI render path stable while a template is incomplete", () => {
+  it("returns the template error message when a template is incomplete", () => {
     expect(
       getTemplatePreview(() => {
         throw new Error("unterminated template expression")
       }),
-    ).toBeUndefined()
+    ).toEqual({
+      status: "error",
+      message: "템플릿 오류: unterminated template expression",
+    })
   })
 })

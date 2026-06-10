@@ -53,23 +53,23 @@ const appendStructurePreviewPost = ({
   post: (typeof structurePreviewSample.posts)[number]
   options: ExportOptions["structure"]
 }) => {
+  const postFolderNamePreview = getTemplatePreview(() =>
+    buildPostFolderName({
+      post: {
+        blogId: "mym0404",
+        logNo: post.logNo,
+        title: post.title,
+        publishedAt: post.publishedAt,
+        categoryName: post.categoryPath.at(-1),
+      },
+      options: {
+        structure: options,
+      },
+    }),
+  )
   const postTree: StructurePreviewTreeNode = {
     kind: "folder",
-    name:
-      getTemplatePreview(() =>
-        buildPostFolderName({
-          post: {
-            blogId: "mym0404",
-            logNo: post.logNo,
-            title: post.title,
-            publishedAt: post.publishedAt,
-            categoryName: post.categoryPath.at(-1),
-          },
-          options: {
-            structure: options,
-          },
-        }),
-      ) ?? post.logNo,
+    name: postFolderNamePreview.status === "success" ? postFolderNamePreview.text : post.logNo,
     defaultOpen: true,
     items: [
       {

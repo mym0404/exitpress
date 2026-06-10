@@ -3,6 +3,8 @@ import { buildPostFolderName } from "@exitpress/domain/export-paths/PostPathTemp
 
 import type { ExportOptions } from "@exitpress/domain/export-options/schema/ExportOptions.js"
 
+import { cn } from "../../lib/Cn.js"
+
 import {
   CheckField,
   OptionField,
@@ -38,16 +40,16 @@ export const StructureOptionsStep = ({
     categoryName: structurePreviewSample.posts[0]?.categoryPath.at(-1) ?? "React",
   }
   const postFolderNameTemplate = options.structure.postFolderNameTemplate.trim()
-  const postFolderNamePreview =
-    postFolderNameTemplate &&
-    getTemplatePreview(() =>
-      buildPostFolderName({
-        post: structureTemplatePreviewPost,
-        options: {
-          structure: options.structure,
-        },
-      }),
-    )
+  const postFolderNamePreview = postFolderNameTemplate
+    ? getTemplatePreview(() =>
+        buildPostFolderName({
+          post: structureTemplatePreviewPost,
+          options: {
+            structure: options.structure,
+          },
+        }),
+      )
+    : undefined
   const structurePreviewTree = buildStructurePreviewTree({
     outputDir,
     options,
@@ -156,9 +158,17 @@ export const StructureOptionsStep = ({
             <span>폴더 이름 결과</span>
             <code
               id="structure-postFolderNameTemplatePreview"
-              className="code-surface-inverse break-all px-3 py-2 font-mono text-[0.8125rem]"
+              role={postFolderNamePreview?.status === "error" ? "alert" : undefined}
+              className={cn(
+                "code-surface-inverse break-all px-3 py-2 font-mono text-[0.8125rem]",
+                postFolderNamePreview?.status === "error" &&
+                  "border-[color-mix(in_srgb,var(--status-error-fg)_26%,transparent)] bg-[var(--status-error-bg)] text-[var(--status-error-fg)]",
+              )}
             >
-              {postFolderNamePreview ?? "템플릿을 입력하면 결과가 여기에서 바로 바뀝니다."}
+              {postFolderNamePreview?.status === "success"
+                ? postFolderNamePreview.text
+                : (postFolderNamePreview?.message ??
+                  "템플릿을 입력하면 결과가 여기에서 바로 바뀝니다.")}
             </code>
           </div>
         </div>

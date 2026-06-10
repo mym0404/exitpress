@@ -1447,6 +1447,14 @@ const run = async () => {
       throw new Error("custom folder template preview crashed on incomplete expression")
     }
 
+    if (
+      !(await folderNamePreview.textContent())?.includes(
+        "템플릿 오류: unterminated template expression",
+      )
+    ) {
+      throw new Error("custom folder template preview did not show syntax error")
+    }
+
     await fillCodeMirror({
       page,
       editor: "#structure-postFolderNameTemplate",
@@ -1729,6 +1737,14 @@ const run = async () => {
 
     if (!(await page.locator("#links-sameBlogPostCustomUrlPreview").isVisible())) {
       throw new Error("custom link template preview crashed on incomplete expression")
+    }
+
+    if (
+      !(await page.locator("#links-sameBlogPostCustomUrlPreview").textContent())?.includes(
+        "템플릿 오류: unterminated template expression",
+      )
+    ) {
+      throw new Error("custom link template preview did not show syntax error")
     }
 
     await fillCodeMirror({
