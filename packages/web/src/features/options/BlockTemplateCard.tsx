@@ -12,7 +12,7 @@ export const getEffectiveBlockTemplate = ({
 }: {
   definition: BlockTemplateDefinition
   template?: string
-}) => template ?? getDefaultTemplate(definition)
+}) => template || getDefaultTemplate(definition)
 
 export const BlockTemplateCard = ({
   definition,
