@@ -1,6 +1,6 @@
 import path from "node:path"
 
-import { resolveRepoPath } from "@exitpress/engine/infra/node/util/FilePaths.js"
+import { resolveRepoPath } from "@exitpress/engine/infra/node/FilePaths.js"
 import { describe, expect, it } from "vitest"
 
 import { toMarkdownAssetPath } from "./paths.js"

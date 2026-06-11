@@ -3,12 +3,12 @@ import { spawn } from "node:child_process"
 const extraArgs = process.argv.slice(2)
 const harnesses = [
   {
-    label: "run-ui-smoke",
-    scriptPath: "tests/e2e/run-ui-smoke.ts",
+    label: "ui-smoke",
+    scriptPath: "tests/e2e/scenarios/ui-smoke.ts",
   },
   {
-    label: "run-ui-resume-smoke",
-    scriptPath: "tests/e2e/run-ui-resume-smoke.ts",
+    label: "ui-resume-smoke",
+    scriptPath: "tests/e2e/scenarios/ui-resume-smoke.ts",
   },
 ] as const
 

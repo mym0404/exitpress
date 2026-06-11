@@ -1,6 +1,6 @@
 import { rm } from "node:fs/promises"
 
-import { resolveRepoPath } from "@exitpress/engine/infra/node/util/FilePaths.js"
+import { resolveRepoPath } from "@exitpress/engine/infra/node/FilePaths.js"
 
 import type { ApiRouteContext, ApiRouteRequest } from "./ApiRouteContext.js"
 

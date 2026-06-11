@@ -1,7 +1,7 @@
 import path from "node:path"
 
 import { DEFAULT_OUTPUT_DIR } from "@exitpress/domain/export-options/ExportDefaults.js"
-import { resolveRepoPath } from "@exitpress/engine/infra/node/util/FilePaths.js"
+import { resolveRepoPath } from "@exitpress/engine/infra/node/FilePaths.js"
 
 import type { ThemePreference } from "@exitpress/domain/preferences/schema/ThemePreference.js"
 

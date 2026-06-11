@@ -16,7 +16,7 @@ import {
   buildPostLinkTargets,
   createSameBlogPostLinkResolver,
 } from "@exitpress/engine/exporting/paths/PostLinkRewriter.js"
-import { ensureDir, resolveRepoPath } from "@exitpress/engine/infra/node/util/FilePaths.js"
+import { ensureDir, resolveRepoPath } from "@exitpress/engine/infra/node/FilePaths.js"
 import { NaverBlogFetcher } from "@exitpress/engine/integrations/naver-blog/NaverBlogFetcher.js"
 import { renderMarkdownPost } from "@exitpress/engine/markdown/util/renderMarkdownPost.js"
 import { parsePostHtmlWithBlockEvidence } from "@exitpress/engine/parsing/naver-blog/core/PostParser.js"

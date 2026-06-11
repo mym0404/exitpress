@@ -1,6 +1,6 @@
 import { extractBlogId } from "@exitpress/domain/blog/NaverUrl.js"
 import { JOB_STATUSES } from "@exitpress/domain/export-job/ExportJobState.js"
-import { recreateDir, resolveRepoPath } from "@exitpress/engine/infra/node/util/FilePaths.js"
+import { recreateDir, resolveRepoPath } from "@exitpress/engine/infra/node/FilePaths.js"
 import { NaverBlogFetcher } from "@exitpress/engine/integrations/naver-blog/NaverBlogFetcher.js"
 import { toErrorMessage } from "@exitpress/engine/shared/error/util/toErrorMessage.js"
 

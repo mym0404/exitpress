@@ -1,7 +1,7 @@
 import { readFile, writeFile } from "node:fs/promises"
 import path from "node:path"
 
-import { ensureDir } from "@exitpress/engine/infra/node/util/FilePaths.js"
+import { ensureDir } from "@exitpress/engine/infra/node/FilePaths.js"
 
 import type { NaverBlogFetcherCache } from "@exitpress/engine/integrations/naver-blog/NaverBlogFetcher.js"
 
