@@ -2,7 +2,7 @@
 
 ## When To Use
 - Use browser validation when the user asks to inspect UI behavior or when a meaningful UI change affects visible flow, layout, controls, or feedback.
-- Automated browser checks run through `mise exec -- pnpm check:playwright`; this document is for targeted manual browser confirmation.
+- Automated browser checks run through `mise exec -- pnpm build:ui` followed by `mise exec -- pnpm check:playwright`; this document is for targeted manual browser confirmation.
 
 ## Server Rules
 - Do not reuse a user's `mise exec -- pnpm dev` session for agent browser checks.

@@ -17,12 +17,10 @@
     "check:unused": "bun scripts/maintenance/check-unused.ts",
     "gh:update-branches": "bun scripts/maintenance/update-open-pr-branches.ts",
     "check:type": "tsc -p tsconfig.json --noEmit",
-    "check:build:server": "tsc -p tsconfig.json",
-    "check:build:web": "pnpm --filter @exitpress/web exec vite build --config vite.config.ts",
     "check:storybook": "bun scripts/storybook/generate-catalog.ts --check",
     "check:test": "vitest run --configLoader runner --silent",
     "check:coverage": "vitest run --configLoader runner --silent --coverage",
-    "check:playwright": "pnpm --filter @exitpress/web exec vite build --config vite.config.ts && playwright test"
+    "check:playwright": "playwright test"
   },
   "devDependencies": {
     "@exitpress/domain": "workspace:*",

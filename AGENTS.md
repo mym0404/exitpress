@@ -56,10 +56,10 @@
 ## Validation Routes
 
 - `mise exec -- pnpm check:test`: Vitest unit, integration, fixture, and provider checks.
-- `mise exec -- pnpm check:playwright`: Playwright browser smoke and live e2e checks.
-- `mise exec -- pnpm check:coverage`: Vitest coverage thresholds.
+- `mise exec -- pnpm check:coverage`: Vitest unit, integration, fixture, and provider checks with coverage thresholds.
+- `mise exec -- pnpm build:ui && mise exec -- pnpm check:playwright`: Playwright browser smoke and live e2e checks against the built web UI.
 - `mise exec -- pnpm check:unused`: dead-code and unused export baseline; run after deleting, moving, or renaming code.
-- `mise exec -- pnpm check:fmt`, `check:lint`, `check:type`, `check:build:server`, `check:build:web`, and `check:storybook`: focused static/build/catalog checks.
+- `mise exec -- pnpm check:fmt`, `check:lint`, `check:type`, `check:storybook`, `build:server`, and `build:ui`: focused static/build/catalog checks.
 - Full validation details and blind spots live in `.agents/knowledge/verification.md`.
 
 ## Knowledge Router

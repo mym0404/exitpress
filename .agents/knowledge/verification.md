@@ -3,7 +3,7 @@
 ## Source Of Truth
 
 - Package scripts live in `package.json`.
-- CI lives in `.github/workflows/required-checks.yml` and runs every `check:*` verification for non-draft PRs.
+- CI lives in `.github/workflows/required-checks.yml` and runs the full non-duplicated verification route for non-draft PRs.
 - Tool versions live in `mise.toml`.
 - Run local package scripts through `mise exec -- pnpm ...`.
 
@@ -13,19 +13,20 @@
 - Browser smoke and end-to-end checks belong in Playwright Test specs.
 - Use Vitest/Playwright config, projects, fixtures, lifecycle hooks, reporters, filtering, and coverage before adding repo-specific runners.
 - Standalone Bun scripts are acceptable for product CLIs, one-off maintenance commands, and manual evidence capture, not for checks that can be expressed as Vitest or Playwright tests.
-- Verification commands use the `check:*` namespace and must do real work directly; do not add alias-only verification scripts that merely redirect to another script.
+- Verification commands must do real work directly; do not add alias-only verification scripts that merely redirect to another script.
+- Use `check:*` for checks whose name would otherwise be ambiguous, and keep clear lifecycle commands such as `build:*` under their existing purpose-specific names.
 
 ## Primary Commands
 
 - `mise exec -- pnpm check:fmt`: format and import order check.
 - `mise exec -- pnpm check:lint`: Oxlint baseline.
-- `mise exec -- pnpm check:type`: TypeScript contract check.
-- `mise exec -- pnpm check:build:server`: server TypeScript build check.
-- `mise exec -- pnpm check:build:web`: web production build check.
+- `mise exec -- pnpm check:type`: fast TypeScript contract check without emitting build output.
+- `mise exec -- pnpm build:server`: server TypeScript build check.
+- `mise exec -- pnpm build:ui`: web production build check.
 - `mise exec -- pnpm check:storybook`: generated Storybook catalog freshness check.
 - `mise exec -- pnpm check:test`: full Vitest suite, including fixtures and provider integration checks.
-- `mise exec -- pnpm check:coverage`: Vitest with V8 coverage thresholds.
-- `mise exec -- pnpm check:playwright`: Playwright smoke and live browser/network e2e suite.
+- `mise exec -- pnpm check:coverage`: full Vitest suite with V8 coverage thresholds.
+- `mise exec -- pnpm check:playwright`: Playwright smoke and live browser/network e2e suite against the current built web UI.
 - `mise exec -- pnpm check:unused`: unused source/test/script diagnostics.
 
 ## Focused Commands
@@ -49,10 +50,11 @@
 
 ## Task Loops
 
-- Use focused commands while iterating only when the same class of check would otherwise be repeated frequently; run the affected `check:*` commands before finishing.
+- Use focused commands while iterating only when the same class of check would otherwise be repeated frequently; run the affected verification commands before finishing.
+- Do not run duplicated checks in sequence when a later command already includes the earlier one, such as `check:test` immediately before `check:coverage`.
 - Documentation-only knowledge edits do not need browser smoke; verify routed paths, command existence, and changed Markdown content.
 - Moving or deleting files requires `check:type` and `check:unused`.
 - Parser changes require `check:test`.
-- Export, manifest, upload, resume, UI state, server API, routing, static asset serving, or job-state changes require `check:playwright`.
+- Export, manifest, upload, resume, UI state, server API, routing, static asset serving, or job-state changes require `build:ui` followed by `check:playwright`.
 - Upload e2e changes must keep both mock smoke and live upload checks aligned with the current export-triggered upload flow.
-- Live fetch/upload changes require `check:playwright`.
+- Live fetch/upload changes require `build:ui` followed by `check:playwright`.
