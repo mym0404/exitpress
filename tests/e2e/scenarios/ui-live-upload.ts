@@ -49,10 +49,6 @@ type TreeResponse = {
 const resolveLiveUploadConfig = (): LiveUploadConfig => {
   loadDotEnv({ quiet: true })
 
-  if (process.env.EXITPRESS_UPLOAD_E2E !== "1") {
-    throw new Error("EXITPRESS_UPLOAD_E2E=1 이 필요합니다.")
-  }
-
   const token = process.env.EXITPRESS_UPLOAD_E2E_GITHUB_TOKEN?.trim()
 
   if (!token) {
