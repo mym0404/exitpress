@@ -3,7 +3,7 @@
 ## Runtime Shape
 
 - The local server owns process startup, HTTP APIs, static serving, job state, local settings, and upload provider runtime metadata.
-- The engine owns provider runtime interfaces, provider export harnesses, legacy Naver fetch/parser runtime, Markdown rendering, asset persistence, upload candidate handling, link rewrite, and export manifest writing.
+- The engine owns provider runtime interfaces, provider export harnesses, Naver fetch/parser runtime, Markdown rendering, asset persistence, upload candidate handling, link rewrite, and export manifest writing.
 - Concrete blog provider packages own provider-specific source parsing, fetching adapters, and parser adapters.
 - The web package owns the browser wizard, Storybook surface, API client, and UI state.
 - The domain package owns shared contracts and pure deterministic logic used across packages.

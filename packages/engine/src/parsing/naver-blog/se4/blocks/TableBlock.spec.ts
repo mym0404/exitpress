@@ -20,18 +20,20 @@ describe("NaverSe4TableBlock", () => {
 
     expect(parsed.blocks).toHaveLength(1)
     expect(parsed.blocks[0]).toMatchObject({
-      type: "table",
-      complex: false,
-      rows: [
-        [
-          { text: "name", colspan: 1, rowspan: 1, isHeader: true },
-          { text: "value", colspan: 1, rowspan: 1, isHeader: true },
+      blockId: "naver-se4:table",
+      props: {
+        complex: false,
+        rows: [
+          [
+            { text: "name", colspan: 1, rowspan: 1, isHeader: true },
+            { text: "value", colspan: 1, rowspan: 1, isHeader: true },
+          ],
+          [
+            { text: "a", colspan: 1, rowspan: 1, isHeader: false },
+            { text: "1", colspan: 1, rowspan: 1, isHeader: false },
+          ],
         ],
-        [
-          { text: "a", colspan: 1, rowspan: 1, isHeader: false },
-          { text: "1", colspan: 1, rowspan: 1, isHeader: false },
-        ],
-      ],
+      },
     })
   })
 

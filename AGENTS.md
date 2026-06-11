@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-- This repository is a local export tool for public blog posts, with legacy Naver runtime and provider harnesses for additional blog platforms.
+- This repository is a local export tool for public blog posts, with Naver runtime and provider harnesses for additional blog platforms.
 - It scans posts, parses provider/editor-specific content into blocks, renders Markdown, writes assets, and keeps resumable export state.
 - The repo maintains a React web UI, server API, export engine, fixture regression tests, smoke UI harnesses, and live network e2e harnesses.
 
@@ -19,7 +19,7 @@
 |-- AGENTS.md                 # agent entry and knowledge router
 |-- .agents/knowledge/        # evergreen repo-local agent knowledge
 |-- packages/domain/          # shared contracts and pure option/path logic
-|-- packages/engine/          # provider interfaces, Naver legacy engine, render/export/assets/upload rewrite
+|-- packages/engine/          # provider interfaces, Naver engine, render/export/assets/upload rewrite
 |-- packages/blog-naver/      # concrete Naver provider adapter
 |-- packages/blog-tistory/    # minimal concrete Tistory provider adapter
 |-- packages/server/          # local HTTP API, jobs, state, upload catalog, static serving

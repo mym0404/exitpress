@@ -2,7 +2,7 @@ import { parseSe4Blocks } from "@tests/support/parser-test-utils.js"
 import { describe, expect, it } from "vitest"
 
 describe("NaverSe4FileBlock", () => {
-  it("parses file components into single link paragraphs without descriptions", () => {
+  it("parses file components into file blocks without descriptions", () => {
     const parsed = parseSe4Blocks(`
       <div class="se-component se-file se-l-default">
         <script
@@ -18,8 +18,12 @@ describe("NaverSe4FileBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "paragraph",
-        text: "[seminar.pdf](https://example.com/seminar.pdf)",
+        blockId: "naver-se4:file",
+        props: {
+          fileName: "seminar",
+          fileExtension: ".pdf",
+          fileUrl: "https://example.com/seminar.pdf",
+        },
       },
     ])
   })
@@ -36,8 +40,12 @@ describe("NaverSe4FileBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "paragraph",
-        text: "[https://example.com/from-data.pdf](https://example.com/from-data.pdf)",
+        blockId: "naver-se4:file",
+        props: {
+          fileName: "https://example.com/from-data.pdf",
+          fileExtension: "",
+          fileUrl: "https://example.com/from-data.pdf",
+        },
       },
     ])
   })

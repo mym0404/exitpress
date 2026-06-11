@@ -15,8 +15,10 @@ describe("NaverSe2PollBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "paragraph",
-        text: "[포스트에 첨부된 투표](https://m.blog.naver.com/Poll.naver?pollKey=abc&blogId=anglekim3708)",
+        blockId: "naver-se2:poll",
+        props: {
+          text: "[포스트에 첨부된 투표](https://m.blog.naver.com/Poll.naver?pollKey=abc&blogId=anglekim3708)",
+        },
       },
     ])
   })
@@ -30,8 +32,10 @@ describe("NaverSe2PollBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "paragraph",
-        text: "[투표](https://m.blog.naver.com/Poll.naver?pollKey=abc)",
+        blockId: "naver-se2:poll",
+        props: {
+          text: "[투표](https://m.blog.naver.com/Poll.naver?pollKey=abc)",
+        },
       },
     ])
   })
@@ -50,8 +54,10 @@ describe("NaverSe2PollBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "paragraph",
-        text: "[포스트에 첨부된 투표](https://m.blog.naver.com/Poll.naver?pollKey=abc)",
+        blockId: "naver-se2:poll",
+        props: {
+          text: "[포스트에 첨부된 투표](https://m.blog.naver.com/Poll.naver?pollKey=abc)",
+        },
       },
     ])
   })
@@ -69,8 +75,10 @@ describe("NaverSe2PollBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "paragraph",
-        text: "[포스트에 첨부된 투표](https://m.blog.naver.com/Poll.naver?pollKey=abc)",
+        blockId: "naver-se2:poll",
+        props: {
+          text: "[포스트에 첨부된 투표](https://m.blog.naver.com/Poll.naver?pollKey=abc)",
+        },
       },
     ])
   })
@@ -83,7 +91,7 @@ describe("NaverSe2PollBlock", () => {
       </div>
     `)
 
-    expect(parsed.blocks).toEqual([{ type: "paragraph", text: "caption" }])
+    expect(parsed.blocks).toEqual([{ blockId: "naver-se2:paragraph", props: { text: "caption" } }])
   })
 
   it("does not parse div-wrapped poll iframes mixed with other media", () => {
@@ -96,13 +104,18 @@ describe("NaverSe2PollBlock", () => {
 
     expect(parsed.blocks).toMatchObject([
       {
-        type: "image",
-        image: {
-          sourceUrl: "https://example.com/other.png",
-          originalSourceUrl: null,
+        blockId: "naver-se2:image",
+        props: {
+          url: "https://example.com/other.png",
           alt: "",
           caption: null,
-          mediaKind: "image",
+        },
+        assets: {
+          url: {
+            role: "image",
+            sourceUrl: "https://example.com/other.png",
+            required: true,
+          },
         },
       },
     ])

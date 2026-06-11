@@ -1,10 +1,16 @@
-import { parseSe3Blocks, toLegacyBlocks } from "@tests/support/parser-test-utils.js"
+import { parseSe3Blocks } from "@tests/support/parser-test-utils.js"
 import { load } from "cheerio"
 import { describe, expect, it } from "vitest"
 
 import { NaverBlogSE3Editor } from "../NaverBlogSe3Editor.js"
 
 import { NaverSe3SubjectMatterBlock } from "./SubjectMatterBlock.js"
+
+const imageAsset = (sourceUrl: string) => ({
+  role: "image",
+  sourceUrl,
+  required: true,
+})
 
 describe("NaverSe3SubjectMatterBlock", () => {
   it("parses book subject matter components", () => {
@@ -44,28 +50,34 @@ describe("NaverSe3SubjectMatterBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "image",
-        image: {
-          sourceUrl:
-            "https://bookthumb-phinf.pstatic.net/cover/108/442/10844211.jpg?type=w150&udate=20160809",
-          originalSourceUrl: null,
+        blockId: "naver-se3:subjectMatter",
+        props: {
+          url: "https://bookthumb-phinf.pstatic.net/cover/108/442/10844211.jpg?type=w150&udate=20160809",
           alt: "",
           caption: null,
-          mediaKind: "image",
+        },
+        assets: {
+          url: imageAsset(
+            "https://bookthumb-phinf.pstatic.net/cover/108/442/10844211.jpg?type=w150&udate=20160809",
+          ),
         },
       },
       {
-        type: "paragraph",
-        text: [
-          "**캐스터브리지의 시장**",
-          "저자: 토마스 하디",
-          "출판: 문학과지성사",
-          "발매: 2016.07.15.",
-        ].join("  \n"),
+        blockId: "naver-se3:subjectMatter",
+        props: {
+          text: [
+            "**캐스터브리지의 시장**",
+            "저자: 토마스 하디",
+            "출판: 문학과지성사",
+            "발매: 2016.07.15.",
+          ].join("  \n"),
+        },
       },
       {
-        type: "paragraph",
-        text: "[상세보기](http://book.naver.com/bookdb/book_detail.php?bid=10844211)",
+        blockId: "naver-se3:subjectMatter",
+        props: {
+          text: "[상세보기](http://book.naver.com/bookdb/book_detail.php?bid=10844211)",
+        },
       },
     ])
   })
@@ -111,24 +123,29 @@ describe("NaverSe3SubjectMatterBlock", () => {
       matchNode: () => [],
     })
 
-    expect(toLegacyBlocks(blocks)).toEqual([
+    expect(blocks).toEqual([
       {
-        type: "image",
-        image: {
-          sourceUrl: "https://example.com/lazy.png",
-          originalSourceUrl: null,
+        blockId: "naver-se3:subjectMatter",
+        props: {
+          url: "https://example.com/lazy.png",
           alt: "cover",
           caption: null,
-          mediaKind: "image",
+        },
+        assets: {
+          url: imageAsset("https://example.com/lazy.png"),
         },
       },
       {
-        type: "paragraph",
-        text: "**Fallbacks**",
+        blockId: "naver-se3:subjectMatter",
+        props: {
+          text: "**Fallbacks**",
+        },
       },
       {
-        type: "paragraph",
-        text: "[상세보기](resolved:https://example.com/book)",
+        blockId: "naver-se3:subjectMatter",
+        props: {
+          text: "[상세보기](resolved:https://example.com/book)",
+        },
       },
     ])
   })

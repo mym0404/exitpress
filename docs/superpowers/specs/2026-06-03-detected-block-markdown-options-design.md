@@ -71,4 +71,4 @@
 ## Open Constraints
 - Do not change parser block output semantics.
 - Do not add a user-facing cache setting.
-- Do not keep legacy fallback behavior for pre-filtered Markdown option rendering beyond existing bootstrap defaults.
+- Do not keep broad fallback behavior for pre-filtered Markdown option rendering beyond existing bootstrap defaults.

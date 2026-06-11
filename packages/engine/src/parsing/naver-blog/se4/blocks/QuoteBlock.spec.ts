@@ -9,7 +9,14 @@ describe("NaverSe4QuoteBlock", () => {
       </div>
     `)
 
-    expect(parsed.blocks).toEqual([{ type: "quote", text: "Quoted **text**" }])
+    expect(parsed.blocks).toEqual([
+      {
+        blockId: "naver-se4:quote",
+        props: {
+          text: "Quoted **text**",
+        },
+      },
+    ])
   })
 
   it("skips quotations with no markdown content", () => {

@@ -19,7 +19,8 @@ describe("NaverSe3DividerBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "divider",
+        blockId: "naver-se3:divider",
+        props: {},
       },
     ])
   })
@@ -31,7 +32,7 @@ describe("NaverSe3DividerBlock", () => {
       </div>
     `)
 
-    expect(parsed.blocks).toEqual([{ type: "divider" }])
+    expect(parsed.blocks).toEqual([{ blockId: "naver-se3:divider", props: {} }])
   })
 
   it("parses line5 horizontal line components into divider blocks", () => {
@@ -41,7 +42,7 @@ describe("NaverSe3DividerBlock", () => {
       </div>
     `)
 
-    expect(parsed.blocks).toEqual([{ type: "divider" }])
+    expect(parsed.blocks).toEqual([{ blockId: "naver-se3:divider", props: {} }])
   })
 
   it("parses line3 horizontal line components into divider blocks", () => {
@@ -51,7 +52,7 @@ describe("NaverSe3DividerBlock", () => {
       </div>
     `)
 
-    expect(parsed.blocks).toEqual([{ type: "divider" }])
+    expect(parsed.blocks).toEqual([{ blockId: "naver-se3:divider", props: {} }])
   })
 
   it("parses unlisted horizontal line style variants into divider blocks", () => {
@@ -61,6 +62,6 @@ describe("NaverSe3DividerBlock", () => {
       </div>
     `)
 
-    expect(parsed.blocks).toEqual([{ type: "divider" }])
+    expect(parsed.blocks).toEqual([{ blockId: "naver-se3:divider", props: {} }])
   })
 })

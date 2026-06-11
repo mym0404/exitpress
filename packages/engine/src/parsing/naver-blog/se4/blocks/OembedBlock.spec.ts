@@ -2,7 +2,7 @@ import { createSe4ModuleScript, parseSe4Blocks } from "@tests/support/parser-tes
 import { describe, expect, it } from "vitest"
 
 describe("NaverSe4OembedBlock", () => {
-  it("parses oembed components into link paragraphs", () => {
+  it("parses oembed components into oembed blocks", () => {
     const parsed = parseSe4Blocks(`
       <div class="se-component se-oembed">
         ${createSe4ModuleScript({
@@ -19,8 +19,20 @@ describe("NaverSe4OembedBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "paragraph",
-        text: "[Video embed](https://youtu.be/demo)",
+        blockId: "naver-se4:oembed",
+        props: {
+          title: "Video embed",
+          description: "embedded preview",
+          url: "https://youtu.be/demo",
+          thumbnailUrl: "https://example.com/oembed.png",
+        },
+        assets: {
+          thumbnailUrl: {
+            role: "thumbnail",
+            sourceUrl: "https://example.com/oembed.png",
+            required: false,
+          },
+        },
       },
     ])
   })
@@ -54,12 +66,22 @@ describe("NaverSe4OembedBlock", () => {
     `)
 
     expect(iframeParsed.blocks[0]).toMatchObject({
-      type: "paragraph",
-      text: "[https://player.example.com](https://player.example.com)",
+      blockId: "naver-se4:oembed",
+      props: {
+        title: "https://player.example.com",
+        description: "",
+        url: "https://player.example.com",
+        thumbnailUrl: null,
+      },
     })
     expect(providerParsed.blocks[0]).toMatchObject({
-      type: "paragraph",
-      text: "[https://provider.example.com](https://provider.example.com)",
+      blockId: "naver-se4:oembed",
+      props: {
+        title: "https://provider.example.com",
+        description: "",
+        url: "https://provider.example.com",
+        thumbnailUrl: null,
+      },
     })
   })
 
@@ -74,8 +96,13 @@ describe("NaverSe4OembedBlock", () => {
     `)
 
     expect(parsed.blocks[0]).toMatchObject({
-      type: "paragraph",
-      text: "[https://provider-fallback.example.com](https://provider-fallback.example.com)",
+      blockId: "naver-se4:oembed",
+      props: {
+        title: "https://provider-fallback.example.com",
+        description: "",
+        url: "https://provider-fallback.example.com",
+        thumbnailUrl: null,
+      },
     })
   })
 

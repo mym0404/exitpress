@@ -2,7 +2,7 @@ import { parseSe4Blocks } from "@tests/support/parser-test-utils.js"
 import { describe, expect, it } from "vitest"
 
 describe("NaverSe4LinkCardBlock", () => {
-  it("parses oglink components into link paragraphs", () => {
+  it("parses oglink components into link card blocks", () => {
     const parsed = parseSe4Blocks(`
       <div class="se-component se-oglink">
         <a class="se-oglink-info" href="https://example.com/article"></a>
@@ -16,8 +16,20 @@ describe("NaverSe4LinkCardBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "paragraph",
-        text: "[External article](https://example.com/article)",
+        blockId: "naver-se4:linkCard",
+        props: {
+          title: "External article",
+          description: "preview text",
+          url: "https://example.com/article",
+          thumbnailUrl: "https://example.com/cover.png",
+        },
+        assets: {
+          thumbnailUrl: {
+            role: "thumbnail",
+            sourceUrl: "https://example.com/cover.png",
+            required: false,
+          },
+        },
       },
     ])
   })
@@ -31,8 +43,13 @@ describe("NaverSe4LinkCardBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "paragraph",
-        text: "[https://example.com/fallback](https://example.com/fallback)",
+        blockId: "naver-se4:linkCard",
+        props: {
+          title: "https://example.com/fallback",
+          description: "",
+          url: "https://example.com/fallback",
+          thumbnailUrl: null,
+        },
       },
     ])
   })
@@ -52,12 +69,13 @@ describe("NaverSe4LinkCardBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "paragraph",
-        text: "[Docs](https://example.com/docs)",
-      },
-      {
-        type: "paragraph",
-        text: "Useful reference",
+        blockId: "naver-se4:linkCard",
+        props: {
+          title: "Docs",
+          description: "Useful reference",
+          url: "https://example.com/docs",
+          thumbnailUrl: null,
+        },
       },
     ])
   })

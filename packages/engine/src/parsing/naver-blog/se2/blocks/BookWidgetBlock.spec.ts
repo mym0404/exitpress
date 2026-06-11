@@ -35,39 +35,52 @@ describe("NaverSe2BookWidgetBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "image",
-        image: {
-          sourceUrl:
-            "https://bookthumb-phinf.pstatic.net/cover/136/172/13617242.jpg?type=w150&udate=20180619",
-          originalSourceUrl: null,
+        blockId: "naver-se2:bookWidget",
+        props: {
+          url: "https://bookthumb-phinf.pstatic.net/cover/136/172/13617242.jpg?type=w150&udate=20180619",
           alt: "섬네일",
           caption: null,
-          mediaKind: "image",
+        },
+        assets: {
+          url: {
+            role: "image",
+            sourceUrl:
+              "https://bookthumb-phinf.pstatic.net/cover/136/172/13617242.jpg?type=w150&udate=20180619",
+            required: true,
+          },
         },
       },
       {
-        type: "paragraph",
-        text: [
-          "**코틀린을 이용한 안드로이드 개발**",
-          "작가",
-          "마르친 모스칼라, 이고르 워다",
-          "출판",
-          "에이콘출판",
-          "발매",
-          "2018.05.31.",
-        ].join("  \n"),
+        blockId: "naver-se2:bookWidget",
+        props: {
+          text: [
+            "**코틀린을 이용한 안드로이드 개발**",
+            "작가",
+            "마르친 모스칼라, 이고르 워다",
+            "출판",
+            "에이콘출판",
+            "발매",
+            "2018.05.31.",
+          ].join("  \n"),
+        },
       },
       {
-        type: "paragraph",
-        text: "[리뷰보기](http://book.naver.com/bookdb/book_detail.php?bid=13617242)",
+        blockId: "naver-se2:bookWidget",
+        props: {
+          text: "[리뷰보기](http://book.naver.com/bookdb/book_detail.php?bid=13617242)",
+        },
       },
       {
-        type: "paragraph",
-        text: "나의 두 번째 안드로이드 서적이다.",
+        blockId: "naver-se2:paragraph",
+        props: {
+          text: "나의 두 번째 안드로이드 서적이다.",
+        },
       },
       {
-        type: "paragraph",
-        text: "원본이 아닌 번역본이지만, 워낙 짜임새 있는 구성으로 공부하기에 좋다.",
+        blockId: "naver-se2:paragraph",
+        props: {
+          text: "원본이 아닌 번역본이지만, 워낙 짜임새 있는 구성으로 공부하기에 좋다.",
+        },
       },
     ])
   })
@@ -81,12 +94,16 @@ describe("NaverSe2BookWidgetBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "paragraph",
-        text: "**Fallback Book**",
+        blockId: "naver-se2:bookWidget",
+        props: {
+          text: "**Fallback Book**",
+        },
       },
       {
-        type: "paragraph",
-        text: "[Fallback Book](https://example.com/book)",
+        blockId: "naver-se2:bookWidget",
+        props: {
+          text: "[Fallback Book](https://example.com/book)",
+        },
       },
     ])
   })
@@ -100,13 +117,18 @@ describe("NaverSe2BookWidgetBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "image",
-        image: {
-          sourceUrl: "https://example.com/book.png",
-          originalSourceUrl: null,
+        blockId: "naver-se2:bookWidget",
+        props: {
+          url: "https://example.com/book.png",
           alt: "",
           caption: null,
-          mediaKind: "image",
+        },
+        assets: {
+          url: {
+            role: "image",
+            sourceUrl: "https://example.com/book.png",
+            required: true,
+          },
         },
       },
     ])

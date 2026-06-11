@@ -9,9 +9,11 @@ console.log(oldSchool)
 
     expect(parsed.blocks).toEqual([
       {
-        type: "code",
-        language: null,
-        code: "const oldSchool = true\nconsole.log(oldSchool)",
+        blockId: "naver-se2:code",
+        props: {
+          language: null,
+          code: "const oldSchool = true\nconsole.log(oldSchool)",
+        },
       },
     ])
   })
@@ -38,9 +40,11 @@ console.log(oldSchool)
 
     expect(parsed.blocks).toEqual([
       {
-        type: "code",
-        language: null,
-        code: "public class MainActivity {\n  void init()",
+        blockId: "naver-se2:code",
+        props: {
+          language: null,
+          code: "public class MainActivity {\n  void init()",
+        },
       },
     ])
   })

@@ -35,16 +35,21 @@ describe("NaverSe4WrappingParagraphBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "image",
-        image: {
-          sourceUrl: "https://example.com/wrapped.png",
-          originalSourceUrl: "https://example.com/wrapped.png",
+        blockId: "naver-se4:wrappingParagraph",
+        props: {
+          url: "https://example.com/wrapped.png",
           alt: "wrapped",
           caption: null,
-          mediaKind: "image",
+        },
+        assets: {
+          url: {
+            role: "image",
+            sourceUrl: "https://example.com/wrapped.png",
+            required: true,
+          },
         },
       },
-      { type: "paragraph", text: "Wrapped **text**" },
+      { blockId: "naver-se4:wrappingParagraph", props: { text: "Wrapped **text**" } },
     ])
   })
 
@@ -59,7 +64,9 @@ describe("NaverSe4WrappingParagraphBlock", () => {
       </div>
     `)
 
-    expect(parsed.blocks).toEqual([{ type: "paragraph", text: "작은 오른쪽 감싼 문단" }])
+    expect(parsed.blocks).toEqual([
+      { blockId: "naver-se4:wrappingParagraph", props: { text: "작은 오른쪽 감싼 문단" } },
+    ])
   })
 
   it("parses left wrapping paragraph components into image and paragraph blocks", () => {
@@ -89,17 +96,22 @@ describe("NaverSe4WrappingParagraphBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "image",
-        image: {
-          sourceUrl: "https://example.com/left.png",
-          originalSourceUrl: "https://example.com/left.png",
+        blockId: "naver-se4:wrappingParagraph",
+        props: {
+          url: "https://example.com/left.png",
           alt: "left",
           caption: null,
-          mediaKind: "image",
+        },
+        assets: {
+          url: {
+            role: "image",
+            sourceUrl: "https://example.com/left.png",
+            required: true,
+          },
         },
       },
-      { type: "paragraph", text: "첫 문단" },
-      { type: "paragraph", text: "**둘째 문단**" },
+      { blockId: "naver-se4:wrappingParagraph", props: { text: "첫 문단" } },
+      { blockId: "naver-se4:wrappingParagraph", props: { text: "**둘째 문단**" } },
     ])
   })
 
@@ -114,7 +126,9 @@ describe("NaverSe4WrappingParagraphBlock", () => {
       </div>
     `)
 
-    expect(parsed.blocks).toEqual([{ type: "paragraph", text: "작은 왼쪽 감싼 문단" }])
+    expect(parsed.blocks).toEqual([
+      { blockId: "naver-se4:wrappingParagraph", props: { text: "작은 왼쪽 감싼 문단" } },
+    ])
   })
 
   it("handles text-only wrapping paragraph components", () => {
@@ -128,7 +142,9 @@ describe("NaverSe4WrappingParagraphBlock", () => {
       </div>
     `)
 
-    expect(parsed.blocks).toEqual([{ type: "paragraph", text: "본문만 있는 감싼 문단" }])
+    expect(parsed.blocks).toEqual([
+      { blockId: "naver-se4:wrappingParagraph", props: { text: "본문만 있는 감싼 문단" } },
+    ])
   })
 
   it("handles image-only wrapping paragraph components", () => {
@@ -144,13 +160,18 @@ describe("NaverSe4WrappingParagraphBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "image",
-        image: {
-          sourceUrl: "https://example.com/image-only.png",
-          originalSourceUrl: "https://example.com/image-only.png",
+        blockId: "naver-se4:wrappingParagraph",
+        props: {
+          url: "https://example.com/image-only.png",
           alt: "",
           caption: null,
-          mediaKind: "image",
+        },
+        assets: {
+          url: {
+            role: "image",
+            sourceUrl: "https://example.com/image-only.png",
+            required: true,
+          },
         },
       },
     ])

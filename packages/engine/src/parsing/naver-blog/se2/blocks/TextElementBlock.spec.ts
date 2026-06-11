@@ -5,7 +5,9 @@ describe("NaverSe2TextElementBlock", () => {
   it("falls back to markdown paragraphs for convertible html", () => {
     const parsed = parseSe2Blocks("<div><strong>Fallback</strong> html</div>")
 
-    expect(parsed.blocks).toEqual([{ type: "paragraph", text: "**Fallback** html" }])
+    expect(parsed.blocks).toEqual([
+      { blockId: "naver-se2:paragraph", props: { text: "**Fallback** html" } },
+    ])
   })
 
   it("throws when unsupported html cannot be parsed", () => {
@@ -30,7 +32,10 @@ describe("NaverSe2TextElementBlock", () => {
     const parsed = parseSe2Blocks(`<div>Classic <a href="https://example.com">link</a></div>`)
 
     expect(parsed.blocks).toEqual([
-      { type: "paragraph", text: "Classic [link](https://example.com)" },
+      {
+        blockId: "naver-se2:paragraph",
+        props: { text: "Classic [link](https://example.com)" },
+      },
     ])
   })
 
@@ -42,7 +47,9 @@ describe("NaverSe2TextElementBlock", () => {
       </div>
     `)
 
-    expect(parsed.blocks).toEqual([{ type: "paragraph", text: "[reference](https://example.com)" }])
+    expect(parsed.blocks).toEqual([
+      { blockId: "naver-se2:paragraph", props: { text: "[reference](https://example.com)" } },
+    ])
   })
 
   it("keeps nested Color Scripter tables parseable as code blocks", () => {
@@ -65,11 +72,13 @@ describe("NaverSe2TextElementBlock", () => {
     `)
 
     expect(parsed.blocks).toEqual([
-      { type: "paragraph", text: "코드 예시" },
+      { blockId: "naver-se2:paragraph", props: { text: "코드 예시" } },
       {
-        type: "code",
-        language: null,
-        code: "val count = 1\nprintln(count)",
+        blockId: "naver-se2:code",
+        props: {
+          language: null,
+          code: "val count = 1\nprintln(count)",
+        },
       },
     ])
   })
@@ -78,7 +87,10 @@ describe("NaverSe2TextElementBlock", () => {
     const parsed = parseSe2Blocks(`<div>vector&lt;int&gt;와 &lt;br /&gt; 예시</div>`)
 
     expect(parsed.blocks).toEqual([
-      { type: "paragraph", text: "vector\\<int\\>와 \\<br /\\> 예시" },
+      {
+        blockId: "naver-se2:paragraph",
+        props: { text: "vector\\<int\\>와 \\<br /\\> 예시" },
+      },
     ])
   })
 })

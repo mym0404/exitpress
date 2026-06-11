@@ -16,9 +16,11 @@ describe("NaverSe4FormulaBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "formula",
-        formula: "x^2 + y^2 = z^2",
-        display: true,
+        blockId: "naver-se4:formula",
+        props: {
+          formula: "x^2 + y^2 = z^2",
+          display: true,
+        },
       },
     ])
   })
@@ -32,9 +34,11 @@ describe("NaverSe4FormulaBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "formula",
-        formula: "x+y",
-        display: false,
+        blockId: "naver-se4:formula",
+        props: {
+          formula: "x+y",
+          display: false,
+        },
       },
     ])
   })
@@ -49,7 +53,10 @@ describe("NaverSe4FormulaBlock", () => {
       </div>
     `)
 
-    expect(parsed.blocks[0]).toMatchObject({ type: "formula", formula: "a+b" })
+    expect(parsed.blocks[0]).toMatchObject({
+      blockId: "naver-se4:formula",
+      props: { formula: "a+b" },
+    })
   })
 
   it("parses formula text metadata and display flags", () => {
@@ -63,9 +70,11 @@ describe("NaverSe4FormulaBlock", () => {
     `)
 
     expect(parsed.blocks[0]).toMatchObject({
-      type: "formula",
-      formula: "c+d",
-      display: false,
+      blockId: "naver-se4:formula",
+      props: {
+        formula: "c+d",
+        display: false,
+      },
     })
   })
 

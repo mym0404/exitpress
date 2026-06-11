@@ -85,14 +85,16 @@ const wrappedLeafFixture = `
 `
 
 const wrappedLeafBlocks = [
-  { type: "paragraph", text: "첫 문단" },
-  { type: "heading", level: 2, text: "둘째 제목" },
-  { type: "quote", text: "셋째 인용" },
-  { type: "divider" },
+  { blockId: "naver-se2:paragraph", props: { text: "첫 문단" } },
+  { blockId: "naver-se2:heading", props: { level: 2, text: "둘째 제목" } },
+  { blockId: "naver-se2:quote", props: { text: "셋째 인용" } },
+  { blockId: "naver-se2:divider", props: {} },
   {
-    type: "code",
-    language: null,
-    code: "const nested = true",
+    blockId: "naver-se2:code",
+    props: {
+      language: null,
+      code: "const nested = true",
+    },
   },
 ]
 
@@ -122,7 +124,7 @@ describe("NaverSe2ContainerBlock", () => {
       </font>
     `)
 
-    expect(parsed.blocks).toEqual([{ type: "paragraph", text: "연말결산" }])
+    expect(parsed.blocks).toEqual([{ blockId: "naver-se2:paragraph", props: { text: "연말결산" } }])
   })
 
   it("unwraps text wrappers that mix paragraphs and Color Scripter code tables", () => {
@@ -147,13 +149,15 @@ describe("NaverSe2ContainerBlock", () => {
     `)
 
     expect(parsed.blocks).toEqual([
-      { type: "paragraph", text: "해결책은 다음과 같다." },
+      { blockId: "naver-se2:paragraph", props: { text: "해결책은 다음과 같다." } },
       {
-        type: "code",
-        language: null,
-        code: "interface EventHandler {\n  fun onSee()\n}",
+        blockId: "naver-se2:code",
+        props: {
+          language: null,
+          code: "interface EventHandler {\n  fun onSee()\n}",
+        },
       },
-      { type: "paragraph", text: "이후 설명" },
+      { blockId: "naver-se2:paragraph", props: { text: "이후 설명" } },
     ])
   })
 
@@ -173,8 +177,10 @@ describe("NaverSe2ContainerBlock", () => {
 
     expect(parsed.blocks).toMatchObject([
       {
-        type: "table",
-        rows: [[{ text: "행사명" }, { text: "DEVIEW" }]],
+        blockId: "naver-se2:table",
+        props: {
+          rows: [[{ text: "행사명" }, { text: "DEVIEW" }]],
+        },
       },
     ])
   })
@@ -184,7 +190,9 @@ describe("NaverSe2ContainerBlock", () => {
       <strong><strike><span>강조 문장</span></strike></strong>
     `)
 
-    expect(parsed.blocks).toEqual([{ type: "paragraph", text: "**~강조 문장~**" }])
+    expect(parsed.blocks).toEqual([
+      { blockId: "naver-se2:paragraph", props: { text: "**~강조 문장~**" } },
+    ])
   })
 
   it("uses the current editor leaf blocks instead of a fixed child tag list", () => {

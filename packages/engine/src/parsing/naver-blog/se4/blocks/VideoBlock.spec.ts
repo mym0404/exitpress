@@ -23,13 +23,13 @@ describe("NaverSe4VideoBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "video",
-        video: {
+        blockId: "naver-se4:video",
+        props: {
           title: "Demo video",
           thumbnailUrl: "https://example.com/video-thumb.png",
-          sourceUrl,
-          vid: null,
-          inkey: null,
+          url: sourceUrl,
+          vid: "vid-1",
+          inkey: "inkey-1",
           width: 640,
           height: 360,
         },
@@ -46,11 +46,11 @@ describe("NaverSe4VideoBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "video",
-        video: {
+        blockId: "naver-se4:video",
+        props: {
           title: "Video",
           thumbnailUrl: null,
-          sourceUrl,
+          url: sourceUrl,
           vid: null,
           inkey: null,
           width: null,
@@ -66,8 +66,8 @@ describe("NaverSe4VideoBlock", () => {
     `)
 
     expect(parsed.blocks[0]).toMatchObject({
-      type: "video",
-      video: {
+      blockId: "naver-se4:video",
+      props: {
         title: "Video",
         thumbnailUrl: null,
         vid: null,

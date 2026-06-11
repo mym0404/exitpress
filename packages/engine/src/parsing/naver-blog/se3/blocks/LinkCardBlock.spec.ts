@@ -2,7 +2,7 @@ import { parseSe3Blocks } from "@tests/support/parser-test-utils.js"
 import { describe, expect, it } from "vitest"
 
 describe("NaverSe3LinkCardBlock", () => {
-  it("parses oglink components into link paragraphs", () => {
+  it("parses oglink components into link card blocks", () => {
     const parsed = parseSe3Blocks(`
       <div class="se_component se_oglink default ">
         <div class="se_sectionArea se_align-center">
@@ -21,12 +21,13 @@ describe("NaverSe3LinkCardBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "paragraph",
-        text: "[首页--汉语考试服务网](http://www.chinesetest.cn/index.do)",
-      },
-      {
-        type: "paragraph",
-        text: "简体中文 | English | 한국어",
+        blockId: "naver-se3:linkCard",
+        props: {
+          title: "首页--汉语考试服务网",
+          description: "简体中文 | English | 한국어",
+          url: "http://www.chinesetest.cn/index.do",
+          thumbnailUrl: null,
+        },
       },
     ])
   })
@@ -49,8 +50,20 @@ describe("NaverSe3LinkCardBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "paragraph",
-        text: "[https://example.com/from-data](https://example.com/from-data)",
+        blockId: "naver-se3:linkCard",
+        props: {
+          title: "https://example.com/from-data",
+          description: "",
+          url: "https://example.com/from-data",
+          thumbnailUrl: "https://dthumb-phinf.pstatic.net/sample.jpg?type=ff500_300",
+        },
+        assets: {
+          thumbnailUrl: {
+            role: "thumbnail",
+            sourceUrl: "https://dthumb-phinf.pstatic.net/sample.jpg?type=ff500_300",
+            required: false,
+          },
+        },
       },
     ])
   })
