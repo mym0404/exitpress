@@ -57,7 +57,6 @@
 - `mise exec -- pnpm check:full`: default local baseline after ordinary code changes; use narrower commands only for repetitive inner-loop checks or when the environment blocks full execution.
 - `mise exec -- pnpm check:local`: format, lint, typecheck, Storybook check, and offline tests without browser smoke.
 - `mise exec -- pnpm check:unused`: dead-code and unused export baseline; run after deleting, moving, or renaming code.
-- `mise exec -- pnpm check:blog-boundaries`: verifies provider-neutral abstractions stay out of `packages/blog-*`.
 - `mise exec -- pnpm test:provider:mock`: provider-neutral engine export harness.
 - `mise exec -- pnpm test:provider:tistory`: live Tistory provider harness; requires `EXITPRESS_TISTORY_LIVE_POST_URL`.
 - `mise exec -- pnpm smoke:ui`: mock browser UI flows; run for user-visible web, server API, export, resume, upload, routing, static asset, or job-state changes.

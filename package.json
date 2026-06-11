@@ -16,7 +16,6 @@
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "storybook:generate": "bun scripts/storybook/generate-catalog.ts",
     "storybook:check": "bun scripts/storybook/generate-catalog.ts --check",
-    "check:blog-boundaries": "bun scripts/maintenance/check-blog-provider-boundaries.ts",
     "check:unused": "bun scripts/maintenance/check-unused.ts",
     "gh:update-branches": "bun scripts/maintenance/update-open-pr-branches.ts",
     "test": "vitest run --configLoader runner --silent",

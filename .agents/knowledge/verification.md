@@ -16,7 +16,6 @@
 - `mise exec -- pnpm test:offline`: full Vitest suite.
 - `mise exec -- pnpm check:local`: format, lint, typecheck, Storybook check, and offline tests.
 - `mise exec -- pnpm check:unused`: unused source/test/script diagnostics.
-- `mise exec -- pnpm check:blog-boundaries`: prevents provider-neutral abstractions from being defined under `packages/blog-*`.
 - `mise exec -- pnpm test:provider:mock`: provider-neutral engine export harness with mock providers.
 - `test -n "$EXITPRESS_TISTORY_LIVE_POST_URL" && mise exec -- pnpm test:provider:tistory`: live Tistory provider export harness.
 - `mise exec -- pnpm smoke:ui`: mock browser scan/export/provider-test/automatic-upload/resume workflow.
@@ -55,4 +54,3 @@
 - Export, manifest, upload, resume, UI state, server API, routing, static asset serving, or job-state changes require smoke UI.
 - Upload e2e changes must keep both mock smoke and live upload harnesses aligned with the current export-triggered upload flow.
 - Live fetch/upload changes require the matching network command when the environment supports it.
-- Provider refactor completion requires `mise exec -- pnpm check:full`, `mise exec -- pnpm test:network`, `mise exec -- pnpm test:provider:mock`, `mise exec -- pnpm test:provider:tistory`, and `mise exec -- pnpm check:blog-boundaries`; skip only the live Tistory command when `EXITPRESS_TISTORY_LIVE_POST_URL` is unavailable and report that environment gap.
