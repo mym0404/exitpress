@@ -38,7 +38,7 @@ export const panelCopy: Record<JobResultsMode, { title: string; description: str
     description: "",
   },
   upload: {
-    title: "Image Upload",
+    title: "이미지 업로드",
     description: "",
   },
   result: {

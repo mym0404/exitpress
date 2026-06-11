@@ -56,19 +56,19 @@ export const FrontmatterOptionsStep = ({
       >
         <div className="frontmatter-state-copy grid min-w-0 gap-2">
           <span className="frontmatter-state-label text-sm font-semibold text-foreground">
-            Alias 상태
+            별칭 상태
           </span>
           <p className="frontmatter-description text-sm leading-6">
             {frontmatterValidationErrors.length > 0
-              ? "중복되거나 비어 있는 alias를 먼저 정리한 뒤 내보내세요."
-              : "현재 frontmatter alias 구성이 유효합니다."}
+              ? "별칭 중복이나 빈 값을 먼저 정리한 뒤 내보내세요."
+              : "현재 frontmatter 별칭 구성이 올바릅니다."}
           </p>
         </div>
         <Badge
           className="frontmatter-state-badge flex min-w-[4.5rem] justify-center rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em]"
           variant={frontmatterValidationErrors.length > 0 ? "destructive" : "secondary"}
         >
-          {frontmatterValidationErrors.length > 0 ? "alias 오류" : "정상"}
+          {frontmatterValidationErrors.length > 0 ? "별칭 오류" : "정상"}
         </Badge>
       </div>
     </div>
@@ -80,7 +80,7 @@ export const FrontmatterOptionsStep = ({
         data-state="error"
         variant="destructive"
       >
-        <AlertTitle>Frontmatter alias</AlertTitle>
+        <AlertTitle>Frontmatter 별칭</AlertTitle>
         <AlertDescription>{frontmatterValidationErrors.join(" ")}</AlertDescription>
       </Alert>
     ) : null}
@@ -138,7 +138,7 @@ export const FrontmatterOptionsStep = ({
               className="field frontmatter-alias-field grid min-h-0 gap-1.5"
               htmlFor={`frontmatter-alias-${fieldName}`}
             >
-              <span className="text-sm font-semibold text-foreground">내보낼 key alias</span>
+              <span className="text-sm font-semibold text-foreground">내보낼 key 별칭</span>
               <Input
                 id={`frontmatter-alias-${fieldName}`}
                 data-alias-input="true"

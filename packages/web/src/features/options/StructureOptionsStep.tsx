@@ -77,7 +77,7 @@ export const StructureOptionsStep = ({
       <OptionField
         optionKey="structure-slugStyle"
         labelFor="structure-slugStyle"
-        label="slug/카테고리 표기 방식"
+        label="slug와 카테고리 표기 방식"
         description={description("structure-slugStyle")}
       >
         <OptionSelectField
@@ -104,7 +104,7 @@ export const StructureOptionsStep = ({
       <OptionField
         optionKey="structure-slugWhitespace"
         labelFor="structure-slugWhitespace"
-        label="slug/카테고리 공백 처리"
+        label="slug와 카테고리 공백 처리"
         description={description("structure-slugWhitespace")}
       >
         <OptionSelectField
@@ -150,7 +150,7 @@ export const StructureOptionsStep = ({
           <div className="grid gap-1">
             <span className="text-sm font-semibold text-foreground">실시간 폴더명 예시</span>
             <p className="text-sm leading-6 text-muted-foreground">
-              {structureTemplatePreviewPost.title} 글을 예시로 바로 표시합니다.
+              {structureTemplatePreviewPost.title}을 예시로 바로 표시합니다.
             </p>
           </div>
 

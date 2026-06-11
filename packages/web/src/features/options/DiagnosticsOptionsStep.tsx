@@ -24,7 +24,7 @@ export const DiagnosticsOptionsStep = ({
         value={options.assets.downloadFailureMode}
         disabled={options.assets.imageHandlingMode === "remote"}
         options={[
-          { value: "fail", label: "글 실패 처리" },
+          { value: "fail", label: "글을 실패로 처리" },
           { value: "use-source", label: "원본 URL 유지" },
           { value: "omit", label: "이미지 생략" },
         ]}

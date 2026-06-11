@@ -85,7 +85,7 @@ export const useAppResumeBootstrap = ({
           ...current,
           [resumedScanResult.blogId]: resumedScanResult,
         }))
-        setNeutralScanStatus(`${resumedScanResult.blogId} 스캔 결과 재개`)
+        setNeutralScanStatus(`${resumedScanResult.blogId} 스캔 결과를 불러왔습니다.`)
         setCategoryStatus(restoredCategoryStatus)
       } else {
         setScanCache({})
@@ -144,7 +144,7 @@ export const useAppResumeBootstrap = ({
 
       if (nextDefaults.resumedScanResult) {
         setScanCache({ [nextDefaults.resumedScanResult.blogId]: nextDefaults.resumedScanResult })
-        setNeutralScanStatus(`${nextDefaults.resumedScanResult.blogId} 스캔 결과 재개`)
+        setNeutralScanStatus(`${nextDefaults.resumedScanResult.blogId} 스캔 결과를 불러왔습니다.`)
         setCategoryStatus(restoredCategoryStatus)
       } else {
         setScanCache({})

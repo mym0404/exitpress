@@ -187,7 +187,7 @@ export const UploadProviderSettingsForm = ({
               data-value={providerKey}
               aria-describedby="upload-providerKey-description"
             >
-              <SelectValue placeholder="Provider 선택" />
+              <SelectValue placeholder="서비스 선택" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
@@ -209,14 +209,14 @@ export const UploadProviderSettingsForm = ({
         <div className="grid items-start gap-3 sm:grid-cols-2">
           {providerKey === UPLOAD_PROVIDER_KEYS.ALIST ? (
             <div className="subtle-panel grid gap-2 rounded-2xl px-4 py-3 sm:col-span-2">
-              <span className="text-sm font-semibold text-foreground">Authentication</span>
+              <span className="text-sm font-semibold text-foreground">인증 방식</span>
               <span className="text-sm leading-6 text-muted-foreground">
-                AList는 Token 또는 계정 인증 중 하나만 사용합니다.
+                AList는 Token 인증과 계정 인증 중 하나만 사용합니다.
               </span>
               <ToggleGroup
                 type="single"
                 value={activeProviderUiState.alistAuthMode}
-                aria-label="Authentication 방식"
+                aria-label="인증 방식"
                 className="justify-start"
                 onValueChange={(nextMode) => {
                   if (!isAlistAuthMode(nextMode)) {
@@ -244,9 +244,9 @@ export const UploadProviderSettingsForm = ({
                 <ToggleGroupItem
                   value="account"
                   className="theme-toggle-item min-w-[10rem]"
-                  aria-label="Username + Password"
+                  aria-label="사용자 이름 + 비밀번호"
                 >
-                  Username + Password
+                  사용자 이름 + 비밀번호
                 </ToggleGroupItem>
               </ToggleGroup>
             </div>

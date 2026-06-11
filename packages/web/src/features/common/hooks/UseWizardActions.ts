@@ -45,7 +45,7 @@ export const useWizardActions = (args: UseWizardActionsArgs) => {
 
     if (frontmatterValidationErrors.length > 0) {
       setSetupStep("frontmatter-options")
-      setCategoryStatus("Frontmatter alias 오류를 먼저 해결하세요.")
+      setCategoryStatus("Frontmatter 별칭 오류를 먼저 해결하세요.")
       return
     }
 
@@ -94,7 +94,7 @@ export const useWizardActions = (args: UseWizardActionsArgs) => {
     }
 
     if (setupStep === "upload-provider-options" && !uploadProviderSettingsReady) {
-      setUploadProviderStepMessage("Image Upload 설정을 먼저 입력해야 합니다.")
+      setUploadProviderStepMessage("이미지 업로드 설정을 먼저 입력해야 합니다.")
       return
     }
 

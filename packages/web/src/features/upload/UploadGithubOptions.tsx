@@ -44,7 +44,7 @@ export const UploadGithubOptions = ({
             className="text-sm leading-6 text-muted-foreground"
           >
             {githubUseJsDelivr
-              ? githubJsDelivrUrl || "Repository를 입력하면 jsDelivr 주소를 만듭니다."
+              ? githubJsDelivrUrl || "저장소를 입력하면 jsDelivr 주소를 만듭니다."
               : "기본 GitHub 업로드 URL을 씁니다."}
           </span>
         </span>
@@ -55,20 +55,20 @@ export const UploadGithubOptions = ({
             htmlFor="upload-github-jsdelivr-preview"
             className="text-sm font-semibold text-foreground"
           >
-            자동 Custom URL
+            자동 커스텀 URL
           </label>
           <Input
             id="upload-github-jsdelivr-preview"
             value={githubJsDelivrUrl}
             readOnly
             aria-describedby="upload-github-jsdelivr-preview-description"
-            placeholder="Repository와 Branch를 입력하면 미리보기가 보입니다."
+            placeholder="저장소와 브랜치를 입력하면 미리보기가 보입니다."
           />
           <span
             id="upload-github-jsdelivr-preview-description"
             className="text-sm leading-6 text-muted-foreground"
           >
-            제출하면 jsDelivr 주소가 Custom URL로 자동 적용됩니다.
+            제출하면 jsDelivr 주소가 커스텀 URL로 자동 적용됩니다.
           </span>
         </div>
       ) : null}

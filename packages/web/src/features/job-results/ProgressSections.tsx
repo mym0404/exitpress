@@ -49,7 +49,7 @@ export const RunningProgressSection = ({
       {showResumeExportButton ? (
         <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[color-mix(in_srgb,var(--status-running-fg)_25%,transparent)] bg-[var(--status-running-bg)] px-4 py-3">
           <p className="info-copy text-sm leading-6">
-            이전 export 상태를 복구했습니다. 남은 글만 이어서 내보냅니다.
+            이전 내보내기 상태를 복구했습니다. 남은 글만 이어서 내보냅니다.
           </p>
           <Button
             id="resume-export-submit"

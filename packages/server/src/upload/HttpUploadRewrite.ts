@@ -109,7 +109,7 @@ export const rewriteReadyPosts = async ({
         throw error
       }
 
-      throw new Error(`Document rewrite failed for ${post.outputPath}: ${toErrorMessage(error)}`)
+      throw new Error(`문서 치환에 실패했습니다: ${post.outputPath}: ${toErrorMessage(error)}`)
     }
   }
 }

@@ -544,7 +544,7 @@ const createUploadCompletedJob = () =>
       },
       {
         timestamp: uploadTimelineTimestamps.finishedAt,
-        message: "Image Upload와 결과 치환이 끝났습니다.",
+        message: "이미지 업로드와 결과 치환이 완료되었습니다.",
       },
     ],
   })
@@ -1336,9 +1336,9 @@ const run = async () => {
 
     const forceScanTooltip = await page.locator("#force-scan-button").getAttribute("title")
 
-    if (forceScanTooltip !== "캐시 무효화") {
+    if (forceScanTooltip !== "캐시 비우기") {
       throw new Error(
-        `expected force scan tooltip to be cache invalidation, got ${forceScanTooltip ?? "null"}`,
+        `expected force scan tooltip to be cache clearing, got ${forceScanTooltip ?? "null"}`,
       )
     }
 
@@ -1508,7 +1508,7 @@ const run = async () => {
       throw new Error("export button should not appear before the assets step")
     }
 
-    await page.click('button:has-text("Assets 설정")')
+    await page.click('button:has-text("자산 설정")')
     await waitForStepView({
       page,
       step: "assets-options",
@@ -1564,14 +1564,14 @@ const run = async () => {
 
     await page.waitForSelector("text=https://cdn.example.com/test-upload.png")
 
-    await page.click('button:has-text("Link 처리")')
+    await page.click('button:has-text("링크 처리")')
     await waitForStepView({
       page,
       step: "links-options",
     })
 
     if (await page.locator("#export-button").count()) {
-      throw new Error("export button should stay hidden inside the Link 처리 step")
+      throw new Error("export button should stay hidden inside the 링크 처리 step")
     }
 
     await page.click('button:has-text("진단 설정")')
@@ -1608,7 +1608,7 @@ const run = async () => {
     })
     await page.fill('[data-frontmatter-field="source"] input[data-alias-input="true"]', "")
     await page.fill('[data-frontmatter-field="title"] input[data-alias-input="true"]', "postTitle")
-    await page.click('button:has-text("Assets 설정")')
+    await page.click('button:has-text("자산 설정")')
     await waitForStepView({
       page,
       step: "assets-options",
@@ -1721,7 +1721,7 @@ const run = async () => {
       throw new Error(`final test upload request failed: ${finalTestUploadResponse.status()}`)
     }
 
-    await page.click('button:has-text("Link 처리")')
+    await page.click('button:has-text("링크 처리")')
     await waitForStepView({
       page,
       step: "links-options",

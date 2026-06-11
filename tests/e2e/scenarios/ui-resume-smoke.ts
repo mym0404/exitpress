@@ -362,8 +362,8 @@ const buildUploadJob = ({
             : status === "uploading"
               ? "이전 업로드 상태를 복구했습니다."
               : status === "upload-failed"
-                ? "Image upload failed."
-                : "Image Upload와 결과 치환이 끝났습니다.",
+                ? "이미지 업로드에 실패했습니다."
+                : "이미지 업로드와 결과 치환이 완료되었습니다.",
       },
     ],
     createdAt: timestamps.createdAt,
@@ -801,7 +801,7 @@ const run = async () => {
     outputDir: uploadFailedOutputDir,
     uploadedCounts: [2, 1, 1],
     rewriteStatuses: ["completed", "failed", "failed"],
-    error: "Image upload failed.",
+    error: "이미지 업로드에 실패했습니다.",
     finishedAt: null,
   })
   const completedJob = buildCompletedJob({
@@ -1027,7 +1027,7 @@ const run = async () => {
         await page.waitForSelector("#job-file-tree table", {
           timeout: responseTimeoutMs,
         })
-        await page.waitForSelector("text=Image upload failed.", {
+        await page.waitForSelector("text=이미지 업로드에 실패했습니다.", {
           timeout: responseTimeoutMs,
         })
         await assertUploadRowStatus({

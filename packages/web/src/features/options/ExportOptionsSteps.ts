@@ -25,10 +25,10 @@ export const exportOptionsStepMeta: Record<
     title: "Markdown 설정",
   },
   assets: {
-    title: "Assets 설정",
+    title: "자산 설정",
   },
   links: {
-    title: "Link 처리",
+    title: "링크 처리",
   },
   diagnostics: {
     title: "진단 설정",

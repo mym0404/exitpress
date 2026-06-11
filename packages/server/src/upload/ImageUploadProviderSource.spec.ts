@@ -118,7 +118,7 @@ describe("createImageUploadProviderSource", () => {
     ])
     expect(catalog.providers[0]).toMatchObject({
       key: "github",
-      description: "리포지토리에 이미지를 커밋해 URL로 씁니다.",
+      description: "리포지토리에 이미지를 커밋해 URL로 사용합니다.",
       fields: [
         {
           key: "repo",
@@ -141,7 +141,7 @@ describe("createImageUploadProviderSource", () => {
         {
           key: "secretId",
           label: "Secret ID",
-          description: "서비스에서 발급한 secret ID입니다.",
+          description: "서비스가 발급한 secret ID입니다.",
           inputType: "password",
         },
         {

@@ -40,7 +40,7 @@ export const sanitizeUploadError = ({
   const rawMessage = toErrorMessage(error).replace(/\s+/g, " ").trim()
 
   if (!rawMessage) {
-    return "Image upload failed."
+    return "이미지 업로드에 실패했습니다."
   }
 
   return Object.values(providerFields)

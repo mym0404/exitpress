@@ -24,7 +24,7 @@ export const runUploadProviderTest = async ({
   const uploadedUrl = results[0]?.uploadedUrl
 
   if (!uploadedUrl) {
-    throw new Error("Image upload test did not return an uploaded URL.")
+    throw new Error("테스트 업로드에서 업로드 URL을 반환하지 않았습니다.")
   }
 
   return uploadedUrl

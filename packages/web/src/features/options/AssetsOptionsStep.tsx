@@ -11,7 +11,7 @@ export const AssetsOptionsStep = ({
   description: (key: string) => string | undefined
   onOptionsChange: (updater: (current: ExportOptions) => ExportOptions) => void
 }) => (
-  <OptionSection title="Assets" note="다운로드와 참조 방식">
+  <OptionSection title="자산" note="다운로드와 참조 방식">
     <OptionField
       optionKey="assets-imageHandlingMode"
       labelFor="assets-imageHandlingMode"
@@ -24,7 +24,7 @@ export const AssetsOptionsStep = ({
         options={[
           { value: "download", label: "다운로드 유지" },
           { value: "remote", label: "네이버 원본 URL 유지" },
-          { value: "download-and-upload", label: "다운로드 후 Image Upload" },
+          { value: "download-and-upload", label: "다운로드 후 이미지 업로드" },
         ]}
         onValueChange={(imageHandlingMode) =>
           onOptionsChange((current) => ({

@@ -218,7 +218,7 @@ describe("export options", () => {
     })
 
     expect(errors).toEqual([
-      "title alias는 영문자 또는 _로 시작하고 영문자, 숫자, -, _만 사용할 수 있습니다.",
+      "title alias는 영문자 또는 _로 시작해야 하며 영문자, 숫자, -, _만 사용할 수 있습니다.",
     ])
   })
 

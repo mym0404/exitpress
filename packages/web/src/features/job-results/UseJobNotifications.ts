@@ -28,7 +28,7 @@ export const useJobNotifications = ({
     lastNotifiedJobKeyRef.current = notificationKey
 
     if (job.status === JOB_STATUSES.UPLOAD_READY) {
-      toast("내보내기가 끝났습니다. Image Upload를 시작할 준비가 됐습니다.", {
+      toast("내보내기가 끝났습니다. 이미지 업로드를 시작할 수 있습니다.", {
         description: `업로드 대상 ${job.upload.candidateCount}개`,
       })
       return
@@ -42,14 +42,14 @@ export const useJobNotifications = ({
     }
 
     if (job.status === JOB_STATUSES.UPLOAD_COMPLETED) {
-      toast.success("Image Upload까지 끝났습니다.", {
+      toast.success("이미지 업로드까지 끝났습니다.", {
         description: `업로드 ${job.upload.uploadedCount}개`,
       })
       return
     }
 
     if (job.status === JOB_STATUSES.UPLOAD_FAILED) {
-      toast.error("Image Upload에 실패했습니다.", {
+      toast.error("이미지 업로드에 실패했습니다.", {
         description: job.error ?? "로그를 확인하세요.",
       })
       return

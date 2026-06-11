@@ -23,7 +23,7 @@ export const BootstrapLoadingOverlay = () => (
               작업 상태를 확인하는 중입니다.
             </h1>
             <p className="text-sm leading-6 text-muted-foreground">
-              이전 작업을 다시 불러올지, 새로 시작할지 확인 중입니다.
+              이전 작업을 불러올지, 새로 시작할지 확인 중입니다.
             </p>
           </div>
         </div>

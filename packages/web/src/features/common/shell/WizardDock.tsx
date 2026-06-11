@@ -56,11 +56,11 @@ export const WizardDock = ({
               id="force-scan-button"
               variant="surface"
               className="h-10 rounded-xl px-4"
-              title="캐시 무효화"
+              title="캐시 비우기"
               disabled={!currentScanTarget || scanPending}
               onClick={onForceScan}
             >
-              강제로 불러오기
+              새로 불러오기
             </Button>
           ) : null}
 

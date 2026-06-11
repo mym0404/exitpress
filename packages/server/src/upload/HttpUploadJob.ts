@@ -62,7 +62,7 @@ export const runUploadForJob = async ({
   )
 
   jobStore.startUpload(jobId, uploadedLocalPaths)
-  jobStore.appendLog(jobId, "Image Upload를 시작했습니다.")
+  jobStore.appendLog(jobId, "이미지 업로드를 시작했습니다.")
   await flushManifestPersist(jobId)
 
   try {
@@ -179,7 +179,7 @@ export const runUploadForJob = async ({
       manifest: completedManifest,
       items: completedJob.items,
     })
-    jobStore.appendLog(jobId, "Image Upload와 결과 치환이 완료되었습니다.")
+    jobStore.appendLog(jobId, "이미지 업로드와 결과 치환이 완료되었습니다.")
     await flushManifestPersist(jobId)
   } catch (error) {
     if (error instanceof ImageUploadPhaseError) {

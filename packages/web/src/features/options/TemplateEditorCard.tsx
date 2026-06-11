@@ -292,7 +292,7 @@ export const TemplateEditorCard = ({
                   <DialogHeader>
                     <DialogTitle>템플릿 문법</DialogTitle>
                     <DialogDescription>
-                      중괄호 두 개 안에 JavaScript와 비슷한 expression을 입력합니다.
+                      중괄호 두 개 안에 JavaScript와 비슷한 식을 입력합니다.
                     </DialogDescription>
                   </DialogHeader>
                   <div className="grid gap-4 text-sm leading-6 text-muted-foreground">
@@ -316,7 +316,7 @@ export const TemplateEditorCard = ({
                         <span className="font-semibold text-foreground">자동완성</span>
                         <p>
                           <code className="font-mono text-foreground">{"{{ "}</code>
-                          뒤에서 변수 이름을 입력하면 사용할 수 있는 prop을 제안합니다.
+                          뒤에 변수 이름을 입력하면 사용할 수 있는 prop을 제안합니다.
                         </p>
                         <div className="flex flex-wrap gap-2">
                           {propEntries.map(([key, prop]) => (

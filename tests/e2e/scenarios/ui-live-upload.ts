@@ -589,7 +589,7 @@ const run = async () => {
     for (const nextStep of ["frontmatter-options", "assets-options"] as const) {
       await clickWizardButton({
         page,
-        label: nextStep === "frontmatter-options" ? "Frontmatter 설정" : "Assets 설정",
+        label: nextStep === "frontmatter-options" ? "Frontmatter 설정" : "자산 설정",
       })
       await waitForStepView({
         page,
@@ -666,7 +666,7 @@ const run = async () => {
 
     await clickWizardButton({
       page,
-      label: "Link 처리",
+      label: "링크 처리",
     })
     await waitForStepView({
       page,

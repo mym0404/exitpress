@@ -28,9 +28,9 @@ export const providerDescriptionMap: Record<string, string> = {
   [UPLOAD_PROVIDER_KEYS.ALIST]: "AList 스토리지 경로로 이미지를 업로드합니다.",
   [UPLOAD_PROVIDER_KEYS.ALIYUN]: "Aliyun OSS 버킷에 이미지를 업로드합니다.",
   [UPLOAD_PROVIDER_KEYS.AWS_S3]: "S3 호환 버킷에 이미지를 업로드합니다.",
-  [UPLOAD_PROVIDER_KEYS.GITHUB]: "리포지토리에 이미지를 커밋해 URL로 씁니다.",
+  [UPLOAD_PROVIDER_KEYS.GITHUB]: "리포지토리에 이미지를 커밋해 URL로 사용합니다.",
   [UPLOAD_PROVIDER_KEYS.IMGUR]: "Imgur 계정 또는 익명 업로드로 이미지를 보관합니다.",
-  [UPLOAD_PROVIDER_KEYS.LOCAL]: "현재 머신의 로컬 경로에 이미지를 저장합니다.",
+  [UPLOAD_PROVIDER_KEYS.LOCAL]: "현재 컴퓨터의 로컬 경로에 이미지를 저장합니다.",
   [UPLOAD_PROVIDER_KEYS.LSKY]: "Lsky Pro 이미지 호스팅 서버로 업로드합니다.",
   [UPLOAD_PROVIDER_KEYS.PICLIST]: "실행 중인 업로드 서버에 요청을 보냅니다.",
   [UPLOAD_PROVIDER_KEYS.QINIU]: "Qiniu 버킷과 CDN 주소를 사용해 업로드합니다.",
@@ -48,17 +48,17 @@ type UploadFieldMetadata = Partial<
 export const commonFieldMetadata: Record<string, UploadFieldMetadata> = {
   accessKeyId: {
     label: "Access Key ID",
-    description: "서비스에서 발급한 access key ID입니다.",
+    description: "서비스가 발급한 access key ID입니다.",
     placeholder: "AKIAxxxxxxxxxxxxx",
   },
   accessKeyID: {
     label: "Access Key ID",
-    description: "서비스에서 발급한 access key ID입니다.",
+    description: "서비스가 발급한 access key ID입니다.",
     placeholder: "AKIAxxxxxxxxxxxxx",
   },
   accessKeySecret: {
     label: "Access Key Secret",
-    description: "서비스에서 발급한 secret key입니다.",
+    description: "서비스가 발급한 secret key입니다.",
     placeholder: "xxxxxxxxxx",
   },
   accessToken: {
@@ -101,7 +101,7 @@ export const commonFieldMetadata: Record<string, UploadFieldMetadata> = {
   },
   body: {
     label: "Body",
-    description: "추가로 보낼 JSON body입니다.",
+    description: "추가로 보낼 JSON 본문입니다.",
     placeholder: '{"key":"value"}',
   },
   branch: {
@@ -121,7 +121,7 @@ export const commonFieldMetadata: Record<string, UploadFieldMetadata> = {
   },
   clientId: {
     label: "Client ID",
-    description: "서비스에서 발급한 client ID입니다.",
+    description: "서비스가 발급한 client ID입니다.",
     placeholder: "client_id_xxx",
   },
   configName: {
@@ -136,7 +136,7 @@ export const commonFieldMetadata: Record<string, UploadFieldMetadata> = {
   },
   customUrl: {
     label: "Custom URL",
-    description: "최종 파일 URL을 직접 덮어쓸 때 씁니다.",
+    description: "최종 파일 URL을 직접 지정할 때 사용합니다.",
     placeholder: "https://cdn.example.com",
   },
   dirMode: {
@@ -146,7 +146,7 @@ export const commonFieldMetadata: Record<string, UploadFieldMetadata> = {
   },
   disableBucketPrefixToURL: {
     label: "Hide Bucket Prefix In URL",
-    description: "path style URL에서 bucket 접두사를 숨깁니다.",
+    description: "path-style URL에서 버킷 접두사를 숨깁니다.",
   },
   endpoint: {
     label: "Endpoint",
@@ -199,7 +199,7 @@ export const commonFieldMetadata: Record<string, UploadFieldMetadata> = {
   },
   passphrase: {
     label: "Passphrase",
-    description: "개인 키에 암호가 걸려 있을 때 씁니다.",
+    description: "개인 키에 암호가 설정되어 있을 때 사용합니다.",
     placeholder: "passphrase",
   },
   password: {
@@ -209,12 +209,12 @@ export const commonFieldMetadata: Record<string, UploadFieldMetadata> = {
   },
   path: {
     label: "Path",
-    description: "원격 저장소 안에서 파일을 둘 하위 경로입니다.",
+    description: "원격 저장소에서 파일을 저장할 하위 경로입니다.",
     placeholder: "images/posts",
   },
   pathStyleAccess: {
     label: "Path Style Access",
-    description: "S3 URL을 path style 방식으로 만듭니다.",
+    description: "S3 URL을 path-style 방식으로 만듭니다.",
   },
   permission: {
     label: "Permission",
@@ -261,17 +261,17 @@ export const commonFieldMetadata: Record<string, UploadFieldMetadata> = {
   },
   secretAccessKey: {
     label: "Secret Access Key",
-    description: "서비스에서 발급한 secret access key입니다.",
+    description: "서비스가 발급한 secret access key입니다.",
     placeholder: "xxxxxxxxxx",
   },
   secretId: {
     label: "Secret ID",
-    description: "서비스에서 발급한 secret ID입니다.",
+    description: "서비스가 발급한 secret ID입니다.",
     placeholder: "secret-id-xxx",
   },
   secretKey: {
     label: "Secret Key",
-    description: "서비스에서 발급한 secret key입니다.",
+    description: "서비스가 발급한 secret key입니다.",
     placeholder: "secret-key-xxx",
   },
   serverKey: {
@@ -304,12 +304,12 @@ export const commonFieldMetadata: Record<string, UploadFieldMetadata> = {
   },
   uploadScriptName: {
     label: "Upload Script Name",
-    description: "스크립트 디렉터리에 있는 업로드 스크립트 파일명입니다.",
+    description: "스크립트 디렉터리에 있는 업로드 스크립트 파일 이름입니다.",
     placeholder: "upload.js",
   },
   url: {
     label: "URL",
-    description: "서비스 기본 주소나 업로드 후 접근할 기본 URL입니다.",
+    description: "서비스 기본 주소 또는 업로드 후 접근할 기본 URL입니다.",
     placeholder: "https://example.com",
   },
   urlPrefix: {

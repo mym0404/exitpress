@@ -63,7 +63,7 @@ export const validateFrontmatterAliases = ({
 
     if (alias && !frontmatterAliasPattern.test(alias)) {
       errors.push(
-        `${fieldName} alias는 영문자 또는 _로 시작하고 영문자, 숫자, -, _만 사용할 수 있습니다.`,
+        `${fieldName} alias는 영문자 또는 _로 시작해야 하며 영문자, 숫자, -, _만 사용할 수 있습니다.`,
       )
       continue
     }

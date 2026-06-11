@@ -282,7 +282,7 @@ const StoryTree = ({
       className="grid max-h-[min(44rem,calc(100vh-14rem))] grid-rows-[auto_minmax(0,1fr)] overflow-hidden lg:sticky lg:top-5"
     >
       <CardHeader className="border-b border-border p-4">
-        <CardTitle className="text-base">Blocks</CardTitle>
+        <CardTitle className="text-base">블록 목록</CardTitle>
       </CardHeader>
       <CardContent className="min-h-0 p-0">
         <ScrollArea className="h-full">
@@ -291,7 +291,7 @@ const StoryTree = ({
             value={openEditorTypes}
             onValueChange={setOpenEditorTypes}
             role="tree"
-            aria-label="Storybook stories"
+            aria-label="Storybook 블록 목록"
             className="grid gap-3 p-3"
           >
             {storybookCatalog.map((group) => (
@@ -399,7 +399,7 @@ const StoryPreview = ({ story }: { story: StorybookStory }) => {
     <section className="grid gap-4" data-active-storybook-story={story.storyKey}>
       <div
         className="flex flex-wrap items-center gap-2"
-        aria-label="선택된 storybook"
+        aria-label="선택된 Storybook 항목"
         data-storybook-summary="true"
       >
         <Badge variant="secondary" className="px-3 py-1 text-sm">
@@ -413,17 +413,17 @@ const StoryPreview = ({ story }: { story: StorybookStory }) => {
       <StoryTemplateCard story={story} />
 
       <div className="grid gap-4 xl:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">
-        <CodePanel title="Input HTML" codeType="html" compact>
+        <CodePanel title="입력 HTML" codeType="html" compact>
           {formatHtmlForDisplay(story.inputHtml)}
         </CodePanel>
         <Card variant="panel" className="overflow-hidden">
           <CardHeader className="border-b border-border p-4">
-            <CardTitle className="text-base">Source Capture</CardTitle>
+            <CardTitle className="text-base">원본 캡처</CardTitle>
           </CardHeader>
           <CardContent className="grid place-items-center bg-muted p-4">
             <img
               src={story.screenshotSrc}
-              alt={`${story.blockLabel} source capture`}
+              alt={`${story.blockLabel} 원본 캡처`}
               className="max-h-[420px] max-w-full rounded-[var(--radius-md)] border border-border bg-card object-contain shadow-[var(--panel-shadow-border)]"
             />
           </CardContent>
@@ -455,13 +455,13 @@ export const StorybookPage = () => {
           pathname: "/",
           basePath: import.meta.env.BASE_URL,
         }),
-        label: "Back",
+        label: "뒤로",
       }
     : undefined
   const summaryCards = useMemo(
     () => [
-      { label: "Editors", value: String(storybookCatalog.length) },
-      { label: "Blocks", value: String(getStoryCount()) },
+      { label: "편집기", value: String(storybookCatalog.length) },
+      { label: "블록", value: String(getStoryCount()) },
     ],
     [],
   )
@@ -499,7 +499,7 @@ export const StorybookPage = () => {
       <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-7xl flex-col gap-5 px-4 py-5 xl:px-6 xl:py-6">
         <WizardHeader
           title="Storybook"
-          description="지원 중인 block의 입력 HTML, 원본 캡처, Markdown 출력을 비교합니다."
+          description="지원 중인 블록의 입력 HTML, 원본 캡처, Markdown 출력을 비교합니다."
           themePreference={themePreference}
           headerStatus="ready"
           summaryCards={summaryCards}

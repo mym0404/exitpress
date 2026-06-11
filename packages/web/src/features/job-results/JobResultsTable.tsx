@@ -106,7 +106,7 @@ const JobItemActionMenu = ({
             variant="ghost"
             size="icon"
             className="size-7 rounded-full text-muted-foreground hover:bg-accent hover:text-foreground"
-            aria-label={`${item.title} 액션 메뉴`}
+            aria-label={`${item.title} 작업 메뉴`}
             onMouseEnter={() => {
               clearCloseTimer()
               setOpen(true)
@@ -304,7 +304,7 @@ export const JobResultsTable = ({
                   상태
                 </TableHead>
                 <TableHead className="w-[3.25rem] text-center text-[10px] sm:w-[3.5rem] sm:text-[11px]">
-                  액션
+                  작업
                 </TableHead>
               </TableRow>
             </TableHeader>

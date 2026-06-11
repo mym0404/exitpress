@@ -55,7 +55,7 @@ export const getUploadProviderFieldRule = ({
     return {
       ...baseRule,
       disabled: true,
-      disabledReason: "jsDelivr CDN을 사용 중이면 Custom URL은 자동으로 계산됩니다.",
+      disabledReason: "jsDelivr CDN을 사용 중이면 Custom URL은 자동으로 계산합니다.",
     }
   }
 
@@ -66,7 +66,7 @@ export const getUploadProviderFieldRule = ({
         disabled: providerUiState.alistAuthMode !== "token",
         disabledReason:
           providerUiState.alistAuthMode !== "token"
-            ? "계정 인증을 선택하면 Token 입력은 사용하지 않습니다."
+            ? "계정 인증을 선택하면 Token 입력란은 사용하지 않습니다."
             : null,
         required: providerUiState.alistAuthMode === "token",
       }
@@ -78,7 +78,7 @@ export const getUploadProviderFieldRule = ({
         disabled: providerUiState.alistAuthMode !== "account",
         disabledReason:
           providerUiState.alistAuthMode !== "account"
-            ? "Token 인증을 선택하면 계정 입력은 사용하지 않습니다."
+            ? "Token 인증을 선택하면 계정 입력란은 사용하지 않습니다."
             : null,
         required: providerUiState.alistAuthMode === "account",
       }
@@ -93,7 +93,7 @@ export const getUploadProviderFieldRule = ({
     return {
       ...baseRule,
       disabled: true,
-      disabledReason: "Path Style Access를 켜야 이 옵션이 활성화됩니다.",
+      disabledReason: "Path Style Access를 켜야 이 옵션을 사용할 수 있습니다.",
     }
   }
 
@@ -105,7 +105,7 @@ export const getUploadProviderFieldRule = ({
     return {
       ...baseRule,
       disabled: true,
-      disabledReason: "Lsky Pro V2를 선택해야 Album ID가 활성화됩니다.",
+      disabledReason: "Lsky Pro V2를 선택해야 Album ID를 사용할 수 있습니다.",
     }
   }
 
@@ -113,7 +113,7 @@ export const getUploadProviderFieldRule = ({
     return {
       ...baseRule,
       disabled: true,
-      disabledReason: "Private Key를 입력해야 Passphrase가 활성화됩니다.",
+      disabledReason: "Private Key를 입력해야 Passphrase를 사용할 수 있습니다.",
     }
   }
 

@@ -12,7 +12,7 @@ describe("UploadProviderOptionsStep", () => {
       <UploadProviderOptionsStep
         uploadProviders={{ defaultProviderKey: null, providers: [] }}
         uploadProviderError={null}
-        stepMessage="Image Upload 설정을 먼저 입력해야 합니다."
+        stepMessage="이미지 업로드 설정을 먼저 입력해야 합니다."
         testUploadSubmitting={false}
         testUploadResult={null}
         testUploadError={null}
@@ -22,6 +22,6 @@ describe("UploadProviderOptionsStep", () => {
       />,
     )
 
-    expect(screen.getByText("Image Upload 설정을 먼저 입력해야 합니다.")).toBeInTheDocument()
+    expect(screen.getByText("이미지 업로드 설정을 먼저 입력해야 합니다.")).toBeInTheDocument()
   })
 })

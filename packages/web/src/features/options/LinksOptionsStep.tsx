@@ -69,7 +69,7 @@ export const LinksOptionsStep = ({
           inputId="links-sameBlogPostMode-custom-url"
           name="links-sameBlogPostMode"
           optionKey="links-sameBlogPostMode"
-          label="내보낼 글이면 커스텀 URL로 바꾸기"
+          label="내보낼 글은 사용자 지정 URL로 바꾸기"
           description={description("links-sameBlogPostMode")}
           checked={options.links.sameBlogPostMode === "custom-url"}
           onChange={() =>
@@ -107,8 +107,8 @@ export const LinksOptionsStep = ({
                   <span className="text-sm font-semibold text-foreground">실시간 변환 예시</span>
                   <p className="text-sm leading-6 text-muted-foreground">
                     {linkTemplatePreviewPost
-                      ? `${linkTemplatePreviewPost.title} 글을 예시로 바로 표시합니다.`
-                      : "선택 범위에 글이 있으면 여기에서 실제 변환 결과를 바로 표시합니다."}
+                      ? `${linkTemplatePreviewPost.title}을 예시로 바로 표시합니다.`
+                      : "선택 범위에 글이 있으면 실제 변환 결과가 여기에 바로 표시됩니다."}
                   </p>
                 </div>
 
@@ -138,8 +138,8 @@ export const LinksOptionsStep = ({
           inputId="links-sameBlogPostMode-relative-filepath"
           name="links-sameBlogPostMode"
           optionKey="links-sameBlogPostMode"
-          label="내보낸 결과 기준 상대경로 filepath로 바꾸기"
-          description="함께 내보낸 다른 글이면 현재 Markdown 파일 위치의 상대경로로 바꿉니다."
+          label="내보낸 결과 기준 상대 파일 경로로 바꾸기"
+          description="함께 내보낸 다른 글이면 현재 Markdown 파일 위치를 기준으로 한 상대경로로 바꿉니다."
           checked={options.links.sameBlogPostMode === "relative-filepath"}
           onChange={() =>
             onOptionsChange((current) => ({

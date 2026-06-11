@@ -68,7 +68,7 @@ export const useWizardResumeActions = ({
         resumedScanResult: restored.resumedScanResult,
       })
       toast.success("이전 작업을 다시 불러왔습니다.", {
-        description: `${restored.resumeSummary.outputDir} 작업 상태를 되살렸습니다.`,
+        description: `${restored.resumeSummary.outputDir} 작업 상태를 복구했습니다.`,
       })
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error)
