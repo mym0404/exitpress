@@ -13,9 +13,11 @@ console.log(classic)
 
     expect(parsed.blocks).toEqual([
       {
-        type: "code",
-        language: null,
-        code: "const classic = true\nconsole.log(classic)",
+        blockId: "naver-se3:code",
+        props: {
+          language: null,
+          code: "const classic = true\nconsole.log(classic)",
+        },
       },
     ])
   })

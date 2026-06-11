@@ -18,19 +18,33 @@ describe("NaverSe4ImageGroupBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "imageGroup",
-        images: [
-          {
-            url: "https://example.com/one.png",
-            alt: "one",
-            caption: "shared caption",
+        blockId: "naver-se4:imageGroup",
+        props: {
+          images: [
+            {
+              url: "https://example.com/one.png",
+              alt: "one",
+              caption: "shared caption",
+            },
+            {
+              url: "https://example.com/two.png",
+              alt: "two",
+              caption: "shared caption",
+            },
+          ],
+        },
+        assets: {
+          "images.0.url": {
+            role: "image",
+            sourceUrl: "https://example.com/one.png",
+            required: true,
           },
-          {
-            url: "https://example.com/two.png",
-            alt: "two",
-            caption: "shared caption",
+          "images.1.url": {
+            role: "image",
+            sourceUrl: "https://example.com/two.png",
+            required: true,
           },
-        ],
+        },
       },
     ])
   })
@@ -47,14 +61,23 @@ describe("NaverSe4ImageGroupBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "imageGroup",
-        images: [
-          {
-            url: "https://example.com/group.png",
-            alt: "group",
-            caption: null,
+        blockId: "naver-se4:imageGroup",
+        props: {
+          images: [
+            {
+              url: "https://example.com/group.png",
+              alt: "group",
+              caption: null,
+            },
+          ],
+        },
+        assets: {
+          "images.0.url": {
+            role: "image",
+            sourceUrl: "https://example.com/group.png",
+            required: true,
           },
-        ],
+        },
       },
     ])
   })

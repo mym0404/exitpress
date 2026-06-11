@@ -1,7 +1,7 @@
 import { execFile } from "node:child_process"
 import path from "node:path"
 
-import { resolveRepoPath } from "@exitpress/engine/infra/node/util/FilePaths.js"
+import { resolveRepoPath } from "@exitpress/engine/infra/node/FilePaths.js"
 
 import type { IncomingMessage } from "node:http"
 

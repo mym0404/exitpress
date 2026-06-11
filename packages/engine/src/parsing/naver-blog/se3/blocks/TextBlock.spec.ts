@@ -11,8 +11,8 @@ describe("NaverSe3TextBlock", () => {
     `)
 
     expect(parsed.blocks).toEqual([
-      { type: "paragraph", text: "Alpha **beta**" },
-      { type: "paragraph", text: "Gamma" },
+      { blockId: "naver-se3:paragraph", props: { text: "Alpha **beta**" } },
+      { blockId: "naver-se3:paragraph", props: { text: "Gamma" } },
     ])
     expect(parsed.tags).toEqual(["daily", "archive"])
   })
@@ -24,7 +24,9 @@ describe("NaverSe3TextBlock", () => {
       </div>
     `)
 
-    expect(parsed.blocks).toEqual([{ type: "paragraph", text: "첫 줄  \n둘째 줄" }])
+    expect(parsed.blocks).toEqual([
+      { blockId: "naver-se3:paragraph", props: { text: "첫 줄  \n둘째 줄" } },
+    ])
   })
 
   it("skips text components with no text blocks", () => {
@@ -55,7 +57,10 @@ describe("NaverSe3TextBlock", () => {
     `)
 
     expect(parsed.blocks).toEqual([
-      { type: "paragraph", text: "Alpha [link](https://example.com)" },
+      {
+        blockId: "naver-se3:paragraph",
+        props: { text: "Alpha [link](https://example.com)" },
+      },
     ])
   })
 
@@ -70,8 +75,8 @@ describe("NaverSe3TextBlock", () => {
     `)
 
     expect(parsed.blocks).toEqual([
-      { type: "paragraph", text: "Paragraph text" },
-      { type: "paragraph", text: "Section title text" },
+      { blockId: "naver-se3:paragraph", props: { text: "Paragraph text" } },
+      { blockId: "naver-se3:paragraph", props: { text: "Section title text" } },
     ])
   })
 

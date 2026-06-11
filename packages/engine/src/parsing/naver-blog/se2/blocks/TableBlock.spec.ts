@@ -32,14 +32,16 @@ describe("NaverSe2TableBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "code",
-        language: null,
-        code: [
-          "(리스트 생성)",
-          "void ListInit(List * plist);",
-          "",
-          "int LCount(List *plist);",
-        ].join("\n"),
+        blockId: "naver-se2:code",
+        props: {
+          language: null,
+          code: [
+            "(리스트 생성)",
+            "void ListInit(List * plist);",
+            "",
+            "int LCount(List *plist);",
+          ].join("\n"),
+        },
       },
     ])
   })
@@ -80,9 +82,11 @@ describe("NaverSe2TableBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "code",
-        language: null,
-        code: ["typedef struct _node", "{"].join("\n"),
+        blockId: "naver-se2:code",
+        props: {
+          language: null,
+          code: ["typedef struct _node", "{"].join("\n"),
+        },
       },
     ])
   })
@@ -105,9 +109,11 @@ describe("NaverSe2TableBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "code",
-        language: null,
-        code: ["void ListInit(List * plist);", "int LCount(List *plist);"].join("\n"),
+        blockId: "naver-se2:code",
+        props: {
+          language: null,
+          code: ["void ListInit(List * plist);", "int LCount(List *plist);"].join("\n"),
+        },
       },
     ])
   })
@@ -129,9 +135,11 @@ describe("NaverSe2TableBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "code",
-        language: null,
-        code: ["class Person", "var person = Person()"].join("\n"),
+        blockId: "naver-se2:code",
+        props: {
+          language: null,
+          code: ["class Person", "var person = Person()"].join("\n"),
+        },
       },
     ])
   })
@@ -147,9 +155,11 @@ describe("NaverSe2TableBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "code",
-        language: null,
-        code: ["#include <stdio.h>", 'printf("hello");'].join("\n"),
+        blockId: "naver-se2:code",
+        props: {
+          language: null,
+          code: ["#include <stdio.h>", 'printf("hello");'].join("\n"),
+        },
       },
     ])
   })
@@ -168,8 +178,8 @@ describe("NaverSe2TableBlock", () => {
     `)
 
     expect(parsed.blocks).toEqual([
-      { type: "paragraph", text: "before" },
-      { type: "paragraph", text: "after" },
+      { blockId: "naver-se2:paragraph", props: { text: "before" } },
+      { blockId: "naver-se2:paragraph", props: { text: "after" } },
     ])
   })
 
@@ -183,15 +193,20 @@ describe("NaverSe2TableBlock", () => {
 
     expect(parsed.blocks).toHaveLength(1)
     expect(parsed.blocks[0]).toMatchObject({
-      type: "table",
-      complex: true,
-      rows: [
-        [
-          { text: "name", isHeader: true },
-          { text: "value", isHeader: true },
+      blockId: "naver-se2:table",
+      props: {
+        complex: true,
+        rows: [
+          [
+            { text: "name", isHeader: true },
+            { text: "value", isHeader: true },
+          ],
+          [
+            { text: "merged", html: "merged", colspan: 2, rowspan: 1, isHeader: false },
+            { text: " ", html: "", colspan: 1, rowspan: 1, isHeader: false },
+          ],
         ],
-        [{ text: "merged", colspan: 2, isHeader: false }],
-      ],
+      },
     })
   })
 
@@ -204,8 +219,8 @@ describe("NaverSe2TableBlock", () => {
     `)
 
     expect(parsed.blocks).toEqual([
-      { type: "paragraph", text: "첫 줄  \n둘째 줄" },
-      { type: "paragraph", text: "셋째 줄" },
+      { blockId: "naver-se2:paragraph", props: { text: "첫 줄  \n둘째 줄" } },
+      { blockId: "naver-se2:paragraph", props: { text: "셋째 줄" } },
     ])
   })
 
@@ -217,9 +232,11 @@ describe("NaverSe2TableBlock", () => {
     `)
 
     expect(parsed.blocks[0]).toMatchObject({
-      type: "table",
-      complex: false,
-      rows: [[{ text: "", html: "<br>", colspan: 1, rowspan: 1, isHeader: false }]],
+      blockId: "naver-se2:table",
+      props: {
+        complex: false,
+        rows: [[{ text: " ", html: "<br>", colspan: 1, rowspan: 1, isHeader: false }]],
+      },
     })
   })
 
@@ -228,7 +245,7 @@ describe("NaverSe2TableBlock", () => {
       <div class="colorscripter-code-table">not code</div>
     `)
 
-    expect(parsed.blocks).toEqual([{ type: "paragraph", text: "not code" }])
+    expect(parsed.blocks).toEqual([{ blockId: "naver-se2:paragraph", props: { text: "not code" } }])
   })
 
   it("applies every output option", () => {

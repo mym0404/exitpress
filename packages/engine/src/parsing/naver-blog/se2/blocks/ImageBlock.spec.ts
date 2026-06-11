@@ -9,13 +9,18 @@ describe("NaverSe2ImageBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "image",
-        image: {
-          sourceUrl: "https://example.com/se2-image.png",
-          originalSourceUrl: null,
+        blockId: "naver-se2:image",
+        props: {
+          url: "https://example.com/se2-image.png",
           alt: "classic image",
           caption: null,
-          mediaKind: "image",
+        },
+        assets: {
+          url: {
+            role: "image",
+            sourceUrl: "https://example.com/se2-image.png",
+            required: true,
+          },
         },
       },
     ])
@@ -28,19 +33,24 @@ describe("NaverSe2ImageBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "image",
-        image: {
-          sourceUrl: "https://example.com/top-level.png",
-          originalSourceUrl: null,
+        blockId: "naver-se2:image",
+        props: {
+          url: "https://example.com/top-level.png",
           alt: "top level image",
           caption: null,
-          mediaKind: "image",
+        },
+        assets: {
+          url: {
+            role: "image",
+            sourceUrl: "https://example.com/top-level.png",
+            required: true,
+          },
         },
       },
     ])
   })
 
-  it("parses multiple standalone images into imageGroup blocks", () => {
+  it("parses multiple standalone images into image blocks", () => {
     const parsed = parseSe2Blocks(`
       <div>
         <img src="https://example.com/one.png" alt="one" />
@@ -50,23 +60,34 @@ describe("NaverSe2ImageBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "imageGroup",
-        images: [
-          {
+        blockId: "naver-se2:image",
+        props: {
+          url: "https://example.com/one.png",
+          alt: "one",
+          caption: null,
+        },
+        assets: {
+          url: {
+            role: "image",
             sourceUrl: "https://example.com/one.png",
-            originalSourceUrl: null,
-            alt: "one",
-            caption: null,
-            mediaKind: "image",
+            required: true,
           },
-          {
+        },
+      },
+      {
+        blockId: "naver-se2:image",
+        props: {
+          url: "https://example.com/two.png",
+          alt: "two",
+          caption: null,
+        },
+        assets: {
+          url: {
+            role: "image",
             sourceUrl: "https://example.com/two.png",
-            originalSourceUrl: null,
-            alt: "two",
-            caption: null,
-            mediaKind: "image",
+            required: true,
           },
-        ],
+        },
       },
     ])
   })
@@ -81,13 +102,18 @@ describe("NaverSe2ImageBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "image",
-        image: {
-          sourceUrl: "https://example.com/valid.png",
-          originalSourceUrl: null,
+        blockId: "naver-se2:image",
+        props: {
+          url: "https://example.com/valid.png",
           alt: "valid",
           caption: null,
-          mediaKind: "image",
+        },
+        assets: {
+          url: {
+            role: "image",
+            sourceUrl: "https://example.com/valid.png",
+            required: true,
+          },
         },
       },
     ])
@@ -103,7 +129,7 @@ describe("NaverSe2ImageBlock", () => {
     expect(parsed.blocks).toEqual([])
   })
 
-  it("parses classic thumburl image groups inside nested wrappers", () => {
+  it("parses classic thumburl images inside nested wrappers", () => {
     const parsed = parseSe2Blocks(`
       <div style="font-size:12pt;">
         <p>
@@ -119,25 +145,36 @@ describe("NaverSe2ImageBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "imageGroup",
-        images: [
-          {
+        blockId: "naver-se2:image",
+        props: {
+          url: "https://mblogthumb-phinf.pstatic.net/one.png?type=w800",
+          alt: "",
+          caption: null,
+        },
+        assets: {
+          url: {
+            role: "image",
             sourceUrl: "https://mblogthumb-phinf.pstatic.net/one.png?type=w800",
-            originalSourceUrl: null,
-            alt: "",
-            caption: null,
-            mediaKind: "image",
+            required: true,
           },
-          {
-            sourceUrl: "https://mblogthumb-phinf.pstatic.net/two.png?type=w800",
-            originalSourceUrl: null,
-            alt: "",
-            caption: null,
-            mediaKind: "image",
-          },
-        ],
+        },
       },
-      { type: "paragraph", text: "블렌더 어렵다" },
+      {
+        blockId: "naver-se2:image",
+        props: {
+          url: "https://mblogthumb-phinf.pstatic.net/two.png?type=w800",
+          alt: "",
+          caption: null,
+        },
+        assets: {
+          url: {
+            role: "image",
+            sourceUrl: "https://mblogthumb-phinf.pstatic.net/two.png?type=w800",
+            required: true,
+          },
+        },
+      },
+      { blockId: "naver-se2:paragraph", props: { text: "블렌더 어렵다" } },
     ])
   })
 

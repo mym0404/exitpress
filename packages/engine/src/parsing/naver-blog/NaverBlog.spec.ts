@@ -104,7 +104,7 @@ describe("parser block catalog", () => {
             expressions.some(
               (expression) => expression.offset <= offset && offset < expression.endOffset,
             ),
-            `${definition.key}:${preset.id} has legacy interpolation outside {{ expression }}`,
+            `${definition.key}:${preset.id} has unsupported interpolation outside {{ expression }}`,
           ).toBe(true)
         })
       })

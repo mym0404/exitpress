@@ -1,6 +1,6 @@
 import path from "node:path"
 
-import { ensureDir, resolveRepoPath } from "@exitpress/engine/infra/node/util/FilePaths.js"
+import { ensureDir, resolveRepoPath } from "@exitpress/engine/infra/node/FilePaths.js"
 
 export const allEvidenceAssetProfiles = ["readme", "figure", "tmp"] as const
 // Evidence asset storage profile for persistent docs or temporary harness output.

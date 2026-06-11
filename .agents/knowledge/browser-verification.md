@@ -2,13 +2,13 @@
 
 ## When To Use
 - Use browser validation when the user asks to inspect UI behavior or when a meaningful UI change affects visible flow, layout, controls, or feedback.
-- Automated checks are still `mise exec -- pnpm smoke:ui` and `mise exec -- pnpm test:network`; this document is for targeted manual browser confirmation.
+- Automated browser checks run through `mise exec -- pnpm build:ui` followed by `mise exec -- pnpm check:playwright`; this document is for targeted manual browser confirmation.
 
 ## Server Rules
-- Do not reuse a user's `mise exec -- pnpm dev` session for agent harness checks.
+- Do not reuse a user's `mise exec -- pnpm dev` session for agent browser checks.
 - Start isolated checks with non-default `PORT`, separate `EXITPRESS_SETTINGS_PATH`, and separate `EXITPRESS_SCAN_CACHE_PATH`.
 - Keep browser verification scratch files under repo-local `tmp/`.
-- Prefer harnesses that use `listen(0)` when available.
+- Prefer test-owned servers that use `listen(0)` when available.
 
 ## What To Check
 - Requested buttons, inputs, dialogs, filters, tables, progress, and upload state actually work on screen.

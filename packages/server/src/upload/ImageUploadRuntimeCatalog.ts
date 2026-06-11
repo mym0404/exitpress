@@ -1,7 +1,7 @@
 import path from "node:path"
 
 import { DEFAULT_UPLOAD_PROVIDER_KEY } from "@exitpress/domain/upload/UploadProviderKeys.js"
-import { ensureDir, getProjectTempPath } from "@exitpress/engine/infra/node/util/FilePaths.js"
+import { ensureDir, getProjectTempPath } from "@exitpress/engine/infra/node/FilePaths.js"
 
 import type {
   UploadProviderCatalogResponse,

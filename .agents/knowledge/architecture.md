@@ -3,7 +3,7 @@
 ## Runtime Shape
 
 - The local server owns process startup, HTTP APIs, static serving, job state, local settings, and upload provider runtime metadata.
-- The engine owns provider runtime interfaces, provider export harnesses, legacy Naver fetch/parser runtime, Markdown rendering, asset persistence, upload candidate handling, link rewrite, and export manifest writing.
+- The engine owns provider runtime interfaces, provider-neutral export units, Naver fetch/parser runtime, Markdown rendering, asset persistence, upload candidate handling, link rewrite, and export manifest writing.
 - Concrete blog provider packages own provider-specific source parsing, fetching adapters, and parser adapters.
 - The web package owns the browser wizard, Storybook surface, API client, and UI state.
 - The domain package owns shared contracts and pure deterministic logic used across packages.
@@ -22,10 +22,10 @@
 - Server may import domain and engine.
 - Engine may import domain but not web or server.
 - Blog provider-neutral DTOs live in `packages/domain/src/blog-provider/schema/`.
-- Blog provider runtime interfaces, registry, fetch policy, and provider harnesses live in `packages/engine/src/blog-provider/` and `packages/engine/src/exporting/provider/`.
+- Blog provider runtime interfaces, registry, fetch policy, and provider-neutral export units live in `packages/engine/src/blog-provider/` and `packages/engine/src/exporting/provider/`.
 - Concrete providers live in `packages/blog-*`.
 - `blog-*` packages may depend on domain and engine, but must not define provider-neutral base types or contracts.
-- Server provider registry migration is outside the current provider harness scope; existing server Naver entrypoints remain until that migration.
+- Server provider registry migration is separate from provider-neutral export units; existing server Naver entrypoints remain until that migration.
 - Package and feature contracts live in the owning folder under `schema/`; cross-package contracts live in domain schema when shared across packages.
 - Shared utilities live under the owning package/folder `util/`.
 - Avoid barrel files and compatibility re-export files; import the current owner path directly.

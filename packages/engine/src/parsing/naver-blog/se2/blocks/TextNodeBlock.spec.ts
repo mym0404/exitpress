@@ -5,7 +5,9 @@ describe("NaverSe2TextNodeBlock", () => {
   it("parses direct text nodes into paragraph blocks", () => {
     const parsed = parseSe2Blocks("plain classic text")
 
-    expect(parsed.blocks).toEqual([{ type: "paragraph", text: "plain classic text" }])
+    expect(parsed.blocks).toEqual([
+      { blockId: "naver-se2:paragraph", props: { text: "plain classic text" } },
+    ])
     expect(parsed.tags).toEqual(["classic", "archive"])
   })
 

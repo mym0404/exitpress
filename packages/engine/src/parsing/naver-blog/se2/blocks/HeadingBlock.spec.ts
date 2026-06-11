@@ -5,7 +5,9 @@ describe("NaverSe2HeadingBlock", () => {
   it("parses heading tags into heading blocks", () => {
     const parsed = parseSe2Blocks("<h3>Classic heading</h3>")
 
-    expect(parsed.blocks).toEqual([{ type: "heading", level: 3, text: "Classic heading" }])
+    expect(parsed.blocks).toEqual([
+      { blockId: "naver-se2:heading", props: { level: 3, text: "Classic heading" } },
+    ])
   })
 
   it("throws when a heading has no text", () => {

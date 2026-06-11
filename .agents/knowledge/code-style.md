@@ -32,9 +32,10 @@
 
 ## Tests
 - Keep tests near the behavior they protect.
-- Prefer pure logic, hook state-machine, parser, exporter, server, and harness tests over shallow UI text checks.
+- Prefer pure logic, hook state-machine, parser, exporter, server, and provider tests over shallow UI text checks.
 - Do not test shadcn/Radix primitive internals.
-- Use smoke/e2e harnesses for browser workflow coverage.
+- Use Playwright Test for browser workflow coverage.
+- Do not add custom runners or validation scripts for checks that Vitest or Playwright can own.
 
 ## Documentation
 - Keep knowledge documents current-state only.

@@ -14,8 +14,10 @@ describe("NaverSe4MrBlogBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "quote",
-        text: "From, 블로그씨\n\n이러지 마 제발~ 정말 듣기 싫은 잔소리 TOP 3는 무엇인가요?",
+        blockId: "naver-se4:mrBlog",
+        props: {
+          text: "From, 블로그씨\n\n이러지 마 제발~ 정말 듣기 싫은 잔소리 TOP 3는 무엇인가요?",
+        },
       },
     ])
   })

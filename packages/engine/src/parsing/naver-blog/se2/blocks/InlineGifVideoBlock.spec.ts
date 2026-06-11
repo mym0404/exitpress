@@ -15,13 +15,18 @@ describe("NaverSe2InlineGifVideoBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "image",
-        image: {
-          sourceUrl: "https://mblogthumb-phinf.pstatic.net/sample.gif?type=w210",
-          originalSourceUrl: "https://mblogvideo-phinf.pstatic.net/sample.gif?type=mp4w800",
+        blockId: "naver-se2:inlineGifVideo",
+        props: {
+          url: "https://mblogthumb-phinf.pstatic.net/sample.gif?type=w210",
           alt: "",
           caption: null,
-          mediaKind: "image",
+        },
+        assets: {
+          url: {
+            role: "image",
+            sourceUrl: "https://mblogthumb-phinf.pstatic.net/sample.gif?type=w210",
+            required: true,
+          },
         },
       },
     ])
@@ -40,13 +45,18 @@ describe("NaverSe2InlineGifVideoBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "image",
-        image: {
-          sourceUrl: "https://mblogthumb-phinf.pstatic.net/sample.gif?type=w210",
-          originalSourceUrl: "https://mblogvideo-phinf.pstatic.net/sample.gif?type=mp4w800",
+        blockId: "naver-se2:inlineGifVideo",
+        props: {
+          url: "https://mblogthumb-phinf.pstatic.net/sample.gif?type=w210",
           alt: "",
           caption: null,
-          mediaKind: "image",
+        },
+        assets: {
+          url: {
+            role: "image",
+            sourceUrl: "https://mblogthumb-phinf.pstatic.net/sample.gif?type=w210",
+            required: true,
+          },
         },
       },
     ])
@@ -67,13 +77,18 @@ describe("NaverSe2InlineGifVideoBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "image",
-        image: {
-          sourceUrl: "https://mblogthumb-phinf.pstatic.net/sample.gif?type=w210",
-          originalSourceUrl: "https://mblogvideo-phinf.pstatic.net/sample.gif?type=mp4w800",
+        blockId: "naver-se2:inlineGifVideo",
+        props: {
+          url: "https://mblogthumb-phinf.pstatic.net/sample.gif?type=w210",
           alt: "",
           caption: null,
-          mediaKind: "image",
+        },
+        assets: {
+          url: {
+            role: "image",
+            sourceUrl: "https://mblogthumb-phinf.pstatic.net/sample.gif?type=w210",
+            required: true,
+          },
         },
       },
     ])
@@ -98,13 +113,18 @@ describe("NaverSe2InlineGifVideoBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "image",
-        image: {
-          sourceUrl: "https://mblogthumb-phinf.pstatic.net/sample.gif?type=w210",
-          originalSourceUrl: "https://mblogvideo-phinf.pstatic.net/sample.gif?type=mp4w800",
+        blockId: "naver-se2:inlineGifVideo",
+        props: {
+          url: "https://mblogthumb-phinf.pstatic.net/sample.gif?type=w210",
           alt: "",
           caption: null,
-          mediaKind: "image",
+        },
+        assets: {
+          url: {
+            role: "image",
+            sourceUrl: "https://mblogthumb-phinf.pstatic.net/sample.gif?type=w210",
+            required: true,
+          },
         },
       },
     ])
@@ -126,13 +146,15 @@ describe("NaverSe2InlineGifVideoBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "paragraph",
-        text: "caption[](https://example.com/source)",
+        blockId: "naver-se2:paragraph",
+        props: {
+          text: "caption[](https://example.com/source)",
+        },
       },
     ])
   })
 
-  it("parses multiple linked inline gif videos into image groups", () => {
+  it("parses multiple linked inline gif videos into image blocks", () => {
     const parsed = parseSe2Blocks(`
       <p>
         <a href="https://example.com/one">
@@ -155,23 +177,34 @@ describe("NaverSe2InlineGifVideoBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "imageGroup",
-        images: [
-          {
+        blockId: "naver-se2:inlineGifVideo",
+        props: {
+          url: "https://mblogthumb-phinf.pstatic.net/one.gif?type=w210",
+          alt: "",
+          caption: null,
+        },
+        assets: {
+          url: {
+            role: "image",
             sourceUrl: "https://mblogthumb-phinf.pstatic.net/one.gif?type=w210",
-            originalSourceUrl: "https://mblogvideo-phinf.pstatic.net/one.gif?type=mp4w800",
-            alt: "",
-            caption: null,
-            mediaKind: "image",
+            required: true,
           },
-          {
+        },
+      },
+      {
+        blockId: "naver-se2:inlineGifVideo",
+        props: {
+          url: "https://mblogthumb-phinf.pstatic.net/two.gif?type=w210",
+          alt: "",
+          caption: null,
+        },
+        assets: {
+          url: {
+            role: "image",
             sourceUrl: "https://mblogthumb-phinf.pstatic.net/two.gif?type=w210",
-            originalSourceUrl: "https://mblogvideo-phinf.pstatic.net/two.gif?type=mp4w800",
-            alt: "",
-            caption: null,
-            mediaKind: "image",
+            required: true,
           },
-        ],
+        },
       },
     ])
   })
@@ -187,13 +220,18 @@ describe("NaverSe2InlineGifVideoBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "image",
-        image: {
-          sourceUrl: "https://mblogthumb-phinf.pstatic.net/sample.gif?type=w210",
-          originalSourceUrl: "https://mblogvideo-phinf.pstatic.net/sample.gif?type=mp4w800",
+        blockId: "naver-se2:inlineGifVideo",
+        props: {
+          url: "https://mblogthumb-phinf.pstatic.net/sample.gif?type=w210",
           alt: "",
           caption: null,
-          mediaKind: "image",
+        },
+        assets: {
+          url: {
+            role: "image",
+            sourceUrl: "https://mblogthumb-phinf.pstatic.net/sample.gif?type=w210",
+            required: true,
+          },
         },
       },
     ])
@@ -212,13 +250,18 @@ describe("NaverSe2InlineGifVideoBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "image",
-        image: {
-          sourceUrl: "https://mblogthumb-phinf.pstatic.net/sample.gif?type=w210",
-          originalSourceUrl: null,
+        blockId: "naver-se2:inlineGifVideo",
+        props: {
+          url: "https://mblogthumb-phinf.pstatic.net/sample.gif?type=w210",
           alt: "sample gif",
           caption: null,
-          mediaKind: "image",
+        },
+        assets: {
+          url: {
+            role: "image",
+            sourceUrl: "https://mblogthumb-phinf.pstatic.net/sample.gif?type=w210",
+            required: true,
+          },
         },
       },
     ])
@@ -238,8 +281,10 @@ describe("NaverSe2InlineGifVideoBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "paragraph",
-        text: "caption",
+        blockId: "naver-se2:paragraph",
+        props: {
+          text: "caption",
+        },
       },
     ])
   })

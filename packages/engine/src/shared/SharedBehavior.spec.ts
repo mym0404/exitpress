@@ -2,9 +2,10 @@ import path from "node:path"
 import { fileURLToPath } from "node:url"
 
 import { extractBlogId, normalizeAssetUrl } from "@exitpress/domain/blog/NaverUrl.js"
-import { getProjectTempPath, resolveRepoPath } from "@exitpress/engine/infra/node/util/FilePaths.js"
 import { createTestPath } from "@tests/support/test-paths.js"
 import { describe, expect, it } from "vitest"
+
+import { getProjectTempPath, resolveRepoPath } from "../infra/node/FilePaths.js"
 
 import { delay, mapConcurrent } from "./async/util/AsyncTasks.js"
 import { toErrorMessage } from "./error/util/toErrorMessage.js"

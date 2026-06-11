@@ -1,6 +1,11 @@
 import { createSe4ModuleScript, parseSe4Blocks } from "@tests/support/parser-test-utils.js"
 import { describe, expect, it } from "vitest"
 
+const paragraphBlock = (text: string) => ({
+  blockId: "naver-se4:paragraph",
+  props: { text },
+})
+
 describe("NaverSe4TextBlock", () => {
   it("parses text components into paragraph blocks", () => {
     const parsed = parseSe4Blocks(`
@@ -12,8 +17,8 @@ describe("NaverSe4TextBlock", () => {
     `)
 
     expect(parsed.blocks).toEqual([
-      { type: "paragraph", text: "First **block**" },
-      { type: "paragraph", text: "Second [link](https://example.com)" },
+      paragraphBlock("First **block**"),
+      paragraphBlock("Second [link](https://example.com)"),
     ])
     expect(parsed.tags).toEqual(["algo", "math"])
   })
@@ -26,7 +31,7 @@ describe("NaverSe4TextBlock", () => {
       </div>
     `)
 
-    expect(parsed.blocks).toEqual([{ type: "paragraph", text: "첫 줄  \n둘째 줄" }])
+    expect(parsed.blocks).toEqual([paragraphBlock("첫 줄  \n둘째 줄")])
   })
 
   it("preserves unordered and ordered text lists", () => {
@@ -48,9 +53,9 @@ describe("NaverSe4TextBlock", () => {
     `)
 
     expect(parsed.blocks).toEqual([
-      { type: "paragraph", text: "Intro" },
-      { type: "paragraph", text: "- unordered list 1\n- 2" },
-      { type: "paragraph", text: "1. orderedlist 1\n2. 2" },
+      paragraphBlock("Intro"),
+      paragraphBlock("- unordered list 1\n- 2"),
+      paragraphBlock("1. orderedlist 1\n2. 2"),
     ])
   })
 
@@ -71,15 +76,14 @@ describe("NaverSe4TextBlock", () => {
     `)
 
     expect(parsed.blocks).toEqual([
-      { type: "paragraph", text: "#오늘의트렌드 #케이크토퍼" },
-      {
-        type: "paragraph",
-        text: [
+      paragraphBlock("#오늘의트렌드 #케이크토퍼"),
+      paragraphBlock(
+        [
           "- 케이크토퍼 영어 한글 자유문구나무픽 #파티용품",
           "- 여름잠옷 원피스 여성잠옷 반팔 면 파자마 나시 홈웨어 세트 #엘제이룸홈웨어 #공주잠옷",
           "- CGS 캘리포니아 제너럴 스토어 스트라이프 티셔츠 #티셔츠 #스트라이프티셔츠",
         ].join("\n"),
-      },
+      ),
     ])
   })
 
@@ -97,10 +101,10 @@ describe("NaverSe4TextBlock", () => {
     `)
 
     expect(parsed.blocks).toEqual([
-      { type: "paragraph", text: "text" },
-      { type: "paragraph", text: "loose child" },
-      { type: "paragraph", text: "추천트렌드" },
-      { type: "paragraph", text: "상품 하나" },
+      paragraphBlock("text"),
+      paragraphBlock("loose child"),
+      paragraphBlock("추천트렌드"),
+      paragraphBlock("상품 하나"),
     ])
   })
 
@@ -114,9 +118,7 @@ describe("NaverSe4TextBlock", () => {
       </div>
     `)
 
-    expect(parsed.blocks).toEqual([
-      { type: "paragraph", text: "[loose link](https://example.com)" },
-    ])
+    expect(parsed.blocks).toEqual([paragraphBlock("[loose link](https://example.com)")])
   })
 
   it("keeps short recommendation-like text as paragraphs", () => {
@@ -128,10 +130,7 @@ describe("NaverSe4TextBlock", () => {
       </div>
     `)
 
-    expect(parsed.blocks).toEqual([
-      { type: "paragraph", text: "추천트렌드" },
-      { type: "paragraph", text: "상품 하나" },
-    ])
+    expect(parsed.blocks).toEqual([paragraphBlock("추천트렌드"), paragraphBlock("상품 하나")])
   })
 
   it("lets earlier link-like blocks win over text class fallback", () => {
@@ -145,7 +144,15 @@ describe("NaverSe4TextBlock", () => {
     `)
 
     expect(parsed.blocks).toEqual([
-      { type: "paragraph", text: "[External article](https://example.com/article)" },
+      {
+        blockId: "naver-se4:linkCard",
+        props: {
+          title: "External article",
+          description: "",
+          url: "https://example.com/article",
+          thumbnailUrl: null,
+        },
+      },
     ])
   })
 
@@ -163,12 +170,12 @@ describe("NaverSe4TextBlock", () => {
     `)
 
     expect(parsed.blocks).toEqual([
-      { type: "paragraph", text: "추천트렌드" },
-      { type: "paragraph", text: "이런 상품 어때요" },
-      { type: "paragraph", text: "첫 상품" },
-      { type: "paragraph", text: "#태그" },
-      { type: "paragraph", text: "둘째 상품" },
-      { type: "paragraph", text: "#태그2" },
+      paragraphBlock("추천트렌드"),
+      paragraphBlock("이런 상품 어때요"),
+      paragraphBlock("첫 상품"),
+      paragraphBlock("#태그"),
+      paragraphBlock("둘째 상품"),
+      paragraphBlock("#태그2"),
     ])
   })
 
@@ -180,8 +187,6 @@ describe("NaverSe4TextBlock", () => {
       </div>
     `)
 
-    expect(parsed.blocks).toEqual([
-      { type: "paragraph", text: "Alpha [link](https://example.com)" },
-    ])
+    expect(parsed.blocks).toEqual([paragraphBlock("Alpha [link](https://example.com)")])
   })
 })

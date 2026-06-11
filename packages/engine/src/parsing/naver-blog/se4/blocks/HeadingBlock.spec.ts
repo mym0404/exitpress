@@ -9,7 +9,15 @@ describe("NaverSe4HeadingBlock", () => {
       </div>
     `)
 
-    expect(parsed.blocks).toEqual([{ type: "heading", level: 2, text: "Section title" }])
+    expect(parsed.blocks).toEqual([
+      {
+        blockId: "naver-se4:heading",
+        props: {
+          level: 2,
+          text: "Section title",
+        },
+      },
+    ])
   })
 
   it("skips empty section title components", () => {

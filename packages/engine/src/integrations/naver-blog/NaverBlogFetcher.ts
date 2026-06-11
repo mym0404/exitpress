@@ -1,6 +1,5 @@
 import { sanitizeCategoryName } from "@exitpress/domain/blog/CategoryName.js"
 import { getSourceUrl, normalizeAssetUrl } from "@exitpress/domain/blog/NaverUrl.js"
-import * as HttpRequests from "@exitpress/engine/infra/http/util/HttpRequests.js"
 import { log } from "@exitpress/engine/infra/runtime/Logger.js"
 import { mapConcurrent } from "@exitpress/engine/shared/async/util/AsyncTasks.js"
 import { toKstDateTime } from "@exitpress/engine/shared/datetime/util/toKstDateTime.js"
@@ -8,6 +7,8 @@ import { toKstDateTime } from "@exitpress/engine/shared/datetime/util/toKstDateT
 import type { CategoryInfo, ScanResult } from "@exitpress/domain/blog/schema/BlogScan.js"
 
 import type { CategoryApiItem, PostApiItem } from "./schema/NaverBlogApi.js"
+
+import * as HttpRequests from "../../infra/http/HttpRequests.js"
 
 import { fetchNaverBlogJson } from "./NaverBlogJsonClient.js"
 import { binaryHeaders, htmlHeaders } from "./NaverBlogRequestHeaders.js"

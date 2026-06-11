@@ -9,7 +9,14 @@ describe("NaverSe3QuoteBlock", () => {
       </div>
     `)
 
-    expect(parsed.blocks).toEqual([{ type: "quote", text: "Quoted **SE3**" }])
+    expect(parsed.blocks).toEqual([
+      {
+        blockId: "naver-se3:quote",
+        props: {
+          text: "Quoted **SE3**",
+        },
+      },
+    ])
   })
 
   it("parses classic quotation components into quote blocks", () => {
@@ -19,7 +26,14 @@ describe("NaverSe3QuoteBlock", () => {
       </div>
     `)
 
-    expect(parsed.blocks).toEqual([{ type: "quote", text: "Classic quote" }])
+    expect(parsed.blocks).toEqual([
+      {
+        blockId: "naver-se3:quote",
+        props: {
+          text: "Classic quote",
+        },
+      },
+    ])
   })
 
   it("throws when a quote has no markdown content", () => {

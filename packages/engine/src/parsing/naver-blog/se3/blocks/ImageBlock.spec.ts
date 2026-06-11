@@ -5,6 +5,12 @@ import {
 } from "@tests/support/parser-test-utils.js"
 import { describe, expect, it } from "vitest"
 
+const imageAsset = (sourceUrl: string) => ({
+  role: "image",
+  sourceUrl,
+  required: true,
+})
+
 describe("NaverSe3ImageBlock", () => {
   it("parses standalone image components into image blocks", () => {
     const parsed = parseSe3Blocks(`
@@ -15,19 +21,20 @@ describe("NaverSe3ImageBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "image",
-        image: {
-          sourceUrl: "https://example.com/se3-image.png",
-          originalSourceUrl: null,
+        blockId: "naver-se3:image",
+        props: {
+          url: "https://example.com/se3-image.png",
           alt: "se3 image",
           caption: null,
-          mediaKind: "image",
+        },
+        assets: {
+          url: imageAsset("https://example.com/se3-image.png"),
         },
       },
     ])
   })
 
-  it("parses multiple standalone images into imageGroup blocks", () => {
+  it("parses multiple standalone images into image blocks", () => {
     const parsed = parseSe3Blocks(`
       <div class="se_component se_image">
         <img src="https://example.com/one.png" alt="one" />
@@ -37,23 +44,26 @@ describe("NaverSe3ImageBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "imageGroup",
-        images: [
-          {
-            sourceUrl: "https://example.com/one.png",
-            originalSourceUrl: null,
-            alt: "one",
-            caption: null,
-            mediaKind: "image",
-          },
-          {
-            sourceUrl: "https://example.com/two.png",
-            originalSourceUrl: null,
-            alt: "two",
-            caption: null,
-            mediaKind: "image",
-          },
-        ],
+        blockId: "naver-se3:image",
+        props: {
+          url: "https://example.com/one.png",
+          alt: "one",
+          caption: null,
+        },
+        assets: {
+          url: imageAsset("https://example.com/one.png"),
+        },
+      },
+      {
+        blockId: "naver-se3:image",
+        props: {
+          url: "https://example.com/two.png",
+          alt: "two",
+          caption: null,
+        },
+        assets: {
+          url: imageAsset("https://example.com/two.png"),
+        },
       },
     ])
   })
@@ -68,13 +78,14 @@ describe("NaverSe3ImageBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "image",
-        image: {
-          sourceUrl: "https://example.com/lazy.png",
-          originalSourceUrl: null,
+        blockId: "naver-se3:image",
+        props: {
+          url: "https://example.com/lazy.png",
           alt: "lazy",
           caption: null,
-          mediaKind: "image",
+        },
+        assets: {
+          url: imageAsset("https://example.com/lazy.png"),
         },
       },
     ])
@@ -101,13 +112,14 @@ describe("NaverSe3ImageBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "image",
-        image: {
-          sourceUrl: "https://mblogthumb-phinf.pstatic.net/sample.gif?type=w800",
-          originalSourceUrl: "https://mblogvideo-phinf.pstatic.net/sample.gif?type=mp4w800",
+        blockId: "naver-se3:image",
+        props: {
+          url: "https://mblogthumb-phinf.pstatic.net/sample.gif?type=w800",
           alt: "",
           caption: null,
-          mediaKind: "image",
+        },
+        assets: {
+          url: imageAsset("https://mblogthumb-phinf.pstatic.net/sample.gif?type=w800"),
         },
       },
     ])
@@ -140,18 +152,21 @@ describe("NaverSe3ImageBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "image",
-        image: {
-          sourceUrl: "https://example.com/vr.jpg?type=preview966_544",
-          originalSourceUrl: null,
+        blockId: "naver-se3:image",
+        props: {
+          url: "https://example.com/vr.jpg?type=preview966_544",
           alt: "",
           caption: null,
-          mediaKind: "image",
+        },
+        assets: {
+          url: imageAsset("https://example.com/vr.jpg?type=preview966_544"),
         },
       },
       {
-        type: "paragraph",
-        text: "360 preview",
+        blockId: "naver-se3:paragraph",
+        props: {
+          text: "360 preview",
+        },
       },
     ])
   })
@@ -168,13 +183,14 @@ describe("NaverSe3ImageBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "image",
-        image: {
-          sourceUrl: "https://mblogthumb-phinf.pstatic.net/source-only.gif?type=w800",
-          originalSourceUrl: null,
+        blockId: "naver-se3:image",
+        props: {
+          url: "https://mblogthumb-phinf.pstatic.net/source-only.gif?type=w800",
           alt: "",
           caption: null,
-          mediaKind: "image",
+        },
+        assets: {
+          url: imageAsset("https://mblogthumb-phinf.pstatic.net/source-only.gif?type=w800"),
         },
       },
     ])
@@ -189,13 +205,14 @@ describe("NaverSe3ImageBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "image",
-        image: {
-          sourceUrl: "https://example.com/sticker.png",
-          originalSourceUrl: null,
+        blockId: "naver-se3:image",
+        props: {
+          url: "https://example.com/sticker.png",
           alt: "sticker",
           caption: null,
-          mediaKind: "image",
+        },
+        assets: {
+          url: imageAsset("https://example.com/sticker.png"),
         },
       },
     ])
@@ -211,19 +228,25 @@ describe("NaverSe3ImageBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "imageStrip",
-        images: [
-          {
-            url: "https://example.com/strip-1.png",
-            alt: "strip 1",
-            caption: null,
-          },
-          {
-            url: "https://example.com/strip-2.png",
-            alt: "strip 2",
-            caption: null,
-          },
-        ],
+        blockId: "naver-se3:imageStrip",
+        props: {
+          images: [
+            {
+              url: "https://example.com/strip-1.png",
+              alt: "strip 1",
+              caption: null,
+            },
+            {
+              url: "https://example.com/strip-2.png",
+              alt: "strip 2",
+              caption: null,
+            },
+          ],
+        },
+        assets: {
+          "images.0.url": imageAsset("https://example.com/strip-1.png"),
+          "images.1.url": imageAsset("https://example.com/strip-2.png"),
+        },
       },
     ])
   })
@@ -242,18 +265,21 @@ describe("NaverSe3ImageBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "image",
-        image: {
-          sourceUrl: "https://example.com/image.png",
-          originalSourceUrl: null,
+        blockId: "naver-se3:image",
+        props: {
+          url: "https://example.com/image.png",
           alt: "image",
           caption: null,
-          mediaKind: "image",
+        },
+        assets: {
+          url: imageAsset("https://example.com/image.png"),
         },
       },
       {
-        type: "paragraph",
-        text: "image caption",
+        blockId: "naver-se3:paragraph",
+        props: {
+          text: "image caption",
+        },
       },
     ])
   })
@@ -273,23 +299,31 @@ describe("NaverSe3ImageBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "imageStrip",
-        images: [
-          {
-            url: "https://example.com/strip-1.png",
-            alt: "strip 1",
-            caption: null,
-          },
-          {
-            url: "https://example.com/strip-2.png",
-            alt: "strip 2",
-            caption: null,
-          },
-        ],
+        blockId: "naver-se3:imageStrip",
+        props: {
+          images: [
+            {
+              url: "https://example.com/strip-1.png",
+              alt: "strip 1",
+              caption: null,
+            },
+            {
+              url: "https://example.com/strip-2.png",
+              alt: "strip 2",
+              caption: null,
+            },
+          ],
+        },
+        assets: {
+          "images.0.url": imageAsset("https://example.com/strip-1.png"),
+          "images.1.url": imageAsset("https://example.com/strip-2.png"),
+        },
       },
       {
-        type: "paragraph",
-        text: "strip caption",
+        blockId: "naver-se3:paragraph",
+        props: {
+          text: "strip caption",
+        },
       },
     ])
   })
@@ -306,13 +340,14 @@ describe("NaverSe3ImageBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "image",
-        image: {
-          sourceUrl: "https://example.com/root.png",
-          originalSourceUrl: null,
+        blockId: "naver-se3:image",
+        props: {
+          url: "https://example.com/root.png",
           alt: "root",
           caption: null,
-          mediaKind: "image",
+        },
+        assets: {
+          url: imageAsset("https://example.com/root.png"),
         },
       },
     ])
@@ -330,13 +365,14 @@ describe("NaverSe3ImageBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "image",
-        image: {
-          sourceUrl: "https://example.com/root.png",
-          originalSourceUrl: null,
+        blockId: "naver-se3:image",
+        props: {
+          url: "https://example.com/root.png",
           alt: "root",
           caption: null,
-          mediaKind: "image",
+        },
+        assets: {
+          url: imageAsset("https://example.com/root.png"),
         },
       },
     ])

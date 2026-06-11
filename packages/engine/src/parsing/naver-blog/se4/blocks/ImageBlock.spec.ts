@@ -18,13 +18,18 @@ describe("NaverSe4ImageBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "image",
-        image: {
-          sourceUrl: "https://example.com/image.png",
-          originalSourceUrl: "https://example.com/image.png",
+        blockId: "naver-se4:image",
+        props: {
+          url: "https://example.com/image.png",
           alt: "diagram",
           caption: "image caption",
-          mediaKind: "image",
+        },
+        assets: {
+          url: {
+            role: "image",
+            sourceUrl: "https://example.com/image.png",
+            required: true,
+          },
         },
       },
     ])
@@ -55,13 +60,18 @@ describe("NaverSe4ImageBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "image",
-        image: {
-          sourceUrl: "https://example.com/classic-se4.png",
-          originalSourceUrl: "https://example.com/classic-se4.png",
+        blockId: "naver-se4:image",
+        props: {
+          url: "https://example.com/classic-se4.png",
           alt: "",
           caption: null,
-          mediaKind: "image",
+        },
+        assets: {
+          url: {
+            role: "image",
+            sourceUrl: "https://example.com/classic-se4.png",
+            required: true,
+          },
         },
       },
     ])
@@ -87,11 +97,17 @@ describe("NaverSe4ImageBlock", () => {
     `)
 
     expect(parsed.blocks[0]).toMatchObject({
-      type: "image",
-      image: {
-        sourceUrl: "https://example.com/fallback.png",
-        originalSourceUrl: null,
+      blockId: "naver-se4:image",
+      props: {
+        url: "https://example.com/fallback.png",
         alt: "fallback",
+      },
+      assets: {
+        url: {
+          role: "image",
+          sourceUrl: "https://example.com/fallback.png",
+          required: true,
+        },
       },
     })
   })
@@ -110,13 +126,18 @@ describe("NaverSe4ImageBlock", () => {
     `)
 
     expect(parsed.blocks[0]).toMatchObject({
-      type: "image",
-      image: {
-        sourceUrl: "https://example.com/vr.jpg?type=preview966_544",
-        originalSourceUrl: null,
+      blockId: "naver-se4:image",
+      props: {
+        url: "https://example.com/vr.jpg?type=preview966_544",
         alt: "",
         caption: "360 preview",
-        mediaKind: "image",
+      },
+      assets: {
+        url: {
+          role: "image",
+          sourceUrl: "https://example.com/vr.jpg?type=preview966_544",
+          required: true,
+        },
       },
     })
   })
@@ -131,10 +152,17 @@ describe("NaverSe4ImageBlock", () => {
     `)
 
     expect(parsed.blocks[0]).toMatchObject({
-      type: "image",
-      image: {
-        sourceUrl: "https://example.com/no-alt.png",
+      blockId: "naver-se4:image",
+      props: {
+        url: "https://example.com/no-alt.png",
         alt: "",
+      },
+      assets: {
+        url: {
+          role: "image",
+          sourceUrl: "https://example.com/no-alt.png",
+          required: true,
+        },
       },
     })
   })

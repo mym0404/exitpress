@@ -1,5 +1,6 @@
-import * as HttpRequests from "@exitpress/engine/infra/http/util/HttpRequests.js"
 import { delay } from "@exitpress/engine/shared/async/util/AsyncTasks.js"
+
+import * as HttpRequests from "../../infra/http/HttpRequests.js"
 
 import { browserHeaders } from "./NaverBlogRequestHeaders.js"
 

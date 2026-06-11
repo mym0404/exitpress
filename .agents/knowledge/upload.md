@@ -24,6 +24,6 @@
 - Web owns provider setup form state, field rules, test upload action, export payload assembly, and progress display.
 
 ## Verification
-- Upload or resume contract changes require server/job tests, web hook tests, smoke UI, and relevant network e2e when credentials are available.
+- Upload or resume contract changes require server/job tests, web hook tests, and `build:ui` followed by `check:playwright`.
 - Mock smoke proves provider setup, test upload, export payload shape, automatic upload progress, result-screen uploaded links, manifest URL replacement, and absence of manual upload POSTs.
-- Live upload e2e is the bundled proof for external upload state, Markdown rewrite, provider metadata use, and credential non-leakage.
+- Live upload Playwright e2e is the bundled proof for external upload state, Markdown rewrite, provider metadata use, and credential non-leakage.

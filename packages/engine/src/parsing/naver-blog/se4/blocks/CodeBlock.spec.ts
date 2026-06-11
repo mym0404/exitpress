@@ -14,9 +14,11 @@ console.log(value)
 
     expect(parsed.blocks).toEqual([
       {
-        type: "code",
-        language: "typescript",
-        code: "const value = 1\nconsole.log(value)",
+        blockId: "naver-se4:code",
+        props: {
+          language: "typescript",
+          code: "const value = 1\nconsole.log(value)",
+        },
       },
     ])
   })
@@ -41,9 +43,11 @@ console.log(value)
     `)
 
     expect(parsed.blocks[0]).toMatchObject({
-      type: "code",
-      language: null,
-      code: "plain()",
+      blockId: "naver-se4:code",
+      props: {
+        language: null,
+        code: "plain()",
+      },
     })
   })
 })

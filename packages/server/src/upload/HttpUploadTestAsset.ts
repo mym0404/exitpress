@@ -2,7 +2,7 @@ import { randomUUID } from "node:crypto"
 import { rmdir, rm, writeFile } from "node:fs/promises"
 import path from "node:path"
 
-import { ensureDir, getProjectTempPath } from "@exitpress/engine/infra/node/util/FilePaths.js"
+import { ensureDir, getProjectTempPath } from "@exitpress/engine/infra/node/FilePaths.js"
 
 import type { UploadCandidate } from "@exitpress/domain/export-job/schema/UploadState.js"
 

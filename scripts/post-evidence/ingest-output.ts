@@ -2,7 +2,7 @@ import { readdir, readFile } from "node:fs/promises"
 import path from "node:path"
 
 import { extractBlogId } from "@exitpress/domain/blog/NaverUrl.js"
-import { resolveRepoPath } from "@exitpress/engine/infra/node/util/FilePaths.js"
+import { resolveRepoPath } from "@exitpress/engine/infra/node/FilePaths.js"
 
 import type {
   ExportManifest,

@@ -2,7 +2,7 @@ import { parseSe4Blocks } from "@tests/support/parser-test-utils.js"
 import { describe, expect, it } from "vitest"
 
 describe("NaverSe4ScheduleBlock", () => {
-  it("parses schedule components into link paragraphs", () => {
+  it("parses schedule components into schedule blocks", () => {
     const parsed = parseSe4Blocks(`
       <div class="se-component se-schedule se-l-default">
         <div class="se-component-content">
@@ -41,12 +41,13 @@ describe("NaverSe4ScheduleBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "paragraph",
-        text: "[근대5종 남자 개인 결승 - 레이저런](https://m.sports.naver.com/game/2024MPNMINDIVIDFNL0001LR/video)",
-      },
-      {
-        type: "paragraph",
-        text: "2024-08-11T02:10:15+09:00",
+        blockId: "naver-se4:schedule",
+        props: {
+          title: "근대5종 남자 개인 결승 - 레이저런",
+          startAt: "2024-08-11T02:10:15+09:00",
+          endAt: "",
+          url: "https://m.sports.naver.com/game/2024MPNMINDIVIDFNL0001LR/video",
+        },
       },
     ])
   })
@@ -63,8 +64,15 @@ describe("NaverSe4ScheduleBlock", () => {
     `)
 
     expect(parsed.blocks).toEqual([
-      { type: "paragraph", text: "결승전" },
-      { type: "paragraph", text: "2024-08-12T20:00:00+09:00" },
+      {
+        blockId: "naver-se4:schedule",
+        props: {
+          title: "결승전",
+          startAt: "2024-08-12T20:00:00+09:00",
+          endAt: "",
+          url: "",
+        },
+      },
     ])
   })
 })

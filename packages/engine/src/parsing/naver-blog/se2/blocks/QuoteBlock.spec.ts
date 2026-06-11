@@ -5,7 +5,9 @@ describe("NaverSe2QuoteBlock", () => {
   it("parses blockquote tags into quote blocks", () => {
     const parsed = parseSe2Blocks("<blockquote><p>Classic <strong>quote</strong></p></blockquote>")
 
-    expect(parsed.blocks).toEqual([{ type: "quote", text: "Classic **quote**" }])
+    expect(parsed.blocks).toEqual([
+      { blockId: "naver-se2:quote", props: { text: "Classic **quote**" } },
+    ])
   })
 
   it("throws when a quote has no markdown content", () => {

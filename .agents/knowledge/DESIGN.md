@@ -28,5 +28,5 @@
 
 ## Verification
 - UI logic can use focused pure or hook tests.
-- Browser workflow coverage belongs in smoke/e2e harnesses.
+- Browser workflow coverage belongs in Playwright smoke/e2e tests.
 - Meaningful UI changes require browser validation when practical.

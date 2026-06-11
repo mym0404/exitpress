@@ -20,19 +20,33 @@ describe("NaverSe4ImageStripBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "imageStrip",
-        images: [
-          {
-            url: "https://example.com/strip-1.png",
-            alt: "",
-            caption: null,
+        blockId: "naver-se4:imageStrip",
+        props: {
+          images: [
+            {
+              url: "https://example.com/strip-1.png",
+              alt: "",
+              caption: null,
+            },
+            {
+              url: "https://example.com/strip-2.png",
+              alt: "",
+              caption: null,
+            },
+          ],
+        },
+        assets: {
+          "images.0.url": {
+            role: "image",
+            sourceUrl: "https://example.com/strip-1.png",
+            required: true,
           },
-          {
-            url: "https://example.com/strip-2.png",
-            alt: "",
-            caption: null,
+          "images.1.url": {
+            role: "image",
+            sourceUrl: "https://example.com/strip-2.png",
+            required: true,
           },
-        ],
+        },
       },
     ])
   })

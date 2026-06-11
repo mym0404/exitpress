@@ -7,7 +7,8 @@ describe("NaverSe2DividerBlock", () => {
 
     expect(parsed.blocks).toEqual([
       {
-        type: "divider",
+        blockId: "naver-se2:divider",
+        props: {},
       },
     ])
   })

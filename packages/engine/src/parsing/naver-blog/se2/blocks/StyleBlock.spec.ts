@@ -8,6 +8,6 @@ describe("NaverSe2StyleBlock", () => {
       <p>본문</p>
     `)
 
-    expect(parsed.blocks).toEqual([{ type: "paragraph", text: "본문" }])
+    expect(parsed.blocks).toEqual([{ blockId: "naver-se2:paragraph", props: { text: "본문" } }])
   })
 })

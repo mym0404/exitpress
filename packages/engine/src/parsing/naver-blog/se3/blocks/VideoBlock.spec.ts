@@ -26,14 +26,14 @@ describe("NaverSe3VideoBlock", () => {
     const video = {
       title: "Demo video",
       thumbnailUrl: null,
-      sourceUrl: "",
-      vid: null,
-      inkey: null,
+      url: "",
+      vid: "vid-1",
+      inkey: "inkey-1",
       width: 1920,
       height: 1080,
     }
 
-    expect(parsed.blocks).toEqual([{ type: "video", video }])
+    expect(parsed.blocks).toEqual([{ blockId: "naver-se3:video", props: video }])
   })
 
   it("uses defaults when module data is missing", () => {
@@ -46,11 +46,11 @@ describe("NaverSe3VideoBlock", () => {
     `)
 
     expect(parsed.blocks[0]).toEqual({
-      type: "video",
-      video: {
+      blockId: "naver-se3:video",
+      props: {
         title: "Video",
         thumbnailUrl: null,
-        sourceUrl: "",
+        url: "",
         vid: null,
         inkey: null,
         width: null,
@@ -83,13 +83,13 @@ describe("NaverSe3VideoBlock", () => {
     )
 
     expect(parsed.blocks[0]).toEqual({
-      type: "video",
-      video: {
+      blockId: "naver-se3:video",
+      props: {
         title: "Video",
         thumbnailUrl: null,
-        sourceUrl: "",
-        vid: null,
-        inkey: null,
+        url: "",
+        vid: "right",
+        inkey: "matched",
         width: null,
         height: 1080,
       },
@@ -115,8 +115,8 @@ describe("NaverSe3VideoBlock", () => {
     )
 
     expect(parsed.blocks[0]).toMatchObject({
-      type: "video",
-      video: {
+      blockId: "naver-se3:video",
+      props: {
         vid: null,
         inkey: null,
       },
@@ -145,8 +145,8 @@ describe("NaverSe3VideoBlock", () => {
     )
 
     expect(parsed.blocks[0]).toMatchObject({
-      type: "video",
-      video: {
+      blockId: "naver-se3:video",
+      props: {
         vid: null,
         inkey: null,
       },

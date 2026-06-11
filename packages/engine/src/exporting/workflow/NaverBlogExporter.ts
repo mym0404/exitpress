@@ -4,7 +4,6 @@ import path from "node:path"
 import { extractBlogId } from "@exitpress/domain/blog/NaverUrl.js"
 import { cloneExportOptions } from "@exitpress/domain/export-options/ExportOptions.js"
 import { filterPostsByScope } from "@exitpress/domain/export-scope/ExportScope.js"
-import { ensureDir, resolveRepoPath } from "@exitpress/engine/infra/node/util/FilePaths.js"
 import {
   isAbortOperationError,
   throwIfAborted,
@@ -22,6 +21,7 @@ import type { NaverBlogFetcherCache } from "@exitpress/engine/integrations/naver
 
 import type { ProcessedPostResult } from "../post/PostExportResult.js"
 
+import { ensureDir, resolveRepoPath } from "../../infra/node/FilePaths.js"
 import { AssetStore } from "../assets/AssetStore.js"
 import {
   createExportProgressState,

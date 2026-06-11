@@ -1,13 +1,13 @@
-import { existsSync, readFileSync } from "node:fs"
 import { mkdir, readFile, rm, writeFile } from "node:fs/promises"
 import path from "node:path"
 
 import { createHttpServer } from "@exitpress/server/http/HttpServer.js"
-import { chromium } from "playwright"
+import { config as loadDotEnv } from "dotenv"
 
 import type { ScanResult } from "@exitpress/domain/blog/schema/BlogScan.js"
 import type { ExportJobState } from "@exitpress/domain/export-job/schema/ExportJobState.js"
 import type { PostManifestEntry } from "@exitpress/domain/export-job/schema/ExportManifest.js"
+import type { Browser } from "playwright"
 
 import { createTestTempDir } from "../../support/test-paths.js"
 
@@ -19,33 +19,7 @@ const uploadPath = `exitpress-live/${Date.now()}`
 const responseTimeoutMs = 240_000
 const githubApiBaseUrl = "https://api.github.com"
 const getCaptureDir = () => {
-  const index = process.argv.indexOf("--capture-dir")
-
-  if (index < 0) {
-    return null
-  }
-
-  return process.argv[index + 1] ?? null
-}
-const resolveBrowserMode = () => {
-  if (process.argv.includes("--headed")) {
-    return {
-      headless: false,
-      slowMo: 200,
-    }
-  }
-
-  if (process.argv.includes("--headless")) {
-    return {
-      headless: true,
-      slowMo: 0,
-    }
-  }
-
-  return {
-    headless: true,
-    slowMo: 0,
-  }
+  return process.env.EXITPRESS_CAPTURE_DIR ?? null
 }
 
 type LiveUploadConfig = {
@@ -72,49 +46,8 @@ type TreeResponse = {
   }>
 }
 
-const loadDotEnv = (filePath: string) => {
-  if (!existsSync(filePath)) {
-    return
-  }
-
-  const content = readFileSync(filePath, "utf8")
-
-  for (const rawLine of content.split(/\r?\n/)) {
-    const line = rawLine.trim()
-
-    if (!line || line.startsWith("#")) {
-      continue
-    }
-
-    const separatorIndex = line.indexOf("=")
-
-    if (separatorIndex < 0) {
-      continue
-    }
-
-    const key = line.slice(0, separatorIndex).trim()
-    const value = line.slice(separatorIndex + 1).trim()
-
-    if (!key || process.env[key] !== undefined) {
-      continue
-    }
-
-    const unquoted =
-      (value.startsWith('"') && value.endsWith('"')) ||
-      (value.startsWith("'") && value.endsWith("'"))
-        ? value.slice(1, -1)
-        : value
-
-    process.env[key] = unquoted
-  }
-}
-
 const resolveLiveUploadConfig = (): LiveUploadConfig => {
-  loadDotEnv(".env")
-
-  if (process.env.EXITPRESS_UPLOAD_E2E !== "1") {
-    throw new Error("EXITPRESS_UPLOAD_E2E=1 이 필요합니다.")
-  }
+  loadDotEnv({ quiet: true })
 
   const token = process.env.EXITPRESS_UPLOAD_E2E_GITHUB_TOKEN?.trim()
 
@@ -455,10 +388,8 @@ const waitForObservedUploadState = async ({
   )
 }
 
-const run = async () => {
+export const runUiLiveUpload = async ({ browser }: { browser: Browser }) => {
   const config = resolveLiveUploadConfig()
-  const browserMode = resolveBrowserMode()
-  const browser = await chromium.launch(browserMode)
   const tempRoot = await createTestTempDir("exitpress-live-upload-harness-")
   const server = createHttpServer({
     settingsPath: path.join(tempRoot, "export-ui-settings.json"),
@@ -1044,7 +975,6 @@ const run = async () => {
     console.log(JSON.stringify(liveEvidence, null, 2))
   } finally {
     await context.close()
-    await browser.close()
     await rm(outputDir, {
       recursive: true,
       force: true,
@@ -1065,8 +995,3 @@ const run = async () => {
     })
   }
 }
-
-void run().catch((error) => {
-  console.error(error instanceof Error ? error.message : String(error))
-  process.exitCode = 1
-})
