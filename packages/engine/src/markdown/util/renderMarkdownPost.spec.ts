@@ -132,6 +132,33 @@ describe("renderMarkdownPost", () => {
     expect(rendered.markdown).toContain("CUSTOM 본문")
   })
 
+  it("allows an empty custom block template to omit a block", async () => {
+    const options = defaultExportOptions()
+    options.blockOutputs.templates["naver-se4:video"] = ""
+
+    const rendered = await render({
+      options,
+      parsedPost: {
+        tags: [],
+        blocks: [
+          {
+            blockId: "naver-se4:video",
+            props: {
+              title: "Demo",
+              url: "https://example.com/video",
+              thumbnailUrl: null,
+              width: null,
+              height: null,
+            },
+          },
+        ],
+      },
+    })
+
+    expect(rendered.markdown).not.toContain("Demo")
+    expect(rendered.markdown).not.toContain("https://example.com/video")
+  })
+
   it("preserves string post identifiers in frontmatter", async () => {
     const rendered = await renderMarkdownPost({
       post: { ...post, logNo: "mock-post-1" },

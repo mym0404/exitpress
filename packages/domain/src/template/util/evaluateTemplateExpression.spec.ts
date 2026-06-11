@@ -51,8 +51,15 @@ describe("evaluateTemplateExpression", () => {
     expect(() => evaluateTemplateExpression("book", props)).toThrow(/unsupported final value/)
   })
 
+  it("allows long post text props within the output safety limit", () => {
+    expect(evaluateTemplateExpression("text", { text: "x".repeat(50000) })).toBe("x".repeat(50000))
+  })
+
   it("limits expression size and array work", () => {
     expect(() => evaluateTemplateExpression("'x'.repeat(100000)", props)).toThrow(/blocked call/)
+    expect(() => evaluateTemplateExpression("text", { text: "x".repeat(100001) })).toThrow(
+      /output length limit/,
+    )
     expect(() =>
       evaluateTemplateExpression("tags", { tags: Array.from({ length: 1001 }, () => "x") }),
     ).toThrow(/unsupported final value/)

@@ -9,7 +9,7 @@ const allowedStringMethods = new Set(["replace", "toLowerCase", "toUpperCase", "
 const maxExpressionLength = 1000
 const maxEvaluationDepth = 80
 const maxArrayIterationLength = 1000
-const maxOutputLength = 20000
+const maxOutputLength = 100000
 
 type PlainObject = Record<string, TemplateValue>
 type AstNode = {

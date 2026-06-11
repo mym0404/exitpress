@@ -176,7 +176,7 @@ export const renderMarkdownPost = async ({
   const getBlockTemplate = (block: ParsedBlock) => {
     const template = customBlockTemplates[block.blockId] ?? defaultBlockTemplates[block.blockId]
 
-    if (!template) {
+    if (template === undefined) {
       throw new Error(`Parser block template is missing: ${block.blockId}`)
     }
 
