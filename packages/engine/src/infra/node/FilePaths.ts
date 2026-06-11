@@ -6,7 +6,7 @@ let repoRootDir: string | undefined
 
 // Resolves a repo-relative path while preserving absolute input.
 export const resolveRepoPath = (targetPath: string) => {
-  repoRootDir ??= fileURLToPath(new URL("../../../../../..", import.meta.url))
+  repoRootDir ??= fileURLToPath(new URL("../../../../..", import.meta.url))
 
   return path.isAbsolute(targetPath) ? targetPath : path.resolve(repoRootDir, targetPath)
 }

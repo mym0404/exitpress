@@ -1,4 +1,9 @@
+import { mkdtemp, readFile, rm } from "node:fs/promises"
+import os from "node:os"
+import path from "node:path"
+
 import { defaultExportOptions } from "@exitpress/domain/export-options/ExportOptions.js"
+import { exportProviderPostUnit } from "@exitpress/engine/exporting/provider/ProviderPostExportUnit.js"
 import { renderBlockTemplates } from "@exitpress/engine/markdown/util/renderBlockTemplates.js"
 import { describe, expect, it, vi } from "vitest"
 
@@ -58,6 +63,35 @@ describe("createTistoryBlogProvider", () => {
       "tistory:paragraph",
       "tistory:paragraph",
     ])
+  })
+
+  it("exports a Tistory provider post to markdown", async () => {
+    const provider = createTistoryBlogProvider({
+      fetchText: vi.fn(async () => html),
+    })
+    const source = provider.parseSource("https://sample.tistory.com/42")
+    const scan = await provider.scan(source)
+    const post = scan.posts[0]!
+    const tempDir = await mkdtemp(path.join(os.tmpdir(), "exitpress-provider-tistory-"))
+
+    try {
+      const result = await exportProviderPostUnit({
+        provider,
+        source,
+        outputDir: tempDir,
+        post,
+        categories: scan.categories,
+        options: defaultExportOptions(),
+        uploadEnabled: false,
+        abortSignal: null,
+      })
+      const markdown = await readFile(result.markdownFilePath, "utf8")
+
+      expect(markdown).toContain("Fixture Tistory Post")
+      expect(markdown).toContain("First paragraph.")
+    } finally {
+      await rm(tempDir, { recursive: true, force: true })
+    }
   })
 
   it("exposes Tistory block template definitions", () => {

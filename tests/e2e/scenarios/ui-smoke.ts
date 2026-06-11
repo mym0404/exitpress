@@ -9,7 +9,6 @@ import {
 } from "@exitpress/domain/export-options/ExportOptions.js"
 import { NaverBlog } from "@exitpress/engine/parsing/naver-blog/NaverBlog.js"
 import { createHttpServer } from "@exitpress/server/http/HttpServer.js"
-import { chromium } from "playwright"
 
 import type { ExportJobPollingConfig } from "@exitpress/domain/export-job/schema/ExportJobPollingConfig.js"
 import type { JobStatus } from "@exitpress/domain/export-job/schema/ExportJobState.js"
@@ -24,6 +23,7 @@ import type {
   UploadProviderValue,
 } from "@exitpress/domain/upload/schema/UploadProvider.js"
 import type { UploadRowStatus } from "@exitpress/web/features/job-results/JobResultsHelpers.js"
+import type { Browser } from "playwright"
 
 import { createTestPath, createTestTempDir } from "../../support/test-paths.js"
 
@@ -58,26 +58,6 @@ const smokeJobFetchLimits = smokeFast
       uploadPartialMax: 12,
       rewritePendingMax: 20,
     }
-const resolveBrowserMode = () => {
-  if (process.argv.includes("--headed")) {
-    return {
-      headless: false,
-      slowMo: 200,
-    }
-  }
-
-  if (process.argv.includes("--headless")) {
-    return {
-      headless: true,
-      slowMo: 0,
-    }
-  }
-
-  return {
-    headless: true,
-    slowMo: 0,
-  }
-}
 const desktopViewport = {
   width: 1440,
   height: 1200,
@@ -89,13 +69,7 @@ const mobileViewport = {
 const fallbackSmokeOutputDir = createTestPath("ui-smoke-fixture", "output")
 
 const getCaptureDir = () => {
-  const index = process.argv.indexOf("--capture-dir")
-
-  if (index < 0) {
-    return null
-  }
-
-  return process.argv[index + 1] ?? null
+  return process.env.EXITPRESS_CAPTURE_DIR ?? null
 }
 
 const buildJsonResponse = (body: unknown, status = 200) => ({
@@ -960,7 +934,7 @@ const waitForStepView = async ({
   )
 }
 
-const run = async () => {
+export const runUiSmoke = async ({ browser }: { browser: Browser }) => {
   const tempRoot = await createTestTempDir("exitpress-smoke-")
   const outputDir = path.join(tempRoot, "output")
   const server = createHttpServer({
@@ -979,8 +953,6 @@ const run = async () => {
   }
 
   const baseUrl = `http://127.0.0.1:${address.port}`
-  const browserMode = resolveBrowserMode()
-  const browser = await chromium.launch(browserMode)
   const context = await browser.newContext({
     viewport: desktopViewport,
   })
@@ -2066,9 +2038,9 @@ const run = async () => {
       throw new Error("per-post index.md output path regressed")
     }
 
-    console.log(`smoke:ui passed (${jobId})`)
+    console.log(`ui smoke passed (${jobId})`)
   } finally {
-    await browser.close()
+    await context.close()
     server.close()
     await rm(tempRoot, {
       recursive: true,
@@ -2076,8 +2048,3 @@ const run = async () => {
     })
   }
 }
-
-void run().catch((error) => {
-  console.error(error instanceof Error ? error.message : String(error))
-  process.exitCode = 1
-})

@@ -10,7 +10,6 @@ import {
 import { NaverBlog } from "@exitpress/engine/parsing/naver-blog/NaverBlog.js"
 import { mapConcurrent } from "@exitpress/engine/shared/async/util/AsyncTasks.js"
 import { createHttpServer } from "@exitpress/server/http/HttpServer.js"
-import { chromium } from "playwright"
 
 import type { ScanResult } from "@exitpress/domain/blog/schema/BlogScan.js"
 import type { ExportJobPollingConfig } from "@exitpress/domain/export-job/schema/ExportJobPollingConfig.js"
@@ -27,6 +26,7 @@ import type { ThemePreference } from "@exitpress/domain/preferences/schema/Theme
 import type { UploadProviderCatalogResponse } from "@exitpress/domain/upload/schema/UploadProvider.js"
 import type { WizardStep } from "@exitpress/web/features/common/shell/WizardFlow.js"
 import type { UploadRowStatus } from "@exitpress/web/features/job-results/JobResultsHelpers.js"
+import type { Browser } from "playwright"
 
 import { createTestTempDir } from "../../support/test-paths.js"
 
@@ -711,7 +711,7 @@ const runScenario = async ({
   }
 }
 
-const run = async () => {
+export const runUiResumeSmoke = async ({ browser }: { browser: Browser }) => {
   const tempRoot = await createTestTempDir("exitpress-resume-smoke-")
   const server = createHttpServer({
     settingsPath: path.join(tempRoot, "export-ui-settings.json"),
@@ -729,11 +729,6 @@ const run = async () => {
   }
 
   const baseUrl = `http://127.0.0.1:${address.port}`
-  const browser = await chromium.launch({
-    headless: !process.argv.includes("--headed"),
-    slowMo: process.argv.includes("--headed") ? 200 : 0,
-  })
-
   const emptyOutputDir = path.join(tempRoot, "empty-output")
   const runningOutputDir = path.join(tempRoot, "running-output")
   const uploadReadyOutputDir = path.join(tempRoot, "upload-ready-output")
@@ -1182,7 +1177,6 @@ const run = async () => {
       `resume smoke passed (${scenarios.length} scenarios, concurrency=${resumeScenarioConcurrency})`,
     )
   } finally {
-    await browser.close()
     server.close()
     await rm(tempRoot, {
       recursive: true,
@@ -1190,8 +1184,3 @@ const run = async () => {
     })
   }
 }
-
-void run().catch((error) => {
-  console.error(error instanceof Error ? error.message : String(error))
-  process.exitCode = 1
-})

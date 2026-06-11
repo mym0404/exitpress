@@ -41,31 +41,33 @@ jobs:
       - name: Run lint check
         run: pnpm check:lint
 
-      - name: Run typecheck
-        run: pnpm typecheck
+      - name: Run type check
+        run: pnpm check:type
 
       - name: Run server build
-        run: pnpm build:server
+        run: pnpm check:build:server
 
       - name: Run Storybook catalog check
-        run: pnpm storybook:check
+        run: pnpm check:storybook
 
       - name: Run web build
-        run: pnpm build:ui
+        run: pnpm check:build:web
 
-      - name: Run UI smoke
-        timeout-minutes: 10
-        run: pnpm smoke:ui
+      - name: Run unused check
+        run: pnpm check:unused
+
+      - name: Run Vitest checks
+        run: pnpm check:test
 
       - name: Run Vitest coverage
-        run: pnpm test:coverage
+        run: pnpm check:coverage
 
-      - name: Run live network e2e
+      - name: Run Playwright checks
         timeout-minutes: 20
         env:
           EXITPRESS_UPLOAD_E2E: ${{ secrets.EXITPRESS_UPLOAD_E2E }}
           EXITPRESS_UPLOAD_E2E_GITHUB_TOKEN: ${{ secrets.EXITPRESS_UPLOAD_E2E_GITHUB_TOKEN }}
-        run: pnpm test:network
+        run: pnpm check:playwright
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v5

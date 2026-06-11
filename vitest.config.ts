@@ -9,6 +9,8 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.join(rootDir, "packages/web/src"),
+      "@exitpress/blog-naver": path.join(rootDir, "packages/blog-naver/src"),
+      "@exitpress/blog-tistory": path.join(rootDir, "packages/blog-tistory/src"),
       "@exitpress/domain": path.join(rootDir, "packages/domain/src"),
       "@exitpress/engine": path.join(rootDir, "packages/engine/src"),
       "@exitpress/server": path.join(rootDir, "packages/server/src"),
@@ -17,6 +19,12 @@ export default defineConfig({
     },
   },
   test: {
+    include: [
+      ".agents/skills/**/*.spec.ts",
+      "packages/**/*.{spec,test}.?(c|m)[jt]s?(x)",
+      "scripts/**/*.spec.ts",
+      "tests/support/**/*.spec.ts",
+    ],
     coverage: {
       provider: "v8",
       reporter: ["text", "json-summary", "lcov"],

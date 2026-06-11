@@ -16,7 +16,7 @@ import { createTestTempDir } from "../../support/test-paths.js"
 
 const repoRoot = fileURLToPath(new URL("../../../", import.meta.url))
 
-const resumeCases = {
+export const resumeCases = {
   default: {
     blogId: "mym0404",
     dateFrom: "2017-03-31",
@@ -35,38 +35,7 @@ const resumeCases = {
   },
 } as const
 
-type ResumeCaseId = keyof typeof resumeCases
-
-const parseResumeCaseId = (argv: string[]): ResumeCaseId => {
-  const caseFlagIndex = argv.indexOf("--case")
-  const caseId = caseFlagIndex >= 0 ? argv[caseFlagIndex + 1] : "default"
-
-  if (caseId !== "default" && caseId !== "se2-table") {
-    throw new Error(`unknown live resume export case: ${caseId}`)
-  }
-
-  return caseId
-}
-
-const selectedResumeCase = resumeCases[parseResumeCaseId(process.argv.slice(2))]
-const blogId = process.env.EXITPRESS_LIVE_RESUME_BLOG_ID ?? selectedResumeCase.blogId
-const scopedDateFrom = process.env.EXITPRESS_LIVE_RESUME_DATE_FROM ?? selectedResumeCase.dateFrom
-const scopedDateTo = process.env.EXITPRESS_LIVE_RESUME_DATE_TO ?? selectedResumeCase.dateTo
-const scopedCategoryId = Number(
-  process.env.EXITPRESS_LIVE_RESUME_CATEGORY_ID ?? selectedResumeCase.categoryId,
-)
-const delayedLogNo =
-  process.env.EXITPRESS_LIVE_RESUME_DELAY_LOGNO ?? selectedResumeCase.delayedLogNo
-const expectedScopedPostCount = Number(
-  process.env.EXITPRESS_LIVE_RESUME_EXPECTED_POSTS ?? selectedResumeCase.expectedPosts,
-)
-const scopedOutputDir = `output/live-resume-e2e-${Date.now()}`
-
-const isWithinScopedDateRange = (publishedAt: string) => {
-  const publishedDate = publishedAt.slice(0, 10)
-
-  return publishedDate >= scopedDateFrom && publishedDate <= scopedDateTo
-}
+export type ResumeCaseId = keyof typeof resumeCases
 
 const wait = (ms: number) =>
   new Promise<void>((resolve) => {
@@ -246,7 +215,15 @@ const stopServer = async ({
     }
   })
 
-const buildScopedOptions = () => {
+const buildScopedOptions = ({
+  scopedCategoryId,
+  scopedDateFrom,
+  scopedDateTo,
+}: {
+  scopedCategoryId: number
+  scopedDateFrom: string
+  scopedDateTo: string
+}) => {
   const options: ExportOptions = defaultExportOptions()
 
   options.scope.categoryMode = "exact-selected"
@@ -258,7 +235,25 @@ const buildScopedOptions = () => {
   return options
 }
 
-const run = async () => {
+export const runUiLiveResumeExport = async ({ resumeCaseId }: { resumeCaseId: ResumeCaseId }) => {
+  const selectedResumeCase = resumeCases[resumeCaseId]
+  const blogId = process.env.EXITPRESS_LIVE_RESUME_BLOG_ID ?? selectedResumeCase.blogId
+  const scopedDateFrom = process.env.EXITPRESS_LIVE_RESUME_DATE_FROM ?? selectedResumeCase.dateFrom
+  const scopedDateTo = process.env.EXITPRESS_LIVE_RESUME_DATE_TO ?? selectedResumeCase.dateTo
+  const scopedCategoryId = Number(
+    process.env.EXITPRESS_LIVE_RESUME_CATEGORY_ID ?? selectedResumeCase.categoryId,
+  )
+  const delayedLogNo =
+    process.env.EXITPRESS_LIVE_RESUME_DELAY_LOGNO ?? selectedResumeCase.delayedLogNo
+  const expectedScopedPostCount = Number(
+    process.env.EXITPRESS_LIVE_RESUME_EXPECTED_POSTS ?? selectedResumeCase.expectedPosts,
+  )
+  const scopedOutputDir = `output/live-resume-e2e-${resumeCaseId}-${Date.now()}`
+  const isWithinScopedDateRange = (publishedAt: string) => {
+    const publishedDate = publishedAt.slice(0, 10)
+
+    return publishedDate >= scopedDateFrom && publishedDate <= scopedDateTo
+  }
   const tempRoot = await createTestTempDir("exitpress-live-resume-export-")
   const settingsPath = path.join(tempRoot, "export-ui-settings.json")
   const scanCachePath = path.join(tempRoot, "scan-cache.json")
@@ -307,7 +302,11 @@ const run = async () => {
       body: {
         blogIdOrUrl: blogId,
         outputDir: scopedOutputDir,
-        options: buildScopedOptions(),
+        options: buildScopedOptions({
+          scopedCategoryId,
+          scopedDateFrom,
+          scopedDateTo,
+        }),
         scanResult,
       },
     })
@@ -445,8 +444,3 @@ const run = async () => {
     })
   }
 }
-
-void run().catch((error) => {
-  console.error(error instanceof Error ? error.message : String(error))
-  process.exitCode = 1
-})
