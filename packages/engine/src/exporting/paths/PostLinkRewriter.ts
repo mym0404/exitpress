@@ -18,6 +18,11 @@ type PostLinkTarget = {
   templateValues: ReturnType<typeof buildSameBlogPostTemplateValues>
 }
 
+type SameBlogPostIdentity = {
+  blogId: string
+  logNo: string
+}
+
 const isNonPostNaverPath = (pathname: string) =>
   /\/PostList\.naver$/i.test(pathname) || /\/PostSearchList\.naver$/i.test(pathname)
 
@@ -129,12 +134,34 @@ export const createSameBlogPostLinkResolver = ({
   options: Pick<ExportOptions, "links">
   targets: Map<string, PostLinkTarget>
 }) => {
+  return createPostLinkResolver({
+    blogId,
+    markdownFilePath,
+    options,
+    targets,
+    resolveIdentity: extractNaverBlogPostIdentity,
+  })
+}
+
+export const createPostLinkResolver = ({
+  blogId,
+  markdownFilePath,
+  options,
+  targets,
+  resolveIdentity,
+}: {
+  blogId: string
+  markdownFilePath: string
+  options: Pick<ExportOptions, "links">
+  targets: Map<string, PostLinkTarget>
+  resolveIdentity: (url: string) => SameBlogPostIdentity | null | undefined
+}) => {
   if (options.links.sameBlogPostMode === "keep-source") {
     return (url: string) => url
   }
 
   return (url: string) => {
-    const identity = extractNaverBlogPostIdentity(url)
+    const identity = resolveIdentity(url)
 
     if (!identity || identity.blogId !== blogId) {
       return url

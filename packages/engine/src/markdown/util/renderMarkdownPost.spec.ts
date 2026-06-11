@@ -110,6 +110,7 @@ describe("renderMarkdownPost", () => {
     })
 
     expect(rendered.markdown).toContain("title: 테스트 글")
+    expect(rendered.markdown).toContain("logNo: 223034929697")
     expect(rendered.markdown).toContain("본문입니다.")
     expect(rendered.markdown).toContain("> 인용문")
     expect(rendered.markdown).toContain("[Demo](https://example.com/video)")
@@ -129,6 +130,52 @@ describe("renderMarkdownPost", () => {
     })
 
     expect(rendered.markdown).toContain("CUSTOM 본문")
+  })
+
+  it("preserves string post identifiers in frontmatter", async () => {
+    const rendered = await renderMarkdownPost({
+      post: { ...post, logNo: "mock-post-1" },
+      category,
+      parsedPost: {
+        tags: [],
+        blocks: [{ blockId: "naver-se4:paragraph", props: { text: "본문" } }],
+      },
+      defaultBlockTemplates,
+      markdownFilePath,
+      options: defaultExportOptions(),
+      resolveAsset: async ({ kind, sourceUrl }) =>
+        createAssetRecord({
+          kind,
+          sourceUrl,
+          reference: sourceUrl,
+        }),
+    })
+
+    expect(rendered.markdown).toContain("logNo: mock-post-1")
+    expect(rendered.markdown).not.toContain(".nan")
+  })
+
+  it("preserves unsafe numeric post identifiers in frontmatter", async () => {
+    const rendered = await renderMarkdownPost({
+      post: { ...post, logNo: "9007199254740993" },
+      category,
+      parsedPost: {
+        tags: [],
+        blocks: [{ blockId: "naver-se4:paragraph", props: { text: "본문" } }],
+      },
+      defaultBlockTemplates,
+      markdownFilePath,
+      options: defaultExportOptions(),
+      resolveAsset: async ({ kind, sourceUrl }) =>
+        createAssetRecord({
+          kind,
+          sourceUrl,
+          reference: sourceUrl,
+        }),
+    })
+
+    expect(rendered.markdown).toContain('logNo: "9007199254740993"')
+    expect(rendered.markdown).not.toContain("9007199254740992")
   })
 
   it("resolves block asset records into top-level props", async () => {

@@ -7,6 +7,8 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["packages/web/src/*"],
+      "@exitpress/blog-naver/*": ["packages/blog-naver/src/*"],
+      "@exitpress/blog-tistory/*": ["packages/blog-tistory/src/*"],
       "@exitpress/domain/*": ["packages/domain/src/*"],
       "@exitpress/engine/*": ["packages/engine/src/*"],
       "@exitpress/server/*": ["packages/server/src/*"],

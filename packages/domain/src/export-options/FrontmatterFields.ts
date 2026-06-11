@@ -32,7 +32,7 @@ export const frontmatterFieldMeta: Record<FrontmatterFieldName, FrontmatterField
   },
   logNo: {
     label: "logNo",
-    description: "원본 글 번호를 숫자로 기록합니다.",
+    description: "원본 글 식별자를 기록합니다.",
     defaultAlias: "logNo",
   },
   publishedAt: {
