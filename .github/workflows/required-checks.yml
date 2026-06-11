@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: mcr.microsoft.com/playwright:v1.59.1-noble
-    timeout-minutes: 30
+    timeout-minutes: 45
     permissions:
       contents: read
       id-token: write
@@ -44,8 +44,14 @@ jobs:
       - name: Run typecheck
         run: pnpm typecheck
 
+      - name: Run server build
+        run: pnpm build:server
+
       - name: Run Storybook catalog check
         run: pnpm storybook:check
+
+      - name: Run web build
+        run: pnpm build:ui
 
       - name: Run UI smoke
         timeout-minutes: 10
@@ -53,6 +59,13 @@ jobs:
 
       - name: Run Vitest coverage
         run: pnpm test:coverage
+
+      - name: Run live network e2e
+        timeout-minutes: 20
+        env:
+          EXITPRESS_UPLOAD_E2E: ${{ secrets.EXITPRESS_UPLOAD_E2E }}
+          EXITPRESS_UPLOAD_E2E_GITHUB_TOKEN: ${{ secrets.EXITPRESS_UPLOAD_E2E_GITHUB_TOKEN }}
+        run: pnpm test:network
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v5

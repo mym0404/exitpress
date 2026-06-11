@@ -21,7 +21,6 @@
     "test": "vitest run --configLoader runner --silent",
     "test:coverage": "vitest run --configLoader runner --silent --coverage",
     "test:offline": "vitest run --configLoader runner --silent",
-    "test:provider:mock": "bun tests/e2e/run-provider-mock-export.ts",
     "test:provider:tistory": "bun tests/e2e/run-provider-tistory-live.ts",
     "test:network": "pnpm build:ui && bun tests/e2e/run-ui-live-resume-export.ts && bun tests/e2e/run-ui-live-resume-export.ts --case se2-table && bun tests/e2e/run-ui-live-upload.ts",
     "test:network:resume-export": "bun tests/e2e/run-ui-live-resume-export.ts",

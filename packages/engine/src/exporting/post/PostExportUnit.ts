@@ -1,7 +1,6 @@
 import { writeFile } from "node:fs/promises"
 import path from "node:path"
 
-import { ensureDir } from "@exitpress/engine/infra/node/util/FilePaths.js"
 import { throwIfAborted } from "@exitpress/engine/infra/runtime/AbortOperation.js"
 import { renderMarkdownPost } from "@exitpress/engine/markdown/util/renderMarkdownPost.js"
 import { parsePostHtml } from "@exitpress/engine/parsing/naver-blog/core/PostParser.js"
@@ -14,6 +13,7 @@ import type { NaverBlogFetcher } from "@exitpress/engine/integrations/naver-blog
 import type { AssetStore } from "../assets/AssetStore.js"
 import type { buildPostLinkTargets } from "../paths/PostLinkRewriter.js"
 
+import { ensureDir } from "../../infra/node/FilePaths.js"
 import { createPostUploadSummary } from "../manifest/ExportManifestProgress.js"
 import { buildMarkdownFilePath, getCategoryForPost } from "../paths/ExportPaths.js"
 import { createSameBlogPostLinkResolver } from "../paths/PostLinkRewriter.js"

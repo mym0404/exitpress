@@ -3,7 +3,7 @@
 ## Source Of Truth
 
 - Package scripts live in `package.json`.
-- CI lives in `.github/workflows/required-checks.yml`.
+- CI lives in `.github/workflows/required-checks.yml` and runs format, lint, typecheck, server build, Storybook check, web build, smoke UI, coverage, and live network e2e for non-draft PRs.
 - Tool versions live in `mise.toml`.
 - Run local package scripts through `mise exec -- pnpm ...`.
 
@@ -16,7 +16,6 @@
 - `mise exec -- pnpm test:offline`: full Vitest suite.
 - `mise exec -- pnpm check:local`: format, lint, typecheck, Storybook check, and offline tests.
 - `mise exec -- pnpm check:unused`: unused source/test/script diagnostics.
-- `mise exec -- pnpm test:provider:mock`: provider-neutral engine export harness with mock providers.
 - `test -n "$EXITPRESS_TISTORY_LIVE_POST_URL" && mise exec -- pnpm test:provider:tistory`: live Tistory provider export harness.
 - `mise exec -- pnpm smoke:ui`: mock browser scan/export/provider-test/automatic-upload/resume workflow.
 - `mise exec -- pnpm check:full`: default local baseline for ordinary code changes; runs `check:local` plus mock browser smoke UI.
@@ -36,13 +35,13 @@
 - Storybook check proves generated catalog matches current parser/renderer output.
 - Smoke UI proves browser workflow behavior with mocked APIs, including provider setup, test upload, automatic upload progress, uploaded result links, and no manual upload POST.
 - Network tests prove live Naver fetch and external upload behavior when environment and secrets are available, including automatic upload and Markdown URL rewrite.
-- Provider harness tests prove provider-neutral export wiring separately from the server/UI migration path.
+- Provider export Vitest cases prove provider-neutral export wiring separately from the server/UI migration path.
 
 ## Blind Spots
 
 - Smoke UI does not prove live Naver or remote upload behavior.
 - Network upload creates remote state and depends on credentials.
-- CI does not run network e2e.
+- CI network e2e depends on upload secrets and live external services.
 - Coverage does not replace behavior-specific parser/export/server/smoke checks.
 
 ## Task Loops

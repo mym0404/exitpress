@@ -1,9 +1,8 @@
 import { writeFile } from "node:fs/promises"
 import path from "node:path"
 
-import { delay } from "@exitpress/engine/shared/async/util/AsyncTasks.js"
-
-import { ensureDir } from "../../node/util/FilePaths.js"
+import { ensureDir } from "../node/FilePaths.js"
+import { delay } from "../../shared/async/util/AsyncTasks.js"
 
 type RetryHttpOptions = {
   headers: Record<string, string>
