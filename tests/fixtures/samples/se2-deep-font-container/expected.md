@@ -168,7 +168,6 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/20100826_135/naver_diary_1282815
 ![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2F20101014_115%2Fnaver_diary_1287040206375IGChE_gif%2Fbullet_link_s_naver_diary.gif%3Ftype%3Dw3%22&type=w)[강연 2](http://blog.naver.com/story_xpress/90099044772)  
 ![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2F20101014_115%2Fnaver_diary_1287040206375IGChE_gif%2Fbullet_link_s_naver_diary.gif%3Ftype%3Dw3%22&type=w)[강연 3](http://blog.naver.com/story_xpress/90099044815)  
 ![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2F20101014_115%2Fnaver_diary_1287040206375IGChE_gif%2Fbullet_link_s_naver_diary.gif%3Ftype%3Dw3%22&type=w)[강연 4](http://blog.naver.com/story_xpress/90099044838)
-
 ![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fpostfiles.pstatic.net%2F20101014_115%2Fnaver_diary_1287040206375IGChE_gif%2Fbullet_link_s_naver_diary.gif%3Ftype%3Dw3%22&type=w)[인터뷰 및 현장 스케치 영상](http://blog.naver.com/story_xpress/90099039939)
 
 **![](https://mblogthumb-phinf.pstatic.net/data41/2009/3/17/83/bullet_3_naver_blog.jpg?type=w) [김영하의 스토리특급 바로가기](http://blog.naver.com/story_xpress)**

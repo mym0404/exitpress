@@ -5,6 +5,9 @@ import type { ParserBlockTemplateDefinition } from "../../core/ParserBlock.js"
 import { createCodeBlock } from "../../core/ParsedBlockOutput.js"
 import { LeafParserBlock } from "../../core/ParserBlock.js"
 
+const hasPreWhitespace = (value: string | undefined) =>
+  /\bwhite-space\s*:\s*pre\b/i.test(value ?? "")
+
 const parseColorScripterCode = ({
   $,
   element,
@@ -17,7 +20,16 @@ const parseColorScripterCode = ({
   }
 
   const lineNodes = element
-    .find('div[style*="white-space:pre"], div[_foo*="white-space:pre"], pre')
+    .find("div, pre")
+    .filter((_, node) => {
+      if (node.tagName.toLowerCase() === "pre") {
+        return true
+      }
+
+      const line = $(node)
+
+      return hasPreWhitespace(line.attr("style")) || hasPreWhitespace(line.attr("_foo"))
+    })
     .toArray()
   const code = lineNodes
     .map((node) => $(node).text().replaceAll("\u00a0", " ").replaceAll("\u200b", ""))

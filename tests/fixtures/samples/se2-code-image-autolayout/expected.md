@@ -19,8 +19,6 @@ Auto Layout is awesome. Just declare the constraints and the views are resized a
 medium.com
 ](https://medium.com/fantageek/auto-layout-with-different-screen-sizes-in-ios-954c780b2884)
 
-![](https://ssl.pstatic.net/static/blog/blank.gif)
-
 \----------------------
 
 우선 아래와 같은 클래스를 하나 만들어준다.

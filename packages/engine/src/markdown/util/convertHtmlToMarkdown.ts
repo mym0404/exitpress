@@ -1,9 +1,12 @@
+import { load } from "cheerio"
 import TurndownService, { type Node as TurndownNode } from "turndown"
 import { gfm } from "turndown-plugin-gfm"
 
 type AttributeNode = TurndownNode & {
   getAttribute: (name: string) => string | null
 }
+
+const naverBlankImageUrl = "https://ssl.pstatic.net/static/blog/blank.gif"
 
 const cleanLinkAttribute = (attribute: string | null) =>
   attribute ? attribute.replace(/(\n+\s*)+/g, "\n") : ""
@@ -19,6 +22,67 @@ const escapeLinkTitle = (title: string) => title.replace(/"/g, '\\"')
 const isAttributeNode = (node: TurndownNode): node is AttributeNode =>
   "getAttribute" in node && typeof node.getAttribute === "function"
 
+const isNaverBlankImage = (node: TurndownNode) =>
+  node.nodeName === "IMG" &&
+  isAttributeNode(node) &&
+  (node.getAttribute("src") ?? "").split("?")[0] === naverBlankImageUrl
+
+const codeBlockPlaceholderPrefix = "EXITPRESSCOLORSCRIPTERCODEBLOCK"
+
+const hasPreWhitespace = (value: string | null) => /\bwhite-space\s*:\s*pre\b/i.test(value ?? "")
+
+const replaceColorScripterTables = (html: string) => {
+  const $ = load(html, undefined, false)
+  const codeBlocks: string[] = []
+
+  $("table.colorscripter-code-table").each((_, table) => {
+    const code = $(table)
+      .find("div, pre")
+      .toArray()
+      .filter(
+        (lineNode) =>
+          lineNode.tagName === "pre" ||
+          hasPreWhitespace($(lineNode).attr("style") ?? "") ||
+          hasPreWhitespace($(lineNode).attr("_foo") ?? ""),
+      )
+      .map((lineNode) => $(lineNode).text().replaceAll("\u00a0", " ").replaceAll("\u200b", ""))
+      .map((line) => (line.trim() === "" ? "" : line))
+      .join("\n")
+      .trimEnd()
+
+    if (code) {
+      const placeholder = `${codeBlockPlaceholderPrefix}${codeBlocks.length}`
+
+      codeBlocks.push(code)
+      $(table).replaceWith(placeholder)
+    }
+  })
+
+  return { html: $.root().html() ?? html, codeBlocks }
+}
+
+const restoreCodeBlockPlaceholders = ({
+  markdown,
+  codeBlocks,
+}: {
+  markdown: string
+  codeBlocks: string[]
+}) =>
+  codeBlocks.reduce(
+    (currentMarkdown, code, index) =>
+      currentMarkdown.replace(
+        new RegExp(`[ \\t]*${codeBlockPlaceholderPrefix}${index}[ \\t]*`, "g"),
+        `\n\n\`\`\`\n${code}\n\`\`\`\n\n`,
+      ),
+    markdown,
+  )
+
+const escapeMarkdownHtmlLikeText = (markdown: string) =>
+  markdown.replace(
+    /(^|[^\\])<([A-Za-z][A-Za-z0-9-]*(?:[,\s:/][^<>\n]*)?\s*\/?)(?<!\\)>/g,
+    "$1\\<$2\\>",
+  )
+
 const createTurndownService = (resolveLinkUrl?: (url: string) => string) => {
   const service = new TurndownService({
     bulletListMarker: "-",
@@ -31,6 +95,10 @@ const createTurndownService = (resolveLinkUrl?: (url: string) => string) => {
 
   service.use(gfm)
   service.remove(["script", "style", "noscript"])
+  service.addRule("naverBlankImage", {
+    filter: isNaverBlankImage,
+    replacement: () => "",
+  })
   service.addRule("hardBreak", {
     filter: "br",
     replacement: () => "  \n",
@@ -75,7 +143,11 @@ export const convertHtmlToMarkdown = ({
   resolveLinkUrl?: (url: string) => string
 }) => {
   const turndownService = createTurndownService(resolveLinkUrl)
-  const markdown = turndownService.turndown(html)
+  const preprocessed = replaceColorScripterTables(html)
+  const markdown = restoreCodeBlockPlaceholders({
+    markdown: turndownService.turndown(preprocessed.html),
+    codeBlocks: preprocessed.codeBlocks,
+  })
 
-  return markdown.trim().replace(/\n{3,}/g, "\n\n")
+  return escapeMarkdownHtmlLikeText(markdown.trim()).replace(/\n{3,}/g, "\n\n")
 }

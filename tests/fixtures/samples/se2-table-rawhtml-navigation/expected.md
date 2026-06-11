@@ -63,7 +63,7 @@ Navigation Component가 제공하는 여러 기능들을 조금만 더 살펴보
 
 예상했을 지도 모르지만, 네비게이션 그래프는 **res/navigation** 리소스 폴더 내에 **xml 파일**로 정의된다.
 
-**<navigation>, <action>** 등 태그를 이용해서 말이다.
+**\<navigation\>, \<action\>** 등 태그를 이용해서 말이다.
 
 **Destination** 이란 우리가 네비게이션으로 갈 수 있는 요소를 의미한다.
 
@@ -86,7 +86,9 @@ dependencies {
     def nav_version = "1.0.0-beta01"
 
     implementation "android.arch.navigation:navigation-fragment-ktx:$nav_version" 
+// use -ktx for Kotlin
     implementation "android.arch.navigation:navigation-ui-ktx:$nav_version" 
+// use -ktx for Kotlin
 }
 ```
 
@@ -190,9 +192,9 @@ Destination을 클릭한 상태이면 해당 Destination의 속성을 설정할 
 </navigation>
 ```
 
-루트 **<navigation>** 태그에 **startDestination**이 설정된 것을 보아라.
+루트 **\<navigation\>** 태그에 **startDestination**이 설정된 것을 보아라.
 
-또한 프라그먼트들은 **<fragment>** 로 표시가 되어있고, 액션은 **<action>** 태그로 정의되어있는데, 하나의 액션은 화살표를 방출하는 Destination 에게 귀속되어 있고 목적지 Destination에 대한 정보를 담고 있음을 알 수 있다.
+또한 프라그먼트들은 **\<fragment\>** 로 표시가 되어있고, 액션은 **\<action\>** 태그로 정의되어있는데, 하나의 액션은 화살표를 방출하는 Destination 에게 귀속되어 있고 목적지 Destination에 대한 정보를 담고 있음을 알 수 있다.
 
 또한, 각 요소들은 id를 갖고, 이는 소스 코드에서 사용되어진다.
 
@@ -257,6 +259,7 @@ val finalHost = NavHostFragment.create(R.navigation.example_graph)
 supportFragmentManager.beginTransaction()
     .replace(R.id.nav_host, finalHost)
     .setPrimaryNavigationFragment(finalHost) 
+// this is the equivalent to app:defaultNavHost="true"
     .commit()
 ```
 
@@ -314,7 +317,7 @@ Text 파일을 보자.
                 app:exitAnim="@anim/nav_default_exit_anim">
 ```
 
-<action> 태그만 편의상 가져왔고, 애니메이션에 관련된 속성에 @anim 리소스를 삽입해준 것을 볼 수 있다.
+\<action\> 태그만 편의상 가져왔고, 애니메이션에 관련된 속성에 @anim 리소스를 삽입해준 것을 볼 수 있다.
 
 **\[Shared Element Transition\]**
 
@@ -373,8 +376,6 @@ How to use shared element transitions in Navigation Controller
 I would like to add a shared elements transition using the navigation architecture components, when navigating to an other fragment. But I have no idea how. Also in the documentations there is noth...
 stackoverflow.com
 ](https://stackoverflow.com/questions/50599360/how-to-use-shared-element-transitions-in-navigation-controller)
-
-![](https://ssl.pstatic.net/static/blog/blank.gif)
 
 두 번째 프라그먼트의 레이아웃에서 다음과 같이 imageView의 transitionName을 설정한다.
 
@@ -442,5 +443,3 @@ Navigation | Android Developers
 Use the Navigation Architecture Component to implement navigation in your app.
 developer.android.com
 ](https://developer.android.com/topic/libraries/architecture/navigation/)
-
-![](https://ssl.pstatic.net/static/blog/blank.gif)

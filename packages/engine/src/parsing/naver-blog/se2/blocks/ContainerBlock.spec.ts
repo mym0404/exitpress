@@ -125,6 +125,38 @@ describe("NaverSe2ContainerBlock", () => {
     expect(parsed.blocks).toEqual([{ type: "paragraph", text: "연말결산" }])
   })
 
+  it("unwraps text wrappers that mix paragraphs and Color Scripter code tables", () => {
+    const parsed = parseSe2Blocks(`
+      <div>
+        해결책은 다음과 같다.
+        <table class="colorscripter-code-table">
+          <tbody>
+            <tr>
+              <td>
+                <div>
+                  <div style="white-space:pre"><span>interface</span>&nbsp;EventHandler&nbsp;{</div>
+                  <div style="white-space:pre">&nbsp;&nbsp;fun&nbsp;onSee()</div>
+                  <div style="white-space:pre">}</div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        이후 설명
+      </div>
+    `)
+
+    expect(parsed.blocks).toEqual([
+      { type: "paragraph", text: "해결책은 다음과 같다." },
+      {
+        type: "code",
+        language: null,
+        code: "interface EventHandler {\n  fun onSee()\n}",
+      },
+      { type: "paragraph", text: "이후 설명" },
+    ])
+  })
+
   it("unwraps strong wrappers that only contain table blocks", () => {
     const parsed = parseSe2Blocks(`
       <strong>

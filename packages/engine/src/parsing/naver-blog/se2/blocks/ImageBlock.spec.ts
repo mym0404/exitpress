@@ -93,6 +93,16 @@ describe("NaverSe2ImageBlock", () => {
     ])
   })
 
+  it("skips Naver blank spacer images", () => {
+    const parsed = parseSe2Blocks(`
+      <p>
+        <img src="https://ssl.pstatic.net/static/blog/blank.gif" alt="" />
+      </p>
+    `)
+
+    expect(parsed.blocks).toEqual([])
+  })
+
   it("parses classic thumburl image groups inside nested wrappers", () => {
     const parsed = parseSe2Blocks(`
       <div style="font-size:12pt;">

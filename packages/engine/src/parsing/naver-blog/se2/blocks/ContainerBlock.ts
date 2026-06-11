@@ -7,6 +7,7 @@ import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../co
 import { ContainerParserBlock } from "../../core/ParserBlock.js"
 
 const nestedBlockContainerTags = new Set(["div", "span", "font", "strong"])
+const naverBlankImageUrl = "https://ssl.pstatic.net/static/blog/blank.gif"
 const spacerContainerTags = new Set([
   "p",
   "div",
@@ -22,6 +23,7 @@ const spacerContainerTags = new Set([
   "ul",
   "a",
 ])
+const structuralBlockLeafSelector = "table,iframe,video,hr,blockquote,pre"
 
 const shouldUnwrapNestedBlocks = ({
   $,
@@ -43,15 +45,16 @@ const shouldUnwrapNestedBlocks = ({
     /* v8 ignore next */
     (node) => node.type === "text" && compactText(node.data ?? "") !== "",
   )
+  const hasDirectStructuralLeafNode = childNodes.some(
+    (node) => node.type === "tag" && $(node).is(structuralBlockLeafSelector) && matchLeafNode(node),
+  )
+  const hasNestedStructuralLeafNode = element.find(structuralBlockLeafSelector).length > 0
 
-  if (hasMeaningfulDirectText) {
+  if (hasMeaningfulDirectText && !hasDirectStructuralLeafNode && !hasNestedStructuralLeafNode) {
     return false
   }
 
-  if (
-    tagName === "strong" &&
-    element.find("table,img,iframe,video,hr,blockquote,pre").length === 0
-  ) {
+  if (tagName === "strong" && !hasNestedStructuralLeafNode) {
     return false
   }
 
@@ -89,6 +92,7 @@ export const isSpacerBlock = ({
   const clone = element.clone()
 
   clone.find("br").remove()
+  clone.find(`img[src="${naverBlankImageUrl}"]`).remove()
 
   if (clone.find("img,iframe,video,table").length > 0) {
     return false

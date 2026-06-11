@@ -11,6 +11,9 @@ import { LeafParserBlock } from "../../core/ParserBlock.js"
 
 const standaloneImageSelector = "img, [thumburl]"
 const standaloneRootImageSelector = "img.fx, img._postImage, [thumburl]"
+const naverBlankImageUrl = "https://ssl.pstatic.net/static/blog/blank.gif"
+
+const isNaverBlankImageUrl = (sourceUrl: string) => sourceUrl === naverBlankImageUrl
 
 const getStandaloneImages = ({
   $,
@@ -27,7 +30,7 @@ const getStandaloneImages = ({
       const $image = $(imageNode)
       const sourceUrl = normalizeAssetUrl($image.attr("src") ?? $image.attr("thumburl") ?? "")
 
-      if (!sourceUrl) {
+      if (!sourceUrl || isNaverBlankImageUrl(sourceUrl)) {
         return null
       }
 
@@ -46,6 +49,36 @@ const getStandaloneImages = ({
   )
 
   return textWithoutImages ? [] : images
+}
+
+const hasOnlyStandaloneBlankImages = ({
+  $,
+  element,
+}: {
+  $: CheerioAPI
+  element: ReturnType<CheerioAPI>
+}) => {
+  const imageNodes = $(element)
+    .filter(standaloneImageSelector)
+    .add($(element).find(standaloneImageSelector))
+    .toArray()
+
+  if (imageNodes.length === 0) {
+    return false
+  }
+
+  const textWithoutImages = compactText(
+    $(element).clone().find(standaloneImageSelector).remove().end().text(),
+  )
+
+  return (
+    !textWithoutImages &&
+    imageNodes.every((imageNode) =>
+      isNaverBlankImageUrl(
+        normalizeAssetUrl($(imageNode).attr("src") ?? $(imageNode).attr("thumburl") ?? ""),
+      ),
+    )
+  )
 }
 
 export class NaverSe2ImageBlock extends LeafParserBlock {
@@ -68,7 +101,11 @@ export class NaverSe2ImageBlock extends LeafParserBlock {
   } satisfies ParserBlockTemplateDefinition
 
   override match({ node, $, $node }: ParserBlockContext) {
-    return node.type === "tag" && getStandaloneImages({ $, element: $node }).length > 0
+    return (
+      node.type === "tag" &&
+      (getStandaloneImages({ $, element: $node }).length > 0 ||
+        hasOnlyStandaloneBlankImages({ $, element: $node }))
+    )
   }
 
   override convert({ $, $node, options, blockId }: Parameters<LeafParserBlock["convert"]>[0]) {

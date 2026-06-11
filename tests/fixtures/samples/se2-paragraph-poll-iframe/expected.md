@@ -150,8 +150,6 @@ thumbnail: https://blogthumb.pstatic.net/20151006_38/blogpeople_1444132521014Wyo
 blog.naver.com
 ](https://blog.naver.com/isyoon71/220498645197)
 
-![](https://ssl.pstatic.net/static/blog/blank.gif)
-
 ![](https://storep-phinf.pstatic.net/nahumkim_01/original_1.png?type=p100_100)
 
 후보 ②
@@ -180,8 +178,6 @@ blog.naver.com
 blog.naver.com
 ](https://blog.naver.com/sarmter/220493806727)
 
-![](https://ssl.pstatic.net/static/blog/blank.gif)
-
 ![](https://storep-phinf.pstatic.net/nahumkim_01/original_13.png?type=p100_100)
 
 후보 ③
@@ -207,8 +203,6 @@ blog.naver.com
 From. 블로그씨 나도 답하기▶ 추석 2행시 또는 추석에피소드를 적어주세요. (글을 쓰고 #추석2행시 또는 #추석에피소드 태그를 붙여요~) 안그래도 추석 에피...
 blog.naver.com
 ](https://blog.naver.com/freshgang/220493456994)
-
-![](https://ssl.pstatic.net/static/blog/blank.gif)
 
 ![](https://storep-phinf.pstatic.net/nahumkim_01/original_18.png?type=p100_100)
 
@@ -236,8 +230,6 @@ From. 블로그씨 나도 답하기▶ 여보게, 추석 에피소드 좀 읊어
 blog.naver.com
 ](https://blog.naver.com/ryu0974/220497715679)
 
-![](https://ssl.pstatic.net/static/blog/blank.gif)
-
 ![](https://storep-phinf.pstatic.net/nahumkim_01/original_40.png?type=p100_100)
 
 후보 ⑤
@@ -263,8 +255,6 @@ blog.naver.com
 어린 시절 추석에 제사지내는 것이 싫었다. 평소에는 다정다감했던 아빠가 유독 그날만은 나에게 엄해지셨기 때문이다. 나이가 들어서 알았다. 딱히 제대로 된 효도 한 번 못하고 부모를...
 blog.naver.com
 ](https://blog.naver.com/sting762/220495027125)
-
-![](https://ssl.pstatic.net/static/blog/blank.gif)
 
 ![](https://storep-phinf.pstatic.net/nahumkim_01/original_28.png?type=p100_100)
 
@@ -294,8 +284,6 @@ blog.naver.com
 blog.naver.com
 ](https://blog.naver.com/aronia8888/220495134354)
 
-![](https://ssl.pstatic.net/static/blog/blank.gif)
-
 ![](https://storep-phinf.pstatic.net/nahumkim_01/original_15.png?type=p100_100)
 
 후보 ⑦
@@ -323,8 +311,6 @@ blog.naver.com
 한국은 오늘이 추석이잖아요,비록 지금은 캐나다에 있는 몸이지만;;한국방문 기간 중에 저에게 가장 특별했던 순간이자 행복했던 추석을 네이버 블로그에도 기억해두고 싶어서 지난 이야기를...
 blog.naver.com
 ](https://blog.naver.com/juhui8576/220492948296)
-
-![](https://ssl.pstatic.net/static/blog/blank.gif)
 
 ![](https://storep-phinf.pstatic.net/nahumkim_01/original_16.png?type=p100_100)
 
@@ -354,8 +340,6 @@ blog.naver.com
 blog.naver.com
 ](https://blog.naver.com/yjay2/220493128545)
 
-![](https://ssl.pstatic.net/static/blog/blank.gif)
-
 ![](https://storep-phinf.pstatic.net/nahumkim_01/original_25.png?type=p100_100)
 
 후보 ⑨
@@ -384,8 +368,6 @@ From. 블로그씨 나도 답하기▶ 여보게, 추석 에피소드 좀 읊어
 blog.naver.com
 ](https://blog.naver.com/ews1016/220493264170)
 
-![](https://ssl.pstatic.net/static/blog/blank.gif)
-
 ![](https://storep-phinf.pstatic.net/nahumkim_01/original_35.png?type=p100_100)
 
 후보 ⑩
@@ -411,8 +393,6 @@ blog.naver.com
 젠장 명절전종류에 대한 고찰 w.시골풍경 평소같았음 즐거운 토욜의 향기에 코를 킁킁거리며 오늘 밤은 어딜나가 무얼하고 놀까..를 계획하고 있을 저이건만, 아침부터 전 ...
 blog.naver.com
 ](https://blog.naver.com/itinerary92/220494396297)
-
-![](https://ssl.pstatic.net/static/blog/blank.gif)
 
 ![](https://storep-phinf.pstatic.net/nahumkim_01/original_37.png?type=p100_100)
 
@@ -473,5 +453,3 @@ blog.naver.com
 조선팔도 시인여러분,잘 만나 보았습니다. 추석백일장! 조선팔도 &...
 blog.naver.com
 ](https://blog.naver.com/blogpeople/220500418917)
-
-![](https://ssl.pstatic.net/static/blog/blank.gif)

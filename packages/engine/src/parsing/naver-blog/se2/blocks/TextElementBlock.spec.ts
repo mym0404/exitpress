@@ -33,4 +33,52 @@ describe("NaverSe2TextElementBlock", () => {
       { type: "paragraph", text: "Classic [link](https://example.com)" },
     ])
   })
+
+  it("drops Naver blank spacer images from markdown paragraphs", () => {
+    const parsed = parseSe2Blocks(`
+      <div>
+        <a href="https://example.com">reference</a>
+        <img src="https://ssl.pstatic.net/static/blog/blank.gif" />
+      </div>
+    `)
+
+    expect(parsed.blocks).toEqual([{ type: "paragraph", text: "[reference](https://example.com)" }])
+  })
+
+  it("keeps nested Color Scripter tables parseable as code blocks", () => {
+    const parsed = parseSe2Blocks(`
+      <div>
+        코드 예시
+        <span>
+          <table class="colorscripter-code-table">
+            <tbody>
+              <tr>
+                <td>
+                  <div _foo="padding:0 6px; white-space:pre; line-height:130%">val&nbsp;count&nbsp;=&nbsp;1</div>
+                  <div _foo="padding:0 6px; white-space: pre; line-height:130%">println(count)</div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </span>
+      </div>
+    `)
+
+    expect(parsed.blocks).toEqual([
+      { type: "paragraph", text: "코드 예시" },
+      {
+        type: "code",
+        language: null,
+        code: "val count = 1\nprintln(count)",
+      },
+    ])
+  })
+
+  it("escapes angle bracket code-like text in markdown paragraphs", () => {
+    const parsed = parseSe2Blocks(`<div>vector&lt;int&gt;와 &lt;br /&gt; 예시</div>`)
+
+    expect(parsed.blocks).toEqual([
+      { type: "paragraph", text: "vector\\<int\\>와 \\<br /\\> 예시" },
+    ])
+  })
 })
