@@ -4,9 +4,9 @@ import { mkdir, readFile, writeFile } from "node:fs/promises"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
 
+import { exportSinglePost } from "@exitpress/blog-naver/exporting/SinglePostExport.js"
+import { inspectSinglePost } from "@exitpress/blog-naver/exporting/SinglePostInspect.js"
 import { cloneExportOptions } from "@exitpress/domain/export-options/ExportOptions.js"
-import { exportSinglePost } from "@exitpress/engine/exporting/post/SinglePostExport.js"
-import { inspectSinglePost } from "@exitpress/engine/exporting/post/SinglePostInspect.js"
 
 import { createSinglePostMetadataCachingFetcher } from "./MetadataCache.js"
 import { parseSinglePostCliArgs } from "./SinglePostArgs.js"
@@ -41,8 +41,8 @@ export const runSinglePostCli = async ({
   },
 }: RunSinglePostCliDeps = {}) => {
   const {
-    blogId,
-    logNo,
+    sourceId,
+    postId,
     outputDir,
     reportPath,
     manualReviewMarkdownPath,
@@ -62,8 +62,8 @@ export const runSinglePostCli = async ({
 
   if (inspect) {
     const diagnostics = await inspectSinglePostImpl({
-      blogId,
-      logNo,
+      sourceId,
+      postId,
       options,
     })
     const report = {
@@ -95,14 +95,14 @@ export const runSinglePostCli = async ({
   }
 
   const diagnostics = await exportSinglePostImpl({
-    blogId,
-    logNo,
+    sourceId,
+    postId,
     outputDir,
     options,
     createFetcher: resolvedMetadataCachePath
       ? async (input) =>
           createSinglePostMetadataCachingFetcher({
-            blogId: input.blogId,
+            sourceId: input.sourceId,
             cachePath: resolvedMetadataCachePath,
             readFile: readFileImpl,
             writeFile: writeFileImpl,
@@ -139,8 +139,8 @@ export const runSinglePostCli = async ({
 
   stderrWrite(
     renderSinglePostSummary({
-      blogId: diagnostics.post.blogId,
-      logNo: diagnostics.post.logNo,
+      sourceId: diagnostics.post.sourceId,
+      postId: diagnostics.post.postId,
       blockIds: diagnostics.blockIds,
       exporterMarkdownFilePath: diagnostics.markdownFilePath,
       manualReviewMarkdownFilePath: resolvedManualReviewMarkdownPath,

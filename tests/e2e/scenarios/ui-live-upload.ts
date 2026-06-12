@@ -11,8 +11,8 @@ import type { Browser } from "playwright"
 
 import { createTestTempDir } from "../../support/test-paths.js"
 
-const blogId = "mym0404"
-const targetLogNo = "222990202785"
+const sourceId = "mym0404"
+const targetPostId = "222990202785"
 const uploadRepo = "mym0404/ia2"
 const uploadBranch = "main"
 const uploadPath = `exitpress-live/${Date.now()}`
@@ -443,7 +443,7 @@ export const runUiLiveUpload = async ({ browser }: { browser: Browser }) => {
       step: "blog-input",
     })
 
-    await page.fill("#blogIdOrUrl", blogId)
+    await page.fill("#sourceInput", sourceId)
     await page.fill("#outputDir", outputDir)
 
     const scanResponsePromise = page.waitForResponse(
@@ -465,10 +465,10 @@ export const runUiLiveUpload = async ({ browser }: { browser: Browser }) => {
       step: "category-selection",
     })
 
-    const targetPost = scanPosts.find((post) => post.logNo === targetLogNo)
+    const targetPost = scanPosts.find((post) => post.postId === targetPostId)
 
     if (!targetPost) {
-      throw new Error(`target post metadata not found: ${blogId}/${targetLogNo}`)
+      throw new Error(`target post metadata not found: ${sourceId}/${targetPostId}`)
     }
 
     const targetCategory = scanResult.categories.find(
@@ -645,7 +645,7 @@ export const runUiLiveUpload = async ({ browser }: { browser: Browser }) => {
     const exportRequest = await exportRequestPromise
     const exportResponse = await exportResponsePromise
     const exportPayload = exportRequest.postDataJSON() as {
-      blogIdOrUrl: string
+      sourceInput: string
       outputDir: string
       options: {
         scope: {
@@ -672,7 +672,7 @@ export const runUiLiveUpload = async ({ browser }: { browser: Browser }) => {
     const exportUploadProviderFields = exportUploadProvider?.providerFields
 
     if (
-      exportPayload.blogIdOrUrl !== blogId ||
+      exportPayload.sourceInput !== sourceId ||
       exportPayload.outputDir !== outputDir ||
       exportPayload.options.scope.categoryMode !== "exact-selected" ||
       exportPayload.options.scope.dateFrom !== scopedDate ||
@@ -829,8 +829,8 @@ export const runUiLiveUpload = async ({ browser }: { browser: Browser }) => {
       }
       posts: PostManifestEntry[]
     }>(`${baseUrl}/api/export/${jobId}/manifest`)
-    const completedPost = manifest.posts.find((post) => post.logNo === targetLogNo)
-    const completedItem = completedJob.items.find((item) => item.logNo === targetLogNo)
+    const completedPost = manifest.posts.find((post) => post.postId === targetPostId)
+    const completedItem = completedJob.items.find((item) => item.postId === targetPostId)
 
     if (completedJob.upload.status !== "upload-completed") {
       throw new Error(`job did not reach upload-completed: ${completedJob.upload.status}`)

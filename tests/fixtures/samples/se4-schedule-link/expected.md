@@ -1,8 +1,8 @@
 ---
 title: "[8월10일] 대한민국 선수단의 파리 소식을 한눈에! - PARIS DAILY"
 source: https://blog.naver.com/naver_sports/223542869218
-blogId: naver_sports
-logNo: 223542869218
+sourceId: naver_sports
+postId: 223542869218
 publishedAt: 2024-08-10T08:32:19+09:00
 category: 데일리 대한민국
 categoryPath:

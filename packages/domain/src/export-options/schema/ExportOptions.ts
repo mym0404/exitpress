@@ -9,8 +9,8 @@ export type SlugWhitespace = (typeof allSlugWhitespaces)[number]
 export const allFrontmatterFieldNames = [
   "title",
   "source",
-  "blogId",
-  "logNo",
+  "sourceId",
+  "postId",
   "publishedAt",
   "category",
   "categoryPath",
@@ -35,7 +35,7 @@ export const allDownloadFailureModes = ["fail", "use-source", "omit"] as const
 export type DownloadFailureMode = (typeof allDownloadFailureModes)[number]
 
 export const allStickerAssetModes = ["ignore", "download-original"] as const
-// Sticker handling rule for Naver sticker assets.
+// Sticker handling rule for provider sticker assets.
 export type StickerAssetMode = (typeof allStickerAssetModes)[number]
 
 export const allThumbnailSources = ["post-list-first", "first-body-image", "none"] as const

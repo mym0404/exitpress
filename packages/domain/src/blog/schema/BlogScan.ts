@@ -1,4 +1,4 @@
-// Category metadata comes from Naver's blog category tree.
+// Category metadata comes from provider's blog category tree.
 export type CategoryInfo = {
   id: number
   name: string
@@ -12,8 +12,8 @@ export type CategoryInfo = {
 
 // A lightweight post row used before full post HTML is fetched.
 export type PostSummary = {
-  blogId: string
-  logNo: string
+  sourceId: string
+  postId: string
   title: string
   publishedAt: string
   categoryId: number
@@ -24,7 +24,7 @@ export type PostSummary = {
 
 // Scan output shared by the server, web wizard, and exporter.
 export type ScanResult = {
-  blogId: string
+  sourceId: string
   totalPostCount: number
   categories: CategoryInfo[]
   posts?: PostSummary[]

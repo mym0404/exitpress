@@ -8,21 +8,21 @@ const allScanStatusTones = ["default", "error"] as const
 export type ScanStatusTone = (typeof allScanStatusTones)[number]
 
 export const BlogInputPanel = ({
-  blogIdOrUrl,
+  sourceInput,
   outputDir,
   scanPending,
   scanStatus,
   scanStatusTone,
-  onBlogIdOrUrlChange,
+  onSourceIdOrUrlChange,
   onOutputDirChange,
   onOutputDirBlur,
 }: {
-  blogIdOrUrl: string
+  sourceInput: string
   outputDir: string
   scanPending: boolean
   scanStatus: string
   scanStatusTone: ScanStatusTone
-  onBlogIdOrUrlChange: (value: string) => void
+  onSourceIdOrUrlChange: (value: string) => void
   onOutputDirChange: (value: string) => void
   onOutputDirBlur: () => void
 }) => (
@@ -30,19 +30,19 @@ export const BlogInputPanel = ({
     <CardContent className="grid gap-4 p-5">
       <FieldGroup className="gap-3 md:grid md:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] md:items-start">
         <Field invalid={scanStatusTone === "error"} disabled={scanPending}>
-          <FieldLabel htmlFor="blogIdOrUrl">블로그 ID 또는 URL</FieldLabel>
+          <FieldLabel htmlFor="sourceInput">블로그 ID 또는 URL</FieldLabel>
           <Input
-            id="blogIdOrUrl"
+            id="sourceInput"
             placeholder="mym0404 또는 https://blog.naver.com/..."
             disabled={scanPending}
-            value={blogIdOrUrl}
+            value={sourceInput}
             aria-invalid={scanStatusTone === "error" || undefined}
             className={
               scanStatusTone === "error"
                 ? "border-[var(--destructive)] shadow-[var(--panel-shadow-border),0_0_0_1px_color-mix(in_srgb,var(--destructive)_18%,transparent)]"
                 : undefined
             }
-            onChange={(event) => onBlogIdOrUrlChange(event.target.value)}
+            onChange={(event) => onSourceIdOrUrlChange(event.target.value)}
           />
         </Field>
         <Field>

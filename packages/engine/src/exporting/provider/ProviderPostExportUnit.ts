@@ -33,8 +33,8 @@ const mapProviderCategory = (category: BlogCategoryRef): CategoryInfo => ({
 })
 
 const mapProviderPost = (post: BlogPostRef): PostSummary => ({
-  blogId: post.sourceId,
-  logNo: post.postId,
+  sourceId: post.sourceId,
+  postId: post.postId,
   title: post.title,
   publishedAt: post.publishedAt,
   categoryId: post.categoryId,
@@ -69,8 +69,8 @@ const mapProviderLinkIdentity = ({ provider, url }: { provider: BlogProvider; ur
   }
 
   return {
-    blogId: identity.sourceId,
-    logNo: identity.postId,
+    sourceId: identity.sourceId,
+    postId: identity.postId,
   }
 }
 
@@ -111,7 +111,7 @@ export const exportProviderPostUnit = async ({
     options,
   })
   const resolveLinkUrl = createPostLinkResolver({
-    blogId: source.sourceId,
+    sourceId: source.sourceId,
     markdownFilePath,
     options,
     targets: buildPostLinkTargets({

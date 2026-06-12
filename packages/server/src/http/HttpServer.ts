@@ -1,11 +1,11 @@
 import { createServer } from "node:http"
 
+import { NaverBlog } from "@exitpress/blog-naver/parsing/naver-blog/NaverBlog.js"
 import { runImageUploadPhase } from "@exitpress/engine/exporting/upload/ImageUploadPhase.js"
 import {
   rewriteImageUploadPost,
   writeImageUploadManifestSnapshot,
 } from "@exitpress/engine/exporting/upload/ImageUploadRewriter.js"
-import { NaverBlog } from "@exitpress/engine/parsing/naver-blog/NaverBlog.js"
 import { toErrorMessage } from "@exitpress/engine/shared/error/util/toErrorMessage.js"
 
 import type { Server as NodeHttpServer } from "node:http"

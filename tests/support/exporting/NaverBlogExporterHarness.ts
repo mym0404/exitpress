@@ -3,16 +3,16 @@ import * as fs from "node:fs/promises"
 import { readFile, rm, writeFile } from "node:fs/promises"
 import path from "node:path"
 
+import { NaverBlogExporter } from "@exitpress/blog-naver/exporting/NaverBlogExporter.js"
+import { NaverBlogFetcher } from "@exitpress/blog-naver/integrations/naver-blog/NaverBlogFetcher.js"
 import { defaultExportOptions } from "@exitpress/domain/export-options/ExportOptions.js"
 import { rewriteUploadedAssets } from "@exitpress/engine/exporting/upload/ImageUploadRewriter.js"
-import { NaverBlogExporter } from "@exitpress/engine/exporting/workflow/NaverBlogExporter.js"
 import { runWithLogSink } from "@exitpress/engine/infra/runtime/Logger.js"
-import { NaverBlogFetcher } from "@exitpress/engine/integrations/naver-blog/NaverBlogFetcher.js"
 
 import { createTestTempDir } from "../test-paths.js"
 
 export const scanResult = {
-  blogId: "mym0404",
+  sourceId: "mym0404",
   totalPostCount: 1,
   categories: [
     {
@@ -30,8 +30,8 @@ export const scanResult = {
 
 export const posts = [
   {
-    blogId: "mym0404",
-    logNo: "223034929697",
+    sourceId: "mym0404",
+    postId: "223034929697",
     title: "테스트 글",
     publishedAt: "2023-03-04T13:00:00+09:00",
     categoryId: 84,
@@ -45,7 +45,7 @@ export const parallelPosts = [
   posts[0],
   {
     ...posts[0],
-    logNo: "223034929698",
+    postId: "223034929698",
     title: "두번째 글",
     source: "https://blog.naver.com/mym0404/223034929698",
   },
@@ -119,7 +119,7 @@ assetPaths:
     markdown,
     markdownPath: path.join(outputDir, outputPath),
     manifest: {
-      blogId: "mym0404",
+      sourceId: "mym0404",
       profile: "gfm" as const,
       options: defaultExportOptions(),
       selectedCategoryIds: [],
@@ -139,7 +139,7 @@ assetPaths:
       categories: scanResult.categories,
       posts: [
         {
-          logNo: posts[0].logNo,
+          postId: posts[0].postId,
           title: posts[0].title,
           source: posts[0].source,
           category: {
@@ -186,7 +186,7 @@ export const createHtmlFragmentUploadReadyFixture = ({ outputDir }: { outputDir:
     markdown,
     markdownPath: path.join(outputDir, outputPath),
     manifest: {
-      blogId: "mym0404",
+      sourceId: "mym0404",
       profile: "gfm" as const,
       options: defaultExportOptions(),
       selectedCategoryIds: [],
@@ -206,7 +206,7 @@ export const createHtmlFragmentUploadReadyFixture = ({ outputDir }: { outputDir:
       categories: scanResult.categories,
       posts: [
         {
-          logNo: posts[0].logNo,
+          postId: posts[0].postId,
           title: posts[0].title,
           source: posts[0].source,
           category: {

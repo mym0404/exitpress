@@ -1,8 +1,8 @@
 ---
 title: 2019 타일트렌드, 시각/촉각적 온도감을 디자인한 색다른 패턴타일
 source: https://blog.naver.com/showeclatkorea/221397621065
-blogId: showeclatkorea
-logNo: 221397621065
+sourceId: showeclatkorea
+postId: 221397621065
 publishedAt: 2018-11-13T16:25:32+09:00
 category: TILE
 categoryPath:

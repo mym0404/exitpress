@@ -12,7 +12,7 @@ const jobOptions = defaultExportOptions()
 jobOptions.blockOutputs.templates["naver-se4:image"] = "{{ `![${alt}](${url})` }}"
 
 const scanResult: ScanResult = {
-  blogId: "mym0404",
+  sourceId: "mym0404",
   totalPostCount: 2,
   categories: [
     {
@@ -28,8 +28,8 @@ const scanResult: ScanResult = {
   ],
   posts: [
     {
-      blogId: "mym0404",
-      logNo: "220971999345",
+      sourceId: "mym0404",
+      postId: "220971999345",
       title: "post-1",
       publishedAt: "2017-03-31T00:00:00+09:00",
       categoryId: 17,
@@ -38,8 +38,8 @@ const scanResult: ScanResult = {
       thumbnailUrl: null,
     },
     {
-      blogId: "mym0404",
-      logNo: "220971956932",
+      sourceId: "mym0404",
+      postId: "220971956932",
       title: "post-2",
       publishedAt: "2017-03-31T00:00:00+09:00",
       categoryId: 17,
@@ -53,7 +53,7 @@ const scanResult: ScanResult = {
 const job: ExportJobState = {
   id: "job-resume",
   request: {
-    blogIdOrUrl: "mym0404",
+    sourceInput: "mym0404",
     outputDir: testOutputDir,
     profile: "gfm",
     options: jobOptions,
@@ -85,7 +85,7 @@ const job: ExportJobState = {
   items: [
     {
       id: "posts/post-1/index.md",
-      logNo: "220971999345",
+      postId: "220971999345",
       title: "post-1",
       source: "https://blog.naver.com/mym0404/220971999345",
       category: {
@@ -125,7 +125,7 @@ describe("buildResumableExportManifest", () => {
     expect(manifest.job).not.toHaveProperty("logs")
     expect(manifest.job).not.toHaveProperty("items")
     expect(manifest.job?.scanResult).toEqual({
-      blogId: scanResult.blogId,
+      sourceId: scanResult.sourceId,
       totalPostCount: scanResult.totalPostCount,
     })
     expect(manifest.options.blockOutputs.templates["naver-se4:image"]).toBe(

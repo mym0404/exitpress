@@ -1,8 +1,8 @@
 ---
 title: 마음 / 오정선
 source: https://blog.naver.com/anglekim3708/70187292476
-blogId: anglekim3708
-logNo: 70187292476
+sourceId: anglekim3708
+postId: 70187292476
 publishedAt: 2014-03-23T16:49:40+09:00
 category: 음반 추천 및 소개
 categoryPath:

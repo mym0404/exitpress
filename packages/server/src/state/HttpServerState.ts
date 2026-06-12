@@ -59,16 +59,16 @@ export const createHttpServerState = ({
   }
 
   const updateScanCache = async ({
-    blogId,
+    sourceId,
     scanResult,
   }: {
-    blogId: string
+    sourceId: string
     scanResult: ScanResult
   }) => {
     const current = await ensureScanCache()
     const next = {
       ...current,
-      [blogId]: scanResult,
+      [sourceId]: scanResult,
     }
 
     await writeScanCacheFile({
@@ -120,7 +120,7 @@ export const createHttpServerState = ({
     }
 
     const resumedScanResult = resolveResumedScanResult({
-      manifestBlogId: manifest.blogId,
+      manifestSourceId: manifest.sourceId,
       manifestCategories: manifest.categories,
       manifestTotalPosts: manifest.totalPosts,
       manifestScanResult: manifest.job.scanResult,

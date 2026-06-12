@@ -41,7 +41,7 @@ describe("export options", () => {
     expect(Object.hasOwn(options.structure, "postDirectoryName")).toBe(false)
     expect(Object.hasOwn(options.structure, "postFolderNameMode")).toBe(false)
     expect(Object.hasOwn(options.structure, "includeDateInPostFolderName")).toBe(false)
-    expect(Object.hasOwn(options.structure, "includeLogNoInPostFolderName")).toBe(false)
+    expect(Object.hasOwn(options.structure, "includePostIdInPostFolderName")).toBe(false)
     expect(Object.hasOwn(options.assets, "assetPathMode")).toBe(false)
   })
 
@@ -49,13 +49,13 @@ describe("export options", () => {
     const options = cloneExportOptions({
       blockOutputs: {
         templates: {
-          "naver-se4:image": "{{ `![${alt}](${url})` }}",
+          "provider:image": "{{ `![${alt}](${url})` }}",
         },
       },
     })
 
     expect(options.blockOutputs.templates).toEqual({
-      "naver-se4:image": "{{ `![${alt}](${url})` }}",
+      "provider:image": "{{ `![${alt}](${url})` }}",
     })
   })
 
@@ -65,8 +65,8 @@ describe("export options", () => {
         JSON.stringify({
           blockOutputs: {
             templates: {
-              "naver-se4:image": "{{ `![${alt}](${url})` }}",
-              "naver-se4:code": 123,
+              "provider:image": "{{ `![${alt}](${url})` }}",
+              "provider:code": 123,
             },
           },
         }),
@@ -74,7 +74,7 @@ describe("export options", () => {
     )
 
     expect(sanitized.blockOutputs?.templates).toEqual({
-      "naver-se4:image": "{{ `![${alt}](${url})` }}",
+      "provider:image": "{{ `![${alt}](${url})` }}",
     })
   })
 
@@ -192,8 +192,8 @@ describe("export options", () => {
       fields: {
         title: true,
         source: true,
-        blogId: false,
-        logNo: false,
+        sourceId: false,
+        postId: false,
         publishedAt: false,
         category: false,
         categoryPath: false,
@@ -205,8 +205,8 @@ describe("export options", () => {
       aliases: {
         title: "9bad",
         source: "dup",
-        blogId: "",
-        logNo: "",
+        sourceId: "",
+        postId: "",
         publishedAt: "",
         category: "",
         categoryPath: "",

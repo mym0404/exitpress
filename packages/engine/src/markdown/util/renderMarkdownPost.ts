@@ -54,10 +54,10 @@ const buildFrontmatter = ({
   return frontmatter
 }
 
-const getFrontmatterPostId = (logNo: string) => {
-  const numericLogNo = Number(logNo)
+const getFrontmatterPostId = (postId: string) => {
+  const numericPostId = Number(postId)
 
-  return Number.isSafeInteger(numericLogNo) ? numericLogNo : logNo
+  return Number.isSafeInteger(numericPostId) ? numericPostId : postId
 }
 
 // Builds the final markdown body, frontmatter, and asset records for one post.
@@ -199,8 +199,8 @@ export const renderMarkdownPost = async ({
   const frontmatterValues: Record<FrontmatterFieldName, unknown> = {
     title: post.title,
     source: post.source,
-    blogId: post.blogId,
-    logNo: getFrontmatterPostId(post.logNo),
+    sourceId: post.sourceId,
+    postId: getFrontmatterPostId(post.postId),
     publishedAt: post.publishedAt,
     category: category.name,
     categoryPath: category.path,

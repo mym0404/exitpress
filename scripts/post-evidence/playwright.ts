@@ -14,8 +14,8 @@ export const createEvidenceBrowserContext = async (browser: Browser) =>
     userAgent,
   })
 
-const naverMobilePostUrl = ({ blogId, logNo }: { blogId: string; logNo: string }) =>
-  `https://m.blog.naver.com/PostView.naver?blogId=${encodeURIComponent(blogId)}&logNo=${encodeURIComponent(logNo)}`
+const naverMobilePostUrl = ({ sourceId, postId }: { sourceId: string; postId: string }) =>
+  `https://m.blog.naver.com/PostView.naver?sourceId=${encodeURIComponent(sourceId)}&postId=${encodeURIComponent(postId)}`
 
 const postBodySelectors = (editorType: string | null) => {
   if (editorType === "naver-se4") {
@@ -79,15 +79,15 @@ const captureElementNode = async ({
 
 export const captureNaverPost = async ({
   browser,
-  blogId,
-  logNo,
+  sourceId,
+  postId,
   editorType,
   inspectPath,
   outputPath,
 }: {
   browser: Browser
-  blogId: string
-  logNo: string
+  sourceId: string
+  postId: string
   editorType: string | null
   inspectPath?: string
   outputPath: string
@@ -96,7 +96,7 @@ export const captureNaverPost = async ({
   const page = await context.newPage()
 
   try {
-    await page.goto(naverMobilePostUrl({ blogId, logNo }), {
+    await page.goto(naverMobilePostUrl({ sourceId, postId }), {
       waitUntil: "domcontentloaded",
       timeout: 30_000,
     })

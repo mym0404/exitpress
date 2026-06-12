@@ -10,14 +10,14 @@ import { JobStore } from "./JobStore.js"
 const testOutputDir = createTestPath("job-store", "output")
 
 const request: ExportRequest = {
-  blogIdOrUrl: "mym0404",
+  sourceInput: "mym0404",
   outputDir: testOutputDir,
   profile: "gfm",
   options: defaultExportOptions(),
 }
 
 const manifest: ExportManifest = {
-  blogId: "mym0404",
+  sourceId: "mym0404",
   profile: "gfm",
   options: defaultExportOptions(),
   selectedCategoryIds: [101],
@@ -37,7 +37,7 @@ const manifest: ExportManifest = {
   categories: [],
   posts: [
     {
-      logNo: "223034929697",
+      postId: "223034929697",
       title: "테스트 글",
       source: "https://blog.naver.com/mym0404/223034929697",
       category: {
@@ -85,7 +85,7 @@ const manifest: ExportManifest = {
     },
     error: null,
     scanResult: {
-      blogId: "mym0404",
+      sourceId: "mym0404",
       totalPostCount: 1,
     },
     summary: {

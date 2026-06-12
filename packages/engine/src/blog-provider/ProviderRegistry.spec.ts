@@ -34,17 +34,17 @@ const createProvider = (key: string): BlogProvider => ({
 
 describe("createProviderRegistry", () => {
   it("finds registered providers by key", () => {
-    const registry = createProviderRegistry([createProvider("naver"), createProvider("tistory")])
+    const registry = createProviderRegistry([createProvider("alpha"), createProvider("tistory")])
 
-    expect(registry.get("naver")?.label).toBe("naver provider")
+    expect(registry.get("alpha")?.label).toBe("alpha provider")
     expect(registry.require("tistory").key).toBe("tistory")
-    expect(registry.list().map((provider) => provider.key)).toEqual(["naver", "tistory"])
+    expect(registry.list().map((provider) => provider.key)).toEqual(["alpha", "tistory"])
   })
 
   it("rejects duplicate provider keys", () => {
     expect(() =>
-      createProviderRegistry([createProvider("naver"), createProvider("naver")]),
-    ).toThrow("Duplicate blog provider key: naver")
+      createProviderRegistry([createProvider("alpha"), createProvider("alpha")]),
+    ).toThrow("Duplicate blog provider key: alpha")
   })
 
   it("throws for missing required provider", () => {

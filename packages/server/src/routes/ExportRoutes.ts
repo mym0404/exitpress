@@ -1,7 +1,7 @@
-import { extractBlogId } from "@exitpress/domain/blog/NaverUrl.js"
+import { NaverBlogFetcher } from "@exitpress/blog-naver/integrations/naver-blog/NaverBlogFetcher.js"
+import { extractBlogId } from "@exitpress/blog-naver/NaverUrl.js"
 import { JOB_STATUSES } from "@exitpress/domain/export-job/ExportJobState.js"
 import { recreateDir, resolveRepoPath } from "@exitpress/engine/infra/node/FilePaths.js"
-import { NaverBlogFetcher } from "@exitpress/engine/integrations/naver-blog/NaverBlogFetcher.js"
 import { toErrorMessage } from "@exitpress/engine/shared/error/util/toErrorMessage.js"
 
 import type { ScanResult } from "@exitpress/domain/blog/schema/BlogScan.js"
@@ -35,52 +35,54 @@ export const handleExportRoutes =
   }: ApiRouteContext) =>
   async ({ request, response, method, url }: ApiRouteRequest) => {
     if (method === "POST" && url.pathname === "/api/scan") {
-      const payload = await parseJsonPayload<{ blogIdOrUrl?: string; forceRefresh?: boolean }>(
+      const payload = await parseJsonPayload<{ sourceInput?: string; forceRefresh?: boolean }>(
         request,
       )
 
-      if (!payload.blogIdOrUrl?.trim()) {
-        sendJson({ response, statusCode: 400, body: { error: "blogIdOrUrl는 필수입니다." } })
+      if (!payload.sourceInput?.trim()) {
+        sendJson({ response, statusCode: 400, body: { error: "sourceInput는 필수입니다." } })
         return true
       }
 
-      const blogId = extractBlogId(payload.blogIdOrUrl)
+      const sourceId = extractBlogId(payload.sourceInput)
       const cachedScans = await state.ensureScanCache()
 
-      if (!payload.forceRefresh && cachedScans[blogId]) {
-        sendJson({ response, statusCode: 200, body: cachedScans[blogId] })
+      if (!payload.forceRefresh && cachedScans[sourceId]) {
+        sendJson({ response, statusCode: 200, body: cachedScans[sourceId] })
         return true
       }
 
-      const scanResult = await new NaverBlogFetcher({ blogId }).scanBlog({ includePosts: true })
-      await state.updateScanCache({ blogId, scanResult })
+      const scanResult = await new NaverBlogFetcher({ blogId: sourceId }).scanBlog({
+        includePosts: true,
+      })
+      await state.updateScanCache({ sourceId, scanResult })
       sendJson({ response, statusCode: 200, body: scanResult })
       return true
     }
 
     if (method === "POST" && url.pathname === "/api/scan-blocks/jobs") {
       const payload = await parseJsonPayload<{
-        blogIdOrUrl?: string
+        sourceInput?: string
         scanResult?: ScanResult
         options?: PartialExportOptions
       }>(request)
 
-      if (!payload.blogIdOrUrl?.trim() || !payload.scanResult?.posts) {
+      if (!payload.sourceInput?.trim() || !payload.scanResult?.posts) {
         sendJson({
           response,
           statusCode: 400,
-          body: { error: "blogIdOrUrl와 scanResult.posts는 필수입니다." },
+          body: { error: "sourceInput와 scanResult.posts는 필수입니다." },
         })
         return true
       }
 
-      const blogId = extractBlogId(payload.blogIdOrUrl)
+      const sourceId = extractBlogId(payload.sourceInput)
 
-      if (payload.scanResult.blogId !== blogId) {
+      if (payload.scanResult.sourceId !== sourceId) {
         sendJson({
           response,
           statusCode: 400,
-          body: { error: "scanResult.blogId가 요청 블로그와 일치하지 않습니다." },
+          body: { error: "scanResult.sourceId가 요청 블로그와 일치하지 않습니다." },
         })
         return true
       }
@@ -127,7 +129,7 @@ export const handleExportRoutes =
 
     if (method === "POST" && url.pathname === "/api/export") {
       const payload = await parseJsonPayload<{
-        blogIdOrUrl?: string
+        sourceInput?: string
         outputDir?: string
         options?: PartialExportOptions
         scanResult?: ScanResult
@@ -137,11 +139,11 @@ export const handleExportRoutes =
         }
       }>(request)
 
-      if (!payload.blogIdOrUrl?.trim() || !payload.outputDir?.trim()) {
+      if (!payload.sourceInput?.trim() || !payload.outputDir?.trim()) {
         sendJson({
           response,
           statusCode: 400,
-          body: { error: "blogIdOrUrl와 outputDir는 필수입니다." },
+          body: { error: "sourceInput와 outputDir는 필수입니다." },
         })
         return true
       }
@@ -194,7 +196,7 @@ export const handleExportRoutes =
       }
 
       const exportRequest: ExportRequest = {
-        blogIdOrUrl: payload.blogIdOrUrl.trim(),
+        sourceInput: payload.sourceInput.trim(),
         outputDir: payload.outputDir.trim(),
         profile: "gfm",
         options,

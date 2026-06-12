@@ -1,24 +1,24 @@
 import { mkdir, writeFile as writeFileDefault } from "node:fs/promises"
 import path from "node:path"
 
+import { NaverBlogFetcher } from "@exitpress/blog-naver/integrations/naver-blog/NaverBlogFetcher.js"
 import { log } from "@exitpress/engine/infra/runtime/Logger.js"
-import { NaverBlogFetcher } from "@exitpress/engine/integrations/naver-blog/NaverBlogFetcher.js"
 
+import type { SinglePostFetcher } from "@exitpress/blog-naver/exporting/SinglePostExport.js"
 import type { PostSummary, ScanResult } from "@exitpress/domain/blog/schema/BlogScan.js"
-import type { SinglePostFetcher } from "@exitpress/engine/exporting/post/SinglePostExport.js"
 
 type SinglePostMetadataCacheFile = {
-  blogId: string
+  sourceId: string
   scan: ScanResult
   posts: PostSummary[]
 }
 
 type CreateSinglePostMetadataCachingFetcherArgs = {
-  blogId: string
+  sourceId: string
   cachePath: string | null
   readFile: (path: string, encoding: "utf8") => Promise<string>
   writeFile?: (path: string, contents: string, encoding: "utf8") => Promise<void>
-  createFetcher?: (input: { blogId: string }) => SinglePostFetcher | Promise<SinglePostFetcher>
+  createFetcher?: (input: { sourceId: string }) => SinglePostFetcher | Promise<SinglePostFetcher>
 }
 
 const isObject = (value: unknown): value is Record<string, unknown> =>
@@ -32,8 +32,8 @@ const isPostSummary = (value: unknown): value is PostSummary => {
   }
 
   return (
-    isString(value.blogId) &&
-    isString(value.logNo) &&
+    isString(value.sourceId) &&
+    isString(value.postId) &&
     isString(value.title) &&
     isString(value.publishedAt) &&
     typeof value.categoryId === "number" &&
@@ -49,7 +49,7 @@ const isScanResult = (value: unknown): value is ScanResult => {
   }
 
   return (
-    isString(value.blogId) &&
+    isString(value.sourceId) &&
     typeof value.totalPostCount === "number" &&
     Array.isArray(value.categories) &&
     value.categories.every((category) => isObject(category) && isString(category.name))
@@ -61,11 +61,11 @@ const parseCacheFile = (value: unknown): SinglePostMetadataCacheFile | null => {
     return null
   }
 
-  if (!isString(value.blogId) || !isScanResult(value.scan) || !Array.isArray(value.posts)) {
+  if (!isString(value.sourceId) || !isScanResult(value.scan) || !Array.isArray(value.posts)) {
     return null
   }
 
-  if (value.scan.blogId !== value.blogId) {
+  if (value.scan.sourceId !== value.sourceId) {
     return null
   }
 
@@ -74,14 +74,14 @@ const parseCacheFile = (value: unknown): SinglePostMetadataCacheFile | null => {
   }
 
   return {
-    blogId: value.blogId,
+    sourceId: value.sourceId,
     scan: value.scan,
     posts: value.posts,
   }
 }
 
 export const createSinglePostMetadataCachingFetcher = async ({
-  blogId,
+  sourceId,
   cachePath,
   readFile: readFileImpl,
   writeFile,
@@ -91,10 +91,10 @@ export const createSinglePostMetadataCachingFetcher = async ({
   const writeFileImpl = writeFile ?? writeFileDefault
   const baseFetcher =
     (await createFetcher?.({
-      blogId,
+      sourceId,
     })) ??
     new NaverBlogFetcher({
-      blogId,
+      blogId: sourceId,
     })
 
   let cachedScan: ScanResult | null = null
@@ -109,8 +109,8 @@ export const createSinglePostMetadataCachingFetcher = async ({
         throw new Error("cache contents are invalid")
       }
 
-      if (cache.blogId !== blogId) {
-        throw new Error(`blogId mismatch: expected ${blogId}, received ${cache.blogId}`)
+      if (cache.sourceId !== sourceId) {
+        throw new Error(`sourceId mismatch: expected ${sourceId}, received ${cache.sourceId}`)
       }
 
       cachedScan = cache.scan
@@ -135,7 +135,7 @@ export const createSinglePostMetadataCachingFetcher = async ({
       resolvedCachePath,
       `${JSON.stringify(
         {
-          blogId,
+          sourceId,
           scan: cachedScan,
           posts: cachedPosts,
         },
@@ -165,7 +165,7 @@ export const createSinglePostMetadataCachingFetcher = async ({
       await persistCache()
       return cachedPosts
     },
-    fetchPostHtml: async (requestedLogNo: string) => baseFetcher.fetchPostHtml(requestedLogNo),
+    fetchPostHtml: async (requestedPostId: string) => baseFetcher.fetchPostHtml(requestedPostId),
     downloadBinary: async (input) => baseFetcher.downloadBinary(input),
     fetchBinary: async (input) => baseFetcher.fetchBinary(input),
   }

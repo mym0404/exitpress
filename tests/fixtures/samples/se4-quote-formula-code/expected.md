@@ -1,8 +1,8 @@
 ---
 title: "[DP] Slope trick 공부 - BOJ - 19693 Safety"
 source: https://blog.naver.com/mym0404/222619228134
-blogId: mym0404
-logNo: 222619228134
+sourceId: mym0404
+postId: 222619228134
 publishedAt: 2022-01-11T22:53:03+09:00
 category: PS 알고리즘, 팁
 categoryPath:

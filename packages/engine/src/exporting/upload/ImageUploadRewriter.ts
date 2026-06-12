@@ -69,7 +69,7 @@ export const rewriteImageUploadPost = async ({
   fileOps?: FileOps
 }): Promise<RewrittenPostResult> => {
   if (!post.outputPath || !item.outputPath) {
-    throw new Error(`Missing output path for ${post.logNo}.`)
+    throw new Error(`Missing output path for ${post.postId}.`)
   }
 
   const uploadResultByLocalPath = new Map(
@@ -169,8 +169,8 @@ export const rewriteUploadedAssets = async ({
     items.length > 0
       ? items
       : manifest.posts.map((post) => ({
-          id: post.outputPath ?? `failed:${post.logNo}`,
-          logNo: post.logNo,
+          id: post.outputPath ?? `failed:${post.postId}`,
+          postId: post.postId,
           title: post.title,
           source: post.source,
           category: post.category,
@@ -187,7 +187,7 @@ export const rewriteUploadedAssets = async ({
   }
   let nextItems = [...normalizedItems]
   const itemById = new Map(
-    nextItems.map((item) => [item.outputPath ?? `failed:${item.logNo}`, item]),
+    nextItems.map((item) => [item.outputPath ?? `failed:${item.postId}`, item]),
   )
 
   for (const post of nextManifest.posts) {

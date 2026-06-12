@@ -1,8 +1,8 @@
 import { mkdir, rm, writeFile } from "node:fs/promises"
 import path from "node:path"
 
+import { NaverBlogFetcher } from "@exitpress/blog-naver/integrations/naver-blog/NaverBlogFetcher.js"
 import { defaultExportOptions } from "@exitpress/domain/export-options/ExportOptions.js"
-import { NaverBlogFetcher } from "@exitpress/engine/integrations/naver-blog/NaverBlogFetcher.js"
 import { createHttpServer } from "@exitpress/server/http/HttpServer.js"
 import { vi } from "vitest"
 
@@ -47,7 +47,7 @@ export const textOnlyHtml = `
 `
 
 export const baseScanResult: ScanResult = {
-  blogId: "mym0404",
+  sourceId: "mym0404",
   totalPostCount: 1,
   categories: [
     {
@@ -65,8 +65,8 @@ export const baseScanResult: ScanResult = {
 
 export const createPosts = (thumbnailUrl: string | null) => [
   {
-    blogId: "mym0404",
-    logNo: "223034929697",
+    sourceId: "mym0404",
+    postId: "223034929697",
     title: "테스트 글",
     publishedAt: "2023-03-04T13:00:00+09:00",
     categoryId: 84,
@@ -77,21 +77,21 @@ export const createPosts = (thumbnailUrl: string | null) => [
 ]
 
 export const createPost = ({
-  logNo,
+  postId,
   title,
   thumbnailUrl,
 }: {
-  logNo: string
+  postId: string
   title: string
   thumbnailUrl: string | null
 }) => ({
-  blogId: "mym0404",
-  logNo,
+  sourceId: "mym0404",
+  postId,
   title,
   publishedAt: "2023-03-04T13:00:00+09:00",
   categoryId: 84,
   categoryName: "PS 알고리즘, 팁",
-  source: `https://blog.naver.com/mym0404/${logNo}`,
+  source: `https://blog.naver.com/mym0404/${postId}`,
   thumbnailUrl,
 })
 
@@ -403,7 +403,7 @@ export const createUploadReadyJob = async ({
   const localPath = "public/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.png"
   const outputPath = "posts/test/index.md"
   const request: ExportRequest = {
-    blogIdOrUrl: "https://blog.naver.com/mym0404",
+    sourceInput: "https://blog.naver.com/mym0404",
     outputDir,
     profile: "gfm",
     options: {
@@ -440,7 +440,7 @@ export const createUploadReadyJob = async ({
     rewrittenAt: null,
   }
   const manifest: ExportManifest = {
-    blogId: "mym0404",
+    sourceId: "mym0404",
     profile: "gfm",
     options: request.options,
     selectedCategoryIds: request.options.scope.categoryIds,
@@ -453,7 +453,7 @@ export const createUploadReadyJob = async ({
     categories: baseScanResult.categories,
     posts: [
       {
-        logNo: "223034929697",
+        postId: "223034929697",
         title: "테스트 글",
         source: "https://blog.naver.com/mym0404/223034929697",
         category: {

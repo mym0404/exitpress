@@ -1,8 +1,8 @@
 ---
 title: "[iOS] 오토 레이아웃을 이용할 때 기기에 따라 적절한 값을 얻어오기"
 source: https://blog.naver.com/mym0404/221504285266
-blogId: mym0404
-logNo: 221504285266
+sourceId: mym0404
+postId: 221504285266
 publishedAt: 2019-04-03T11:07:24+09:00
 category: Tip
 categoryPath:

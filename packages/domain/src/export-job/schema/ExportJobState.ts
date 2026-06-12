@@ -31,7 +31,7 @@ export type ExportJobProgress = {
 // Per-post runtime state tracked while an export job runs.
 export type ExportJobItem = {
   id: string
-  logNo: string
+  postId: string
   title: string
   source: string
   category: {

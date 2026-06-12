@@ -12,7 +12,7 @@ export type ExportUploadProviderRequest = {
 
 // Request body used to start an export job.
 export type ExportRequest = {
-  blogIdOrUrl: string
+  sourceInput: string
   outputDir: string
   profile: ExportProfile
   options: ExportOptions

@@ -55,7 +55,7 @@ describe("ui api helpers", () => {
     await expect(fetchJson("/api/fail")).rejects.toThrow("bad request")
     await expect(
       postJson<{ jobId: string }>("/api/export", {
-        blogIdOrUrl: "mym0404",
+        sourceInput: "mym0404",
       }),
     ).resolves.toEqual({
       jobId: "job-1",
@@ -67,7 +67,7 @@ describe("ui api helpers", () => {
         "content-type": "application/json",
       },
       body: JSON.stringify({
-        blogIdOrUrl: "mym0404",
+        sourceInput: "mym0404",
       }),
     })
   })

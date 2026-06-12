@@ -10,7 +10,7 @@ import { createTestTempDir } from "../../tests/support/test-paths.js"
 import { findLatestReusableIngestOutput, loadReusableIngestOutput } from "./ingest-output.js"
 
 const createManifest = (overrides: Partial<ExportManifest> = {}): ExportManifest => ({
-  blogId: "sample",
+  sourceId: "sample",
   profile: "gfm",
   options: {
     scope: {
@@ -30,8 +30,8 @@ const createManifest = (overrides: Partial<ExportManifest> = {}): ExportManifest
       fields: {
         title: true,
         source: true,
-        blogId: true,
-        logNo: true,
+        sourceId: true,
+        postId: true,
         publishedAt: true,
         category: true,
         categoryPath: true,
@@ -43,8 +43,8 @@ const createManifest = (overrides: Partial<ExportManifest> = {}): ExportManifest
       aliases: {
         title: "",
         source: "",
-        blogId: "",
-        logNo: "",
+        sourceId: "",
+        postId: "",
         publishedAt: "",
         category: "",
         categoryPath: "",
@@ -89,7 +89,7 @@ const createManifest = (overrides: Partial<ExportManifest> = {}): ExportManifest
   categories: [],
   posts: [
     {
-      logNo: "1",
+      postId: "1",
       title: "failed",
       source: "https://blog.naver.com/sample/1",
       category: {
@@ -126,7 +126,7 @@ describe("ingest output reuse helpers", () => {
     )
 
     const output = await loadReusableIngestOutput({
-      blogId: "sample",
+      sourceId: "sample",
       outputDir: dir,
     })
 
@@ -141,7 +141,9 @@ describe("ingest output reuse helpers", () => {
       "utf8",
     )
 
-    await expect(loadReusableIngestOutput({ blogId: "sample", outputDir: dir })).resolves.toBeNull()
+    await expect(
+      loadReusableIngestOutput({ sourceId: "sample", outputDir: dir }),
+    ).resolves.toBeNull()
   })
 
   it("finds the latest completed output for a blog", async () => {
@@ -166,7 +168,7 @@ describe("ingest output reuse helpers", () => {
     await utimes(newDir, new Date("2026-05-01T00:00:00.000Z"), new Date("2026-05-01T00:00:00.000Z"))
 
     const output = await findLatestReusableIngestOutput({
-      blogId: "sample",
+      sourceId: "sample",
       rootDir: root,
     })
 

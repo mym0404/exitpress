@@ -29,6 +29,7 @@ export default defineConfig({
       provider: "v8",
       reporter: ["text", "json-summary", "lcov"],
       include: [
+        "packages/blog-naver/src/**/*.ts",
         "packages/domain/src/**/*.ts",
         "packages/engine/src/**/*.ts",
         "packages/server/src/**/*.ts",

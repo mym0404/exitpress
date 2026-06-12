@@ -2,9 +2,9 @@ import { access, mkdir, readFile, rm, writeFile } from "node:fs/promises"
 import path from "node:path"
 import { setTimeout as delay } from "node:timers/promises"
 
+import { NaverBlogFetcher } from "@exitpress/blog-naver/integrations/naver-blog/NaverBlogFetcher.js"
 import { defaultExportOptions } from "@exitpress/domain/export-options/ExportOptions.js"
 import { buildMarkdownViewerShareUrl } from "@exitpress/engine/exporting/post/MarkdownViewerShareUrl.js"
-import { NaverBlogFetcher } from "@exitpress/engine/integrations/naver-blog/NaverBlogFetcher.js"
 import {
   baseScanResult,
   cleanupTestServerRoots,
@@ -116,7 +116,7 @@ describe("http server local routes", () => {
         "content-type": "application/json",
       },
       body: JSON.stringify({
-        blogIdOrUrl: "https://blog.naver.com/mym0404",
+        sourceInput: "https://blog.naver.com/mym0404",
         outputDir,
         options,
       }),
@@ -155,7 +155,7 @@ describe("http server local routes", () => {
         "content-type": "application/json",
       },
       body: JSON.stringify({
-        blogIdOrUrl: "https://blog.naver.com/mym0404",
+        sourceInput: "https://blog.naver.com/mym0404",
         outputDir,
         options,
         uploadProvider: {
@@ -213,7 +213,7 @@ describe("http server local routes", () => {
         "content-type": "application/json",
       },
       body: JSON.stringify({
-        blogIdOrUrl: "https://blog.naver.com/mym0404",
+        sourceInput: "https://blog.naver.com/mym0404",
         outputDir,
         options,
         uploadProvider: {
@@ -273,7 +273,7 @@ describe("http server local routes", () => {
         "content-type": "application/json",
       },
       body: JSON.stringify({
-        blogIdOrUrl: "https://blog.naver.com/mym0404",
+        sourceInput: "https://blog.naver.com/mym0404",
         outputDir,
         options,
         uploadProvider: createUploadPayload({
@@ -317,7 +317,7 @@ describe("http server local routes", () => {
         "content-type": "application/json",
       },
       body: JSON.stringify({
-        blogIdOrUrl: "https://blog.naver.com/mym0404",
+        sourceInput: "https://blog.naver.com/mym0404",
         outputDir,
         options,
         uploadProvider: createUploadPayload({
@@ -558,7 +558,7 @@ describe("http server local routes", () => {
           "content-type": "application/json",
         },
         body: JSON.stringify({
-          blogIdOrUrl: "https://blog.naver.com/mym0404",
+          sourceInput: "https://blog.naver.com/mym0404",
         }),
       })
 
@@ -589,13 +589,13 @@ describe("http server local routes", () => {
           "content-type": "application/json",
         },
         body: JSON.stringify({
-          blogIdOrUrl: "https://blog.naver.com/mym0404",
+          sourceInput: "https://blog.naver.com/mym0404",
         }),
       })
       const secondBody = (await secondResponse.json()) as ScanResult
 
       expect(secondResponse.status).toBe(200)
-      expect(secondBody.blogId).toBe("mym0404")
+      expect(secondBody.sourceId).toBe("mym0404")
       expect(scanBlogSpy).toHaveBeenCalledTimes(1)
 
       const forcedResponse = await fetch(`${baseUrl}/api/scan`, {
@@ -604,7 +604,7 @@ describe("http server local routes", () => {
           "content-type": "application/json",
         },
         body: JSON.stringify({
-          blogIdOrUrl: "https://blog.naver.com/mym0404",
+          sourceInput: "https://blog.naver.com/mym0404",
           forceRefresh: true,
         }),
       })
@@ -641,7 +641,7 @@ describe("http server local routes", () => {
         "content-type": "application/json",
       },
       body: JSON.stringify({
-        blogIdOrUrl: "https://blog.naver.com/mym0404",
+        sourceInput: "https://blog.naver.com/mym0404",
         scanResult: {
           ...baseScanResult,
           posts: createPosts(null),
@@ -702,7 +702,7 @@ describe("http server local routes", () => {
           "content-type": "application/json",
         },
         body: JSON.stringify({
-          blogIdOrUrl: "https://blog.naver.com/mym0404",
+          sourceInput: "https://blog.naver.com/mym0404",
           scanResult,
           options,
         }),
@@ -726,7 +726,7 @@ describe("http server local routes", () => {
           "content-type": "application/json",
         },
         body: JSON.stringify({
-          blogIdOrUrl: "https://blog.naver.com/mym0404",
+          sourceInput: "https://blog.naver.com/mym0404",
           outputDir,
           scanResult,
           options,
@@ -761,7 +761,7 @@ describe("http server local routes", () => {
         "content-type": "application/json",
       },
       body: JSON.stringify({
-        blogIdOrUrl: "https://blog.naver.com/mym0404",
+        sourceInput: "https://blog.naver.com/mym0404",
         scanResult: baseScanResult,
         options: defaultExportOptions(),
       }),
@@ -784,10 +784,10 @@ describe("http server local routes", () => {
         "content-type": "application/json",
       },
       body: JSON.stringify({
-        blogIdOrUrl: "https://blog.naver.com/mym0404",
+        sourceInput: "https://blog.naver.com/mym0404",
         scanResult: {
           ...baseScanResult,
-          blogId: "other-blog",
+          sourceId: "other-blog",
           posts: createPosts(null),
         },
         options: defaultExportOptions(),
@@ -811,7 +811,7 @@ describe("http server local routes", () => {
         "content-type": "application/json",
       },
       body: JSON.stringify({
-        blogIdOrUrl: "https://blog.naver.com/mym0404",
+        sourceInput: "https://blog.naver.com/mym0404",
         scanResult: {
           ...baseScanResult,
           posts: createPosts(null),

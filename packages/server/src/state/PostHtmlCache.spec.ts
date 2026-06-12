@@ -23,19 +23,19 @@ describe("createPostHtmlCache", () => {
   it("returns null when a cached post html file does not exist", async () => {
     const cache = createPostHtmlCache({ cacheDir: await createTempDir() })
 
-    await expect(cache.getPostHtml?.({ blogId: "blog/a", logNo: "1" })).resolves.toBeNull()
+    await expect(cache.getPostHtml?.({ sourceId: "blog/a", postId: "1" })).resolves.toBeNull()
   })
 
   it("writes and reads post html using an encoded blog and log key", async () => {
     const cache = createPostHtmlCache({ cacheDir: await createTempDir() })
 
     await cache.setPostHtml?.({
-      blogId: "blog/a",
-      logNo: "1/2",
+      sourceId: "blog/a",
+      postId: "1/2",
       html: "<html>cached</html>",
     })
 
-    await expect(cache.getPostHtml?.({ blogId: "blog/a", logNo: "1/2" })).resolves.toBe(
+    await expect(cache.getPostHtml?.({ sourceId: "blog/a", postId: "1/2" })).resolves.toBe(
       "<html>cached</html>",
     )
   })
@@ -44,20 +44,20 @@ describe("createPostHtmlCache", () => {
     const cache = createPostHtmlCache({ cacheDir: await createTempDir() })
 
     await cache.setPostHtml?.({
-      blogId: "a-b",
-      logNo: "c",
+      sourceId: "a-b",
+      postId: "c",
       html: "<html>a-b c</html>",
     })
     await cache.setPostHtml?.({
-      blogId: "a",
-      logNo: "b-c",
+      sourceId: "a",
+      postId: "b-c",
       html: "<html>a b-c</html>",
     })
 
-    await expect(cache.getPostHtml?.({ blogId: "a-b", logNo: "c" })).resolves.toBe(
+    await expect(cache.getPostHtml?.({ sourceId: "a-b", postId: "c" })).resolves.toBe(
       "<html>a-b c</html>",
     )
-    await expect(cache.getPostHtml?.({ blogId: "a", logNo: "b-c" })).resolves.toBe(
+    await expect(cache.getPostHtml?.({ sourceId: "a", postId: "b-c" })).resolves.toBe(
       "<html>a b-c</html>",
     )
   })

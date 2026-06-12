@@ -21,7 +21,7 @@ const mockedFetchJson = vi.mocked(fetchJson)
 const mockedPostJson = vi.mocked(postJson)
 const testOutputDir = createTestPath("ui-use-export-job", "output")
 const scanResult: ScanResult = {
-  blogId: "mym0404",
+  sourceId: "mym0404",
   totalPostCount: 1,
   categories: [
     {
@@ -37,8 +37,8 @@ const scanResult: ScanResult = {
   ],
   posts: [
     {
-      blogId: "mym0404",
-      logNo: "223034929697",
+      sourceId: "mym0404",
+      postId: "223034929697",
       title: "테스트 글",
       publishedAt: "2023-03-04T13:00:00+09:00",
       categoryId: 84,
@@ -64,7 +64,7 @@ describe("useExportJob", () => {
       .mockResolvedValueOnce({
         id: "job-1",
         request: {
-          blogIdOrUrl: "mym0404",
+          sourceInput: "mym0404",
           outputDir: testOutputDir,
           profile: "gfm",
           options: defaultExportOptions(),
@@ -94,7 +94,7 @@ describe("useExportJob", () => {
       .mockResolvedValueOnce({
         id: "job-1",
         request: {
-          blogIdOrUrl: "mym0404",
+          sourceInput: "mym0404",
           outputDir: testOutputDir,
           profile: "gfm",
           options: defaultExportOptions(),
@@ -136,7 +136,7 @@ describe("useExportJob", () => {
 
     await act(async () => {
       await result.current.startJob({
-        blogIdOrUrl: "mym0404",
+        sourceInput: "mym0404",
         outputDir: testOutputDir,
         options: defaultExportOptions(),
         scanResult,
@@ -149,7 +149,7 @@ describe("useExportJob", () => {
     expect(result.current.submitting).toBe(false)
     expect(result.current.jobId).toBe("job-1")
     expect(mockedPostJson).toHaveBeenCalledWith("/api/export", {
-      blogIdOrUrl: "mym0404",
+      sourceInput: "mym0404",
       outputDir: testOutputDir,
       options: defaultExportOptions(),
       scanResult,
@@ -170,7 +170,7 @@ describe("useExportJob", () => {
       id: "job-upload-auto",
       status: "queued",
       request: {
-        blogIdOrUrl: "blog",
+        sourceInput: "blog",
         outputDir: "/tmp/out",
         profile: "gfm",
         options: uploadFlowOptions,
@@ -196,7 +196,7 @@ describe("useExportJob", () => {
 
     await act(async () => {
       await result.current.startJob({
-        blogIdOrUrl: "blog",
+        sourceInput: "blog",
         outputDir: "/tmp/out",
         options: uploadFlowOptions,
         scanResult: null,
@@ -212,7 +212,7 @@ describe("useExportJob", () => {
     })
 
     expect(mockedPostJson).toHaveBeenCalledWith("/api/export", {
-      blogIdOrUrl: "blog",
+      sourceInput: "blog",
       outputDir: "/tmp/out",
       options: uploadFlowOptions,
       scanResult: null,
@@ -237,7 +237,7 @@ describe("useExportJob", () => {
     const resumableJob = {
       id: "job-resume",
       request: {
-        blogIdOrUrl: "mym0404",
+        sourceInput: "mym0404",
         outputDir: testOutputDir,
         profile: "gfm" as const,
         options: defaultExportOptions(),

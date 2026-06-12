@@ -1,8 +1,8 @@
 ---
 title: 서울의 하이라인 서울로(Seoullo) 7017
 source: https://blog.naver.com/anglekim3708/221958395128
-blogId: anglekim3708
-logNo: 221958395128
+sourceId: anglekim3708
+postId: 221958395128
 publishedAt: 2020-05-12T11:06:36+09:00
 category: 브로맨스들과 동행
 categoryPath:

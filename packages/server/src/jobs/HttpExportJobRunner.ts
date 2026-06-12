@@ -1,10 +1,10 @@
+import { NaverBlogExporter } from "@exitpress/blog-naver/exporting/NaverBlogExporter.js"
 import { UPLOAD_STATUSES } from "@exitpress/domain/export-job/ExportJobState.js"
 import { runImageUploadPhase } from "@exitpress/engine/exporting/upload/ImageUploadPhase.js"
 import {
   rewriteImageUploadPost,
   writeImageUploadManifestSnapshot,
 } from "@exitpress/engine/exporting/upload/ImageUploadRewriter.js"
-import { NaverBlogExporter } from "@exitpress/engine/exporting/workflow/NaverBlogExporter.js"
 import {
   isAbortOperationError,
   throwIfAborted,
@@ -12,9 +12,9 @@ import {
 import { runWithLogSink } from "@exitpress/engine/infra/runtime/Logger.js"
 import { toErrorMessage } from "@exitpress/engine/shared/error/util/toErrorMessage.js"
 
+import type { NaverBlogFetcherCache } from "@exitpress/blog-naver/integrations/naver-blog/NaverBlogFetcher.js"
 import type { ScanResult } from "@exitpress/domain/blog/schema/BlogScan.js"
 import type { ExportRequest } from "@exitpress/domain/export-job/schema/ExportRequest.js"
-import type { NaverBlogFetcherCache } from "@exitpress/engine/integrations/naver-blog/NaverBlogFetcher.js"
 
 import type { JobStore } from "./JobStore.js"
 

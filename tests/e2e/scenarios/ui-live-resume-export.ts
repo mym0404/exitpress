@@ -18,19 +18,19 @@ const repoRoot = fileURLToPath(new URL("../../../", import.meta.url))
 
 export const resumeCases = {
   default: {
-    blogId: "mym0404",
+    sourceId: "mym0404",
     dateFrom: "2017-03-31",
     dateTo: "2017-03-31",
     categoryId: "17",
-    delayedLogNo: "220971956932",
+    delayedPostId: "220971956932",
     expectedPosts: "2",
   },
   "se2-table": {
-    blogId: "blogpeople",
+    sourceId: "blogpeople",
     dateFrom: "2013-06-26",
     dateTo: "2013-06-27",
     categoryId: "21",
-    delayedLogNo: "150170710293",
+    delayedPostId: "150170710293",
     expectedPosts: "4",
   },
 } as const
@@ -161,13 +161,13 @@ const startServer = async ({
   settingsPath,
   scanCachePath,
   postHtmlCacheDir,
-  delayedLogNos = [],
+  delayedPostIds = [],
   delayMs = 0,
 }: {
   settingsPath: string
   scanCachePath: string
   postHtmlCacheDir: string
-  delayedLogNos?: string[]
+  delayedPostIds?: string[]
   delayMs?: number
 }) => {
   const child = spawn("bun", ["./tests/support/e2e/run-live-server.ts"], {
@@ -179,7 +179,7 @@ const startServer = async ({
       EXITPRESS_SETTINGS_PATH: settingsPath,
       EXITPRESS_SCAN_CACHE_PATH: scanCachePath,
       EXITPRESS_POST_HTML_CACHE_DIR: postHtmlCacheDir,
-      EXITPRESS_LIVE_FETCH_DELAY_LOGNOS: delayedLogNos.join(","),
+      EXITPRESS_LIVE_FETCH_DELAY_LOGNOS: delayedPostIds.join(","),
       EXITPRESS_LIVE_FETCH_DELAY_MS: String(delayMs),
     },
     stdio: ["pipe", "pipe", "pipe"],
@@ -237,14 +237,14 @@ const buildScopedOptions = ({
 
 export const runUiLiveResumeExport = async ({ resumeCaseId }: { resumeCaseId: ResumeCaseId }) => {
   const selectedResumeCase = resumeCases[resumeCaseId]
-  const blogId = process.env.EXITPRESS_LIVE_RESUME_BLOG_ID ?? selectedResumeCase.blogId
+  const sourceId = process.env.EXITPRESS_LIVE_RESUME_BLOG_ID ?? selectedResumeCase.sourceId
   const scopedDateFrom = process.env.EXITPRESS_LIVE_RESUME_DATE_FROM ?? selectedResumeCase.dateFrom
   const scopedDateTo = process.env.EXITPRESS_LIVE_RESUME_DATE_TO ?? selectedResumeCase.dateTo
   const scopedCategoryId = Number(
     process.env.EXITPRESS_LIVE_RESUME_CATEGORY_ID ?? selectedResumeCase.categoryId,
   )
-  const delayedLogNo =
-    process.env.EXITPRESS_LIVE_RESUME_DELAY_LOGNO ?? selectedResumeCase.delayedLogNo
+  const delayedPostId =
+    process.env.EXITPRESS_LIVE_RESUME_DELAY_LOGNO ?? selectedResumeCase.delayedPostId
   const expectedScopedPostCount = Number(
     process.env.EXITPRESS_LIVE_RESUME_EXPECTED_POSTS ?? selectedResumeCase.expectedPosts,
   )
@@ -267,7 +267,7 @@ export const runUiLiveResumeExport = async ({ resumeCaseId }: { resumeCaseId: Re
       settingsPath,
       scanCachePath,
       postHtmlCacheDir,
-      delayedLogNos: [delayedLogNo],
+      delayedPostIds: [delayedPostId],
       delayMs: 30_000,
     })
     firstServer = activeFirstServer
@@ -276,7 +276,7 @@ export const runUiLiveResumeExport = async ({ resumeCaseId }: { resumeCaseId: Re
     const scanResult = await postJson<ScanResult>({
       url: `${activeFirstServer.baseUrl}/api/scan`,
       body: {
-        blogIdOrUrl: blogId,
+        sourceInput: sourceId,
       },
     })
     console.log("live resume: scan completed")
@@ -291,16 +291,16 @@ export const runUiLiveResumeExport = async ({ resumeCaseId }: { resumeCaseId: Re
       )
     }
 
-    if (!scopedPosts.some((post) => post.logNo === delayedLogNo)) {
+    if (!scopedPosts.some((post) => post.postId === delayedPostId)) {
       throw new Error(
-        `live resume delayed target is missing from the scoped posts: ${delayedLogNo}`,
+        `live resume delayed target is missing from the scoped posts: ${delayedPostId}`,
       )
     }
 
     const exportResponse = await postJson<{ jobId: string }>({
       url: `${activeFirstServer.baseUrl}/api/export`,
       body: {
-        blogIdOrUrl: blogId,
+        sourceInput: sourceId,
         outputDir: scopedOutputDir,
         options: buildScopedOptions({
           scopedCategoryId,
@@ -367,7 +367,7 @@ export const runUiLiveResumeExport = async ({ resumeCaseId }: { resumeCaseId: Re
     if (
       resumedScanPosts.length < expectedScopedPostCount ||
       !scopedPosts.every((post) =>
-        resumedScanPosts.some((resumedPost) => resumedPost.logNo === post.logNo),
+        resumedScanPosts.some((resumedPost) => resumedPost.postId === post.postId),
       )
     ) {
       throw new Error("bootstrap did not restore cached scan posts for the resumed job")
@@ -402,14 +402,14 @@ export const runUiLiveResumeExport = async ({ resumeCaseId }: { resumeCaseId: Re
 
     for (const post of completedManifest.posts) {
       if (!post.outputPath) {
-        throw new Error(`completed manifest post outputPath missing: ${post.logNo}`)
+        throw new Error(`completed manifest post outputPath missing: ${post.postId}`)
       }
     }
 
     console.log(
       JSON.stringify(
         {
-          blogId,
+          sourceId,
           scopedDateFrom,
           scopedDateTo,
           scopedCategoryId,

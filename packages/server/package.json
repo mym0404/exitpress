@@ -10,6 +10,7 @@
     }
   },
   "dependencies": {
+    "@exitpress/blog-naver": "workspace:*",
     "@exitpress/domain": "workspace:*",
     "@exitpress/engine": "workspace:*",
     "piclist": "catalog:",

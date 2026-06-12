@@ -60,7 +60,7 @@ describe("http server upload security", () => {
         "content-type": "application/json",
       },
       body: JSON.stringify({
-        blogIdOrUrl: "https://blog.naver.com/mym0404",
+        sourceInput: "https://blog.naver.com/mym0404",
         outputDir: createTestPath("http-server", "upload-retry-output"),
         options,
         uploadProvider: createUploadPayload({

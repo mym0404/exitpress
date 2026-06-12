@@ -35,7 +35,7 @@ describe("exportProviderPostUnit", () => {
       const markdown = await readFile(result.markdownFilePath, "utf8")
 
       expect(markdown).toContain("Hello from markdown provider")
-      expect(markdown).toContain("logNo: mock-post-1")
+      expect(markdown).toContain("postId: mock-post-1")
       expect(markdown).not.toContain(".nan")
     } finally {
       await rm(tempDir, { recursive: true, force: true })
@@ -86,7 +86,7 @@ describe("exportProviderPostUnit", () => {
     const options = defaultExportOptions()
     options.links.sameBlogPostMode = "custom-url"
     options.links.sameBlogPostCustomUrlTemplate =
-      "https://archive.example.com/{{ blogId }}/{{ logNo }}"
+      "https://archive.example.com/{{ sourceId }}/{{ postId }}"
 
     try {
       const result = await exportProviderPostUnit({

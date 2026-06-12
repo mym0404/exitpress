@@ -1,8 +1,8 @@
 ---
 title: 전북 부안 가볼만한곳 변산반도 여행 1박2일 정산
 source: https://blog.naver.com/goyamee/223511986798
-blogId: goyamee
-logNo: 223511986798
+sourceId: goyamee
+postId: 223511986798
 publishedAt: 2024-07-14T09:31:32+09:00
 category: ▶ 방방곡곡
 categoryPath:

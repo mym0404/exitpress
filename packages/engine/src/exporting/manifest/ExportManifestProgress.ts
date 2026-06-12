@@ -14,7 +14,7 @@ export type ExportProgressState = {
 
 export const createInitialManifest = ({
   resumeManifest,
-  blogId,
+  sourceId,
   profile,
   options,
   categories,
@@ -22,7 +22,7 @@ export const createInitialManifest = ({
   uploadEnabled,
 }: {
   resumeManifest: ExportManifest | null
-  blogId: string
+  sourceId: string
   profile: ExportRequest["profile"]
   options: ExportRequest["options"]
   categories: ScanResult["categories"]
@@ -37,7 +37,7 @@ export const createInitialManifest = ({
         finishedAt: null,
       }
     : {
-        blogId,
+        sourceId,
         profile,
         options,
         selectedCategoryIds: options.scope.categoryIds,

@@ -17,16 +17,16 @@ export const safeEvidencePathSegment = (value: string) => {
 
 // Creates a timestamped repo-local output directory for evidence captures.
 export const createDefaultEvidenceOutputDir = ({
-  blogId,
-  logNo,
+  sourceId,
+  postId,
 }: {
-  blogId: string
-  logNo?: string
+  sourceId: string
+  postId?: string
 }) => {
   const timestamp = new Date().toISOString().replace(/[:.]/g, "-")
   const name = [
-    safeEvidencePathSegment(blogId),
-    logNo ? safeEvidencePathSegment(logNo) : null,
+    safeEvidencePathSegment(sourceId),
+    postId ? safeEvidencePathSegment(postId) : null,
     timestamp,
   ]
     .filter(Boolean)

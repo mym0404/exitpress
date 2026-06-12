@@ -1,8 +1,8 @@
 ---
 title: 플랫폼트리쌤  원 데이 세미나 후기
 source: https://blog.naver.com/huehaho/223480843215
-blogId: huehaho
-logNo: 223480843215
+sourceId: huehaho
+postId: 223480843215
 publishedAt: 2024-06-16T09:14:01+09:00
 category: 오늘의 이야기
 categoryPath:

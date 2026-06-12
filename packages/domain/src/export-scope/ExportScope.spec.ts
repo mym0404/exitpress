@@ -30,23 +30,23 @@ const categories: CategoryInfo[] = [
 
 const posts: PostSummary[] = [
   {
-    blogId: "mym0404",
-    logNo: "1",
+    sourceId: "mym0404",
+    postId: "1",
     title: "First",
     publishedAt: "2024-01-03T12:00:00+09:00",
     categoryId: 1,
     categoryName: "Algorithm",
-    source: "https://blog.naver.com/mym0404/1",
+    source: "https://example.com/source-a/1",
     thumbnailUrl: null,
   },
   {
-    blogId: "mym0404",
-    logNo: "2",
+    sourceId: "mym0404",
+    postId: "2",
     title: "Second",
     publishedAt: "2024-01-04T12:00:00+09:00",
     categoryId: 2,
     categoryName: "BOJ",
-    source: "https://blog.naver.com/mym0404/2",
+    source: "https://example.com/source-a/2",
     thumbnailUrl: null,
   },
 ]

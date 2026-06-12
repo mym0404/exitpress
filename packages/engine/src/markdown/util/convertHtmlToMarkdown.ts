@@ -6,8 +6,6 @@ type AttributeNode = TurndownNode & {
   getAttribute: (name: string) => string | null
 }
 
-const naverBlankImageUrl = "https://ssl.pstatic.net/static/blog/blank.gif"
-
 const cleanLinkAttribute = (attribute: string | null) =>
   attribute ? attribute.replace(/(\n+\s*)+/g, "\n") : ""
 
@@ -21,11 +19,6 @@ const escapeLinkTitle = (title: string) => title.replace(/"/g, '\\"')
 
 const isAttributeNode = (node: TurndownNode): node is AttributeNode =>
   "getAttribute" in node && typeof node.getAttribute === "function"
-
-const isNaverBlankImage = (node: TurndownNode) =>
-  node.nodeName === "IMG" &&
-  isAttributeNode(node) &&
-  (node.getAttribute("src") ?? "").split("?")[0] === naverBlankImageUrl
 
 const codeBlockPlaceholderPrefix = "EXITPRESSCOLORSCRIPTERCODEBLOCK"
 
@@ -95,10 +88,6 @@ const createTurndownService = (resolveLinkUrl?: (url: string) => string) => {
 
   service.use(gfm)
   service.remove(["script", "style", "noscript"])
-  service.addRule("naverBlankImage", {
-    filter: isNaverBlankImage,
-    replacement: () => "",
-  })
   service.addRule("hardBreak", {
     filter: "br",
     replacement: () => "  \n",
@@ -134,7 +123,7 @@ const createTurndownService = (resolveLinkUrl?: (url: string) => string) => {
   return service
 }
 
-// Converts trusted Naver HTML fragments into markdown text.
+// Converts trusted HTML fragments into markdown text.
 export const convertHtmlToMarkdown = ({
   html,
   resolveLinkUrl,

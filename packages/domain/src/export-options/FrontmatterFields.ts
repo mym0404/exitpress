@@ -3,8 +3,8 @@ import type { FrontmatterFieldMeta, FrontmatterFieldName } from "./schema/Export
 export const frontmatterFieldOrder: FrontmatterFieldName[] = [
   "title",
   "source",
-  "blogId",
-  "logNo",
+  "sourceId",
+  "postId",
   "publishedAt",
   "category",
   "categoryPath",
@@ -25,15 +25,15 @@ export const frontmatterFieldMeta: Record<FrontmatterFieldName, FrontmatterField
     description: "원본 글 URL을 기록합니다.",
     defaultAlias: "source",
   },
-  blogId: {
-    label: "blogId",
+  sourceId: {
+    label: "sourceId",
     description: "블로그 식별자를 기록합니다.",
-    defaultAlias: "blogId",
+    defaultAlias: "sourceId",
   },
-  logNo: {
-    label: "logNo",
+  postId: {
+    label: "postId",
     description: "원본 글 식별자를 기록합니다.",
-    defaultAlias: "logNo",
+    defaultAlias: "postId",
   },
   publishedAt: {
     label: "publishedAt",

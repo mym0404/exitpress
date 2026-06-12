@@ -1,8 +1,8 @@
 ---
 title: 사진을 아름답고 우아하게 포스팅하는 법!
 source: https://blog.naver.com/blogpeople/150173619413
-blogId: blogpeople
-logNo: 150173619413
+sourceId: blogpeople
+postId: 150173619413
 publishedAt: 2013-08-09T15:51:02+09:00
 category: 블로그 새소식
 categoryPath:

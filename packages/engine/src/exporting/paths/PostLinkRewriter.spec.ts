@@ -4,82 +4,59 @@ import { describe, expect, it } from "vitest"
 
 import type { CategoryInfo, PostSummary } from "@exitpress/domain/blog/schema/BlogScan.js"
 
-import {
-  buildPostLinkTargets,
-  createSameBlogPostLinkResolver,
-  extractNaverBlogPostIdentity,
-} from "./PostLinkRewriter.js"
+import { buildPostLinkTargets, createPostLinkResolver } from "./PostLinkRewriter.js"
 
 const testExportDir = createTestPath("post-link-rewriter", "export")
 
 const categories: CategoryInfo[] = [
   {
     id: 10,
-    name: "NestJS",
+    name: "Notes",
     parentId: null,
     postCount: 2,
     isDivider: false,
     isOpen: true,
-    path: ["NestJS"],
+    path: ["Notes"],
     depth: 0,
   },
 ]
 
 const posts: PostSummary[] = [
   {
-    blogId: "mym0404",
-    logNo: "223034929697",
-    title: "첫 글",
+    sourceId: "source-a",
+    postId: "post-1",
+    title: "First post",
     publishedAt: "2026-04-11T04:00:00.000Z",
     categoryId: 10,
-    categoryName: "NestJS",
-    source: "https://blog.naver.com/mym0404/223034929697",
+    categoryName: "Notes",
+    source: "https://example.com/source-a/post-1",
     thumbnailUrl: null,
   },
   {
-    blogId: "mym0404",
-    logNo: "223034929698",
-    title: "둘째 글",
+    sourceId: "source-a",
+    postId: "post-2",
+    title: "Second post",
     publishedAt: "2026-04-12T04:00:00.000Z",
     categoryId: 10,
-    categoryName: "NestJS",
-    source: "https://blog.naver.com/mym0404/223034929698",
+    categoryName: "Notes",
+    source: "https://example.com/source-a/post-2",
     thumbnailUrl: null,
   },
 ]
 
-describe("post-link-rewriter", () => {
-  it("extracts blogId and logNo from multiple Naver post URL shapes", () => {
-    expect(extractNaverBlogPostIdentity("https://blog.naver.com/mym0404/223034929697")).toEqual({
-      blogId: "mym0404",
-      logNo: "223034929697",
-    })
-    expect(
-      extractNaverBlogPostIdentity("http://blog.naver.com/mym0404/223034929697?viewType=pc"),
-    ).toEqual({
-      blogId: "mym0404",
-      logNo: "223034929697",
-    })
-    expect(
-      extractNaverBlogPostIdentity(
-        "https://m.blog.naver.com/PostView.naver?blogId=mym0404&logNo=223034929697",
-      ),
-    ).toEqual({
-      blogId: "mym0404",
-      logNo: "223034929697",
-    })
-    expect(
-      extractNaverBlogPostIdentity("/PostView.naver?blogId=mym0404&logNo=223034929697"),
-    ).toEqual({
-      blogId: "mym0404",
-      logNo: "223034929697",
-    })
-    expect(
-      extractNaverBlogPostIdentity("https://m.blog.naver.com/PostList.naver?blogId=mym0404"),
-    ).toBeNull()
-  })
+const resolveIdentity = (url: string) => {
+  const match = url.match(/^post:\/\/([^/]+)\/([^/]+)$/)
 
-  it("rewrites matched same-blog links to relative file paths", () => {
+  return match
+    ? {
+        sourceId: match[1] ?? "",
+        postId: match[2] ?? "",
+      }
+    : null
+}
+
+describe("post-link-rewriter", () => {
+  it("rewrites matched same-source links to relative file paths", () => {
     const options = defaultExportOptions()
     const targets = buildPostLinkTargets({
       outputDir: testExportDir,
@@ -87,9 +64,9 @@ describe("post-link-rewriter", () => {
       categories,
       options,
     })
-    const resolveLinkUrl = createSameBlogPostLinkResolver({
-      blogId: "mym0404",
-      markdownFilePath: `${testExportDir}/nestjs/2026-04-11-첫_글/index.md`,
+    const resolveLinkUrl = createPostLinkResolver({
+      sourceId: "source-a",
+      markdownFilePath: `${testExportDir}/notes/2026-04-11-first-post/index.md`,
       options: {
         links: {
           sameBlogPostMode: "relative-filepath",
@@ -97,15 +74,14 @@ describe("post-link-rewriter", () => {
         },
       },
       targets,
+      resolveIdentity,
     })
 
-    expect(resolveLinkUrl("https://m.blog.naver.com/mym0404/223034929698")).toBe(
-      "../2026-04-12-둘째_글/index.md",
-    )
-    expect(resolveLinkUrl("https://blog.naver.com/other/1")).toBe("https://blog.naver.com/other/1")
+    expect(resolveLinkUrl("post://source-a/post-2")).toBe("../2026-04-12-second_post/index.md")
+    expect(resolveLinkUrl("post://source-b/post-1")).toBe("post://source-b/post-1")
   })
 
-  it("rewrites matched same-blog links to custom slug URLs and keeps unmatched links as-is", () => {
+  it("rewrites matched same-source links to custom slug URLs and keeps unmatched links as-is", () => {
     const options = defaultExportOptions()
     const targets = buildPostLinkTargets({
       outputDir: testExportDir,
@@ -113,31 +89,30 @@ describe("post-link-rewriter", () => {
       categories,
       options,
     })
-    const resolveLinkUrl = createSameBlogPostLinkResolver({
-      blogId: "mym0404",
-      markdownFilePath: `${testExportDir}/nestjs/2026-04-11-first/index.md`,
+    const resolveLinkUrl = createPostLinkResolver({
+      sourceId: "source-a",
+      markdownFilePath: `${testExportDir}/notes/2026-04-11-first-post/index.md`,
       options: {
         links: {
           sameBlogPostMode: "custom-url",
           sameBlogPostCustomUrlTemplate:
-            "https://myblog/{{ category }}/{{ title }}/{{ YYYY }}/{{ MM }}/{{ DD }}/{{ YY }}/{{ M }}/{{ D }}/{{ blogId }}/{{ logNo }}/{{ slug }}",
+            "https://archive.example.com/{{ category }}/{{ sourceId }}/{{ postId }}/{{ slug }}",
         },
       },
       targets,
+      resolveIdentity,
     })
 
-    expect(resolveLinkUrl("https://blog.naver.com/mym0404/223034929698")).toBe(
-      "https://myblog/nestjs/둘째-글/2026/04/12/26/4/12/mym0404/223034929698/둘째_글",
+    expect(resolveLinkUrl("post://source-a/post-2")).toBe(
+      "https://archive.example.com/notes/source-a/post-2/second_post",
     )
-    expect(resolveLinkUrl("https://blog.naver.com/mym0404/999999999999")).toBe(
-      "https://blog.naver.com/mym0404/999999999999",
-    )
+    expect(resolveLinkUrl("post://source-a/missing")).toBe("post://source-a/missing")
   })
 
   it("uses custom post folder name templates for relative export paths", () => {
     const options = defaultExportOptions()
 
-    options.structure.postFolderNameTemplate = "{{ year }}_{{ month }}_{{ logNo }}_{{ slug }}"
+    options.structure.postFolderNameTemplate = "{{ year }}_{{ month }}_{{ postId }}_{{ slug }}"
 
     const targets = buildPostLinkTargets({
       outputDir: testExportDir,
@@ -145,9 +120,9 @@ describe("post-link-rewriter", () => {
       categories,
       options,
     })
-    const resolveLinkUrl = createSameBlogPostLinkResolver({
-      blogId: "mym0404",
-      markdownFilePath: `${testExportDir}/nestjs/2026_04_223034929697_첫_글/index.md`,
+    const resolveLinkUrl = createPostLinkResolver({
+      sourceId: "source-a",
+      markdownFilePath: `${testExportDir}/notes/2026_04_post-1_first-post/index.md`,
       options: {
         links: {
           sameBlogPostMode: "relative-filepath",
@@ -155,10 +130,9 @@ describe("post-link-rewriter", () => {
         },
       },
       targets,
+      resolveIdentity,
     })
 
-    expect(resolveLinkUrl("https://m.blog.naver.com/mym0404/223034929698")).toBe(
-      "../2026_04_223034929698_둘째_글/index.md",
-    )
+    expect(resolveLinkUrl("post://source-a/post-2")).toBe("../2026_04_post-2_second_post/index.md")
   })
 })

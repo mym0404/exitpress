@@ -1,8 +1,8 @@
 ---
 title: "[이름을 불러주세요 시즌3 with 조석 에필로그] 여덟 명의 청년 사업자를 소개합니다"
 source: https://blog.naver.com/naver_diary/221713161939
-blogId: naver_diary
-logNo: 221713161939
+sourceId: naver_diary
+postId: 221713161939
 publishedAt: 2019-11-20 11:42:51
 category: 서비스 완전정복
 categoryPath:

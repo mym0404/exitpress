@@ -27,22 +27,22 @@ const category: CategoryInfo = {
 }
 
 const post: PostSummary = {
-  blogId: "mym0404",
-  logNo: "223034929697",
+  sourceId: "mym0404",
+  postId: "223034929697",
   title: "테스트 글",
   publishedAt: "2023-03-04T13:00:00+09:00",
   categoryId: 1,
   categoryName: "Algorithm",
-  source: "https://blog.naver.com/mym0404/223034929697",
+  source: "https://example.com/source-a/223034929697",
   thumbnailUrl: "https://example.com/thumb.png",
 }
 
 const defaultBlockTemplates = {
-  "naver-se4:paragraph": "{{ text }}",
-  "naver-se4:quote": "> {{ text }}",
-  "naver-se4:image": "{{ `![${alt}](${url})` }}",
-  "naver-se4:video": "{{ `[${title}](${url})` }}",
-  "naver-se4:table": tableTemplate,
+  "provider:paragraph": "{{ text }}",
+  "provider:quote": "> {{ text }}",
+  "provider:image": "{{ `![${alt}](${url})` }}",
+  "provider:video": "{{ `[${title}](${url})` }}",
+  "provider:table": tableTemplate,
 }
 
 const createAssetRecord = ({
@@ -93,10 +93,10 @@ describe("renderMarkdownPost", () => {
       parsedPost: {
         tags: ["algo"],
         blocks: [
-          { blockId: "naver-se4:paragraph", props: { text: "본문입니다." } },
-          { blockId: "naver-se4:quote", props: { text: "인용문" } },
+          { blockId: "provider:paragraph", props: { text: "본문입니다." } },
+          { blockId: "provider:quote", props: { text: "인용문" } },
           {
-            blockId: "naver-se4:video",
+            blockId: "provider:video",
             props: {
               title: "Demo",
               url: "https://example.com/video",
@@ -110,7 +110,7 @@ describe("renderMarkdownPost", () => {
     })
 
     expect(rendered.markdown).toContain("title: 테스트 글")
-    expect(rendered.markdown).toContain("logNo: 223034929697")
+    expect(rendered.markdown).toContain("postId: 223034929697")
     expect(rendered.markdown).toContain("본문입니다.")
     expect(rendered.markdown).toContain("> 인용문")
     expect(rendered.markdown).toContain("[Demo](https://example.com/video)")
@@ -119,13 +119,13 @@ describe("renderMarkdownPost", () => {
 
   it("uses custom templates by blockId", async () => {
     const options = defaultExportOptions()
-    options.blockOutputs.templates["naver-se4:paragraph"] = "CUSTOM {{ text }}"
+    options.blockOutputs.templates["provider:paragraph"] = "CUSTOM {{ text }}"
 
     const rendered = await render({
       options,
       parsedPost: {
         tags: [],
-        blocks: [{ blockId: "naver-se4:paragraph", props: { text: "본문" } }],
+        blocks: [{ blockId: "provider:paragraph", props: { text: "본문" } }],
       },
     })
 
@@ -134,7 +134,7 @@ describe("renderMarkdownPost", () => {
 
   it("allows an empty custom block template to omit a block", async () => {
     const options = defaultExportOptions()
-    options.blockOutputs.templates["naver-se4:video"] = ""
+    options.blockOutputs.templates["provider:video"] = ""
 
     const rendered = await render({
       options,
@@ -142,7 +142,7 @@ describe("renderMarkdownPost", () => {
         tags: [],
         blocks: [
           {
-            blockId: "naver-se4:video",
+            blockId: "provider:video",
             props: {
               title: "Demo",
               url: "https://example.com/video",
@@ -161,11 +161,11 @@ describe("renderMarkdownPost", () => {
 
   it("preserves string post identifiers in frontmatter", async () => {
     const rendered = await renderMarkdownPost({
-      post: { ...post, logNo: "mock-post-1" },
+      post: { ...post, postId: "mock-post-1" },
       category,
       parsedPost: {
         tags: [],
-        blocks: [{ blockId: "naver-se4:paragraph", props: { text: "본문" } }],
+        blocks: [{ blockId: "provider:paragraph", props: { text: "본문" } }],
       },
       defaultBlockTemplates,
       markdownFilePath,
@@ -178,17 +178,17 @@ describe("renderMarkdownPost", () => {
         }),
     })
 
-    expect(rendered.markdown).toContain("logNo: mock-post-1")
+    expect(rendered.markdown).toContain("postId: mock-post-1")
     expect(rendered.markdown).not.toContain(".nan")
   })
 
   it("preserves unsafe numeric post identifiers in frontmatter", async () => {
     const rendered = await renderMarkdownPost({
-      post: { ...post, logNo: "9007199254740993" },
+      post: { ...post, postId: "9007199254740993" },
       category,
       parsedPost: {
         tags: [],
-        blocks: [{ blockId: "naver-se4:paragraph", props: { text: "본문" } }],
+        blocks: [{ blockId: "provider:paragraph", props: { text: "본문" } }],
       },
       defaultBlockTemplates,
       markdownFilePath,
@@ -201,7 +201,7 @@ describe("renderMarkdownPost", () => {
         }),
     })
 
-    expect(rendered.markdown).toContain('logNo: "9007199254740993"')
+    expect(rendered.markdown).toContain('postId: "9007199254740993"')
     expect(rendered.markdown).not.toContain("9007199254740992")
   })
 
@@ -211,7 +211,7 @@ describe("renderMarkdownPost", () => {
         tags: [],
         blocks: [
           {
-            blockId: "naver-se4:image",
+            blockId: "provider:image",
             props: {
               url: "https://example.com/image.png",
               alt: "image",
@@ -245,7 +245,7 @@ describe("renderMarkdownPost", () => {
         tags: [],
         blocks: [
           {
-            blockId: "naver-se4:image",
+            blockId: "provider:image",
             props: {
               url: "https://example.com/missing.png",
               alt: "missing",
@@ -277,9 +277,9 @@ describe("renderMarkdownPost", () => {
       render({
         parsedPost: {
           tags: [],
-          blocks: [{ blockId: "naver-se4:unknown", props: { text: "본문" } }],
+          blocks: [{ blockId: "provider:unknown", props: { text: "본문" } }],
         },
       }),
-    ).rejects.toThrow("Parser block template is missing: naver-se4:unknown")
+    ).rejects.toThrow("Parser block template is missing: provider:unknown")
   })
 })

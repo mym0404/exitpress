@@ -1,8 +1,8 @@
 ---
 title: "[ 블로그 위젯 ] 네이버 블로그 위젯 만들기"
 source: https://blog.naver.com/anglekim3708/70170491705
-blogId: anglekim3708
-logNo: 70170491705
+sourceId: anglekim3708
+postId: 70170491705
 publishedAt: 2013-06-27T16:58:07+09:00
 category: 블로그 꾸미기
 categoryPath:

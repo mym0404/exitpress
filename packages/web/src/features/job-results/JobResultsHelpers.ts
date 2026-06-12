@@ -117,17 +117,17 @@ export const getJobItems = (job: ExportJobState | null) => {
 }
 
 export const buildJobItemPathMeta = (
-  item: Pick<ExportJobState["items"][number], "logNo" | "outputPath">,
+  item: Pick<ExportJobState["items"][number], "postId" | "outputPath">,
 ) => {
   const pathSegments = item.outputPath?.split("/").filter(Boolean) ?? []
 
   if (pathSegments.length === 0) {
     return {
-      fileLabel: `${item.logNo}.diagnostics`,
+      fileLabel: `${item.postId}.diagnostics`,
     }
   }
 
-  const fileName = pathSegments.at(-1) ?? `${item.logNo}.diagnostics`
+  const fileName = pathSegments.at(-1) ?? `${item.postId}.diagnostics`
   const isIndexMarkdown = fileName === INDEX_MARKDOWN_FILE
   const postFolderName = isIndexMarkdown ? pathSegments.at(-2) : null
 

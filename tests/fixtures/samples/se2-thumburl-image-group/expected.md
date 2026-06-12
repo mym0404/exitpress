@@ -1,8 +1,8 @@
 ---
 title: 트위치 로고, 카트라이더 부스터 로고를 만들어 보았다.
 source: https://blog.naver.com/mym0404/221425068566
-blogId: mym0404
-logNo: 221425068566
+sourceId: mym0404
+postId: 221425068566
 publishedAt: 2018-12-22T21:34:56+09:00
 category: Blender
 categoryPath:

@@ -10,70 +10,18 @@ import { relativePathFrom } from "../../infra/node/FilePaths.js"
 
 import { buildMarkdownFilePath, getCategoryForPost } from "./ExportPaths.js"
 
-const naverBlogHosts = new Set(["blog.naver.com", "m.blog.naver.com"])
-const postViewPathPattern = /\/PostView\.naver$/i
-const postPathPattern = /^\/([^/]+)\/(\d+)(?:\/)?$/i
-
 type PostLinkTarget = {
   markdownFilePath: string
   templateValues: ReturnType<typeof buildSameBlogPostTemplateValues>
 }
 
 type SameBlogPostIdentity = {
-  blogId: string
-  logNo: string
+  sourceId: string
+  postId: string
 }
 
-const isNonPostNaverPath = (pathname: string) =>
-  /\/PostList\.naver$/i.test(pathname) || /\/PostSearchList\.naver$/i.test(pathname)
-
-export const extractNaverBlogPostIdentity = (value: string) => {
-  const trimmed = value.trim()
-
-  if (!trimmed || trimmed.startsWith("#")) {
-    return null
-  }
-
-  let url: URL
-
-  try {
-    url = new URL(trimmed, "https://m.blog.naver.com")
-  } catch {
-    return null
-  }
-
-  if (!naverBlogHosts.has(url.hostname.toLowerCase()) || isNonPostNaverPath(url.pathname)) {
-    return null
-  }
-
-  const directPathMatch = url.pathname.match(postPathPattern)
-
-  if (directPathMatch) {
-    return {
-      blogId: directPathMatch[1] ?? "",
-      logNo: directPathMatch[2] ?? "",
-    }
-  }
-
-  if (!postViewPathPattern.test(url.pathname)) {
-    return null
-  }
-
-  const blogId = url.searchParams.get("blogId")?.trim() ?? ""
-  const logNo = url.searchParams.get("logNo")?.trim() ?? ""
-
-  if (!blogId || !/^\d+$/.test(logNo)) {
-    return null
-  }
-
-  return {
-    blogId,
-    logNo,
-  }
-}
-
-const getPostLinkTargetKey = ({ blogId, logNo }: { blogId: string; logNo: string }) =>
-  `${blogId}:${logNo}`
+const getPostLinkTargetKey = ({ sourceId, postId }: { sourceId: string; postId: string }) =>
+  `${sourceId}:${postId}`
 
 export const buildPostLinkTargets = ({
   outputDir,
@@ -98,8 +46,8 @@ export const buildPostLinkTargets = ({
 
       return [
         getPostLinkTargetKey({
-          blogId: post.blogId,
-          logNo: post.logNo,
+          sourceId: post.sourceId,
+          postId: post.postId,
         }),
         {
           markdownFilePath: buildMarkdownFilePath({
@@ -110,8 +58,8 @@ export const buildPostLinkTargets = ({
           }),
           templateValues: buildSameBlogPostTemplateValues({
             post: {
-              blogId: post.blogId,
-              logNo: post.logNo,
+              sourceId: post.sourceId,
+              postId: post.postId,
               title: post.title,
               publishedAt: post.publishedAt,
               categoryName: category.name,
@@ -124,34 +72,14 @@ export const buildPostLinkTargets = ({
   )
 }
 
-export const createSameBlogPostLinkResolver = ({
-  blogId,
-  markdownFilePath,
-  options,
-  targets,
-}: {
-  blogId: string
-  markdownFilePath: string
-  options: Pick<ExportOptions, "links">
-  targets: Map<string, PostLinkTarget>
-}) => {
-  return createPostLinkResolver({
-    blogId,
-    markdownFilePath,
-    options,
-    targets,
-    resolveIdentity: extractNaverBlogPostIdentity,
-  })
-}
-
 export const createPostLinkResolver = ({
-  blogId,
+  sourceId,
   markdownFilePath,
   options,
   targets,
   resolveIdentity,
 }: {
-  blogId: string
+  sourceId: string
   markdownFilePath: string
   options: Pick<ExportOptions, "links">
   targets: Map<string, PostLinkTarget>
@@ -164,14 +92,14 @@ export const createPostLinkResolver = ({
   return (url: string) => {
     const identity = resolveIdentity(url)
 
-    if (!identity || identity.blogId !== blogId) {
+    if (!identity || identity.sourceId !== sourceId) {
       return url
     }
 
     const target = targets.get(
       getPostLinkTargetKey({
-        blogId: identity.blogId,
-        logNo: identity.logNo,
+        sourceId: identity.sourceId,
+        postId: identity.postId,
       }),
     )
 

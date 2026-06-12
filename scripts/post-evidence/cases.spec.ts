@@ -5,9 +5,9 @@ import { parseCapturePostEvidenceArgs } from "./cases.js"
 describe("parseCapturePostEvidenceArgs", () => {
   it("defaults asset profile to tmp", async () => {
     const parsed = await parseCapturePostEvidenceArgs([
-      "--blogId",
+      "--sourceId",
       "my-blog",
-      "--logNo",
+      "--postId",
       "123456789012",
     ])
 
@@ -18,9 +18,9 @@ describe("parseCapturePostEvidenceArgs", () => {
 
   it("accepts a metadata cache path", async () => {
     const parsed = await parseCapturePostEvidenceArgs([
-      "--blogId",
+      "--sourceId",
       "my-blog",
-      "--logNo",
+      "--postId",
       "123456789012",
       "--metadataCachePath",
       "tmp/metadata-cache.json",
@@ -34,9 +34,9 @@ describe("parseCapturePostEvidenceArgs", () => {
   it("accepts persistent asset profiles", async () => {
     await expect(
       parseCapturePostEvidenceArgs([
-        "--blogId",
+        "--sourceId",
         "my-blog",
-        "--logNo",
+        "--postId",
         "123456789012",
         "--assetProfile",
         "readme",
@@ -46,9 +46,9 @@ describe("parseCapturePostEvidenceArgs", () => {
     })
     await expect(
       parseCapturePostEvidenceArgs([
-        "--blogId",
+        "--sourceId",
         "my-blog",
-        "--logNo",
+        "--postId",
         "123456789012",
         "--assetProfile",
         "figure",
@@ -61,9 +61,9 @@ describe("parseCapturePostEvidenceArgs", () => {
   it("rejects the removed temporary profile name", async () => {
     await expect(
       parseCapturePostEvidenceArgs([
-        "--blogId",
+        "--sourceId",
         "my-blog",
-        "--logNo",
+        "--postId",
         "123456789012",
         "--assetProfile",
         "temporary",

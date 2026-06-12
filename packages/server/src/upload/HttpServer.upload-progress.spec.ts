@@ -83,7 +83,7 @@ describe("http server upload progress", () => {
           "content-type": "application/json",
         },
         body: JSON.stringify({
-          blogIdOrUrl: "https://blog.naver.com/mym0404",
+          sourceInput: "https://blog.naver.com/mym0404",
           outputDir,
           options,
           uploadProvider: createUploadPayload({
@@ -199,7 +199,7 @@ describe("http server upload progress", () => {
         "content-type": "application/json",
       },
       body: JSON.stringify({
-        blogIdOrUrl: "https://blog.naver.com/mym0404",
+        sourceInput: "https://blog.naver.com/mym0404",
         outputDir: createTestPath("http-server", "upload-progress-output"),
         options,
         uploadProvider: createUploadPayload({
@@ -265,7 +265,7 @@ describe("http server upload progress", () => {
         "content-type": "application/json",
       },
       body: JSON.stringify({
-        blogIdOrUrl: "https://blog.naver.com/mym0404",
+        sourceInput: "https://blog.naver.com/mym0404",
         outputDir: createTestPath("http-server", "rewrite-failure-output"),
         options,
         uploadProvider: createUploadPayload({

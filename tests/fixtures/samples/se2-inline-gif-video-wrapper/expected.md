@@ -1,8 +1,8 @@
 ---
 title: "[Android] 더블버퍼링 Double Buffering"
 source: https://blog.naver.com/mym0404/221343327125
-blogId: mym0404
-logNo: 221343327125
+sourceId: mym0404
+postId: 221343327125
 publishedAt: 2018-08-21T22:03:55+09:00
 category: Tip
 categoryPath:

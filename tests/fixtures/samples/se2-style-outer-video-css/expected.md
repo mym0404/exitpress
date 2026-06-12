@@ -1,8 +1,8 @@
 ---
 title: "[르노삼성 자동차] QM3 전시차 [전시차량 실사 사진]"
 source: https://blog.naver.com/anglekim3708/70180618808
-blogId: anglekim3708
-logNo: 70180618808
+sourceId: anglekim3708
+postId: 70180618808
 publishedAt: 2013-12-07T12:24:27+09:00
 category: 신차 정보
 categoryPath:

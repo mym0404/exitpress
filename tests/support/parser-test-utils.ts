@@ -1,7 +1,7 @@
+import { NaverBlogSE2Editor } from "@exitpress/blog-naver/parsing/naver-blog/se2/NaverBlogSe2Editor.js"
+import { NaverBlogSE3Editor } from "@exitpress/blog-naver/parsing/naver-blog/se3/NaverBlogSe3Editor.js"
+import { NaverBlogSE4Editor } from "@exitpress/blog-naver/parsing/naver-blog/se4/NaverBlogSe4Editor.js"
 import { defaultExportOptions } from "@exitpress/domain/export-options/ExportOptions.js"
-import { NaverBlogSE2Editor } from "@exitpress/engine/parsing/naver-blog/se2/NaverBlogSe2Editor.js"
-import { NaverBlogSE3Editor } from "@exitpress/engine/parsing/naver-blog/se3/NaverBlogSe3Editor.js"
-import { NaverBlogSE4Editor } from "@exitpress/engine/parsing/naver-blog/se4/NaverBlogSe4Editor.js"
 import { load } from "cheerio"
 import { expect } from "vitest"
 

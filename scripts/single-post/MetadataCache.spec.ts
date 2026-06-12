@@ -18,7 +18,7 @@ const createBaseFetcher = ({
     scanCount.value += 1
 
     return {
-      blogId: "mym0404",
+      sourceId: "mym0404",
       totalPostCount: 1,
       categories: [
         {
@@ -39,8 +39,8 @@ const createBaseFetcher = ({
 
     return [
       {
-        blogId: "mym0404",
-        logNo: "223034929697",
+        sourceId: "mym0404",
+        postId: "223034929697",
         title: "Single post",
         publishedAt: "2024-01-02T03:04:05+09:00",
         categoryId: 85,
@@ -69,7 +69,7 @@ describe("single post metadata cache", () => {
 
     try {
       const firstFetcher = await createSinglePostMetadataCachingFetcher({
-        blogId: "mym0404",
+        sourceId: "mym0404",
         cachePath,
         createFetcher: () => createBaseFetcher({ scanCount, postsCount }),
         readFile,
@@ -80,10 +80,10 @@ describe("single post metadata cache", () => {
 
       expect(scanCount.value).toBe(1)
       expect(postsCount.value).toBe(1)
-      expect(await readFile(cachePath, "utf8")).toContain('"blogId": "mym0404"')
+      expect(await readFile(cachePath, "utf8")).toContain('"sourceId": "mym0404"')
 
       const secondFetcher = await createSinglePostMetadataCachingFetcher({
-        blogId: "mym0404",
+        sourceId: "mym0404",
         cachePath,
         createFetcher: () =>
           createBaseFetcher({ scanCount: secondScanCount, postsCount: secondPostsCount }),

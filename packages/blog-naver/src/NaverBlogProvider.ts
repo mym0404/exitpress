@@ -1,8 +1,7 @@
-import { extractBlogId } from "@exitpress/domain/blog/NaverUrl.js"
-import { extractNaverBlogPostIdentity } from "@exitpress/engine/exporting/paths/PostLinkRewriter.js"
-import { NaverBlogFetcher } from "@exitpress/engine/integrations/naver-blog/NaverBlogFetcher.js"
-import { parsePostHtml } from "@exitpress/engine/parsing/naver-blog/core/PostParser.js"
-import { NaverBlog } from "@exitpress/engine/parsing/naver-blog/NaverBlog.js"
+import { NaverBlogFetcher } from "@exitpress/blog-naver/integrations/naver-blog/NaverBlogFetcher.js"
+import { extractBlogId, extractNaverBlogPostIdentity } from "@exitpress/blog-naver/NaverUrl.js"
+import { parsePostHtml } from "@exitpress/blog-naver/parsing/naver-blog/core/PostParser.js"
+import { NaverBlog } from "@exitpress/blog-naver/parsing/naver-blog/NaverBlog.js"
 
 import type { BlogProvider } from "@exitpress/engine/blog-provider/BlogProvider.js"
 
@@ -41,8 +40,8 @@ export const createNaverBlogProvider = (): BlogProvider => {
         })),
         posts: (scan.posts ?? []).map((post) => ({
           providerKey,
-          sourceId: post.blogId,
-          postId: post.logNo,
+          sourceId: post.sourceId,
+          postId: post.postId,
           title: post.title,
           sourceUrl: post.source,
           publishedAt: post.publishedAt,
@@ -85,8 +84,8 @@ export const createNaverBlogProvider = (): BlogProvider => {
 
       return {
         providerKey,
-        sourceId: identity.blogId,
-        postId: identity.logNo,
+        sourceId: identity.sourceId,
+        postId: identity.postId,
       }
     },
   }

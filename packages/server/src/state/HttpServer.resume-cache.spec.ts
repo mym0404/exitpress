@@ -55,7 +55,7 @@ describe("http server resume cache", () => {
         path.join(outputDir, "manifest.json"),
         JSON.stringify(
           {
-            blogId: "mym0404",
+            sourceId: "mym0404",
             profile: "gfm",
             options: defaultExportOptions(),
             selectedCategoryIds: [84],
@@ -78,7 +78,7 @@ describe("http server resume cache", () => {
               id: "job-temp-resume",
               phase: "export",
               request: {
-                blogIdOrUrl: "mym0404",
+                sourceInput: "mym0404",
                 outputDir,
                 profile: "gfm",
                 options: defaultExportOptions(),
@@ -103,7 +103,7 @@ describe("http server resume cache", () => {
               },
               error: null,
               scanResult: {
-                blogId: baseScanResult.blogId,
+                sourceId: baseScanResult.sourceId,
                 totalPostCount: baseScanResult.totalPostCount,
               },
               summary: {
@@ -171,7 +171,7 @@ describe("http server resume cache", () => {
         scanCachePath,
         JSON.stringify({
           scans: {
-            [cachedScanResult.blogId]: cachedScanResult,
+            [cachedScanResult.sourceId]: cachedScanResult,
           },
         }),
       )
@@ -179,7 +179,7 @@ describe("http server resume cache", () => {
         path.join(outputDir, "manifest.json"),
         JSON.stringify(
           {
-            blogId: "mym0404",
+            sourceId: "mym0404",
             profile: "gfm",
             options: defaultExportOptions(),
             selectedCategoryIds: [84],
@@ -202,7 +202,7 @@ describe("http server resume cache", () => {
               id: "job-resume",
               phase: "export",
               request: {
-                blogIdOrUrl: "mym0404",
+                sourceInput: "mym0404",
                 outputDir,
                 profile: "gfm",
                 options: defaultExportOptions(),
@@ -227,7 +227,7 @@ describe("http server resume cache", () => {
               },
               error: null,
               scanResult: {
-                blogId: cachedScanResult.blogId,
+                sourceId: cachedScanResult.sourceId,
                 totalPostCount: cachedScanResult.totalPostCount,
               },
               summary: {

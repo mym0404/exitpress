@@ -1,8 +1,8 @@
 ---
 title: "[동네를 만드는 사람들] 전국에서 여기뿐, 동네가 담긴 맛집 탐방"
 source: https://blog.naver.com/naver_diary/221380275038
-blogId: naver_diary
-logNo: 221380275038
+sourceId: naver_diary
+postId: 221380275038
 publishedAt: 2018-10-18T18:30:29+09:00
 category: 서비스 완전정복
 categoryPath:

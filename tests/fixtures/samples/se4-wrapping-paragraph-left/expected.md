@@ -1,8 +1,8 @@
 ---
 title: 네이버랩스, 기술 고문에 MIT 김상배 교수 영입 “로보틱스 기술 연구 박차”
 source: https://blog.naver.com/naver_diary/221578167505
-blogId: naver_diary
-logNo: 221578167505
+sourceId: naver_diary
+postId: 221578167505
 publishedAt: 2019-07-05 09:16:07
 category: NOW 공지
 categoryPath:

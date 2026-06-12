@@ -34,7 +34,7 @@ export const useWizardScanActions = ({
   setCategoryStatus,
   setCategorySearch,
   setSetupStep,
-  setBlogIdOrUrl,
+  setSourceIdOrUrl,
   setOutputDir,
   setNeutralScanStatus,
   setErrorScanStatus,
@@ -101,7 +101,7 @@ export const useWizardScanActions = ({
       }
 
       if (activeScanResult && !forceRefresh) {
-        setNeutralScanStatus(`${activeScanResult.blogId} 스캔 결과를 다시 사용합니다.`)
+        setNeutralScanStatus(`${activeScanResult.sourceId} 스캔 결과를 다시 사용합니다.`)
         setCategoryStatus(readyCategoryStatus)
         setCategorySearch("")
         setOptions((current) => ({
@@ -132,7 +132,7 @@ export const useWizardScanActions = ({
 
       try {
         const nextScanResult = await postJson<ScanResult>("/api/scan", {
-          blogIdOrUrl: currentScanTarget,
+          sourceInput: currentScanTarget,
           forceRefresh,
         })
 
@@ -140,7 +140,7 @@ export const useWizardScanActions = ({
           ...current,
           [currentScanTarget]: nextScanResult,
         }))
-        setNeutralScanStatus(`${nextScanResult.blogId} 스캔 완료`)
+        setNeutralScanStatus(`${nextScanResult.sourceId} 스캔 완료`)
         setCategoryStatus(readyCategoryStatus)
         setCategorySearch("")
         setOptions((current) => ({
@@ -186,7 +186,7 @@ export const useWizardScanActions = ({
 
   const handleBlogInputChange = useCallback(
     (value: string) => {
-      setBlogIdOrUrl(value)
+      setSourceIdOrUrl(value)
       setSetupStep("blog-input")
 
       if (value.trim() && scanCache[value.trim()]) {
@@ -210,7 +210,7 @@ export const useWizardScanActions = ({
     },
     [
       scanCache,
-      setBlogIdOrUrl,
+      setSourceIdOrUrl,
       setCategorySearch,
       setCategoryStatus,
       setNeutralScanStatus,

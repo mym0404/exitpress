@@ -9,8 +9,8 @@ import type {
 import type { ExportManifest } from "@exitpress/domain/export-job/schema/ExportManifest.js"
 import type { ExportRequest } from "@exitpress/domain/export-job/schema/ExportRequest.js"
 
-const getJobItemId = ({ outputPath, logNo }: { outputPath: string | null; logNo: string }) =>
-  outputPath ?? `failed:${logNo}`
+const getJobItemId = ({ outputPath, postId }: { outputPath: string | null; postId: string }) =>
+  outputPath ?? `failed:${postId}`
 
 // Converts persisted manifest posts back into polling job items.
 export const buildJobItemFromPost = (
@@ -18,7 +18,7 @@ export const buildJobItemFromPost = (
   updatedAt: string,
 ): ExportJobItem => ({
   id: getJobItemId(post),
-  logNo: post.logNo,
+  postId: post.postId,
   title: post.title,
   source: post.source,
   category: post.category,

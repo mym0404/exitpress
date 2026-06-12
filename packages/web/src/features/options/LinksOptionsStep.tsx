@@ -23,7 +23,7 @@ export const LinksOptionsStep = ({
   description: (key: string) => string | undefined
   linkTemplatePreviewPost?: Pick<
     PostSummary,
-    "blogId" | "logNo" | "title" | "publishedAt" | "categoryName"
+    "sourceId" | "postId" | "title" | "publishedAt" | "categoryName"
   > | null
   onOptionsChange: (updater: (current: ExportOptions) => ExportOptions) => void
 }) => {

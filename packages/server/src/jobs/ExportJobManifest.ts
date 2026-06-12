@@ -2,7 +2,7 @@ import { randomUUID } from "node:crypto"
 import { mkdir, readFile, rename, rm, writeFile } from "node:fs/promises"
 import path from "node:path"
 
-import { extractBlogId } from "@exitpress/domain/blog/NaverUrl.js"
+import { extractBlogId } from "@exitpress/blog-naver/NaverUrl.js"
 import { resolveExportResumePhase } from "@exitpress/domain/export-job/ExportJobState.js"
 import { resolveRepoPath } from "@exitpress/engine/infra/node/FilePaths.js"
 
@@ -19,11 +19,11 @@ import type {
 
 const manifestFileName = "manifest.json"
 
-const getJobItemId = ({ outputPath, logNo }: { outputPath: string | null; logNo: string }) =>
-  outputPath ?? `failed:${logNo}`
+const getJobItemId = ({ outputPath, postId }: { outputPath: string | null; postId: string }) =>
+  outputPath ?? `failed:${postId}`
 
 const buildPostManifestEntryFromItem = (item: ExportJobItem): PostManifestEntry => ({
-  logNo: item.logNo,
+  postId: item.postId,
   title: item.title,
   source: item.source,
   category: item.category,
@@ -64,7 +64,8 @@ const buildFallbackManifest = ({
   job: ExportJobState
   scanResult: ScanResult | null
 }): ExportManifest => ({
-  blogId: scanResult?.blogId ?? extractBlogId(job.request.blogIdOrUrl) ?? job.request.blogIdOrUrl,
+  sourceId:
+    scanResult?.sourceId ?? extractBlogId(job.request.sourceInput) ?? job.request.sourceInput,
   profile: job.request.profile,
   options: job.request.options,
   selectedCategoryIds: job.request.options.scope.categoryIds,
@@ -112,7 +113,7 @@ export const buildResumableExportManifest = ({
     })
   const persistedScanResult = scanResult
     ? ({
-        blogId: scanResult.blogId,
+        sourceId: scanResult.sourceId,
         totalPostCount: scanResult.totalPostCount,
       } satisfies ExportManifestScanResult)
     : null
@@ -123,7 +124,7 @@ export const buildResumableExportManifest = ({
 
   return {
     ...baseManifest,
-    blogId: scanResult?.blogId ?? baseManifest.blogId,
+    sourceId: scanResult?.sourceId ?? baseManifest.sourceId,
     profile: job.request.profile,
     options: job.request.options,
     selectedCategoryIds: job.request.options.scope.categoryIds,

@@ -21,8 +21,8 @@ const allowedFrontmatterKeys = ["enabled", "fields", "aliases"] as const
 const allowedFrontmatterFieldKeys = [
   "title",
   "source",
-  "blogId",
-  "logNo",
+  "sourceId",
+  "postId",
   "publishedAt",
   "category",
   "categoryPath",

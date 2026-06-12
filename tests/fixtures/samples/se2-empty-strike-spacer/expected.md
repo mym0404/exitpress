@@ -1,8 +1,8 @@
 ---
 title: '[앱 제작이야기]"부동산 정보를 공간에 뿌려라"'
 source: https://blog.naver.com/naver_diary/150132115896
-blogId: naver_diary
-logNo: 150132115896
+sourceId: naver_diary
+postId: 150132115896
 publishedAt: 2012-02-20T10:14:33+09:00
 category: 네이버 피플
 categoryPath:

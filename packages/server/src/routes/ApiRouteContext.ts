@@ -1,7 +1,7 @@
 import type { IncomingMessage, ServerResponse } from "node:http"
 
+import type { NaverBlogFetcherCache } from "@exitpress/blog-naver/integrations/naver-blog/NaverBlogFetcher.js"
 import type { runImageUploadPhase } from "@exitpress/engine/exporting/upload/ImageUploadPhase.js"
-import type { NaverBlogFetcherCache } from "@exitpress/engine/integrations/naver-blog/NaverBlogFetcher.js"
 
 import type { BlockScanJobRunner } from "../jobs/BlockScanJobRunner.js"
 import type { HttpExportJobRunner } from "../jobs/HttpExportJobRunner.js"

@@ -7,7 +7,7 @@ describe("resolveParsedBlockAssetsForRender", () => {
     const result = await resolveParsedBlockAssetsForRender({
       blocks: [
         {
-          blockId: "naver-se4:image",
+          blockId: "provider:image",
           props: {
             url: "https://example.com/image.png",
             alt: "image",
@@ -42,7 +42,7 @@ describe("resolveParsedBlockAssetsForRender", () => {
     const result = await resolveParsedBlockAssetsForRender({
       blocks: [
         {
-          blockId: "naver-se4:image",
+          blockId: "provider:image",
           props: {
             url: "https://example.com/image.png",
           },
@@ -75,7 +75,7 @@ describe("resolveParsedBlockAssetsForRender", () => {
     const result = await resolveParsedBlockAssetsForRender({
       blocks: [
         {
-          blockId: "naver-se4:imageGroup",
+          blockId: "provider:imageGroup",
           props: {
             images: [
               {

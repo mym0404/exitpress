@@ -30,7 +30,7 @@ type AppStepViewProps = {
   testUploadSubmitting: boolean
   testUploadResult: string | null
   testUploadError: string | null
-  blogIdOrUrl: string
+  sourceInput: string
   outputDir: string
   scanPending: boolean
   blockScanJob: BlockScanJobState | null
@@ -48,7 +48,7 @@ type AppStepViewProps = {
   frontmatterValidationErrors: string[]
   linkTemplatePreviewPost: Pick<
     PostSummary,
-    "blogId" | "logNo" | "title" | "publishedAt" | "categoryName"
+    "sourceId" | "postId" | "title" | "publishedAt" | "categoryName"
   > | null
   setActiveJobFilter: Dispatch<SetStateAction<JobFilter>>
   setCategorySearch: Dispatch<SetStateAction<string>>
@@ -79,7 +79,7 @@ export const AppStepView = ({
   testUploadSubmitting,
   testUploadResult,
   testUploadError,
-  blogIdOrUrl,
+  sourceInput,
   outputDir,
   scanPending,
   blockScanJob,
@@ -137,12 +137,12 @@ export const AppStepView = ({
   if (currentStep === "blog-input") {
     return (
       <BlogInputPanel
-        blogIdOrUrl={blogIdOrUrl}
+        sourceInput={sourceInput}
         outputDir={outputDir}
         scanPending={scanPending}
         scanStatus={scanStatus}
         scanStatusTone={scanStatusTone}
-        onBlogIdOrUrlChange={handleBlogInputChange}
+        onSourceIdOrUrlChange={handleBlogInputChange}
         onOutputDirChange={handleOutputDirChange}
         onOutputDirBlur={handleOutputDirBlur}
       />

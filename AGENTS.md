@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-- This repository is a local export tool for public blog posts, with Naver runtime and provider adapters for additional blog platforms.
+- This repository is a local export tool for public blog posts, with concrete provider packages for supported blog platforms.
 - It scans posts, parses provider/editor-specific content into blocks, renders Markdown, writes assets, and keeps resumable export state.
 - The repo maintains a React web UI, server API, export engine, fixture regression tests, browser smoke coverage, and live network e2e coverage.
 
@@ -19,7 +19,7 @@
 |-- AGENTS.md                 # agent entry and knowledge router
 |-- .agents/knowledge/        # evergreen repo-local agent knowledge
 |-- packages/domain/          # shared contracts and pure option/path logic
-|-- packages/engine/          # provider interfaces, Naver engine, render/export/assets/upload rewrite
+|-- packages/engine/          # provider interfaces, render/export/assets/upload rewrite
 |-- packages/blog-naver/      # concrete Naver provider adapter
 |-- packages/blog-tistory/    # minimal concrete Tistory provider adapter
 |-- packages/server/          # local HTTP API, jobs, state, upload catalog, static serving
@@ -36,7 +36,7 @@
 - Main runtime starts in the server package and serves the web UI plus HTTP APIs.
 - Shared cross-package contracts live in owning folders under `schema/`.
 - Shared utilities live in owning folders under `util/`; a single exported utility uses the function name as the file name.
-- Dependency direction is `web -> domain`, `server -> domain, engine`, `engine -> domain`, and `blog-* -> domain, engine`.
+- Dependency direction is `web -> domain`, `server -> domain, engine, blog-*`, `engine -> domain`, and `blog-* -> domain, engine`.
 - Read `.agents/knowledge/architecture.md` before changing package boundaries or runtime flow.
 
 ## Design System

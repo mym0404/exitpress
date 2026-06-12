@@ -2,8 +2,6 @@ import { createHash } from "node:crypto"
 import { writeFile } from "node:fs/promises"
 import path from "node:path"
 
-import { normalizeAssetUrl } from "@exitpress/domain/blog/NaverUrl.js"
-
 import type {
   AssetRecord,
   UploadCandidateKind,
@@ -68,7 +66,7 @@ export class AssetStore {
     sourceUrl: string
     markdownFilePath: string
   }) {
-    const normalizedSourceUrl = normalizeAssetUrl(sourceUrl)
+    const normalizedSourceUrl = sourceUrl.trim()
 
     const shouldDownload =
       this.options.assets.imageHandlingMode !== "remote" &&

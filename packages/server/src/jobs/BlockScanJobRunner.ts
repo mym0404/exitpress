@@ -1,16 +1,16 @@
-import { filterPostsByScope } from "@exitpress/domain/export-scope/ExportScope.js"
 import {
   blockDetectionConcurrency,
   detectPostBlockTemplateKeys,
-} from "@exitpress/engine/exporting/workflow/DetectedBlockTemplateScanner.js"
-import { NaverBlogFetcher } from "@exitpress/engine/integrations/naver-blog/NaverBlogFetcher.js"
+} from "@exitpress/blog-naver/exporting/DetectedBlockTemplateScanner.js"
+import { NaverBlogFetcher } from "@exitpress/blog-naver/integrations/naver-blog/NaverBlogFetcher.js"
+import { filterPostsByScope } from "@exitpress/domain/export-scope/ExportScope.js"
 import { mapConcurrent } from "@exitpress/engine/shared/async/util/AsyncTasks.js"
 import { toErrorMessage } from "@exitpress/engine/shared/error/util/toErrorMessage.js"
 
+import type { NaverBlogFetcherCache } from "@exitpress/blog-naver/integrations/naver-blog/NaverBlogFetcher.js"
 import type { ScanResult } from "@exitpress/domain/blog/schema/BlogScan.js"
 import type { ExportOptions } from "@exitpress/domain/export-options/schema/ExportOptions.js"
 import type { BlockTemplateDefinition } from "@exitpress/domain/template/schema/BlockTemplateDefinition.js"
-import type { NaverBlogFetcherCache } from "@exitpress/engine/integrations/naver-blog/NaverBlogFetcher.js"
 
 import type { BlockScanJobStore } from "./BlockScanJobStore.js"
 
@@ -65,7 +65,7 @@ export const createBlockScanJobRunner = ({
       jobStore.start(job.id)
 
       const fetcher = new NaverBlogFetcher({
-        blogId: scanResult.blogId,
+        blogId: scanResult.sourceId,
         cache: postHtmlCache,
       })
 
@@ -74,7 +74,7 @@ export const createBlockScanJobRunner = ({
         concurrency: blockDetectionConcurrency,
         mapper: async (post) => {
           try {
-            const html = await fetcher.fetchPostHtml(post.logNo)
+            const html = await fetcher.fetchPostHtml(post.postId)
             const keys = detectPostBlockTemplateKeys({
               html,
               sourceUrl: post.source,

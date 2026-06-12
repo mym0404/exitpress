@@ -1,8 +1,8 @@
 import { mkdir, readFile, rm, writeFile } from "node:fs/promises"
 import path from "node:path"
 
+import { NaverBlogExporter } from "@exitpress/blog-naver/exporting/NaverBlogExporter.js"
 import { defaultExportOptions } from "@exitpress/domain/export-options/ExportOptions.js"
-import { NaverBlogExporter } from "@exitpress/engine/exporting/workflow/NaverBlogExporter.js"
 import {
   baseScanResult,
   cleanupTestServerRoots,
@@ -44,7 +44,7 @@ describe("http server settings bootstrap", () => {
     const settingsPath = path.join(rootDir, "export-ui-settings.json")
     const outputDir = path.join(rootDir, "output")
     const staleManifest = {
-      blogId: "mym0404",
+      sourceId: "mym0404",
       profile: "gfm",
       options: defaultExportOptions(),
       selectedCategoryIds: [84],
@@ -67,7 +67,7 @@ describe("http server settings bootstrap", () => {
         id: "job-resume",
         phase: "export" as const,
         request: {
-          blogIdOrUrl: "mym0404",
+          sourceInput: "mym0404",
           outputDir,
           profile: "gfm" as const,
           options: defaultExportOptions(),
@@ -92,7 +92,7 @@ describe("http server settings bootstrap", () => {
         },
         error: null,
         scanResult: {
-          blogId: baseScanResult.blogId,
+          sourceId: baseScanResult.sourceId,
           totalPostCount: baseScanResult.totalPostCount,
         },
         summary: {

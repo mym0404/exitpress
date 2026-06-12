@@ -28,26 +28,26 @@ export const getManifestJobTimestamp = (updatedAt: string) => toTimestamp(update
 
 // Reconstructs the best available scan result from manifest and cache data.
 export const resolveResumedScanResult = ({
-  manifestBlogId,
+  manifestSourceId,
   manifestCategories,
   manifestTotalPosts,
   manifestScanResult,
   cachedScans,
 }: {
-  manifestBlogId: string
+  manifestSourceId: string
   manifestCategories: ScanResult["categories"]
   manifestTotalPosts: number
   manifestScanResult: ExportManifestScanResult | null
   cachedScans: ScanCacheMap
 }) => {
-  const blogId = manifestScanResult?.blogId ?? manifestBlogId
+  const sourceId = manifestScanResult?.sourceId ?? manifestSourceId
   const totalPostCount = manifestScanResult?.totalPostCount || manifestTotalPosts
   const minimalScanResult: ScanResult = {
-    blogId,
+    sourceId,
     totalPostCount,
     categories: manifestCategories,
   }
-  const cachedScanResult = cachedScans[blogId]
+  const cachedScanResult = cachedScans[sourceId]
 
   if (!cachedScanResult) {
     return minimalScanResult
@@ -55,7 +55,7 @@ export const resolveResumedScanResult = ({
 
   return {
     ...cachedScanResult,
-    blogId,
+    sourceId,
     totalPostCount: totalPostCount || cachedScanResult.totalPostCount,
     categories:
       cachedScanResult.categories.length > 0 ? cachedScanResult.categories : manifestCategories,
