@@ -1,6 +1,7 @@
 import type { IncomingMessage, ServerResponse } from "node:http"
 
-import type { NaverBlogFetcherCache } from "@exitpress/blog-naver/integrations/naver-blog/NaverBlogFetcher.js"
+import type { BlogPostContentCache } from "@exitpress/engine/blog/Blog.js"
+import type { BlogRegistry } from "@exitpress/engine/blog/BlogRegistry.js"
 import type { runImageUploadPhase } from "@exitpress/engine/exporting/upload/ImageUploadPhase.js"
 
 import type { BlockScanJobRunner } from "../jobs/BlockScanJobRunner.js"
@@ -19,9 +20,10 @@ export type ApiRouteRequest = {
 export type ApiRouteContext = {
   jobStore: JobStore
   state: HttpServerState
+  blogRegistry: BlogRegistry
   blockScanJobRunner: BlockScanJobRunner
   exportJobRunner: HttpExportJobRunner
-  postHtmlCache: NaverBlogFetcherCache
+  postHtmlCache: BlogPostContentCache
   uploadPhaseRunner: typeof runImageUploadPhase
   uploadProviderSource: UploadProviderSource
   openLocalPath: (targetPath: string) => Promise<void> | void

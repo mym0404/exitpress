@@ -30,6 +30,7 @@ const categories: CategoryInfo[] = [
 
 const posts: PostSummary[] = [
   {
+    blogKey: "sample",
     sourceId: "mym0404",
     postId: "1",
     title: "First",
@@ -40,6 +41,7 @@ const posts: PostSummary[] = [
     thumbnailUrl: null,
   },
   {
+    blogKey: "sample",
     sourceId: "mym0404",
     postId: "2",
     title: "Second",

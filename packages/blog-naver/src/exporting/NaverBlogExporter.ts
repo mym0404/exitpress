@@ -2,7 +2,7 @@ import { writeFile } from "node:fs/promises"
 import path from "node:path"
 
 import { NaverBlogFetcher } from "@exitpress/blog-naver/integrations/naver-blog/NaverBlogFetcher.js"
-import { extractBlogId } from "@exitpress/blog-naver/NaverUrl.js"
+import { extractSourceId } from "@exitpress/blog-naver/NaverUrl.js"
 import { cloneExportOptions } from "@exitpress/domain/export-options/ExportOptions.js"
 import { filterPostsByScope } from "@exitpress/domain/export-scope/ExportScope.js"
 import { AssetStore } from "@exitpress/engine/exporting/assets/AssetStore.js"
@@ -85,11 +85,11 @@ export class NaverBlogExporter {
   async run() {
     throwIfAborted(this.abortSignal)
 
-    const blogId = extractBlogId(this.request.sourceInput)
+    const sourceId = extractSourceId(this.request.sourceInput)
     const outputDir = resolveRepoPath(this.request.outputDir)
     const options = cloneExportOptions(this.request.options)
     const fetcher = new NaverBlogFetcher({
-      blogId,
+      sourceId,
       cache: this.fetcherCache,
     })
     const assetStore = new AssetStore({
@@ -100,7 +100,7 @@ export class NaverBlogExporter {
     const uploadEnabled = options.assets.imageHandlingMode === "download-and-upload"
     const { scan, posts, reused } = await loadScanAndPosts({
       fetcher,
-      sourceId: blogId,
+      sourceId,
       cachedScanResult: this.cachedScanResult,
     })
 
@@ -122,7 +122,8 @@ export class NaverBlogExporter {
 
     const manifest = createInitialManifest({
       resumeManifest: this.resumeState?.manifest ?? null,
-      sourceId: blogId,
+      blogKey: "naver",
+      sourceId,
       profile: this.request.profile,
       options,
       categories: scan.categories,
@@ -183,7 +184,7 @@ export class NaverBlogExporter {
           pendingResults.set(
             index,
             await exportPostUnit({
-              sourceId: blogId,
+              sourceId,
               outputDir,
               post,
               categories: categoryMap,

@@ -1,6 +1,7 @@
 ---
 title: 파밍캅 이란? [경남지방경찰청] 제공
 source: https://blog.naver.com/anglekim3708/70186901036
+blogKey: naver
 sourceId: anglekim3708
 postId: 70186901036
 publishedAt: 2014-03-17T13:10:22+09:00

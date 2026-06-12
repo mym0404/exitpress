@@ -32,7 +32,7 @@
 
 ## Tests
 - Keep tests near the behavior they protect.
-- Prefer pure logic, hook state-machine, parser, exporter, server, and provider tests over shallow UI text checks.
+- Prefer pure logic, hook state-machine, parser, exporter, server, and blog tests over shallow UI text checks.
 - Do not test shadcn/Radix primitive internals.
 - Use Playwright Test for browser workflow coverage.
 - Do not add custom runners or validation scripts for checks that Vitest or Playwright can own.

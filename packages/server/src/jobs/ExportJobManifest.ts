@@ -2,7 +2,6 @@ import { randomUUID } from "node:crypto"
 import { mkdir, readFile, rename, rm, writeFile } from "node:fs/promises"
 import path from "node:path"
 
-import { extractBlogId } from "@exitpress/blog-naver/NaverUrl.js"
 import { resolveExportResumePhase } from "@exitpress/domain/export-job/ExportJobState.js"
 import { resolveRepoPath } from "@exitpress/engine/infra/node/FilePaths.js"
 
@@ -23,6 +22,8 @@ const getJobItemId = ({ outputPath, postId }: { outputPath: string | null; postI
   outputPath ?? `failed:${postId}`
 
 const buildPostManifestEntryFromItem = (item: ExportJobItem): PostManifestEntry => ({
+  blogKey: item.blogKey,
+  sourceId: item.sourceId,
   postId: item.postId,
   title: item.title,
   source: item.source,
@@ -60,12 +61,14 @@ const mergeManifestPosts = ({
 const buildFallbackManifest = ({
   job,
   scanResult,
+  sourceId,
 }: {
   job: ExportJobState
   scanResult: ScanResult | null
+  sourceId?: string
 }): ExportManifest => ({
-  sourceId:
-    scanResult?.sourceId ?? extractBlogId(job.request.sourceInput) ?? job.request.sourceInput,
+  blogKey: scanResult?.blogKey ?? job.request.blogKey,
+  sourceId: scanResult?.sourceId ?? sourceId ?? job.request.sourceInput,
   profile: job.request.profile,
   options: job.request.options,
   selectedCategoryIds: job.request.options.scope.categoryIds,
@@ -101,18 +104,22 @@ export const readExportManifest = async (outputDir: string) => {
 export const buildResumableExportManifest = ({
   job,
   scanResult,
+  sourceId,
 }: {
   job: ExportJobState
   scanResult: ScanResult | null
+  sourceId?: string
 }): ExportManifest => {
   const baseManifest =
     job.manifest ??
     buildFallbackManifest({
       job,
       scanResult,
+      sourceId,
     })
   const persistedScanResult = scanResult
     ? ({
+        blogKey: scanResult.blogKey,
         sourceId: scanResult.sourceId,
         totalPostCount: scanResult.totalPostCount,
       } satisfies ExportManifestScanResult)
@@ -124,6 +131,7 @@ export const buildResumableExportManifest = ({
 
   return {
     ...baseManifest,
+    blogKey: scanResult?.blogKey ?? baseManifest.blogKey,
     sourceId: scanResult?.sourceId ?? baseManifest.sourceId,
     profile: job.request.profile,
     options: job.request.options,

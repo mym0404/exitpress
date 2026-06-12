@@ -1,6 +1,7 @@
 ---
 title: 캐스터브리지의 시장(The Mayor of Casterbridge)
 source: https://blog.naver.com/dlwkdlf/221298156647
+blogKey: naver
 sourceId: dlwkdlf
 postId: 221298156647
 publishedAt: 2018-06-13T20:21:00+09:00

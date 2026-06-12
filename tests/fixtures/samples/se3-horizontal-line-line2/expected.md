@@ -1,6 +1,7 @@
 ---
 title: 세계적 코디네이션 박람회, 2017 F/W '메종 앤 오브제' 트렌드_3
 source: https://blog.naver.com/showeclatkorea/221118175082
+blogKey: naver
 sourceId: showeclatkorea
 postId: 221118175082
 publishedAt: 2017-10-16T15:10:35+09:00

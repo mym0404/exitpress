@@ -31,6 +31,8 @@ export const createSuccessPostResult = ({
   upload: ReturnType<typeof createPostUploadSummary>
 }): ProcessedPostResult => {
   const manifestEntry = {
+    blogKey: post.blogKey,
+    sourceId: post.sourceId,
     postId: post.postId,
     title: post.title,
     source: post.source,
@@ -50,6 +52,8 @@ export const createSuccessPostResult = ({
     manifestEntry,
     jobItem: {
       id: manifestEntry.outputPath ?? `failed:${post.postId}`,
+      blogKey: post.blogKey,
+      sourceId: post.sourceId,
       postId: post.postId,
       title: post.title,
       source: post.source,
@@ -86,6 +90,8 @@ export const createFailedPostResult = ({
     rewrittenAt: null,
   }
   const manifestEntry = {
+    blogKey: post.blogKey,
+    sourceId: post.sourceId,
     postId: post.postId,
     title: post.title,
     source: post.source,
@@ -105,6 +111,8 @@ export const createFailedPostResult = ({
     manifestEntry,
     jobItem: {
       id: `failed:${post.postId}`,
+      blogKey: post.blogKey,
+      sourceId: post.sourceId,
       postId: post.postId,
       title: post.title,
       source: post.source,

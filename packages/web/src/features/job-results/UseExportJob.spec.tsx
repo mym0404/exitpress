@@ -21,6 +21,7 @@ const mockedFetchJson = vi.mocked(fetchJson)
 const mockedPostJson = vi.mocked(postJson)
 const testOutputDir = createTestPath("ui-use-export-job", "output")
 const scanResult: ScanResult = {
+  blogKey: "naver",
   sourceId: "mym0404",
   totalPostCount: 1,
   categories: [
@@ -37,6 +38,7 @@ const scanResult: ScanResult = {
   ],
   posts: [
     {
+      blogKey: "naver",
       sourceId: "mym0404",
       postId: "223034929697",
       title: "테스트 글",
@@ -64,6 +66,7 @@ describe("useExportJob", () => {
       .mockResolvedValueOnce({
         id: "job-1",
         request: {
+          blogKey: "naver",
           sourceInput: "mym0404",
           outputDir: testOutputDir,
           profile: "gfm",
@@ -94,6 +97,7 @@ describe("useExportJob", () => {
       .mockResolvedValueOnce({
         id: "job-1",
         request: {
+          blogKey: "naver",
           sourceInput: "mym0404",
           outputDir: testOutputDir,
           profile: "gfm",
@@ -136,6 +140,7 @@ describe("useExportJob", () => {
 
     await act(async () => {
       await result.current.startJob({
+        blogKey: "naver",
         sourceInput: "mym0404",
         outputDir: testOutputDir,
         options: defaultExportOptions(),
@@ -149,6 +154,7 @@ describe("useExportJob", () => {
     expect(result.current.submitting).toBe(false)
     expect(result.current.jobId).toBe("job-1")
     expect(mockedPostJson).toHaveBeenCalledWith("/api/export", {
+      blogKey: "naver",
       sourceInput: "mym0404",
       outputDir: testOutputDir,
       options: defaultExportOptions(),
@@ -170,6 +176,7 @@ describe("useExportJob", () => {
       id: "job-upload-auto",
       status: "queued",
       request: {
+        blogKey: "naver",
         sourceInput: "blog",
         outputDir: "/tmp/out",
         profile: "gfm",
@@ -196,6 +203,7 @@ describe("useExportJob", () => {
 
     await act(async () => {
       await result.current.startJob({
+        blogKey: "naver",
         sourceInput: "blog",
         outputDir: "/tmp/out",
         options: uploadFlowOptions,
@@ -212,6 +220,7 @@ describe("useExportJob", () => {
     })
 
     expect(mockedPostJson).toHaveBeenCalledWith("/api/export", {
+      blogKey: "naver",
       sourceInput: "blog",
       outputDir: "/tmp/out",
       options: uploadFlowOptions,
@@ -237,6 +246,7 @@ describe("useExportJob", () => {
     const resumableJob = {
       id: "job-resume",
       request: {
+        blogKey: "naver",
         sourceInput: "mym0404",
         outputDir: testOutputDir,
         profile: "gfm" as const,

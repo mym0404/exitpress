@@ -58,11 +58,16 @@ export const exportPostUnit = async ({
     options,
   })
   const resolveLinkUrl = createPostLinkResolver({
+    blogKey: "naver",
     sourceId,
     markdownFilePath,
     options,
     targets: postLinkTargets,
-    resolveIdentity: extractNaverBlogPostIdentity,
+    resolveIdentity: (url) => {
+      const identity = extractNaverBlogPostIdentity(url)
+
+      return identity ? { blogKey: "naver", ...identity } : null
+    },
   })
   const html = await fetcher.fetchPostHtml(post.postId)
 

@@ -4,7 +4,7 @@ export const allBlogContentKinds = ["html", "markdown", "blocks"] as const
 export type BlogContentKind = (typeof allBlogContentKinds)[number]
 
 export type BlogSource = {
-  providerKey: string
+  blogKey: string
   sourceId: string
   displayName: string
   input: string
@@ -20,7 +20,7 @@ export type BlogCategoryRef = {
 }
 
 export type BlogPostRef = {
-  providerKey: string
+  blogKey: string
   sourceId: string
   postId: string
   title: string
@@ -39,7 +39,7 @@ export type BlogScanResult = {
 }
 
 export type BlogPostIdentity = {
-  providerKey: string
+  blogKey: string
   sourceId: string
   postId: string
 }

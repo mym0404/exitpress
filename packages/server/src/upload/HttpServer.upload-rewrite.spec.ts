@@ -73,6 +73,7 @@ describe("http server upload rewrite", () => {
         "content-type": "application/json",
       },
       body: JSON.stringify({
+        blogKey: "naver",
         sourceInput: "https://blog.naver.com/mym0404",
         outputDir,
         options,
@@ -224,6 +225,7 @@ describe("http server upload rewrite", () => {
         "content-type": "application/json",
       },
       body: JSON.stringify({
+        blogKey: "naver",
         sourceInput: "https://blog.naver.com/mym0404",
         outputDir: createTestPath("http-server", "batch-rewrite-failure-output"),
         options,
@@ -272,6 +274,7 @@ describe("http server upload rewrite", () => {
         "content-type": "application/json",
       },
       body: JSON.stringify({
+        blogKey: "naver",
         sourceInput: "https://blog.naver.com/mym0404",
         outputDir: createTestPath("http-server", "zero-candidates-output"),
         options,

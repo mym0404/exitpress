@@ -1,8 +1,8 @@
 import { mkdir, readFile, rm, writeFile } from "node:fs/promises"
 import path from "node:path"
 
-import { NaverBlogExporter } from "@exitpress/blog-naver/exporting/NaverBlogExporter.js"
 import { defaultExportOptions } from "@exitpress/domain/export-options/ExportOptions.js"
+import { BlogExportWorkflow } from "@exitpress/engine/exporting/blog/BlogExportWorkflow.js"
 import {
   baseScanResult,
   cleanupTestServerRoots,
@@ -44,6 +44,7 @@ describe("http server settings bootstrap", () => {
     const settingsPath = path.join(rootDir, "export-ui-settings.json")
     const outputDir = path.join(rootDir, "output")
     const staleManifest = {
+      blogKey: "naver",
       sourceId: "mym0404",
       profile: "gfm",
       options: defaultExportOptions(),
@@ -67,6 +68,7 @@ describe("http server settings bootstrap", () => {
         id: "job-resume",
         phase: "export" as const,
         request: {
+          blogKey: "naver",
           sourceInput: "mym0404",
           outputDir,
           profile: "gfm" as const,
@@ -92,6 +94,7 @@ describe("http server settings bootstrap", () => {
         },
         error: null,
         scanResult: {
+          blogKey: "naver",
           sourceId: baseScanResult.sourceId,
           totalPostCount: baseScanResult.totalPostCount,
         },
@@ -112,7 +115,7 @@ describe("http server settings bootstrap", () => {
       resolveRun = resolve
     })
     const exporterRunSpy = vi
-      .spyOn(NaverBlogExporter.prototype, "run")
+      .spyOn(BlogExportWorkflow.prototype, "run")
       .mockImplementation(() => runPromise)
 
     try {

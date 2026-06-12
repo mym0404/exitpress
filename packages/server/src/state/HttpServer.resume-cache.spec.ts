@@ -55,6 +55,7 @@ describe("http server resume cache", () => {
         path.join(outputDir, "manifest.json"),
         JSON.stringify(
           {
+            blogKey: "naver",
             sourceId: "mym0404",
             profile: "gfm",
             options: defaultExportOptions(),
@@ -78,6 +79,7 @@ describe("http server resume cache", () => {
               id: "job-temp-resume",
               phase: "export",
               request: {
+                blogKey: "naver",
                 sourceInput: "mym0404",
                 outputDir,
                 profile: "gfm",
@@ -103,6 +105,7 @@ describe("http server resume cache", () => {
               },
               error: null,
               scanResult: {
+                blogKey: "naver",
                 sourceId: baseScanResult.sourceId,
                 totalPostCount: baseScanResult.totalPostCount,
               },
@@ -171,7 +174,7 @@ describe("http server resume cache", () => {
         scanCachePath,
         JSON.stringify({
           scans: {
-            [cachedScanResult.sourceId]: cachedScanResult,
+            [`${cachedScanResult.blogKey}:${cachedScanResult.sourceId}`]: cachedScanResult,
           },
         }),
       )
@@ -179,6 +182,7 @@ describe("http server resume cache", () => {
         path.join(outputDir, "manifest.json"),
         JSON.stringify(
           {
+            blogKey: "naver",
             sourceId: "mym0404",
             profile: "gfm",
             options: defaultExportOptions(),
@@ -202,6 +206,7 @@ describe("http server resume cache", () => {
               id: "job-resume",
               phase: "export",
               request: {
+                blogKey: "naver",
                 sourceInput: "mym0404",
                 outputDir,
                 profile: "gfm",
@@ -227,6 +232,7 @@ describe("http server resume cache", () => {
               },
               error: null,
               scanResult: {
+                blogKey: "naver",
                 sourceId: cachedScanResult.sourceId,
                 totalPostCount: cachedScanResult.totalPostCount,
               },

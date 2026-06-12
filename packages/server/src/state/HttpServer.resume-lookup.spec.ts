@@ -48,6 +48,7 @@ describe("http server resume lookup", () => {
         path.join(outputDir, "manifest.json"),
         JSON.stringify(
           {
+            blogKey: "naver",
             sourceId: "mym0404",
             profile: "gfm",
             options: defaultExportOptions(),
@@ -71,6 +72,7 @@ describe("http server resume lookup", () => {
               id: "job-lookup",
               phase: "export",
               request: {
+                blogKey: "naver",
                 sourceInput: "mym0404",
                 outputDir,
                 profile: "gfm",
@@ -96,6 +98,7 @@ describe("http server resume lookup", () => {
               },
               error: null,
               scanResult: {
+                blogKey: "naver",
                 sourceId: baseScanResult.sourceId,
                 totalPostCount: baseScanResult.totalPostCount,
               },
@@ -162,6 +165,7 @@ describe("http server resume lookup", () => {
         path.join(outputDir, "manifest.json"),
         JSON.stringify(
           {
+            blogKey: "naver",
             sourceId: "mym0404",
             profile: "gfm",
             options: defaultExportOptions(),
@@ -185,6 +189,7 @@ describe("http server resume lookup", () => {
               id: "job-restore",
               phase: "export",
               request: {
+                blogKey: "naver",
                 sourceInput: "mym0404",
                 outputDir,
                 profile: "gfm",
@@ -210,6 +215,7 @@ describe("http server resume lookup", () => {
               },
               error: null,
               scanResult: {
+                blogKey: "naver",
                 sourceId: baseScanResult.sourceId,
                 totalPostCount: baseScanResult.totalPostCount,
               },

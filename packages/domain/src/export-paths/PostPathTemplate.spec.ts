@@ -8,6 +8,7 @@ import {
 } from "./PostPathTemplate.js"
 
 const samplePost = {
+  blogKey: "sample",
   sourceId: "mym0404",
   postId: "223034929697",
   title: "첫 글",
@@ -28,6 +29,7 @@ describe("post-path-template", () => {
       slug: "첫_글",
       category: "react",
       title: "첫-글",
+      blogKey: "sample",
       postId: "223034929697",
       sourceId: "mym0404",
       date: "2026-04-11",
@@ -84,12 +86,13 @@ describe("post-path-template", () => {
   it("replaces variables in post templates", () => {
     expect(
       applyPostTemplate({
-        template: "{{ category }}/{{ YYYY }}/{{ MM }}/{{ DD }}/{{ YY }}/{{ M }}/{{ D }}/{{ slug }}",
+        template:
+          "{{ blogKey }}/{{ category }}/{{ YYYY }}/{{ MM }}/{{ DD }}/{{ YY }}/{{ M }}/{{ D }}/{{ slug }}",
         values: buildPostTemplateValues({
           post: samplePost,
           options: defaultExportOptions(),
         }),
       }),
-    ).toBe("react/2026/04/11/26/4/11/첫_글")
+    ).toBe("sample/react/2026/04/11/26/4/11/첫_글")
   })
 })

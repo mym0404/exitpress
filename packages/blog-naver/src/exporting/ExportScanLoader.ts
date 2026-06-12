@@ -11,7 +11,9 @@ export const loadScanAndPosts = async ({
   cachedScanResult: ScanResult | null
 }) => {
   const reusablePosts =
-    cachedScanResult?.sourceId === sourceId && cachedScanResult.posts
+    cachedScanResult?.blogKey === "naver" &&
+    cachedScanResult.sourceId === sourceId &&
+    cachedScanResult.posts
       ? cachedScanResult.posts
       : null
   const reusableScanResult = reusablePosts ? cachedScanResult : null
@@ -19,6 +21,7 @@ export const loadScanAndPosts = async ({
   if (reusableScanResult && reusablePosts) {
     return {
       scan: {
+        blogKey: reusableScanResult.blogKey,
         sourceId: reusableScanResult.sourceId,
         totalPostCount: reusableScanResult.totalPostCount,
         categories: reusableScanResult.categories,

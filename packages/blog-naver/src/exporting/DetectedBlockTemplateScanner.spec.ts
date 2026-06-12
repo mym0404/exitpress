@@ -29,11 +29,13 @@ const categories = [
 ]
 
 const scanResult: ScanResult & { posts: NonNullable<ScanResult["posts"]> } = {
+  blogKey: "naver",
   sourceId: "mym0404",
   totalPostCount: 3,
   categories,
   posts: [
     {
+      blogKey: "naver",
       sourceId: "mym0404",
       postId: "1",
       title: "Image post",
@@ -44,6 +46,7 @@ const scanResult: ScanResult & { posts: NonNullable<ScanResult["posts"]> } = {
       thumbnailUrl: null,
     },
     {
+      blogKey: "naver",
       sourceId: "mym0404",
       postId: "3",
       title: "Second image post",
@@ -54,6 +57,7 @@ const scanResult: ScanResult & { posts: NonNullable<ScanResult["posts"]> } = {
       thumbnailUrl: null,
     },
     {
+      blogKey: "naver",
       sourceId: "mym0404",
       postId: "2",
       title: "Table post",

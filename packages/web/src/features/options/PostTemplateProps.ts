@@ -6,6 +6,7 @@ export const postTemplatePropDefinitions = {
   category: { label: "카테고리", type: "string" },
   title: { label: "제목", type: "string" },
   postId: { label: "글 번호", type: "string" },
+  blogKey: { label: "블로그 종류", type: "string" },
   sourceId: { label: "블로그 ID", type: "string" },
   date: { label: "발행일", type: "string" },
   year: { label: "발행 연도", type: "string" },

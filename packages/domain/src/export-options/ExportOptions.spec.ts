@@ -49,13 +49,13 @@ describe("export options", () => {
     const options = cloneExportOptions({
       blockOutputs: {
         templates: {
-          "provider:image": "{{ `![${alt}](${url})` }}",
+          "blog:image": "{{ `![${alt}](${url})` }}",
         },
       },
     })
 
     expect(options.blockOutputs.templates).toEqual({
-      "provider:image": "{{ `![${alt}](${url})` }}",
+      "blog:image": "{{ `![${alt}](${url})` }}",
     })
   })
 
@@ -65,8 +65,8 @@ describe("export options", () => {
         JSON.stringify({
           blockOutputs: {
             templates: {
-              "provider:image": "{{ `![${alt}](${url})` }}",
-              "provider:code": 123,
+              "blog:image": "{{ `![${alt}](${url})` }}",
+              "blog:code": 123,
             },
           },
         }),
@@ -74,7 +74,7 @@ describe("export options", () => {
     )
 
     expect(sanitized.blockOutputs?.templates).toEqual({
-      "provider:image": "{{ `![${alt}](${url})` }}",
+      "blog:image": "{{ `![${alt}](${url})` }}",
     })
   })
 
@@ -192,6 +192,7 @@ describe("export options", () => {
       fields: {
         title: true,
         source: true,
+        blogKey: false,
         sourceId: false,
         postId: false,
         publishedAt: false,
@@ -205,6 +206,7 @@ describe("export options", () => {
       aliases: {
         title: "9bad",
         source: "dup",
+        blogKey: "",
         sourceId: "",
         postId: "",
         publishedAt: "",

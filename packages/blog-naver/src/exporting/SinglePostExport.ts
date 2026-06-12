@@ -1,5 +1,5 @@
 import { NaverBlogFetcher } from "@exitpress/blog-naver/integrations/naver-blog/NaverBlogFetcher.js"
-import { extractBlogId } from "@exitpress/blog-naver/NaverUrl.js"
+import { extractSourceId } from "@exitpress/blog-naver/NaverUrl.js"
 import { cloneExportOptions } from "@exitpress/domain/export-options/ExportOptions.js"
 import { isPostWithinScope } from "@exitpress/domain/export-scope/ExportScope.js"
 import { AssetStore } from "@exitpress/engine/exporting/assets/AssetStore.js"
@@ -45,13 +45,13 @@ export const exportSinglePost = async ({
 }): Promise<ExportSinglePostDiagnostics> => {
   const resolvedOutputDir = resolveRepoPath(outputDir)
   const resolvedOptions = cloneExportOptions(options)
-  const resolvedSourceId = extractBlogId(sourceId)
+  const resolvedSourceId = extractSourceId(sourceId)
   const fetcher = createFetcher
     ? await createFetcher({
         sourceId: resolvedSourceId,
       })
     : new NaverBlogFetcher({
-        blogId: resolvedSourceId,
+        sourceId: resolvedSourceId,
       })
   const assetStore = new AssetStore({
     outputDir: resolvedOutputDir,

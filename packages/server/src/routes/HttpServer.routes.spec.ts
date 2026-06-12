@@ -116,6 +116,7 @@ describe("http server local routes", () => {
         "content-type": "application/json",
       },
       body: JSON.stringify({
+        blogKey: "naver",
         sourceInput: "https://blog.naver.com/mym0404",
         outputDir,
         options,
@@ -155,6 +156,7 @@ describe("http server local routes", () => {
         "content-type": "application/json",
       },
       body: JSON.stringify({
+        blogKey: "naver",
         sourceInput: "https://blog.naver.com/mym0404",
         outputDir,
         options,
@@ -213,6 +215,7 @@ describe("http server local routes", () => {
         "content-type": "application/json",
       },
       body: JSON.stringify({
+        blogKey: "naver",
         sourceInput: "https://blog.naver.com/mym0404",
         outputDir,
         options,
@@ -273,6 +276,7 @@ describe("http server local routes", () => {
         "content-type": "application/json",
       },
       body: JSON.stringify({
+        blogKey: "naver",
         sourceInput: "https://blog.naver.com/mym0404",
         outputDir,
         options,
@@ -317,6 +321,7 @@ describe("http server local routes", () => {
         "content-type": "application/json",
       },
       body: JSON.stringify({
+        blogKey: "naver",
         sourceInput: "https://blog.naver.com/mym0404",
         outputDir,
         options,
@@ -558,6 +563,7 @@ describe("http server local routes", () => {
           "content-type": "application/json",
         },
         body: JSON.stringify({
+          blogKey: "naver",
           sourceInput: "https://blog.naver.com/mym0404",
         }),
       })
@@ -589,6 +595,7 @@ describe("http server local routes", () => {
           "content-type": "application/json",
         },
         body: JSON.stringify({
+          blogKey: "naver",
           sourceInput: "https://blog.naver.com/mym0404",
         }),
       })
@@ -604,6 +611,7 @@ describe("http server local routes", () => {
           "content-type": "application/json",
         },
         body: JSON.stringify({
+          blogKey: "naver",
           sourceInput: "https://blog.naver.com/mym0404",
           forceRefresh: true,
         }),
@@ -641,6 +649,7 @@ describe("http server local routes", () => {
         "content-type": "application/json",
       },
       body: JSON.stringify({
+        blogKey: "naver",
         sourceInput: "https://blog.naver.com/mym0404",
         scanResult: {
           ...baseScanResult,
@@ -702,6 +711,7 @@ describe("http server local routes", () => {
           "content-type": "application/json",
         },
         body: JSON.stringify({
+          blogKey: "naver",
           sourceInput: "https://blog.naver.com/mym0404",
           scanResult,
           options,
@@ -726,6 +736,7 @@ describe("http server local routes", () => {
           "content-type": "application/json",
         },
         body: JSON.stringify({
+          blogKey: "naver",
           sourceInput: "https://blog.naver.com/mym0404",
           outputDir,
           scanResult,
@@ -761,6 +772,7 @@ describe("http server local routes", () => {
         "content-type": "application/json",
       },
       body: JSON.stringify({
+        blogKey: "naver",
         sourceInput: "https://blog.naver.com/mym0404",
         scanResult: baseScanResult,
         options: defaultExportOptions(),
@@ -784,6 +796,7 @@ describe("http server local routes", () => {
         "content-type": "application/json",
       },
       body: JSON.stringify({
+        blogKey: "naver",
         sourceInput: "https://blog.naver.com/mym0404",
         scanResult: {
           ...baseScanResult,
@@ -811,6 +824,7 @@ describe("http server local routes", () => {
         "content-type": "application/json",
       },
       body: JSON.stringify({
+        blogKey: "naver",
         sourceInput: "https://blog.naver.com/mym0404",
         scanResult: {
           ...baseScanResult,

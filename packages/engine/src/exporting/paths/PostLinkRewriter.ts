@@ -16,12 +16,20 @@ type PostLinkTarget = {
 }
 
 type SameBlogPostIdentity = {
+  blogKey: string
   sourceId: string
   postId: string
 }
 
-const getPostLinkTargetKey = ({ sourceId, postId }: { sourceId: string; postId: string }) =>
-  `${sourceId}:${postId}`
+const getPostLinkTargetKey = ({
+  blogKey,
+  sourceId,
+  postId,
+}: {
+  blogKey: string
+  sourceId: string
+  postId: string
+}) => `${blogKey}:${sourceId}:${postId}`
 
 export const buildPostLinkTargets = ({
   outputDir,
@@ -46,6 +54,7 @@ export const buildPostLinkTargets = ({
 
       return [
         getPostLinkTargetKey({
+          blogKey: post.blogKey,
           sourceId: post.sourceId,
           postId: post.postId,
         }),
@@ -59,6 +68,7 @@ export const buildPostLinkTargets = ({
           templateValues: buildSameBlogPostTemplateValues({
             post: {
               sourceId: post.sourceId,
+              blogKey: post.blogKey,
               postId: post.postId,
               title: post.title,
               publishedAt: post.publishedAt,
@@ -74,12 +84,14 @@ export const buildPostLinkTargets = ({
 
 export const createPostLinkResolver = ({
   sourceId,
+  blogKey,
   markdownFilePath,
   options,
   targets,
   resolveIdentity,
 }: {
   sourceId: string
+  blogKey: string
   markdownFilePath: string
   options: Pick<ExportOptions, "links">
   targets: Map<string, PostLinkTarget>
@@ -92,12 +104,13 @@ export const createPostLinkResolver = ({
   return (url: string) => {
     const identity = resolveIdentity(url)
 
-    if (!identity || identity.sourceId !== sourceId) {
+    if (!identity || identity.blogKey !== blogKey || identity.sourceId !== sourceId) {
       return url
     }
 
     const target = targets.get(
       getPostLinkTargetKey({
+        blogKey: identity.blogKey,
         sourceId: identity.sourceId,
         postId: identity.postId,
       }),

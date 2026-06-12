@@ -199,6 +199,7 @@ export const renderMarkdownPost = async ({
   const frontmatterValues: Record<FrontmatterFieldName, unknown> = {
     title: post.title,
     source: post.source,
+    blogKey: post.blogKey,
     sourceId: post.sourceId,
     postId: getFrontmatterPostId(post.postId),
     publishedAt: post.publishedAt,

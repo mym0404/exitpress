@@ -276,6 +276,7 @@ export const runUiLiveResumeExport = async ({ resumeCaseId }: { resumeCaseId: Re
     const scanResult = await postJson<ScanResult>({
       url: `${activeFirstServer.baseUrl}/api/scan`,
       body: {
+        blogKey: "naver",
         sourceInput: sourceId,
       },
     })
@@ -300,6 +301,7 @@ export const runUiLiveResumeExport = async ({ resumeCaseId }: { resumeCaseId: Re
     const exportResponse = await postJson<{ jobId: string }>({
       url: `${activeFirstServer.baseUrl}/api/export`,
       body: {
+        blogKey: "naver",
         sourceInput: sourceId,
         outputDir: scopedOutputDir,
         options: buildScopedOptions({

@@ -1,28 +1,23 @@
 import { describe, expect, it } from "vitest"
 
-import type {
-  BlogContentDocument,
-  BlogPostIdentity,
-  BlogPostRef,
-  BlogSource,
-} from "./BlogProvider.js"
+import type { BlogContentDocument, BlogPostIdentity, BlogPostRef, BlogSource } from "./Blog.js"
 
-import { allBlogContentKinds } from "./BlogProvider.js"
+import { allBlogContentKinds } from "./Blog.js"
 
-describe("blog provider domain schema", () => {
+describe("blog domain schema", () => {
   it("keeps content kinds stable", () => {
     expect(allBlogContentKinds).toEqual(["html", "markdown", "blocks"])
   })
 
-  it("represents provider-neutral source and post identity", () => {
+  it("represents blog-agnostic source and post identity", () => {
     const source = {
-      providerKey: "tistory",
+      blogKey: "tistory",
       sourceId: "fixture-blog",
       displayName: "Fixture Blog",
       input: "https://fixture.tistory.com",
     } satisfies BlogSource
     const post = {
-      providerKey: source.providerKey,
+      blogKey: source.blogKey,
       sourceId: source.sourceId,
       postId: "42",
       title: "Fixture Post",
@@ -33,7 +28,7 @@ describe("blog provider domain schema", () => {
       thumbnailUrl: undefined,
     } satisfies BlogPostRef
     const identity = {
-      providerKey: "tistory",
+      blogKey: "tistory",
       sourceId: "fixture-blog",
       postId: "42",
     } satisfies BlogPostIdentity

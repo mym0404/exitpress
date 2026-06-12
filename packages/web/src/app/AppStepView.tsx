@@ -48,7 +48,7 @@ type AppStepViewProps = {
   frontmatterValidationErrors: string[]
   linkTemplatePreviewPost: Pick<
     PostSummary,
-    "sourceId" | "postId" | "title" | "publishedAt" | "categoryName"
+    "blogKey" | "sourceId" | "postId" | "title" | "publishedAt" | "categoryName"
   > | null
   setActiveJobFilter: Dispatch<SetStateAction<JobFilter>>
   setCategorySearch: Dispatch<SetStateAction<string>>

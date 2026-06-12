@@ -3,9 +3,10 @@ const entrypoint = "bun scripts/single-post/export-single-post.ts"
 const usageError = () => new Error(singlePostCliUsage())
 
 export const singlePostCliUsage = () =>
-  `Usage: ${entrypoint} --sourceId my-blog --postId 123456789012 --outputDir ./output [--report ./output/report.json] [--manualReviewMarkdownPath ./output/post.md] [--metadataCachePath ./output/metadata-cache.json] [--options ./config/single-post.json] [--stdout]\nInspect: ${entrypoint} --inspect --sourceId my-blog --postId 123456789012 [--report ./inspect.json] [--options ./config/single-post.json] [--stdout]`
+  `Usage: ${entrypoint} --blogKey naver --sourceId my-blog --postId 123456789012 --outputDir ./output [--report ./output/report.json] [--manualReviewMarkdownPath ./output/post.md] [--metadataCachePath ./output/metadata-cache.json] [--options ./config/single-post.json] [--stdout]\nInspect: ${entrypoint} --inspect --blogKey naver --sourceId my-blog --postId 123456789012 [--report ./inspect.json] [--options ./config/single-post.json] [--stdout]`
 
 export const parseSinglePostCliArgs = (args: string[]) => {
+  let blogKey: string | null = null
   let sourceId: string | null = null
   let postId: string | null = null
   let outputDir: string | null = null
@@ -28,6 +29,12 @@ export const parseSinglePostCliArgs = (args: string[]) => {
 
   for (let index = 0; index < args.length; index++) {
     const arg = args[index]
+
+    if (arg === "--blogKey") {
+      blogKey = readValue(index)
+      index++
+      continue
+    }
 
     if (arg === "--sourceId") {
       sourceId = readValue(index)
@@ -84,11 +91,12 @@ export const parseSinglePostCliArgs = (args: string[]) => {
     throw usageError()
   }
 
-  if (!sourceId || !postId || (!inspect && !outputDir)) {
+  if (!blogKey || !sourceId || !postId || (!inspect && !outputDir)) {
     throw usageError()
   }
 
   return {
+    blogKey,
     sourceId,
     postId,
     outputDir,

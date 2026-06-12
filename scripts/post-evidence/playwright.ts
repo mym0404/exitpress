@@ -15,7 +15,7 @@ export const createEvidenceBrowserContext = async (browser: Browser) =>
   })
 
 const naverMobilePostUrl = ({ sourceId, postId }: { sourceId: string; postId: string }) =>
-  `https://m.blog.naver.com/PostView.naver?sourceId=${encodeURIComponent(sourceId)}&postId=${encodeURIComponent(postId)}`
+  `https://m.blog.naver.com/PostView.naver?blogId=${encodeURIComponent(sourceId)}&logNo=${encodeURIComponent(postId)}`
 
 const postBodySelectors = (editorType: string | null) => {
   if (editorType === "naver-se4") {
@@ -77,7 +77,7 @@ const captureElementNode = async ({
   await element.screenshot({ path: outputPath })
 }
 
-export const captureNaverPost = async ({
+const captureNaverPost = async ({
   browser,
   sourceId,
   postId,
@@ -165,4 +165,23 @@ export const captureNaverPost = async ({
   } finally {
     await context.close()
   }
+}
+
+export const captureBlogPost = async ({
+  blogKey,
+  ...input
+}: {
+  blogKey: string
+  browser: Browser
+  sourceId: string
+  postId: string
+  editorType: string | null
+  inspectPath?: string
+  outputPath: string
+}) => {
+  if (blogKey === "naver") {
+    return captureNaverPost(input)
+  }
+
+  throw new Error(`Unsupported blogKey for source capture: ${blogKey}`)
 }

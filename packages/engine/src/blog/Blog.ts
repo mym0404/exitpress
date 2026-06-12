@@ -4,7 +4,7 @@ import type {
   BlogPostRef,
   BlogScanResult,
   BlogSource,
-} from "@exitpress/domain/blog-provider/schema/BlogProvider.js"
+} from "@exitpress/domain/blog/schema/Blog.js"
 import type { ExportOptions } from "@exitpress/domain/export-options/schema/ExportOptions.js"
 import type { ParsedBlock, ParsedPost } from "@exitpress/domain/parser/schema/ParsedPost.js"
 import type { ParserBlockOptions } from "@exitpress/domain/parser/schema/ParserBlockOptions.js"
@@ -15,6 +15,7 @@ export type BlogFetcher = {
   loadPostContent: (input: {
     source: BlogSource
     post: BlogPostRef
+    cache?: BlogPostContentCache
     signal?: AbortSignal
   }) => Promise<BlogContentDocument>
   downloadBinary?: (input: { sourceUrl: string; destinationPath: string }) => Promise<void>
@@ -22,6 +23,20 @@ export type BlogFetcher = {
     bytes: Buffer
     contentType: string | null
   }>
+}
+
+export type BlogPostContentCache = {
+  getPostHtml?: (input: {
+    blogKey: string
+    sourceId: string
+    postId: string
+  }) => string | null | Promise<string | null>
+  setPostHtml?: (input: {
+    blogKey: string
+    sourceId: string
+    postId: string
+    html: string
+  }) => void | Promise<void>
 }
 
 export type BlogContentParser = {
@@ -53,7 +68,7 @@ export type BlockParser = {
   parse: (input: { content: BlogContentDocument; options: ParserBlockOptions }) => ParsedBlock[]
 }
 
-export type BlogProvider = BlogFetcher &
+export type Blog = BlogFetcher &
   BlogContentParser & {
     key: string
     label: string

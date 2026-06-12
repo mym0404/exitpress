@@ -14,6 +14,7 @@ export type ExportProgressState = {
 
 export const createInitialManifest = ({
   resumeManifest,
+  blogKey,
   sourceId,
   profile,
   options,
@@ -22,6 +23,7 @@ export const createInitialManifest = ({
   uploadEnabled,
 }: {
   resumeManifest: ExportManifest | null
+  blogKey: string
   sourceId: string
   profile: ExportRequest["profile"]
   options: ExportRequest["options"]
@@ -37,6 +39,7 @@ export const createInitialManifest = ({
         finishedAt: null,
       }
     : {
+        blogKey,
         sourceId,
         profile,
         options,

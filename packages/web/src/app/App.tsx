@@ -42,7 +42,7 @@ import {
 import { fetchJson, postJson, postSameOriginJson } from "../lib/Api.js"
 import { getAppRoute } from "../lib/AppRoutes.js"
 
-import { fallbackDefaults } from "./AppDefaults.js"
+import { defaultBlogKey, fallbackDefaults } from "./AppDefaults.js"
 import { useAppResumeBootstrap } from "./AppResumeBootstrap.js"
 import { AppShell } from "./AppShell.js"
 import { getAppShellState, shouldWarnBeforeLeavingApp } from "./AppShellState.js"
@@ -75,6 +75,7 @@ const createErrorJobState = ({
   ({
     id: "failed-local",
     request: {
+      blogKey: defaultBlogKey,
       sourceInput: request.sourceInput,
       outputDir: request.outputDir,
       profile: "gfm",
@@ -341,6 +342,7 @@ const ExportApp = () => {
 
       try {
         const jobId = await startJob({
+          blogKey: scanResult.blogKey,
           sourceInput: currentScanTarget,
           outputDir: normalizeOutputDir(outputDir),
           options,
@@ -450,6 +452,7 @@ const ExportApp = () => {
 
     try {
       const { jobId } = await postJson<{ jobId: string }>("/api/scan-blocks/jobs", {
+        blogKey: activeScanResult.blogKey,
         sourceInput: currentScanTarget,
         scanResult: activeScanResult,
         options,

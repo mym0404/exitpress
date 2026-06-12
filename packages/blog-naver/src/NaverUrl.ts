@@ -1,8 +1,8 @@
-export const extractBlogId = (value: string) => {
+export const extractSourceId = (value: string) => {
   const trimmed = value.trim()
 
   if (!trimmed) {
-    throw new Error("blogId 또는 blog URL을 입력해야 합니다.")
+    throw new Error("sourceInput을 입력해야 합니다.")
   }
 
   const urlMatch = trimmed.match(/blog\.naver\.com\/([^/?#]+)/i)
@@ -20,8 +20,8 @@ export const extractBlogId = (value: string) => {
   return trimmed
 }
 
-export const getSourceUrl = ({ blogId, logNo }: { blogId: string; logNo: string }) =>
-  `https://blog.naver.com/${blogId}/${logNo}`
+export const getSourceUrl = ({ sourceId, postId }: { sourceId: string; postId: string }) =>
+  `https://blog.naver.com/${sourceId}/${postId}`
 
 const naverBlogHosts = new Set(["blog.naver.com", "m.blog.naver.com"])
 const postViewPathPattern = /\/PostView\.naver$/i

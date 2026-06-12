@@ -1,26 +1,26 @@
 import { readFile, rm } from "node:fs/promises"
 
 import { defaultExportOptions } from "@exitpress/domain/export-options/ExportOptions.js"
-import { createMarkdownMockProvider } from "@tests/support/provider/MockBlogProviders.js"
+import { createMarkdownMockBlog } from "@tests/support/blog/MockBlogs.js"
 import { createTestTempDir } from "@tests/support/test-paths.js"
 import { describe, expect, it, vi } from "vitest"
 
-import type { BlogProvider } from "@exitpress/engine/blog-provider/BlogProvider.js"
+import type { Blog } from "@exitpress/engine/blog/Blog.js"
 
-import { exportProviderPostUnit } from "./ProviderPostExportUnit.js"
+import { exportBlogPostUnit } from "./BlogPostExportUnit.js"
 
-describe("exportProviderPostUnit", () => {
-  it("exports one provider post through the markdown renderer", async () => {
-    const tempDir = await createTestTempDir("provider-post-export-")
-    const provider = createMarkdownMockProvider()
-    const source = provider.parseSource("mock-blog")
-    const scan = await provider.scan(source)
+describe("exportBlogPostUnit", () => {
+  it("exports one blog post through the markdown renderer", async () => {
+    const tempDir = await createTestTempDir("blog-post-export-")
+    const blog = createMarkdownMockBlog()
+    const source = blog.parseSource("mock-blog")
+    const scan = await blog.scan(source)
     const post = scan.posts[0]
     const options = defaultExportOptions()
 
     try {
-      const result = await exportProviderPostUnit({
-        provider,
+      const result = await exportBlogPostUnit({
+        blog,
         source,
         outputDir: tempDir,
         post,
@@ -34,7 +34,7 @@ describe("exportProviderPostUnit", () => {
       expect(result.blockIds).toEqual(["mock:paragraph"])
       const markdown = await readFile(result.markdownFilePath, "utf8")
 
-      expect(markdown).toContain("Hello from markdown provider")
+      expect(markdown).toContain("Hello from markdown blog")
       expect(markdown).toContain("postId: mock-post-1")
       expect(markdown).not.toContain(".nan")
     } finally {
@@ -42,10 +42,10 @@ describe("exportProviderPostUnit", () => {
     }
   })
 
-  it("resolves provider post links with configured same-blog link options", async () => {
-    const tempDir = await createTestTempDir("provider-post-export-links-")
-    const provider: BlogProvider = {
-      ...createMarkdownMockProvider(),
+  it("resolves blog post links with configured same-blog link options", async () => {
+    const tempDir = await createTestTempDir("blog-post-export-links-")
+    const blog: Blog = {
+      ...createMarkdownMockBlog(),
       parseContent: ({ content, options }) => {
         if (content.kind !== "markdown") {
           throw new Error(`Unsupported mock content kind: ${content.kind}`)
@@ -68,14 +68,14 @@ describe("exportProviderPostUnit", () => {
       resolvePostLinkIdentity: (url) =>
         url === "https://mock.example.com/posts/target-post"
           ? {
-              providerKey: "mock-markdown",
+              blogKey: "mock-markdown",
               sourceId: "mock-blog",
               postId: "target-post",
             }
           : undefined,
     }
-    const source = provider.parseSource("mock-blog")
-    const scan = await provider.scan(source)
+    const source = blog.parseSource("mock-blog")
+    const scan = await blog.scan(source)
     const post = scan.posts[0]
     const targetPost = {
       ...post,
@@ -89,8 +89,8 @@ describe("exportProviderPostUnit", () => {
       "https://archive.example.com/{{ sourceId }}/{{ postId }}"
 
     try {
-      const result = await exportProviderPostUnit({
-        provider,
+      const result = await exportBlogPostUnit({
+        blog,
         source,
         outputDir: tempDir,
         post,
@@ -108,10 +108,10 @@ describe("exportProviderPostUnit", () => {
     }
   })
 
-  it("fails clearly when local asset export needs a provider binary fetcher", async () => {
-    const tempDir = await createTestTempDir("provider-post-export-assets-")
-    const provider: BlogProvider = {
-      ...createMarkdownMockProvider(),
+  it("fails clearly when local asset export needs a blog binary fetcher", async () => {
+    const tempDir = await createTestTempDir("blog-post-export-assets-")
+    const blog: Blog = {
+      ...createMarkdownMockBlog(),
       parseContent: ({ content }) => {
         if (content.kind !== "markdown") {
           throw new Error(`Unsupported mock content kind: ${content.kind}`)
@@ -149,14 +149,14 @@ describe("exportProviderPostUnit", () => {
         },
       ],
     }
-    const source = provider.parseSource("mock-blog")
-    const scan = await provider.scan(source)
+    const source = blog.parseSource("mock-blog")
+    const scan = await blog.scan(source)
     const post = scan.posts[0]
 
     try {
       await expect(
-        exportProviderPostUnit({
-          provider,
+        exportBlogPostUnit({
+          blog,
           source,
           outputDir: tempDir,
           post,
@@ -171,14 +171,14 @@ describe("exportProviderPostUnit", () => {
     }
   })
 
-  it("uses provider fetchBinary for local asset export", async () => {
-    const tempDir = await createTestTempDir("provider-post-export-fetch-binary-")
+  it("uses blog fetchBinary for local asset export", async () => {
+    const tempDir = await createTestTempDir("blog-post-export-fetch-binary-")
     const fetchBinary = vi.fn(async () => ({
       bytes: Buffer.from("mock image"),
       contentType: "image/png",
     }))
-    const provider: BlogProvider = {
-      ...createMarkdownMockProvider(),
+    const blog: Blog = {
+      ...createMarkdownMockBlog(),
       fetchBinary,
       parseContent: ({ content }) => {
         if (content.kind !== "markdown") {
@@ -217,13 +217,13 @@ describe("exportProviderPostUnit", () => {
         },
       ],
     }
-    const source = provider.parseSource("mock-blog")
-    const scan = await provider.scan(source)
+    const source = blog.parseSource("mock-blog")
+    const scan = await blog.scan(source)
     const post = scan.posts[0]
 
     try {
-      const result = await exportProviderPostUnit({
-        provider,
+      const result = await exportBlogPostUnit({
+        blog,
         source,
         outputDir: tempDir,
         post,

@@ -2,12 +2,12 @@ import { load } from "cheerio"
 
 import type { ParsedBlock } from "@exitpress/domain/parser/schema/ParsedPost.js"
 import type { BlockTemplateDefinition } from "@exitpress/domain/template/schema/BlockTemplateDefinition.js"
-import type { BlogProvider } from "@exitpress/engine/blog-provider/BlogProvider.js"
+import type { Blog } from "@exitpress/engine/blog/Blog.js"
 
-const providerKey = "tistory"
+const blogKey = "tistory"
 const uncategorizedCategoryId = 0
 
-type CreateTistoryBlogProviderOptions = {
+type CreateTistoryBlogOptions = {
   fetchText?: (url: string) => Promise<string>
 }
 
@@ -130,16 +130,16 @@ const blockTemplateDefinitions: BlockTemplateDefinition[] = [
   },
 ]
 
-export const createTistoryBlogProvider = ({
+export const createTistoryBlog = ({
   fetchText = defaultFetchText,
-}: CreateTistoryBlogProviderOptions = {}): BlogProvider => ({
-  key: providerKey,
+}: CreateTistoryBlogOptions = {}): Blog => ({
+  key: blogKey,
   label: "Tistory",
   parseSource: (input) => {
     const url = new URL(input)
 
     return {
-      providerKey,
+      blogKey,
       sourceId: url.host,
       displayName: url.host,
       input,
@@ -166,7 +166,7 @@ export const createTistoryBlogProvider = ({
       ],
       posts: [
         {
-          providerKey,
+          blogKey,
           sourceId: source.sourceId,
           postId,
           title,

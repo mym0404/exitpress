@@ -9,7 +9,7 @@
 
 ## Runner Policy
 
-- Unit, integration, parser, exporter, server, provider, and other non-browser checks belong in Vitest specs.
+- Unit, integration, parser, exporter, server, blog, and other non-browser checks belong in Vitest specs.
 - Browser smoke and end-to-end checks belong in Playwright Test specs.
 - Use Vitest/Playwright config, projects, fixtures, lifecycle hooks, reporters, filtering, and coverage before adding repo-specific runners.
 - Standalone Bun scripts are acceptable for product CLIs, one-off maintenance commands, and manual evidence capture, not for checks that can be expressed as Vitest or Playwright tests.
@@ -24,7 +24,7 @@
 - `mise exec -- pnpm build:server`: server TypeScript build check.
 - `mise exec -- pnpm build:ui`: web production build check.
 - `mise exec -- pnpm check:storybook`: generated Storybook catalog freshness check.
-- `mise exec -- pnpm check:test`: full Vitest suite, including fixtures and provider integration checks.
+- `mise exec -- pnpm check:test`: full Vitest suite, including fixtures and blog integration checks.
 - `mise exec -- pnpm check:coverage`: full Vitest suite with V8 coverage thresholds.
 - `mise exec -- pnpm check:playwright`: Playwright smoke and live browser/network e2e suite against the current built web UI.
 - `mise exec -- pnpm check:unused`: unused source/test/script diagnostics.
@@ -37,7 +37,7 @@
 ## What Each Layer Proves
 
 - Typecheck proves moved imports, shared contracts, and cross-package type compatibility.
-- Vitest proves pure logic, parser block conversion, renderer, server, hook, fixture, provider, and generated catalog behavior.
+- Vitest proves pure logic, parser block conversion, renderer, server, hook, fixture, blog, and generated catalog behavior.
 - Storybook check proves generated catalog matches current parser/renderer output.
 - Playwright proves browser workflow behavior with mocked APIs and live e2e behavior, including resume, provider setup, test upload, automatic upload progress, uploaded result links, and no manual upload POST.
 - Live upload checks read `.env` locally and CI secrets in GitHub Actions.

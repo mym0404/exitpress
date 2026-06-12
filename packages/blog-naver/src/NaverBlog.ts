@@ -1,31 +1,59 @@
 import { NaverBlogFetcher } from "@exitpress/blog-naver/integrations/naver-blog/NaverBlogFetcher.js"
-import { extractBlogId, extractNaverBlogPostIdentity } from "@exitpress/blog-naver/NaverUrl.js"
+import { extractSourceId, extractNaverBlogPostIdentity } from "@exitpress/blog-naver/NaverUrl.js"
 import { parsePostHtml } from "@exitpress/blog-naver/parsing/naver-blog/core/PostParser.js"
 import { NaverBlog } from "@exitpress/blog-naver/parsing/naver-blog/NaverBlog.js"
 
-import type { BlogProvider } from "@exitpress/engine/blog-provider/BlogProvider.js"
+import type { Blog, BlogPostContentCache } from "@exitpress/engine/blog/Blog.js"
 
-const providerKey = "naver"
+const blogKey = "naver"
 
-export const createNaverBlogProvider = (): BlogProvider => {
-  const createFetcher = (blogId: string) => new NaverBlogFetcher({ blogId })
-  const createAssetFetcher = () => new NaverBlogFetcher({ blogId: "" })
+export const createNaverBlog = (): Blog => {
+  const createFetcher = (sourceId: string, cache?: BlogPostContentCache) =>
+    new NaverBlogFetcher({
+      sourceId,
+      ...(cache
+        ? {
+            cache: {
+              getPostHtml: ({ sourceId, postId }) =>
+                cache.getPostHtml?.({
+                  blogKey,
+                  sourceId,
+                  postId,
+                }) ?? null,
+              setPostHtml: ({ sourceId, postId, html }) =>
+                cache.setPostHtml?.({
+                  blogKey,
+                  sourceId,
+                  postId,
+                  html,
+                }),
+            },
+          }
+        : {}),
+    })
+  const createAssetFetcher = () => new NaverBlogFetcher({ sourceId: "" })
 
   return {
-    key: providerKey,
+    key: blogKey,
     label: "Naver Blog",
     parseSource: (input) => {
-      const sourceId = extractBlogId(input)
+      const sourceId = extractSourceId(input)
 
       return {
-        providerKey,
+        blogKey,
         sourceId,
         displayName: sourceId,
         input,
       }
     },
     scan: async (source) => {
-      const scan = await createFetcher(source.sourceId).scanBlog({ includePosts: true })
+      const fetcher = createFetcher(source.sourceId)
+      const scan = await fetcher.scanBlog({ includePosts: true })
+      const posts =
+        scan.posts ??
+        (await fetcher.getAllPosts({
+          expectedTotal: scan.totalPostCount,
+        }))
 
       return {
         source,
@@ -38,8 +66,8 @@ export const createNaverBlogProvider = (): BlogProvider => {
           path: category.path,
           depth: category.depth,
         })),
-        posts: (scan.posts ?? []).map((post) => ({
-          providerKey,
+        posts: posts.map((post) => ({
+          blogKey,
           sourceId: post.sourceId,
           postId: post.postId,
           title: post.title,
@@ -51,8 +79,8 @@ export const createNaverBlogProvider = (): BlogProvider => {
         })),
       }
     },
-    loadPostContent: async ({ source, post }) => {
-      const html = await createFetcher(source.sourceId).fetchPostHtml(post.postId)
+    loadPostContent: async ({ source, post, cache }) => {
+      const html = await createFetcher(source.sourceId, cache).fetchPostHtml(post.postId)
 
       return {
         kind: "html",
@@ -83,7 +111,7 @@ export const createNaverBlogProvider = (): BlogProvider => {
       }
 
       return {
-        providerKey,
+        blogKey,
         sourceId: identity.sourceId,
         postId: identity.postId,
       }

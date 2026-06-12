@@ -213,6 +213,7 @@ export const renderSampleFixture = async ({
   })
   const rendered = await renderMarkdownPost({
     post: {
+      blogKey: "naver",
       sourceId: sample.sourceId,
       postId: sample.postId,
       title: sample.post.title,
@@ -254,7 +255,7 @@ export const renderSampleFixture = async ({
 
 export const loadSampleFixture = async (sample: SampleFixtureEntry) => ({
   html: await new NaverBlogFetcher({
-    blogId: sample.sourceId,
+    sourceId: sample.sourceId,
     cache:
       process.env.CI === "true"
         ? undefined

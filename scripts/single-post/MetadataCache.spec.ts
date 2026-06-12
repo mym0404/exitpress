@@ -18,6 +18,7 @@ const createBaseFetcher = ({
     scanCount.value += 1
 
     return {
+      blogKey: "naver",
       sourceId: "mym0404",
       totalPostCount: 1,
       categories: [
@@ -39,6 +40,7 @@ const createBaseFetcher = ({
 
     return [
       {
+        blogKey: "naver",
         sourceId: "mym0404",
         postId: "223034929697",
         title: "Single post",
@@ -69,6 +71,7 @@ describe("single post metadata cache", () => {
 
     try {
       const firstFetcher = await createSinglePostMetadataCachingFetcher({
+        blogKey: "naver",
         sourceId: "mym0404",
         cachePath,
         createFetcher: () => createBaseFetcher({ scanCount, postsCount }),
@@ -80,9 +83,12 @@ describe("single post metadata cache", () => {
 
       expect(scanCount.value).toBe(1)
       expect(postsCount.value).toBe(1)
-      expect(await readFile(cachePath, "utf8")).toContain('"sourceId": "mym0404"')
+      const cacheText = await readFile(cachePath, "utf8")
+      expect(cacheText).toContain('"blogKey": "naver"')
+      expect(cacheText).toContain('"sourceId": "mym0404"')
 
       const secondFetcher = await createSinglePostMetadataCachingFetcher({
+        blogKey: "naver",
         sourceId: "mym0404",
         cachePath,
         createFetcher: () =>

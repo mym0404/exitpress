@@ -1,5 +1,5 @@
-import { NaverBlogExporter } from "@exitpress/blog-naver/exporting/NaverBlogExporter.js"
 import { UPLOAD_STATUSES } from "@exitpress/domain/export-job/ExportJobState.js"
+import { BlogExportWorkflow } from "@exitpress/engine/exporting/blog/BlogExportWorkflow.js"
 import { runImageUploadPhase } from "@exitpress/engine/exporting/upload/ImageUploadPhase.js"
 import {
   rewriteImageUploadPost,
@@ -12,9 +12,10 @@ import {
 import { runWithLogSink } from "@exitpress/engine/infra/runtime/Logger.js"
 import { toErrorMessage } from "@exitpress/engine/shared/error/util/toErrorMessage.js"
 
-import type { NaverBlogFetcherCache } from "@exitpress/blog-naver/integrations/naver-blog/NaverBlogFetcher.js"
 import type { ScanResult } from "@exitpress/domain/blog/schema/BlogScan.js"
 import type { ExportRequest } from "@exitpress/domain/export-job/schema/ExportRequest.js"
+import type { BlogPostContentCache } from "@exitpress/engine/blog/Blog.js"
+import type { BlogRegistry } from "@exitpress/engine/blog/BlogRegistry.js"
 
 import type { JobStore } from "./JobStore.js"
 
@@ -30,6 +31,7 @@ export type HttpExportJobRunner = ReturnType<typeof createHttpExportJobRunner>
 // Starts and tracks export jobs while keeping resumable manifests up to date.
 export const createHttpExportJobRunner = ({
   jobStore,
+  blogRegistry,
   jobScanResults,
   postHtmlCache,
   uploadPhaseRunner = runImageUploadPhase,
@@ -37,8 +39,9 @@ export const createHttpExportJobRunner = ({
   manifestSnapshotWriter = writeImageUploadManifestSnapshot,
 }: {
   jobStore: JobStore
+  blogRegistry: BlogRegistry
   jobScanResults: Map<string, ScanResult | null>
-  postHtmlCache?: NaverBlogFetcherCache
+  postHtmlCache?: BlogPostContentCache
   uploadPhaseRunner?: typeof runImageUploadPhase
   postUploadRewriter?: typeof rewriteImageUploadPost
   manifestSnapshotWriter?: typeof writeImageUploadManifestSnapshot
@@ -61,6 +64,8 @@ export const createHttpExportJobRunner = ({
     const manifest = buildResumableExportManifest({
       job,
       scanResult: jobScanResults.get(jobId) ?? null,
+      sourceId: blogRegistry.require(job.request.blogKey).parseSource(job.request.sourceInput)
+        .sourceId,
     })
 
     job.manifest = manifest
@@ -138,7 +143,9 @@ export const createHttpExportJobRunner = ({
     await manifestPersistRunner.flush(jobId)
 
     try {
-      const exporter = new NaverBlogExporter({
+      const blog = blogRegistry.require(request.blogKey)
+      const exporter = new BlogExportWorkflow({
+        blog,
         request,
         cachedScanResult,
         resumeState: resume
@@ -149,7 +156,7 @@ export const createHttpExportJobRunner = ({
           : null,
         writeManifestFile: false,
         abortSignal: signal,
-        fetcherCache: postHtmlCache,
+        postContentCache: postHtmlCache,
         onProgress: (progress) => {
           jobStore.updateProgress(jobId, progress)
           scheduleJobManifestPersist(jobId)

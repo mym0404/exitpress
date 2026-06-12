@@ -1,6 +1,7 @@
 ---
 title: 한바탕웃고갑시다~쿠쿠정수기렌탈25시접수처
 source: https://blog.naver.com/cuk1026/110167789656
+blogKey: naver
 sourceId: cuk1026
 postId: 110167789656
 publishedAt: 2013-05-09T20:09:08+09:00

@@ -128,6 +128,7 @@ describe("http server resume defaults", () => {
         path.join(outputDir, "manifest.json"),
         JSON.stringify(
           {
+            blogKey: "naver",
             sourceId: "mym0404",
             profile: "gfm",
             options: defaultExportOptions(),
@@ -151,6 +152,7 @@ describe("http server resume defaults", () => {
               id: "job-resume",
               phase: "export",
               request: {
+                blogKey: "naver",
                 sourceInput: "mym0404",
                 outputDir,
                 profile: "gfm",
@@ -176,6 +178,7 @@ describe("http server resume defaults", () => {
               },
               error: null,
               scanResult: {
+                blogKey: "naver",
                 sourceId: baseScanResult.sourceId,
                 totalPostCount: baseScanResult.totalPostCount,
               },

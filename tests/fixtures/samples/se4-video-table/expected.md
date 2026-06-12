@@ -1,6 +1,7 @@
 ---
 title: 휴머노이드 첫 Rigging 성공 애니메이션
 source: https://blog.naver.com/mym0404/221302086471
+blogKey: naver
 sourceId: mym0404
 postId: 221302086471
 publishedAt: 2018-06-19T13:16:43+09:00

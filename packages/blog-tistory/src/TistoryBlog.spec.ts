@@ -3,11 +3,11 @@ import os from "node:os"
 import path from "node:path"
 
 import { defaultExportOptions } from "@exitpress/domain/export-options/ExportOptions.js"
-import { exportProviderPostUnit } from "@exitpress/engine/exporting/provider/ProviderPostExportUnit.js"
+import { exportBlogPostUnit } from "@exitpress/engine/exporting/blog/BlogPostExportUnit.js"
 import { renderBlockTemplates } from "@exitpress/engine/markdown/util/renderBlockTemplates.js"
 import { describe, expect, it, vi } from "vitest"
 
-import { createTistoryBlogProvider } from "./TistoryBlogProvider.js"
+import { createTistoryBlog } from "./TistoryBlog.js"
 
 const html = `<!doctype html>
 <html>
@@ -25,12 +25,12 @@ const html = `<!doctype html>
   </body>
 </html>`
 
-describe("createTistoryBlogProvider", () => {
+describe("createTistoryBlog", () => {
   it("parses a Tistory post URL source", () => {
-    const provider = createTistoryBlogProvider()
+    const blog = createTistoryBlog()
 
-    expect(provider.parseSource("https://sample.tistory.com/42")).toEqual({
-      providerKey: "tistory",
+    expect(blog.parseSource("https://sample.tistory.com/42")).toEqual({
+      blogKey: "tistory",
       sourceId: "sample.tistory.com",
       displayName: "sample.tistory.com",
       input: "https://sample.tistory.com/42",
@@ -39,14 +39,14 @@ describe("createTistoryBlogProvider", () => {
 
   it("loads and parses a minimal public Tistory post", async () => {
     const fetchText = vi.fn(async () => html)
-    const provider = createTistoryBlogProvider({ fetchText })
+    const blog = createTistoryBlog({ fetchText })
     const options = defaultExportOptions()
-    const source = provider.parseSource("https://sample.tistory.com/42")
+    const source = blog.parseSource("https://sample.tistory.com/42")
 
-    const scan = await provider.scan(source)
+    const scan = await blog.scan(source)
     const post = scan.posts[0]!
-    const content = await provider.loadPostContent({ source, post })
-    const parsed = provider.parseContent({
+    const content = await blog.loadPostContent({ source, post })
+    const parsed = blog.parseContent({
       source,
       post,
       content,
@@ -65,18 +65,18 @@ describe("createTistoryBlogProvider", () => {
     ])
   })
 
-  it("exports a Tistory provider post to markdown", async () => {
-    const provider = createTistoryBlogProvider({
+  it("exports a Tistory blog post to markdown", async () => {
+    const blog = createTistoryBlog({
       fetchText: vi.fn(async () => html),
     })
-    const source = provider.parseSource("https://sample.tistory.com/42")
-    const scan = await provider.scan(source)
+    const source = blog.parseSource("https://sample.tistory.com/42")
+    const scan = await blog.scan(source)
     const post = scan.posts[0]!
-    const tempDir = await mkdtemp(path.join(os.tmpdir(), "exitpress-provider-tistory-"))
+    const tempDir = await mkdtemp(path.join(os.tmpdir(), "exitpress-blog-tistory-"))
 
     try {
-      const result = await exportProviderPostUnit({
-        provider,
+      const result = await exportBlogPostUnit({
+        blog,
         source,
         outputDir: tempDir,
         post,
@@ -95,8 +95,8 @@ describe("createTistoryBlogProvider", () => {
   })
 
   it("exposes Tistory block template definitions", () => {
-    const provider = createTistoryBlogProvider()
-    const definitions = provider.getBlockTemplateDefinitions()
+    const blog = createTistoryBlog()
+    const definitions = blog.getBlockTemplateDefinitions()
     const definitionKeys = definitions.map((definition) => definition.key)
 
     expect(definitionKeys).toContain("tistory:heading")

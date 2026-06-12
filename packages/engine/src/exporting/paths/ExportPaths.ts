@@ -64,6 +64,7 @@ export const buildMarkdownFilePath = ({
 
   const postFolderName = buildPostFolderName({
     post: {
+      blogKey: post.blogKey,
       sourceId: post.sourceId,
       postId: post.postId,
       title: post.title,

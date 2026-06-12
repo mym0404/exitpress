@@ -6,6 +6,7 @@ import type { ExportResumeLookupResponse } from "../../../lib/Api.js"
 
 import type { WizardScanActionsArgs } from "./schema/WizardActions.js"
 
+import { defaultBlogKey } from "../../../app/AppDefaults.js"
 import { toast } from "../../../components/ui/Sonner.js"
 import { postJson } from "../../../lib/Api.js"
 import {
@@ -132,6 +133,7 @@ export const useWizardScanActions = ({
 
       try {
         const nextScanResult = await postJson<ScanResult>("/api/scan", {
+          blogKey: defaultBlogKey,
           sourceInput: currentScanTarget,
           forceRefresh,
         })

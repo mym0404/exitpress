@@ -1,8 +1,8 @@
 import { access, mkdir, readFile, rm, writeFile } from "node:fs/promises"
 import path from "node:path"
 
-import { NaverBlogExporter } from "@exitpress/blog-naver/exporting/NaverBlogExporter.js"
 import { defaultExportOptions } from "@exitpress/domain/export-options/ExportOptions.js"
+import { BlogExportWorkflow } from "@exitpress/engine/exporting/blog/BlogExportWorkflow.js"
 import { AbortOperationError } from "@exitpress/engine/infra/runtime/AbortOperation.js"
 import {
   baseScanResult,
@@ -57,6 +57,7 @@ describe("http server resume reset", () => {
         path.join(outputDir, "manifest.json"),
         JSON.stringify(
           {
+            blogKey: "naver",
             sourceId: "mym0404",
             profile: "gfm",
             options: defaultExportOptions(),
@@ -80,6 +81,7 @@ describe("http server resume reset", () => {
               id: "job-reset",
               phase: "export",
               request: {
+                blogKey: "naver",
                 sourceInput: "mym0404",
                 outputDir,
                 profile: "gfm",
@@ -105,6 +107,7 @@ describe("http server resume reset", () => {
               },
               error: null,
               scanResult: {
+                blogKey: "naver",
                 sourceId: baseScanResult.sourceId,
                 totalPostCount: baseScanResult.totalPostCount,
               },
@@ -169,8 +172,8 @@ describe("http server resume reset", () => {
       resolveStarted = resolve
     })
 
-    vi.spyOn(NaverBlogExporter.prototype, "run").mockImplementation(
-      async function (this: NaverBlogExporter) {
+    vi.spyOn(BlogExportWorkflow.prototype, "run").mockImplementation(
+      async function (this: BlogExportWorkflow) {
         resolveStarted()
 
         while (!this.abortSignal?.aborted) {
@@ -194,6 +197,7 @@ describe("http server resume reset", () => {
           "content-type": "application/json",
         },
         body: JSON.stringify({
+          blogKey: "naver",
           sourceInput: "https://blog.naver.com/mym0404",
           outputDir,
           options: defaultExportOptions(),

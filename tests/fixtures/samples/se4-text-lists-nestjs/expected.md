@@ -1,6 +1,7 @@
 ---
 title: "[Nest JS] 공부 시작"
 source: https://blog.naver.com/mym0404/222990202785
+blogKey: naver
 sourceId: mym0404
 postId: 222990202785
 publishedAt: 2023-01-21T02:38:27+09:00

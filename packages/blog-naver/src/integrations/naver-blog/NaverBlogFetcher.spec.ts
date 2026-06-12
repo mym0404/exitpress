@@ -36,7 +36,7 @@ describe("NaverBlogFetcher", () => {
     vi.stubGlobal("fetch", fetchMock)
 
     const fetcher = new NaverBlogFetcher({
-      blogId: "mym0404",
+      sourceId: "mym0404",
     })
 
     Reflect.set(fetcher, "requestTimeoutMs", 10)
@@ -104,7 +104,7 @@ describe("NaverBlogFetcher", () => {
     vi.stubGlobal("fetch", fetchMock)
 
     const fetcher = new NaverBlogFetcher({
-      blogId: "mym0404",
+      sourceId: "mym0404",
     })
 
     await expect(fetcher.getCategories()).resolves.toEqual([
@@ -155,7 +155,7 @@ describe("NaverBlogFetcher", () => {
     vi.stubGlobal("fetch", fetchMock)
 
     const fetcher = new NaverBlogFetcher({
-      blogId: "mym0404",
+      sourceId: "mym0404",
     })
 
     const binary = await fetcher.fetchBinary({
@@ -175,7 +175,7 @@ describe("NaverBlogFetcher", () => {
     vi.stubGlobal("fetch", fetchMock)
 
     const fetcher = new NaverBlogFetcher({
-      blogId: "mym0404",
+      sourceId: "mym0404",
       retryDelays: [0, 0],
     })
 
@@ -189,7 +189,7 @@ describe("NaverBlogFetcher", () => {
     vi.stubGlobal("fetch", fetchMock)
 
     const fetcher = new NaverBlogFetcher({
-      blogId: "mym0404",
+      sourceId: "mym0404",
       cache: {
         getPostHtml: async ({ sourceId, postId }) =>
           sourceId === "mym0404" && postId === "223034929697" ? "<div>cached</div>" : null,
@@ -209,7 +209,7 @@ describe("NaverBlogFetcher", () => {
     vi.stubGlobal("fetch", fetchMock)
 
     const fetcher = new NaverBlogFetcher({
-      blogId: "mym0404",
+      sourceId: "mym0404",
       cache: {
         getPostHtml: async () => null,
         setPostHtml,
@@ -240,7 +240,7 @@ describe("NaverBlogFetcher", () => {
     vi.stubGlobal("fetch", fetchMock)
 
     const fetcher = new NaverBlogFetcher({
-      blogId: "mym0404",
+      sourceId: "mym0404",
       retryDelays: [0, 0],
     })
 

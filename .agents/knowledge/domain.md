@@ -1,10 +1,11 @@
 # Domain
 
 ## Product Surface
-- The app exports public Naver Blog posts into local Markdown, assets, frontmatter, and a resumable manifest.
+- The app exports public blog posts into local Markdown, assets, frontmatter, and a resumable manifest.
 - Users choose blog source, output path, category/date scope, Markdown output options, asset handling, link rewrite, and upload behavior.
 
 ## Core Concepts
+- Blog identity: shared contracts use `blogKey`, `sourceInput`, `sourceId`, and `postId`.
 - Blog scan: categories, post summaries, detected block template keys, and scan cache state.
 - Export options: scope, output structure, frontmatter, block templates, asset handling, and same-blog link behavior.
 - Parser output: parsed posts, parsed blocks, block props, tables, media, and asset dependencies.

@@ -21,7 +21,7 @@ export type ExportResumeSummary = {
 }
 
 // Scan metadata kept in the manifest without duplicating the full scan.
-export type ExportManifestScanResult = Pick<ScanResult, "sourceId" | "totalPostCount">
+export type ExportManifestScanResult = Pick<ScanResult, "blogKey" | "sourceId" | "totalPostCount">
 
 type ExportManifestJobState = {
   id: string
@@ -40,6 +40,8 @@ type ExportManifestJobState = {
 }
 
 export type PostManifestEntry = {
+  blogKey: string
+  sourceId: string
   postId: string
   title: string
   source: string
@@ -57,6 +59,7 @@ export type PostManifestEntry = {
 
 // Resumable export record written beside exported posts.
 export type ExportManifest = {
+  blogKey: string
   sourceId: string
   profile: ExportProfile
   options: ExportOptions

@@ -22,6 +22,8 @@ export type EvidenceTarget =
 
 // Input case for one post evidence capture.
 export type EvidenceCase = {
+  blogKey: string
+  sourceInput: string
   sourceId: string
   postId: string
   metadata: string | Record<string, string | number | boolean | null | undefined>
@@ -39,10 +41,10 @@ export type EvidenceCliArgs = {
 }
 
 const usageText = `Usage:
-  bun scripts/post-evidence/capture-post-evidence.ts --sourceId my-blog --postId 123 [--metadata key=value] [--target post|inspect-path --inspectPath 0.1] [--optionsPath options.json] [--metadataCachePath tmp/harness/post-evidence/metadata-cache.json] [--outputDir tmp/harness/post-evidence/case] [--assetProfile readme|figure|tmp]
+  bun scripts/post-evidence/capture-post-evidence.ts --blogKey naver --sourceInput my-blog --postId 123 [--metadata key=value] [--target post|inspect-path --inspectPath 0.1] [--optionsPath options.json] [--metadataCachePath tmp/harness/post-evidence/metadata-cache.json] [--outputDir tmp/harness/post-evidence/case] [--assetProfile readme|figure|tmp]
   bun scripts/post-evidence/capture-post-evidence.ts --case cases.json [--metadataCachePath tmp/harness/post-evidence/metadata-cache.json] [--outputDir tmp/harness/post-evidence/run] [--assetProfile readme|figure|tmp]
 
-Outputs evidence.md, report.json, Naver screenshots, and Markdown evidence.`
+Outputs evidence.md, report.json, source capture images, and Markdown evidence.`
 
 export const capturePostEvidenceUsage = () => usageText
 
@@ -146,9 +148,12 @@ const parseCaseObject = ({
   context: string
 }): EvidenceCase => {
   const record = assertRecord(value, context)
+  const sourceInput = assertString(record.sourceInput, `${context}.sourceInput`)
 
   return {
-    sourceId: assertString(record.sourceId, `${context}.sourceId`),
+    blogKey: assertString(record.blogKey, `${context}.blogKey`),
+    sourceInput,
+    sourceId: typeof record.sourceId === "string" ? record.sourceId : sourceInput,
     postId: assertString(record.postId, `${context}.postId`),
     metadata:
       typeof record.metadata === "string" ||
@@ -186,7 +191,8 @@ export const parseEvidenceCaseFile = async ({
 export const parseCapturePostEvidenceArgs = async (
   args: string[],
 ): Promise<EvidenceCliArgs | typeof evidenceCliHelpResult> => {
-  let sourceId: string | undefined
+  let blogKey: string | undefined
+  let sourceInput: string | undefined
   let postId: string | undefined
   let target: EvidenceTargetKind = evidenceTargetPostKind
   let inspectPath: string | undefined
@@ -204,8 +210,14 @@ export const parseCapturePostEvidenceArgs = async (
       return evidenceCliHelpResult
     }
 
-    if (arg === "--sourceId") {
-      sourceId = readValue(args, index)
+    if (arg === "--blogKey") {
+      blogKey = readValue(args, index)
+      index++
+      continue
+    }
+
+    if (arg === "--sourceInput") {
+      sourceInput = readValue(args, index)
       index++
       continue
     }
@@ -288,14 +300,16 @@ export const parseCapturePostEvidenceArgs = async (
     }
   }
 
-  if (!sourceId || !postId || (target === "inspect-path" && !inspectPath)) {
+  if (!blogKey || !sourceInput || !postId || (target === "inspect-path" && !inspectPath)) {
     throw new Error(capturePostEvidenceUsage())
   }
 
   return {
     cases: [
       {
-        sourceId,
+        blogKey,
+        sourceInput,
+        sourceId: sourceInput,
         postId,
         metadata: parseMetadataEntries(metadataEntries),
         target:

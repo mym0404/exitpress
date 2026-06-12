@@ -14,6 +14,7 @@ export const postTemplateKeys = [
   "slug",
   "category",
   "title",
+  "blogKey",
   "postId",
   "sourceId",
   "date",
@@ -36,7 +37,7 @@ export const buildPostTemplateValues = ({
   post,
   options,
 }: {
-  post: Pick<PostSummary, "sourceId" | "postId" | "title" | "publishedAt"> & {
+  post: Pick<PostSummary, "blogKey" | "sourceId" | "postId" | "title" | "publishedAt"> & {
     categoryName?: string
   }
   options: Pick<ExportOptions, "structure">
@@ -58,6 +59,7 @@ export const buildPostTemplateValues = ({
       slugWhitespace: options.structure.slugWhitespace,
     }),
     title: sanitizePathSegment(post.title).replace(/\s+/g, "-"),
+    blogKey: post.blogKey,
     postId: post.postId,
     sourceId: post.sourceId,
     date,
@@ -85,7 +87,7 @@ export const buildPostFolderName = ({
   post,
   options,
 }: {
-  post: Pick<PostSummary, "sourceId" | "postId" | "title" | "publishedAt"> & {
+  post: Pick<PostSummary, "blogKey" | "sourceId" | "postId" | "title" | "publishedAt"> & {
     categoryName?: string
   }
   options: Pick<ExportOptions, "structure">

@@ -5,7 +5,9 @@ import { parseCapturePostEvidenceArgs } from "./cases.js"
 describe("parseCapturePostEvidenceArgs", () => {
   it("defaults asset profile to tmp", async () => {
     const parsed = await parseCapturePostEvidenceArgs([
-      "--sourceId",
+      "--blogKey",
+      "naver",
+      "--sourceInput",
       "my-blog",
       "--postId",
       "123456789012",
@@ -18,7 +20,9 @@ describe("parseCapturePostEvidenceArgs", () => {
 
   it("accepts a metadata cache path", async () => {
     const parsed = await parseCapturePostEvidenceArgs([
-      "--sourceId",
+      "--blogKey",
+      "naver",
+      "--sourceInput",
       "my-blog",
       "--postId",
       "123456789012",
@@ -34,7 +38,9 @@ describe("parseCapturePostEvidenceArgs", () => {
   it("accepts persistent asset profiles", async () => {
     await expect(
       parseCapturePostEvidenceArgs([
-        "--sourceId",
+        "--blogKey",
+        "naver",
+        "--sourceInput",
         "my-blog",
         "--postId",
         "123456789012",
@@ -46,7 +52,9 @@ describe("parseCapturePostEvidenceArgs", () => {
     })
     await expect(
       parseCapturePostEvidenceArgs([
-        "--sourceId",
+        "--blogKey",
+        "naver",
+        "--sourceInput",
         "my-blog",
         "--postId",
         "123456789012",
@@ -61,7 +69,9 @@ describe("parseCapturePostEvidenceArgs", () => {
   it("rejects the removed temporary profile name", async () => {
     await expect(
       parseCapturePostEvidenceArgs([
-        "--sourceId",
+        "--blogKey",
+        "naver",
+        "--sourceInput",
         "my-blog",
         "--postId",
         "123456789012",

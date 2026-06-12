@@ -1,7 +1,7 @@
 export type EvidenceMarkdownSection = {
   metadata: string | Record<string, string | number | boolean | null | undefined>
   sourceUrl: string
-  naverCapturePath: string | null
+  blogCapturePath: string | null
   markdown: string | null
 }
 
@@ -54,7 +54,7 @@ const renderSection = (
   options: Required<EvidenceMarkdownRenderOptions>,
 ) => {
   const heading = renderMetadata(section.metadata).replace(/\n/g, " / ")
-  const image = renderImage(section.naverCapturePath, `${heading} Naver capture`)
+  const image = renderImage(section.blogCapturePath, `${heading} source capture`)
   const markdown = renderMarkdownFence(section.markdown)
 
   return [

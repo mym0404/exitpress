@@ -180,6 +180,7 @@ const smokeImageBytes = Buffer.from(
 )
 
 const scanResult = {
+  blogKey: "naver",
   sourceId: "mym0404",
   totalPostCount: 1,
   categories: [
@@ -196,6 +197,7 @@ const scanResult = {
   ],
   posts: [
     {
+      blogKey: "naver",
       sourceId: "mym0404",
       postId: "223034929697",
       title: "NestJS 업로드 플로우 점검",
@@ -207,6 +209,16 @@ const scanResult = {
     },
   ],
 }
+
+const createScanResult = (sourceId: string) => ({
+  ...scanResult,
+  sourceId,
+  posts: scanResult.posts.map((post) => ({
+    ...post,
+    sourceId,
+    source: `https://blog.naver.com/${sourceId}/${post.postId}`,
+  })),
+})
 
 const createUploadFlowOptions = () => {
   const options = defaultExportOptions()
@@ -280,6 +292,8 @@ const buildUploadItem = ({
 
   return {
     id: outputPath,
+    blogKey: "naver",
+    sourceId: "mym0404",
     postId,
     title,
     source: `https://blog.naver.com/mym0404/${postId}`,
@@ -994,6 +1008,7 @@ export const runUiSmoke = async ({ browser }: { browser: Browser }) => {
       providerKey: string
       providerFields: Record<string, UploadProviderValue>
     }
+    lastScanSourceInput: string | null
   } = {
     scanRequestCount: 0,
     jobFetchCount: 0,
@@ -1002,6 +1017,7 @@ export const runUiSmoke = async ({ browser }: { browser: Browser }) => {
     exportOptions: null,
     testUploadPayload: null,
     exportUploadProvider: null,
+    lastScanSourceInput: null,
   }
 
   const manualUploadRoutePattern = /\/api\/export\/[^/]+\/upload$/
@@ -1103,8 +1119,12 @@ export const runUiSmoke = async ({ browser }: { browser: Browser }) => {
     }
 
     if (pathname === "/api/scan" && request.method() === "POST") {
+      const body = request.postDataJSON() as {
+        sourceInput?: string
+      }
+      mockState.lastScanSourceInput = body.sourceInput ?? null
       mockState.scanRequestCount += 1
-      await route.fulfill(buildJsonResponse(scanResult))
+      await route.fulfill(buildJsonResponse(createScanResult(body.sourceInput ?? "mym0404")))
       return
     }
 
@@ -1130,6 +1150,8 @@ export const runUiSmoke = async ({ browser }: { browser: Browser }) => {
 
     if (pathname === "/api/export" && request.method() === "POST") {
       const body = request.postDataJSON() as {
+        blogKey?: string
+        sourceInput?: string
         options?: ExportOptions
         uploadProvider?: {
           providerKey?: string
@@ -1137,6 +1159,13 @@ export const runUiSmoke = async ({ browser }: { browser: Browser }) => {
         }
       }
       const templates = body.options?.blockOutputs.templates ?? {}
+
+      if (
+        body.blogKey !== "naver" ||
+        body.sourceInput !== (mockState.lastScanSourceInput ?? "mym0404")
+      ) {
+        throw new Error("export payload did not include the selected blog identity")
+      }
 
       if (typeof templates["naver-se4:image"] !== "string") {
         throw new Error("export payload did not include the saved naver-se4 image template")

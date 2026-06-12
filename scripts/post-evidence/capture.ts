@@ -3,7 +3,7 @@ import { readFile, writeFile } from "node:fs/promises"
 import path from "node:path"
 
 import { NaverBlogFetcher } from "@exitpress/blog-naver/integrations/naver-blog/NaverBlogFetcher.js"
-import { extractBlogId, extractNaverBlogPostIdentity } from "@exitpress/blog-naver/NaverUrl.js"
+import { extractSourceId, extractNaverBlogPostIdentity } from "@exitpress/blog-naver/NaverUrl.js"
 import { parsePostHtmlWithBlockEvidence } from "@exitpress/blog-naver/parsing/naver-blog/core/PostParser.js"
 import { createNaverBlogDefaultBlockTemplateMap } from "@exitpress/blog-naver/parsing/naver-blog/NaverBlog.js"
 import { NaverBlog } from "@exitpress/blog-naver/parsing/naver-blog/NaverBlog.js"
@@ -47,17 +47,19 @@ import {
   safeEvidencePathSegment,
   toMarkdownAssetPath,
 } from "./paths.js"
-import { captureNaverPost } from "./playwright.js"
+import { captureBlogPost } from "./playwright.js"
 
-// Evidence row produced for one captured Naver post target.
+// Evidence row produced for one captured blog post target.
 export type EvidenceRowReport = {
+  blogKey: string
+  sourceInput: string
   sourceId: string
   postId: string
   target: EvidenceCase["target"]
   metadata: EvidenceCase["metadata"]
   sourceUrl: string
-  naverCaptureAssetPath: string | null
-  naverCapturePath: string | null
+  blogCaptureAssetPath: string | null
+  blogCapturePath: string | null
   markdown: string | null
   errors: string[]
 }
@@ -171,7 +173,7 @@ const createCaptureFilename = ({
   sourceId: string
   postId: string
   target: EvidenceCase["target"]
-  kind: "naver"
+  kind: string
 }) => {
   const targetSegment =
     target.kind === "post" ? "post" : `path-${safeEvidencePathSegment(target.path)}`
@@ -228,11 +230,15 @@ const renderEvidenceMarkdown = async ({
     options,
   })
   const resolveLinkUrl = createPostLinkResolver({
+    blogKey: "naver",
     sourceId,
     markdownFilePath,
     options,
     targets: postLinkTargets,
-    resolveIdentity: extractNaverBlogPostIdentity,
+    resolveIdentity: (value) => {
+      const identity = extractNaverBlogPostIdentity(value)
+      return identity ? { blogKey: "naver", ...identity } : null
+    },
   })
   const parsedPost = parsePostHtmlWithBlockEvidence({
     html,
@@ -301,7 +307,11 @@ const captureCase = async ({
   readBlogScan: (sourceId: string) => Promise<BlogScan>
   readFetcher: (sourceId: string) => Promise<SinglePostFetcher>
 }): Promise<EvidenceRowReport> => {
-  const sourceId = extractBlogId(evidenceCase.sourceId)
+  if (evidenceCase.blogKey !== "naver") {
+    throw new Error(`Unsupported blogKey for post evidence: ${evidenceCase.blogKey}`)
+  }
+
+  const sourceId = extractSourceId(evidenceCase.sourceId)
   const fetcher = await readFetcher(sourceId)
   const options = await readEvidenceOptions(evidenceCase.optionsPath)
   const html = await fetcher.fetchPostHtml(evidenceCase.postId)
@@ -329,44 +339,47 @@ const captureCase = async ({
     errors.push(toErrorMessage(error))
   }
 
-  const naverCapturePath = path.join(
+  const blogCapturePath = path.join(
     assetDir,
     createCaptureFilename({
       sourceId,
       postId: evidenceCase.postId,
       target: evidenceCase.target,
-      kind: "naver",
+      kind: evidenceCase.blogKey,
     }),
   )
 
   try {
-    await captureNaverPost({
+    await captureBlogPost({
+      blogKey: evidenceCase.blogKey,
       browser,
       sourceId,
       postId: evidenceCase.postId,
       editorType,
       inspectPath:
         evidenceCase.target.kind === "inspect-path" ? evidenceCase.target.path : undefined,
-      outputPath: naverCapturePath,
+      outputPath: blogCapturePath,
     })
   } catch (error) {
-    errors.push(`Naver capture failed: ${toErrorMessage(error)}`)
+    errors.push(`source capture failed: ${toErrorMessage(error)}`)
   }
 
-  const naverCaptureFailed = errors.some((error) => error.startsWith("Naver capture failed"))
+  const blogCaptureFailed = errors.some((error) => error.startsWith("source capture failed"))
 
   return {
+    blogKey: evidenceCase.blogKey,
+    sourceInput: evidenceCase.sourceInput,
     sourceId,
     postId: evidenceCase.postId,
     target: evidenceCase.target,
     metadata: evidenceCase.metadata,
     sourceUrl,
-    naverCaptureAssetPath: naverCaptureFailed ? null : naverCapturePath,
-    naverCapturePath: naverCaptureFailed
+    blogCaptureAssetPath: blogCaptureFailed ? null : blogCapturePath,
+    blogCapturePath: blogCaptureFailed
       ? null
       : toMarkdownAssetPath({
           markdownFilePath: evidencePath,
-          assetPath: naverCapturePath,
+          assetPath: blogCapturePath,
         }),
     markdown,
     errors,
@@ -383,10 +396,10 @@ export const createEvidenceMarkdownSections = ({
   rows.map((row) => ({
     metadata: row.metadata,
     sourceUrl: row.sourceUrl,
-    naverCapturePath: row.naverCaptureAssetPath
+    blogCapturePath: row.blogCaptureAssetPath
       ? toMarkdownAssetPath({
           markdownFilePath: evidencePath,
-          assetPath: row.naverCaptureAssetPath,
+          assetPath: row.blogCaptureAssetPath,
         })
       : null,
     markdown: row.markdown,
@@ -435,12 +448,21 @@ export const capturePostEvidence = async ({
 
     const fetcher = resolvedMetadataCachePath
       ? createSinglePostMetadataCachingFetcher({
+          blogKey: "naver",
           sourceId,
           cachePath: resolvedMetadataCachePath,
           readFile,
           writeFile,
+          createFetcher: ({ sourceId: fetcherSourceId }) =>
+            new NaverBlogFetcher({
+              sourceId: fetcherSourceId,
+            }),
         })
-      : Promise.resolve(new NaverBlogFetcher({ blogId: sourceId }))
+      : Promise.resolve(
+          new NaverBlogFetcher({
+            sourceId: sourceId,
+          }),
+        )
 
     fetcherCache.set(sourceId, fetcher)
     return fetcher

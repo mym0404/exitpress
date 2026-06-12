@@ -12,6 +12,7 @@ const jobOptions = defaultExportOptions()
 jobOptions.blockOutputs.templates["naver-se4:image"] = "{{ `![${alt}](${url})` }}"
 
 const scanResult: ScanResult = {
+  blogKey: "naver",
   sourceId: "mym0404",
   totalPostCount: 2,
   categories: [
@@ -28,6 +29,7 @@ const scanResult: ScanResult = {
   ],
   posts: [
     {
+      blogKey: "naver",
       sourceId: "mym0404",
       postId: "220971999345",
       title: "post-1",
@@ -38,6 +40,7 @@ const scanResult: ScanResult = {
       thumbnailUrl: null,
     },
     {
+      blogKey: "naver",
       sourceId: "mym0404",
       postId: "220971956932",
       title: "post-2",
@@ -53,6 +56,7 @@ const scanResult: ScanResult = {
 const job: ExportJobState = {
   id: "job-resume",
   request: {
+    blogKey: "naver",
     sourceInput: "mym0404",
     outputDir: testOutputDir,
     profile: "gfm",
@@ -85,6 +89,8 @@ const job: ExportJobState = {
   items: [
     {
       id: "posts/post-1/index.md",
+      blogKey: "naver",
+      sourceId: "mym0404",
       postId: "220971999345",
       title: "post-1",
       source: "https://blog.naver.com/mym0404/220971999345",
@@ -125,6 +131,7 @@ describe("buildResumableExportManifest", () => {
     expect(manifest.job).not.toHaveProperty("logs")
     expect(manifest.job).not.toHaveProperty("items")
     expect(manifest.job?.scanResult).toEqual({
+      blogKey: scanResult.blogKey,
       sourceId: scanResult.sourceId,
       totalPostCount: scanResult.totalPostCount,
     })

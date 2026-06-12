@@ -1,6 +1,7 @@
 ---
 title: 잔소리
 source: https://blog.naver.com/mym0404/222616669508
+blogKey: naver
 sourceId: mym0404
 postId: 222616669508
 publishedAt: 2022-01-09T01:41:18+09:00

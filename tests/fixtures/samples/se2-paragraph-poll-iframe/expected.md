@@ -1,6 +1,7 @@
 ---
 title: "[투표 2탄] 조선팔도 최고의 글쟁이를 뽑아주세요!"
 source: https://blog.naver.com/blogpeople/220501374134
+blogKey: naver
 sourceId: blogpeople
 postId: 220501374134
 publishedAt: 2015-10-07T00:00:00+09:00

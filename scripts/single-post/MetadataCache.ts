@@ -1,24 +1,25 @@
 import { mkdir, writeFile as writeFileDefault } from "node:fs/promises"
 import path from "node:path"
 
-import { NaverBlogFetcher } from "@exitpress/blog-naver/integrations/naver-blog/NaverBlogFetcher.js"
 import { log } from "@exitpress/engine/infra/runtime/Logger.js"
 
 import type { SinglePostFetcher } from "@exitpress/blog-naver/exporting/SinglePostExport.js"
 import type { PostSummary, ScanResult } from "@exitpress/domain/blog/schema/BlogScan.js"
 
 type SinglePostMetadataCacheFile = {
+  blogKey: string
   sourceId: string
   scan: ScanResult
   posts: PostSummary[]
 }
 
 type CreateSinglePostMetadataCachingFetcherArgs = {
+  blogKey: string
   sourceId: string
   cachePath: string | null
   readFile: (path: string, encoding: "utf8") => Promise<string>
   writeFile?: (path: string, contents: string, encoding: "utf8") => Promise<void>
-  createFetcher?: (input: { sourceId: string }) => SinglePostFetcher | Promise<SinglePostFetcher>
+  createFetcher: (input: { sourceId: string }) => SinglePostFetcher | Promise<SinglePostFetcher>
 }
 
 const isObject = (value: unknown): value is Record<string, unknown> =>
@@ -32,6 +33,7 @@ const isPostSummary = (value: unknown): value is PostSummary => {
   }
 
   return (
+    isString(value.blogKey) &&
     isString(value.sourceId) &&
     isString(value.postId) &&
     isString(value.title) &&
@@ -49,6 +51,7 @@ const isScanResult = (value: unknown): value is ScanResult => {
   }
 
   return (
+    isString(value.blogKey) &&
     isString(value.sourceId) &&
     typeof value.totalPostCount === "number" &&
     Array.isArray(value.categories) &&
@@ -61,7 +64,12 @@ const parseCacheFile = (value: unknown): SinglePostMetadataCacheFile | null => {
     return null
   }
 
-  if (!isString(value.sourceId) || !isScanResult(value.scan) || !Array.isArray(value.posts)) {
+  if (
+    !isString(value.blogKey) ||
+    !isString(value.sourceId) ||
+    !isScanResult(value.scan) ||
+    !Array.isArray(value.posts)
+  ) {
     return null
   }
 
@@ -69,11 +77,22 @@ const parseCacheFile = (value: unknown): SinglePostMetadataCacheFile | null => {
     return null
   }
 
+  if (value.scan.blogKey !== value.blogKey) {
+    return null
+  }
+
   if (!value.posts.every(isPostSummary)) {
     return null
   }
 
+  if (
+    value.posts.some((post) => post.blogKey !== value.blogKey || post.sourceId !== value.sourceId)
+  ) {
+    return null
+  }
+
   return {
+    blogKey: value.blogKey,
     sourceId: value.sourceId,
     scan: value.scan,
     posts: value.posts,
@@ -81,6 +100,7 @@ const parseCacheFile = (value: unknown): SinglePostMetadataCacheFile | null => {
 }
 
 export const createSinglePostMetadataCachingFetcher = async ({
+  blogKey,
   sourceId,
   cachePath,
   readFile: readFileImpl,
@@ -89,13 +109,9 @@ export const createSinglePostMetadataCachingFetcher = async ({
 }: CreateSinglePostMetadataCachingFetcherArgs): Promise<SinglePostFetcher> => {
   const resolvedCachePath = cachePath ? path.resolve(cachePath) : null
   const writeFileImpl = writeFile ?? writeFileDefault
-  const baseFetcher =
-    (await createFetcher?.({
-      sourceId,
-    })) ??
-    new NaverBlogFetcher({
-      blogId: sourceId,
-    })
+  const baseFetcher = await createFetcher({
+    sourceId,
+  })
 
   let cachedScan: ScanResult | null = null
   let cachedPosts: PostSummary[] | null = null
@@ -107,6 +123,10 @@ export const createSinglePostMetadataCachingFetcher = async ({
 
       if (!cache) {
         throw new Error("cache contents are invalid")
+      }
+
+      if (cache.blogKey !== blogKey) {
+        throw new Error(`blogKey mismatch: expected ${blogKey}, received ${cache.blogKey}`)
       }
 
       if (cache.sourceId !== sourceId) {
@@ -135,6 +155,7 @@ export const createSinglePostMetadataCachingFetcher = async ({
       resolvedCachePath,
       `${JSON.stringify(
         {
+          blogKey,
           sourceId,
           scan: cachedScan,
           posts: cachedPosts,

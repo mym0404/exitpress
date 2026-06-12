@@ -10,6 +10,7 @@ import { createTestTempDir } from "../../tests/support/test-paths.js"
 import { findLatestReusableIngestOutput, loadReusableIngestOutput } from "./ingest-output.js"
 
 const createManifest = (overrides: Partial<ExportManifest> = {}): ExportManifest => ({
+  blogKey: "naver",
   sourceId: "sample",
   profile: "gfm",
   options: {
@@ -30,6 +31,7 @@ const createManifest = (overrides: Partial<ExportManifest> = {}): ExportManifest
       fields: {
         title: true,
         source: true,
+        blogKey: true,
         sourceId: true,
         postId: true,
         publishedAt: true,
@@ -43,6 +45,7 @@ const createManifest = (overrides: Partial<ExportManifest> = {}): ExportManifest
       aliases: {
         title: "",
         source: "",
+        blogKey: "",
         sourceId: "",
         postId: "",
         publishedAt: "",
@@ -89,6 +92,8 @@ const createManifest = (overrides: Partial<ExportManifest> = {}): ExportManifest
   categories: [],
   posts: [
     {
+      blogKey: "naver",
+      sourceId: "sample",
       postId: "1",
       title: "failed",
       source: "https://blog.naver.com/sample/1",
@@ -126,6 +131,7 @@ describe("ingest output reuse helpers", () => {
     )
 
     const output = await loadReusableIngestOutput({
+      blogKey: "naver",
       sourceId: "sample",
       outputDir: dir,
     })
@@ -142,7 +148,7 @@ describe("ingest output reuse helpers", () => {
     )
 
     await expect(
-      loadReusableIngestOutput({ sourceId: "sample", outputDir: dir }),
+      loadReusableIngestOutput({ blogKey: "naver", sourceId: "sample", outputDir: dir }),
     ).resolves.toBeNull()
   })
 
@@ -168,6 +174,7 @@ describe("ingest output reuse helpers", () => {
     await utimes(newDir, new Date("2026-05-01T00:00:00.000Z"), new Date("2026-05-01T00:00:00.000Z"))
 
     const output = await findLatestReusableIngestOutput({
+      blogKey: "naver",
       sourceId: "sample",
       rootDir: root,
     })

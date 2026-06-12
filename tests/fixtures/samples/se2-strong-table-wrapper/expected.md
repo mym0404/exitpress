@@ -1,6 +1,7 @@
 ---
 title: "[개발자행사]NHN DeView2009,개방과 공유의 축제"
 source: https://blog.naver.com/naver_diary/150068341394
+blogKey: naver
 sourceId: naver_diary
 postId: 150068341394
 publishedAt: 2009-08-25T10:36:22+09:00

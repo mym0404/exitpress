@@ -1,6 +1,7 @@
 ---
 title: "[Outsourcing] 외주2"
 source: https://blog.naver.com/mym0404/221589718939
+blogKey: naver
 sourceId: mym0404
 postId: 221589718939
 publishedAt: 2019-07-19T12:11:57+09:00

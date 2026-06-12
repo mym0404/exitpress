@@ -2,6 +2,7 @@ import type { SinglePostInspectDiagnostics } from "@exitpress/blog-naver/exporti
 import type { ParserBlockInspection } from "@exitpress/blog-naver/parsing/naver-blog/core/ParserBlockDiagnostics.js"
 
 export const renderSinglePostSummary = ({
+  blogKey,
   sourceId,
   postId,
   blockIds,
@@ -9,6 +10,7 @@ export const renderSinglePostSummary = ({
   manualReviewMarkdownFilePath,
   metadataCachePath,
 }: {
+  blogKey: string
   sourceId: string
   postId: string
   blockIds: string[]
@@ -17,6 +19,7 @@ export const renderSinglePostSummary = ({
   metadataCachePath: string | null
 }) =>
   [
+    `blogKey: ${blogKey}`,
     `sourceId: ${sourceId}`,
     `postId: ${postId}`,
     `blockIds: ${blockIds.join(", ") || "(none)"}`,
@@ -54,6 +57,7 @@ export const renderSinglePostInspectSummary = ({
       : ["parse: failed", `error: ${diagnostics.parse.error}`]
 
   return [
+    `blogKey: ${diagnostics.blogKey}`,
     `sourceId: ${diagnostics.sourceId}`,
     `postId: ${diagnostics.postId}`,
     `editor: ${diagnostics.editor ? `${diagnostics.editor.type} (${diagnostics.editor.label})` : "(not detected)"}`,

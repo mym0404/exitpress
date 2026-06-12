@@ -3,29 +3,30 @@
 ## Runtime Shape
 
 - The local server owns process startup, HTTP APIs, static serving, job state, local settings, and upload provider runtime metadata.
-- The engine owns provider runtime interfaces, provider-neutral export units, Markdown rendering, asset persistence, upload candidate handling, link rewrite, and export manifest writing.
-- Concrete blog provider packages own provider-specific source parsing, fetching adapters, parser adapters, URL identity resolution, and provider workflows.
+- The engine owns blog runtime interfaces, blog-neutral export units, Markdown rendering, asset persistence, upload candidate handling, link rewrite, and export manifest writing.
+- Concrete `blog-*` packages own blog-specific source parsing, fetching adapters, parser adapters, URL identity resolution, and blog workflows.
 - The web package owns the browser wizard, Storybook surface, API client, and UI state.
 - The domain package owns shared contracts and pure deterministic logic used across packages.
+- Architecture work uses an abstract-first rule: shared contracts and engine flow start from `blogKey`, `sourceId`, `postId`, and `sourceInput`; concrete platform names belong only in the owning `blog-*` package, package-specific tests, fixtures, or user-facing platform selection UI.
 
 ## Main Flow
 
-- Scan starts from the server API and delegates provider retrieval to the selected concrete provider package.
-- Provider parser routing chooses the matching editor implementation and converts supported editor blocks into parsed blocks.
+- Scan starts from the server API and delegates retrieval to the selected concrete blog package.
+- Blog parser routing chooses the matching editor implementation and converts supported editor blocks into parsed blocks.
 - Renderer turns parsed blocks and templates into Markdown, resolves assets, and produces manifest-ready asset records.
 - Export workflow writes Markdown/assets, updates job progress, persists resume data, and runs automatic upload/rewrite phases when `download-and-upload` is selected.
-- Web reads bootstrap/defaults, drives scan/options/provider-test/export actions through HTTP APIs, and displays progress from polled job state.
+- Web reads bootstrap/defaults, drives scan/options/upload-provider-test/export actions through HTTP APIs, and displays progress from polled job state.
 
 ## Boundaries
 
 - Web runtime may import domain contracts and pure helpers only.
-- Server may import domain, engine, and concrete provider packages.
+- Server may import domain, engine, and concrete `blog-*` packages.
 - Engine may import domain but not web or server.
-- Blog provider-neutral DTOs live in `packages/domain/src/blog-provider/schema/`.
-- Blog provider runtime interfaces, registry, fetch policy, and provider-neutral export units live in `packages/engine/src/blog-provider/` and `packages/engine/src/exporting/provider/`.
-- Concrete providers live in `packages/blog-*`.
-- `blog-*` packages may depend on domain and engine, but must not define provider-neutral base types or contracts.
-- Provider-specific fetchers, parsers, URL helpers, and workflows must stay inside the owning concrete provider package.
+- Blog-neutral DTOs live in `packages/domain/src/blog/schema/`.
+- Blog runtime interfaces, registry, fetch policy, and blog-neutral export units live in `packages/engine/src/blog/` and `packages/engine/src/exporting/blog/`.
+- Concrete blogs live in `packages/blog-*`.
+- `blog-*` packages may depend on domain and engine, but must not define blog-neutral base types or contracts.
+- Blog-specific fetchers, parsers, URL helpers, and workflows must stay inside the owning concrete blog package.
 - Package and feature contracts live in the owning folder under `schema/`; cross-package contracts live in domain schema when shared across packages.
 - Shared utilities live under the owning package/folder `util/`.
 - Avoid barrel files and compatibility re-export files; import the current owner path directly.
@@ -33,7 +34,7 @@
 ## Storybook Flow
 
 - Storybook source data is committed in the web package.
-- A script renders the generated Storybook catalog through provider parser and engine renderer code.
+- A script renders the generated Storybook catalog through blog parser and engine renderer code.
 - The web Storybook route reads the committed generated catalog and does not import engine at runtime.
 
 ## Change Signals

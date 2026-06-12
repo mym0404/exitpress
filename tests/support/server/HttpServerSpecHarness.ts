@@ -47,6 +47,7 @@ export const textOnlyHtml = `
 `
 
 export const baseScanResult: ScanResult = {
+  blogKey: "naver",
   sourceId: "mym0404",
   totalPostCount: 1,
   categories: [
@@ -65,6 +66,7 @@ export const baseScanResult: ScanResult = {
 
 export const createPosts = (thumbnailUrl: string | null) => [
   {
+    blogKey: "naver",
     sourceId: "mym0404",
     postId: "223034929697",
     title: "테스트 글",
@@ -85,6 +87,7 @@ export const createPost = ({
   title: string
   thumbnailUrl: string | null
 }) => ({
+  blogKey: "naver",
   sourceId: "mym0404",
   postId,
   title,
@@ -160,9 +163,12 @@ export const waitForJob = async ({
   jobId: string
   accept: (job: ExportJobState) => boolean
 }) => {
+  let lastJob: ExportJobState | null = null
+
   for (let attempt = 0; attempt < 50; attempt += 1) {
     const response = await fetch(`${baseUrl}/api/export/${jobId}`)
     const job = (await response.json()) as ExportJobState
+    lastJob = job
 
     if (accept(job)) {
       return job
@@ -171,7 +177,9 @@ export const waitForJob = async ({
     await new Promise((resolve) => setTimeout(resolve, 25))
   }
 
-  throw new Error(`timed out waiting for job ${jobId}`)
+  throw new Error(
+    `timed out waiting for job ${jobId}: status=${lastJob?.status ?? "unknown"}, upload=${lastJob?.upload.status ?? "unknown"}, error=${lastJob?.error ?? "none"}`,
+  )
 }
 
 const uploadProviderCatalog: UploadProviderCatalogResponse = {
@@ -403,6 +411,7 @@ export const createUploadReadyJob = async ({
   const localPath = "public/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.png"
   const outputPath = "posts/test/index.md"
   const request: ExportRequest = {
+    blogKey: "naver",
     sourceInput: "https://blog.naver.com/mym0404",
     outputDir,
     profile: "gfm",
@@ -440,6 +449,7 @@ export const createUploadReadyJob = async ({
     rewrittenAt: null,
   }
   const manifest: ExportManifest = {
+    blogKey: "naver",
     sourceId: "mym0404",
     profile: "gfm",
     options: request.options,
@@ -453,6 +463,8 @@ export const createUploadReadyJob = async ({
     categories: baseScanResult.categories,
     posts: [
       {
+        blogKey: "naver",
+        sourceId: "mym0404",
         postId: "223034929697",
         title: "테스트 글",
         source: "https://blog.naver.com/mym0404/223034929697",

@@ -1,6 +1,7 @@
 ---
 title: "[동네를 만드는 사람들]경남 산청_지리산 청강원"
 source: https://blog.naver.com/naver_diary/221367365894
+blogKey: naver
 sourceId: naver_diary
 postId: 221367365894
 publishedAt: 2018-09-28T23:26:17+09:00

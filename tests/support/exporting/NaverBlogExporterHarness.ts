@@ -12,6 +12,7 @@ import { runWithLogSink } from "@exitpress/engine/infra/runtime/Logger.js"
 import { createTestTempDir } from "../test-paths.js"
 
 export const scanResult = {
+  blogKey: "naver",
   sourceId: "mym0404",
   totalPostCount: 1,
   categories: [
@@ -30,6 +31,7 @@ export const scanResult = {
 
 export const posts = [
   {
+    blogKey: "naver",
     sourceId: "mym0404",
     postId: "223034929697",
     title: "테스트 글",
@@ -119,6 +121,7 @@ assetPaths:
     markdown,
     markdownPath: path.join(outputDir, outputPath),
     manifest: {
+      blogKey: "naver",
       sourceId: "mym0404",
       profile: "gfm" as const,
       options: defaultExportOptions(),
@@ -139,6 +142,8 @@ assetPaths:
       categories: scanResult.categories,
       posts: [
         {
+          blogKey: "naver",
+          sourceId: posts[0].sourceId,
           postId: posts[0].postId,
           title: posts[0].title,
           source: posts[0].source,
@@ -186,6 +191,7 @@ export const createHtmlFragmentUploadReadyFixture = ({ outputDir }: { outputDir:
     markdown,
     markdownPath: path.join(outputDir, outputPath),
     manifest: {
+      blogKey: "naver",
       sourceId: "mym0404",
       profile: "gfm" as const,
       options: defaultExportOptions(),
@@ -206,6 +212,8 @@ export const createHtmlFragmentUploadReadyFixture = ({ outputDir }: { outputDir:
       categories: scanResult.categories,
       posts: [
         {
+          blogKey: "naver",
+          sourceId: posts[0].sourceId,
           postId: posts[0].postId,
           title: posts[0].title,
           source: posts[0].source,

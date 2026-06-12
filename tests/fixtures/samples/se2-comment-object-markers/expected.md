@@ -1,6 +1,7 @@
 ---
 title: 마음 / 오정선
 source: https://blog.naver.com/anglekim3708/70187292476
+blogKey: naver
 sourceId: anglekim3708
 postId: 70187292476
 publishedAt: 2014-03-23T16:49:40+09:00

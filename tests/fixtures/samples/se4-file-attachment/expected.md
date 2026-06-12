@@ -1,6 +1,7 @@
 ---
 title: "[Git] Git 세미나 자료"
 source: https://blog.naver.com/mym0404/222655418367
+blogKey: naver
 sourceId: mym0404
 postId: 222655418367
 publishedAt: 2022-02-23T10:40:44+09:00

@@ -1,6 +1,7 @@
 ---
 title: "[블로그] 재능기부, 소설가 김영하를 만나다."
 source: https://blog.naver.com/naver_diary/150092783639
+blogKey: naver
 sourceId: naver_diary
 postId: 150092783639
 publishedAt: 2010-08-26T19:10:53+09:00

@@ -27,6 +27,7 @@ const category: CategoryInfo = {
 }
 
 const post: PostSummary = {
+  blogKey: "sample",
   sourceId: "mym0404",
   postId: "223034929697",
   title: "테스트 글",
@@ -38,11 +39,11 @@ const post: PostSummary = {
 }
 
 const defaultBlockTemplates = {
-  "provider:paragraph": "{{ text }}",
-  "provider:quote": "> {{ text }}",
-  "provider:image": "{{ `![${alt}](${url})` }}",
-  "provider:video": "{{ `[${title}](${url})` }}",
-  "provider:table": tableTemplate,
+  "blog:paragraph": "{{ text }}",
+  "blog:quote": "> {{ text }}",
+  "blog:image": "{{ `![${alt}](${url})` }}",
+  "blog:video": "{{ `[${title}](${url})` }}",
+  "blog:table": tableTemplate,
 }
 
 const createAssetRecord = ({
@@ -93,10 +94,10 @@ describe("renderMarkdownPost", () => {
       parsedPost: {
         tags: ["algo"],
         blocks: [
-          { blockId: "provider:paragraph", props: { text: "본문입니다." } },
-          { blockId: "provider:quote", props: { text: "인용문" } },
+          { blockId: "blog:paragraph", props: { text: "본문입니다." } },
+          { blockId: "blog:quote", props: { text: "인용문" } },
           {
-            blockId: "provider:video",
+            blockId: "blog:video",
             props: {
               title: "Demo",
               url: "https://example.com/video",
@@ -110,6 +111,7 @@ describe("renderMarkdownPost", () => {
     })
 
     expect(rendered.markdown).toContain("title: 테스트 글")
+    expect(rendered.markdown).toContain("blogKey: sample")
     expect(rendered.markdown).toContain("postId: 223034929697")
     expect(rendered.markdown).toContain("본문입니다.")
     expect(rendered.markdown).toContain("> 인용문")
@@ -119,13 +121,13 @@ describe("renderMarkdownPost", () => {
 
   it("uses custom templates by blockId", async () => {
     const options = defaultExportOptions()
-    options.blockOutputs.templates["provider:paragraph"] = "CUSTOM {{ text }}"
+    options.blockOutputs.templates["blog:paragraph"] = "CUSTOM {{ text }}"
 
     const rendered = await render({
       options,
       parsedPost: {
         tags: [],
-        blocks: [{ blockId: "provider:paragraph", props: { text: "본문" } }],
+        blocks: [{ blockId: "blog:paragraph", props: { text: "본문" } }],
       },
     })
 
@@ -134,7 +136,7 @@ describe("renderMarkdownPost", () => {
 
   it("allows an empty custom block template to omit a block", async () => {
     const options = defaultExportOptions()
-    options.blockOutputs.templates["provider:video"] = ""
+    options.blockOutputs.templates["blog:video"] = ""
 
     const rendered = await render({
       options,
@@ -142,7 +144,7 @@ describe("renderMarkdownPost", () => {
         tags: [],
         blocks: [
           {
-            blockId: "provider:video",
+            blockId: "blog:video",
             props: {
               title: "Demo",
               url: "https://example.com/video",
@@ -165,7 +167,7 @@ describe("renderMarkdownPost", () => {
       category,
       parsedPost: {
         tags: [],
-        blocks: [{ blockId: "provider:paragraph", props: { text: "본문" } }],
+        blocks: [{ blockId: "blog:paragraph", props: { text: "본문" } }],
       },
       defaultBlockTemplates,
       markdownFilePath,
@@ -188,7 +190,7 @@ describe("renderMarkdownPost", () => {
       category,
       parsedPost: {
         tags: [],
-        blocks: [{ blockId: "provider:paragraph", props: { text: "본문" } }],
+        blocks: [{ blockId: "blog:paragraph", props: { text: "본문" } }],
       },
       defaultBlockTemplates,
       markdownFilePath,
@@ -211,7 +213,7 @@ describe("renderMarkdownPost", () => {
         tags: [],
         blocks: [
           {
-            blockId: "provider:image",
+            blockId: "blog:image",
             props: {
               url: "https://example.com/image.png",
               alt: "image",
@@ -245,7 +247,7 @@ describe("renderMarkdownPost", () => {
         tags: [],
         blocks: [
           {
-            blockId: "provider:image",
+            blockId: "blog:image",
             props: {
               url: "https://example.com/missing.png",
               alt: "missing",
@@ -277,9 +279,9 @@ describe("renderMarkdownPost", () => {
       render({
         parsedPost: {
           tags: [],
-          blocks: [{ blockId: "provider:unknown", props: { text: "본문" } }],
+          blocks: [{ blockId: "blog:unknown", props: { text: "본문" } }],
         },
       }),
-    ).rejects.toThrow("Parser block template is missing: provider:unknown")
+    ).rejects.toThrow("Parser block template is missing: blog:unknown")
   })
 })

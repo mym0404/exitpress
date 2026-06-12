@@ -56,6 +56,7 @@ const appendStructurePreviewPost = ({
   const postFolderNamePreview = getTemplatePreview(() =>
     buildPostFolderName({
       post: {
+        blogKey: "naver",
         sourceId: "mym0404",
         postId: post.postId,
         title: post.title,

@@ -1,6 +1,7 @@
 ---
 title: 2024 대전 디지털교육 밋업데이 Meet Up Day – 수학대왕의 참여와 AI 코스웨어로 이룬 성황리 마무리
 source: https://blog.naver.com/iammathking/223674688590
+blogKey: naver
 sourceId: iammathking
 postId: 223674688590
 publishedAt: 2024-12-07T07:10:00+09:00

@@ -18,6 +18,7 @@ export const defaultExportOptions = (): ExportOptions => ({
     fields: {
       title: true,
       source: true,
+      blogKey: true,
       sourceId: true,
       postId: true,
       publishedAt: true,
@@ -31,6 +32,7 @@ export const defaultExportOptions = (): ExportOptions => ({
     aliases: {
       title: "",
       source: "",
+      blogKey: "",
       sourceId: "",
       postId: "",
       publishedAt: "",

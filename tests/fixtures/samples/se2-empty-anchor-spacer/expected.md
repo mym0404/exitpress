@@ -1,6 +1,7 @@
 ---
 title: 사전은 '밥'이다
 source: https://blog.naver.com/naver_diary/150139648475
+blogKey: naver
 sourceId: naver_diary
 postId: 150139648475
 publishedAt: 2012-05-30T14:54:58+09:00

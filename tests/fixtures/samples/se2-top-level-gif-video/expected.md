@@ -1,6 +1,7 @@
 ---
 title: 편의를 높이는 새로운 기능 업데이트! 다크모드와 위젯을 소개합니다
 source: https://blog.naver.com/naver_diary/222366132633
+blogKey: naver
 sourceId: naver_diary
 postId: 222366132633
 publishedAt: 2021-05-25T14:47:32+09:00

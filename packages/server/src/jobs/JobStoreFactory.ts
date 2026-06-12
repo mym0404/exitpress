@@ -18,6 +18,8 @@ export const buildJobItemFromPost = (
   updatedAt: string,
 ): ExportJobItem => ({
   id: getJobItemId(post),
+  blogKey: post.blogKey,
+  sourceId: post.sourceId,
   postId: post.postId,
   title: post.title,
   source: post.source,

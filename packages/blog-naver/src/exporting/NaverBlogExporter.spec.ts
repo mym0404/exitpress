@@ -49,6 +49,7 @@ describe("NaverBlogExporter", () => {
 
     const exporter = new NaverBlogExporter({
       request: {
+        blogKey: "naver",
         sourceInput: "https://blog.naver.com/mym0404",
         outputDir,
         profile: "gfm",
@@ -117,6 +118,7 @@ describe("NaverBlogExporter", () => {
 
     const exporter = new NaverBlogExporter({
       request: {
+        blogKey: "naver",
         sourceInput: "https://blog.naver.com/mym0404",
         outputDir,
         profile: "gfm",
@@ -156,6 +158,7 @@ describe("NaverBlogExporter", () => {
 
     const exporter = new NaverBlogExporter({
       request: {
+        blogKey: "naver",
         sourceInput: "https://blog.naver.com/mym0404",
         outputDir,
         profile: "gfm",
@@ -211,6 +214,7 @@ describe("NaverBlogExporter", () => {
     try {
       const exporter = new NaverBlogExporter({
         request: {
+          blogKey: "naver",
           sourceInput: "https://blog.naver.com/mym0404",
           outputDir,
           profile: "gfm",
@@ -272,6 +276,7 @@ describe("NaverBlogExporter", () => {
     try {
       const exporter = new NaverBlogExporter({
         request: {
+          blogKey: "naver",
           sourceInput: "https://blog.naver.com/mym0404",
           outputDir,
           profile: "gfm",
@@ -323,6 +328,7 @@ describe("NaverBlogExporter", () => {
 
     const exporter = new NaverBlogExporter({
       request: {
+        blogKey: "naver",
         sourceInput: "https://blog.naver.com/mym0404",
         outputDir,
         profile: "gfm",
@@ -402,6 +408,7 @@ describe("NaverBlogExporter", () => {
 
     const exporter = new NaverBlogExporter({
       request: {
+        blogKey: "naver",
         sourceInput: "https://blog.naver.com/mym0404",
         outputDir,
         profile: "gfm",
@@ -473,6 +480,7 @@ describe("NaverBlogExporter", () => {
 
     const exporter = new NaverBlogExporter({
       request: {
+        blogKey: "naver",
         sourceInput: "https://blog.naver.com/mym0404",
         outputDir,
         profile: "gfm",
@@ -521,6 +529,7 @@ describe("NaverBlogExporter", () => {
 
     const exporter = new NaverBlogExporter({
       request: {
+        blogKey: "naver",
         sourceInput: "https://blog.naver.com/mym0404",
         outputDir,
         profile: "gfm",
@@ -555,6 +564,7 @@ describe("NaverBlogExporter", () => {
 
     const exporter = new NaverBlogExporter({
       request: {
+        blogKey: "naver",
         sourceInput: "https://blog.naver.com/mym0404",
         outputDir,
         profile: "gfm",
@@ -623,6 +633,8 @@ describe("NaverBlogExporter", () => {
         items: [
           {
             id: fixture.manifest.posts[0]!.outputPath!,
+            blogKey: fixture.manifest.posts[0]!.blogKey,
+            sourceId: fixture.manifest.posts[0]!.sourceId,
             postId: fixture.manifest.posts[0]!.postId,
             title: fixture.manifest.posts[0]!.title,
             source: fixture.manifest.posts[0]!.source,

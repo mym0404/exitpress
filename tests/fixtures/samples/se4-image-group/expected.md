@@ -1,6 +1,7 @@
 ---
 title: 초간단 운전면허 필기 2026 - 첫 시험에서 합격하는 가장 확실한 방법
 source: https://blog.naver.com/mym0404/224056819985
+blogKey: naver
 sourceId: mym0404
 postId: 224056819985
 publishedAt: 2025-10-28T18:55:34+09:00

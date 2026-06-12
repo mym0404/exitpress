@@ -1,10 +1,10 @@
-import type { BlogProvider } from "@exitpress/engine/blog-provider/BlogProvider.js"
+import type { Blog } from "@exitpress/engine/blog/Blog.js"
 
-export const createMarkdownMockProvider = (): BlogProvider => ({
+export const createMarkdownMockBlog = (): Blog => ({
   key: "mock-markdown",
   label: "Mock Markdown",
   parseSource: (input) => ({
-    providerKey: "mock-markdown",
+    blogKey: "mock-markdown",
     sourceId: input,
     displayName: input,
     input,
@@ -24,7 +24,7 @@ export const createMarkdownMockProvider = (): BlogProvider => ({
     ],
     posts: [
       {
-        providerKey: source.providerKey,
+        blogKey: source.blogKey,
         sourceId: source.sourceId,
         postId: "mock-post-1",
         title: "Mock markdown post",
@@ -38,7 +38,7 @@ export const createMarkdownMockProvider = (): BlogProvider => ({
   }),
   loadPostContent: async () => ({
     kind: "markdown",
-    markdown: "Hello from markdown provider",
+    markdown: "Hello from markdown blog",
     sourceUrl: "https://example.com/mock-post-1",
     tags: ["mock"],
   }),

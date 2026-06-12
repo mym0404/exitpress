@@ -1,6 +1,7 @@
 ---
 title: 제부도 모세의기적 하루코스여행~^^
 source: https://blog.naver.com/cuk1026/221300912196
+blogKey: naver
 sourceId: cuk1026
 postId: 221300912196
 publishedAt: 2018-06-17T22:08:55+09:00

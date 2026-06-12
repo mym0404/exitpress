@@ -32,6 +32,7 @@ const createFetcher = ({
   html: string
 }) => ({
   scanBlog: async () => ({
+    blogKey: "naver",
     sourceId: resolvedBlogId,
     totalPostCount: posts.length,
     categories: [
@@ -57,7 +58,7 @@ const createFetcher = ({
       },
     ],
   }),
-  getAllPosts: async () => posts,
+  getAllPosts: async () => posts.map((post) => ({ blogKey: "naver", ...post })),
   fetchPostHtml: async (requestedPostId: string) => {
     if (requestedPostId !== logNo) {
       throw new Error(`unexpected postId: ${requestedPostId}`)
@@ -81,6 +82,7 @@ describe("exportSinglePost", () => {
     const options = defaultExportOptions()
 
     const post = {
+      blogKey: "naver",
       sourceId: blogId,
       postId: logNo,
       title: "Single post",

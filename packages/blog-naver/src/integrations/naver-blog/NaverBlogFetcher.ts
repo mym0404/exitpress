@@ -26,23 +26,23 @@ const defaultRetryDelays = [0, 1_000, 2_000, 4_000]
 const defaultRequestTimeoutMs = 5_000
 
 export class NaverBlogFetcher {
-  readonly blogId: string
+  readonly sourceId: string
   readonly requestTimeoutMs: number
   readonly retryDelays: number[]
   readonly cache?: NaverBlogFetcherCache
 
   constructor({
-    blogId,
+    sourceId,
     requestTimeoutMs,
     retryDelays,
     cache,
   }: {
-    blogId: string
+    sourceId: string
     requestTimeoutMs?: number
     retryDelays?: number[]
     cache?: NaverBlogFetcherCache
   }) {
-    this.blogId = blogId
+    this.sourceId = sourceId
     this.requestTimeoutMs = requestTimeoutMs ?? defaultRequestTimeoutMs
     this.retryDelays = retryDelays ?? defaultRetryDelays
     this.cache = cache
@@ -50,7 +50,7 @@ export class NaverBlogFetcher {
 
   async getPostCount() {
     const result = await this.fetchJson<{ postCount: number }>({
-      url: `https://m.blog.naver.com/api/blogs/${this.blogId}/contents-count`,
+      url: `https://m.blog.naver.com/api/blogs/${this.sourceId}/contents-count`,
     })
 
     return result.postCount
@@ -60,7 +60,7 @@ export class NaverBlogFetcher {
     const result = await this.fetchJson<{
       mylogCategoryList: CategoryApiItem[]
     }>({
-      url: `https://m.blog.naver.com/api/blogs/${this.blogId}/category-list`,
+      url: `https://m.blog.naver.com/api/blogs/${this.sourceId}/category-list`,
     })
 
     const categories = result.mylogCategoryList.map((category) => ({
@@ -108,7 +108,8 @@ export class NaverBlogFetcher {
       : undefined
 
     return {
-      sourceId: this.blogId,
+      blogKey: "naver",
+      sourceId: this.sourceId,
       totalPostCount,
       categories,
       ...(posts ? { posts } : {}),
@@ -126,23 +127,21 @@ export class NaverBlogFetcher {
         const result = await this.fetchJson<{
           items: PostApiItem[]
         }>({
-          url: `https://m.blog.naver.com/api/blogs/${this.blogId}/post-list?page=${page}&itemCount=${pageSize}&categoryNo=0`,
+          url: `https://m.blog.naver.com/api/blogs/${this.sourceId}/post-list?page=${page}&itemCount=${pageSize}&categoryNo=0`,
         })
         const pageItems = result.items
           .filter(
             (item) => !item.notOpen && !item.postBlocked && !item.buddyOpen && !item.bothBuddyOpen,
           )
           .map((item) => ({
-            sourceId: this.blogId,
+            blogKey: "naver",
+            sourceId: this.sourceId,
             postId: String(item.logNo),
             title: item.titleWithInspectMessage.trim(),
             publishedAt: toKstDateTime(item.addDate),
             categoryId: item.categoryNo,
             categoryName: sanitizeCategoryName(item.categoryName),
-            source: getSourceUrl({
-              blogId: this.blogId,
-              logNo: String(item.logNo),
-            }),
+            source: getSourceUrl({ sourceId: this.sourceId, postId: String(item.logNo) }),
             thumbnailUrl: item.thumbnailUrl ? normalizeAssetUrl(item.thumbnailUrl) : null,
           }))
 
@@ -162,7 +161,7 @@ export class NaverBlogFetcher {
 
   async fetchPostHtml(logNo: string) {
     const cachedHtml = await this.cache?.getPostHtml?.({
-      sourceId: this.blogId,
+      sourceId: this.sourceId,
       postId: logNo,
     })
 
@@ -171,9 +170,9 @@ export class NaverBlogFetcher {
     }
 
     const response = await HttpRequests.fetchResponseWithRetry({
-      url: `https://m.blog.naver.com/PostView.naver?blogId=${this.blogId}&logNo=${logNo}`,
+      url: `https://m.blog.naver.com/PostView.naver?blogId=${this.sourceId}&logNo=${logNo}`,
       headers: htmlHeaders({
-        blogId: this.blogId,
+        blogId: this.sourceId,
       }),
       failureLabel: "글 HTML 요청 실패",
       retryDelays: this.retryDelays,
@@ -183,7 +182,7 @@ export class NaverBlogFetcher {
     const html = await response.text()
 
     await this.cache?.setPostHtml?.({
-      sourceId: this.blogId,
+      sourceId: this.sourceId,
       postId: logNo,
       html,
     })
@@ -219,7 +218,7 @@ export class NaverBlogFetcher {
   }
   private async fetchJson<Result>({ url }: { url: string }): Promise<Result> {
     return fetchNaverBlogJson({
-      blogId: this.blogId,
+      blogId: this.sourceId,
       url,
       retryDelays: this.retryDelays,
       requestTimeoutMs: this.requestTimeoutMs,

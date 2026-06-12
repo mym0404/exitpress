@@ -5,12 +5,12 @@ export type SupportUnitFailureGroup = {
   firstUnsupportedPath?: string | null
   firstUnsupportedTag?: string | null
   representative?: {
-    logNo: string
+    postId: string
     title?: string
     source?: string
     inspectReportPath?: string | null
   }
-  logNos: string[]
+  postIds: string[]
 }
 
 const mergeOptionalGroupMetadata = ({
@@ -40,7 +40,7 @@ export const mergeSupportUnitFailureGroups = (groups: SupportUnitFailureGroup[])
           current: group,
           next: group,
         }),
-        logNos: [...new Set(group.logNos)],
+        postIds: [...new Set(group.postIds)],
       })
       continue
     }
@@ -51,7 +51,7 @@ export const mergeSupportUnitFailureGroups = (groups: SupportUnitFailureGroup[])
         current,
         next: group,
       }),
-      logNos: [...new Set([...current.logNos, ...group.logNos])],
+      postIds: [...new Set([...current.postIds, ...group.postIds])],
     })
   }
 
@@ -72,7 +72,7 @@ export const selectFocusedSupportUnit = <Group extends SupportUnitFailureGroup>(
       reportFailureGroups: failureGroups,
       remainingBacklogGroups: [],
       previousFocusedGroups: [],
-      previousFocusedLogNos: [],
+      previousFocusedPostIds: [],
       focusedFailureBlockHash: undefined,
       focusedSupportUnitKnown: true,
       focusedSupportUnitResolved: null,
@@ -88,10 +88,11 @@ export const selectFocusedSupportUnit = <Group extends SupportUnitFailureGroup>(
   const previousFocusedGroups = previousFailureGroups.filter(
     (group) => group.supportUnitKey === focusSupportUnit,
   )
-  const previousFocusedLogNos = previousFailureGroups
+  const previousFocusedPostIds = previousFailureGroups
     .filter((group) => group.supportUnitKey === focusSupportUnit)
-    .flatMap((group) => group.logNos)
-  const focusedSupportUnitKnown = reportFailureGroups.length > 0 || previousFocusedLogNos.length > 0
+    .flatMap((group) => group.postIds)
+  const focusedSupportUnitKnown =
+    reportFailureGroups.length > 0 || previousFocusedPostIds.length > 0
   const focusedFailureBlockHash =
     reportFailureGroups.find((group) => group.failureBlockHash)?.failureBlockHash ??
     previousFailureGroups.find((group) => group.supportUnitKey === focusSupportUnit)
@@ -101,7 +102,7 @@ export const selectFocusedSupportUnit = <Group extends SupportUnitFailureGroup>(
     reportFailureGroups,
     remainingBacklogGroups,
     previousFocusedGroups,
-    previousFocusedLogNos,
+    previousFocusedPostIds,
     focusedFailureBlockHash,
     focusedSupportUnitKnown,
     focusedSupportUnitResolved: focusedSupportUnitKnown ? reportFailureGroups.length === 0 : false,

@@ -123,6 +123,7 @@ const uploadProviderCatalog: UploadProviderCatalogResponse = {
 const blockTemplateDefinitions = new NaverBlog().getBlockTemplateDefinitions()
 
 const resumedScanResult: ScanResult = {
+  blogKey: "naver",
   sourceId: "mym0404",
   totalPostCount: 5,
   categories: [
@@ -139,6 +140,7 @@ const resumedScanResult: ScanResult = {
   ],
   posts: [
     {
+      blogKey: "naver",
       sourceId: "mym0404",
       postId: "223034929700",
       title: "NestJS 복구 테스트 1",
@@ -201,6 +203,8 @@ const buildUploadItem = ({
 
   return {
     id: `NestJS/2026-04-11-${postId}/index.md`,
+    blogKey: "naver",
+    sourceId: "mym0404",
     postId,
     title: `NestJS 복구 테스트 ${postId.slice(-1)}`,
     source: `https://blog.naver.com/mym0404/${postId}`,
@@ -239,6 +243,7 @@ const buildExportRunningJob = ({
 }): ExportJobState => ({
   id: "job-running",
   request: {
+    blogKey: "naver",
     sourceInput: "mym0404",
     outputDir,
     profile: "gfm",
@@ -342,6 +347,7 @@ const buildUploadJob = ({
   return {
     id: jobId,
     request: {
+      blogKey: "naver",
       sourceInput: "mym0404",
       outputDir,
       profile: "gfm",
@@ -391,6 +397,7 @@ const buildUploadJob = ({
 const buildCompletedJob = ({ outputDir }: { outputDir: string }): ExportJobState => ({
   id: "job-completed",
   request: {
+    blogKey: "naver",
     sourceInput: "mym0404",
     outputDir,
     profile: "gfm",
@@ -428,6 +435,7 @@ const buildCompletedJob = ({ outputDir }: { outputDir: string }): ExportJobState
 const buildFailedJob = ({ outputDir }: { outputDir: string }): ExportJobState => ({
   id: "job-failed",
   request: {
+    blogKey: "naver",
     sourceInput: "mym0404",
     outputDir,
     profile: "gfm",

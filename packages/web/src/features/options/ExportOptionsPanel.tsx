@@ -40,7 +40,7 @@ export const ExportOptionsPanel = ({
   frontmatterValidationErrors: string[]
   linkTemplatePreviewPost?: Pick<
     PostSummary,
-    "sourceId" | "postId" | "title" | "publishedAt" | "categoryName"
+    "blogKey" | "sourceId" | "postId" | "title" | "publishedAt" | "categoryName"
   > | null
   onOptionsChange: (updater: (current: ExportOptions) => ExportOptions) => void
 }) => {

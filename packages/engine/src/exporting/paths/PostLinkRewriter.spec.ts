@@ -23,6 +23,7 @@ const categories: CategoryInfo[] = [
 
 const posts: PostSummary[] = [
   {
+    blogKey: "mock",
     sourceId: "source-a",
     postId: "post-1",
     title: "First post",
@@ -33,6 +34,7 @@ const posts: PostSummary[] = [
     thumbnailUrl: null,
   },
   {
+    blogKey: "mock",
     sourceId: "source-a",
     postId: "post-2",
     title: "Second post",
@@ -45,12 +47,13 @@ const posts: PostSummary[] = [
 ]
 
 const resolveIdentity = (url: string) => {
-  const match = url.match(/^post:\/\/([^/]+)\/([^/]+)$/)
+  const match = url.match(/^post:\/\/([^/]+)\/([^/]+)\/([^/]+)$/)
 
   return match
     ? {
-        sourceId: match[1] ?? "",
-        postId: match[2] ?? "",
+        blogKey: match[1] ?? "",
+        sourceId: match[2] ?? "",
+        postId: match[3] ?? "",
       }
     : null
 }
@@ -66,6 +69,7 @@ describe("post-link-rewriter", () => {
     })
     const resolveLinkUrl = createPostLinkResolver({
       sourceId: "source-a",
+      blogKey: "mock",
       markdownFilePath: `${testExportDir}/notes/2026-04-11-first-post/index.md`,
       options: {
         links: {
@@ -77,8 +81,9 @@ describe("post-link-rewriter", () => {
       resolveIdentity,
     })
 
-    expect(resolveLinkUrl("post://source-a/post-2")).toBe("../2026-04-12-second_post/index.md")
-    expect(resolveLinkUrl("post://source-b/post-1")).toBe("post://source-b/post-1")
+    expect(resolveLinkUrl("post://mock/source-a/post-2")).toBe("../2026-04-12-second_post/index.md")
+    expect(resolveLinkUrl("post://other/source-a/post-2")).toBe("post://other/source-a/post-2")
+    expect(resolveLinkUrl("post://mock/source-b/post-1")).toBe("post://mock/source-b/post-1")
   })
 
   it("rewrites matched same-source links to custom slug URLs and keeps unmatched links as-is", () => {
@@ -91,22 +96,23 @@ describe("post-link-rewriter", () => {
     })
     const resolveLinkUrl = createPostLinkResolver({
       sourceId: "source-a",
+      blogKey: "mock",
       markdownFilePath: `${testExportDir}/notes/2026-04-11-first-post/index.md`,
       options: {
         links: {
           sameBlogPostMode: "custom-url",
           sameBlogPostCustomUrlTemplate:
-            "https://archive.example.com/{{ category }}/{{ sourceId }}/{{ postId }}/{{ slug }}",
+            "https://archive.example.com/{{ blogKey }}/{{ category }}/{{ sourceId }}/{{ postId }}/{{ slug }}",
         },
       },
       targets,
       resolveIdentity,
     })
 
-    expect(resolveLinkUrl("post://source-a/post-2")).toBe(
-      "https://archive.example.com/notes/source-a/post-2/second_post",
+    expect(resolveLinkUrl("post://mock/source-a/post-2")).toBe(
+      "https://archive.example.com/mock/notes/source-a/post-2/second_post",
     )
-    expect(resolveLinkUrl("post://source-a/missing")).toBe("post://source-a/missing")
+    expect(resolveLinkUrl("post://mock/source-a/missing")).toBe("post://mock/source-a/missing")
   })
 
   it("uses custom post folder name templates for relative export paths", () => {
@@ -122,6 +128,7 @@ describe("post-link-rewriter", () => {
     })
     const resolveLinkUrl = createPostLinkResolver({
       sourceId: "source-a",
+      blogKey: "mock",
       markdownFilePath: `${testExportDir}/notes/2026_04_post-1_first-post/index.md`,
       options: {
         links: {
@@ -133,6 +140,8 @@ describe("post-link-rewriter", () => {
       resolveIdentity,
     })
 
-    expect(resolveLinkUrl("post://source-a/post-2")).toBe("../2026_04_post-2_second_post/index.md")
+    expect(resolveLinkUrl("post://mock/source-a/post-2")).toBe(
+      "../2026_04_post-2_second_post/index.md",
+    )
   })
 })

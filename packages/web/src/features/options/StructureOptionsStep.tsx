@@ -33,6 +33,7 @@ export const StructureOptionsStep = ({
   onOptionsChange: (updater: (current: ExportOptions) => ExportOptions) => void
 }) => {
   const structureTemplatePreviewPost = {
+    blogKey: "naver",
     sourceId: "mym0404",
     postId: structurePreviewSample.posts[0]?.postId ?? "223034929697",
     title: structurePreviewSample.posts[0]?.title ?? "첫 글",

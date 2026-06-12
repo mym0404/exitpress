@@ -170,6 +170,8 @@ export const rewriteUploadedAssets = async ({
       ? items
       : manifest.posts.map((post) => ({
           id: post.outputPath ?? `failed:${post.postId}`,
+          blogKey: post.blogKey,
+          sourceId: post.sourceId,
           postId: post.postId,
           title: post.title,
           source: post.source,

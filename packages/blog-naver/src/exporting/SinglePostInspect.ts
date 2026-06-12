@@ -1,5 +1,5 @@
 import { NaverBlogFetcher } from "@exitpress/blog-naver/integrations/naver-blog/NaverBlogFetcher.js"
-import { extractBlogId, getSourceUrl } from "@exitpress/blog-naver/NaverUrl.js"
+import { extractSourceId, getSourceUrl } from "@exitpress/blog-naver/NaverUrl.js"
 import {
   extractPostTags,
   parsePostHtml,
@@ -17,6 +17,7 @@ type SinglePostInspectFetcher = {
 }
 
 export type SinglePostInspectDiagnostics = {
+  blogKey: string
   sourceId: string
   postId: string
   sourceUrl: string
@@ -65,6 +66,7 @@ export const inspectPostHtml = ({
 
   if (!editor) {
     return {
+      blogKey: "naver",
       sourceId,
       postId,
       sourceUrl,
@@ -106,6 +108,7 @@ export const inspectPostHtml = ({
   })
 
   return {
+    blogKey: "naver",
     sourceId,
     postId,
     sourceUrl,
@@ -132,13 +135,13 @@ export const inspectSinglePost = async ({
     sourceId: string
   }) => SinglePostInspectFetcher | Promise<SinglePostInspectFetcher>
 }) => {
-  const resolvedSourceId = extractBlogId(sourceId)
+  const resolvedSourceId = extractSourceId(sourceId)
   const fetcher = createFetcher
     ? await createFetcher({
         sourceId: resolvedSourceId,
       })
     : new NaverBlogFetcher({
-        blogId: resolvedSourceId,
+        sourceId: resolvedSourceId,
       })
   const html = await fetcher.fetchPostHtml(postId)
 
@@ -147,8 +150,8 @@ export const inspectSinglePost = async ({
     postId,
     html,
     sourceUrl: getSourceUrl({
-      blogId: resolvedSourceId,
-      logNo: postId,
+      sourceId: resolvedSourceId,
+      postId,
     }),
     options,
   })

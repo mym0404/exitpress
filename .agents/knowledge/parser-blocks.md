@@ -1,7 +1,7 @@
 # Parser Blocks
 
 ## Role
-- Parser blocks identify one Naver editor block shape and convert it into a parsed block.
+- Parser blocks identify one blog/editor block shape and convert it into a parsed block.
 - Blocks should preserve user-visible content and avoid adding renderer-specific policy.
 - Block output should be deterministic for the same HTML and parser options.
 

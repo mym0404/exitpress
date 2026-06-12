@@ -7,7 +7,7 @@ export const optionDescriptions: Record<string, string> = {
     "글 제목 slug와 카테고리 경로를 kebab-case, snake_case, 원본 제목 중 어떤 방식으로 쓸지 고릅니다.",
   "structure-slugWhitespace": "slug와 카테고리 이름의 공백을 -, _, 공백 유지 중 하나로 처리합니다.",
   "structure-postFolderNameTemplate":
-    "지원 변수 {{ slug }}, {{ category }}, {{ title }}, {{ postId }}, {{ sourceId }}, {{ date }}, {{ year }}, {{ YYYY }}, {{ YY }}, {{ month }}, {{ MM }}, {{ M }}, {{ day }}, {{ DD }}, {{ D }}를 조합해 글 폴더 이름을 만듭니다.",
+    "지원 변수 {{ slug }}, {{ category }}, {{ title }}, {{ blogKey }}, {{ postId }}, {{ sourceId }}, {{ date }}, {{ year }}, {{ YYYY }}, {{ YY }}, {{ month }}, {{ MM }}, {{ M }}, {{ day }}, {{ DD }}, {{ D }}를 조합해 글 폴더 이름을 만듭니다.",
   "frontmatter-enabled": "Markdown 파일 상단에 YAML frontmatter 블록을 넣을지 고릅니다.",
   "assets-imageHandlingMode":
     "이미지를 로컬에 둘지, 원본 URL로 둘지, 내보낸 뒤 업로드까지 이어갈지 고릅니다.",
@@ -24,5 +24,5 @@ export const optionDescriptions: Record<string, string> = {
   "links-sameBlogPostMode":
     "같은 블로그의 다른 글 링크를 그대로 둘지, 커스텀 URL이나 상대경로로 바꿀지 고릅니다.",
   "links-sameBlogPostCustomUrlTemplate":
-    "지원 변수 {{ slug }}, {{ category }}, {{ title }}, {{ postId }}, {{ sourceId }}, {{ date }}, {{ year }}, {{ YYYY }}, {{ YY }}, {{ month }}, {{ MM }}, {{ M }}, {{ day }}, {{ DD }}, {{ D }}를 넣어 커스텀 URL을 만듭니다.",
+    "지원 변수 {{ slug }}, {{ category }}, {{ title }}, {{ blogKey }}, {{ postId }}, {{ sourceId }}, {{ date }}, {{ year }}, {{ YYYY }}, {{ YY }}, {{ month }}, {{ MM }}, {{ M }}, {{ day }}, {{ DD }}, {{ D }}를 넣어 커스텀 URL을 만듭니다.",
 }

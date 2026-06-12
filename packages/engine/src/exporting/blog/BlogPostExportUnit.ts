@@ -8,10 +8,10 @@ import type {
   BlogCategoryRef,
   BlogPostRef,
   BlogSource,
-} from "@exitpress/domain/blog-provider/schema/BlogProvider.js"
+} from "@exitpress/domain/blog/schema/Blog.js"
 import type { CategoryInfo, PostSummary } from "@exitpress/domain/blog/schema/BlogScan.js"
 import type { ExportOptions } from "@exitpress/domain/export-options/schema/ExportOptions.js"
-import type { BlogProvider } from "@exitpress/engine/blog-provider/BlogProvider.js"
+import type { Blog, BlogPostContentCache } from "@exitpress/engine/blog/Blog.js"
 
 import { ensureDir } from "../../infra/node/FilePaths.js"
 import { AssetStore } from "../assets/AssetStore.js"
@@ -21,7 +21,7 @@ import { buildPostLinkTargets, createPostLinkResolver } from "../paths/PostLinkR
 import { createSuccessPostResult } from "../post/PostExportResult.js"
 import { dedupeUploadCandidatesByLocalPath } from "../upload/util/dedupeUploadCandidatesByLocalPath.js"
 
-const mapProviderCategory = (category: BlogCategoryRef): CategoryInfo => ({
+export const mapBlogCategory = (category: BlogCategoryRef): CategoryInfo => ({
   id: category.id,
   name: category.name,
   parentId: category.parentId ?? null,
@@ -32,7 +32,8 @@ const mapProviderCategory = (category: BlogCategoryRef): CategoryInfo => ({
   depth: category.depth,
 })
 
-const mapProviderPost = (post: BlogPostRef): PostSummary => ({
+export const mapBlogPost = (post: BlogPostRef): PostSummary => ({
+  blogKey: post.blogKey,
   sourceId: post.sourceId,
   postId: post.postId,
   title: post.title,
@@ -43,39 +44,40 @@ const mapProviderPost = (post: BlogPostRef): PostSummary => ({
   thumbnailUrl: post.thumbnailUrl ?? null,
 })
 
-const createDefaultBlockTemplateMap = (provider: BlogProvider) =>
+const createDefaultBlockTemplateMap = (blog: Blog) =>
   Object.fromEntries(
-    provider
+    blog
       .getBlockTemplateDefinitions()
       .map((definition) => [definition.key, definition.presets[0].template]),
   )
 
-const createProviderAssetDownloader = (
-  provider: BlogProvider,
+const createBlogAssetDownloader = (
+  blog: Blog,
 ): ConstructorParameters<typeof AssetStore>[0]["downloader"] => {
-  const downloadBinary = provider.downloadBinary ?? (async () => {})
+  const downloadBinary = blog.downloadBinary ?? (async () => {})
 
   return {
     downloadBinary,
-    ...(provider.fetchBinary ? { fetchBinary: provider.fetchBinary } : {}),
+    ...(blog.fetchBinary ? { fetchBinary: blog.fetchBinary } : {}),
   }
 }
 
-const mapProviderLinkIdentity = ({ provider, url }: { provider: BlogProvider; url: string }) => {
-  const identity = provider.resolvePostLinkIdentity?.(url)
+const mapBlogLinkIdentity = ({ blog, url }: { blog: Blog; url: string }) => {
+  const identity = blog.resolvePostLinkIdentity?.(url)
 
-  if (!identity || identity.providerKey !== provider.key) {
+  if (!identity || identity.blogKey !== blog.key) {
     return null
   }
 
   return {
+    blogKey: identity.blogKey,
     sourceId: identity.sourceId,
     postId: identity.postId,
   }
 }
 
-export const exportProviderPostUnit = async ({
-  provider,
+export const exportBlogPostUnit = async ({
+  blog,
   source,
   outputDir,
   post,
@@ -84,8 +86,9 @@ export const exportProviderPostUnit = async ({
   options,
   uploadEnabled,
   abortSignal,
+  postContentCache,
 }: {
-  provider: BlogProvider
+  blog: Blog
   source: BlogSource
   outputDir: string
   post: BlogPostRef
@@ -94,10 +97,11 @@ export const exportProviderPostUnit = async ({
   options: ExportOptions
   uploadEnabled: boolean
   abortSignal: AbortSignal | null
+  postContentCache?: BlogPostContentCache
 }) => {
-  const mappedPost = mapProviderPost(post)
+  const mappedPost = mapBlogPost(post)
   const categoryMap = new Map(
-    categories.map((category) => [category.id, mapProviderCategory(category)]),
+    categories.map((category) => [category.id, mapBlogCategory(category)]),
   )
   const category = getCategoryForPost({
     categories: categoryMap,
@@ -111,31 +115,33 @@ export const exportProviderPostUnit = async ({
     options,
   })
   const resolveLinkUrl = createPostLinkResolver({
+    blogKey: source.blogKey,
     sourceId: source.sourceId,
     markdownFilePath,
     options,
     targets: buildPostLinkTargets({
       outputDir,
-      posts: (posts ?? [post]).map(mapProviderPost),
-      categories: categories.map(mapProviderCategory),
+      posts: (posts ?? [post]).map(mapBlogPost),
+      categories: categories.map(mapBlogCategory),
       options,
     }),
-    resolveIdentity: (url) => mapProviderLinkIdentity({ provider, url }),
+    resolveIdentity: (url) => mapBlogLinkIdentity({ blog, url }),
   })
   const assetStore = new AssetStore({
     outputDir,
-    downloader: createProviderAssetDownloader(provider),
+    downloader: createBlogAssetDownloader(blog),
     options,
   })
-  const content = await provider.loadPostContent({
+  const content = await blog.loadPostContent({
     source,
     post,
+    ...(postContentCache ? { cache: postContentCache } : {}),
     signal: abortSignal ?? undefined,
   })
 
   throwIfAborted(abortSignal)
 
-  const parsedPost = provider.parseContent({
+  const parsedPost = blog.parseContent({
     source,
     post,
     content,
@@ -149,7 +155,7 @@ export const exportProviderPostUnit = async ({
     post: mappedPost,
     category,
     parsedPost,
-    defaultBlockTemplates: createDefaultBlockTemplateMap(provider),
+    defaultBlockTemplates: createDefaultBlockTemplateMap(blog),
     markdownFilePath,
     options,
     resolveAsset: async (input) => assetStore.saveAsset(input),

@@ -1,6 +1,7 @@
 ---
 title: "[공유] 16번째 레벨업 무료 특강 N잡러 소규모 사업자를 위한 노션 활용법(3월 14일 금요일)"
 source: https://blog.naver.com/huehaho/223792316629
+blogKey: naver
 sourceId: huehaho
 postId: 223792316629
 publishedAt: 2025-03-11T17:26:29+09:00

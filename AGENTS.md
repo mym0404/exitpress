@@ -2,8 +2,8 @@
 
 ## Project Overview
 
-- This repository is a local export tool for public blog posts, with concrete provider packages for supported blog platforms.
-- It scans posts, parses provider/editor-specific content into blocks, renders Markdown, writes assets, and keeps resumable export state.
+- This repository is a local export tool for public blog posts, with concrete blog packages for supported blog platforms.
+- It scans posts, parses blog/editor-specific content into blocks, renders Markdown, writes assets, and keeps resumable export state.
 - The repo maintains a React web UI, server API, export engine, fixture regression tests, browser smoke coverage, and live network e2e coverage.
 
 ## Tech Stack
@@ -19,9 +19,9 @@
 |-- AGENTS.md                 # agent entry and knowledge router
 |-- .agents/knowledge/        # evergreen repo-local agent knowledge
 |-- packages/domain/          # shared contracts and pure option/path logic
-|-- packages/engine/          # provider interfaces, render/export/assets/upload rewrite
-|-- packages/blog-naver/      # concrete Naver provider adapter
-|-- packages/blog-tistory/    # minimal concrete Tistory provider adapter
+|-- packages/engine/          # blog interfaces, render/export/assets/upload rewrite
+|-- packages/blog-naver/      # concrete Naver blog adapter
+|-- packages/blog-tistory/    # minimal concrete Tistory blog adapter
 |-- packages/server/          # local HTTP API, jobs, state, upload catalog, static serving
 |-- packages/web/             # React export wizard, Storybook view, UI primitives
 |-- scripts/                  # single-post, evidence, Storybook, maintenance CLIs
@@ -51,12 +51,12 @@
 - Do not create branches, commits, pushes, PRs, or worktrees unless the user explicitly asks.
 - Keep temporary harness/config output under repo-local `tmp/` or `.cache/` as documented.
 - Do not preserve legacy compatibility shims unless the user explicitly asks for backward compatibility.
-- Prefer Vitest for unit/integration/provider checks and Playwright Test for browser smoke/e2e; do not add new custom test runners or validation scripts when a standard runner can express the check.
+- Prefer Vitest for unit/integration/blog checks and Playwright Test for browser smoke/e2e; do not add new custom test runners or validation scripts when a standard runner can express the check.
 
 ## Validation Routes
 
-- `mise exec -- pnpm check:test`: Vitest unit, integration, fixture, and provider checks.
-- `mise exec -- pnpm check:coverage`: Vitest unit, integration, fixture, and provider checks with coverage thresholds.
+- `mise exec -- pnpm check:test`: Vitest unit, integration, fixture, and blog checks.
+- `mise exec -- pnpm check:coverage`: Vitest unit, integration, fixture, and blog checks with coverage thresholds.
 - `mise exec -- pnpm build:ui && mise exec -- pnpm check:playwright`: Playwright browser smoke and live e2e checks against the built web UI.
 - `mise exec -- pnpm check:unused`: dead-code and unused export baseline; run after deleting, moving, or renaming code.
 - `mise exec -- pnpm check:fmt`, `check:lint`, `check:type`, `check:storybook`, `build:server`, and `build:ui`: focused static/build/catalog checks.
