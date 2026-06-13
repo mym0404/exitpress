@@ -1,33 +1,70 @@
-import { RiLoader4Line } from "@remixicon/react"
-
-import { Card, CardContent } from "../components/ui/Card.js"
+import { Box, Heading, Spinner, Text } from "@primer/react"
 
 export const BootstrapLoadingOverlay = () => (
-  <section
-    className="fixed inset-0 z-50 grid place-items-center px-4 py-6"
+  <Box
+    as="section"
     data-step-view="bootstrap-loading"
+    sx={{
+      position: "fixed",
+      inset: 0,
+      zIndex: 50,
+      display: "grid",
+      placeItems: "center",
+      px: 3,
+      py: 4,
+    }}
   >
-    <div className="absolute inset-0 bg-background/78 backdrop-blur-[6px]" aria-hidden="true" />
-    <Card variant="panel" className="relative w-full max-w-xl overflow-hidden">
-      <CardContent className="grid gap-4 px-6 py-8 sm:px-8 sm:py-10">
-        <div
-          className="grid justify-items-center gap-4 text-center"
-          role="status"
-          aria-live="polite"
-        >
-          <span className="inline-flex size-12 items-center justify-center rounded-full border border-border bg-secondary text-foreground shadow-[var(--panel-shadow-border)]">
-            <RiLoader4Line className="size-5 motion-safe:animate-spin" aria-hidden="true" />
-          </span>
-          <div className="grid gap-1.5">
-            <h1 className="text-xl font-semibold tracking-[-0.04em] text-foreground">
-              작업 상태를 확인하는 중입니다.
-            </h1>
-            <p className="text-sm leading-6 text-muted-foreground">
-              이전 작업을 불러올지, 새로 시작할지 확인 중입니다.
-            </p>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
-  </section>
+    <Box
+      aria-hidden="true"
+      sx={{
+        position: "absolute",
+        inset: 0,
+        bg: "canvas.default",
+        opacity: 0.78,
+        backdropFilter: "blur(6px)",
+      }}
+    />
+    <Box
+      role="status"
+      aria-live="polite"
+      sx={{
+        position: "relative",
+        width: "100%",
+        maxWidth: "544px",
+        display: "grid",
+        gap: 3,
+        justifyItems: "center",
+        px: [4, 5],
+        py: [5, 6],
+        textAlign: "center",
+        border: "1px solid",
+        borderColor: "border.default",
+        borderRadius: 2,
+        bg: "canvas.overlay",
+        boxShadow: "shadow.floating.medium",
+      }}
+    >
+      <Box
+        sx={{
+          display: "inline-flex",
+          width: 48,
+          height: 48,
+          alignItems: "center",
+          justifyContent: "center",
+          border: "1px solid",
+          borderColor: "border.default",
+          borderRadius: "50%",
+          bg: "canvas.subtle",
+        }}
+      >
+        <Spinner size="large" srText={null} />
+      </Box>
+      <Box sx={{ display: "grid", gap: 1 }}>
+        <Heading sx={{ fontSize: 3, lineHeight: 1.25 }}>작업 상태를 확인하는 중입니다.</Heading>
+        <Text sx={{ display: "block", m: 0, fontSize: 1, lineHeight: 1.6, color: "fg.muted" }}>
+          이전 작업을 불러올지, 새로 시작할지 확인 중입니다.
+        </Text>
+      </Box>
+    </Box>
+  </Box>
 )

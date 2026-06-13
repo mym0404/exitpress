@@ -406,7 +406,6 @@ pre,
 .field-help,
 .results-description,
 .frontmatter-description,
-.scan-status-note,
 .muted-copy {
   color: var(--muted-foreground);
 }

@@ -2,7 +2,7 @@ import { StrictMode } from "react"
 import { createRoot } from "react-dom/client"
 
 import { App } from "./app/App.js"
-import "./styles/globals.css"
+import "./styles/global.css"
 
 const container = document.querySelector("#root")
 

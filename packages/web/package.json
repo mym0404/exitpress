@@ -20,6 +20,9 @@
     "@codemirror/language": "catalog:",
     "@codemirror/view": "catalog:",
     "@exitpress/domain": "workspace:*",
+    "@primer/octicons-react": "catalog:",
+    "@primer/primitives": "catalog:",
+    "@primer/react": "catalog:",
     "@radix-ui/react-scroll-area": "catalog:",
     "@radix-ui/react-slot": "catalog:",
     "@remixicon/react": "catalog:",
@@ -30,7 +33,9 @@
     "radix-ui": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
+    "react-is": "catalog:",
     "sonner": "catalog:",
+    "styled-components": "catalog:",
     "tailwind-merge": "catalog:"
   },
   "devDependencies": {
@@ -43,6 +48,8 @@
     "@types/node": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
+    "@types/react-is": "catalog:",
+    "@types/styled-components": "catalog:",
     "@vitejs/plugin-react": "catalog:",
     "cheerio": "catalog:",
     "jsdom": "catalog:",

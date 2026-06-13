@@ -18,7 +18,7 @@ import type { ResumeDialogState } from "../features/resume/ResumeState.js"
 import type { ScanStatusTone } from "../features/scan/BlogInputPanel.js"
 import type { UploadProviderSettingsValue } from "../features/upload/UploadProviderSettingsForm.js"
 
-import { toast } from "../components/ui/Sonner.js"
+import { toast } from "../components/primer/PrimerToast.js"
 import { useBeforeUnloadWarning } from "../features/common/hooks/UseBeforeUnloadWarning.js"
 import { useBootstrapDefaults } from "../features/common/hooks/UseBootstrapDefaults.js"
 import { useExportSettingsSync } from "../features/common/hooks/UseExportSettingsSync.js"
@@ -47,6 +47,7 @@ import { useAppResumeBootstrap } from "./AppResumeBootstrap.js"
 import { AppShell } from "./AppShell.js"
 import { getAppShellState, shouldWarnBeforeLeavingApp } from "./AppShellState.js"
 import { AppStepView } from "./AppStepView.js"
+import { PrimerAppProvider } from "./PrimerAppProvider.js"
 
 const getBlockDetectionScopeSignature = (options: Pick<ExportOptions, "scope">) =>
   JSON.stringify(options.scope)
@@ -617,85 +618,87 @@ const ExportApp = () => {
   })
 
   return (
-    <AppShell
-      themePreference={themePreference}
-      bootstrapping={bootstrapping}
-      resumeDialog={resumeDialog}
-      resettingResume={resettingResume}
-      restoringResume={restoringResume}
-      currentStep={currentStep}
-      isSetupStep={isSetupStep}
-      setupStep={setupStep}
-      setupStepIndex={setupStepIndex}
-      stepViewRef={stepViewRef}
-      headerStatus={headerStatus}
-      summaryCards={summaryCards}
-      currentScanTarget={currentScanTarget}
-      scanPending={scanPending}
-      exportDisabled={exportDisabled}
-      nextDisabled={nextDisabled}
-      submitting={submitting}
-      nextButtonLabel={nextButtonLabel}
-      onThemeChange={setThemePreference}
-      onResetResume={() => void handleResetResume()}
-      onRestoreResume={() => void handleRestoreResume()}
-      onPrevious={goToPreviousStep}
-      onForceScan={() => {
-        void ensureScanResult({ forceRefresh: true })
-      }}
-      onNext={() => {
-        void goToNextStep()
-      }}
-    >
-      <AppStepView
+    <PrimerAppProvider themePreference={themePreference}>
+      <AppShell
+        themePreference={themePreference}
+        bootstrapping={bootstrapping}
+        resumeDialog={resumeDialog}
+        resettingResume={resettingResume}
+        restoringResume={restoringResume}
         currentStep={currentStep}
-        job={job}
-        activeJobFilter={activeJobFilter}
-        submitting={submitting}
-        uploadProviders={uploadProviders}
-        uploadProviderError={uploadProviderError}
-        uploadProviderStepMessage={uploadProviderStepMessage}
-        testUploadSubmitting={testUploadSubmitting}
-        testUploadResult={testUploadResult}
-        testUploadError={testUploadError}
-        blogIdOrUrl={blogIdOrUrl}
-        outputDir={outputDir}
+        isSetupStep={isSetupStep}
+        setupStep={setupStep}
+        setupStepIndex={setupStepIndex}
+        stepViewRef={stepViewRef}
+        headerStatus={headerStatus}
+        summaryCards={summaryCards}
+        currentScanTarget={currentScanTarget}
         scanPending={scanPending}
-        blockScanJob={blockScanJob}
-        blockScanError={blockScanError}
-        scanStatus={scanStatus}
-        scanStatusTone={scanStatusTone}
-        activeScanResult={activeScanResult}
-        selectedCategoryIds={selectedCategoryIds}
-        categorySearch={categorySearch}
-        categoryStatus={categoryStatus}
-        scopedPostCount={scopedPostCount}
-        options={options}
-        selectedCount={selectedCount}
-        defaults={defaults}
-        frontmatterValidationErrors={frontmatterValidationErrors}
-        linkTemplatePreviewPost={linkTemplatePreviewPost}
-        setActiveJobFilter={setActiveJobFilter}
-        setCategorySearch={setCategorySearch}
-        updateOptions={updateOptions}
-        handleBlogInputChange={handleBlogInputChange}
-        handleOutputDirChange={handleOutputDirChange}
-        handleOutputDirBlur={handleOutputDirBlur}
-        handleSelectAllCategories={handleSelectAllCategories}
-        handleClearAllCategories={handleClearAllCategories}
-        handleCategoryToggle={handleCategoryToggle}
-        handleUploadProviderSettingsChange={(value) => {
-          setUploadProviderSettings(value)
-          setUploadProviderStepMessage(null)
-          invalidateTestUpload()
+        exportDisabled={exportDisabled}
+        nextDisabled={nextDisabled}
+        submitting={submitting}
+        nextButtonLabel={nextButtonLabel}
+        onThemeChange={setThemePreference}
+        onResetResume={() => void handleResetResume()}
+        onRestoreResume={() => void handleRestoreResume()}
+        onPrevious={goToPreviousStep}
+        onForceScan={() => {
+          void ensureScanResult({ forceRefresh: true })
         }}
-        handleUploadProviderSettingsReadyChange={handleUploadProviderSettingsReadyChange}
-        handleTestUpload={handleTestUpload}
-        handleResumeExport={handleResumeExport}
-        handleRetryBlockScan={startBlockScan}
-        handleBackFromBlockScan={goBackFromBlockScan}
-        handleConfirmMarkdownReview={confirmMarkdownAndStartExport}
-      />
-    </AppShell>
+        onNext={() => {
+          void goToNextStep()
+        }}
+      >
+        <AppStepView
+          currentStep={currentStep}
+          job={job}
+          activeJobFilter={activeJobFilter}
+          submitting={submitting}
+          uploadProviders={uploadProviders}
+          uploadProviderError={uploadProviderError}
+          uploadProviderStepMessage={uploadProviderStepMessage}
+          testUploadSubmitting={testUploadSubmitting}
+          testUploadResult={testUploadResult}
+          testUploadError={testUploadError}
+          blogIdOrUrl={blogIdOrUrl}
+          outputDir={outputDir}
+          scanPending={scanPending}
+          blockScanJob={blockScanJob}
+          blockScanError={blockScanError}
+          scanStatus={scanStatus}
+          scanStatusTone={scanStatusTone}
+          activeScanResult={activeScanResult}
+          selectedCategoryIds={selectedCategoryIds}
+          categorySearch={categorySearch}
+          categoryStatus={categoryStatus}
+          scopedPostCount={scopedPostCount}
+          options={options}
+          selectedCount={selectedCount}
+          defaults={defaults}
+          frontmatterValidationErrors={frontmatterValidationErrors}
+          linkTemplatePreviewPost={linkTemplatePreviewPost}
+          setActiveJobFilter={setActiveJobFilter}
+          setCategorySearch={setCategorySearch}
+          updateOptions={updateOptions}
+          handleBlogInputChange={handleBlogInputChange}
+          handleOutputDirChange={handleOutputDirChange}
+          handleOutputDirBlur={handleOutputDirBlur}
+          handleSelectAllCategories={handleSelectAllCategories}
+          handleClearAllCategories={handleClearAllCategories}
+          handleCategoryToggle={handleCategoryToggle}
+          handleUploadProviderSettingsChange={(value) => {
+            setUploadProviderSettings(value)
+            setUploadProviderStepMessage(null)
+            invalidateTestUpload()
+          }}
+          handleUploadProviderSettingsReadyChange={handleUploadProviderSettingsReadyChange}
+          handleTestUpload={handleTestUpload}
+          handleResumeExport={handleResumeExport}
+          handleRetryBlockScan={startBlockScan}
+          handleBackFromBlockScan={goBackFromBlockScan}
+          handleConfirmMarkdownReview={confirmMarkdownAndStartExport}
+        />
+      </AppShell>
+    </PrimerAppProvider>
   )
 }

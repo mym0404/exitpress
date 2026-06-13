@@ -2,7 +2,7 @@ import { useCallback } from "react"
 
 import type { WizardScanActionsArgs } from "./schema/WizardActions.js"
 
-import { toast } from "../../../components/ui/Sonner.js"
+import { toast } from "../../../components/primer/PrimerToast.js"
 import { toggleCategorySelection } from "../../scan/CategorySelection.js"
 
 export const useWizardCategoryActions = ({

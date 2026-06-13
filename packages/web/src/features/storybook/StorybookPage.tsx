@@ -6,6 +6,7 @@ import type { ReactNode } from "react"
 
 import type { StorybookStory } from "./schema/Storybook.js"
 
+import { PrimerAppProvider } from "../../app/PrimerAppProvider.js"
 import {
   Accordion,
   AccordionContent,
@@ -488,29 +489,31 @@ export const StorybookPage = () => {
   }
 
   return (
-    <main
-      className={`dashboard-shell relative min-h-screen w-full overflow-x-clip ${themePreference}`}
-    >
-      <div
-        id="dashboard-backdrop"
-        className="shell-backdrop pointer-events-none fixed inset-0 -z-10"
-        aria-hidden="true"
-      />
-      <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-7xl flex-col gap-5 px-4 py-5 xl:px-6 xl:py-6">
-        <WizardHeader
-          title="Storybook"
-          description="지원 중인 블록의 입력 HTML, 원본 캡처, Markdown 출력을 비교합니다."
-          themePreference={themePreference}
-          headerStatus="ready"
-          summaryCards={summaryCards}
-          backLink={backLink}
-          onThemeChange={setThemePreference}
+    <PrimerAppProvider themePreference={themePreference}>
+      <main
+        className={`dashboard-shell relative min-h-screen w-full overflow-x-clip ${themePreference}`}
+      >
+        <div
+          id="dashboard-backdrop"
+          className="shell-backdrop pointer-events-none fixed inset-0 -z-10"
+          aria-hidden="true"
         />
-        <div className="grid gap-5 lg:grid-cols-[18rem_minmax(0,1fr)]" data-storybook-layout>
-          <StoryTree activeStoryKey={activeStory.storyKey} onSelect={selectStory} />
-          <StoryPreview story={activeStory} />
+        <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-7xl flex-col gap-5 px-4 py-5 xl:px-6 xl:py-6">
+          <WizardHeader
+            title="Storybook"
+            description="지원 중인 블록의 입력 HTML, 원본 캡처, Markdown 출력을 비교합니다."
+            themePreference={themePreference}
+            headerStatus="ready"
+            summaryCards={summaryCards}
+            backLink={backLink}
+            onThemeChange={setThemePreference}
+          />
+          <div className="grid gap-5 lg:grid-cols-[18rem_minmax(0,1fr)]" data-storybook-layout>
+            <StoryTree activeStoryKey={activeStory.storyKey} onSelect={selectStory} />
+            <StoryPreview story={activeStory} />
+          </div>
         </div>
-      </div>
-    </main>
+      </main>
+    </PrimerAppProvider>
   )
 }

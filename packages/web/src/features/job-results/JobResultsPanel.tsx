@@ -4,8 +4,8 @@ import type { ExportJobState } from "@exitpress/domain/export-job/schema/ExportJ
 
 import type { JobFilter, JobResultsMode } from "./JobResultsHelpers.js"
 
+import { toast } from "../../components/primer/PrimerToast.js"
 import { Card, CardContent } from "../../components/ui/Card.js"
-import { toast } from "../../components/ui/Sonner.js"
 import { TooltipProvider } from "../../components/ui/Tooltip.js"
 import { postSameOriginJson, postSameOriginJsonNoContent } from "../../lib/Api.js"
 
