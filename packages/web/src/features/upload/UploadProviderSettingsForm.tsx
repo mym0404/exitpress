@@ -1,4 +1,15 @@
 import { UPLOAD_PROVIDER_KEYS } from "@exitpress/domain/upload/UploadProviderKeys.js"
+import {
+  Box,
+  Button,
+  Checkbox,
+  Flash,
+  FormControl,
+  SegmentedControl,
+  Select,
+  Text,
+  TextInput,
+} from "@primer/react"
 import { useEffect } from "react"
 
 import type {
@@ -7,19 +18,6 @@ import type {
 } from "@exitpress/domain/upload/schema/UploadProvider.js"
 
 import type { AlistAuthMode } from "./UploadProviderFormRules.js"
-
-import { Button } from "../../components/ui/Button.js"
-import { Checkbox } from "../../components/ui/Checkbox.js"
-import { Input } from "../../components/ui/Input.js"
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../../components/ui/Select.js"
-import { ToggleGroup, ToggleGroupItem } from "../../components/ui/ToggleGroup.js"
 
 import { UploadGithubOptions } from "./UploadGithubOptions.js"
 import {
@@ -37,8 +35,8 @@ import {
 
 const EMPTY_SELECT_VALUE = "__none__"
 
-const isAlistAuthMode = (value: string): value is AlistAuthMode =>
-  allAlistAuthModes.some((mode) => mode === value)
+const isAlistAuthMode = (value: string | undefined): value is AlistAuthMode =>
+  value !== undefined && allAlistAuthModes.some((mode) => mode === value)
 
 export type UploadProviderSettingsValue = {
   providerKey: string
@@ -56,6 +54,23 @@ const resultToText = (value: unknown) => {
 
   return JSON.stringify(value)
 }
+
+const fieldGridSx = {
+  display: "grid",
+  gap: 2,
+  alignContent: "start",
+  alignSelf: "start",
+} as const
+
+const fieldPanelSx = {
+  bg: "canvas.subtle",
+  border: "1px solid",
+  borderColor: "border.default",
+  borderRadius: 2,
+  display: "grid",
+  gap: 2,
+  p: 3,
+} as const
 
 export const UploadProviderSettingsForm = ({
   resetKey,
@@ -144,29 +159,43 @@ export const UploadProviderSettingsForm = ({
   }, [onReadyChange, providerSettingsReady])
 
   if (uploadProviders.providers.length === 0 || !activeProviderDefinition) {
-    return (
-      <p className="text-sm leading-7 text-muted-foreground">업로드 설정을 불러오지 못했습니다.</p>
-    )
+    return <Text sx={{ color: "fg.muted", fontSize: 1 }}>업로드 설정을 불러오지 못했습니다.</Text>
   }
 
   const testUploadDisabled = testUploadSubmitting || !providerSettingsReady
-
   return (
-    <form
-      className="field-card grid gap-4 rounded-[1.5rem] p-4"
+    <Box
+      as="form"
+      sx={{
+        bg: "canvas.default",
+        border: "1px solid",
+        borderColor: "border.default",
+        borderRadius: 2,
+        display: "grid",
+        gap: 3,
+        p: 3,
+      }}
       onSubmit={(event) => {
         event.preventDefault()
         void onTestUpload(buildValue())
       }}
     >
-      <div className="grid gap-4 xl:grid-cols-[minmax(16rem,0.8fr)_minmax(0,1.2fr)] xl:items-start">
-        <div className="grid gap-2">
-          <label htmlFor="upload-providerKey" className="text-sm font-semibold text-foreground">
-            Provider
-          </label>
+      <Box
+        sx={{
+          display: "grid",
+          gap: 3,
+          gridTemplateColumns: ["1fr", null, null, "minmax(16rem,0.8fr) minmax(0,1.2fr)"],
+          alignItems: "start",
+        }}
+      >
+        <FormControl id="upload-providerKey">
+          <FormControl.Label>Provider</FormControl.Label>
           <Select
+            block
             value={providerKey}
-            onValueChange={(nextProviderKey) => {
+            data-value={providerKey}
+            onChange={(event) => {
+              const nextProviderKey = event.target.value
               const nextProvider =
                 uploadProviders.providers.find((provider) => provider.key === nextProviderKey) ??
                 null
@@ -182,43 +211,28 @@ export const UploadProviderSettingsForm = ({
               )
             }}
           >
-            <SelectTrigger
-              id="upload-providerKey"
-              data-value={providerKey}
-              aria-describedby="upload-providerKey-description"
-            >
-              <SelectValue placeholder="서비스 선택" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                {uploadProviders.providers.map((provider) => (
-                  <SelectItem key={provider.key} value={provider.key}>
-                    {provider.label}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
+            {uploadProviders.providers.map((provider) => (
+              <Select.Option key={provider.key} value={provider.key}>
+                {provider.label}
+              </Select.Option>
+            ))}
           </Select>
-          <p
-            id="upload-providerKey-description"
-            className="text-sm leading-6 text-muted-foreground"
-          >
-            {activeProviderDefinition.description}
-          </p>
-        </div>
-        <div className="grid items-start gap-3 sm:grid-cols-2">
+          <FormControl.Caption>{activeProviderDefinition.description}</FormControl.Caption>
+        </FormControl>
+
+        <Box sx={{ display: "grid", gap: 3, gridTemplateColumns: ["1fr", null, "1fr 1fr"] }}>
           {providerKey === UPLOAD_PROVIDER_KEYS.ALIST ? (
-            <div className="subtle-panel grid gap-2 rounded-2xl px-4 py-3 sm:col-span-2">
-              <span className="text-sm font-semibold text-foreground">인증 방식</span>
-              <span className="text-sm leading-6 text-muted-foreground">
+            <Box sx={{ ...fieldPanelSx, gridColumn: ["auto", null, "1 / -1"] }}>
+              <Text sx={{ fontSize: 1, fontWeight: "semibold" }}>인증 방식</Text>
+              <Text sx={{ color: "fg.muted", fontSize: 1, lineHeight: "24px" }}>
                 AList는 Token 인증과 계정 인증 중 하나만 사용합니다.
-              </span>
-              <ToggleGroup
-                type="single"
-                value={activeProviderUiState.alistAuthMode}
+              </Text>
+              <SegmentedControl
                 aria-label="인증 방식"
-                className="justify-start"
-                onValueChange={(nextMode) => {
+                fullWidth={{ narrow: true, regular: false }}
+                onChange={(selectedIndex) => {
+                  const nextMode = allAlistAuthModes[selectedIndex]
+
                   if (!isAlistAuthMode(nextMode)) {
                     return
                   }
@@ -234,51 +248,45 @@ export const UploadProviderSettingsForm = ({
                   onChange(buildValue({ nextProviderUiState }))
                 }}
               >
-                <ToggleGroupItem
-                  value="token"
-                  className="theme-toggle-item min-w-[6rem]"
-                  aria-label="Token"
-                >
+                <SegmentedControl.Button selected={activeProviderUiState.alistAuthMode === "token"}>
                   Token
-                </ToggleGroupItem>
-                <ToggleGroupItem
-                  value="account"
-                  className="theme-toggle-item min-w-[10rem]"
-                  aria-label="사용자 이름 + 비밀번호"
+                </SegmentedControl.Button>
+                <SegmentedControl.Button
+                  selected={activeProviderUiState.alistAuthMode === "account"}
                 >
                   사용자 이름 + 비밀번호
-                </ToggleGroupItem>
-              </ToggleGroup>
-            </div>
+                </SegmentedControl.Button>
+              </SegmentedControl>
+            </Box>
           ) : null}
+
           {activeProviderDefinition.fields.map((field) => {
             const fieldInputId = `upload-providerField-${field.key}`
-            const fieldDescriptionId = `${fieldInputId}-description`
-            const fieldDisabledReasonId = `${fieldInputId}-disabled-reason`
             const rule = getUploadProviderFieldRule({
               providerKey,
               field,
               providerFields: activeProviderFields,
               providerUiState: activeProviderUiState,
             })
-            const fieldDescribedBy = rule.disabledReason
-              ? `${fieldDescriptionId} ${fieldDisabledReasonId}`
-              : fieldDescriptionId
 
             if (field.inputType === "checkbox") {
               return (
-                <div
+                <FormControl
                   key={`${providerKey}:${field.key}`}
-                  className={`subtle-panel flex items-center gap-3 rounded-2xl px-4 py-3 sm:col-span-2 ${rule.disabled ? "opacity-70" : ""}`}
+                  id={fieldInputId}
+                  layout="horizontal"
+                  disabled={rule.disabled}
+                  sx={{
+                    ...fieldPanelSx,
+                    alignItems: "flex-start",
+                    gridColumn: ["auto", null, "1 / -1"],
+                    opacity: rule.disabled ? 0.7 : 1,
+                  }}
                 >
                   <Checkbox
-                    id={fieldInputId}
                     checked={activeProviderFields[field.key] === true}
-                    disabled={rule.disabled}
-                    className="shrink-0"
-                    aria-describedby={fieldDescribedBy}
-                    onCheckedChange={(next) => {
-                      const nextValue = next === true
+                    onChange={(event) => {
+                      const nextValue = event.target.checked
                       const nextProviderFields = {
                         ...activeProviderFields,
                         [field.key]: nextValue,
@@ -288,51 +296,52 @@ export const UploadProviderSettingsForm = ({
                       onChange(buildValue({ nextProviderFields }))
                     }}
                   />
-                  <span className="grid gap-1">
-                    <label htmlFor={fieldInputId} className="text-sm font-semibold text-foreground">
-                      {field.label}
-                    </label>
-                    <span
-                      id={fieldDescriptionId}
-                      className="text-sm leading-6 text-muted-foreground"
-                    >
-                      {rule.description}
-                    </span>
+                  <FormControl.Label>{field.label}</FormControl.Label>
+                  <FormControl.Caption>
+                    {rule.description}
                     {rule.disabledReason ? (
-                      <span id={fieldDisabledReasonId} className="notice-copy text-sm leading-6">
+                      <Box as="span" sx={{ color: "attention.fg", display: "block", mt: 1 }}>
                         {rule.disabledReason}
-                      </span>
+                      </Box>
                     ) : field.placeholder ? (
-                      <span className="text-sm leading-6 text-muted-foreground">
+                      <Box as="span" sx={{ color: "fg.muted", display: "block", mt: 1 }}>
                         {field.placeholder}
-                      </span>
+                      </Box>
                     ) : null}
-                  </span>
-                </div>
+                  </FormControl.Caption>
+                </FormControl>
               )
             }
 
             if (field.inputType === "select") {
+              const currentValue = String(activeProviderFields[field.key] ?? "")
+
               return (
-                <div
+                <FormControl
                   key={`${providerKey}:${field.key}`}
-                  className="grid content-start gap-2 self-start"
+                  id={fieldInputId}
+                  disabled={rule.disabled}
+                  sx={fieldGridSx}
                 >
-                  <label htmlFor={fieldInputId} className="text-sm font-semibold text-foreground">
-                    {field.label}
-                  </label>
-                  <span id={fieldDescriptionId} className="text-sm leading-6 text-muted-foreground">
+                  <FormControl.Label>{field.label}</FormControl.Label>
+                  <FormControl.Caption>
                     {rule.description}
-                  </span>
+                    {rule.disabledReason ? (
+                      <Box as="span" sx={{ color: "attention.fg", display: "block", mt: 1 }}>
+                        {rule.disabledReason}
+                      </Box>
+                    ) : null}
+                  </FormControl.Caption>
                   <Select
+                    block
                     value={
-                      !field.required && String(activeProviderFields[field.key] ?? "") === ""
-                        ? EMPTY_SELECT_VALUE
-                        : String(activeProviderFields[field.key] ?? "")
+                      !field.required && currentValue === "" ? EMPTY_SELECT_VALUE : currentValue
                     }
                     disabled={rule.disabled}
-                    onValueChange={(nextValue) => {
-                      const fieldValue = nextValue === EMPTY_SELECT_VALUE ? "" : nextValue
+                    data-value={currentValue}
+                    onChange={(event) => {
+                      const fieldValue =
+                        event.target.value === EMPTY_SELECT_VALUE ? "" : event.target.value
                       const nextProviderFields = {
                         ...activeProviderFields,
                         [field.key]: fieldValue,
@@ -342,55 +351,44 @@ export const UploadProviderSettingsForm = ({
                       onChange(buildValue({ nextProviderFields }))
                     }}
                   >
-                    <SelectTrigger
-                      id={fieldInputId}
-                      data-value={String(activeProviderFields[field.key] ?? "")}
-                      aria-describedby={fieldDescribedBy}
-                    >
-                      <SelectValue placeholder={!field.required ? "선택 안 함" : "항목 선택"} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        {!field.required ? (
-                          <SelectItem value={EMPTY_SELECT_VALUE}>선택 안 함</SelectItem>
-                        ) : null}
-                        {(field.options ?? []).map((option) => (
-                          <SelectItem
-                            key={`${field.key}:${option.value}`}
-                            value={String(option.value)}
-                          >
-                            {option.label}
-                          </SelectItem>
-                        ))}
-                      </SelectGroup>
-                    </SelectContent>
+                    {!field.required ? (
+                      <Select.Option value={EMPTY_SELECT_VALUE}>선택 안 함</Select.Option>
+                    ) : null}
+                    {(field.options ?? []).map((option) => (
+                      <Select.Option
+                        key={`${field.key}:${option.value}`}
+                        value={String(option.value)}
+                      >
+                        {option.label}
+                      </Select.Option>
+                    ))}
                   </Select>
-                  {rule.disabledReason ? (
-                    <span id={fieldDisabledReasonId} className="notice-copy text-sm leading-6">
-                      {rule.disabledReason}
-                    </span>
-                  ) : null}
-                </div>
+                </FormControl>
               )
             }
 
             return (
-              <div
+              <FormControl
                 key={`${providerKey}:${field.key}`}
-                className="grid content-start gap-2 self-start"
+                id={fieldInputId}
+                disabled={rule.disabled}
+                sx={fieldGridSx}
               >
-                <label htmlFor={fieldInputId} className="text-sm font-semibold text-foreground">
-                  {field.label}
-                </label>
-                <span id={fieldDescriptionId} className="text-sm leading-6 text-muted-foreground">
+                <FormControl.Label>{field.label}</FormControl.Label>
+                <FormControl.Caption>
                   {rule.description}
-                </span>
-                <Input
-                  id={fieldInputId}
+                  {rule.disabledReason ? (
+                    <Box as="span" sx={{ color: "attention.fg", display: "block", mt: 1 }}>
+                      {rule.disabledReason}
+                    </Box>
+                  ) : null}
+                </FormControl.Caption>
+                <TextInput
+                  block
                   type={field.inputType}
                   value={String(activeProviderFields[field.key] ?? "")}
                   disabled={rule.disabled}
-                  aria-describedby={fieldDescribedBy}
+                  placeholder={field.placeholder}
                   onChange={(event) => {
                     const nextProviderFields = {
                       ...activeProviderFields,
@@ -400,18 +398,13 @@ export const UploadProviderSettingsForm = ({
                     updateProviderField(field.key, event.target.value)
                     onChange(buildValue({ nextProviderFields }))
                   }}
-                  placeholder={field.placeholder}
                 />
-                {rule.disabledReason ? (
-                  <span id={fieldDisabledReasonId} className="notice-copy text-sm leading-6">
-                    {rule.disabledReason}
-                  </span>
-                ) : null}
-              </div>
+              </FormControl>
             )
           })}
-        </div>
-      </div>
+        </Box>
+      </Box>
+
       <UploadGithubOptions
         providerKey={providerKey}
         githubUseJsDelivr={githubUseJsDelivr}
@@ -426,15 +419,19 @@ export const UploadProviderSettingsForm = ({
           onChange(buildValue({ nextProviderUiState }))
         }}
       />
-      {testUploadResult ? (
-        <p className="notice-copy text-sm leading-7">{resultToText(testUploadResult)}</p>
-      ) : null}
-      {testUploadError ? <p className="danger-copy text-sm leading-7">{testUploadError}</p> : null}
-      <div className="flex justify-end">
-        <Button type="submit" className="w-full rounded-xl sm:w-auto" disabled={testUploadDisabled}>
+
+      {testUploadResult ? <Flash>{resultToText(testUploadResult)}</Flash> : null}
+      {testUploadError ? <Flash variant="danger">{testUploadError}</Flash> : null}
+      <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+        <Button
+          type="submit"
+          variant="primary"
+          sx={{ width: ["100%", "auto"] }}
+          disabled={testUploadDisabled}
+        >
           {testUploadSubmitting ? "테스트 업로드 중..." : "테스트 업로드"}
         </Button>
-      </div>
-    </form>
+      </Box>
+    </Box>
   )
 }

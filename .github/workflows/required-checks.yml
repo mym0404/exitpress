@@ -57,7 +57,7 @@ jobs:
         run: pnpm check:coverage
 
       - name: Run Playwright checks
-        timeout-minutes: 20
+        timeout-minutes: 10
         env:
           EXITPRESS_UPLOAD_E2E_GITHUB_TOKEN: ${{ secrets.EXITPRESS_UPLOAD_E2E_GITHUB_TOKEN }}
         run: pnpm check:playwright

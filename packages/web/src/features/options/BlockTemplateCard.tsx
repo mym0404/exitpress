@@ -1,3 +1,4 @@
+import type { ThemePreference } from "@exitpress/domain/preferences/schema/ThemePreference.js"
 import type { BlockTemplateDefinition } from "@exitpress/domain/template/schema/BlockTemplateDefinition.js"
 
 import { TemplateEditorCard } from "./TemplateEditorCard.js"
@@ -17,11 +18,13 @@ export const getEffectiveBlockTemplate = ({
 export const BlockTemplateCard = ({
   definition,
   template,
+  themePreference,
   readOnly = false,
   onTemplateChange,
 }: {
   definition: BlockTemplateDefinition
   template?: string
+  themePreference: ThemePreference
   readOnly?: boolean
   onTemplateChange?: (template: string) => void
 }) => {
@@ -37,6 +40,7 @@ export const BlockTemplateCard = ({
       presets={definition.presets}
       props={definition.props}
       value={effectiveTemplate}
+      themePreference={themePreference}
       readOnly={readOnly}
       data-block-template-card={definition.key}
       onPresetApply={onTemplateChange}

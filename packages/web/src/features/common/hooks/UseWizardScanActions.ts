@@ -7,7 +7,7 @@ import type { ExportResumeLookupResponse } from "../../../lib/Api.js"
 import type { WizardScanActionsArgs } from "./schema/WizardActions.js"
 
 import { defaultBlogKey } from "../../../app/AppDefaults.js"
-import { toast } from "../../../components/ui/Sonner.js"
+import { toast } from "../../../components/primer/PrimerToast.js"
 import { postJson } from "../../../lib/Api.js"
 import {
   defaultCategoryStatus,
@@ -143,7 +143,9 @@ export const useWizardScanActions = ({
           [currentScanTarget]: nextScanResult,
         }))
         setNeutralScanStatus(`${nextScanResult.sourceId} 스캔 완료`)
-        setCategoryStatus(readyCategoryStatus)
+        setCategoryStatus(
+          `카테고리 스캔이 끝났습니다. ${nextScanResult.totalPostCount}개 글과 ${nextScanResult.categories.length}개 카테고리를 불러왔습니다.`,
+        )
         setCategorySearch("")
         setOptions((current) => ({
           ...current,
@@ -153,10 +155,6 @@ export const useWizardScanActions = ({
           },
         }))
         setSetupStep("category-selection")
-        toast.success("카테고리 스캔이 끝났습니다.", {
-          description: `${nextScanResult.totalPostCount}개 글과 ${nextScanResult.categories.length}개 카테고리를 불러왔습니다.`,
-        })
-
         return true
       } catch (error) {
         const message = error instanceof Error ? error.message : String(error)

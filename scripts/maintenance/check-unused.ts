@@ -64,8 +64,6 @@ const allowedKnipFileEntries: Record<string, string> = {
   "scripts/post-evidence/playwright.ts": "manual evidence capture CLI dependency",
   "tests/support/e2e/run-live-server.ts": "spawned by live resume Playwright helper",
   "packages/web/vite.pages.config.ts": "GitHub Pages Storybook build config entrypoint",
-  "packages/web/src/components/ui/Skeleton.tsx": "shadcn primitive kept for composition",
-  "packages/web/src/components/ui/Tabs.tsx": "shadcn primitive kept for composition",
 }
 const allowedKnipExports: Record<string, string> = {
   "scripts/single-post/export-single-post.ts:runSinglePostExportCli": "script entrypoint alias",
@@ -80,10 +78,6 @@ const allowedKnipExports: Record<string, string> = {
     "manual evidence capture CLI dependency",
   "scripts/post-evidence/paths.ts:resolveEvidenceOutputPaths":
     "manual evidence capture CLI dependency",
-  "packages/web/src/components/ui/Dialog.tsx:DialogClose": "shadcn primitive export",
-  "packages/web/src/components/ui/Dialog.tsx:DialogTrigger": "shadcn primitive export",
-  "packages/web/src/components/ui/Select.tsx:allSelectTriggerSizes":
-    "shadcn primitive const source",
 }
 const allowedKnipTypes: Record<string, string> = {
   ".agents/skills/ingest-blog/scripts/lib/ingest-focus.ts:SupportUnitFailureGroup":
@@ -96,7 +90,6 @@ const allowedKnipTypes: Record<string, string> = {
   "scripts/post-evidence/ingest-output.ts:ReusableIngestOutput": "ingest-blog skill CLI dependency",
   "scripts/post-evidence/evidence.ts:EvidenceMarkdownSection":
     "manual evidence capture CLI dependency",
-  "packages/web/src/components/ui/Select.tsx:SelectTriggerSize": "shadcn primitive prop type",
 }
 
 const runCommand = (command: string, args: string[]): Promise<CommandResult> =>

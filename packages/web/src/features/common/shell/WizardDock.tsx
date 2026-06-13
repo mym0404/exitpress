@@ -1,6 +1,6 @@
-import type { ReactNode } from "react"
+import { Box, Button } from "@primer/react"
 
-import { Button } from "../../../components/ui/Button.js"
+import type { ReactElement } from "react"
 
 export const WizardDock = ({
   isSetupStep,
@@ -26,7 +26,7 @@ export const WizardDock = ({
   nextDisabled: boolean
   submitting: boolean
   nextButtonLabel: string
-  nextActionIcon: ReactNode
+  nextActionIcon: ReactElement
   onPrevious: () => void
   onForceScan: () => void
   onNext: () => void
@@ -36,16 +36,45 @@ export const WizardDock = ({
   }
 
   return (
-    <div className="fixed inset-x-0 bottom-0 z-40 px-4 pb-4 sm:pb-5 xl:px-6">
-      <div className="mx-auto flex w-full max-w-6xl justify-center">
-        <div className="floating-dock flex min-h-16 w-full max-w-fit flex-wrap items-center justify-end gap-2.5 rounded-[1.4rem] px-3 py-3">
+    <Box
+      sx={{
+        position: "sticky",
+        bottom: 0,
+        zIndex: 40,
+        px: [3, 4, 5],
+        pb: [3, 4],
+      }}
+    >
+      <Box
+        sx={{
+          mx: "auto",
+          display: "flex",
+          width: "100%",
+          maxWidth: "1280px",
+          justifyContent: "center",
+        }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            minHeight: "64px",
+            width: "100%",
+            maxWidth: "max-content",
+            flexWrap: "wrap",
+            alignItems: "center",
+            justifyContent: "flex-end",
+            gap: 2,
+            px: 3,
+            py: 3,
+            border: "1px solid",
+            borderColor: "border.default",
+            borderRadius: 2,
+            bg: "canvas.overlay",
+            boxShadow: "shadow.floating.medium",
+          }}
+        >
           {setupStepIndex > 0 ? (
-            <Button
-              type="button"
-              variant="surface"
-              className="h-10 rounded-xl px-4"
-              onClick={onPrevious}
-            >
+            <Button type="button" variant="default" onClick={onPrevious}>
               이전
             </Button>
           ) : null}
@@ -54,8 +83,7 @@ export const WizardDock = ({
             <Button
               type="button"
               id="force-scan-button"
-              variant="surface"
-              className="h-10 rounded-xl px-4"
+              variant="default"
               title="캐시 비우기"
               disabled={!currentScanTarget || scanPending}
               onClick={onForceScan}
@@ -73,19 +101,19 @@ export const WizardDock = ({
                   ? "export-button"
                   : undefined
             }
-            className="h-10 rounded-xl px-4"
             disabled={
               setupStep === "diagnostics-options"
                 ? exportDisabled || submitting || nextDisabled
                 : nextDisabled
             }
             onClick={onNext}
+            variant="primary"
+            leadingVisual={nextActionIcon}
           >
-            {nextActionIcon}
-            <span>{nextButtonLabel}</span>
+            {nextButtonLabel}
           </Button>
-        </div>
-      </div>
-    </div>
+        </Box>
+      </Box>
+    </Box>
   )
 }

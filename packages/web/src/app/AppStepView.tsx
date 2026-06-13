@@ -1,7 +1,10 @@
+import { Box, Button, Flash, ProgressBar, Text } from "@primer/react"
+
 import type { BlockScanJobState } from "@exitpress/domain/block-scan/schema/BlockScanJobState.js"
 import type { PostSummary, ScanResult } from "@exitpress/domain/blog/schema/BlogScan.js"
 import type { ExportJobState } from "@exitpress/domain/export-job/schema/ExportJobState.js"
 import type { ExportOptions } from "@exitpress/domain/export-options/schema/ExportOptions.js"
+import type { ThemePreference } from "@exitpress/domain/preferences/schema/ThemePreference.js"
 import type { UploadProviderCatalogResponse } from "@exitpress/domain/upload/schema/UploadProvider.js"
 import type { Dispatch, SetStateAction } from "react"
 
@@ -11,8 +14,6 @@ import type { ScanStatusTone } from "../features/scan/BlogInputPanel.js"
 import type { UploadProviderSettingsValue } from "../features/upload/UploadProviderSettingsForm.js"
 import type { ExportBootstrapResponse } from "../lib/Api.js"
 
-import { Button } from "../components/ui/Button.js"
-import { Progress } from "../components/ui/Progress.js"
 import { JobResultsPanel } from "../features/job-results/JobResultsPanel.js"
 import { ExportOptionsPanel } from "../features/options/ExportOptionsPanel.js"
 import { UploadProviderOptionsStep } from "../features/options/UploadProviderOptionsStep.js"
@@ -43,6 +44,7 @@ type AppStepViewProps = {
   categoryStatus: string
   scopedPostCount: number
   options: ExportOptions
+  themePreference: ThemePreference
   selectedCount: number
   defaults: ExportBootstrapResponse
   frontmatterValidationErrors: string[]
@@ -92,6 +94,7 @@ export const AppStepView = ({
   categoryStatus,
   scopedPostCount,
   options,
+  themePreference,
   selectedCount,
   defaults,
   frontmatterValidationErrors,
@@ -204,32 +207,48 @@ export const AppStepView = ({
     const progressValue = total > 0 ? ((completed + failed) / total) * 100 : 100
 
     return (
-      <div className="grid gap-5 rounded-[var(--radius-lg)] border border-border bg-card p-5 shadow-[var(--panel-shadow-border)]">
-        <div className="grid gap-2">
-          <div className="flex items-center justify-between gap-4 text-sm">
-            <span className="font-medium text-foreground">
+      <Box
+        sx={{
+          display: "grid",
+          gap: 3,
+          border: "1px solid",
+          borderColor: "border.default",
+          borderRadius: 2,
+          bg: "canvas.default",
+          p: 3,
+        }}
+      >
+        <Box sx={{ display: "grid", gap: 2 }}>
+          <Box
+            sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 3 }}
+          >
+            <Text sx={{ color: "fg.default", fontSize: 1, fontWeight: 600 }}>
               {blockScanError ? "준비 실패" : "준비 중"}
-            </span>
-            <span className="text-muted-foreground">
+            </Text>
+            <Text sx={{ color: "fg.muted", fontSize: 1 }}>
               총 {total} / 완료 {completed} / 실패 {failed}
-            </span>
-          </div>
-          <Progress value={progressValue} />
-        </div>
-        <p className="text-sm text-muted-foreground">
-          {blockScanError ?? "선택한 글에서 필요한 Markdown 옵션을 확인 중입니다."}
-        </p>
+            </Text>
+          </Box>
+          <ProgressBar progress={progressValue} barSize="large" />
+        </Box>
         {blockScanError ? (
-          <div className="flex flex-wrap justify-end gap-2">
-            <Button type="button" variant="secondary" onClick={handleBackFromBlockScan}>
+          <Flash variant="danger">{blockScanError}</Flash>
+        ) : (
+          <Text sx={{ color: "fg.muted", fontSize: 1, lineHeight: "20px" }}>
+            선택한 글에서 필요한 Markdown 옵션을 확인 중입니다.
+          </Text>
+        )}
+        {blockScanError ? (
+          <Box sx={{ display: "flex", flexWrap: "wrap", justifyContent: "flex-end", gap: 2 }}>
+            <Button type="button" onClick={handleBackFromBlockScan}>
               이전
             </Button>
-            <Button type="button" onClick={() => void handleRetryBlockScan()}>
+            <Button type="button" variant="primary" onClick={() => void handleRetryBlockScan()}>
               재시도
             </Button>
-          </div>
+          </Box>
         ) : null}
-      </div>
+      </Box>
     )
   }
 
@@ -240,6 +259,7 @@ export const AppStepView = ({
           step="markdown"
           outputDir={outputDir}
           options={options}
+          themePreference={themePreference}
           optionDescriptions={defaults.optionDescriptions}
           blockTemplateDefinitions={visibleBlockTemplateDefinitions}
           frontmatterFieldOrder={defaults.frontmatterFieldOrder}
@@ -248,14 +268,18 @@ export const AppStepView = ({
           linkTemplatePreviewPost={linkTemplatePreviewPost}
           onOptionsChange={updateOptions}
         />
-        <div className="flex flex-wrap justify-end gap-2">
-          <Button type="button" variant="secondary" onClick={handleBackFromBlockScan}>
+        <Box sx={{ display: "flex", flexWrap: "wrap", justifyContent: "flex-end", gap: 2 }}>
+          <Button type="button" onClick={handleBackFromBlockScan}>
             이전
           </Button>
-          <Button type="button" onClick={() => void handleConfirmMarkdownReview()}>
+          <Button
+            type="button"
+            variant="primary"
+            onClick={() => void handleConfirmMarkdownReview()}
+          >
             변환 시작
           </Button>
-        </div>
+        </Box>
       </>
     )
   }
@@ -291,6 +315,7 @@ export const AppStepView = ({
       }
       outputDir={outputDir}
       options={options}
+      themePreference={themePreference}
       optionDescriptions={defaults.optionDescriptions}
       blockTemplateDefinitions={visibleBlockTemplateDefinitions}
       frontmatterFieldOrder={defaults.frontmatterFieldOrder}

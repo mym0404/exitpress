@@ -16,7 +16,8 @@ const targetPostId = "222990202785"
 const uploadRepo = "mym0404/ia2"
 const uploadBranch = "main"
 const uploadPath = `exitpress-live/${Date.now()}`
-const responseTimeoutMs = 240_000
+const responseTimeoutMs = 45_000
+const observedUploadStateTimeoutMs = 25_000
 const githubApiBaseUrl = "https://api.github.com"
 const getCaptureDir = () => {
   return process.env.EXITPRESS_CAPTURE_DIR ?? null
@@ -84,7 +85,22 @@ const chooseSelectOption = async ({
   trigger: string
   value: string
 }) => {
-  await page.click(trigger)
+  const target = page.locator(trigger).first()
+  const tagName = await target.evaluate((element) => element.tagName.toLowerCase())
+
+  if (tagName === "select") {
+    await target.selectOption(value)
+    return
+  }
+
+  const childSelect = target.locator("select")
+
+  if ((await childSelect.count()) > 0) {
+    await childSelect.selectOption(value)
+    return
+  }
+
+  await target.click()
   await page.locator(`[data-slot="select-item"][data-value="${value}"]`).click()
 }
 
@@ -330,30 +346,52 @@ const saveJsonCapture = async ({
   return filePath
 }
 
+const logLiveUpload = (message: string, payload?: unknown) => {
+  if (payload === undefined) {
+    console.log(`live upload: ${message}`)
+    return
+  }
+
+  console.log(`live upload: ${message} ${JSON.stringify(payload)}`)
+}
+
 const readUiUploadState = async ({ page }: { page: import("playwright").Page }) =>
-  page.evaluate(() => ({
-    statusText: document.querySelector("#status-text")?.getAttribute("data-status"),
-    uploadProgress: Number(
+  page.evaluate(() => {
+    const progressValue = Number(
       document.querySelector("#upload-progress")?.getAttribute("aria-valuenow") ?? "0",
-    ),
-    partialRowCount: document.querySelectorAll('[data-upload-row-status="partial"]').length,
-    completeRowCount: document.querySelectorAll('[data-upload-row-status="complete"]').length,
-    uploadFormVisible: Boolean(document.querySelector("#upload-providerKey")),
-    rewritePendingCopy: document
-      .querySelector("#status-panel")
-      ?.textContent?.includes("자산 업로드는 끝났고 결과 파일에 URL을 반영하는 중입니다."),
-  }))
+    )
+    const statusPanelText =
+      document.querySelector("#status-panel")?.textContent?.replace(/\s+/g, " ").trim() ?? ""
+    const progressMatch = /(\d+)\s*\/\s*(\d+)/.exec(statusPanelText)
+    const completed = Number(progressMatch?.[1] ?? "0")
+    const total = Number(progressMatch?.[2] ?? "0")
+    const uploadProgress =
+      progressValue > 0 ? progressValue : total > 0 ? Math.round((completed / total) * 100) : 0
+
+    return {
+      statusText: document.querySelector("#status-text")?.getAttribute("data-status"),
+      uploadProgress,
+      partialRowCount: document.querySelectorAll('[data-upload-row-status="partial"]').length,
+      completeRowCount: document.querySelectorAll('[data-upload-row-status="complete"]').length,
+      uploadFormVisible: Boolean(document.querySelector("#upload-providerKey")),
+      rewritePendingCopy: statusPanelText.includes(
+        "자산 업로드는 끝났고 결과 파일에 URL을 반영하는 중입니다.",
+      ),
+    }
+  })
 
 const waitForObservedUploadState = async ({
   page,
   baseUrl,
   jobId,
+  label,
   timeoutMs,
   accept,
 }: {
   page: import("playwright").Page
   baseUrl: string
   jobId: string
+  label: string
   timeoutMs: number
   accept: (snapshot: {
     job: ExportJobState
@@ -377,6 +415,13 @@ const waitForObservedUploadState = async ({
     }
 
     if (await accept({ job, ui })) {
+      logLiveUpload(`${label} observed`, {
+        jobStatus: job.status,
+        uploadStatus: job.upload.status,
+        uploadedCount: job.upload.uploadedCount,
+        candidateCount: job.upload.candidateCount,
+        ui,
+      })
       return { job, ui }
     }
 
@@ -384,7 +429,7 @@ const waitForObservedUploadState = async ({
   }
 
   throw new Error(
-    `expected live upload state was not observed before timeout: ${JSON.stringify(lastSnapshot)}`,
+    `expected live upload ${label} state was not observed before timeout: ${JSON.stringify(lastSnapshot)}`,
   )
 }
 
@@ -437,6 +482,7 @@ export const runUiLiveUpload = async ({ browser }: { browser: Browser }) => {
 
   try {
     baseUrl = await startServer(server)
+    logLiveUpload("server ready")
     await page.goto(baseUrl)
     await waitForStepView({
       page,
@@ -459,6 +505,9 @@ export const runUiLiveUpload = async ({ browser }: { browser: Browser }) => {
     const scanResponse = await scanResponsePromise
     const scanResult = (await scanResponse.json()) as ScanResult
     const scanPosts = scanResult.posts ?? []
+    logLiveUpload("scan completed", {
+      postCount: scanPosts.length,
+    })
 
     await waitForStepView({
       page,
@@ -591,9 +640,14 @@ export const runUiLiveUpload = async ({ browser }: { browser: Browser }) => {
     }
 
     await page.waitForSelector(`text=${testUploadBody.uploadedUrl}`)
+    logLiveUpload("test upload completed")
 
     const branchHeadBeforeUpload = await getBranchHeadSha(config)
     liveEvidence.beforeSha = branchHeadBeforeUpload
+    logLiveUpload("branch head captured", {
+      branch: config.branch,
+      beforeSha: branchHeadBeforeUpload,
+    })
 
     await clickWizardButton({
       page,
@@ -699,6 +753,9 @@ export const runUiLiveUpload = async ({ browser }: { browser: Browser }) => {
     if (!jobId) {
       throw new Error("export response did not return a jobId")
     }
+    logLiveUpload("export accepted", {
+      jobId,
+    })
 
     await page.waitForFunction(
       () => {
@@ -714,7 +771,8 @@ export const runUiLiveUpload = async ({ browser }: { browser: Browser }) => {
       page,
       baseUrl,
       jobId,
-      timeoutMs: 60_000,
+      label: "partial progress",
+      timeoutMs: observedUploadStateTimeoutMs,
       accept: async ({ job, ui }) => {
         const uploadObserved =
           job.upload.uploadedCount > 0 &&
@@ -775,7 +833,8 @@ export const runUiLiveUpload = async ({ browser }: { browser: Browser }) => {
       page,
       baseUrl,
       jobId,
-      timeoutMs: 60_000,
+      label: "rewrite pending",
+      timeoutMs: observedUploadStateTimeoutMs,
       accept: ({ job, ui }) => {
         const rewritePendingObserved =
           job.status === "uploading" &&
@@ -819,6 +878,7 @@ export const runUiLiveUpload = async ({ browser }: { browser: Browser }) => {
       page,
       status: "upload-completed",
     })
+    logLiveUpload("upload completed")
 
     const completedJob = await fetchJson<ExportJobState>(`${baseUrl}/api/export/${jobId}`)
     const manifest = await fetchJson<{

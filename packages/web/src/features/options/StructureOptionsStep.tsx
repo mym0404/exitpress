@@ -1,16 +1,17 @@
 import { getDefaultSlugWhitespace } from "@exitpress/domain/export-options/ExportOptions.js"
 import { buildPostFolderName } from "@exitpress/domain/export-paths/PostPathTemplate.js"
+import { Box, Text } from "@primer/react"
 
 import type { ExportOptions } from "@exitpress/domain/export-options/schema/ExportOptions.js"
-
-import { cn } from "../../lib/Cn.js"
+import type { ThemePreference } from "@exitpress/domain/preferences/schema/ThemePreference.js"
 
 import {
   CheckField,
+  EmbeddedOptionPanel,
   OptionField,
   OptionSection,
   OptionSelectField,
-  optionEmbeddedPanelClass,
+  OptionWideBox,
 } from "./OptionControls.js"
 import { postTemplatePropDefinitions } from "./PostTemplateProps.js"
 import {
@@ -25,11 +26,13 @@ export const StructureOptionsStep = ({
   outputDir,
   options,
   description,
+  themePreference,
   onOptionsChange,
 }: {
   outputDir: string
   options: ExportOptions
   description: (key: string) => string | undefined
+  themePreference: ThemePreference
   onOptionsChange: (updater: (current: ExportOptions) => ExportOptions) => void
 }) => {
   const structureTemplatePreviewPost = {
@@ -128,67 +131,90 @@ export const StructureOptionsStep = ({
         />
       </OptionField>
 
-      <div className="grid gap-3 xl:col-span-2">
-        <TemplateEditorCard
-          title="폴더명 템플릿"
-          editorId="structure-postFolderNameTemplate"
-          props={postTemplatePropDefinitions}
-          value={options.structure.postFolderNameTemplate}
-          minHeight="6.5rem"
-          surface="embedded"
-          onTemplateChange={(postFolderNameTemplate) =>
-            onOptionsChange((current) => ({
-              ...current,
-              structure: {
-                ...current.structure,
-                postFolderNameTemplate,
-              },
-            }))
-          }
-        />
+      <OptionWideBox>
+        <Box sx={{ display: "grid", gap: 3 }}>
+          <TemplateEditorCard
+            title="폴더명 템플릿"
+            editorId="structure-postFolderNameTemplate"
+            props={postTemplatePropDefinitions}
+            value={options.structure.postFolderNameTemplate}
+            themePreference={themePreference}
+            minHeight="6.5rem"
+            surface="embedded"
+            onTemplateChange={(postFolderNameTemplate) =>
+              onOptionsChange((current) => ({
+                ...current,
+                structure: {
+                  ...current.structure,
+                  postFolderNameTemplate,
+                },
+              }))
+            }
+          />
 
-        <div className={optionEmbeddedPanelClass}>
-          <div className="grid gap-1">
-            <span className="text-sm font-semibold text-foreground">실시간 폴더명 예시</span>
-            <p className="text-sm leading-6 text-muted-foreground">
-              {structureTemplatePreviewPost.title}을 예시로 바로 표시합니다.
-            </p>
-          </div>
+          <EmbeddedOptionPanel>
+            <Box sx={{ display: "grid", gap: 1 }}>
+              <Text sx={{ fontSize: 1, fontWeight: "semibold" }}>실시간 폴더명 예시</Text>
+              <Text sx={{ color: "fg.muted", fontSize: 1, lineHeight: "24px" }}>
+                {structureTemplatePreviewPost.title}을 예시로 바로 표시합니다.
+              </Text>
+            </Box>
 
-          <div className="grid gap-2 text-sm leading-6 text-muted-foreground">
-            <span>폴더 이름 결과</span>
-            <code
-              id="structure-postFolderNameTemplatePreview"
-              role={postFolderNamePreview?.status === "error" ? "alert" : undefined}
-              className={cn(
-                "code-surface-inverse break-all px-3 py-2 font-mono text-[0.8125rem]",
-                postFolderNamePreview?.status === "error" &&
-                  "border-[color-mix(in_srgb,var(--status-error-fg)_26%,transparent)] bg-[var(--status-error-bg)] text-[var(--status-error-fg)]",
-              )}
+            <Box
+              sx={{ color: "fg.muted", display: "grid", fontSize: 1, gap: 2, lineHeight: "24px" }}
             >
-              {postFolderNamePreview?.status === "success"
-                ? postFolderNamePreview.text
-                : (postFolderNamePreview?.message ??
-                  "템플릿을 입력하면 결과가 여기에서 바로 바뀝니다.")}
-            </code>
-          </div>
-        </div>
-      </div>
+              <Text>폴더 이름 결과</Text>
+              <Box
+                as="code"
+                id="structure-postFolderNameTemplatePreview"
+                role={postFolderNamePreview?.status === "error" ? "alert" : undefined}
+                sx={{
+                  bg: postFolderNamePreview?.status === "error" ? "danger.subtle" : "canvas.inset",
+                  border: "1px solid",
+                  borderColor:
+                    postFolderNamePreview?.status === "error" ? "danger.muted" : "border.default",
+                  borderRadius: 2,
+                  color: postFolderNamePreview?.status === "error" ? "danger.fg" : "fg.default",
+                  display: "block",
+                  fontFamily: "mono",
+                  fontSize: 0,
+                  lineHeight: "20px",
+                  overflowWrap: "anywhere",
+                  px: 3,
+                  py: 2,
+                }}
+              >
+                {postFolderNamePreview?.status === "success"
+                  ? postFolderNamePreview.text
+                  : (postFolderNamePreview?.message ??
+                    "템플릿을 입력하면 결과가 여기에서 바로 바뀝니다.")}
+              </Box>
+            </Box>
+          </EmbeddedOptionPanel>
+        </Box>
+      </OptionWideBox>
 
-      <div
-        id="structure-file-tree-preview"
-        className="field-card grid gap-3 rounded-2xl px-4 py-4 xl:col-span-2"
-      >
-        <div className="grid gap-1">
-          <span className="text-sm font-semibold text-foreground">예시 파일 트리</span>
-          <p className="text-sm leading-6 text-muted-foreground">
-            현재 옵션으로 여러 글을 저장했을 때의 예시입니다.
-          </p>
-        </div>
-        <div className="rounded-xl border border-border bg-muted/20 p-2">
-          <StructurePreviewTree node={structurePreviewTree} />
-        </div>
-      </div>
+      <OptionWideBox id="structure-file-tree-preview">
+        <EmbeddedOptionPanel>
+          <Box sx={{ display: "grid", gap: 1 }}>
+            <Text sx={{ fontSize: 1, fontWeight: "semibold" }}>예시 파일 트리</Text>
+            <Text sx={{ color: "fg.muted", fontSize: 1, lineHeight: "24px" }}>
+              현재 옵션으로 여러 글을 저장했을 때의 예시입니다.
+            </Text>
+          </Box>
+          <Box
+            sx={{
+              bg: "canvas.inset",
+              border: "1px solid",
+              borderColor: "border.default",
+              borderRadius: 2,
+              p: 2,
+            }}
+          >
+            <StructurePreviewTree node={structurePreviewTree} />
+          </Box>
+        </EmbeddedOptionPanel>
+      </OptionWideBox>
     </OptionSection>
   )
 }

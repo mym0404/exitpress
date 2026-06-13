@@ -1,15 +1,18 @@
+import { Box } from "@primer/react"
+
 import type { PostSummary } from "@exitpress/domain/blog/schema/BlogScan.js"
 import type {
   ExportOptions,
   FrontmatterFieldMeta,
   FrontmatterFieldName,
 } from "@exitpress/domain/export-options/schema/ExportOptions.js"
+import type { ThemePreference } from "@exitpress/domain/preferences/schema/ThemePreference.js"
 import type { BlockTemplateDefinition } from "@exitpress/domain/template/schema/BlockTemplateDefinition.js"
 import type { ReactNode } from "react"
 
 import type { ExportOptionsStep } from "./ExportOptionsSteps.js"
 
-import { Card, CardContent } from "../../components/ui/Card.js"
+import { PrimerPanel, PrimerPanelBody } from "../../components/primer/PrimerPage.js"
 
 import { AssetsOptionsStep } from "./AssetsOptionsStep.js"
 import { MarkdownOptionsStep } from "./BlockTemplateOptions.js"
@@ -22,6 +25,7 @@ export const ExportOptionsPanel = ({
   step,
   outputDir,
   options,
+  themePreference,
   optionDescriptions,
   blockTemplateDefinitions = [],
   frontmatterFieldOrder,
@@ -33,6 +37,7 @@ export const ExportOptionsPanel = ({
   step: ExportOptionsStep
   outputDir: string
   options: ExportOptions
+  themePreference: ThemePreference
   optionDescriptions: Record<string, string>
   blockTemplateDefinitions?: BlockTemplateDefinition[]
   frontmatterFieldOrder: FrontmatterFieldName[]
@@ -51,6 +56,7 @@ export const ExportOptionsPanel = ({
         outputDir={outputDir}
         options={options}
         description={description}
+        themePreference={themePreference}
         onOptionsChange={onOptionsChange}
       />
     ),
@@ -68,6 +74,7 @@ export const ExportOptionsPanel = ({
       <MarkdownOptionsStep
         options={options}
         blockTemplateDefinitions={blockTemplateDefinitions}
+        themePreference={themePreference}
         onOptionsChange={onOptionsChange}
       />
     ),
@@ -83,6 +90,7 @@ export const ExportOptionsPanel = ({
         options={options}
         description={description}
         linkTemplatePreviewPost={linkTemplatePreviewPost}
+        themePreference={themePreference}
         onOptionsChange={onOptionsChange}
       />
     ),
@@ -95,9 +103,9 @@ export const ExportOptionsPanel = ({
     ),
   }
   const formContent = (
-    <div id="export-form" className="form-stack grid gap-5">
+    <Box id="export-form" sx={{ display: "grid", gap: 4 }}>
       {contentByStep[step]}
-    </div>
+    </Box>
   )
 
   if (step === "markdown") {
@@ -105,8 +113,10 @@ export const ExportOptionsPanel = ({
   }
 
   return (
-    <Card variant="panel" className="board-card overflow-hidden" id="export-panel">
-      <CardContent className="panel-body grid gap-4 p-5">{formContent}</CardContent>
-    </Card>
+    <PrimerPanel>
+      <Box id="export-panel">
+        <PrimerPanelBody>{formContent}</PrimerPanelBody>
+      </Box>
+    </PrimerPanel>
   )
 }

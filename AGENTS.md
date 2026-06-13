@@ -10,7 +10,7 @@
 
 - Runtime versions are pinned by `mise.toml`: Node.js, pnpm, and Bun.
 - Run repo commands through `mise exec -- pnpm ...`.
-- The codebase uses TypeScript ESM, React, Vite, Tailwind CSS v4, shadcn/Radix primitives, Oxfmt, Oxlint, Vitest, and Playwright.
+- The codebase uses TypeScript ESM, React, Vite, Primer React, Octicons, Oxfmt, Oxlint, Vitest, and Playwright.
 
 ## Project Structure
 
@@ -42,8 +42,8 @@
 ## Design System
 
 - UI rules live in `.agents/knowledge/DESIGN.md`.
-- UI changes use existing primitives, tokens, and dark-first wizard patterns.
-- shadcn/Radix primitive implementations are used as-is; avoid testing their internals.
+- UI changes use Primer React components, Octicons, Primer `sx` styling, and dark/light wizard patterns.
+- Do not add shadcn, Radix UI wrappers, Remix icons, Tailwind utilities, or compatibility shims.
 
 ## Operating Rules
 

@@ -1,45 +1,20 @@
+import { Box } from "@primer/react"
+
 import type { ThemePreference } from "@exitpress/domain/preferences/schema/ThemePreference.js"
 import type { ReactNode, RefObject } from "react"
 
 import type { SetupStep, WizardStep } from "../features/common/shell/WizardFlow.js"
 import type { ResumeDialogState } from "../features/resume/ResumeState.js"
 
-import { Toaster } from "../components/ui/Sonner.js"
+import { PrimerToastViewport } from "../components/primer/PrimerToast.js"
 import { WizardDock } from "../features/common/shell/WizardDock.js"
 import { NextActionIcon, stepMeta } from "../features/common/shell/WizardFlow.js"
 import { WizardHeader } from "../features/common/shell/WizardHeader.js"
 import { ResumeDialogPanel } from "../features/resume/ResumeDialogPanel.js"
-import { cn } from "../lib/Cn.js"
 
 import { BootstrapLoadingOverlay } from "./BootstrapLoadingOverlay.js"
 
-export const AppShell = ({
-  themePreference,
-  bootstrapping,
-  resumeDialog,
-  resettingResume,
-  restoringResume,
-  currentStep,
-  isSetupStep,
-  setupStep,
-  setupStepIndex,
-  stepViewRef,
-  headerStatus,
-  summaryCards,
-  currentScanTarget,
-  scanPending,
-  exportDisabled,
-  nextDisabled,
-  submitting,
-  nextButtonLabel,
-  children,
-  onThemeChange,
-  onResetResume,
-  onRestoreResume,
-  onPrevious,
-  onForceScan,
-  onNext,
-}: {
+type AppShellProps = {
   themePreference: ThemePreference
   bootstrapping: boolean
   resumeDialog: ResumeDialogState | null
@@ -67,10 +42,47 @@ export const AppShell = ({
   onPrevious: () => void
   onForceScan: () => void
   onNext: () => void
-}) => (
-  <main
-    className={cn("dashboard-shell relative min-h-screen w-full overflow-x-clip", themePreference)}
+}
+
+export const AppShell = ({
+  themePreference,
+  bootstrapping,
+  resumeDialog,
+  resettingResume,
+  restoringResume,
+  currentStep,
+  isSetupStep,
+  setupStep,
+  setupStepIndex,
+  stepViewRef,
+  headerStatus,
+  summaryCards,
+  currentScanTarget,
+  scanPending,
+  exportDisabled,
+  nextDisabled,
+  submitting,
+  nextButtonLabel,
+  children,
+  onThemeChange,
+  onResetResume,
+  onRestoreResume,
+  onPrevious,
+  onForceScan,
+  onNext,
+}: AppShellProps) => (
+  <Box
+    as="main"
     aria-busy={bootstrapping || undefined}
+    sx={{
+      minHeight: "100vh",
+      bg: "canvas.default",
+      color: "fg.default",
+      display: "flex",
+      flexDirection: "column",
+      overflowX: "clip",
+      position: "relative",
+    }}
   >
     <ResumeDialogPanel
       resumeDialog={resumeDialog}
@@ -80,15 +92,25 @@ export const AppShell = ({
       onRestore={onRestoreResume}
     />
 
-    <div
-      id="dashboard-backdrop"
-      className="shell-backdrop pointer-events-none fixed inset-0 -z-10"
-      aria-hidden="true"
-    />
-
     {bootstrapping ? <BootstrapLoadingOverlay /> : null}
 
-    <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-6xl flex-col gap-5 px-4 py-5 xl:px-6 xl:py-6">
+    <Box
+      sx={{
+        width: "100%",
+        maxWidth: "1280px",
+        minHeight: isSetupStep ? ["auto", "100vh"] : "100vh",
+        flex: isSetupStep ? ["1 0 auto", "initial"] : "initial",
+        mx: "auto",
+        px: [3, 4, 5],
+        pt: [3, 4],
+        pb: isSetupStep ? [0, "128px"] : [3, 4],
+        display: "grid",
+        gridTemplateRows: "auto 1fr",
+        gap: [3, 4],
+        position: "relative",
+        zIndex: 1,
+      }}
+    >
       <WizardHeader
         title={stepMeta[currentStep].title}
         description={stepMeta[currentStep].description}
@@ -98,14 +120,19 @@ export const AppShell = ({
         onThemeChange={onThemeChange}
       />
 
-      <section
+      <Box
+        as="section"
         ref={stepViewRef}
-        className={cn("grid gap-4", isSetupStep ? "pb-28 sm:pb-32" : "")}
         data-step-view={currentStep}
+        sx={{
+          display: "grid",
+          gap: 3,
+          alignContent: "start",
+        }}
       >
         {children}
-      </section>
-    </div>
+      </Box>
+    </Box>
 
     <WizardDock
       isSetupStep={isSetupStep}
@@ -124,6 +151,6 @@ export const AppShell = ({
       onForceScan={onForceScan}
       onNext={onNext}
     />
-    <Toaster theme={themePreference} />
-  </main>
+    <PrimerToastViewport />
+  </Box>
 )

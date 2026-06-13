@@ -1,7 +1,5 @@
 import { UPLOAD_PROVIDER_KEYS } from "@exitpress/domain/upload/UploadProviderKeys.js"
-
-import { Checkbox } from "../../components/ui/Checkbox.js"
-import { Input } from "../../components/ui/Input.js"
+import { Checkbox, FormControl, TextInput } from "@primer/react"
 
 export const UploadGithubOptions = ({
   providerKey,
@@ -20,57 +18,45 @@ export const UploadGithubOptions = ({
 
   return (
     <>
-      <div className="flex items-start gap-3 rounded-[var(--radius-md)] px-2 py-1.5 transition-colors hover:bg-accent/55">
+      <FormControl
+        id="upload-github-use-jsdelivr"
+        layout="horizontal"
+        sx={{
+          alignItems: "flex-start",
+          borderRadius: 2,
+          px: 2,
+          py: 2,
+          "&:hover": { bg: "neutral.subtle" },
+        }}
+      >
         <Checkbox
-          id="upload-github-use-jsdelivr"
           checked={githubUseJsDelivr}
-          className="shrink-0"
-          aria-describedby="upload-github-use-jsdelivr-description"
-          onCheckedChange={(next) =>
+          onChange={(event) =>
             updateProviderUiState({
-              githubUseJsDelivr: next === true,
+              githubUseJsDelivr: event.target.checked,
             })
           }
         />
-        <span className="grid gap-1">
-          <label
-            htmlFor="upload-github-use-jsdelivr"
-            className="text-sm font-semibold text-foreground"
-          >
-            jsDelivr CDN 사용
-          </label>
-          <span
-            id="upload-github-use-jsdelivr-description"
-            className="text-sm leading-6 text-muted-foreground"
-          >
-            {githubUseJsDelivr
-              ? githubJsDelivrUrl || "저장소를 입력하면 jsDelivr 주소를 만듭니다."
-              : "기본 GitHub 업로드 URL을 씁니다."}
-          </span>
-        </span>
-      </div>
+        <FormControl.Label>jsDelivr CDN 사용</FormControl.Label>
+        <FormControl.Caption>
+          {githubUseJsDelivr
+            ? githubJsDelivrUrl || "저장소를 입력하면 jsDelivr 주소를 만듭니다."
+            : "기본 GitHub 업로드 URL을 씁니다."}
+        </FormControl.Caption>
+      </FormControl>
       {githubUseJsDelivr ? (
-        <div className="grid gap-2">
-          <label
-            htmlFor="upload-github-jsdelivr-preview"
-            className="text-sm font-semibold text-foreground"
-          >
-            자동 커스텀 URL
-          </label>
-          <Input
-            id="upload-github-jsdelivr-preview"
+        <FormControl id="upload-github-jsdelivr-preview">
+          <FormControl.Label>자동 커스텀 URL</FormControl.Label>
+          <TextInput
+            block
             value={githubJsDelivrUrl}
             readOnly
-            aria-describedby="upload-github-jsdelivr-preview-description"
             placeholder="저장소와 브랜치를 입력하면 미리보기가 보입니다."
           />
-          <span
-            id="upload-github-jsdelivr-preview-description"
-            className="text-sm leading-6 text-muted-foreground"
-          >
+          <FormControl.Caption>
             제출하면 jsDelivr 주소가 커스텀 URL로 자동 적용됩니다.
-          </span>
-        </div>
+          </FormControl.Caption>
+        </FormControl>
       ) : null}
     </>
   )

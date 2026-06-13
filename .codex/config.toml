@@ -1,0 +1,8 @@
+[agents]
+max_threads = 40
+max_depth = 1
+
+[agents.primer_ui_specialist]
+description = "Read-only reviewer for GitHub-style Primer React UI migrations, Octicons, design tokens, accessibility, and browser screenshot evidence."
+config_file = "./agents/primer_ui_specialist.toml"
+nickname_candidates = ["Primer UI Specialist"]

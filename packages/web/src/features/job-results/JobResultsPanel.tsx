@@ -4,9 +4,8 @@ import type { ExportJobState } from "@exitpress/domain/export-job/schema/ExportJ
 
 import type { JobFilter, JobResultsMode } from "./JobResultsHelpers.js"
 
-import { Card, CardContent } from "../../components/ui/Card.js"
-import { toast } from "../../components/ui/Sonner.js"
-import { TooltipProvider } from "../../components/ui/Tooltip.js"
+import { PrimerPanel, PrimerPanelBody } from "../../components/primer/PrimerPage.js"
+import { toast } from "../../components/primer/PrimerToast.js"
 import { postSameOriginJson, postSameOriginJsonNoContent } from "../../lib/Api.js"
 
 import { JobLogsPanel } from "./JobLogsPanel.js"
@@ -98,21 +97,17 @@ export const JobResultsPanel = ({
   }
 
   useEffect(() => {
-    const viewport = logsScrollAreaRef.current?.querySelector<HTMLElement>(
-      '[data-slot="scroll-area-viewport"]',
-    )
-
-    if (!viewport) {
+    if (!logsScrollAreaRef.current) {
       return
     }
 
-    viewport.scrollTop = viewport.scrollHeight
+    logsScrollAreaRef.current.scrollTop = logsScrollAreaRef.current.scrollHeight
   }, [latestLogSignature])
 
   return (
-    <TooltipProvider>
-      <Card variant="panel" className="board-card overflow-hidden" id="status-panel">
-        <CardContent className="status-layout grid gap-5 p-6">
+    <PrimerPanel>
+      <div id="status-panel">
+        <PrimerPanelBody>
           {mode === "running" ? (
             <RunningProgressSection
               job={job}
@@ -143,8 +138,8 @@ export const JobResultsPanel = ({
           ) : null}
 
           <JobLogsPanel job={job} logsScrollAreaRef={logsScrollAreaRef} />
-        </CardContent>
-      </Card>
-    </TooltipProvider>
+        </PrimerPanelBody>
+      </div>
+    </PrimerPanel>
   )
 }

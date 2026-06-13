@@ -1,29 +1,14 @@
-import { RiExternalLinkLine, RiFileTextLine, RiFolderOpenLine, RiMore2Line } from "@remixicon/react"
-import { useRef, useState } from "react"
+import {
+  FileCodeIcon,
+  FileDirectoryOpenFillIcon,
+  KebabHorizontalIcon,
+  LinkExternalIcon,
+} from "@primer/octicons-react"
+import { ActionList, ActionMenu, Box, Button, Label, Text, Tooltip } from "@primer/react"
 
 import type { ExportJobState } from "@exitpress/domain/export-job/schema/ExportJobState.js"
 
 import type { JobFilter, JobResultsMode, UploadRowStatus } from "./JobResultsHelpers.js"
-
-import { Badge } from "../../components/ui/Badge.js"
-import { Button } from "../../components/ui/Button.js"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "../../components/ui/DropdownMenu.js"
-import { ScrollArea } from "../../components/ui/ScrollArea.js"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../../components/ui/Table.js"
-import { Tooltip, TooltipContent, TooltipTrigger } from "../../components/ui/Tooltip.js"
-import { cn } from "../../lib/Cn.js"
 
 import {
   buildJobItemPathMeta,
@@ -36,17 +21,21 @@ import {
   shouldShowUploadColumns,
 } from "./JobResultsHelpers.js"
 
-const uploadRowBadgeClass = (status: UploadRowStatus) =>
-  cn(
-    "rounded-full border px-2.5 py-0.5",
-    status === "pending"
-      ? "upload-badge--pending"
-      : status === "partial"
-        ? "upload-badge--partial"
-        : status === "complete"
-          ? "upload-badge--complete"
-          : "upload-badge--failed",
-  )
+const uploadRowLabelVariant = (status: UploadRowStatus) => {
+  if (status === "complete") {
+    return "success"
+  }
+
+  if (status === "failed") {
+    return "danger"
+  }
+
+  if (status === "partial") {
+    return "attention"
+  }
+
+  return "secondary"
+}
 
 type JobItem = ReturnType<typeof getJobItems>[number]
 
@@ -65,25 +54,6 @@ const JobItemActionMenu = ({
   onOpenPreviewLink: (input: { itemId: string; outputPath: string; title: string }) => void
   onOpenSourceLink: (input: { source: string }) => void
 }) => {
-  const [open, setOpen] = useState(false)
-  const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-
-  const clearCloseTimer = () => {
-    if (!closeTimerRef.current) {
-      return
-    }
-
-    clearTimeout(closeTimerRef.current)
-    closeTimerRef.current = null
-  }
-
-  const scheduleClose = () => {
-    clearCloseTimer()
-    closeTimerRef.current = setTimeout(() => {
-      setOpen(false)
-    }, 140)
-  }
-
   const openPreviewLabel = previewPending
     ? "미리보기 링크 생성 중"
     : canOpenPreview
@@ -91,41 +61,16 @@ const JobItemActionMenu = ({
       : "미리보기 없음"
 
   return (
-    <div
-      className="inline-flex opacity-0 transition-opacity duration-150 group-hover/job-row:opacity-100 group-focus-within/job-row:opacity-100 data-[state=open]:opacity-100"
-      data-state={open ? "open" : "closed"}
-      onMouseEnter={() => {
-        clearCloseTimer()
-      }}
-      onMouseLeave={scheduleClose}
-    >
-      <DropdownMenu open={open} onOpenChange={setOpen}>
-        <DropdownMenuTrigger asChild>
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon"
-            className="size-7 rounded-full text-muted-foreground hover:bg-accent hover:text-foreground"
-            aria-label={`${item.title} 작업 메뉴`}
-            onMouseEnter={() => {
-              clearCloseTimer()
-              setOpen(true)
-            }}
-            onFocus={() => {
-              clearCloseTimer()
-              setOpen(true)
-            }}
-          >
-            <RiMore2Line className="size-4" aria-hidden="true" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent
-          onMouseEnter={() => {
-            clearCloseTimer()
-          }}
-          onMouseLeave={scheduleClose}
-        >
-          <DropdownMenuItem
+    <ActionMenu>
+      <ActionMenu.Button
+        aria-label={`${item.title} 작업 메뉴`}
+        size="small"
+        variant="invisible"
+        icon={KebabHorizontalIcon}
+      />
+      <ActionMenu.Overlay align="end">
+        <ActionList>
+          <ActionList.Item
             data-job-item-source-link
             onSelect={() => {
               onOpenSourceLink({
@@ -133,10 +78,12 @@ const JobItemActionMenu = ({
               })
             }}
           >
-            <RiExternalLinkLine className="size-4" aria-hidden="true" />
+            <ActionList.LeadingVisual>
+              <LinkExternalIcon />
+            </ActionList.LeadingVisual>
             네이버 원문 보기
-          </DropdownMenuItem>
-          <DropdownMenuItem
+          </ActionList.Item>
+          <ActionList.Item
             data-job-item-preview-link
             disabled={!canOpenPreview || previewPending}
             onSelect={(event) => {
@@ -152,10 +99,12 @@ const JobItemActionMenu = ({
               })
             }}
           >
-            <RiFileTextLine className="size-4" aria-hidden="true" />
+            <ActionList.LeadingVisual>
+              <FileCodeIcon />
+            </ActionList.LeadingVisual>
             {openPreviewLabel}
-          </DropdownMenuItem>
-          <DropdownMenuItem
+          </ActionList.Item>
+          <ActionList.Item
             disabled={!item.outputPath}
             onSelect={(event) => {
               if (!item.outputPath) {
@@ -169,12 +118,14 @@ const JobItemActionMenu = ({
               })
             }}
           >
-            <RiFolderOpenLine className="size-4" aria-hidden="true" />
+            <ActionList.LeadingVisual>
+              <FileDirectoryOpenFillIcon />
+            </ActionList.LeadingVisual>
             로컬 파일 열기
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </div>
+          </ActionList.Item>
+        </ActionList>
+      </ActionMenu.Overlay>
+    </ActionMenu>
   )
 }
 
@@ -201,6 +152,11 @@ const getJobFilterCounts = (job: ExportJobState | null) =>
       failed: 0,
     } satisfies Record<JobFilter, number>,
   )
+
+const filterLabel = (filter: JobFilter) =>
+  filter === "all" ? "전체" : filter === "success" ? "성공" : "실패"
+
+const tableColumnCount = (showUploadColumns: boolean) => (showUploadColumns ? 6 : 4)
 
 export const JobResultsTable = ({
   mode,
@@ -239,76 +195,122 @@ export const JobResultsTable = ({
   const showUploadColumns = shouldShowUploadColumns(job)
 
   return (
-    <section className="job-results-panel subtle-panel grid gap-4 rounded-[1.5rem] p-4">
-      <div className="job-results-header grid gap-4 lg:flex lg:items-start lg:justify-between">
-        <div
-          className="job-filter-group flex flex-wrap items-center gap-2"
-          role="tablist"
-          aria-label="완료 리스트 필터"
-        >
-          {(["all", "success", "failed"] as const).map((filter) => (
-            <Button
-              key={filter}
-              type="button"
-              variant={activeJobFilter === filter ? "outline" : "ghost"}
-              className={`job-filter-button min-w-16 rounded-full px-4 ${activeJobFilter === filter ? "is-active" : ""}`}
-              data-job-filter={filter}
-              onClick={() => onFilterChange(filter)}
-            >
-              {filter === "all" ? "전체" : filter === "success" ? "성공" : "실패"}{" "}
-              {jobFilterCounts[filter]}
-            </Button>
-          ))}
-        </div>
-      </div>
+    <Box
+      as="section"
+      sx={{
+        display: "grid",
+        gap: 3,
+        border: "1px solid",
+        borderColor: "border.default",
+        borderRadius: 2,
+        p: 3,
+      }}
+    >
+      <Box
+        role="tablist"
+        aria-label="완료 리스트 필터"
+        sx={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 2 }}
+      >
+        {(["all", "success", "failed"] as const).map((filter) => (
+          <Button
+            key={filter}
+            type="button"
+            variant={activeJobFilter === filter ? "default" : "invisible"}
+            data-job-filter={filter}
+            count={jobFilterCounts[filter]}
+            aria-selected={activeJobFilter === filter}
+            onClick={() => onFilterChange(filter)}
+          >
+            {filterLabel(filter)}
+          </Button>
+        ))}
+      </Box>
 
       {jobItems.length === 0 ? (
-        <div
+        <Box
           id="job-file-tree"
-          className="job-file-tree empty-state-surface grid min-h-28 place-items-center rounded-2xl px-4 py-6 text-center text-sm"
+          sx={{
+            display: "grid",
+            minHeight: "7rem",
+            placeItems: "center",
+            border: "1px dashed",
+            borderColor: "border.default",
+            borderRadius: 2,
+            px: 3,
+            py: 4,
+            color: "fg.muted",
+            fontSize: 1,
+            textAlign: "center",
+          }}
         >
           {activeJobFilter === "all"
             ? mode === "running"
               ? "완료된 결과가 아직 없습니다."
               : "완료된 결과가 여기에 표시됩니다."
             : "현재 필터에 맞는 결과가 없습니다."}
-        </div>
+        </Box>
       ) : (
-        <ScrollArea
+        <Box
           id="job-file-tree"
-          className="job-file-tree job-file-tree-scroll section-card max-h-[min(32rem,62vh)] overflow-hidden rounded-[1.5rem]"
+          sx={{
+            maxHeight: "min(32rem, 62vh)",
+            overflow: "auto",
+            border: "1px solid",
+            borderColor: "border.default",
+            borderRadius: 2,
+          }}
         >
-          <Table
-            className={cn(
-              "w-full text-[11px] sm:text-xs",
-              showUploadColumns ? "min-w-[50rem] table-fixed" : "table-fixed",
-            )}
+          <Box
+            as="table"
+            sx={{
+              width: "100%",
+              minWidth: showUploadColumns ? "50rem" : "42rem",
+              borderCollapse: "collapse",
+              tableLayout: "fixed",
+              fontSize: [0, 1],
+            }}
           >
-            <TableHeader className="sticky top-0 z-10">
-              <TableRow className="hover:bg-transparent">
-                <TableHead className="w-[7.5rem] text-[10px] sm:w-[8.5rem] sm:text-[11px]">
+            <Box
+              as="thead"
+              sx={{
+                position: "sticky",
+                top: 0,
+                zIndex: 1,
+                bg: "canvas.subtle",
+              }}
+            >
+              <Box as="tr" sx={{ borderBottom: "1px solid", borderColor: "border.default" }}>
+                <Box as="th" sx={{ width: ["7.5rem", "8.5rem"], px: 3, py: 2, textAlign: "left" }}>
                   카테고리
-                </TableHead>
-                <TableHead className="text-[10px] sm:text-[11px]">파일</TableHead>
+                </Box>
+                <Box as="th" sx={{ px: 3, py: 2, textAlign: "left" }}>
+                  파일
+                </Box>
                 {showUploadColumns ? (
-                  <TableHead className="w-[7rem] text-center text-[10px] sm:w-[8rem] sm:text-[11px]">
+                  <Box as="th" sx={{ width: ["7rem", "8rem"], px: 3, py: 2, textAlign: "center" }}>
                     업로드
-                  </TableHead>
+                  </Box>
                 ) : null}
                 {showUploadColumns ? (
-                  <TableHead className="w-[7rem] text-center text-[10px] sm:w-[8rem] sm:text-[11px]">
+                  <Box as="th" sx={{ width: ["7rem", "8rem"], px: 3, py: 2, textAlign: "center" }}>
                     업로드 상태
-                  </TableHead>
+                  </Box>
                 ) : null}
-                <TableHead className="w-[6.5rem] text-center text-[10px] sm:w-[7.5rem] sm:text-[11px]">
+                <Box
+                  as="th"
+                  sx={{ width: ["6.5rem", "7.5rem"], px: 3, py: 2, textAlign: "center" }}
+                >
                   상태
-                </TableHead>
-                <TableHead className="w-[3.25rem] text-center text-[10px] sm:w-[3.5rem] sm:text-[11px]">
+                </Box>
+                <Box
+                  as="th"
+                  sx={{ width: ["3.25rem", "3.5rem"], px: 2, py: 2, textAlign: "center" }}
+                >
                   작업
-                </TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
+                </Box>
+              </Box>
+            </Box>
+            <Box as="tbody">
               {jobItems.map((item) => {
                 const severity = buildJobItemSeverity(item)
                 const pathMeta = buildJobItemPathMeta(item)
@@ -326,123 +328,177 @@ export const JobResultsTable = ({
                         jobStatus: job?.status,
                         item,
                       })
-                    : null
+                    : undefined
                 const uploadedLinks =
                   showUploadColumns && hasUploadCandidate ? buildUploadedLinkMeta(item) : []
 
                 return (
-                  <TableRow
+                  <Box
                     key={item.id}
-                    className={cn(
-                      "group/job-row last:border-b-0",
-                      severity === "error" ? "bg-[var(--status-error-bg)]" : "",
-                    )}
+                    as="tr"
                     data-upload-row-id={
                       showUploadColumns && hasUploadCandidate ? item.id : undefined
                     }
                     data-upload-row-status={uploadRowStatus?.key}
                     data-severity={severity}
+                    sx={{
+                      bg: severity === "error" ? "danger.subtle" : "canvas.default",
+                      borderBottom: "1px solid",
+                      borderColor: "border.muted",
+                      "&:last-child": { borderBottom: 0 },
+                    }}
                   >
-                    <TableCell className="align-top">
-                      <div className="flex min-h-[3.5rem] items-start">
-                        <Badge
-                          variant="outline"
-                          className="max-w-full rounded-full px-2.5 py-1 text-[10px] font-medium normal-case sm:text-[11px]"
-                          title={item.category.path.join(" / ")}
-                        >
-                          <span className="truncate">{item.category.name}</span>
-                        </Badge>
-                      </div>
-                    </TableCell>
-                    <TableCell className="min-w-0 align-top">
-                      <div
-                        className="job-results-row grid min-h-0 w-full min-w-0 whitespace-normal rounded-xl px-1.5 py-1 text-left"
+                    <Box as="td" sx={{ px: 3, py: 3, verticalAlign: "top" }}>
+                      <Label
+                        title={item.category.path.join(" / ")}
+                        variant="secondary"
+                        sx={{
+                          maxWidth: "100%",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        {item.category.name}
+                      </Label>
+                    </Box>
+                    <Box as="td" sx={{ minWidth: 0, px: 3, py: 3, verticalAlign: "top" }}>
+                      <Box
                         data-job-item-id={item.id}
                         data-severity={severity}
+                        sx={{ display: "grid", minWidth: 0, gap: 1 }}
                       >
-                        <span className="grid min-w-0 gap-1">
-                          {localOutputPath ? (
-                            <Tooltip>
-                              <TooltipTrigger asChild>
-                                <button
-                                  type="button"
-                                  className="w-fit max-w-full cursor-help border-0 bg-transparent p-0 text-left outline-none"
-                                >
-                                  <strong className="break-words text-[11px] font-semibold leading-[1.45] text-foreground sm:text-[13px]">
-                                    {pathMeta.fileLabel}
-                                  </strong>
-                                </button>
-                              </TooltipTrigger>
-                              <TooltipContent align="start" side="top" sideOffset={8}>
-                                <span className="font-mono">{localOutputPath}</span>
-                              </TooltipContent>
-                            </Tooltip>
-                          ) : (
-                            <strong className="break-words text-[11px] font-semibold leading-[1.45] text-foreground sm:text-[13px]">
-                              {pathMeta.fileLabel}
-                            </strong>
-                          )}
-                          <span className="whitespace-normal break-words text-[10px] leading-[1.45] text-muted-foreground sm:text-[11px]">
-                            {item.title}
-                          </span>
-                        </span>
-                      </div>
-                    </TableCell>
+                        {localOutputPath ? (
+                          <Tooltip text={localOutputPath} direction="n">
+                            <Box
+                              as="button"
+                              type="button"
+                              sx={{
+                                width: "fit-content",
+                                maxWidth: "100%",
+                                m: 0,
+                                p: 0,
+                                border: 0,
+                                bg: "transparent",
+                                color: "fg.default",
+                                font: "inherit",
+                                textAlign: "left",
+                                cursor: "help",
+                              }}
+                            >
+                              <Box
+                                as="strong"
+                                sx={{
+                                  display: "block",
+                                  overflowWrap: "anywhere",
+                                  fontSize: [0, 1],
+                                  fontWeight: 600,
+                                  lineHeight: "20px",
+                                }}
+                              >
+                                {pathMeta.fileLabel}
+                              </Box>
+                            </Box>
+                          </Tooltip>
+                        ) : (
+                          <Box
+                            as="strong"
+                            sx={{
+                              overflowWrap: "anywhere",
+                              fontSize: [0, 1],
+                              fontWeight: 600,
+                              lineHeight: "20px",
+                            }}
+                          >
+                            {pathMeta.fileLabel}
+                          </Box>
+                        )}
+                        <Text
+                          sx={{
+                            color: "fg.muted",
+                            fontSize: 0,
+                            lineHeight: "18px",
+                            overflowWrap: "anywhere",
+                          }}
+                        >
+                          {item.title}
+                        </Text>
+                      </Box>
+                    </Box>
                     {showUploadColumns ? (
-                      <TableCell className="align-middle text-center text-[11px] text-foreground sm:text-xs">
+                      <Box
+                        as="td"
+                        sx={{ px: 3, py: 3, textAlign: "center", verticalAlign: "middle" }}
+                      >
                         {hasUploadCandidate ? (
-                          <div className="grid justify-items-center gap-1">
-                            <span>
+                          <Box sx={{ display: "grid", justifyItems: "center", gap: 1 }}>
+                            <Text>
                               {item.upload.uploadedCount} / {item.upload.candidateCount}
-                            </span>
+                            </Text>
                             {uploadedLinks.length > 0 ? (
-                              <div className="flex flex-wrap justify-center gap-1.5 text-[10px] sm:text-xs">
+                              <Box
+                                sx={{
+                                  display: "flex",
+                                  flexWrap: "wrap",
+                                  justifyContent: "center",
+                                  gap: 2,
+                                }}
+                              >
                                 {uploadedLinks.map((link) => (
-                                  <a
+                                  <Box
                                     key={`${item.id}:${link.label}`}
+                                    as="a"
                                     href={link.url}
                                     target="_blank"
                                     rel="noreferrer"
-                                    className="font-medium text-[var(--status-running-fg)] underline underline-offset-2"
+                                    sx={{
+                                      color: "accent.fg",
+                                      fontSize: 0,
+                                      fontWeight: 600,
+                                      textDecoration: "underline",
+                                      textUnderlineOffset: "2px",
+                                    }}
                                   >
                                     {link.label}
-                                  </a>
+                                  </Box>
                                 ))}
-                              </div>
+                              </Box>
                             ) : null}
-                          </div>
+                          </Box>
                         ) : (
-                          <span className="text-muted-foreground/70">-</span>
+                          <Text sx={{ color: "fg.subtle" }}>-</Text>
                         )}
-                      </TableCell>
+                      </Box>
                     ) : null}
                     {showUploadColumns ? (
-                      <TableCell className="align-middle text-center">
+                      <Box
+                        as="td"
+                        sx={{ px: 3, py: 3, textAlign: "center", verticalAlign: "middle" }}
+                      >
                         {uploadRowStatus ? (
-                          <Badge
-                            variant="outline"
-                            className={cn(
-                              "text-[10px] sm:text-[11px]",
-                              uploadRowBadgeClass(uploadRowStatus.key),
-                            )}
+                          <Label
+                            variant={uploadRowLabelVariant(uploadRowStatus.key)}
                             data-upload-row-status-badge={uploadRowStatus.key}
                           >
                             {uploadRowStatus.label}
-                          </Badge>
+                          </Label>
                         ) : (
-                          <span className="text-sm text-muted-foreground/70">-</span>
+                          <Text sx={{ color: "fg.subtle" }}>-</Text>
                         )}
-                      </TableCell>
+                      </Box>
                     ) : null}
-                    <TableCell className="align-middle text-center">
-                      <Badge
-                        className="min-w-14 justify-center rounded-full px-2 py-0.5 text-[10px] sm:min-w-16 sm:px-2.5 sm:text-[11px]"
-                        variant={severity === "success" ? "secondary" : meta.badge}
-                      >
+                    <Box
+                      as="td"
+                      sx={{ px: 3, py: 3, textAlign: "center", verticalAlign: "middle" }}
+                    >
+                      <Label variant={severity === "success" ? "success" : "danger"}>
                         {meta.label}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="align-middle text-center">
+                      </Label>
+                    </Box>
+                    <Box
+                      as="td"
+                      sx={{ px: 2, py: 3, textAlign: "center", verticalAlign: "middle" }}
+                    >
                       <JobItemActionMenu
                         item={item}
                         previewPending={previewPending}
@@ -451,14 +507,19 @@ export const JobResultsTable = ({
                         onOpenPreviewLink={onOpenPreviewLink}
                         onOpenSourceLink={onOpenSourceLink}
                       />
-                    </TableCell>
-                  </TableRow>
+                    </Box>
+                  </Box>
                 )
               })}
-            </TableBody>
-          </Table>
-        </ScrollArea>
+              {jobItems.length > 0 ? (
+                <Box as="tr" sx={{ display: "none" }}>
+                  <Box as="td" colSpan={tableColumnCount(showUploadColumns)} />
+                </Box>
+              ) : null}
+            </Box>
+          </Box>
+        </Box>
       )}
-    </section>
+    </Box>
   )
 }

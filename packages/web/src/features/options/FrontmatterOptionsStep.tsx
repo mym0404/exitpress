@@ -1,16 +1,12 @@
+import { Box, Checkbox, Flash, FormControl, Label, Text, TextInput } from "@primer/react"
+
 import type {
   ExportOptions,
   FrontmatterFieldMeta,
   FrontmatterFieldName,
 } from "@exitpress/domain/export-options/schema/ExportOptions.js"
 
-import { Alert, AlertDescription, AlertTitle } from "../../components/ui/Alert.js"
-import { Badge } from "../../components/ui/Badge.js"
-import { Checkbox } from "../../components/ui/Checkbox.js"
-import { Input } from "../../components/ui/Input.js"
-import { cn } from "../../lib/Cn.js"
-
-import { CheckField, OptionSection } from "./OptionControls.js"
+import { CheckField, OptionSection, OptionWideBox } from "./OptionControls.js"
 
 export const FrontmatterOptionsStep = ({
   options,
@@ -28,147 +24,167 @@ export const FrontmatterOptionsStep = ({
   onOptionsChange: (updater: (current: ExportOptions) => ExportOptions) => void
 }) => (
   <OptionSection title="Frontmatter" note="메타데이터 블록">
-    <div className="frontmatter-toolbar grid gap-3 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:items-start">
-      <CheckField
-        inputId="frontmatter-enabled"
-        optionKey="frontmatter-enabled"
-        label="Frontmatter 사용"
-        description={description("frontmatter-enabled")}
-        checked={options.frontmatter.enabled}
-        compact
-        onChange={(checked) =>
-          onOptionsChange((current) => ({
-            ...current,
-            frontmatter: {
-              ...current.frontmatter,
-              enabled: checked,
-            },
-          }))
-        }
-      />
-      <div
-        className={cn(
-          "frontmatter-state-card field-card flex min-h-0 w-full flex-col justify-between gap-3 self-start rounded-2xl px-4 py-4 sm:flex-row sm:items-start",
-          frontmatterValidationErrors.length > 0 &&
-            "border-[color-mix(in_srgb,var(--status-error-fg)_26%,transparent)] shadow-[var(--panel-shadow-border),0_0_0_1px_color-mix(in_srgb,var(--status-error-fg)_12%,transparent)]",
-        )}
-        data-state={frontmatterValidationErrors.length > 0 ? "error" : "default"}
+    <OptionWideBox>
+      <Box
+        sx={{
+          display: "grid",
+          gap: 3,
+          gridTemplateColumns: ["1fr", null, "minmax(0,0.85fr) minmax(0,1.15fr)"],
+          alignItems: "start",
+        }}
       >
-        <div className="frontmatter-state-copy grid min-w-0 gap-2">
-          <span className="frontmatter-state-label text-sm font-semibold text-foreground">
-            별칭 상태
-          </span>
-          <p className="frontmatter-description text-sm leading-6">
-            {frontmatterValidationErrors.length > 0
-              ? "별칭 중복이나 빈 값을 먼저 정리한 뒤 내보내세요."
-              : "현재 frontmatter 별칭 구성이 올바릅니다."}
-          </p>
-        </div>
-        <Badge
-          className="frontmatter-state-badge flex min-w-[4.5rem] justify-center rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em]"
-          variant={frontmatterValidationErrors.length > 0 ? "destructive" : "secondary"}
+        <CheckField
+          inputId="frontmatter-enabled"
+          optionKey="frontmatter-enabled"
+          label="Frontmatter 사용"
+          description={description("frontmatter-enabled")}
+          checked={options.frontmatter.enabled}
+          compact
+          onChange={(checked) =>
+            onOptionsChange((current) => ({
+              ...current,
+              frontmatter: {
+                ...current.frontmatter,
+                enabled: checked,
+              },
+            }))
+          }
+        />
+        <Box
+          data-state={frontmatterValidationErrors.length > 0 ? "error" : "default"}
+          sx={{
+            bg: frontmatterValidationErrors.length > 0 ? "danger.subtle" : "canvas.subtle",
+            border: "1px solid",
+            borderColor: frontmatterValidationErrors.length > 0 ? "danger.muted" : "border.default",
+            borderRadius: 2,
+            display: "flex",
+            flexDirection: ["column", "row"],
+            gap: 3,
+            justifyContent: "space-between",
+            p: 3,
+          }}
         >
-          {frontmatterValidationErrors.length > 0 ? "별칭 오류" : "정상"}
-        </Badge>
-      </div>
-    </div>
+          <Box sx={{ display: "grid", gap: 2, minWidth: 0 }}>
+            <Text sx={{ fontSize: 1, fontWeight: "semibold" }}>별칭 상태</Text>
+            <Text
+              sx={{
+                color: frontmatterValidationErrors.length > 0 ? "danger.fg" : "fg.muted",
+                fontSize: 1,
+                lineHeight: "24px",
+              }}
+            >
+              {frontmatterValidationErrors.length > 0
+                ? "별칭 중복이나 빈 값을 먼저 정리한 뒤 내보내세요."
+                : "현재 frontmatter 별칭 구성이 올바릅니다."}
+            </Text>
+          </Box>
+          <Label
+            variant={frontmatterValidationErrors.length > 0 ? "danger" : "success"}
+            sx={{ alignSelf: "flex-start" }}
+          >
+            {frontmatterValidationErrors.length > 0 ? "별칭 오류" : "정상"}
+          </Label>
+        </Box>
+      </Box>
+    </OptionWideBox>
 
     {frontmatterValidationErrors.length > 0 ? (
-      <Alert
-        id="frontmatter-status"
-        className="frontmatter-alert rounded-2xl px-4 py-4"
-        data-state="error"
-        variant="destructive"
-      >
-        <AlertTitle>Frontmatter 별칭</AlertTitle>
-        <AlertDescription>{frontmatterValidationErrors.join(" ")}</AlertDescription>
-      </Alert>
+      <OptionWideBox>
+        <Flash id="frontmatter-status" variant="danger">
+          {frontmatterValidationErrors.join(" ")}
+        </Flash>
+      </OptionWideBox>
     ) : null}
 
-    <div
-      id="frontmatter-fields"
-      className="frontmatter-grid grid items-start gap-3 md:grid-cols-2 xl:col-span-2 2xl:grid-cols-3"
-    >
-      {frontmatterFieldOrder.map((fieldName) => {
-        const fieldMeta = frontmatterFieldMeta[fieldName]
-        const fieldEnabled = options.frontmatter.fields[fieldName]
-        const hasError = frontmatterValidationErrors.some((error) => error.includes(fieldName))
+    <OptionWideBox id="frontmatter-fields">
+      <Box
+        sx={{
+          display: "grid",
+          gap: 3,
+          gridTemplateColumns: ["1fr", null, "1fr 1fr", "1fr 1fr 1fr"],
+          alignItems: "start",
+        }}
+      >
+        {frontmatterFieldOrder.map((fieldName) => {
+          const fieldMeta = frontmatterFieldMeta[fieldName]
+          const fieldEnabled = options.frontmatter.fields[fieldName]
+          const hasError = frontmatterValidationErrors.some((error) => error.includes(fieldName))
 
-        return (
-          <div
-            key={fieldName}
-            className={cn(
-              "frontmatter-row grid content-start gap-3 self-start rounded-[var(--radius-md)] px-2 py-2 transition-colors hover:bg-accent/45",
-              hasError && "bg-[var(--status-error-bg)] text-[var(--status-error-fg)]",
-            )}
-            data-frontmatter-field={fieldName}
-            data-state={hasError ? "error" : "default"}
-          >
-            <div className="frontmatter-main grid gap-3">
-              <label
-                className="frontmatter-toggle inline-flex items-start gap-3"
-                htmlFor={`frontmatter-field-${fieldName}`}
+          return (
+            <Box
+              key={fieldName}
+              data-frontmatter-field={fieldName}
+              data-state={hasError ? "error" : "default"}
+              sx={{
+                bg: hasError ? "danger.subtle" : "canvas.subtle",
+                border: "1px solid",
+                borderColor: hasError ? "danger.muted" : "border.default",
+                borderRadius: 2,
+                display: "grid",
+                gap: 3,
+                p: 3,
+              }}
+            >
+              <FormControl
+                id={`frontmatter-field-${fieldName}`}
+                layout="horizontal"
+                disabled={!options.frontmatter.enabled}
+                sx={{ alignItems: "flex-start", gap: 2 }}
               >
                 <Checkbox
-                  id={`frontmatter-field-${fieldName}`}
                   checked={fieldEnabled}
-                  className="mt-0.5"
-                  onCheckedChange={(next) =>
+                  onChange={(event) =>
                     onOptionsChange((current) => ({
                       ...current,
                       frontmatter: {
                         ...current.frontmatter,
                         fields: {
                           ...current.frontmatter.fields,
-                          [fieldName]: next === true,
+                          [fieldName]: event.target.checked,
                         },
                       },
                     }))
                   }
                 />
-                <span className="frontmatter-toggle-copy grid gap-0.5">
-                  <span className="text-sm font-semibold text-foreground">{fieldMeta.label}</span>
-                </span>
-              </label>
-              <p className="frontmatter-description text-[13px] leading-5">
-                {fieldMeta.description}
-              </p>
-            </div>
-            <label
-              className="field frontmatter-alias-field grid min-h-0 gap-1.5"
-              htmlFor={`frontmatter-alias-${fieldName}`}
-            >
-              <span className="text-sm font-semibold text-foreground">내보낼 key 별칭</span>
-              <Input
+                <FormControl.Label>{fieldMeta.label}</FormControl.Label>
+                <FormControl.Caption className="frontmatter-description">
+                  {fieldMeta.description}
+                </FormControl.Caption>
+              </FormControl>
+
+              <FormControl
                 id={`frontmatter-alias-${fieldName}`}
-                data-alias-input="true"
-                data-field-name={fieldName}
-                value={options.frontmatter.aliases[fieldName] ?? ""}
-                placeholder={fieldMeta.defaultAlias}
-                aria-invalid={hasError || undefined}
-                className={
-                  hasError
-                    ? "border-[var(--destructive)] shadow-[var(--panel-shadow-border),0_0_0_1px_color-mix(in_srgb,var(--destructive)_18%,transparent)]"
-                    : undefined
-                }
                 disabled={!options.frontmatter.enabled || !fieldEnabled}
-                onChange={(event) =>
-                  onOptionsChange((current) => ({
-                    ...current,
-                    frontmatter: {
-                      ...current.frontmatter,
-                      aliases: {
-                        ...current.frontmatter.aliases,
-                        [fieldName]: event.target.value,
+              >
+                <FormControl.Label>내보낼 key 별칭</FormControl.Label>
+                <TextInput
+                  block
+                  id={`frontmatter-alias-${fieldName}`}
+                  data-alias-input="true"
+                  data-field-name={fieldName}
+                  value={options.frontmatter.aliases[fieldName] ?? ""}
+                  placeholder={fieldMeta.defaultAlias}
+                  aria-invalid={hasError || undefined}
+                  validationStatus={hasError ? "error" : undefined}
+                  disabled={!options.frontmatter.enabled || !fieldEnabled}
+                  onChange={(event) =>
+                    onOptionsChange((current) => ({
+                      ...current,
+                      frontmatter: {
+                        ...current.frontmatter,
+                        aliases: {
+                          ...current.frontmatter.aliases,
+                          [fieldName]: event.target.value,
+                        },
                       },
-                    },
-                  }))
-                }
-              />
-            </label>
-          </div>
-        )
-      })}
-    </div>
+                    }))
+                  }
+                />
+              </FormControl>
+            </Box>
+          )
+        })}
+      </Box>
+    </OptionWideBox>
   </OptionSection>
 )

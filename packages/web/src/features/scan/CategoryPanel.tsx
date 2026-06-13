@@ -1,31 +1,10 @@
 import { allCategoryModes } from "@exitpress/domain/export-options/schema/ExportOptions.js"
+import { Box, Checkbox, FormControl, Label, Select, Text, TextInput } from "@primer/react"
 
 import type { ScanResult } from "@exitpress/domain/blog/schema/BlogScan.js"
 import type { CategoryMode } from "@exitpress/domain/export-options/schema/ExportOptions.js"
 
-import { Badge } from "../../components/ui/Badge.js"
-import { Card, CardContent } from "../../components/ui/Card.js"
-import { Checkbox } from "../../components/ui/Checkbox.js"
-import { Field, FieldGroup, FieldLabel } from "../../components/ui/Field.js"
-import { Input } from "../../components/ui/Input.js"
-import { ScrollArea } from "../../components/ui/ScrollArea.js"
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../../components/ui/Select.js"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../../components/ui/Table.js"
-import { cn } from "../../lib/Cn.js"
+import { PrimerPanel, PrimerPanelBody } from "../../components/primer/PrimerPage.js"
 
 import { getCategoryCheckboxState, orderCategoriesHierarchically } from "./CategorySelection.js"
 
@@ -84,204 +63,339 @@ export const CategoryPanel = ({
     selectedCount === 0 ? false : selectedCount === categories.length ? true : "indeterminate"
 
   return (
-    <Card variant="panel" className="board-card overflow-hidden" id="category-panel">
-      <CardContent className="panel-body grid gap-4 p-5">
-        <p id="category-status" className="panel-description max-w-2xl text-sm leading-7">
-          {categoryStatus}
-        </p>
+    <Box id="category-panel">
+      <PrimerPanel>
+        <PrimerPanelBody>
+          <Box
+            id="category-status"
+            as="p"
+            sx={{ color: "fg.muted", fontSize: 1, lineHeight: 1.7, maxWidth: "48rem", m: 0 }}
+          >
+            {categoryStatus}
+          </Box>
 
-        <FieldGroup className="gap-3 xl:grid xl:grid-cols-3 xl:items-start">
-          <Field disabled={!scanResult}>
-            <FieldLabel htmlFor="scope-categoryMode">카테고리 포함 범위</FieldLabel>
-            <Select
-              value={categoryMode}
-              disabled={!scanResult}
-              onValueChange={(value) => {
-                if (isCategoryMode(value)) {
-                  onCategoryModeChange(value)
-                }
+          <Box
+            sx={{
+              display: "grid",
+              gap: 3,
+              gridTemplateColumns: ["1fr", null, null, "repeat(3, minmax(0, 1fr))"],
+              alignItems: "start",
+            }}
+          >
+            <FormControl id="scope-categoryMode" disabled={!scanResult}>
+              <FormControl.Label>카테고리 포함 범위</FormControl.Label>
+              <Select
+                block
+                value={categoryMode}
+                data-value={categoryMode}
+                onChange={(event) => {
+                  const value = event.target.value
+
+                  if (isCategoryMode(value)) {
+                    onCategoryModeChange(value)
+                  }
+                }}
+              >
+                <Select.Option value="selected-and-descendants">
+                  선택 카테고리 + 하위 카테고리
+                </Select.Option>
+                <Select.Option value="exact-selected">선택 카테고리만</Select.Option>
+              </Select>
+            </FormControl>
+
+            <FormControl id="scope-dateFrom" disabled={!scanResult}>
+              <FormControl.Label>시작일</FormControl.Label>
+              <TextInput
+                block
+                type="date"
+                value={dateFrom ?? ""}
+                onChange={(event) => onDateFromChange(event.target.value || null)}
+              />
+            </FormControl>
+
+            <FormControl id="scope-dateTo" disabled={!scanResult}>
+              <FormControl.Label>종료일</FormControl.Label>
+              <TextInput
+                block
+                type="date"
+                value={dateTo ?? ""}
+                onChange={(event) => onDateToChange(event.target.value || null)}
+              />
+            </FormControl>
+          </Box>
+
+          <Box className="toolbar category-toolbar" sx={{ display: "grid", gap: 2 }}>
+            <FormControl id="category-search" disabled={!scanResult}>
+              <FormControl.Label>검색</FormControl.Label>
+              <TextInput
+                block
+                placeholder="카테고리 이름 또는 경로 검색"
+                value={categorySearch}
+                onChange={(event) => onCategorySearchChange(event.target.value)}
+              />
+            </FormControl>
+          </Box>
+
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: ["column", "row"],
+              gap: 3,
+              alignItems: ["flex-start", "center"],
+              justifyContent: "space-between",
+              color: "fg.muted",
+              fontSize: 1,
+            }}
+          >
+            <Box sx={{ display: "grid", gap: 1 }}>
+              <Text id="selected-category-count" sx={{ display: "block" }}>
+                선택한 카테고리 {selectedCount}개 / {categories.length}개
+              </Text>
+              <Text id="selected-post-count" sx={{ display: "block" }}>
+                대상 글 {selectedPostCount}개 / 전체 {totalPostCount}개
+              </Text>
+            </Box>
+            <Label variant={selectedCount > 0 ? "success" : "secondary"}>
+              {selectedCount > 0 ? "선택됨" : "미선택"}
+            </Label>
+          </Box>
+
+          {!scanResult ? (
+            <Box
+              id="category-list"
+              className="category-list"
+              sx={{
+                bg: "canvas.subtle",
+                border: "1px solid",
+                borderColor: "border.default",
+                borderRadius: 2,
+                color: "fg.muted",
+                display: "grid",
+                fontSize: 1,
+                minHeight: "6rem",
+                placeItems: "center",
+                px: 3,
+                py: 4,
+                textAlign: "center",
               }}
             >
-              <SelectTrigger id="scope-categoryMode" data-value={categoryMode}>
-                <SelectValue placeholder="카테고리 포함 범위 선택" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectItem value="selected-and-descendants">
-                    선택 카테고리 + 하위 카테고리
-                  </SelectItem>
-                  <SelectItem value="exact-selected">선택 카테고리만</SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </Field>
-
-          <Field disabled={!scanResult}>
-            <FieldLabel htmlFor="scope-dateFrom">시작일</FieldLabel>
-            <Input
-              id="scope-dateFrom"
-              type="date"
-              value={dateFrom ?? ""}
-              disabled={!scanResult}
-              onChange={(event) => onDateFromChange(event.target.value || null)}
-            />
-          </Field>
-
-          <Field disabled={!scanResult}>
-            <FieldLabel htmlFor="scope-dateTo">종료일</FieldLabel>
-            <Input
-              id="scope-dateTo"
-              type="date"
-              value={dateTo ?? ""}
-              disabled={!scanResult}
-              onChange={(event) => onDateToChange(event.target.value || null)}
-            />
-          </Field>
-        </FieldGroup>
-
-        <div className="toolbar category-toolbar grid gap-4">
-          <label className="input-stack toolbar-search grid gap-2" htmlFor="category-search">
-            <span className="toolbar-label wizard-kicker">검색</span>
-            <Input
-              id="category-search"
-              placeholder="카테고리 이름 또는 경로 검색"
-              disabled={!scanResult}
-              value={categorySearch}
-              onChange={(event) => onCategorySearchChange(event.target.value)}
-            />
-          </label>
-        </div>
-
-        <div className="selection-summary flex flex-col gap-3 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-          <div className="grid gap-1">
-            <span id="selected-category-count">
-              선택한 카테고리 {selectedCount}개 / {categories.length}개
-            </span>
-            <span id="selected-post-count">
-              대상 글 {selectedPostCount}개 / 전체 {totalPostCount}개
-            </span>
-          </div>
-          <Badge
-            variant={selectedCount > 0 ? "success" : "idle"}
-            className="w-fit rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em]"
-          >
-            {selectedCount > 0 ? "선택됨" : "미선택"}
-          </Badge>
-        </div>
-
-        {!scanResult ? (
-          <div
-            id="category-list"
-            className="category-list empty-state-surface grid min-h-24 place-items-center rounded-2xl px-4 py-6 text-center text-sm"
-          >
-            스캔을 진행하면 카테고리가 여기에 표시됩니다.
-          </div>
-        ) : filteredCategories.length === 0 ? (
-          <div
-            id="category-list"
-            className="category-list empty-state-surface grid min-h-24 place-items-center rounded-2xl px-4 py-6 text-center text-sm"
-          >
-            검색 결과가 없습니다.
-          </div>
-        ) : (
-          <div
-            id="category-list"
-            className="section-card category-list overflow-hidden rounded-2xl"
-          >
-            <ScrollArea className="h-[min(28rem,52vh)] overflow-hidden">
-              <Table className="min-w-[30rem]">
-                <TableHeader className="sticky top-0 z-10">
-                  <TableRow className="hover:bg-transparent">
-                    <TableHead className="w-14">
-                      <Checkbox
-                        aria-label="전체 카테고리 선택"
-                        checked={bulkSelectionState}
-                        data-category-bulk-selection="true"
-                        disabled={!scanResult}
-                        onCheckedChange={(next) => {
-                          if (next === true) {
-                            onSelectAll()
-                            return
-                          }
-
-                          onClearAll()
+              스캔을 진행하면 카테고리가 여기에 표시됩니다.
+            </Box>
+          ) : filteredCategories.length === 0 ? (
+            <Box
+              id="category-list"
+              className="category-list"
+              sx={{
+                bg: "canvas.subtle",
+                border: "1px solid",
+                borderColor: "border.default",
+                borderRadius: 2,
+                color: "fg.muted",
+                display: "grid",
+                fontSize: 1,
+                minHeight: "6rem",
+                placeItems: "center",
+                px: 3,
+                py: 4,
+                textAlign: "center",
+              }}
+            >
+              검색 결과가 없습니다.
+            </Box>
+          ) : (
+            <Box
+              id="category-list"
+              className="category-list"
+              sx={{
+                border: "1px solid",
+                borderColor: "border.default",
+                borderRadius: 2,
+                overflow: "hidden",
+              }}
+            >
+              <Box sx={{ maxHeight: "min(28rem, 52vh)", overflowX: "hidden", overflowY: "auto" }}>
+                <Box
+                  as="table"
+                  sx={{ borderCollapse: "collapse", tableLayout: "fixed", width: "100%" }}
+                >
+                  <Box
+                    as="thead"
+                    sx={{ bg: "canvas.subtle", position: "sticky", top: 0, zIndex: 1 }}
+                  >
+                    <Box as="tr">
+                      <Box
+                        as="th"
+                        scope="col"
+                        sx={{
+                          borderBottom: "1px solid",
+                          borderColor: "border.default",
+                          p: 2,
+                          textAlign: "left",
+                          width: "3rem",
                         }}
-                      />
-                    </TableHead>
-                    <TableHead>카테고리</TableHead>
-                    <TableHead className="w-24">글 수</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filteredCategories.map((category) => {
-                    const checked = getCategoryCheckboxState({
-                      categories,
-                      selectedIds: selectedCategoryIds,
-                      categoryId: category.id,
-                    })
-                    const categoryPath = category.path.join(" / ")
-                    const hasParent = category.parentId !== null
-                    const indentWidth = `${Math.max(category.depth, 0) * 1.2}rem`
-
-                    return (
-                      <TableRow
-                        key={category.id}
-                        className={cn(
-                          "category-item cursor-pointer last:border-b-0",
-                          hasParent && "bg-[color-mix(in_srgb,var(--foreground)_4%,transparent)]",
-                        )}
-                        data-category-id={category.id}
-                        data-category-level={hasParent ? "child" : "root"}
-                        onClick={() => onCategoryToggle(category.id, checked !== true)}
                       >
-                        <TableCell className="w-14 py-0">
-                          <div className="flex h-11 items-center">
+                        <Checkbox
+                          aria-label="전체 카테고리 선택"
+                          checked={bulkSelectionState === true}
+                          data-category-bulk-selection="true"
+                          disabled={!scanResult}
+                          indeterminate={bulkSelectionState === "indeterminate"}
+                          onChange={(event) => {
+                            if (event.target.checked) {
+                              onSelectAll()
+                              return
+                            }
+
+                            onClearAll()
+                          }}
+                        />
+                      </Box>
+                      <Box
+                        as="th"
+                        scope="col"
+                        sx={{
+                          borderBottom: "1px solid",
+                          borderColor: "border.default",
+                          color: "fg.muted",
+                          fontSize: 0,
+                          fontWeight: 600,
+                          p: 2,
+                          textAlign: "left",
+                        }}
+                      >
+                        카테고리
+                      </Box>
+                      <Box
+                        as="th"
+                        scope="col"
+                        sx={{
+                          borderBottom: "1px solid",
+                          borderColor: "border.default",
+                          color: "fg.muted",
+                          fontSize: 0,
+                          fontWeight: 600,
+                          p: 2,
+                          textAlign: "left",
+                          width: "4.5rem",
+                        }}
+                      >
+                        글 수
+                      </Box>
+                    </Box>
+                  </Box>
+                  <Box as="tbody">
+                    {filteredCategories.map((category) => {
+                      const checked = getCategoryCheckboxState({
+                        categories,
+                        selectedIds: selectedCategoryIds,
+                        categoryId: category.id,
+                      })
+                      const categoryPath = category.path.join(" / ")
+                      const hasParent = category.parentId !== null
+                      const indentWidth = `${Math.max(category.depth, 0) * 1.2}rem`
+
+                      return (
+                        <Box
+                          as="tr"
+                          key={category.id}
+                          className="category-item"
+                          data-category-id={category.id}
+                          data-category-level={hasParent ? "child" : "root"}
+                          sx={{
+                            bg: hasParent ? "canvas.subtle" : "canvas.default",
+                            cursor: "pointer",
+                            ":hover": { bg: "canvas.subtle" },
+                          }}
+                          onClick={() => onCategoryToggle(category.id, checked !== true)}
+                        >
+                          <Box
+                            as="td"
+                            sx={{
+                              borderBottom: "1px solid",
+                              borderColor: "border.default",
+                              p: 2,
+                              verticalAlign: "middle",
+                              width: "3rem",
+                            }}
+                          >
                             <Checkbox
-                              checked={checked}
+                              checked={checked === true}
                               aria-label={categoryPath}
-                              className="flex-none"
+                              indeterminate={checked === "indeterminate"}
                               onClick={(event) => event.stopPropagation()}
-                              onCheckedChange={(next) =>
-                                onCategoryToggle(category.id, next === true)
+                              onChange={(event) =>
+                                onCategoryToggle(category.id, event.target.checked)
                               }
                             />
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <div
-                            className="relative grid gap-0.5"
-                            style={{ paddingLeft: indentWidth }}
+                          </Box>
+                          <Box
+                            as="td"
+                            sx={{
+                              borderBottom: "1px solid",
+                              borderColor: "border.default",
+                              p: 2,
+                              verticalAlign: "middle",
+                            }}
                           >
-                            {hasParent ? (
-                              <>
-                                <span
+                            <Box
+                              sx={{
+                                display: "grid",
+                                gap: 1,
+                                minWidth: 0,
+                                pl: indentWidth,
+                                position: "relative",
+                              }}
+                            >
+                              {hasParent ? (
+                                <Box
                                   aria-hidden="true"
-                                  className="absolute bottom-0 top-0 w-px bg-border"
                                   data-category-tree-line="true"
-                                  style={{ left: `calc(${indentWidth} - 0.65rem)` }}
+                                  sx={{
+                                    bg: "border.default",
+                                    bottom: 0,
+                                    left: `calc(${indentWidth} - 0.65rem)`,
+                                    position: "absolute",
+                                    top: 0,
+                                    width: "1px",
+                                  }}
                                 />
-                              </>
-                            ) : null}
-                            <span className="font-semibold text-foreground">{category.name}</span>
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <Badge
-                            className="category-count min-w-10 justify-center rounded-full px-2.5 py-0.5"
-                            variant="idle"
+                              ) : null}
+                              <Text
+                                sx={{
+                                  color: "fg.default",
+                                  display: "block",
+                                  fontWeight: 600,
+                                  overflowWrap: "anywhere",
+                                }}
+                              >
+                                {category.name}
+                              </Text>
+                            </Box>
+                          </Box>
+                          <Box
+                            as="td"
+                            sx={{
+                              borderBottom: "1px solid",
+                              borderColor: "border.default",
+                              p: 2,
+                              verticalAlign: "middle",
+                              width: "4.5rem",
+                            }}
                           >
-                            {category.postCount}
-                          </Badge>
-                        </TableCell>
-                      </TableRow>
-                    )
-                  })}
-                </TableBody>
-              </Table>
-            </ScrollArea>
-          </div>
-        )}
-      </CardContent>
-    </Card>
+                            <Label className="category-count" variant="secondary">
+                              {category.postCount}
+                            </Label>
+                          </Box>
+                        </Box>
+                      )
+                    })}
+                  </Box>
+                </Box>
+              </Box>
+            </Box>
+          )}
+        </PrimerPanelBody>
+      </PrimerPanel>
+    </Box>
   )
 }

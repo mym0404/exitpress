@@ -9,7 +9,7 @@ export default defineConfig({
   retries: isCi ? 1 : 0,
   workers: 1,
   reporter: isCi ? [["list"], ["github"]] : [["list"]],
-  timeout: 300_000,
+  timeout: 120_000,
   expect: {
     timeout: 10_000,
   },

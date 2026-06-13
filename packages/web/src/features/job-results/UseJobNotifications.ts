@@ -4,7 +4,7 @@ import { useEffect } from "react"
 import type { ExportJobState } from "@exitpress/domain/export-job/schema/ExportJobState.js"
 import type { MutableRefObject } from "react"
 
-import { toast } from "../../components/ui/Sonner.js"
+import { toast } from "../../components/primer/PrimerToast.js"
 
 export const useJobNotifications = ({
   job,

@@ -5,7 +5,7 @@ import type { ExportBootstrapResponse, ExportResumeLookupResponse } from "../../
 
 import type { UseWizardActionsArgs } from "./schema/WizardActions.js"
 
-import { toast } from "../../../components/ui/Sonner.js"
+import { toast } from "../../../components/primer/PrimerToast.js"
 import { postJson } from "../../../lib/Api.js"
 import { getPersistedUiStateSignature } from "../shell/WizardFlow.js"
 

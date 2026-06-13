@@ -534,7 +534,7 @@ const waitForDialog = async ({
   page: import("playwright").Page
   summary: ExportResumeSummary
 }) => {
-  const dialog = page.getByRole("dialog")
+  const dialog = page.getByRole("alertdialog")
   await dialog.waitFor({
     state: "visible",
     timeout: responseTimeoutMs,
@@ -550,14 +550,14 @@ const waitForDialog = async ({
 }
 
 const closeDialog = async (page: import("playwright").Page) => {
-  const dialog = page.getByRole("dialog")
+  const dialog = page.getByRole("alertdialog")
   await dialog.getByRole("button", { name: "불러오기" }).first().click()
   await dialog.waitFor({ state: "hidden", timeout: responseTimeoutMs })
 }
 
 const assertNoDialog = async (page: import("playwright").Page) => {
   await page.waitForTimeout(resumeDialogSettledWaitMs)
-  if (await page.getByRole("dialog").count()) {
+  if (await page.getByRole("alertdialog").count()) {
     throw new Error("unexpected resume dialog")
   }
 }

@@ -1,4 +1,5 @@
-import { RiArrowDownSLine } from "@remixicon/react"
+import { ChevronDownIcon } from "@primer/octicons-react"
+import { Box, Label, Text } from "@primer/react"
 import { useEffect, useMemo, useState } from "react"
 
 import type { ThemePreference } from "@exitpress/domain/preferences/schema/ThemePreference.js"
@@ -6,17 +7,8 @@ import type { ReactNode } from "react"
 
 import type { StorybookStory } from "./schema/Storybook.js"
 
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "../../components/ui/Accordion.js"
-import { Badge } from "../../components/ui/Badge.js"
-import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/Card.js"
-import { ScrollArea } from "../../components/ui/ScrollArea.js"
+import { PrimerAppProvider } from "../../app/PrimerAppProvider.js"
 import { createAppHref, shouldShowStorybookBackLink } from "../../lib/AppRoutes.js"
-import { cn } from "../../lib/Cn.js"
 import { useThemePreference } from "../common/hooks/UseThemePreference.js"
 import { WizardHeader } from "../common/shell/WizardHeader.js"
 import { BlockTemplateCard, getEffectiveBlockTemplate } from "../options/BlockTemplateCard.js"
@@ -65,42 +57,38 @@ const formatHtmlForDisplay = (html: string) => {
   return lines.join("\n")
 }
 
-const codeBlockClassName =
-  "min-w-0 max-h-[520px] overflow-auto p-4 font-mono text-[0.75rem] leading-5 text-foreground"
-
-const htmlTokenClassNames = {
-  bracket: "text-muted-foreground",
-  tag: "text-[color:var(--status-ready-fg)]",
-  attribute: "text-[color:var(--status-running-fg)]",
-  operator: "text-muted-foreground",
-  value: "text-[color:var(--status-success-fg)]",
-  comment: "text-muted-foreground",
-  text: "text-foreground",
+const htmlTokenSx = {
+  bracket: { color: "fg.muted" },
+  tag: { color: "success.fg" },
+  attribute: { color: "accent.fg" },
+  operator: { color: "fg.muted" },
+  value: { color: "done.fg" },
+  comment: { color: "fg.muted" },
+  text: { color: "fg.default" },
 } as const
 
-const markdownTokenClassNames = {
-  marker: "text-[color:var(--status-running-fg)]",
-  fence: "text-[color:var(--status-ready-fg)]",
-  link: "text-[color:var(--status-success-fg)]",
-  code: "text-[color:var(--status-ready-fg)]",
-  text: "text-foreground",
+const markdownTokenSx = {
+  marker: { color: "accent.fg" },
+  fence: { color: "success.fg" },
+  link: { color: "done.fg" },
+  code: { color: "success.fg" },
+  text: { color: "fg.default" },
 } as const
 
 const renderToken = (
   key: string,
-  tokenType: keyof typeof htmlTokenClassNames | keyof typeof markdownTokenClassNames,
-
+  tokenType: keyof typeof htmlTokenSx | keyof typeof markdownTokenSx,
   children: string,
 ) => {
-  const className =
-    tokenType in htmlTokenClassNames
-      ? htmlTokenClassNames[tokenType as keyof typeof htmlTokenClassNames]
-      : markdownTokenClassNames[tokenType as keyof typeof markdownTokenClassNames]
+  const sx =
+    tokenType in htmlTokenSx
+      ? htmlTokenSx[tokenType as keyof typeof htmlTokenSx]
+      : markdownTokenSx[tokenType as keyof typeof markdownTokenSx]
 
   return (
-    <span key={key} data-storybook-token={tokenType} className={className}>
+    <Box key={key} as="span" data-storybook-token={tokenType} sx={sx}>
       {children}
-    </span>
+    </Box>
   )
 }
 
@@ -228,6 +216,33 @@ const highlightMarkdown = (markdown: string): ReactNode[] =>
     return nodes
   }, [])
 
+const panelSx = {
+  border: "1px solid",
+  borderColor: "border.default",
+  borderRadius: 2,
+  bg: "canvas.default",
+  overflow: "hidden",
+} as const
+
+const codeBlockSx = ({
+  codeType,
+  compact,
+}: {
+  codeType: StorybookCodeType
+  compact?: boolean
+}) => ({
+  m: 0,
+  minWidth: 0,
+  maxHeight: "520px",
+  overflow: "auto",
+  p: 3,
+  color: "fg.default",
+  fontFamily: "mono",
+  fontSize: compact ? "11px" : "12px",
+  lineHeight: "20px",
+  whiteSpace: codeType === "html" ? "pre" : "pre-wrap",
+})
+
 const StoryTreeBlock = ({
   story,
   active,
@@ -237,17 +252,47 @@ const StoryTreeBlock = ({
   active: boolean
   onSelect: (storyKey: string) => void
 }) => (
-  <button
+  <Box
+    as="button"
     type="button"
     role="treeitem"
+    tabIndex={0}
     aria-selected={active}
     data-storybook-block={story.storyKey}
-    className="grid w-full grid-cols-[auto_minmax(0,1fr)] items-center gap-2 rounded-[var(--radius-md)] px-2.5 py-2 text-left text-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:shadow-[var(--focus-ring)] aria-selected:bg-primary aria-selected:text-primary-foreground"
+    sx={{
+      display: "grid",
+      width: "100%",
+      gridTemplateColumns: "auto minmax(0, 1fr)",
+      alignItems: "center",
+      gap: 2,
+      border: 0,
+      borderRadius: 2,
+      bg: active ? "accent.emphasis" : "transparent",
+      color: active ? "fg.onEmphasis" : "fg.default",
+      px: 2,
+      py: 2,
+      font: "inherit",
+      fontSize: 1,
+      textAlign: "left",
+      cursor: "pointer",
+      "&:hover": {
+        bg: active ? "accent.emphasis" : "canvas.subtle",
+      },
+      "&:focus-visible": {
+        outline: "2px solid",
+        outlineColor: "accent.fg",
+        outlineOffset: "2px",
+      },
+    }}
     onClick={() => onSelect(story.storyKey)}
   >
-    <span className="text-xs tabular-nums opacity-70">{story.blockIndex + 1}</span>
-    <span className="min-w-0 truncate">{story.blockLabel}</span>
-  </button>
+    <Text sx={{ fontSize: 0, fontVariantNumeric: "tabular-nums", opacity: 0.72 }}>
+      {story.blockIndex + 1}
+    </Text>
+    <Text sx={{ minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+      {story.blockLabel}
+    </Text>
+  </Box>
 )
 
 const StoryTree = ({
@@ -275,68 +320,100 @@ const StoryTree = ({
     )
   }, [activeEditorType])
 
+  const toggleEditorType = (editorType: string) => {
+    setOpenEditorTypes((current) =>
+      current.includes(editorType)
+        ? current.filter((currentEditorType) => currentEditorType !== editorType)
+        : [...current, editorType],
+    )
+  }
+
   return (
-    <Card
-      variant="panel"
+    <Box
       data-storybook-tree
-      className="grid max-h-[min(44rem,calc(100vh-14rem))] grid-rows-[auto_minmax(0,1fr)] overflow-hidden lg:sticky lg:top-5"
+      sx={{
+        ...panelSx,
+        display: "grid",
+        maxHeight: "min(44rem, calc(100vh - 14rem))",
+        gridTemplateRows: "auto minmax(0, 1fr)",
+        "@media (min-width: 1012px)": { position: "sticky", top: 4 },
+      }}
     >
-      <CardHeader className="border-b border-border p-4">
-        <CardTitle className="text-base">블록 목록</CardTitle>
-      </CardHeader>
-      <CardContent className="min-h-0 p-0">
-        <ScrollArea className="h-full">
-          <Accordion
-            type="multiple"
-            value={openEditorTypes}
-            onValueChange={setOpenEditorTypes}
-            role="tree"
-            aria-label="Storybook 블록 목록"
-            className="grid gap-3 p-3"
-          >
-            {storybookCatalog.map((group) => (
-              <AccordionItem
-                key={group.editorType}
-                value={group.editorType}
-                className="grid gap-2"
-                data-storybook-editor
-              >
-                <AccordionTrigger
+      <Box sx={{ borderBottom: "1px solid", borderColor: "border.default", p: 3 }}>
+        <Text sx={{ color: "fg.default", fontSize: 2, fontWeight: 600 }}>블록 목록</Text>
+      </Box>
+      <Box sx={{ minHeight: 0, overflow: "auto", p: 3 }}>
+        <Box role="tree" aria-label="Storybook 블록 목록" sx={{ display: "grid", gap: 3 }}>
+          {storybookCatalog.map((group) => {
+            const open = openEditorTypes.includes(group.editorType)
+
+            return (
+              <Box key={group.editorType} data-storybook-editor sx={{ display: "grid", gap: 2 }}>
+                <Box
+                  as="button"
+                  type="button"
                   role="treeitem"
-                  className="flex w-full items-center justify-between gap-2 rounded-[var(--radius-md)] px-3 py-2 text-left text-sm font-semibold text-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:shadow-[var(--focus-ring)] data-[state=open]:bg-muted"
+                  tabIndex={0}
+                  aria-expanded={open}
+                  sx={{
+                    display: "flex",
+                    width: "100%",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    gap: 2,
+                    border: 0,
+                    borderRadius: 2,
+                    bg: open ? "canvas.subtle" : "transparent",
+                    color: "fg.default",
+                    px: 3,
+                    py: 2,
+                    font: "inherit",
+                    fontSize: 1,
+                    fontWeight: 600,
+                    textAlign: "left",
+                    cursor: "pointer",
+                    "&:hover": { bg: "canvas.subtle" },
+                    "&:focus-visible": {
+                      outline: "2px solid",
+                      outlineColor: "accent.fg",
+                      outlineOffset: "2px",
+                    },
+                  }}
+                  onClick={() => toggleEditorType(group.editorType)}
                 >
-                  <span>{group.editorLabel}</span>
-                  <span className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
-                    <span>{group.stories.length}</span>
-                    <RiArrowDownSLine
-                      aria-hidden="true"
-                      className={cn(
-                        "size-4 shrink-0 transition-transform",
-                        openEditorTypes.includes(group.editorType) && "rotate-180",
-                      )}
-                    />
-                  </span>
-                </AccordionTrigger>
-                <AccordionContent
-                  forceMount
-                  role="group"
-                  className="grid gap-1 data-[state=closed]:hidden"
-                >
-                  {group.stories.map((story) => (
-                    <StoryTreeBlock
-                      key={story.storyKey}
-                      story={story}
-                      active={story.storyKey === activeStoryKey}
-                      onSelect={onSelect}
-                    />
-                  ))}
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
-        </ScrollArea>
-      </CardContent>
-    </Card>
+                  <Text>{group.editorLabel}</Text>
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 2, color: "fg.muted" }}>
+                    <Text sx={{ fontSize: 0, fontWeight: 600 }}>{group.stories.length}</Text>
+                    <Box
+                      as="span"
+                      sx={{
+                        display: "inline-flex",
+                        transform: open ? "rotate(180deg)" : "rotate(0deg)",
+                        transition: "transform 120ms ease",
+                      }}
+                    >
+                      <ChevronDownIcon aria-hidden="true" />
+                    </Box>
+                  </Box>
+                </Box>
+                {open ? (
+                  <Box role="group" sx={{ display: "grid", gap: 1 }}>
+                    {group.stories.map((story) => (
+                      <StoryTreeBlock
+                        key={story.storyKey}
+                        story={story}
+                        active={story.storyKey === activeStoryKey}
+                        onSelect={onSelect}
+                      />
+                    ))}
+                  </Box>
+                ) : null}
+              </Box>
+            )
+          })}
+        </Box>
+      </Box>
+    </Box>
   )
 }
 
@@ -354,26 +431,30 @@ const CodePanel = ({
   codeType: StorybookCodeType
   compact?: boolean
 }) => (
-  <Card variant="panel" className="overflow-hidden">
-    <CardHeader className="border-b border-border p-4">
-      <CardTitle className="text-base">{title}</CardTitle>
-    </CardHeader>
-    <CardContent className="p-0">
-      <pre
-        className={cn(
-          codeBlockClassName,
-          codeType === "html" ? "whitespace-pre" : "whitespace-pre-wrap",
-          compact ? "text-[0.6875rem] leading-5" : "text-[0.75rem] leading-5",
-        )}
-        data-storybook-code={codeType}
-      >
-        {codeType === "html" ? highlightHtml(children) : highlightMarkdown(children)}
-      </pre>
-    </CardContent>
-  </Card>
+  <Box sx={panelSx}>
+    <Box sx={{ borderBottom: "1px solid", borderColor: "border.default", p: 3 }}>
+      <Text sx={{ color: "fg.default", fontSize: 2, fontWeight: 600 }}>{title}</Text>
+    </Box>
+    <Box
+      as="pre"
+      data-storybook-code={codeType}
+      sx={codeBlockSx({
+        codeType,
+        compact,
+      })}
+    >
+      {codeType === "html" ? highlightHtml(children) : highlightMarkdown(children)}
+    </Box>
+  </Box>
 )
 
-const StoryTemplateCard = ({ story }: { story: StorybookStory }) => {
+const StoryTemplateCard = ({
+  story,
+  themePreference,
+}: {
+  story: StorybookStory
+  themePreference: ThemePreference
+}) => {
   const [template, setTemplate] = useState("")
 
   useEffect(() => {
@@ -388,59 +469,81 @@ const StoryTemplateCard = ({ story }: { story: StorybookStory }) => {
         definition: story.templateDefinition,
         template,
       })}
+      themePreference={themePreference}
       readOnly
       onTemplateChange={setTemplate}
     />
   )
 }
 
-const StoryPreview = ({ story }: { story: StorybookStory }) => {
+const StoryPreview = ({
+  story,
+  themePreference,
+}: {
+  story: StorybookStory
+  themePreference: ThemePreference
+}) => {
   return (
-    <section className="grid gap-4" data-active-storybook-story={story.storyKey}>
-      <div
-        className="flex flex-wrap items-center gap-2"
+    <Box as="section" data-active-storybook-story={story.storyKey} sx={{ display: "grid", gap: 3 }}>
+      <Box
         aria-label="선택된 Storybook 항목"
         data-storybook-summary="true"
+        sx={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 2 }}
       >
-        <Badge variant="secondary" className="px-3 py-1 text-sm">
+        <Label variant="secondary" size="large">
           {story.blockLabel}
-        </Badge>
-        <Badge variant="outline" className="px-3 py-1 text-sm">
+        </Label>
+        <Label size="large">
           {story.editorLabel} / {story.blockId}
-        </Badge>
-      </div>
+        </Label>
+      </Box>
 
-      <StoryTemplateCard story={story} />
+      <StoryTemplateCard story={story} themePreference={themePreference} />
 
-      <div className="grid gap-4 xl:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">
+      <Box
+        sx={{
+          display: "grid",
+          gap: 3,
+          "@media (min-width: 1280px)": {
+            gridTemplateColumns: "minmax(0, 0.95fr) minmax(0, 1.05fr)",
+          },
+        }}
+      >
         <CodePanel title="입력 HTML" codeType="html" compact>
           {formatHtmlForDisplay(story.inputHtml)}
         </CodePanel>
-        <Card variant="panel" className="overflow-hidden">
-          <CardHeader className="border-b border-border p-4">
-            <CardTitle className="text-base">원본 캡처</CardTitle>
-          </CardHeader>
-          <CardContent className="grid place-items-center bg-muted p-4">
-            <img
+        <Box sx={panelSx}>
+          <Box sx={{ borderBottom: "1px solid", borderColor: "border.default", p: 3 }}>
+            <Text sx={{ color: "fg.default", fontSize: 2, fontWeight: 600 }}>원본 캡처</Text>
+          </Box>
+          <Box sx={{ display: "grid", placeItems: "center", bg: "canvas.subtle", p: 3 }}>
+            <Box
+              as="img"
               src={story.screenshotSrc}
               alt={`${story.blockLabel} 원본 캡처`}
-              className="max-h-[420px] max-w-full rounded-[var(--radius-md)] border border-border bg-card object-contain shadow-[var(--panel-shadow-border)]"
+              sx={{
+                maxHeight: "420px",
+                maxWidth: "100%",
+                border: "1px solid",
+                borderColor: "border.default",
+                borderRadius: 2,
+                bg: "canvas.default",
+                objectFit: "contain",
+              }}
             />
-          </CardContent>
-        </Card>
-      </div>
+          </Box>
+        </Box>
+      </Box>
 
-      <Card variant="panel" className="overflow-hidden">
-        <CardHeader className="border-b border-border p-4">
-          <CardTitle className="text-base">Markdown</CardTitle>
-        </CardHeader>
-        <CardContent className="p-0">
-          <pre className={codeBlockClassName} data-storybook-markdown>
-            {highlightMarkdown(story.markdown)}
-          </pre>
-        </CardContent>
-      </Card>
-    </section>
+      <Box sx={panelSx}>
+        <Box sx={{ borderBottom: "1px solid", borderColor: "border.default", p: 3 }}>
+          <Text sx={{ color: "fg.default", fontSize: 2, fontWeight: 600 }}>Markdown</Text>
+        </Box>
+        <Box as="pre" data-storybook-markdown sx={codeBlockSx({ codeType: "markdown" })}>
+          {highlightMarkdown(story.markdown)}
+        </Box>
+      </Box>
+    </Box>
   )
 }
 
@@ -488,29 +591,50 @@ export const StorybookPage = () => {
   }
 
   return (
-    <main
-      className={`dashboard-shell relative min-h-screen w-full overflow-x-clip ${themePreference}`}
-    >
-      <div
-        id="dashboard-backdrop"
-        className="shell-backdrop pointer-events-none fixed inset-0 -z-10"
-        aria-hidden="true"
-      />
-      <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-7xl flex-col gap-5 px-4 py-5 xl:px-6 xl:py-6">
-        <WizardHeader
-          title="Storybook"
-          description="지원 중인 블록의 입력 HTML, 원본 캡처, Markdown 출력을 비교합니다."
-          themePreference={themePreference}
-          headerStatus="ready"
-          summaryCards={summaryCards}
-          backLink={backLink}
-          onThemeChange={setThemePreference}
-        />
-        <div className="grid gap-5 lg:grid-cols-[18rem_minmax(0,1fr)]" data-storybook-layout>
-          <StoryTree activeStoryKey={activeStory.storyKey} onSelect={selectStory} />
-          <StoryPreview story={activeStory} />
-        </div>
-      </div>
-    </main>
+    <PrimerAppProvider themePreference={themePreference}>
+      <Box
+        as="main"
+        sx={{ minHeight: "100vh", width: "100%", overflowX: "clip", bg: "canvas.inset" }}
+      >
+        <Box
+          sx={{
+            position: "relative",
+            zIndex: 1,
+            display: "flex",
+            minHeight: "100vh",
+            width: "100%",
+            maxWidth: "1280px",
+            mx: "auto",
+            flexDirection: "column",
+            gap: 3,
+            px: [3, 4],
+            py: [3, 4],
+          }}
+        >
+          <WizardHeader
+            title="Storybook"
+            description="지원 중인 블록의 입력 HTML, 원본 캡처, Markdown 출력을 비교합니다."
+            themePreference={themePreference}
+            headerStatus="ready"
+            summaryCards={summaryCards}
+            backLink={backLink}
+            onThemeChange={setThemePreference}
+          />
+          <Box
+            data-storybook-layout
+            sx={{
+              display: "grid",
+              gap: 3,
+              "@media (min-width: 1012px)": {
+                gridTemplateColumns: "18rem minmax(0, 1fr)",
+              },
+            }}
+          >
+            <StoryTree activeStoryKey={activeStory.storyKey} onSelect={selectStory} />
+            <StoryPreview story={activeStory} themePreference={themePreference} />
+          </Box>
+        </Box>
+      </Box>
+    </PrimerAppProvider>
   )
 }

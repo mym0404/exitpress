@@ -1,6 +1,7 @@
 import { JOB_STATUSES } from "@exitpress/domain/export-job/ExportJobState.js"
 import { sanitizePersistedExportOptions } from "@exitpress/domain/export-options/ExportOptions.js"
-import { RiArrowRightLine, RiDownload2Line, RiLoader4Line, RiRadarLine } from "@remixicon/react"
+import { ArrowRightIcon, DownloadIcon, IssueOpenedIcon } from "@primer/octicons-react"
+import { Spinner } from "@primer/react"
 
 import type { ScanResult } from "@exitpress/domain/blog/schema/BlogScan.js"
 import type { ExportJobState } from "@exitpress/domain/export-job/schema/ExportJobState.js"
@@ -50,21 +51,21 @@ export const NextActionIcon = ({
 }) => {
   if (setupStep === "blog-input") {
     return scanPending ? (
-      <RiLoader4Line className="size-4 motion-safe:animate-spin" aria-hidden="true" />
+      <Spinner size="small" srText={null} />
     ) : (
-      <RiRadarLine className="size-4" aria-hidden="true" />
+      <IssueOpenedIcon size={16} aria-hidden="true" />
     )
   }
 
   if (setupStep === "diagnostics-options") {
     return submitting ? (
-      <RiLoader4Line className="size-4 motion-safe:animate-spin" aria-hidden="true" />
+      <Spinner size="small" srText={null} />
     ) : (
-      <RiDownload2Line className="size-4" aria-hidden="true" />
+      <DownloadIcon size={16} aria-hidden="true" />
     )
   }
 
-  return <RiArrowRightLine className="size-4" aria-hidden="true" />
+  return <ArrowRightIcon size={16} aria-hidden="true" />
 }
 
 export const stepMeta: Record<WizardStep, { title: string; description: string }> = {

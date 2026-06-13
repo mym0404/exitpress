@@ -1,11 +1,9 @@
 import { formatCategorySegment } from "@exitpress/domain/export-paths/PathFormat.js"
 import { buildPostFolderName } from "@exitpress/domain/export-paths/PostPathTemplate.js"
+import { ChevronDownIcon, FileDirectoryIcon, FileIcon } from "@primer/octicons-react"
+import { Box, Details, Text } from "@primer/react"
 
 import type { ExportOptions } from "@exitpress/domain/export-options/schema/ExportOptions.js"
-import type { SVGProps } from "react"
-
-import { Collapsible, CollapsibleContent } from "../../components/ui/Collapsible.js"
-import { cn } from "../../lib/Cn.js"
 
 import { getTemplatePreview } from "./TemplatePreview.js"
 
@@ -177,41 +175,6 @@ export const buildStructurePreviewTree = ({
   }
 }
 
-const TreeChevronIcon = ({ className, ...props }: SVGProps<SVGSVGElement>) => (
-  <svg aria-hidden="true" className={className} fill="none" viewBox="0 0 16 16" {...props}>
-    <path
-      d="m6 3 5 5-5 5"
-      stroke="currentColor"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth="1.5"
-    />
-  </svg>
-)
-
-const TreeFolderIcon = ({ className, ...props }: SVGProps<SVGSVGElement>) => (
-  <svg aria-hidden="true" className={className} fill="none" viewBox="0 0 16 16" {...props}>
-    <path
-      d="M2 4.75c0-.97.78-1.75 1.75-1.75h2.12c.46 0 .89.18 1.22.51l.52.52c.19.19.44.29.7.29h3.94c.97 0 1.75.78 1.75 1.75v5.18c0 .97-.78 1.75-1.75 1.75H3.75A1.75 1.75 0 0 1 2 11.25z"
-      stroke="currentColor"
-      strokeLinejoin="round"
-      strokeWidth="1.2"
-    />
-  </svg>
-)
-
-const TreeFileIcon = ({ className, ...props }: SVGProps<SVGSVGElement>) => (
-  <svg aria-hidden="true" className={className} fill="none" viewBox="0 0 16 16" {...props}>
-    <path
-      d="M4 2.75C4 2.34 4.34 2 4.75 2h4.94c.2 0 .39.08.53.22l1.56 1.56c.14.14.22.33.22.53v8.94c0 .41-.34.75-.75.75h-6.5A.75.75 0 0 1 4 13.25z"
-      stroke="currentColor"
-      strokeLinejoin="round"
-      strokeWidth="1.2"
-    />
-    <path d="M9.5 2.25v2.5h2.5" stroke="currentColor" strokeLinejoin="round" strokeWidth="1.2" />
-  </svg>
-)
-
 export const StructurePreviewTree = ({
   node,
   depth = 0,
@@ -221,34 +184,82 @@ export const StructurePreviewTree = ({
 }) => {
   if (node.kind === "file") {
     return (
-      <div
-        className={cn(
-          "flex min-h-7 items-center gap-1.5 rounded-md px-1.5 py-1 text-muted-foreground",
-          depth > 0 && "ml-2",
-        )}
+      <Box
         data-tree-kind="file"
+        sx={{
+          alignItems: "center",
+          borderRadius: 2,
+          color: "fg.muted",
+          display: "flex",
+          gap: 2,
+          minHeight: 28,
+          ml: depth > 0 ? 2 : 0,
+          px: 2,
+          py: 1,
+        }}
       >
-        <TreeFileIcon className="size-3.5 shrink-0 text-muted-foreground" />
-        <span className="min-w-0 truncate font-mono text-[0.75rem] leading-5">{node.name}</span>
-      </div>
+        <FileIcon size={14} />
+        <Text
+          sx={{
+            fontFamily: "mono",
+            fontSize: 0,
+            lineHeight: "20px",
+            minWidth: 0,
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+          }}
+        >
+          {node.name}
+        </Text>
+      </Box>
     )
   }
 
   return (
-    <Collapsible className="grid gap-0.5" open>
-      <div
-        className={cn(
-          "flex min-h-7 items-center gap-1.5 rounded-md px-1.5 py-1",
-          depth > 0 && "ml-2",
-        )}
+    <Details open sx={{ display: "grid", gap: 1 }}>
+      <Details.Summary>
+        <Box
+          sx={{
+            alignItems: "center",
+            borderRadius: 2,
+            color: "fg.default",
+            cursor: "default",
+            display: "flex",
+            gap: 2,
+            minHeight: 28,
+            ml: depth > 0 ? 2 : 0,
+            px: 2,
+            py: 1,
+          }}
+        >
+          <ChevronDownIcon size={14} fill="var(--fgColor-muted)" />
+          <FileDirectoryIcon size={14} fill="var(--fgColor-accent)" />
+          <Text
+            sx={{
+              fontFamily: "mono",
+              fontSize: 0,
+              fontWeight: "semibold",
+              lineHeight: "20px",
+              minWidth: 0,
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {node.name}
+          </Text>
+        </Box>
+      </Details.Summary>
+      <Box
+        sx={{
+          borderLeft: depth > 0 ? "1px solid" : undefined,
+          borderColor: "border.default",
+          display: "grid",
+          gap: 1,
+          pl: depth > 0 ? 2 : 0,
+        }}
       >
-        <TreeChevronIcon className="size-3.5 shrink-0 rotate-90 text-muted-foreground" />
-        <TreeFolderIcon className="size-3.5 shrink-0 text-[var(--status-running-fg)]" />
-        <span className="min-w-0 truncate font-mono text-[0.75rem] leading-5 text-foreground">
-          {node.name}
-        </span>
-      </div>
-      <CollapsibleContent className="grid gap-0.5 border-l border-border pl-2.5">
         {node.items.map((child, index) => (
           <StructurePreviewTree
             key={`${node.name}:${child.name}:${index}`}
@@ -256,7 +267,7 @@ export const StructurePreviewTree = ({
             depth={depth + 1}
           />
         ))}
-      </CollapsibleContent>
-    </Collapsible>
+      </Box>
+    </Details>
   )
 }
