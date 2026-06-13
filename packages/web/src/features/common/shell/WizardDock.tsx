@@ -38,9 +38,7 @@ export const WizardDock = ({
   return (
     <Box
       sx={{
-        position: ["sticky", "fixed"],
-        left: 0,
-        right: 0,
+        position: "sticky",
         bottom: 0,
         zIndex: 40,
         px: [3, 4, 5],

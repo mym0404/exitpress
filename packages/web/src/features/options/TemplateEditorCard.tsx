@@ -2,34 +2,16 @@ import { autocompletion } from "@codemirror/autocomplete"
 import { javascript } from "@codemirror/lang-javascript"
 import { defaultHighlightStyle, syntaxHighlighting } from "@codemirror/language"
 import { EditorView } from "@codemirror/view"
+import { ActionList, ActionMenu, Box, Button, Dialog, Label, Text } from "@primer/react"
 import { githubDark } from "@uiw/codemirror-theme-github"
 import CodeMirror from "@uiw/react-codemirror"
-import { useMemo } from "react"
+import { useMemo, useState } from "react"
 
 import type {
   BlockTemplatePreset,
   TemplatePropDefinition,
 } from "@exitpress/domain/template/schema/BlockTemplateDefinition.js"
 import type { ComponentPropsWithoutRef } from "react"
-
-import { Badge } from "../../components/ui/Badge.js"
-import { Button } from "../../components/ui/Button.js"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "../../components/ui/Dialog.js"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "../../components/ui/DropdownMenu.js"
-import { cn } from "../../lib/Cn.js"
 
 import { createTemplatePropCompletionSource } from "./TemplatePropAutocomplete.js"
 
@@ -58,11 +40,11 @@ const templateEditorBaseExtensions = [
         overflow: "hidden",
         padding: "0.25rem",
         border: "1px solid #30363d",
-        borderRadius: "0.625rem",
+        borderRadius: "0.375rem",
         backgroundColor: "#161b22",
         boxShadow: "0 18px 48px rgba(0, 0, 0, 0.44), 0 0 0 1px rgba(255, 255, 255, 0.04)",
         color: "#c9d1d9",
-        fontFamily: "var(--font-mono)",
+        fontFamily: "var(--fontStack-monospace)",
       },
       ".cm-tooltip.cm-tooltip-autocomplete > ul": {
         maxHeight: "14rem",
@@ -76,7 +58,7 @@ const templateEditorBaseExtensions = [
         gap: "0.625rem",
         minHeight: "2rem",
         padding: "0.375rem 0.625rem",
-        borderRadius: "0.4375rem",
+        borderRadius: "0.375rem",
         color: "#c9d1d9",
         lineHeight: "1.35",
       },
@@ -100,7 +82,7 @@ const templateEditorBaseExtensions = [
       ".cm-tooltip.cm-tooltip-autocomplete .cm-completionDetail": {
         marginLeft: "auto",
         color: "#8b949e",
-        fontFamily: "var(--font-sans)",
+        fontFamily: "var(--fontStack-sansSerif)",
         fontSize: "0.75rem",
         fontStyle: "normal",
       },
@@ -144,10 +126,10 @@ const templateEditorBaseExtensions = [
         return false
       }
 
-      const scrollX = window.scrollX
-      const scrollY = window.scrollY
-
-      lastTemplateEditorScroll = { x: scrollX, y: scrollY }
+      lastTemplateEditorScroll = {
+        x: window.scrollX,
+        y: window.scrollY,
+      }
       view.contentDOM.focus({ preventScroll: true })
       requestAnimationFrame(() => {
         restoreTemplateEditorScroll()
@@ -164,6 +146,21 @@ const templateEditorBaseExtensions = [
   }),
 ]
 
+const codeSurfaceSx = {
+  bg: "canvas.inset",
+  border: "1px solid",
+  borderColor: "border.default",
+  borderRadius: 2,
+  color: "fg.default",
+  display: "block",
+  fontFamily: "mono",
+  fontSize: 1,
+  lineHeight: "20px",
+  overflowWrap: "anywhere",
+  px: 3,
+  py: 2,
+} as const
+
 export const TemplateEditorCard = ({
   title,
   badge,
@@ -177,7 +174,6 @@ export const TemplateEditorCard = ({
   surface = "card",
   onPresetApply,
   onTemplateChange,
-  className,
   ...sectionProps
 }: ComponentPropsWithoutRef<"section"> & {
   title: string
@@ -193,6 +189,7 @@ export const TemplateEditorCard = ({
   onPresetApply?: (template: string) => void
   onTemplateChange?: (template: string) => void
 }) => {
+  const [syntaxDialogOpen, setSyntaxDialogOpen] = useState(false)
   const propEntries = Object.entries(props)
   const completionExtension = useMemo(
     () => autocompletion({ override: [createTemplatePropCompletionSource(props)] }),
@@ -213,149 +210,164 @@ export const TemplateEditorCard = ({
   )
 
   return (
-    <section
-      className={cn(
-        "grid content-start overflow-hidden border border-border",
-        surface === "card"
-          ? "rounded-[var(--radius-lg)] bg-card shadow-[var(--panel-shadow-border)]"
-          : "rounded-xl bg-muted/20",
-        className,
-      )}
+    <Box
+      as="section"
+      sx={{
+        bg: surface === "card" ? "canvas.default" : "canvas.subtle",
+        border: "1px solid",
+        borderColor: "border.default",
+        borderRadius: 2,
+        display: "grid",
+        overflow: "hidden",
+      }}
       {...sectionProps}
     >
-      <div className="flex items-center justify-between gap-3 border-b border-border px-4 py-4">
-        <h4 className="min-w-0 truncate text-base font-semibold tracking-[-0.03em] text-foreground">
-          {title}
-        </h4>
-        {badge ? (
-          <Badge variant="outline" className="shrink-0 font-mono">
-            {badge}
-          </Badge>
-        ) : null}
-      </div>
-
-      <div className="grid gap-4 p-4">
-        {propEntries.length > 0 ? (
-          <div className="overflow-hidden rounded-[var(--radius-md)] border border-border">
-            <div className="border-b border-border px-3 py-2 text-[0.6875rem] font-semibold tracking-[0.14em] text-muted-foreground">
-              PROP
-            </div>
-            <div className="grid gap-0 sm:grid-cols-2" data-template-prop-grid>
-              {propEntries.map(([key, prop], index) => (
-                <div
-                  key={key}
-                  className={cn(
-                    "grid min-w-0 grid-cols-[max-content_minmax(0,1fr)_max-content] items-center gap-3 px-3 py-2.5",
-                    index > 0 && "border-t border-border",
-                    index % 2 === 1 && "sm:border-l",
-                    index === 1 && "sm:border-t-0",
-                  )}
-                  data-template-prop={key}
-                >
-                  <span className="whitespace-nowrap font-mono text-sm font-semibold text-[color:var(--status-ready-fg)]">
-                    {key}
-                  </span>
-                  <span className="min-w-0 truncate text-sm font-medium text-foreground">
-                    {prop.label}
-                  </span>
-                  <Badge variant="secondary" className="shrink-0 font-mono">
-                    {prop.type}
-                  </Badge>
-                </div>
-              ))}
-            </div>
-          </div>
-        ) : null}
-
-        <div
-          className="overflow-hidden rounded-[var(--radius-md)] border border-border bg-background"
-          data-template-code-section
+      <Box
+        sx={{
+          alignItems: "center",
+          borderBottom: "1px solid",
+          borderColor: "border.default",
+          display: "flex",
+          gap: 3,
+          justifyContent: "space-between",
+          px: 3,
+          py: 3,
+        }}
+      >
+        <Box
+          as="h4"
+          sx={{
+            fontSize: 2,
+            fontWeight: "semibold",
+            m: 0,
+            minWidth: 0,
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+          }}
         >
-          <div className="flex items-center justify-between gap-3 border-b border-border px-3 py-2">
-            <span className="text-[0.6875rem] font-semibold tracking-[0.14em] text-muted-foreground">
-              CODE
-            </span>
-            <div className="flex items-center gap-2">
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="icon"
-                    className="size-8 rounded-[var(--radius-sm)] font-mono"
-                    aria-label="템플릿 문법 도움말"
-                  >
-                    ?
-                  </Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>템플릿 문법</DialogTitle>
-                    <DialogDescription>
-                      중괄호 두 개 안에 JavaScript와 비슷한 식을 입력합니다.
-                    </DialogDescription>
-                  </DialogHeader>
-                  <div className="grid gap-4 text-sm leading-6 text-muted-foreground">
-                    <div className="grid gap-2">
-                      <span className="font-semibold text-foreground">기본</span>
-                      <code className="code-surface break-all px-3 py-2 font-mono text-foreground">
-                        {"{{ title }}"}
-                      </code>
-                      <code className="code-surface break-all px-3 py-2 font-mono text-foreground">
-                        {"{{ `![${alt}](${url})` }}"}
-                      </code>
-                    </div>
-                    <div className="grid gap-2">
-                      <span className="font-semibold text-foreground">문자열</span>
-                      <code className="code-surface break-all px-3 py-2 font-mono text-foreground">
-                        {"{{ '{{}}' }}"}
-                      </code>
-                    </div>
-                    {propEntries.length > 0 ? (
-                      <div className="grid gap-2">
-                        <span className="font-semibold text-foreground">자동완성</span>
-                        <p>
-                          <code className="font-mono text-foreground">{"{{ "}</code>
-                          뒤에 변수 이름을 입력하면 사용할 수 있는 prop을 제안합니다.
-                        </p>
-                        <div className="flex flex-wrap gap-2">
-                          {propEntries.map(([key, prop]) => (
-                            <Badge key={key} variant="secondary" className="font-mono">
-                              {key}: {prop.type}
-                            </Badge>
-                          ))}
-                        </div>
-                      </div>
-                    ) : null}
-                  </div>
-                  <DialogFooter showCloseButton />
-                </DialogContent>
-              </Dialog>
+          {title}
+        </Box>
+        {badge ? (
+          <Label variant="secondary" sx={{ fontFamily: "mono", flexShrink: 0 }}>
+            {badge}
+          </Label>
+        ) : null}
+      </Box>
+
+      <Box sx={{ display: "grid", gap: 3, p: 3 }}>
+        {propEntries.length > 0 ? (
+          <Box
+            sx={{
+              border: "1px solid",
+              borderColor: "border.default",
+              borderRadius: 2,
+              overflow: "hidden",
+            }}
+          >
+            <Box
+              sx={{
+                borderBottom: "1px solid",
+                borderColor: "border.default",
+                color: "fg.muted",
+                fontSize: 0,
+                fontWeight: "semibold",
+                px: 3,
+                py: 2,
+              }}
+            >
+              PROP
+            </Box>
+            <Box
+              data-template-prop-grid
+              sx={{ display: "grid", gap: 0, gridTemplateColumns: ["1fr", "1fr 1fr"] }}
+            >
+              {propEntries.map(([key, prop]) => (
+                <Box
+                  key={key}
+                  data-template-prop={key}
+                  sx={{
+                    alignItems: "center",
+                    borderTop: "1px solid",
+                    borderColor: "border.default",
+                    display: "grid",
+                    gap: 2,
+                    gridTemplateColumns: "max-content minmax(0,1fr) max-content",
+                    minWidth: 0,
+                    px: 3,
+                    py: 2,
+                  }}
+                >
+                  <Text sx={{ color: "success.fg", fontFamily: "mono", fontWeight: "semibold" }}>
+                    {key}
+                  </Text>
+                  <Text sx={{ minWidth: 0, overflow: "hidden", textOverflow: "ellipsis" }}>
+                    {prop.label}
+                  </Text>
+                  <Label sx={{ fontFamily: "mono", flexShrink: 0 }}>{prop.type}</Label>
+                </Box>
+              ))}
+            </Box>
+          </Box>
+        ) : null}
+
+        <Box
+          data-template-code-section
+          sx={{
+            bg: "canvas.default",
+            border: "1px solid",
+            borderColor: "border.default",
+            borderRadius: 2,
+            overflow: "hidden",
+          }}
+        >
+          <Box
+            sx={{
+              alignItems: "center",
+              borderBottom: "1px solid",
+              borderColor: "border.default",
+              display: "flex",
+              gap: 3,
+              justifyContent: "space-between",
+              px: 3,
+              py: 2,
+            }}
+          >
+            <Text sx={{ color: "fg.muted", fontSize: 0, fontWeight: "semibold" }}>CODE</Text>
+            <Box sx={{ alignItems: "center", display: "flex", gap: 2 }}>
+              <Button
+                type="button"
+                size="small"
+                aria-label="템플릿 문법 도움말"
+                onClick={() => setSyntaxDialogOpen(true)}
+              >
+                ?
+              </Button>
               {presets.length > 0 ? (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild disabled={readOnly && !onTemplateChange}>
-                    <button
-                      id={presetButtonId}
-                      type="button"
-                      className="inline-flex h-8 shrink-0 items-center rounded-[var(--radius-sm)] border border-border bg-background px-3 text-sm font-medium text-foreground transition-colors hover:bg-accent hover:text-accent-foreground disabled:pointer-events-none disabled:opacity-45"
-                    >
-                      프리셋
-                    </button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    {presets.map((preset) => (
-                      <DropdownMenuItem
-                        key={preset.id}
-                        onSelect={() => onPresetApply?.(preset.template)}
-                      >
-                        {preset.label}
-                      </DropdownMenuItem>
-                    ))}
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                <ActionMenu>
+                  <ActionMenu.Button
+                    id={presetButtonId}
+                    size="small"
+                    disabled={readOnly && !onTemplateChange}
+                  >
+                    프리셋
+                  </ActionMenu.Button>
+                  <ActionMenu.Overlay align="end">
+                    <ActionList>
+                      {presets.map((preset) => (
+                        <ActionList.Item
+                          key={preset.id}
+                          onSelect={() => onPresetApply?.(preset.template)}
+                        >
+                          {preset.label}
+                        </ActionList.Item>
+                      ))}
+                    </ActionList>
+                  </ActionMenu.Overlay>
+                </ActionMenu>
               ) : null}
-            </div>
-          </div>
+            </Box>
+          </Box>
           <CodeMirror
             id={editorId}
             value={value}
@@ -372,8 +384,50 @@ export const TemplateEditorCard = ({
             extensions={editorExtensions}
             onChange={(nextValue) => onTemplateChange?.(nextValue)}
           />
-        </div>
-      </div>
-    </section>
+        </Box>
+      </Box>
+
+      {syntaxDialogOpen ? (
+        <Dialog
+          title="템플릿 문법"
+          subtitle="중괄호 두 개 안에 JavaScript와 비슷한 식을 입력합니다."
+          width="large"
+          onClose={() => setSyntaxDialogOpen(false)}
+        >
+          <Box sx={{ display: "grid", gap: 3, fontSize: 1, lineHeight: "24px" }}>
+            <Box sx={{ display: "grid", gap: 2 }}>
+              <Text sx={{ fontWeight: "semibold" }}>기본</Text>
+              <Box as="code" sx={codeSurfaceSx}>
+                {"{{ title }}"}
+              </Box>
+              <Box as="code" sx={codeSurfaceSx}>
+                {"{{ `![${alt}](${url})` }}"}
+              </Box>
+            </Box>
+            <Box sx={{ display: "grid", gap: 2 }}>
+              <Text sx={{ fontWeight: "semibold" }}>문자열</Text>
+              <Box as="code" sx={codeSurfaceSx}>
+                {"{{ '{{}}' }}"}
+              </Box>
+            </Box>
+            {propEntries.length > 0 ? (
+              <Box sx={{ display: "grid", gap: 2 }}>
+                <Text sx={{ fontWeight: "semibold" }}>자동완성</Text>
+                <Text sx={{ color: "fg.muted" }}>
+                  {"{{ "} 뒤에 변수 이름을 입력하면 사용할 수 있는 prop을 제안합니다.
+                </Text>
+                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2 }}>
+                  {propEntries.map(([key, prop]) => (
+                    <Label key={key} sx={{ fontFamily: "mono" }}>
+                      {key}: {prop.type}
+                    </Label>
+                  ))}
+                </Box>
+              </Box>
+            ) : null}
+          </Box>
+        </Dialog>
+      ) : null}
+    </Box>
   )
 }

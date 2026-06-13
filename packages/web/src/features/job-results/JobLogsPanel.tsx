@@ -1,9 +1,7 @@
+import { Box, Text } from "@primer/react"
+
 import type { ExportJobState } from "@exitpress/domain/export-job/schema/ExportJobState.js"
 import type { RefObject } from "react"
-
-import { CardDescription } from "../../components/ui/Card.js"
-import { ScrollArea } from "../../components/ui/ScrollArea.js"
-import { Separator } from "../../components/ui/Separator.js"
 
 export const JobLogsPanel = ({
   job,
@@ -12,40 +10,80 @@ export const JobLogsPanel = ({
   job: ExportJobState | null
   logsScrollAreaRef: RefObject<HTMLDivElement | null>
 }) => (
-  <section className="logs-panel subtle-panel grid gap-4 rounded-[1.5rem] p-4">
-    <div className="logs-header grid gap-3">
-      <div>
-        <CardDescription className="results-description text-sm leading-7">
-          작업 로그
-        </CardDescription>
-      </div>
-    </div>
-    <Separator />
-    <ScrollArea
+  <Box
+    as="section"
+    sx={{
+      display: "grid",
+      gap: 3,
+      border: "1px solid",
+      borderColor: "border.default",
+      borderRadius: 2,
+      p: 3,
+    }}
+  >
+    <Text sx={{ color: "fg.muted", fontSize: 1, lineHeight: "20px" }}>작업 로그</Text>
+    <Box sx={{ borderTop: "1px solid", borderColor: "border.default" }} />
+    <Box
       id="logs"
       ref={logsScrollAreaRef}
-      className="logs-scroll log-surface h-[min(28rem,56vh)] overflow-hidden rounded-[1.5rem]"
       aria-live="polite"
+      sx={{
+        maxHeight: "min(28rem, 56vh)",
+        overflow: "auto",
+        border: "1px solid",
+        borderColor: "border.default",
+        borderRadius: 2,
+        bg: "canvas.subtle",
+      }}
     >
-      <div className="logs grid min-h-full gap-1.5 px-4 py-4 font-mono text-[0.88rem] text-foreground">
+      <Box
+        sx={{
+          display: "grid",
+          minHeight: "100%",
+          gap: 2,
+          px: 3,
+          py: 3,
+          color: "fg.default",
+          fontFamily: "mono",
+          fontSize: 1,
+        }}
+      >
         {(job?.logs ?? []).map((entry, index) => (
-          <div
+          <Box
             key={`${entry.timestamp}-${index}`}
-            className="log-line grid gap-0.5 pb-1.5 last:border-b-0 last:pb-0"
             data-job-log-entry
+            sx={{
+              display: "grid",
+              gap: 1,
+              pb: 2,
+              borderBottom: "1px solid",
+              borderColor: "border.muted",
+              "&:last-child": { borderBottom: 0, pb: 0 },
+            }}
           >
-            <span className="log-meta text-[11px] leading-5" data-job-log-timestamp>
+            <Box
+              as="span"
+              data-job-log-timestamp
+              sx={{ color: "fg.muted", fontSize: 0, lineHeight: "16px" }}
+            >
               {entry.timestamp}
-            </span>
-            <span
-              className="whitespace-pre-wrap break-words text-sm leading-6 text-foreground"
+            </Box>
+            <Box
+              as="span"
               data-job-log-message
+              sx={{
+                color: "fg.default",
+                fontSize: 1,
+                lineHeight: "20px",
+                whiteSpace: "pre-wrap",
+                overflowWrap: "anywhere",
+              }}
             >
               {entry.message}
-            </span>
-          </div>
+            </Box>
+          </Box>
         ))}
-      </div>
-    </ScrollArea>
-  </section>
+      </Box>
+    </Box>
+  </Box>
 )

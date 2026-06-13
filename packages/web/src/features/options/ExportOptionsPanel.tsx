@@ -1,3 +1,5 @@
+import { Box } from "@primer/react"
+
 import type { PostSummary } from "@exitpress/domain/blog/schema/BlogScan.js"
 import type {
   ExportOptions,
@@ -9,7 +11,7 @@ import type { ReactNode } from "react"
 
 import type { ExportOptionsStep } from "./ExportOptionsSteps.js"
 
-import { Card, CardContent } from "../../components/ui/Card.js"
+import { PrimerPanel, PrimerPanelBody } from "../../components/primer/PrimerPage.js"
 
 import { AssetsOptionsStep } from "./AssetsOptionsStep.js"
 import { MarkdownOptionsStep } from "./BlockTemplateOptions.js"
@@ -95,9 +97,9 @@ export const ExportOptionsPanel = ({
     ),
   }
   const formContent = (
-    <div id="export-form" className="form-stack grid gap-5">
+    <Box id="export-form" sx={{ display: "grid", gap: 4 }}>
       {contentByStep[step]}
-    </div>
+    </Box>
   )
 
   if (step === "markdown") {
@@ -105,8 +107,10 @@ export const ExportOptionsPanel = ({
   }
 
   return (
-    <Card variant="panel" className="board-card overflow-hidden" id="export-panel">
-      <CardContent className="panel-body grid gap-4 p-5">{formContent}</CardContent>
-    </Card>
+    <PrimerPanel>
+      <Box id="export-panel">
+        <PrimerPanelBody>{formContent}</PrimerPanelBody>
+      </Box>
+    </PrimerPanel>
   )
 }

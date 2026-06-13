@@ -1,26 +1,51 @@
-import { cn } from "../../lib/Cn.js"
+import { Box } from "@primer/react"
+
+import type { ComponentProps } from "react"
 
 export const CompactMetrics = ({
   items,
-  className,
+  sx,
 }: {
-  items: Array<{ label: string; value: string }>
-  className?: string
+  items: { label: string; value: string }[]
+  sx?: ComponentProps<typeof Box>["sx"]
 }) => (
-  <div
-    className={cn(
-      "flex min-w-0 flex-wrap items-center gap-x-4 gap-y-1.5 text-sm leading-6 text-muted-foreground",
-      className,
-    )}
+  <Box
+    sx={{
+      display: "flex",
+      minWidth: 0,
+      flexWrap: "wrap",
+      alignItems: "center",
+      gap: 3,
+      color: "fg.muted",
+      fontSize: 1,
+      lineHeight: "20px",
+      ...sx,
+    }}
   >
     {items.map((item) => (
-      <span
+      <Box
         key={item.label}
-        className="inline-flex min-w-0 max-w-full flex-wrap items-baseline gap-x-1.5 gap-y-0.5"
+        as="span"
+        sx={{
+          display: "inline-flex",
+          minWidth: 0,
+          maxWidth: "100%",
+          flexWrap: "wrap",
+          alignItems: "baseline",
+          columnGap: 2,
+          rowGap: 1,
+        }}
       >
-        <span className="shrink-0 text-muted-foreground">{item.label}</span>
-        <strong className="metric-value min-w-0 break-all font-semibold">{item.value}</strong>
-      </span>
+        <Box as="span" sx={{ flexShrink: 0, color: "fg.muted" }}>
+          {item.label}
+        </Box>
+        <Box
+          as="strong"
+          sx={{ minWidth: 0, overflowWrap: "anywhere", color: "fg.default", fontWeight: 600 }}
+        >
+          {item.value}
+        </Box>
+      </Box>
     ))}
-  </div>
+  </Box>
 )

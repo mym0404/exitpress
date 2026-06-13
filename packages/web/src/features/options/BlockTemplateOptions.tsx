@@ -1,8 +1,9 @@
+import { Box } from "@primer/react"
+
 import type { ExportOptions } from "@exitpress/domain/export-options/schema/ExportOptions.js"
 import type { BlockTemplateDefinition } from "@exitpress/domain/template/schema/BlockTemplateDefinition.js"
 
 import { BlockTemplateCard } from "./BlockTemplateCard.js"
-import { editorOutputCardClass } from "./OptionControls.js"
 
 const editorLabelByKey: Record<string, string> = {
   "naver-se2": "SmartEditor 2",
@@ -88,17 +89,27 @@ export const MarkdownOptionsStep = ({
   const blockTemplateGroups = groupBlockTemplateDefinitionsByEditor(blockTemplateDefinitions)
 
   return (
-    <section className="option-section grid gap-4">
+    <Box as="section" sx={{ display: "grid", gap: 3 }}>
       {blockTemplateGroups.map((group) => (
-        <div
+        <Box
           key={group.editorKey}
-          className={editorOutputCardClass}
           data-block-template-editor-group={group.editorKey}
+          sx={{
+            bg: "canvas.default",
+            border: "1px solid",
+            borderColor: "border.default",
+            borderRadius: 2,
+            display: "grid",
+            gap: 3,
+            p: 3,
+          }}
         >
-          <h3 className="text-base font-semibold tracking-[-0.03em] text-foreground">
+          <Box as="h3" sx={{ fontSize: 2, fontWeight: "semibold", m: 0 }}>
             {group.editorLabel}
-          </h3>
-          <div className="grid gap-4 xl:grid-cols-2">
+          </Box>
+          <Box
+            sx={{ display: "grid", gap: 3, gridTemplateColumns: ["1fr", null, null, "1fr 1fr"] }}
+          >
             {group.definitions.map((definition) => (
               <EditableBlockTemplateCard
                 key={definition.key}
@@ -107,9 +118,9 @@ export const MarkdownOptionsStep = ({
                 onOptionsChange={onOptionsChange}
               />
             ))}
-          </div>
-        </div>
+          </Box>
+        </Box>
       ))}
-    </section>
+    </Box>
   )
 }

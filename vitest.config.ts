@@ -53,8 +53,6 @@ export default defineConfig({
         "packages/server/src/static/**",
         "packages/web/src/Main.tsx",
         "packages/web/src/app/**",
-        "packages/web/src/components/ui/**",
-        "packages/web/src/lib/Cn.ts",
         "tests/**",
       ],
       thresholds: {

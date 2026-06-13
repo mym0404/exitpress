@@ -2,9 +2,6 @@ import { Box, Checkbox, FormControl, Select, Text } from "@primer/react"
 
 import type { ReactNode } from "react"
 
-export const optionEmbeddedPanelClass = ""
-export const editorOutputCardClass = ""
-
 const panelSx = {
   display: "grid",
   gap: 3,

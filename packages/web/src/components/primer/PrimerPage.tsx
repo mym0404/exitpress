@@ -1,4 +1,4 @@
-import { Box, Heading, Text } from "@primer/react"
+import { Box } from "@primer/react"
 
 import type { ReactNode } from "react"
 
@@ -13,23 +13,6 @@ export const PrimerPanel = ({ children }: { children: ReactNode }) => (
     }}
   >
     {children}
-  </Box>
-)
-
-export const PrimerPanelHeader = ({
-  title,
-  description,
-}: {
-  title: string
-  description?: string
-}) => (
-  <Box sx={{ borderBottom: "1px solid", borderColor: "border.default", px: 3, py: 3 }}>
-    <Heading as="h2" sx={{ fontSize: 2 }}>
-      {title}
-    </Heading>
-    {description ? (
-      <Text sx={{ display: "block", color: "fg.muted", fontSize: 1, mt: 1 }}>{description}</Text>
-    ) : null}
   </Box>
 )
 

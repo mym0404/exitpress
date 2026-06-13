@@ -1,8 +1,10 @@
+import { Box, Flash } from "@primer/react"
+
 import type { UploadProviderCatalogResponse } from "@exitpress/domain/upload/schema/UploadProvider.js"
 
 import type { UploadProviderSettingsValue } from "../upload/UploadProviderSettingsForm.js"
 
-import { Card, CardContent } from "../../components/ui/Card.js"
+import { PrimerPanel, PrimerPanelBody } from "../../components/primer/PrimerPage.js"
 import { UploadProviderSettingsForm } from "../upload/UploadProviderSettingsForm.js"
 
 export const UploadProviderOptionsStep = ({
@@ -26,24 +28,24 @@ export const UploadProviderOptionsStep = ({
   onReadyChange: (ready: boolean) => void
   onTestUpload: (value: UploadProviderSettingsValue) => Promise<void> | void
 }) => (
-  <Card variant="panel" className="board-card overflow-hidden" id="upload-provider-panel">
-    <CardContent className="panel-body grid gap-4 p-5">
-      <div id="upload-provider-form" className="form-stack grid gap-5">
-        {uploadProviderError ? (
-          <p className="danger-copy text-sm leading-7">{uploadProviderError}</p>
-        ) : null}
-        {stepMessage ? <p className="danger-copy text-sm leading-7">{stepMessage}</p> : null}
-        <UploadProviderSettingsForm
-          resetKey={uploadProviders.defaultProviderKey ?? undefined}
-          uploadProviders={uploadProviders}
-          testUploadSubmitting={testUploadSubmitting}
-          testUploadResult={testUploadResult}
-          testUploadError={testUploadError}
-          onChange={onChange}
-          onReadyChange={onReadyChange}
-          onTestUpload={onTestUpload}
-        />
-      </div>
-    </CardContent>
-  </Card>
+  <PrimerPanel>
+    <Box id="upload-provider-panel">
+      <PrimerPanelBody>
+        <Box id="upload-provider-form" sx={{ display: "grid", gap: 4 }}>
+          {uploadProviderError ? <Flash variant="danger">{uploadProviderError}</Flash> : null}
+          {stepMessage ? <Flash variant="danger">{stepMessage}</Flash> : null}
+          <UploadProviderSettingsForm
+            resetKey={uploadProviders.defaultProviderKey ?? undefined}
+            uploadProviders={uploadProviders}
+            testUploadSubmitting={testUploadSubmitting}
+            testUploadResult={testUploadResult}
+            testUploadError={testUploadError}
+            onChange={onChange}
+            onReadyChange={onReadyChange}
+            onTestUpload={onTestUpload}
+          />
+        </Box>
+      </PrimerPanelBody>
+    </Box>
+  </PrimerPanel>
 )
