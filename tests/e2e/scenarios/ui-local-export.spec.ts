@@ -591,12 +591,12 @@ const captureReviewScreens = async ({
 
 const assertPrimerWorkflowShell = async (page: import("playwright").Page) => {
   const shell = page.locator("[data-workflow-shell]")
-  const progress = page.locator("[data-workflow-progress]")
   const actions = page.locator("[data-step-actions]")
+  const summary = page.locator("#summary")
 
   await shell.waitFor({ timeout: 5000 })
-  await progress.waitFor({ timeout: 5000 })
   await actions.waitFor({ timeout: 5000 })
+  await summary.waitFor({ timeout: 5000 })
 
   const navigationCount = await page.locator("[data-workflow-nav]").count()
 
@@ -604,10 +604,26 @@ const assertPrimerWorkflowShell = async (page: import("playwright").Page) => {
     throw new Error("workflow steps should not render as a decorative sidebar navigation")
   }
 
-  const progressText = await progress.textContent()
+  const progressCount = await page.locator("[data-workflow-progress]").count()
 
-  if (!progressText?.startsWith("설정 1/")) {
-    throw new Error(`workflow progress should be a compact step summary, got ${progressText}`)
+  if (progressCount !== 0) {
+    throw new Error("workflow header should not render step progress")
+  }
+
+  const summaryText = await summary.textContent()
+
+  if (
+    !summaryText?.includes("대상 글") ||
+    !summaryText.includes("카테고리") ||
+    !summaryText.includes("선택")
+  ) {
+    throw new Error(`workflow summary should render metadata labels, got ${summaryText}`)
+  }
+
+  const summaryLabelCount = await summary.locator("[data-size][data-variant]").count()
+
+  if (summaryLabelCount < 3) {
+    throw new Error("workflow summary should use Primer labels for metadata")
   }
 
   const actionLayout = await actions.evaluate((element) => {
@@ -732,8 +748,22 @@ const chooseSelectOption = async ({
     return
   }
 
-  await target.click()
-  await page.locator(`[data-slot="select-item"][data-value="${value}"]`).click()
+  const isExpanded = (await target.getAttribute("aria-expanded")) === "true"
+
+  if (!isExpanded) {
+    await target.click()
+  }
+
+  await page.locator(`[data-slot="select-item"][data-value="${value}"]:visible`).click()
+  await page.waitForFunction(
+    ({ selector, expectedValue }) =>
+      document.querySelector(selector)?.getAttribute("data-value") === expectedValue,
+    { selector: trigger, expectedValue: value },
+  )
+
+  if ((await target.getAttribute("aria-expanded")) === "true") {
+    await page.keyboard.press("Escape")
+  }
 }
 
 const fillCodeMirror = async ({
@@ -1502,6 +1532,23 @@ const runUiLocalExport = async ({ browser }: { browser: Browser }) => {
       page,
       editor: "#structure-postFolderNameTemplate",
     })
+    await page.getByRole("button", { name: "템플릿 문법 도움말" }).click()
+
+    const templateSyntaxDialog = page.getByRole("dialog", { name: "템플릿 문법" })
+    const templateSyntaxHelpText = await templateSyntaxDialog.textContent()
+
+    if (!templateSyntaxHelpText?.includes("사용할 수 있는 prop을 자동완성합니다.")) {
+      throw new Error("template syntax dialog should explain that prop autocomplete is available")
+    }
+
+    if (
+      templateSyntaxHelpText.includes("slug: string") ||
+      templateSyntaxHelpText.includes("date: string")
+    ) {
+      throw new Error("template syntax dialog should not list every autocomplete prop")
+    }
+
+    await page.keyboard.press("Escape")
     await fillCodeMirror({
       page,
       editor: "#structure-postFolderNameTemplate",
@@ -1555,6 +1602,52 @@ const runUiLocalExport = async ({ browser }: { browser: Browser }) => {
 
     if (!frontmatterDescription?.includes("글 제목")) {
       throw new Error("frontmatter description missing")
+    }
+
+    const frontmatterAliasLayout = await page
+      .locator('[data-frontmatter-field="title"]')
+      .evaluate((element) => {
+        const aliasRow = element.querySelector('[data-frontmatter-alias-row="true"]')
+        const label = aliasRow?.querySelector("label")
+        const input = aliasRow?.querySelector('input[data-alias-input="true"]')
+        const example = element.querySelector('[data-frontmatter-example="true"]')
+
+        if (!aliasRow || !label || !(input instanceof HTMLInputElement) || !example) {
+          throw new Error("frontmatter alias layout is missing expected elements")
+        }
+
+        const labelRect = label.getBoundingClientRect()
+        const inputRect = input.getBoundingClientRect()
+        const exampleStyle = getComputedStyle(example)
+
+        return {
+          labelText: label.textContent?.trim(),
+          exampleText: example.textContent?.trim(),
+          exampleFontSize: exampleStyle.fontSize,
+          inputIsRightOfLabel: inputRect.left > labelRect.right,
+          sameRow: Math.abs(inputRect.top - labelRect.top) < 8,
+        }
+      })
+
+    if (frontmatterAliasLayout.labelText !== "내보낼 이름") {
+      throw new Error(
+        `frontmatter alias label should be 내보낼 이름, got ${frontmatterAliasLayout.labelText}`,
+      )
+    }
+
+    if (!frontmatterAliasLayout.inputIsRightOfLabel || !frontmatterAliasLayout.sameRow) {
+      throw new Error(
+        "frontmatter alias input should render on the same row to the right of its label",
+      )
+    }
+
+    if (
+      frontmatterAliasLayout.exampleFontSize !== "12px" ||
+      !frontmatterAliasLayout.exampleText?.startsWith("예: title:")
+    ) {
+      throw new Error(
+        `frontmatter field example should render compact key output, got ${frontmatterAliasLayout.exampleText} at ${frontmatterAliasLayout.exampleFontSize}`,
+      )
     }
 
     await fillFrontmatterAlias({ page, fieldName: "title", value: "shared" })
@@ -1615,6 +1708,97 @@ const runUiLocalExport = async ({ browser }: { browser: Browser }) => {
 
     if (providerValue !== "github") {
       throw new Error("upload provider default did not stay on github")
+    }
+
+    const uploadProviderFormChrome = await page
+      .locator("#upload-provider-form form")
+      .evaluate((form) => {
+        const style = getComputedStyle(form)
+
+        return {
+          borderBottomWidth: style.borderBottomWidth,
+          borderTopWidth: style.borderTopWidth,
+          borderRadius: style.borderRadius,
+        }
+      })
+
+    if (
+      uploadProviderFormChrome.borderBottomWidth !== "0px" ||
+      uploadProviderFormChrome.borderTopWidth !== "0px" ||
+      uploadProviderFormChrome.borderRadius !== "0px"
+    ) {
+      throw new Error("upload provider form should not use an outer card border")
+    }
+
+    const uploadCdnCheckboxGroup = await page
+      .getByRole("group", { name: "jsDelivr CDN 사용" })
+      .evaluate((group) => {
+        const style = getComputedStyle(group)
+
+        return {
+          ariaLabelledby: group.getAttribute("aria-labelledby"),
+          backgroundColor: style.backgroundColor,
+          borderBottomWidth: style.borderBottomWidth,
+          borderTopWidth: style.borderTopWidth,
+          role: group.getAttribute("role"),
+        }
+      })
+
+    if (
+      uploadCdnCheckboxGroup.role !== "group" ||
+      uploadCdnCheckboxGroup.ariaLabelledby !== "upload-github-use-jsdelivr-label"
+    ) {
+      throw new Error("GitHub CDN option should use Primer CheckboxGroup semantics")
+    }
+
+    if (
+      uploadCdnCheckboxGroup.borderBottomWidth !== "0px" ||
+      uploadCdnCheckboxGroup.borderTopWidth !== "0px" ||
+      uploadCdnCheckboxGroup.backgroundColor !== "rgba(0, 0, 0, 0)"
+    ) {
+      throw new Error("GitHub CDN option should not render as a custom checkbox row")
+    }
+
+    const repositoryFieldLayout = await page
+      .locator("#upload-providerField-repo")
+      .evaluate((input) => {
+        let field = input.parentElement
+
+        while (field && !field.textContent?.includes("업로드할 GitHub 저장소 경로입니다.")) {
+          field = field.parentElement
+        }
+
+        const label = field?.querySelector("label")
+        const caption = Array.from(field?.querySelectorAll("*") ?? []).find(
+          (element) => element.textContent?.trim() === "업로드할 GitHub 저장소 경로입니다.",
+        )
+
+        if (!label || !input || !caption) {
+          return null
+        }
+
+        const labelRect = label.getBoundingClientRect()
+        const inputRect = input.getBoundingClientRect()
+        const captionRect = caption.getBoundingClientRect()
+
+        return {
+          captionTop: captionRect.top,
+          inputBottom: inputRect.bottom,
+          inputTop: inputRect.top,
+          labelBottom: labelRect.bottom,
+        }
+      })
+
+    if (!repositoryFieldLayout) {
+      throw new Error("repository field did not expose label, input, and caption")
+    }
+
+    if (repositoryFieldLayout.inputTop - repositoryFieldLayout.labelBottom > 10) {
+      throw new Error("repository field label and input are spaced too far apart")
+    }
+
+    if (repositoryFieldLayout.captionTop < repositoryFieldLayout.inputBottom) {
+      throw new Error("repository field caption should render below the input")
     }
 
     await page.fill("#upload-providerField-repo", "owner/name")

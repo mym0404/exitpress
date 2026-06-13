@@ -1,5 +1,4 @@
-import { ChevronDownIcon } from "@primer/octicons-react"
-import { Box, FormControl, Label, Select, Text } from "@primer/react"
+import { Box, FormControl, Label, NavList, Text } from "@primer/react"
 import { useEffect, useMemo, useState } from "react"
 
 import type { ThemePreference } from "@exitpress/domain/preferences/schema/ThemePreference.js"
@@ -8,6 +7,7 @@ import type { ReactNode } from "react"
 import type { StorybookStory } from "./schema/Storybook.js"
 
 import { PrimerAppProvider } from "../../app/PrimerAppProvider.js"
+import { PrimerSelectActionMenu } from "../../components/primer/PrimerSelectActionMenu.js"
 import { createAppHref, shouldShowStorybookBackLink } from "../../lib/AppRoutes.js"
 import { useThemePreference } from "../common/hooks/UseThemePreference.js"
 import { WizardHeader } from "../common/shell/WizardHeader.js"
@@ -245,179 +245,82 @@ const codeBlockSx = ({
   whiteSpace: codeType === "html" ? "pre" : "pre-wrap",
 })
 
-const StoryTreeBlock = ({
-  story,
-  active,
-  onSelect,
-}: {
-  story: StorybookStory
-  active: boolean
-  onSelect: (storyKey: string) => void
-}) => (
-  <Box
-    as="button"
-    type="button"
-    role="treeitem"
-    tabIndex={0}
-    aria-selected={active}
-    data-storybook-block={story.storyKey}
-    sx={{
-      display: "grid",
-      width: "100%",
-      gridTemplateColumns: "auto minmax(0, 1fr)",
-      alignItems: "center",
-      gap: 2,
-      border: 0,
-      borderRadius: 2,
-      bg: active ? "accent.emphasis" : "transparent",
-      color: active ? "fg.onEmphasis" : "fg.default",
-      px: 2,
-      py: 2,
-      font: "inherit",
-      fontSize: 1,
-      textAlign: "left",
-      cursor: "pointer",
-      "&:hover": {
-        bg: active ? "accent.emphasis" : "canvas.subtle",
-      },
-      "&:focus-visible": {
-        outline: "2px solid",
-        outlineColor: "accent.fg",
-        outlineOffset: "2px",
-      },
-    }}
-    onClick={() => onSelect(story.storyKey)}
-  >
-    <Text sx={{ fontSize: 0, fontVariantNumeric: "tabular-nums", opacity: 0.72 }}>
-      {story.blockIndex + 1}
-    </Text>
-    <Text sx={{ minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-      {story.blockLabel}
-    </Text>
-  </Box>
-)
-
 const StoryTree = ({
   activeStoryKey,
   onSelect,
 }: {
   activeStoryKey: string
   onSelect: (storyKey: string) => void
-}) => {
-  const activeEditorType =
-    storybookCatalog.find((group) =>
-      group.stories.some((story) => story.storyKey === activeStoryKey),
-    )?.editorType ?? storybookCatalog[0]?.editorType
-  const [openEditorTypes, setOpenEditorTypes] = useState<string[]>(
-    activeEditorType ? [activeEditorType] : [],
-  )
+}) => (
+  <Box
+    as="aside"
+    data-storybook-tree
+    sx={{
+      display: "grid",
+      height: "100%",
+      minHeight: 0,
+      gridTemplateRows: "auto minmax(0, 1fr)",
+    }}
+  >
+    <Box sx={{ borderBottom: "1px solid", borderColor: "border.default", px: 3, py: 3 }}>
+      <Text sx={{ color: "fg.default", fontSize: 2, fontWeight: 600 }}>블록 목록</Text>
+      <Text sx={{ color: "fg.muted", display: "block", fontSize: 0, mt: 1 }}>
+        {getStoryCount()} blocks
+      </Text>
+    </Box>
+    <Box sx={{ minHeight: 0, overflowY: "auto", px: 2, py: 3 }}>
+      <NavList aria-label="Storybook 블록 목록">
+        {storybookCatalog.map((group) => (
+          <NavList.Group
+            key={group.editorType}
+            title={`${group.editorLabel} (${group.stories.length})`}
+          >
+            {group.stories.map((story) => {
+              const active = story.storyKey === activeStoryKey
 
-  useEffect(() => {
-    if (!activeEditorType) {
-      return
-    }
-
-    setOpenEditorTypes((current) =>
-      current.includes(activeEditorType) ? current : [...current, activeEditorType],
-    )
-  }, [activeEditorType])
-
-  const toggleEditorType = (editorType: string) => {
-    setOpenEditorTypes((current) =>
-      current.includes(editorType)
-        ? current.filter((currentEditorType) => currentEditorType !== editorType)
-        : [...current, editorType],
-    )
-  }
-
-  return (
-    <Box
-      data-storybook-tree
-      sx={{
-        ...panelSx,
-        display: "grid",
-        maxHeight: "min(44rem, calc(100vh - 14rem))",
-        gridTemplateRows: "auto minmax(0, 1fr)",
-        "@media (min-width: 1012px)": { position: "sticky", top: 4 },
-      }}
-    >
-      <Box sx={{ borderBottom: "1px solid", borderColor: "border.default", p: 3 }}>
-        <Text sx={{ color: "fg.default", fontSize: 2, fontWeight: 600 }}>블록 목록</Text>
-      </Box>
-      <Box sx={{ minHeight: 0, overflow: "auto", p: 3 }}>
-        <Box role="tree" aria-label="Storybook 블록 목록" sx={{ display: "grid", gap: 3 }}>
-          {storybookCatalog.map((group) => {
-            const open = openEditorTypes.includes(group.editorType)
-
-            return (
-              <Box key={group.editorType} data-storybook-editor sx={{ display: "grid", gap: 2 }}>
-                <Box
-                  as="button"
-                  type="button"
-                  role="treeitem"
-                  tabIndex={0}
-                  aria-expanded={open}
-                  sx={{
-                    display: "flex",
-                    width: "100%",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    gap: 2,
-                    border: 0,
-                    borderRadius: 2,
-                    bg: open ? "canvas.subtle" : "transparent",
-                    color: "fg.default",
-                    px: 3,
-                    py: 2,
-                    font: "inherit",
-                    fontSize: 1,
-                    fontWeight: 600,
-                    textAlign: "left",
-                    cursor: "pointer",
-                    "&:hover": { bg: "canvas.subtle" },
-                    "&:focus-visible": {
-                      outline: "2px solid",
-                      outlineColor: "accent.fg",
-                      outlineOffset: "2px",
-                    },
+              return (
+                <NavList.Item
+                  key={story.storyKey}
+                  href={`#${story.storyKey}`}
+                  aria-current={active ? "page" : undefined}
+                  data-storybook-block={story.storyKey}
+                  onClick={(event) => {
+                    event.preventDefault()
+                    onSelect(story.storyKey)
                   }}
-                  onClick={() => toggleEditorType(group.editorType)}
                 >
-                  <Text>{group.editorLabel}</Text>
-                  <Box sx={{ display: "flex", alignItems: "center", gap: 2, color: "fg.muted" }}>
-                    <Text sx={{ fontSize: 0, fontWeight: 600 }}>{group.stories.length}</Text>
+                  <Text
+                    sx={{
+                      display: "grid",
+                      gridTemplateColumns: "2ch minmax(0, 1fr)",
+                      gap: 2,
+                      minWidth: 0,
+                    }}
+                  >
+                    <Box as="span" sx={{ color: "fg.muted", fontSize: 0 }}>
+                      {story.blockIndex + 1}
+                    </Box>
                     <Box
                       as="span"
                       sx={{
-                        display: "inline-flex",
-                        transform: open ? "rotate(180deg)" : "rotate(0deg)",
-                        transition: "transform 120ms ease",
+                        minWidth: 0,
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
                       }}
                     >
-                      <ChevronDownIcon aria-hidden="true" />
+                      {story.blockLabel}
                     </Box>
-                  </Box>
-                </Box>
-                {open ? (
-                  <Box role="group" sx={{ display: "grid", gap: 1 }}>
-                    {group.stories.map((story) => (
-                      <StoryTreeBlock
-                        key={story.storyKey}
-                        story={story}
-                        active={story.storyKey === activeStoryKey}
-                        onSelect={onSelect}
-                      />
-                    ))}
-                  </Box>
-                ) : null}
-              </Box>
-            )
-          })}
-        </Box>
-      </Box>
+                  </Text>
+                </NavList.Item>
+              )
+            })}
+          </NavList.Group>
+        ))}
+      </NavList>
     </Box>
-  )
-}
+  </Box>
+)
 
 const allStorybookCodeTypes = ["html", "markdown"] as const
 type StorybookCodeType = (typeof allStorybookCodeTypes)[number]
@@ -604,66 +507,94 @@ export const StorybookPage = () => {
     <PrimerAppProvider themePreference={themePreference}>
       <Box
         as="main"
-        sx={{ minHeight: "100vh", width: "100%", overflowX: "clip", bg: "canvas.default" }}
+        sx={{
+          minHeight: "100vh",
+          width: "100%",
+          overflowX: "clip",
+          bg: "canvas.default",
+        }}
       >
         <Box
           sx={{
-            position: "relative",
-            zIndex: 1,
-            display: "flex",
-            minHeight: "100vh",
-            width: "100%",
-            maxWidth: "1280px",
-            mx: "auto",
-            flexDirection: "column",
-            gap: 3,
-            px: [3, 4],
-            py: [3, 4],
+            bg: "canvas.subtle",
+            borderBottom: "1px solid",
+            borderColor: "border.default",
           }}
         >
-          <WizardHeader
-            title="Storybook"
-            description="지원 중인 블록의 입력 HTML, 원본 캡처, Markdown 출력을 비교합니다."
-            themePreference={themePreference}
-            headerStatus="ready"
-            summaryCards={summaryCards}
-            backLink={backLink}
-            onThemeChange={setThemePreference}
-          />
-          <Box sx={{ display: ["block", null, "none"] }}>
-            <FormControl id="storybook-block-select">
-              <FormControl.Label>블록 선택</FormControl.Label>
-              <Select
-                block
-                value={activeStory.storyKey}
-                onChange={(event) => selectStory(event.target.value)}
-              >
-                {storybookCatalog.map((group) => (
-                  <optgroup key={group.editorType} label={group.editorLabel}>
-                    {group.stories.map((story) => (
-                      <Select.Option key={story.storyKey} value={story.storyKey}>
-                        {story.blockIndex + 1}. {story.blockLabel}
-                      </Select.Option>
-                    ))}
-                  </optgroup>
-                ))}
-              </Select>
-            </FormControl>
-          </Box>
           <Box
-            data-storybook-layout
             sx={{
-              display: "grid",
-              gap: 3,
-              "@media (min-width: 1012px)": {
-                gridTemplateColumns: "18rem minmax(0, 1fr)",
-              },
+              width: "100%",
+              maxWidth: "1280px",
+              mx: "auto",
+              px: [3, 4],
             }}
           >
-            <Box sx={{ display: ["none", null, "block"], order: [2, null, 1] }}>
-              <StoryTree activeStoryKey={activeStory.storyKey} onSelect={selectStory} />
-            </Box>
-            <Box sx={{ order: [1, null, 2], minWidth: 0 }}>
+            <WizardHeader
+              title="Storybook"
+              themePreference={themePreference}
+              headerStatus="ready"
+              summaryCards={summaryCards}
+              backLink={backLink}
+              onThemeChange={setThemePreference}
+            />
+          </Box>
+        </Box>
+        <Box
+          data-storybook-layout
+          sx={{
+            display: ["block", null, "grid"],
+            gridTemplateColumns: [undefined, null, "20rem minmax(0, 1fr)"],
+            minHeight: ["auto", null, "calc(100vh - 9rem)"],
+          }}
+        >
+          <Box
+            data-storybook-pane
+            sx={{
+              display: ["none", null, "block"],
+              minHeight: "calc(100vh - 9rem)",
+              maxHeight: "calc(100vh - 9rem)",
+              overflow: "hidden",
+              bg: "canvas.subtle",
+              borderRight: "1px solid",
+              borderColor: "border.default",
+              position: "sticky",
+              top: 0,
+            }}
+          >
+            <StoryTree activeStoryKey={activeStory.storyKey} onSelect={selectStory} />
+          </Box>
+          <Box
+            sx={{
+              minWidth: 0,
+              px: [3, 4],
+              py: [3, 4],
+            }}
+          >
+            <Box
+              sx={{
+                display: "grid",
+                gap: 3,
+                maxWidth: "1280px",
+                mx: "auto",
+              }}
+            >
+              <Box sx={{ display: ["block", null, "none"] }}>
+                <FormControl id="storybook-block-select">
+                  <FormControl.Label>블록 선택</FormControl.Label>
+                  <PrimerSelectActionMenu
+                    id="storybook-block-select"
+                    value={activeStory.storyKey}
+                    groups={storybookCatalog.map((group) => ({
+                      label: group.editorLabel,
+                      options: group.stories.map((story) => ({
+                        value: story.storyKey,
+                        label: `${story.blockIndex + 1}. ${story.blockLabel}`,
+                      })),
+                    }))}
+                    onValueChange={selectStory}
+                  />
+                </FormControl>
+              </Box>
               <StoryPreview story={activeStory} themePreference={themePreference} />
             </Box>
           </Box>

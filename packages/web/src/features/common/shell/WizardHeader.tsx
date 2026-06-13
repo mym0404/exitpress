@@ -1,15 +1,25 @@
 import {
   BookIcon,
-  ChevronLeftIcon,
   GlobeIcon,
+  KebabHorizontalIcon,
   MarkGithubIcon,
+  RepoIcon,
   MoonIcon,
   SunIcon,
 } from "@primer/octicons-react"
-import { Box, Heading, IconButton, Link, SegmentedControl, Text } from "@primer/react"
+import {
+  ActionList,
+  ActionMenu,
+  Box,
+  IconButton,
+  Label,
+  LabelGroup,
+  Link,
+  PageHeader,
+  SegmentedControl,
+} from "@primer/react"
 
 import type { ThemePreference } from "@exitpress/domain/preferences/schema/ThemePreference.js"
-import type { ReactNode } from "react"
 
 import { PrimerStatusLabel } from "../../../components/primer/PrimerStatusLabel.js"
 import { createAppHref } from "../../../lib/AppRoutes.js"
@@ -39,16 +49,13 @@ const themeOptions: ThemePreference[] = ["dark", "light"]
 
 export const WizardHeader = ({
   title,
-  description,
   themePreference,
   headerStatus,
   summaryCards,
   backLink,
-  progress,
   onThemeChange,
 }: {
   title: string
-  description?: string
   themePreference: ThemePreference
   headerStatus: string
   summaryCards: Array<{ label: string; value: string }>
@@ -56,165 +63,145 @@ export const WizardHeader = ({
     href: string
     label: string
   }
-  progress?: ReactNode
   onThemeChange: (value: ThemePreference) => void
 }) => (
-  <Box
+  <PageHeader
     sx={{
-      display: "grid",
-      gap: 2,
       py: [2, 3],
     }}
   >
-    <Box
-      sx={{
-        display: "grid",
-        gridTemplateColumns: ["1fr", "minmax(0, 1fr) auto"],
-        gap: 3,
-        alignItems: "start",
-      }}
-    >
-      <Box sx={{ display: "grid", gap: 2, minWidth: 0 }}>
-        <Box
-          sx={{
-            display: "flex",
-            minWidth: 0,
-            flexWrap: "wrap",
-            alignItems: "center",
-            gap: 2,
-          }}
-        >
-          {backLink ? (
-            <IconButton
-              aria-label={backLink.label}
-              icon={ChevronLeftIcon}
-              title={backLink.label}
-              onClick={() => {
-                window.location.href = backLink.href
-              }}
-            />
-          ) : null}
-          <Heading sx={{ fontSize: [3, 4], lineHeight: 1.25, minWidth: 0 }}>{title}</Heading>
-        </Box>
-        {description ? (
-          <Text
-            sx={{
-              display: "block",
-              maxWidth: "768px",
-              m: 0,
-              color: "fg.muted",
-              fontSize: 1,
-              lineHeight: "22px",
-            }}
-          >
-            {description}
-          </Text>
-        ) : null}
-      </Box>
-
-      <Box sx={{ display: "grid", justifyItems: ["start", "end"], gap: 2 }}>
-        <Box
-          as="nav"
-          sx={{
-            display: "flex",
-            flexWrap: "wrap",
-            justifyContent: ["flex-start", "flex-end"],
-            gap: 2,
-            fontSize: 0,
-            fontWeight: "semibold",
-          }}
-        >
-          {headerLinks.map(({ href, pathname, Icon, external, label }) => (
-            <Link
-              key={href ?? pathname}
-              href={
-                pathname
-                  ? createAppHref({
-                      pathname,
-                      basePath: import.meta.env.BASE_URL,
-                    })
-                  : href
-              }
-              target={external ? "_blank" : undefined}
-              rel={external ? "noreferrer" : undefined}
-              sx={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 1,
-                color: "fg.muted",
-                whiteSpace: "nowrap",
-              }}
-            >
-              <Icon size={14} aria-hidden="true" />
-              {label}
-            </Link>
-          ))}
-        </Box>
-
-        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 2 }}>
-          <SegmentedControl
-            aria-label="테마 선택"
+    <PageHeader.LeadingAction hidden={{ narrow: false, regular: true, wide: true }}>
+      <ActionMenu>
+        <ActionMenu.Anchor>
+          <IconButton
+            aria-label="메뉴 열기"
+            icon={KebabHorizontalIcon}
             size="small"
-            onChange={(selectedIndex) => {
-              const nextTheme = themeOptions[selectedIndex]
+            title="메뉴 열기"
+          />
+        </ActionMenu.Anchor>
+        <ActionMenu.Overlay>
+          <ActionList>
+            {backLink ? (
+              <ActionList.Item
+                onSelect={() => {
+                  window.location.href = backLink.href
+                }}
+              >
+                {backLink.label}
+              </ActionList.Item>
+            ) : null}
+            <ActionList.Group>
+              <ActionList.GroupHeading>Links</ActionList.GroupHeading>
+              {headerLinks.map(({ href, pathname, label }) => (
+                <ActionList.LinkItem
+                  key={href ?? pathname}
+                  href={
+                    pathname
+                      ? createAppHref({
+                          pathname,
+                          basePath: import.meta.env.BASE_URL,
+                        })
+                      : href
+                  }
+                >
+                  {label}
+                </ActionList.LinkItem>
+              ))}
+            </ActionList.Group>
+            <ActionList.Group selectionVariant="single">
+              <ActionList.GroupHeading>Theme</ActionList.GroupHeading>
+              {themeOptions.map((theme) => (
+                <ActionList.Item
+                  key={theme}
+                  selected={themePreference === theme}
+                  onSelect={() => {
+                    onThemeChange(theme)
+                  }}
+                >
+                  {theme === "dark" ? "Dark" : "Light"}
+                </ActionList.Item>
+              ))}
+            </ActionList.Group>
+          </ActionList>
+        </ActionMenu.Overlay>
+      </ActionMenu>
+    </PageHeader.LeadingAction>
 
-              if (nextTheme) {
-                onThemeChange(nextTheme)
-              }
-            }}
-          >
-            <SegmentedControl.IconButton
-              aria-label="다크"
-              icon={MoonIcon}
-              selected={themePreference === "dark"}
-            />
-            <SegmentedControl.IconButton
-              aria-label="라이트"
-              icon={SunIcon}
-              selected={themePreference === "light"}
-            />
-          </SegmentedControl>
-          <Box id="status-text" data-status={headerStatus}>
-            <PrimerStatusLabel status={headerStatus}>
-              {getStatusPillLabel(headerStatus)}
-            </PrimerStatusLabel>
-          </Box>
-        </Box>
-      </Box>
-    </Box>
+    <PageHeader.TitleArea variant="large">
+      <PageHeader.LeadingVisual>
+        <RepoIcon />
+      </PageHeader.LeadingVisual>
+      <PageHeader.Title as="h1">{title}</PageHeader.Title>
+    </PageHeader.TitleArea>
 
-    <Box
-      id="summary"
-      aria-live="polite"
-      sx={{
-        display: "flex",
-        flexWrap: "wrap",
-        alignItems: "center",
-        gap: 2,
-        color: "fg.muted",
-        fontSize: 0,
-      }}
-    >
-      {summaryCards.map((card) => (
-        <Box
-          as="span"
-          key={card.label}
+    <PageHeader.Actions hidden={{ narrow: true, regular: false, wide: false }}>
+      {headerLinks.map(({ href, pathname, Icon, external, label }) => (
+        <Link
+          key={href ?? pathname}
+          href={
+            pathname
+              ? createAppHref({
+                  pathname,
+                  basePath: import.meta.env.BASE_URL,
+                })
+              : href
+          }
+          target={external ? "_blank" : undefined}
+          rel={external ? "noreferrer" : undefined}
           sx={{
             display: "inline-flex",
-            minWidth: 0,
-            maxWidth: "100%",
-            flexWrap: "wrap",
-            alignItems: "baseline",
-            columnGap: 1,
+            alignItems: "center",
+            gap: 1,
+            color: "fg.muted",
+            fontSize: 0,
+            fontWeight: "semibold",
+            whiteSpace: "nowrap",
           }}
         >
-          <Text sx={{ flexShrink: 0, color: "fg.muted" }}>{card.label}</Text>
-          <Box as="strong" sx={{ minWidth: 0, overflowWrap: "anywhere", fontWeight: "semibold" }}>
-            {card.value}
-          </Box>
-        </Box>
+          <Icon size={14} aria-hidden="true" />
+          {label}
+        </Link>
       ))}
-    </Box>
-    {progress ? <Box>{progress}</Box> : null}
-  </Box>
+      <SegmentedControl
+        aria-label="테마 선택"
+        size="small"
+        onChange={(selectedIndex) => {
+          const nextTheme = themeOptions[selectedIndex]
+
+          if (nextTheme) {
+            onThemeChange(nextTheme)
+          }
+        }}
+      >
+        <SegmentedControl.IconButton
+          aria-label="다크"
+          icon={MoonIcon}
+          selected={themePreference === "dark"}
+        />
+        <SegmentedControl.IconButton
+          aria-label="라이트"
+          icon={SunIcon}
+          selected={themePreference === "light"}
+        />
+      </SegmentedControl>
+      <Box id="status-text" data-status={headerStatus}>
+        <PrimerStatusLabel status={headerStatus}>
+          {getStatusPillLabel(headerStatus)}
+        </PrimerStatusLabel>
+      </Box>
+    </PageHeader.Actions>
+
+    <PageHeader.Navigation as="div">
+      <Box id="summary" aria-live="polite">
+        <LabelGroup visibleChildCount="auto">
+          {summaryCards.map((card) => (
+            <Label key={card.label} variant="secondary">
+              {card.label} {card.value}
+            </Label>
+          ))}
+        </LabelGroup>
+      </Box>
+    </PageHeader.Navigation>
+  </PageHeader>
 )

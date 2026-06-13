@@ -38,58 +38,45 @@ type SummaryCard = {
   value: string
 }
 
-export const stepMeta: Record<WizardStep, { title: string; description: string }> = {
+export const stepMeta: Record<WizardStep, { title: string }> = {
   "blog-input": {
     title: "블로그 입력",
-    description: "네이버 블로그 ID나 주소, 결과 저장 경로를 입력합니다.",
   },
   "category-selection": {
     title: "카테고리 선택",
-    description: "카테고리, 포함 범위, 날짜 조건으로 내보낼 글을 고릅니다.",
   },
   "structure-options": {
     title: exportOptionsStepMeta.structure.title,
-    description: "출력 폴더와 글 파일 이름 규칙을 정합니다.",
   },
   "frontmatter-options": {
     title: exportOptionsStepMeta.frontmatter.title,
-    description: "Markdown 파일 앞에 넣을 메타데이터와 별칭을 설정합니다.",
   },
   "assets-options": {
     title: exportOptionsStepMeta.assets.title,
-    description: "이미지와 썸네일 저장 방식을 고릅니다.",
   },
   "upload-provider-options": {
     title: "이미지 업로드 설정",
-    description: "내보낸 이미지를 올릴 서비스와 인증 정보를 입력합니다.",
   },
   "links-options": {
     title: exportOptionsStepMeta.links.title,
-    description: "같은 블로그 글 링크를 내보낸 결과에 맞춰 바꿉니다.",
   },
   "diagnostics-options": {
     title: exportOptionsStepMeta.diagnostics.title,
-    description: "이미지 다운로드 실패 같은 예외 처리 방식을 고릅니다.",
   },
   "block-scan": {
     title: "Markdown 옵션 준비",
-    description: "선택한 글에서 필요한 Markdown 옵션을 확인합니다.",
   },
   "markdown-review": {
     title: exportOptionsStepMeta.markdown.title,
-    description: "감지한 에디터 블록의 Markdown 출력 방식을 고릅니다.",
   },
   running: {
     title: "실행 중",
-    description: "선택한 글을 Markdown과 자산 파일로 내보내고 있습니다.",
   },
   upload: {
     title: "이미지 업로드",
-    description: "내보낸 자산을 이미지 호스팅에 업로드합니다.",
   },
   result: {
     title: "결과",
-    description: "완료 파일, 실패 항목, 로그를 확인합니다.",
   },
 }
 
