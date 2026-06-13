@@ -594,7 +594,7 @@ export const StorybookPage = () => {
     <PrimerAppProvider themePreference={themePreference}>
       <Box
         as="main"
-        sx={{ minHeight: "100vh", width: "100%", overflowX: "clip", bg: "canvas.inset" }}
+        sx={{ minHeight: "100vh", width: "100%", overflowX: "clip", bg: "canvas.default" }}
       >
         <Box
           sx={{
@@ -630,8 +630,12 @@ export const StorybookPage = () => {
               },
             }}
           >
-            <StoryTree activeStoryKey={activeStory.storyKey} onSelect={selectStory} />
-            <StoryPreview story={activeStory} themePreference={themePreference} />
+            <Box sx={{ order: [2, null, 1] }}>
+              <StoryTree activeStoryKey={activeStory.storyKey} onSelect={selectStory} />
+            </Box>
+            <Box sx={{ order: [1, null, 2], minWidth: 0 }}>
+              <StoryPreview story={activeStory} themePreference={themePreference} />
+            </Box>
           </Box>
         </Box>
       </Box>

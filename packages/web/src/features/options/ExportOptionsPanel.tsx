@@ -12,8 +12,6 @@ import type { ReactNode } from "react"
 
 import type { ExportOptionsStep } from "./ExportOptionsSteps.js"
 
-import { PrimerPanel, PrimerPanelBody } from "../../components/primer/PrimerPage.js"
-
 import { AssetsOptionsStep } from "./AssetsOptionsStep.js"
 import { MarkdownOptionsStep } from "./BlockTemplateOptions.js"
 import { DiagnosticsOptionsStep } from "./DiagnosticsOptionsStep.js"
@@ -108,15 +106,5 @@ export const ExportOptionsPanel = ({
     </Box>
   )
 
-  if (step === "markdown") {
-    return formContent
-  }
-
-  return (
-    <PrimerPanel>
-      <Box id="export-panel">
-        <PrimerPanelBody>{formContent}</PrimerPanelBody>
-      </Box>
-    </PrimerPanel>
-  )
+  return <Box id="export-panel">{formContent}</Box>
 }

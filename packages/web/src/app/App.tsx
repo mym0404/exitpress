@@ -241,6 +241,16 @@ const ExportApp = () => {
   const selectedCount = activeScanResult ? selectedCategoryIds.length : 0
   const exportDisabled = !activeScanResult || frontmatterValidationErrors.length > 0
   const setupStepIndex = setupSteps.indexOf(setupStep)
+  const visibleSetupSteps = useMemo(
+    () =>
+      setupSteps.filter(
+        (step) =>
+          step !== "upload-provider-options" ||
+          options.assets.imageHandlingMode === "download-and-upload" ||
+          setupStep === "upload-provider-options",
+      ),
+    [options.assets.imageHandlingMode, setupStep],
+  )
   const persistedOptions = useMemo(() => sanitizePersistedExportOptions(options), [options])
   const persistedUiStateSignature = useMemo(
     () => getPersistedUiStateSignature({ options: persistedOptions, themePreference }),
@@ -632,6 +642,7 @@ const ExportApp = () => {
         isSetupStep={isSetupStep}
         setupStep={setupStep}
         setupStepIndex={setupStepIndex}
+        visibleSetupSteps={visibleSetupSteps}
         stepViewRef={stepViewRef}
         headerStatus={headerStatus}
         summaryCards={summaryCards}
@@ -644,6 +655,7 @@ const ExportApp = () => {
         onThemeChange={setThemePreference}
         onResetResume={() => void handleResetResume()}
         onRestoreResume={() => void handleRestoreResume()}
+        onSetupStepSelect={setSetupStep}
         onPrevious={goToPreviousStep}
         onForceScan={() => {
           void ensureScanResult({ forceRefresh: true })

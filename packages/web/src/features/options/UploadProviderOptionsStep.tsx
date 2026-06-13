@@ -4,7 +4,6 @@ import type { UploadProviderCatalogResponse } from "@exitpress/domain/upload/sch
 
 import type { UploadProviderSettingsValue } from "../upload/UploadProviderSettingsForm.js"
 
-import { PrimerPanel, PrimerPanelBody } from "../../components/primer/PrimerPage.js"
 import { UploadProviderSettingsForm } from "../upload/UploadProviderSettingsForm.js"
 
 export const UploadProviderOptionsStep = ({
@@ -28,24 +27,20 @@ export const UploadProviderOptionsStep = ({
   onReadyChange: (ready: boolean) => void
   onTestUpload: (value: UploadProviderSettingsValue) => Promise<void> | void
 }) => (
-  <PrimerPanel>
-    <Box id="upload-provider-panel">
-      <PrimerPanelBody>
-        <Box id="upload-provider-form" sx={{ display: "grid", gap: 4 }}>
-          {uploadProviderError ? <Flash variant="danger">{uploadProviderError}</Flash> : null}
-          {stepMessage ? <Flash variant="danger">{stepMessage}</Flash> : null}
-          <UploadProviderSettingsForm
-            resetKey={uploadProviders.defaultProviderKey ?? undefined}
-            uploadProviders={uploadProviders}
-            testUploadSubmitting={testUploadSubmitting}
-            testUploadResult={testUploadResult}
-            testUploadError={testUploadError}
-            onChange={onChange}
-            onReadyChange={onReadyChange}
-            onTestUpload={onTestUpload}
-          />
-        </Box>
-      </PrimerPanelBody>
+  <Box id="upload-provider-panel">
+    <Box id="upload-provider-form" sx={{ display: "grid", gap: 4 }}>
+      {uploadProviderError ? <Flash variant="danger">{uploadProviderError}</Flash> : null}
+      {stepMessage ? <Flash variant="danger">{stepMessage}</Flash> : null}
+      <UploadProviderSettingsForm
+        resetKey={uploadProviders.defaultProviderKey ?? undefined}
+        uploadProviders={uploadProviders}
+        testUploadSubmitting={testUploadSubmitting}
+        testUploadResult={testUploadResult}
+        testUploadError={testUploadError}
+        onChange={onChange}
+        onReadyChange={onReadyChange}
+        onTestUpload={onTestUpload}
+      />
     </Box>
-  </PrimerPanel>
+  </Box>
 )

@@ -589,6 +589,55 @@ const captureReviewScreens = async ({
   })
 }
 
+const assertPrimerWorkflowShell = async (page: import("playwright").Page) => {
+  const shell = page.locator("[data-workflow-shell]")
+  const navigation = page.locator("[data-workflow-nav]")
+  const actions = page.locator("[data-step-actions]")
+
+  await shell.waitFor({ timeout: 5000 })
+  await navigation.waitFor({ timeout: 5000 })
+  await actions.waitFor({ timeout: 5000 })
+
+  const disabledStepLinks = navigation.locator('a[aria-disabled="true"]')
+  const disabledStepLinkCount = await disabledStepLinks.count()
+
+  if (disabledStepLinkCount === 0) {
+    throw new Error("inactive workflow steps should be marked as disabled navigation items")
+  }
+
+  const disabledTabIndex = await disabledStepLinks.first().evaluate((element) => element.tabIndex)
+
+  if (disabledTabIndex !== -1) {
+    throw new Error(
+      `inactive workflow steps should be removed from tab order, got ${disabledTabIndex}`,
+    )
+  }
+
+  const actionLayout = await actions.evaluate((element) => {
+    const style = getComputedStyle(element)
+    const rect = element.getBoundingClientRect()
+
+    return {
+      position: style.position,
+      bottom: style.bottom,
+      width: Math.round(rect.width),
+      viewportWidth: window.innerWidth,
+    }
+  })
+
+  if (actionLayout.position === "fixed" || actionLayout.position === "sticky") {
+    throw new Error(`setup actions should be in content flow, got ${actionLayout.position}`)
+  }
+
+  if (actionLayout.bottom !== "auto") {
+    throw new Error(`setup actions should not reserve viewport bottom, got ${actionLayout.bottom}`)
+  }
+
+  if (actionLayout.width >= actionLayout.viewportWidth - 16) {
+    throw new Error("setup actions should not render as a floating full-width dock")
+  }
+}
+
 const waitForJobStatus = async ({
   page,
   timeoutMs,
@@ -1285,6 +1334,7 @@ const runUiLocalExport = async ({ browser }: { browser: Browser }) => {
       page,
       step: "blog-input",
     })
+    await assertPrimerWorkflowShell(page)
     const lightThemeButton = page.getByRole("button", { name: "라이트" })
 
     await waitForHtmlThemeClass({ page, theme: "dark" })

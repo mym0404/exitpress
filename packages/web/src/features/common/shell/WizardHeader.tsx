@@ -59,13 +59,8 @@ export const WizardHeader = ({
   <Box
     sx={{
       display: "grid",
-      gap: 3,
-      px: [3, 4],
-      py: [3, 4],
-      border: "1px solid",
-      borderColor: "border.default",
-      borderRadius: 2,
-      bg: "canvas.subtle",
+      gap: 2,
+      py: [2, 3],
     }}
   >
     <Box
@@ -77,7 +72,15 @@ export const WizardHeader = ({
       }}
     >
       <Box sx={{ display: "grid", gap: 2, minWidth: 0 }}>
-        <Box sx={{ display: "flex", minWidth: 0, flexWrap: "wrap", alignItems: "center", gap: 2 }}>
+        <Box
+          sx={{
+            display: "flex",
+            minWidth: 0,
+            flexWrap: "wrap",
+            alignItems: "center",
+            gap: 2,
+          }}
+        >
           {backLink ? (
             <IconButton
               aria-label={backLink.label}
@@ -88,7 +91,7 @@ export const WizardHeader = ({
               }}
             />
           ) : null}
-          <Heading sx={{ fontSize: [4, 5], lineHeight: 1.1, minWidth: 0 }}>{title}</Heading>
+          <Heading sx={{ fontSize: [3, 4], lineHeight: 1.25, minWidth: 0 }}>{title}</Heading>
         </Box>
         {description ? (
           <Text
@@ -98,7 +101,7 @@ export const WizardHeader = ({
               m: 0,
               color: "fg.muted",
               fontSize: 1,
-              lineHeight: 1.7,
+              lineHeight: "22px",
             }}
           >
             {description}
@@ -185,11 +188,8 @@ export const WizardHeader = ({
         flexWrap: "wrap",
         alignItems: "center",
         gap: 2,
-        pt: 3,
-        borderTop: "1px solid",
-        borderColor: "border.default",
         color: "fg.muted",
-        fontSize: 1,
+        fontSize: 0,
       }}
     >
       {summaryCards.map((card) => (
