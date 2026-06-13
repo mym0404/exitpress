@@ -70,7 +70,14 @@ export const WizardHeader = ({
       py: [2, 3],
     }}
   >
-    <PageHeader.LeadingAction hidden={{ narrow: false, regular: true, wide: true }}>
+    <PageHeader.LeadingAction
+      sx={{
+        display: "flex",
+        "@media screen and (min-width: 1280px)": {
+          display: "none",
+        },
+      }}
+    >
       <ActionMenu>
         <ActionMenu.Anchor>
           <IconButton
@@ -135,7 +142,14 @@ export const WizardHeader = ({
       <PageHeader.Title as="h1">{title}</PageHeader.Title>
     </PageHeader.TitleArea>
 
-    <PageHeader.Actions hidden={{ narrow: true, regular: false, wide: false }}>
+    <PageHeader.Actions
+      sx={{
+        display: "none",
+        "@media screen and (min-width: 1280px)": {
+          display: "flex",
+        },
+      }}
+    >
       {headerLinks.map(({ href, pathname, Icon, external, label }) => (
         <Link
           key={href ?? pathname}
@@ -185,11 +199,6 @@ export const WizardHeader = ({
           selected={themePreference === "light"}
         />
       </SegmentedControl>
-      <Box id="status-text" data-status={headerStatus}>
-        <PrimerStatusLabel status={headerStatus}>
-          {getStatusPillLabel(headerStatus)}
-        </PrimerStatusLabel>
-      </Box>
     </PageHeader.Actions>
 
     <PageHeader.Navigation as="div">
@@ -200,6 +209,16 @@ export const WizardHeader = ({
               {card.label} {card.value}
             </Label>
           ))}
+          <Box
+            as="span"
+            id="status-text"
+            data-status={headerStatus}
+            sx={{ display: "inline-flex" }}
+          >
+            <PrimerStatusLabel status={headerStatus}>
+              {getStatusPillLabel(headerStatus)}
+            </PrimerStatusLabel>
+          </Box>
         </LabelGroup>
       </Box>
     </PageHeader.Navigation>

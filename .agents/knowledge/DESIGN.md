@@ -31,11 +31,12 @@
 - All app-level and Storybook page headers use Primer `PageHeader` through the shared header component.
 - Do not hand-roll page headers with custom `Heading` plus ad hoc grid/flex wrappers.
 - The shared page header sits in a full-width top band with `canvas.subtle` and no top page gap.
-- Page headers show the page title, status, responsive actions, and compact metadata only.
+- Page headers show the page title, responsive actions, and compact metadata only.
 - Do not put page descriptions in `PageHeader.Description` for this app.
 - Do not show wizard step progress in the page header.
-- Use `PageHeader.LeadingAction` for narrow viewport overflow/menu access and `PageHeader.Actions` for regular/wide viewport actions.
-- Metadata such as 대상 글, 카테고리, and 선택 belongs in Primer `LabelGroup`.
+- Use `PageHeader.LeadingAction` for narrow and regular viewport overflow/menu access.
+- Use `PageHeader.Actions` only at wide viewport widths where right-side actions can fit without wrapping.
+- Metadata such as 대상 글, 카테고리, 선택, and 상태 belongs in Primer `LabelGroup`.
 - Do not add repository-style under-navigation tabs unless the app has real peer page destinations that need them.
 - Full-page workflows should use a centered content region capped at `xlarge` width with Primer breakpoint padding.
 - Split pages are only for real side navigation, filtering, overview, or list-detail flows.
@@ -54,13 +55,13 @@
 | Need | Primer component | Usage rule |
 | --- | --- | --- |
 | Page shell | `Box` with Primer `sx` tokens | Use semantic regions and width constraints. Do not build decorative wrappers. |
-| Main page header | Primer `PageHeader` through the shared header component | Show title, status, responsive menu/actions, and LabelGroup metadata. Do not show page descriptions or wizard step progress. |
+| Main page header | Primer `PageHeader` through the shared header component | Show title, responsive menu/actions, and LabelGroup metadata. Do not show page descriptions or wizard step progress. |
 | Contextual side navigation | `NavList` | Use only when choosing an item changes the main content area. |
 | Mobile replacement for side navigation | `ActionMenu` + `ActionList` | Use single select state and group headings when the desktop pane uses grouped navigation. |
 | Primary or secondary command | `Button` | Use Primer variants. Do not restyle buttons globally. |
 | Icon command | `IconButton` or `Button` with Octicon | Use Octicons when the icon is a standard action. |
 | Status | `Label`, `Flash`, or local `PrimerStatusLabel` | Use `Label` for compact state, `Flash` for messages that need attention. |
-| Header metadata | `LabelGroup` + `Label` | Use for compact page metadata counts such as 대상 글, 카테고리, 선택, 완료, 실패, and 업로드. |
+| Header metadata | `LabelGroup` + `Label` | Use for compact page metadata and status such as 대상 글, 카테고리, 선택, 완료, 실패, and 업로드. |
 | Text input | `TextInput` inside `FormControl` | Label first, input second, caption/validation third. |
 | Long text input | `Textarea` inside `FormControl` | Use when the value is paragraph-like or multi-line. |
 | Boolean setting | `Checkbox` inside horizontal `FormControl` | Use for a single independent yes/no setting. |
