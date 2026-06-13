@@ -146,10 +146,10 @@ export const FrontmatterOptionsStep = ({
                     }))
                   }
                 />
-                <Box sx={{ display: "grid", gap: 1, minWidth: 0 }}>
-                  <FormControl.Label>{fieldMeta.label}</FormControl.Label>
-                  <FormControl.Caption>{fieldMeta.description}</FormControl.Caption>
-                </Box>
+                <FormControl.Label>{fieldMeta.label}</FormControl.Label>
+                <FormControl.Caption className="frontmatter-description">
+                  {fieldMeta.description}
+                </FormControl.Caption>
               </FormControl>
 
               <FormControl

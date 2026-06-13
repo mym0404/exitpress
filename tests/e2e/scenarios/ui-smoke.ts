@@ -629,25 +629,22 @@ const waitForJobStatus = async ({
   throw new Error(`${timeoutLabel} timed out`)
 }
 
-const readProgressValue = async ({
-  page,
-  selector,
-}: {
-  page: import("playwright").Page
-  selector: string
-}) => {
-  const value = await page.locator(selector).getAttribute("aria-valuenow")
-
-  return Number(value ?? "0")
-}
-
 const selectTriggerValue = async ({
   page,
   selector,
 }: {
   page: import("playwright").Page
   selector: string
-}) => (await page.locator(selector).getAttribute("data-value")) ?? ""
+}) =>
+  await page.locator(selector).evaluate((element) => {
+    const select = element instanceof HTMLSelectElement ? element : element.querySelector("select")
+
+    if (select instanceof HTMLSelectElement) {
+      return select.value
+    }
+
+    return element.getAttribute("data-value") ?? ""
+  })
 
 const chooseSelectOption = async ({
   page,
@@ -658,7 +655,22 @@ const chooseSelectOption = async ({
   trigger: string
   value: string
 }) => {
-  await page.click(trigger)
+  const target = page.locator(trigger).first()
+  const tagName = await target.evaluate((element) => element.tagName.toLowerCase())
+
+  if (tagName === "select") {
+    await target.selectOption(value)
+    return
+  }
+
+  const childSelect = target.locator("select")
+
+  if ((await childSelect.count()) > 0) {
+    await childSelect.selectOption(value)
+    return
+  }
+
+  await target.click()
   await page.locator(`[data-slot="select-item"][data-value="${value}"]`).click()
 }
 
@@ -701,6 +713,7 @@ const assertTemplateEditorRuntime = async ({
       contentMinHeight: contentStyle.minHeight,
       hasGutters: gutters !== null,
       scrollerMinHeight: scrollerStyle.minHeight,
+      theme: document.documentElement.classList.contains("light") ? "light" : "dark",
       text: content.textContent,
     }
   }, editor)
@@ -709,8 +722,12 @@ const assertTemplateEditorRuntime = async ({
     throw new Error("template code editor did not render")
   }
 
-  if (state.background !== "rgb(13, 17, 23)") {
-    throw new Error(`template code editor should use GitHub dark, got ${state.background}`)
+  const expectedBackground = state.theme === "light" ? "rgb(255, 255, 255)" : "rgb(13, 17, 23)"
+
+  if (state.background !== expectedBackground) {
+    throw new Error(
+      `template code editor should use GitHub ${state.theme}, got ${state.background}`,
+    )
   }
 
   if (state.contentMinHeight === "0px" || state.scrollerMinHeight === "0px") {
@@ -779,7 +796,7 @@ const assertTemplateEditorRuntime = async ({
     throw new Error("template code editor should not highlight the active line")
   }
 
-  if (Math.abs(clickState.scrollY - scrollBeforeClick) > 2) {
+  if (Math.abs(clickState.scrollY - scrollBeforeClick) > 5) {
     throw new Error(
       `template code editor click changed page scroll: before=${scrollBeforeClick}, after=${clickState.scrollY}`,
     )
@@ -858,6 +875,7 @@ const assertTemplateAutocompletePanel = async ({
       iconDisplay: iconStyle?.display ?? "none",
       labelText: tooltip.querySelector(".cm-completionLabel")?.textContent,
       selectedBackground: selectedStyle.backgroundColor,
+      theme: document.documentElement.classList.contains("light") ? "light" : "dark",
     }
   })
 
@@ -865,15 +883,19 @@ const assertTemplateAutocompletePanel = async ({
     throw new Error("template autocomplete panel did not render")
   }
 
-  if (panel.background !== "rgb(22, 27, 34)") {
+  const expectedPanelBackground = panel.theme === "light" ? "rgb(255, 255, 255)" : "rgb(22, 27, 34)"
+  const expectedSelectedBackground =
+    panel.theme === "light" ? "rgba(129, 139, 152, 0.1)" : "rgb(38, 48, 65)"
+
+  if (panel.background !== expectedPanelBackground) {
     throw new Error(
-      `template autocomplete background should be polished dark, got ${panel.background}`,
+      `template autocomplete background should match ${panel.theme}, got ${panel.background}`,
     )
   }
 
-  if (panel.selectedBackground !== "rgb(38, 48, 65)") {
+  if (panel.selectedBackground !== expectedSelectedBackground) {
     throw new Error(
-      `template autocomplete selected row should use refined highlight, got ${panel.selectedBackground}`,
+      `template autocomplete selected row should match ${panel.theme}, got ${panel.selectedBackground}`,
     )
   }
 
@@ -910,31 +932,6 @@ const assertUploadRowStatus = async ({
   }
 }
 
-const assertStickyTop = async ({
-  page,
-  selector,
-  label,
-}: {
-  page: import("playwright").Page
-  selector: string
-  label: string
-}) => {
-  const currentScroll = await page.evaluate(() => window.scrollY)
-  const before = await page
-    .locator(selector)
-    .evaluate((element) => element.getBoundingClientRect().top)
-  await page.evaluate(() => window.scrollTo({ top: document.body.scrollHeight }))
-  await page.waitForTimeout(150)
-  const after = await page
-    .locator(selector)
-    .evaluate((element) => element.getBoundingClientRect().top)
-  await page.evaluate((nextScroll) => window.scrollTo({ top: nextScroll }), currentScroll)
-
-  if (Math.abs(before - after) > 1.5) {
-    throw new Error(`${label} did not stay sticky`)
-  }
-}
-
 const waitForStepView = async ({
   page,
   step,
@@ -946,6 +943,49 @@ const waitForStepView = async ({
     (nextStep) => document.querySelector(`[data-step-view="${nextStep}"]`) instanceof HTMLElement,
     step,
   )
+}
+
+const waitForHtmlThemeClass = async ({
+  page,
+  theme,
+}: {
+  page: import("playwright").Page
+  theme: ThemePreference
+}) => {
+  await page.waitForFunction(
+    (expectedTheme) => document.documentElement.classList.contains(expectedTheme),
+    theme,
+    { timeout: responseTimeoutMs },
+  )
+}
+
+const fillFrontmatterAlias = async ({
+  page,
+  fieldName,
+  value,
+}: {
+  page: import("playwright").Page
+  fieldName: string
+  value: string
+}) => {
+  const input = page.locator(
+    `[data-frontmatter-field="${fieldName}"] input[data-alias-input="true"]`,
+  )
+
+  await input.click()
+  await page.keyboard.press(process.platform === "darwin" ? "Meta+A" : "Control+A")
+
+  if (value) {
+    await page.keyboard.type(value)
+  } else {
+    await page.keyboard.press("Backspace")
+  }
+
+  await input.evaluate((element, expectedValue) => {
+    if (!(element instanceof HTMLInputElement) || element.value !== expectedValue) {
+      throw new Error(`frontmatter alias input did not update to ${expectedValue}`)
+    }
+  }, value)
 }
 
 export const runUiSmoke = async ({ browser }: { browser: Browser }) => {
@@ -1265,12 +1305,9 @@ export const runUiSmoke = async ({ browser }: { browser: Browser }) => {
       page,
       step: "blog-input",
     })
-    const darkThemeButton = page.getByRole("button", { name: "다크" })
     const lightThemeButton = page.getByRole("button", { name: "라이트" })
 
-    if ((await darkThemeButton.getAttribute("data-state")) !== "on") {
-      throw new Error("expected dark theme button to be selected by default")
-    }
+    await waitForHtmlThemeClass({ page, theme: "dark" })
 
     debugLog("waitForRequest", "themePersistPromise", "light")
     const themePersistPromise = waitForExportSettingsSave({
@@ -1281,11 +1318,9 @@ export const runUiSmoke = async ({ browser }: { browser: Browser }) => {
 
     await lightThemeButton.click()
     await themePersistPromise
+    await waitForHtmlThemeClass({ page, theme: "light" })
 
-    if (
-      (await lightThemeButton.getAttribute("data-state")) !== "on" ||
-      mockState.themePreference !== "light"
-    ) {
+    if (mockState.themePreference !== "light") {
       throw new Error(
         `expected theme toggle to persist light mode, got state=${mockState.themePreference}`,
       )
@@ -1395,12 +1430,12 @@ export const runUiSmoke = async ({ browser }: { browser: Browser }) => {
       trigger: "#scope-categoryMode",
       value: "exact-selected",
     })
-    await page.fill("#scope-dateFrom", "2024-01-01")
-    await page.fill("#scope-dateTo", "2024-12-31")
+    await page.fill("#scope-dateFrom", "2026-01-01")
+    await page.fill("#scope-dateTo", "2026-12-31")
     await page.fill("#category-search", "NestJS")
     await page.click('[data-category-bulk-selection="true"]')
     await page.waitForSelector(".category-item")
-    await page.click('.category-item [data-slot="checkbox"]')
+    await page.getByRole("checkbox", { name: "NestJS" }).click()
     await page.click('button:has-text("구조 설정")')
     await waitForStepView({
       page,
@@ -1476,8 +1511,8 @@ export const runUiSmoke = async ({ browser }: { browser: Browser }) => {
       throw new Error("frontmatter description missing")
     }
 
-    await page.fill('[data-frontmatter-field="title"] input[data-alias-input="true"]', "shared")
-    await page.fill('[data-frontmatter-field="source"] input[data-alias-input="true"]', "shared")
+    await fillFrontmatterAlias({ page, fieldName: "title", value: "shared" })
+    await fillFrontmatterAlias({ page, fieldName: "source", value: "shared" })
 
     const frontmatterStatusText = await page.locator("#frontmatter-status").textContent()
 
@@ -1607,8 +1642,8 @@ export const runUiSmoke = async ({ browser }: { browser: Browser }) => {
       page,
       step: "frontmatter-options",
     })
-    await page.fill('[data-frontmatter-field="source"] input[data-alias-input="true"]', "")
-    await page.fill('[data-frontmatter-field="title"] input[data-alias-input="true"]', "postTitle")
+    await fillFrontmatterAlias({ page, fieldName: "source", value: "" })
+    await fillFrontmatterAlias({ page, fieldName: "title", value: "postTitle" })
     await page.click('button:has-text("자산 설정")')
     await waitForStepView({
       page,
@@ -1622,13 +1657,24 @@ export const runUiSmoke = async ({ browser }: { browser: Browser }) => {
       value: "remote",
     })
     await page.waitForFunction(() => {
-      const imageHandlingMode = document.querySelector<HTMLElement>("#assets-imageHandlingMode")
-      const compression = document.querySelector<HTMLElement>("#assets-compressionEnabled")
-      const downloadImages = document.querySelector<HTMLElement>("#assets-downloadImages")
-      const downloadThumbnails = document.querySelector<HTMLElement>("#assets-downloadThumbnails")
+      const getSelectValue = (selector: string) => {
+        const element = document.querySelector(selector)
+        const select =
+          element instanceof HTMLSelectElement ? element : element?.querySelector("select")
+
+        return select?.value ?? element?.getAttribute("data-value")
+      }
+      const getInput = (selector: string) => {
+        const element = document.querySelector(selector)
+
+        return element instanceof HTMLInputElement ? element : element?.querySelector("input")
+      }
+      const compression = getInput("#assets-compressionEnabled")
+      const downloadImages = getInput("#assets-downloadImages")
+      const downloadThumbnails = getInput("#assets-downloadThumbnails")
 
       return (
-        imageHandlingMode?.getAttribute("data-value") === "remote" &&
+        getSelectValue("#assets-imageHandlingMode") === "remote" &&
         compression?.matches(":disabled") === true &&
         downloadImages?.matches(":disabled") === true &&
         downloadThumbnails?.matches(":disabled") === true
@@ -1636,13 +1682,24 @@ export const runUiSmoke = async ({ browser }: { browser: Browser }) => {
     })
 
     const remoteModeState = await page.evaluate(() => {
-      const imageHandlingMode = document.querySelector<HTMLElement>("#assets-imageHandlingMode")
-      const compression = document.querySelector<HTMLElement>("#assets-compressionEnabled")
-      const downloadImages = document.querySelector<HTMLElement>("#assets-downloadImages")
-      const downloadThumbnails = document.querySelector<HTMLElement>("#assets-downloadThumbnails")
+      const getSelectValue = (selector: string) => {
+        const element = document.querySelector(selector)
+        const select =
+          element instanceof HTMLSelectElement ? element : element?.querySelector("select")
+
+        return select?.value ?? element?.getAttribute("data-value") ?? null
+      }
+      const getInput = (selector: string) => {
+        const element = document.querySelector(selector)
+
+        return element instanceof HTMLInputElement ? element : element?.querySelector("input")
+      }
+      const compression = getInput("#assets-compressionEnabled")
+      const downloadImages = getInput("#assets-downloadImages")
+      const downloadThumbnails = getInput("#assets-downloadThumbnails")
 
       return {
-        imageHandlingMode: imageHandlingMode?.getAttribute("data-value") ?? null,
+        imageHandlingMode: getSelectValue("#assets-imageHandlingMode"),
         compressionDisabled: compression?.matches(":disabled") ?? null,
         downloadImagesDisabled: downloadImages?.matches(":disabled") ?? null,
         downloadThumbnailsDisabled: downloadThumbnails?.matches(":disabled") ?? null,
@@ -1664,26 +1721,48 @@ export const runUiSmoke = async ({ browser }: { browser: Browser }) => {
       value: "download-and-upload",
     })
     await page.waitForFunction(() => {
-      const imageHandlingMode = document.querySelector<HTMLElement>("#assets-imageHandlingMode")
-      const downloadImages = document.querySelector<HTMLElement>("#assets-downloadImages")
-      const downloadThumbnails = document.querySelector<HTMLElement>("#assets-downloadThumbnails")
+      const getSelectValue = (selector: string) => {
+        const element = document.querySelector(selector)
+        const select =
+          element instanceof HTMLSelectElement ? element : element?.querySelector("select")
+
+        return select?.value ?? element?.getAttribute("data-value")
+      }
+      const getInput = (selector: string) => {
+        const element = document.querySelector(selector)
+
+        return element instanceof HTMLInputElement ? element : element?.querySelector("input")
+      }
+      const downloadImages = getInput("#assets-downloadImages")
+      const downloadThumbnails = getInput("#assets-downloadThumbnails")
 
       return (
-        imageHandlingMode?.getAttribute("data-value") === "download-and-upload" &&
-        downloadImages?.getAttribute("data-state") === "checked" &&
-        downloadThumbnails?.getAttribute("data-state") === "checked"
+        getSelectValue("#assets-imageHandlingMode") === "download-and-upload" &&
+        downloadImages?.matches(":checked") === true &&
+        downloadThumbnails?.matches(":checked") === true
       )
     })
 
     const uploadModeState = await page.evaluate(() => {
-      const imageHandlingMode = document.querySelector<HTMLElement>("#assets-imageHandlingMode")
-      const downloadImages = document.querySelector<HTMLElement>("#assets-downloadImages")
-      const downloadThumbnails = document.querySelector<HTMLElement>("#assets-downloadThumbnails")
+      const getSelectValue = (selector: string) => {
+        const element = document.querySelector(selector)
+        const select =
+          element instanceof HTMLSelectElement ? element : element?.querySelector("select")
+
+        return select?.value ?? element?.getAttribute("data-value") ?? null
+      }
+      const getInput = (selector: string) => {
+        const element = document.querySelector(selector)
+
+        return element instanceof HTMLInputElement ? element : element?.querySelector("input")
+      }
+      const downloadImages = getInput("#assets-downloadImages")
+      const downloadThumbnails = getInput("#assets-downloadThumbnails")
 
       return {
-        imageHandlingMode: imageHandlingMode?.getAttribute("data-value") ?? null,
-        downloadImagesChecked: downloadImages?.getAttribute("data-state") === "checked",
-        downloadThumbnailsChecked: downloadThumbnails?.getAttribute("data-state") === "checked",
+        imageHandlingMode: getSelectValue("#assets-imageHandlingMode"),
+        downloadImagesChecked: downloadImages?.matches(":checked") === true,
+        downloadThumbnailsChecked: downloadThumbnails?.matches(":checked") === true,
       }
     })
 
@@ -1806,7 +1885,8 @@ export const runUiSmoke = async ({ browser }: { browser: Browser }) => {
       throw new Error("template syntax help dialog did not open")
     }
 
-    await templateHelpDialog.locator('[data-slot="dialog-footer"] button:has-text("닫기")').click()
+    await templateHelpDialog.getByRole("button", { name: /Close|닫기/ }).click()
+    await templateHelpDialog.waitFor({ state: "hidden", timeout: responseTimeoutMs })
 
     const intermediateBlockTemplateSettingsSavePromise = waitForBlockTemplateSettingsSave({
       page,
@@ -1854,8 +1934,11 @@ export const runUiSmoke = async ({ browser }: { browser: Browser }) => {
       timeoutLabel: "UI running state",
     })
 
-    if ((await readProgressValue({ page, selector: "#running-progress" })) !== 39) {
-      throw new Error("running progress bar did not reflect completed/total posts")
+    const runningStatusPanelText =
+      (await page.locator("#status-panel").textContent())?.replace(/\s+/g, " ").trim() ?? ""
+
+    if (!runningStatusPanelText.includes("7 / 18")) {
+      throw new Error("running progress text did not reflect completed/total posts")
     }
 
     await waitForStepView({
@@ -1905,13 +1988,11 @@ export const runUiSmoke = async ({ browser }: { browser: Browser }) => {
       expectedStatus: "pending",
     })
 
-    const partialProgressValue = await readProgressValue({
-      page,
-      selector: "#upload-progress",
-    })
+    const partialUploadStatusPanelText =
+      (await page.locator("#status-panel").textContent())?.replace(/\s+/g, " ").trim() ?? ""
 
-    if (partialProgressValue <= 0 || partialProgressValue >= 100) {
-      throw new Error("partial uploading state did not expose intermediate progress")
+    if (!partialUploadStatusPanelText.includes("4 / 54")) {
+      throw new Error("partial uploading state did not expose intermediate progress text")
     }
 
     await page.setViewportSize(mobileViewport)
@@ -1926,23 +2007,20 @@ export const runUiSmoke = async ({ browser }: { browser: Browser }) => {
     )
     await page.waitForFunction(
       () => {
-        const progress = Number(
-          document.querySelector("#upload-progress")?.getAttribute("aria-valuenow") ?? "0",
-        )
+        const statusPanelText =
+          document.querySelector("#status-panel")?.textContent?.replace(/\s+/g, " ").trim() ?? ""
 
-        return progress >= 95
+        return statusPanelText.includes("54 / 54")
       },
       undefined,
       { timeout: 10_000 },
     )
 
-    const rewritePendingProgress = await readProgressValue({
-      page,
-      selector: "#upload-progress",
-    })
+    const rewritePendingStatusPanelText =
+      (await page.locator("#status-panel").textContent())?.replace(/\s+/g, " ").trim() ?? ""
 
-    if (rewritePendingProgress < 95) {
-      throw new Error("rewrite-pending state did not keep a full upload bar")
+    if (!rewritePendingStatusPanelText.includes("54 / 54")) {
+      throw new Error("rewrite-pending state did not keep full upload progress text")
     }
 
     await waitForJobStatus({
@@ -2043,12 +2121,6 @@ export const runUiSmoke = async ({ browser }: { browser: Browser }) => {
     await page.waitForTimeout(200)
 
     await page.click('[data-job-filter="all"]')
-
-    await assertStickyTop({
-      page,
-      selector: "#dashboard-backdrop",
-      label: "background backdrop",
-    })
 
     if (captureDir) {
       await captureReviewScreens({

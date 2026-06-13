@@ -84,7 +84,22 @@ const chooseSelectOption = async ({
   trigger: string
   value: string
 }) => {
-  await page.click(trigger)
+  const target = page.locator(trigger).first()
+  const tagName = await target.evaluate((element) => element.tagName.toLowerCase())
+
+  if (tagName === "select") {
+    await target.selectOption(value)
+    return
+  }
+
+  const childSelect = target.locator("select")
+
+  if ((await childSelect.count()) > 0) {
+    await childSelect.selectOption(value)
+    return
+  }
+
+  await target.click()
   await page.locator(`[data-slot="select-item"][data-value="${value}"]`).click()
 }
 
