@@ -1,3 +1,4 @@
+import { getScanCacheKey } from "@exitpress/domain/blog/schema/BlogScan.js"
 import {
   cloneExportOptions,
   frontmatterFieldMeta,
@@ -58,17 +59,11 @@ export const createHttpServerState = ({
     return scanCachePromise
   }
 
-  const updateScanCache = async ({
-    blogId,
-    scanResult,
-  }: {
-    blogId: string
-    scanResult: ScanResult
-  }) => {
+  const updateScanCache = async ({ scanResult }: { scanResult: ScanResult }) => {
     const current = await ensureScanCache()
     const next = {
       ...current,
-      [blogId]: scanResult,
+      [getScanCacheKey(scanResult)]: scanResult,
     }
 
     await writeScanCacheFile({
@@ -120,7 +115,8 @@ export const createHttpServerState = ({
     }
 
     const resumedScanResult = resolveResumedScanResult({
-      manifestBlogId: manifest.blogId,
+      manifestSourceId: manifest.sourceId,
+      manifestBlogKey: manifest.blogKey,
       manifestCategories: manifest.categories,
       manifestTotalPosts: manifest.totalPosts,
       manifestScanResult: manifest.job.scanResult,

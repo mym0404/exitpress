@@ -48,7 +48,8 @@ describe("http server resume lookup", () => {
         path.join(outputDir, "manifest.json"),
         JSON.stringify(
           {
-            blogId: "mym0404",
+            blogKey: "naver",
+            sourceId: "mym0404",
             profile: "gfm",
             options: defaultExportOptions(),
             selectedCategoryIds: [84],
@@ -71,7 +72,8 @@ describe("http server resume lookup", () => {
               id: "job-lookup",
               phase: "export",
               request: {
-                blogIdOrUrl: "mym0404",
+                blogKey: "naver",
+                sourceInput: "mym0404",
                 outputDir,
                 profile: "gfm",
                 options: defaultExportOptions(),
@@ -96,7 +98,8 @@ describe("http server resume lookup", () => {
               },
               error: null,
               scanResult: {
-                blogId: baseScanResult.blogId,
+                blogKey: "naver",
+                sourceId: baseScanResult.sourceId,
                 totalPostCount: baseScanResult.totalPostCount,
               },
               summary: {
@@ -162,7 +165,8 @@ describe("http server resume lookup", () => {
         path.join(outputDir, "manifest.json"),
         JSON.stringify(
           {
-            blogId: "mym0404",
+            blogKey: "naver",
+            sourceId: "mym0404",
             profile: "gfm",
             options: defaultExportOptions(),
             selectedCategoryIds: [84],
@@ -185,7 +189,8 @@ describe("http server resume lookup", () => {
               id: "job-restore",
               phase: "export",
               request: {
-                blogIdOrUrl: "mym0404",
+                blogKey: "naver",
+                sourceInput: "mym0404",
                 outputDir,
                 profile: "gfm",
                 options: defaultExportOptions(),
@@ -210,7 +215,8 @@ describe("http server resume lookup", () => {
               },
               error: null,
               scanResult: {
-                blogId: baseScanResult.blogId,
+                blogKey: "naver",
+                sourceId: baseScanResult.sourceId,
                 totalPostCount: baseScanResult.totalPostCount,
               },
               summary: {

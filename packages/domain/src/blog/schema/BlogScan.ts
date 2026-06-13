@@ -1,4 +1,4 @@
-// Category metadata comes from Naver's blog category tree.
+// Category metadata comes from the concrete blog's category tree.
 export type CategoryInfo = {
   id: number
   name: string
@@ -12,8 +12,9 @@ export type CategoryInfo = {
 
 // A lightweight post row used before full post HTML is fetched.
 export type PostSummary = {
-  blogId: string
-  logNo: string
+  blogKey: string
+  sourceId: string
+  postId: string
   title: string
   publishedAt: string
   categoryId: number
@@ -24,7 +25,8 @@ export type PostSummary = {
 
 // Scan output shared by the server, web wizard, and exporter.
 export type ScanResult = {
-  blogId: string
+  blogKey: string
+  sourceId: string
   totalPostCount: number
   categories: CategoryInfo[]
   posts?: PostSummary[]
@@ -32,5 +34,8 @@ export type ScanResult = {
   detectedBlockTemplateScopeSignature?: string
 }
 
-// Server-side cache keyed by normalized blog id.
+// Server-side cache keyed by blog-qualified source id.
 export type ScanCacheMap = Record<string, ScanResult>
+
+export const getScanCacheKey = ({ blogKey, sourceId }: { blogKey: string; sourceId: string }) =>
+  `${blogKey}:${sourceId}`

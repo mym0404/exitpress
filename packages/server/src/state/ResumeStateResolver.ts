@@ -1,3 +1,5 @@
+import { getScanCacheKey } from "@exitpress/domain/blog/schema/BlogScan.js"
+
 import type { ScanCacheMap, ScanResult } from "@exitpress/domain/blog/schema/BlogScan.js"
 import type { ExportJobState } from "@exitpress/domain/export-job/schema/ExportJobState.js"
 import type { ExportManifestScanResult } from "@exitpress/domain/export-job/schema/ExportManifest.js"
@@ -28,26 +30,30 @@ export const getManifestJobTimestamp = (updatedAt: string) => toTimestamp(update
 
 // Reconstructs the best available scan result from manifest and cache data.
 export const resolveResumedScanResult = ({
-  manifestBlogId,
+  manifestSourceId,
+  manifestBlogKey,
   manifestCategories,
   manifestTotalPosts,
   manifestScanResult,
   cachedScans,
 }: {
-  manifestBlogId: string
+  manifestSourceId: string
+  manifestBlogKey: string
   manifestCategories: ScanResult["categories"]
   manifestTotalPosts: number
   manifestScanResult: ExportManifestScanResult | null
   cachedScans: ScanCacheMap
 }) => {
-  const blogId = manifestScanResult?.blogId ?? manifestBlogId
+  const blogKey = manifestScanResult?.blogKey ?? manifestBlogKey
+  const sourceId = manifestScanResult?.sourceId ?? manifestSourceId
   const totalPostCount = manifestScanResult?.totalPostCount || manifestTotalPosts
   const minimalScanResult: ScanResult = {
-    blogId,
+    blogKey,
+    sourceId,
     totalPostCount,
     categories: manifestCategories,
   }
-  const cachedScanResult = cachedScans[blogId]
+  const cachedScanResult = cachedScans[getScanCacheKey({ blogKey, sourceId })]
 
   if (!cachedScanResult) {
     return minimalScanResult
@@ -55,7 +61,8 @@ export const resolveResumedScanResult = ({
 
   return {
     ...cachedScanResult,
-    blogId,
+    blogKey,
+    sourceId,
     totalPostCount: totalPostCount || cachedScanResult.totalPostCount,
     categories:
       cachedScanResult.categories.length > 0 ? cachedScanResult.categories : manifestCategories,

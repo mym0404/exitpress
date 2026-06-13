@@ -1,8 +1,9 @@
 ---
 title: "[공지] 새로운 기능을 소개합니다."
 source: https://blog.naver.com/blogpeople/220957996267
-blogId: blogpeople
-logNo: 220957996267
+blogKey: naver
+sourceId: blogpeople
+postId: 220957996267
 publishedAt: 2017-03-14T17:48:36+09:00
 category: 스마트에디터ONE
 categoryPath:

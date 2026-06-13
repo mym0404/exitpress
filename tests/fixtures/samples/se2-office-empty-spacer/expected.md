@@ -1,8 +1,9 @@
 ---
 title: "[우리동네오차제로] 네이버지도 수정 현황 (10/3~10/9) - 동천동,CGV청담씨네시티"
 source: https://blog.naver.com/naver_map/10121270973
-blogId: naver_map
-logNo: 10121270973
+blogKey: naver
+sourceId: naver_map
+postId: 10121270973
 publishedAt: 2011-10-13T16:35:07+09:00
 category: 오차Zero프로젝트
 categoryPath:

@@ -1,13 +1,14 @@
 # Single Post Verification
 
 ## Purpose
-- Use this path to compare one public Naver Blog post against the single-post export CLI and manual browser observation.
+- Use this path to compare one public blog post against the single-post export CLI and manual browser observation.
 
 ## Export Command
 ```bash
 bun scripts/single-post/export-single-post.ts \
-  --blogId my-blog \
-  --logNo 123456789012 \
+  --blogKey naver \
+  --sourceId my-blog \
+  --postId 123456789012 \
   --outputDir tmp/manual-audit/123456789012/output \
   --report tmp/manual-audit/123456789012/report.json \
   --manualReviewMarkdownPath tmp/manual-audit/123456789012/post.md \
@@ -18,8 +19,9 @@ bun scripts/single-post/export-single-post.ts \
 ```bash
 bun scripts/single-post/export-single-post.ts \
   --inspect \
-  --blogId my-blog \
-  --logNo 123456789012 \
+  --blogKey naver \
+  --sourceId my-blog \
+  --postId 123456789012 \
   --report tmp/manual-audit/123456789012/inspect.json
 ```
 
@@ -32,7 +34,7 @@ bun scripts/single-post/export-single-post.ts \
 - Open the public post in a browser.
 - Record visible editor version clues, block types, and unusual structure.
 - Run inspect when a parser failure needs unsupported-node evidence.
-- Run export with a `tmp/manual-audit/<logNo>/` output.
+- Run export with a `tmp/manual-audit/<postId>/` output.
 - Compare browser structure, `post.md`, and `report.json`.
 - Record whether the result is `as-expected`, `mismatch`, `error`, or `not-checked`.
 
@@ -46,5 +48,6 @@ bun scripts/single-post/export-single-post.ts \
 - `scripts/single-post/SinglePostArgs.ts`
 - `scripts/single-post/SinglePostOptions.ts`
 - `scripts/single-post/SinglePostSummary.ts`
-- `packages/engine/src/exporting/post/SinglePostInspect.ts`
-- `packages/engine/src/exporting/post/SinglePostExport.ts`
+- `scripts/single-post/SinglePostBlogRuntime.ts`
+- `packages/blog-naver/src/exporting/SinglePostInspect.ts`
+- `packages/blog-naver/src/exporting/SinglePostExport.ts`

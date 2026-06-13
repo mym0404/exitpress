@@ -55,7 +55,8 @@ describe("http server resume cache", () => {
         path.join(outputDir, "manifest.json"),
         JSON.stringify(
           {
-            blogId: "mym0404",
+            blogKey: "naver",
+            sourceId: "mym0404",
             profile: "gfm",
             options: defaultExportOptions(),
             selectedCategoryIds: [84],
@@ -78,7 +79,8 @@ describe("http server resume cache", () => {
               id: "job-temp-resume",
               phase: "export",
               request: {
-                blogIdOrUrl: "mym0404",
+                blogKey: "naver",
+                sourceInput: "mym0404",
                 outputDir,
                 profile: "gfm",
                 options: defaultExportOptions(),
@@ -103,7 +105,8 @@ describe("http server resume cache", () => {
               },
               error: null,
               scanResult: {
-                blogId: baseScanResult.blogId,
+                blogKey: "naver",
+                sourceId: baseScanResult.sourceId,
                 totalPostCount: baseScanResult.totalPostCount,
               },
               summary: {
@@ -171,7 +174,7 @@ describe("http server resume cache", () => {
         scanCachePath,
         JSON.stringify({
           scans: {
-            [cachedScanResult.blogId]: cachedScanResult,
+            [`${cachedScanResult.blogKey}:${cachedScanResult.sourceId}`]: cachedScanResult,
           },
         }),
       )
@@ -179,7 +182,8 @@ describe("http server resume cache", () => {
         path.join(outputDir, "manifest.json"),
         JSON.stringify(
           {
-            blogId: "mym0404",
+            blogKey: "naver",
+            sourceId: "mym0404",
             profile: "gfm",
             options: defaultExportOptions(),
             selectedCategoryIds: [84],
@@ -202,7 +206,8 @@ describe("http server resume cache", () => {
               id: "job-resume",
               phase: "export",
               request: {
-                blogIdOrUrl: "mym0404",
+                blogKey: "naver",
+                sourceInput: "mym0404",
                 outputDir,
                 profile: "gfm",
                 options: defaultExportOptions(),
@@ -227,7 +232,8 @@ describe("http server resume cache", () => {
               },
               error: null,
               scanResult: {
-                blogId: cachedScanResult.blogId,
+                blogKey: "naver",
+                sourceId: cachedScanResult.sourceId,
                 totalPostCount: cachedScanResult.totalPostCount,
               },
               summary: {

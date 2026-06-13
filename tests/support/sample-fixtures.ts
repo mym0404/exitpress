@@ -1,21 +1,21 @@
 import { readdir } from "node:fs/promises"
 import path from "node:path"
 
+import { NaverBlogFetcher } from "@exitpress/blog-naver/integrations/naver-blog/NaverBlogFetcher.js"
+import { parsePostHtml } from "@exitpress/blog-naver/parsing/naver-blog/core/PostParser.js"
+import { createNaverBlogDefaultBlockTemplateMap } from "@exitpress/blog-naver/parsing/naver-blog/NaverBlog.js"
 import { defaultExportOptions } from "@exitpress/domain/export-options/ExportOptions.js"
-import { NaverBlogFetcher } from "@exitpress/engine/integrations/naver-blog/NaverBlogFetcher.js"
 import { renderMarkdownPost } from "@exitpress/engine/markdown/util/renderMarkdownPost.js"
-import { parsePostHtml } from "@exitpress/engine/parsing/naver-blog/core/PostParser.js"
-import { createNaverBlogDefaultBlockTemplateMap } from "@exitpress/engine/parsing/naver-blog/NaverBlog.js"
 import { parse as parseYaml } from "yaml"
 
-import type { NaverBlogFetcherCache } from "@exitpress/engine/integrations/naver-blog/NaverBlogFetcher.js"
+import type { NaverBlogFetcherCache } from "@exitpress/blog-naver/integrations/naver-blog/NaverBlogFetcher.js"
 
 import { ensureHarnessDir, pathExists, readUtf8, repoPath, writeUtf8 } from "./e2e/paths.js"
 
 type SampleFixtureEntry = {
   id: string
-  blogId: string
-  logNo: string
+  sourceId: string
+  postId: string
   expectedError?: string
   post: {
     title: string
@@ -31,8 +31,8 @@ type SampleFixtureEntry = {
 type ExpectedFrontmatter = {
   title: string
   source: string
-  blogId: string
-  logNo: string
+  sourceId: string
+  postId: string
   publishedAt: string
   category: string
   categoryPath: string[]
@@ -85,8 +85,8 @@ const parseExpectedFrontmatter = (markdown: string): ExpectedFrontmatter => {
   return {
     title: assertString(frontmatter.title, "title"),
     source: assertString(frontmatter.source, "source"),
-    blogId: assertString(frontmatter.blogId, "blogId"),
-    logNo: String(frontmatter.logNo),
+    sourceId: assertString(frontmatter.sourceId, "sourceId"),
+    postId: String(frontmatter.postId),
     publishedAt: assertString(frontmatter.publishedAt, "publishedAt"),
     category: assertString(frontmatter.category, "category"),
     categoryPath,
@@ -96,8 +96,8 @@ const parseExpectedFrontmatter = (markdown: string): ExpectedFrontmatter => {
 }
 
 const createSamplePostHtmlCache = (cacheDir: string): NaverBlogFetcherCache => {
-  const getCachePath = ({ blogId, logNo }: { blogId: string; logNo: string }) =>
-    path.join(cacheDir, `${encodeURIComponent(blogId)}-${encodeURIComponent(logNo)}.html`)
+  const getCachePath = ({ sourceId, postId }: { sourceId: string; postId: string }) =>
+    path.join(cacheDir, `${encodeURIComponent(sourceId)}-${encodeURIComponent(postId)}.html`)
 
   return {
     getPostHtml: async (input) => {
@@ -129,8 +129,8 @@ const readSampleFixtureEntry = async (sampleId: string): Promise<SampleFixtureEn
 
   return {
     id: sampleId,
-    blogId: frontmatter.blogId,
-    logNo: frontmatter.logNo,
+    sourceId: frontmatter.sourceId,
+    postId: frontmatter.postId,
     expectedError: frontmatter.error,
     post: {
       title: frontmatter.title,
@@ -213,8 +213,9 @@ export const renderSampleFixture = async ({
   })
   const rendered = await renderMarkdownPost({
     post: {
-      blogId: sample.blogId,
-      logNo: sample.logNo,
+      blogKey: "naver",
+      sourceId: sample.sourceId,
+      postId: sample.postId,
       title: sample.post.title,
       publishedAt: sample.post.publishedAt,
       categoryId: sample.post.categoryId,
@@ -254,12 +255,12 @@ export const renderSampleFixture = async ({
 
 export const loadSampleFixture = async (sample: SampleFixtureEntry) => ({
   html: await new NaverBlogFetcher({
-    blogId: sample.blogId,
+    sourceId: sample.sourceId,
     cache:
       process.env.CI === "true"
         ? undefined
         : createSamplePostHtmlCache(await ensureHarnessDir("sample-post-html-cache")),
-  }).fetchPostHtml(sample.logNo),
+  }).fetchPostHtml(sample.postId),
   expectedMarkdown: sample.expectedError
     ? undefined
     : normalizeMarkdownFixture(await readUtf8(getSampleExpectedMarkdownPath(sample.id))),

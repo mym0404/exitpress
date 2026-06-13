@@ -5,24 +5,24 @@ import path from "node:path"
 
 import { ensureDir, resolveRepoPath } from "@exitpress/engine/infra/node/FilePaths.js"
 
+import type { SinglePostInspectDiagnostics } from "../../../../packages/blog-naver/src/exporting/SinglePostInspect.js"
 import type { ScanResult } from "../../../../packages/domain/src/blog/schema/BlogScan.js"
 import type { ExportJobItem } from "../../../../packages/domain/src/export-job/schema/ExportJobState.js"
 import type {
   ExportManifest,
   PostManifestEntry,
 } from "../../../../packages/domain/src/export-job/schema/ExportManifest.js"
-import type { SinglePostInspectDiagnostics } from "../../../../packages/engine/src/exporting/post/SinglePostInspect.js"
 import type { EvidenceCase } from "../../../../scripts/post-evidence/cases.js"
 import type { ReusableIngestOutput } from "../../../../scripts/post-evidence/ingest-output.js"
 
 import type { SupportUnitFailureGroup } from "./lib/ingest-focus.js"
 
-import { extractBlogId } from "../../../../packages/domain/src/blog/NaverUrl.js"
+import { NaverBlogExporter } from "../../../../packages/blog-naver/src/exporting/NaverBlogExporter.js"
+import { inspectSinglePost } from "../../../../packages/blog-naver/src/exporting/SinglePostInspect.js"
+import { NaverBlogFetcher } from "../../../../packages/blog-naver/src/integrations/naver-blog/NaverBlogFetcher.js"
+import { extractSourceId } from "../../../../packages/blog-naver/src/NaverUrl.js"
 import { defaultExportOptions } from "../../../../packages/domain/src/export-options/ExportOptions.js"
-import { inspectSinglePost } from "../../../../packages/engine/src/exporting/post/SinglePostInspect.js"
-import { NaverBlogExporter } from "../../../../packages/engine/src/exporting/workflow/NaverBlogExporter.js"
 import { runWithLogSink } from "../../../../packages/engine/src/infra/runtime/Logger.js"
-import { NaverBlogFetcher } from "../../../../packages/engine/src/integrations/naver-blog/NaverBlogFetcher.js"
 import { toErrorMessage } from "../../../../packages/engine/src/shared/error/util/toErrorMessage.js"
 import {
   capturePostEvidence,
@@ -38,7 +38,8 @@ import { mergeSupportUnitFailureGroups, selectFocusedSupportUnit } from "./lib/i
 import { createSupportUnit } from "./lib/ingest-support-units.js"
 
 type CollectArgs = {
-  blogId: string
+  blogKey: string
+  sourceInput: string
   outputDir?: string
   reuseOutputDir?: string
   rerunFailures: boolean
@@ -58,7 +59,7 @@ type CollectChanges = {
 }
 
 type FailedPostReport = {
-  logNo: string
+  postId: string
   title: string
   source: string
   error: string
@@ -89,20 +90,20 @@ type FailureGroup = {
   supportUnitKey: string
   failureBlockHash: string
   representative: {
-    logNo: string
+    postId: string
     title: string
     source: string
     inspectReportPath: string | null
   }
-  logNos: string[]
+  postIds: string[]
 }
 
 const allIngestReuseModes = ["full", "rerun-failures", "completed-no-failures"] as const
 type IngestReuseMode = (typeof allIngestReuseModes)[number]
 
 const usage = () => `Usage:
-  bun .agents/skills/ingest-blog/scripts/collect-blog-errors.ts --blogId <blogId> [--outputDir tmp/harness/ingest-blog/<runId>]
-  bun .agents/skills/ingest-blog/scripts/collect-blog-errors.ts --blogId <blogId> --reuseOutputDir /absolute/path/to/tmp/harness/ingest-blog/<runId> --rerunFailures
+  bun .agents/skills/ingest-blog/scripts/collect-blog-errors.ts --blogKey naver --sourceInput <sourceInput> [--outputDir tmp/harness/ingest-blog/<runId>]
+  bun .agents/skills/ingest-blog/scripts/collect-blog-errors.ts --blogKey naver --sourceInput <sourceInput> --reuseOutputDir /absolute/path/to/tmp/harness/ingest-blog/<runId> --rerunFailures
 
 Options:
   --reuseOutputDir <dir>  Reuse a completed ingest output and rerun only failed posts.
@@ -126,7 +127,8 @@ const readValue = (args: string[], index: number) => {
 }
 
 const parseArgs = (args: string[]): CollectArgs | "help" => {
-  let blogId: string | undefined
+  let blogKey: string | undefined
+  let sourceInput: string | undefined
   let outputDir: string | undefined
   let reuseOutputDir: string | undefined
   let changesPath: string | undefined
@@ -141,8 +143,14 @@ const parseArgs = (args: string[]): CollectArgs | "help" => {
       return "help"
     }
 
-    if (arg === "--blogId") {
-      blogId = readValue(args, index)
+    if (arg === "--blogKey") {
+      blogKey = readValue(args, index)
+      index++
+      continue
+    }
+
+    if (arg === "--sourceInput") {
+      sourceInput = readValue(args, index)
       index++
       continue
     }
@@ -184,12 +192,13 @@ const parseArgs = (args: string[]): CollectArgs | "help" => {
     throw new Error(usage())
   }
 
-  if (!blogId) {
+  if (!blogKey || !sourceInput) {
     throw new Error(usage())
   }
 
   return {
-    blogId,
+    blogKey,
+    sourceInput,
     rerunFailures,
     forceFull,
     ...(outputDir ? { outputDir } : {}),
@@ -216,10 +225,10 @@ const safePathSegment = (value: string) => {
   return segment || "blog"
 }
 
-const createDefaultOutputDir = (blogId: string) => {
+const createDefaultOutputDir = (sourceId: string) => {
   const timestamp = new Date().toISOString().replace(/[:.]/g, "-")
 
-  return path.join("tmp", "harness", "ingest-blog", `${safePathSegment(blogId)}-${timestamp}`)
+  return path.join("tmp", "harness", "ingest-blog", `${safePathSegment(sourceId)}-${timestamp}`)
 }
 
 const isNotFoundError = (error: unknown) =>
@@ -342,12 +351,12 @@ const readPreviousRepresentative = (value: unknown): SupportUnitFailureGroup["re
 
   const record = value as Record<string, unknown>
 
-  if (typeof record.logNo !== "string") {
+  if (typeof record.postId !== "string") {
     return undefined
   }
 
   return {
-    logNo: record.logNo,
+    postId: record.postId,
     ...(typeof record.title === "string" ? { title: record.title } : {}),
     ...(typeof record.source === "string" ? { source: record.source } : {}),
     ...(typeof record.inspectReportPath === "string" || record.inspectReportPath === null
@@ -380,9 +389,9 @@ const readPreviousFailureGroups = async (outputDir: string): Promise<SupportUnit
       const firstUnsupportedPath = record.firstUnsupportedPath
       const firstUnsupportedTag = record.firstUnsupportedTag
       const representative = readPreviousRepresentative(record.representative)
-      const logNos = record.logNos
+      const postIds = record.postIds
 
-      return typeof supportUnitKey === "string" && Array.isArray(logNos)
+      return typeof supportUnitKey === "string" && Array.isArray(postIds)
         ? [
             {
               supportUnitKey,
@@ -391,7 +400,7 @@ const readPreviousFailureGroups = async (outputDir: string): Promise<SupportUnit
               ...(typeof firstUnsupportedPath === "string" ? { firstUnsupportedPath } : {}),
               ...(typeof firstUnsupportedTag === "string" ? { firstUnsupportedTag } : {}),
               ...(representative ? { representative } : {}),
-              logNos: logNos.filter((logNo): logNo is string => typeof logNo === "string"),
+              postIds: postIds.filter((postId): postId is string => typeof postId === "string"),
             },
           ]
         : []
@@ -442,20 +451,22 @@ const groupFailures = (reports: FailedPostReport[]): FailureGroup[] => {
         supportUnitKey: supportUnit.supportUnitKey,
         failureBlockHash: supportUnit.failureBlockHash,
         representative: {
-          logNo: representative.logNo,
+          postId: representative.postId,
           title: representative.title,
           source: representative.source,
           inspectReportPath: representative.inspectReportPath,
         },
-        logNos: groupReports.map((report) => report.logNo),
+        postIds: groupReports.map((report) => report.postId),
       }
     })
     .sort((left, right) => right.count - left.count || left.key.localeCompare(right.key))
 }
 
 const createJobItemFromManifestPost = (post: PostManifestEntry): ExportJobItem => ({
-  id: post.outputPath ?? `failed:${post.logNo}`,
-  logNo: post.logNo,
+  id: post.outputPath ?? `failed:${post.postId}`,
+  blogKey: post.blogKey,
+  sourceId: post.sourceId,
+  postId: post.postId,
   title: post.title,
   source: post.source,
   category: post.category,
@@ -483,16 +494,17 @@ const createFailureRerunResumeState = (manifest: ExportManifest) => {
 }
 
 const createPostSummaryFromManifestPost = ({
-  blogId,
+  sourceId,
   post,
   livePost,
 }: {
-  blogId: string
+  sourceId: string
   post: PostManifestEntry
   livePost?: NonNullable<ScanResult["posts"]>[number]
 }): NonNullable<ScanResult["posts"]>[number] => ({
-  blogId,
-  logNo: post.logNo,
+  blogKey: post.blogKey,
+  sourceId: post.sourceId || sourceId,
+  postId: post.postId,
   title: livePost?.title ?? post.title,
   publishedAt: livePost?.publishedAt ?? "",
   categoryId: livePost?.categoryId ?? post.category.id,
@@ -502,43 +514,44 @@ const createPostSummaryFromManifestPost = ({
 })
 
 const createFailureRerunScanResult = async ({
-  blogId,
+  sourceId,
   manifest,
 }: {
-  blogId: string
+  sourceId: string
   manifest: ExportManifest
 }): Promise<ScanResult> => {
   const fetcher = new NaverBlogFetcher({
-    blogId,
+    sourceId,
   })
   const liveScan = await fetcher.scanBlog({
     includePosts: true,
   })
-  const livePostMap = new Map((liveScan.posts ?? []).map((post) => [post.logNo, post]))
+  const livePostMap = new Map((liveScan.posts ?? []).map((post) => [post.postId, post]))
 
   return {
-    blogId,
+    blogKey: "naver",
+    sourceId,
     totalPostCount: manifest.totalPosts,
     categories: liveScan.categories.length > 0 ? liveScan.categories : manifest.categories,
     posts: manifest.posts.map((post) =>
       createPostSummaryFromManifestPost({
-        blogId,
+        sourceId,
         post,
-        livePost: livePostMap.get(post.logNo),
+        livePost: livePostMap.get(post.postId),
       }),
     ),
   }
 }
 
 const runExporter = async ({
-  blogId,
+  sourceInput,
   outputDir,
   options,
   logs,
   reusableOutput,
   cachedScanResult,
 }: {
-  blogId: string
+  sourceInput: string
   outputDir: string
   options: ReturnType<typeof createIngestOptions>
   logs: string[]
@@ -547,7 +560,8 @@ const runExporter = async ({
 }) => {
   const exporter = new NaverBlogExporter({
     request: {
-      blogIdOrUrl: blogId,
+      blogKey: "naver",
+      sourceInput,
       outputDir,
       profile: "gfm",
       options,
@@ -563,7 +577,7 @@ const runExporter = async ({
     },
     onItem: (item) => {
       if (item.status === "failed") {
-        console.error(`failed: ${item.logNo} ${item.error ?? ""}`)
+        console.error(`failed: ${item.postId} ${item.error ?? ""}`)
       }
     },
   })
@@ -578,18 +592,18 @@ const runExporter = async ({
 }
 
 const renderFailureSummaryMarkdown = ({
-  blogId,
+  sourceId,
   manifest,
   failureGroups,
   downloadedAssetFiles,
 }: {
-  blogId: string
+  sourceId: string
   manifest: ExportManifest
   failureGroups: FailureGroup[]
   downloadedAssetFiles: string[]
 }) => {
   const lines = [
-    `# Ingest Failure Summary: ${blogId}`,
+    `# Ingest Failure Summary: ${sourceId}`,
     "",
     `- totalPosts: ${manifest.totalPosts}`,
     `- successCount: ${manifest.successCount}`,
@@ -613,7 +627,7 @@ const renderFailureSummaryMarkdown = ({
       `- supportUnitKey: ${group.supportUnitKey}`,
       `- failureBlockHash: ${group.failureBlockHash}`,
       `- error: ${group.error}`,
-      `- representativeLogNo: ${group.representative.logNo}`,
+      `- representativePostId: ${group.representative.postId}`,
       `- representativeTitle: ${group.representative.title}`,
       `- inspectReportPath: ${group.representative.inspectReportPath ?? "(not available)"}`,
       "",
@@ -653,12 +667,12 @@ const renderDeferredList = ({
   }
 
   return failureGroups
-    .map((group) => `- ${group.representative.logNo}: 보류 사유 미기재`)
+    .map((group) => `- ${group.representative.postId}: 보류 사유 미기재`)
     .join("\n")
 }
 
 const renderIngestReportMarkdown = ({
-  blogId,
+  sourceId,
   manifest,
   outputDir,
   reuse,
@@ -671,7 +685,7 @@ const renderIngestReportMarkdown = ({
   focusedSupportUnitResolved,
   focusedSupportUnitKnown,
 }: {
-  blogId: string
+  sourceId: string
   manifest: ExportManifest
   outputDir: string
   reuse: {
@@ -681,7 +695,7 @@ const renderIngestReportMarkdown = ({
     previousFailureCount: number
   }
   rerunResults: Array<{
-    logNo: string
+    postId: string
     beforeError: string | null
     status: PostManifestEntry["status"] | "missing"
     afterError: string | null
@@ -717,7 +731,7 @@ const renderIngestReportMarkdown = ({
       ? ["- 없음"]
       : failureGroups.map(
           (group) =>
-            `- ${group.representative.logNo}: ${group.error} (${group.count} posts, inspect=${group.representative.inspectReportPath ?? "none"})`,
+            `- ${group.representative.postId}: ${group.error} (${group.count} posts, inspect=${group.representative.inspectReportPath ?? "none"})`,
         )),
     "",
     "## Deferred",
@@ -746,7 +760,7 @@ const renderIngestReportMarkdown = ({
         ? ["- 없음"]
         : rerunResults.map(
             (result) =>
-              `- ${result.logNo}: ${result.status} (before=${result.beforeError ?? "none"}, after=${result.afterError ?? "none"})`,
+              `- ${result.postId}: ${result.status} (before=${result.beforeError ?? "none"}, after=${result.afterError ?? "none"})`,
           )),
       "",
       ...commonSections,
@@ -754,7 +768,7 @@ const renderIngestReportMarkdown = ({
   }
 
   return [
-    `# Ingest Report: ${blogId}`,
+    `# Ingest Report: ${sourceId}`,
     "",
     "## Target",
     "",
@@ -777,7 +791,7 @@ const renderIngestReportMarkdown = ({
       ? ["- 없음"]
       : rerunResults.map(
           (result) =>
-            `- ${result.logNo}: ${result.status} (before=${result.beforeError ?? "none"}, after=${result.afterError ?? "none"})`,
+            `- ${result.postId}: ${result.status} (before=${result.beforeError ?? "none"}, after=${result.afterError ?? "none"})`,
         )),
     "",
     ...commonSections,
@@ -785,20 +799,20 @@ const renderIngestReportMarkdown = ({
 }
 
 const inspectFailedPost = async ({
-  blogId,
+  sourceId,
   failedPost,
   inspectDir,
 }: {
-  blogId: string
+  sourceId: string
   failedPost: PostManifestEntry
   inspectDir: string
 }): Promise<FailedPostReport> => {
-  const reportPath = path.join(inspectDir, `${failedPost.logNo}.json`)
+  const reportPath = path.join(inspectDir, `${failedPost.postId}.json`)
 
   try {
     const diagnostics = await inspectSinglePost({
-      blogId,
-      logNo: failedPost.logNo,
+      sourceId,
+      postId: failedPost.postId,
       options: createIngestOptions(),
     })
     await writeJson({
@@ -807,7 +821,7 @@ const inspectFailedPost = async ({
     })
 
     return {
-      logNo: failedPost.logNo,
+      postId: failedPost.postId,
       title: failedPost.title,
       source: failedPost.source,
       error: failedPost.error ?? "Unknown export failure",
@@ -820,7 +834,7 @@ const inspectFailedPost = async ({
     }
   } catch (error) {
     return {
-      logNo: failedPost.logNo,
+      postId: failedPost.postId,
       title: failedPost.title,
       source: failedPost.source,
       error: failedPost.error ?? "Unknown export failure",
@@ -835,32 +849,34 @@ const inspectFailedPost = async ({
 }
 
 const createEvidenceCases = ({
-  blogId,
+  sourceId,
   failureGroups,
   previousFocusedGroups,
   rerunResults,
   manifest,
-  focusedLogNos,
+  focusedPostIds,
 }: {
-  blogId: string
+  sourceId: string
   failureGroups: FailureGroup[]
   previousFocusedGroups: SupportUnitFailureGroup[]
   rerunResults: Array<{
-    logNo: string
+    postId: string
     beforeError: string | null
     status: PostManifestEntry["status"] | "missing"
     afterError: string | null
   }>
   manifest: ExportManifest
-  focusedLogNos: string[]
+  focusedPostIds: string[]
 }): EvidenceCase[] => {
   if (failureGroups.length > 0) {
     return failureGroups.map((group) => {
       const targetReport = group.representative
 
       return {
-        blogId,
-        logNo: targetReport.logNo,
+        blogKey: "naver",
+        sourceInput: sourceId,
+        sourceId,
+        postId: targetReport.postId,
         metadata: `parse failure: ${group.editorType ?? "unknown-editor"} / ${group.firstUnsupportedTag ?? "unknown-tag"}`,
         target: group.firstUnsupportedPath
           ? {
@@ -874,25 +890,28 @@ const createEvidenceCases = ({
     })
   }
 
-  const focusedLogNoSet = new Set(focusedLogNos)
-  const successfulLogNoSet = new Set(
-    rerunResults.filter((result) => result.status === "success").map((result) => result.logNo),
+  const focusedPostIdSet = new Set(focusedPostIds)
+  const successfulPostIdSet = new Set(
+    rerunResults.filter((result) => result.status === "success").map((result) => result.postId),
   )
   const previousFocusedCases = previousFocusedGroups.flatMap((group): EvidenceCase[] => {
-    const representativeLogNo = group.representative?.logNo
-    const logNo =
-      representativeLogNo && successfulLogNoSet.has(representativeLogNo)
-        ? representativeLogNo
-        : (group.logNos.find((candidate) => successfulLogNoSet.has(candidate)) ?? group.logNos[0])
+    const representativePostId = group.representative?.postId
+    const postId =
+      representativePostId && successfulPostIdSet.has(representativePostId)
+        ? representativePostId
+        : (group.postIds.find((candidate) => successfulPostIdSet.has(candidate)) ??
+          group.postIds[0])
 
-    if (!logNo || !successfulLogNoSet.has(logNo)) {
+    if (!postId || !successfulPostIdSet.has(postId)) {
       return []
     }
 
     return [
       {
-        blogId,
-        logNo,
+        blogKey: "naver",
+        sourceInput: sourceId,
+        sourceId,
+        postId: postId,
         metadata: `fixed parse example: ${group.editorType ?? "unknown-editor"} / ${group.firstUnsupportedTag ?? "unknown-tag"}`,
         target: group.firstUnsupportedPath
           ? {
@@ -912,17 +931,19 @@ const createEvidenceCases = ({
 
   return rerunResults
     .filter((result) => result.status === "success")
-    .filter((result) => focusedLogNoSet.size === 0 || focusedLogNoSet.has(result.logNo))
+    .filter((result) => focusedPostIdSet.size === 0 || focusedPostIdSet.has(result.postId))
     .slice(0, 5)
     .map((result) => {
-      const post = manifest.posts.find((entry) => entry.logNo === result.logNo)
+      const post = manifest.posts.find((entry) => entry.postId === result.postId)
 
       return {
-        blogId,
-        logNo: result.logNo,
+        blogKey: "naver",
+        sourceInput: sourceId,
+        sourceId,
+        postId: result.postId,
         metadata: result.beforeError
           ? `fixed parse example: ${result.beforeError}`
-          : `converted post example: ${post?.title ?? result.logNo}`,
+          : `converted post example: ${post?.title ?? result.postId}`,
         target: {
           kind: "post",
         },
@@ -938,7 +959,11 @@ const run = async () => {
     return
   }
 
-  const blogId = extractBlogId(parsedArgs.blogId)
+  if (parsedArgs.blogKey !== "naver") {
+    throw new Error(`unsupported blogKey: ${parsedArgs.blogKey}`)
+  }
+
+  const sourceId = extractSourceId(parsedArgs.sourceInput)
   const logs: string[] = []
   const options = createIngestOptions()
   const explicitReuseOutputDir = parsedArgs.reuseOutputDir ?? parsedArgs.outputDir
@@ -946,15 +971,17 @@ const run = async () => {
     ? null
     : explicitReuseOutputDir
       ? await loadReusableIngestOutput({
-          blogId,
+          blogKey: "naver",
+          sourceId,
           outputDir: explicitReuseOutputDir,
         })
       : await findLatestReusableIngestOutput({
-          blogId,
+          blogKey: "naver",
+          sourceId,
         })
 
   if (parsedArgs.rerunFailures && !reusableOutput) {
-    throw new Error(`재사용 가능한 완료 output을 찾지 못했습니다: ${blogId}`)
+    throw new Error(`재사용 가능한 완료 output을 찾지 못했습니다: ${sourceId}`)
   }
 
   const reuseMode: IngestReuseMode =
@@ -964,13 +991,13 @@ const run = async () => {
         ? "rerun-failures"
         : "full"
   const outputDir =
-    reusableOutput?.outputDir ?? parsedArgs.outputDir ?? createDefaultOutputDir(blogId)
+    reusableOutput?.outputDir ?? parsedArgs.outputDir ?? createDefaultOutputDir(sourceId)
   const resolvedOutputDir = resolveRepoPath(outputDir)
   const previousFailedPosts = reusableOutput?.failedPosts ?? []
   const cachedScanResult =
     reuseMode === "rerun-failures" && reusableOutput
       ? await createFailureRerunScanResult({
-          blogId,
+          sourceId,
           manifest: reusableOutput.manifest,
         })
       : undefined
@@ -978,7 +1005,7 @@ const run = async () => {
     reuseMode === "completed-no-failures" && reusableOutput
       ? reusableOutput.manifest
       : await runExporter({
-          blogId,
+          sourceInput: parsedArgs.sourceInput,
           outputDir,
           options,
           logs,
@@ -986,10 +1013,10 @@ const run = async () => {
           ...(cachedScanResult ? { cachedScanResult } : {}),
         })
   const rerunResults = previousFailedPosts.map((previousPost) => {
-    const currentPost = manifest.posts.find((post) => post.logNo === previousPost.logNo)
+    const currentPost = manifest.posts.find((post) => post.postId === previousPost.postId)
 
     return {
-      logNo: previousPost.logNo,
+      postId: previousPost.postId,
       beforeError: previousPost.error,
       status: currentPost?.status ?? "missing",
       afterError: currentPost?.error ?? null,
@@ -1000,7 +1027,7 @@ const run = async () => {
   const failedPostReports = await Promise.all(
     failedPosts.map((failedPost) =>
       inspectFailedPost({
-        blogId,
+        sourceId,
         failedPost,
         inspectDir,
       }),
@@ -1020,10 +1047,10 @@ const run = async () => {
     focusSupportUnit: parsedArgs.focusSupportUnit,
   })
   const failureGroups = focusedSelection.reportFailureGroups
-  const focusedLogNos = parsedArgs.focusSupportUnit ? focusedSelection.previousFocusedLogNos : []
-  const focusedLogNoSet = new Set(focusedLogNos)
+  const focusedPostIds = parsedArgs.focusSupportUnit ? focusedSelection.previousFocusedPostIds : []
+  const focusedPostIdSet = new Set(focusedPostIds)
   const reportRerunResults = parsedArgs.focusSupportUnit
-    ? rerunResults.filter((result) => focusedLogNoSet.has(result.logNo))
+    ? rerunResults.filter((result) => focusedPostIdSet.has(result.postId))
     : rerunResults
   const downloadedAssetFiles = await listFilesRecursive(path.join(resolvedOutputDir, "public"))
   const manifestPath = path.join(resolvedOutputDir, "manifest.json")
@@ -1035,12 +1062,12 @@ const run = async () => {
   const logPath = path.join(resolvedOutputDir, "ingest.log")
   const changes = await readChanges(parsedArgs.changesPath)
   const evidenceCases = createEvidenceCases({
-    blogId,
+    sourceId,
     failureGroups,
     previousFocusedGroups: focusedSelection.previousFocusedGroups,
     rerunResults: reportRerunResults,
     manifest,
-    focusedLogNos,
+    focusedPostIds,
   })
   let evidenceReport: Awaited<ReturnType<typeof capturePostEvidence>> | null = null
   let evidenceError: string | null = null
@@ -1076,7 +1103,9 @@ const run = async () => {
     errorCount: evidenceReport?.errorCount ?? (evidenceError ? 1 : 0),
   }
   const aggregateSummary = {
-    blogId,
+    blogKey: parsedArgs.blogKey,
+    sourceInput: parsedArgs.sourceInput,
+    sourceId,
     outputDir: resolvedOutputDir,
     manifestPath,
     reportJsonPath,
@@ -1090,7 +1119,7 @@ const run = async () => {
       failureBlockHash: focusedSelection.focusedFailureBlockHash ?? null,
       known: focusedSelection.focusedSupportUnitKnown,
       resolved: focusedSelection.focusedSupportUnitResolved,
-      previousLogNos: focusedSelection.previousFocusedLogNos,
+      previousPostIds: focusedSelection.previousFocusedPostIds,
       remainingBacklogGroupCount: focusedSelection.remainingBacklogGroups.length,
     },
     reuse: {
@@ -1115,7 +1144,9 @@ const run = async () => {
   }
   const reportSummary = parsedArgs.focusSupportUnit
     ? {
-        blogId,
+        blogKey: parsedArgs.blogKey,
+        sourceInput: parsedArgs.sourceInput,
+        sourceId,
         outputDir: resolvedOutputDir,
         reportJsonPath,
         reportMarkdownPath,
@@ -1146,7 +1177,7 @@ const run = async () => {
   await writeFile(
     failureSummaryMarkdownPath,
     renderFailureSummaryMarkdown({
-      blogId,
+      sourceId,
       manifest,
       failureGroups: allFailureGroups,
       downloadedAssetFiles,
@@ -1156,7 +1187,7 @@ const run = async () => {
   await writeFile(
     reportMarkdownPath,
     renderIngestReportMarkdown({
-      blogId,
+      sourceId,
       manifest,
       outputDir: resolvedOutputDir,
       reuse: aggregateSummary.reuse,
@@ -1175,7 +1206,7 @@ const run = async () => {
 
   console.log(
     [
-      `blogId: ${blogId}`,
+      `sourceId: ${sourceId}`,
       `outputDir: ${resolvedOutputDir}`,
       `manifestPath: ${manifestPath}`,
       `reportJsonPath: ${reportJsonPath}`,

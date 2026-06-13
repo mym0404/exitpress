@@ -4,11 +4,11 @@
 - Sample fixture directories live under `tests/fixtures/samples/*`.
 - Each sample must contain either `expected.md` or `expected-error.md`.
 - `tests/support/sample-fixtures.spec.ts` discovers directories dynamically.
-- `tests/support/sample-fixtures.ts` parses expected frontmatter, fetches the live Naver post HTML from `blogId` and `logNo`, and renders it with fixture export options.
-- Live sample HTML is cached under `tmp/harness/sample-post-html-cache` through the optional `NaverBlogFetcher` cache interface outside CI.
+- `tests/support/sample-fixtures.ts` parses expected frontmatter, fetches the live source post HTML from `blogKey`, `sourceId`, and `postId`, and renders it with fixture export options.
+- Live sample HTML is cached under `tmp/harness/sample-post-html-cache` through the concrete blog fetcher cache interface outside CI.
 - CI fixture runs bypass the sample HTML cache and fetch live HTML directly.
-- Sample fixtures do not store source HTML files; update `blogId`, `logNo`, and expected Markdown from the live post.
-- Sample fixture rendering normalizes volatile Naver attachment download URLs inside `tests/support/sample-fixtures.ts` so expected Markdown does not depend on request-specific download tokens.
+- Sample fixtures do not store source HTML files; update `blogKey`, `sourceId`, `postId`, and expected Markdown from the live post.
+- Concrete blog packages normalize volatile attachment download URLs so expected Markdown does not depend on request-specific download tokens.
 
 ## Fixture Options
 - Sample fixture rendering uses `defaultExportOptions()`.
@@ -24,7 +24,7 @@
 ## Operating Rules
 - Add or update the expected output file for each sample.
 - Do not add fixture-local source HTML such as `post.html`; live public posts and the sample HTML cache are the source of input truth.
-- `expected.md` and `expected-error.md` must start with YAML frontmatter containing title, source, blogId, logNo, publishedAt, category, and categoryPath.
+- `expected.md` and `expected-error.md` must start with YAML frontmatter containing title, source, blogKey, sourceId, postId, publishedAt, category, and categoryPath.
 - `expected-error.md` must include an `error` frontmatter string.
 - Fixture ids should describe editor and dominant block coverage.
 - A parser block without a public sample should be covered by focused parser tests until a durable sample exists.

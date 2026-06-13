@@ -1,8 +1,9 @@
 ---
 title: "[Quick Review] 더 강력해진 Note- 삼성 갤럭시 노트9 (Samsung Galaxy Note9)"
 source: https://blog.naver.com/sekishin/221405258251
-blogId: sekishin
-logNo: 221405258251
+blogKey: naver
+sourceId: sekishin
+postId: 221405258251
 publishedAt: 2018-11-24T15:03:13+09:00
 category: Review IT
 categoryPath:

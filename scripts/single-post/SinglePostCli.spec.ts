@@ -3,7 +3,7 @@ import path from "node:path"
 
 import { describe, expect, it, vi } from "vitest"
 
-import type { RunSinglePostCliDeps } from "./export-single-post.js"
+import type { SinglePostBlogRuntime } from "./SinglePostBlogRuntime.js"
 
 import { createTestPath, createTestTempDir } from "../../tests/support/test-paths.js"
 
@@ -11,8 +11,6 @@ import { runSinglePostCli } from "./export-single-post.js"
 import { parseSinglePostCliArgs, singlePostCliUsage } from "./SinglePostArgs.js"
 import { renderSinglePostInspectSummary, renderSinglePostSummary } from "./SinglePostSummary.js"
 
-type RunSinglePostExportFn = NonNullable<RunSinglePostCliDeps["exportSinglePost"]>
-type RunSinglePostInspectFn = NonNullable<RunSinglePostCliDeps["inspectSinglePost"]>
 const testOutputDir = createTestPath("single-post-cli", "output")
 const testExporterMarkdownFilePath = createTestPath(
   "single-post-cli",
@@ -21,13 +19,47 @@ const testExporterMarkdownFilePath = createTestPath(
   "my-blog.md",
 )
 
+const createMockBlogRuntime = ({
+  exportSinglePost = vi.fn(),
+  inspectSinglePost = vi.fn(),
+}: Partial<Pick<SinglePostBlogRuntime, "exportSinglePost" | "inspectSinglePost">> = {}) => ({
+  exportSinglePost,
+  inspectSinglePost,
+  createFetcher: vi.fn(async () => ({
+    scanBlog: async () => ({
+      blogKey: "naver",
+      sourceId: "my-blog",
+      totalPostCount: 0,
+      categories: [],
+    }),
+    getAllPosts: async () => [],
+    fetchPostHtml: async () => "<div />",
+    downloadBinary: async () => {},
+    fetchBinary: async () => ({
+      bytes: Buffer.from("asset"),
+      contentType: "image/png",
+    }),
+  })),
+})
+
+const createGetBlogRuntime = (runtime: SinglePostBlogRuntime) =>
+  vi.fn((blogKey: string) => {
+    if (blogKey !== "naver") {
+      throw new Error(`Unsupported blogKey: ${blogKey}`)
+    }
+
+    return runtime
+  })
+
 describe("single-post cli", () => {
   it("parses required and optional flags", () => {
     expect(
       parseSinglePostCliArgs([
-        "--blogId",
+        "--blogKey",
+        "naver",
+        "--sourceId",
         "my-blog",
-        "--logNo",
+        "--postId",
         "123456789012",
         "--outputDir",
         testOutputDir,
@@ -42,8 +74,9 @@ describe("single-post cli", () => {
         "--stdout",
       ]),
     ).toEqual({
-      blogId: "my-blog",
-      logNo: "123456789012",
+      blogKey: "naver",
+      sourceId: "my-blog",
+      postId: "123456789012",
       outputDir: testOutputDir,
       reportPath: "./report.json",
       manualReviewMarkdownPath: "./post.md",
@@ -58,9 +91,11 @@ describe("single-post cli", () => {
     expect(
       parseSinglePostCliArgs([
         "--inspect",
-        "--blogId",
+        "--blogKey",
+        "naver",
+        "--sourceId",
         "my-blog",
-        "--logNo",
+        "--postId",
         "123456789012",
         "--report",
         "./inspect.json",
@@ -69,8 +104,9 @@ describe("single-post cli", () => {
         "--stdout",
       ]),
     ).toEqual({
-      blogId: "my-blog",
-      logNo: "123456789012",
+      blogKey: "naver",
+      sourceId: "my-blog",
+      postId: "123456789012",
       outputDir: null,
       reportPath: "./inspect.json",
       manualReviewMarkdownPath: null,
@@ -83,21 +119,29 @@ describe("single-post cli", () => {
 
   it("throws the usage string when required flags are missing", () => {
     expect(() =>
-      parseSinglePostCliArgs(["--blogId", "my-blog", "--outputDir", testOutputDir]),
+      parseSinglePostCliArgs([
+        "--blogKey",
+        "naver",
+        "--sourceId",
+        "my-blog",
+        "--outputDir",
+        testOutputDir,
+      ]),
     ).toThrow(singlePostCliUsage())
   })
 
   it("shows the real pnpm exec entrypoint in the usage string", () => {
     expect(singlePostCliUsage()).toBe(
-      "Usage: bun scripts/single-post/export-single-post.ts --blogId my-blog --logNo 123456789012 --outputDir ./output [--report ./output/report.json] [--manualReviewMarkdownPath ./output/post.md] [--metadataCachePath ./output/metadata-cache.json] [--options ./config/single-post.json] [--stdout]\nInspect: bun scripts/single-post/export-single-post.ts --inspect --blogId my-blog --logNo 123456789012 [--report ./inspect.json] [--options ./config/single-post.json] [--stdout]",
+      "Usage: bun scripts/single-post/export-single-post.ts --blogKey naver --sourceId my-blog --postId 123456789012 --outputDir ./output [--report ./output/report.json] [--manualReviewMarkdownPath ./output/post.md] [--metadataCachePath ./output/metadata-cache.json] [--options ./config/single-post.json] [--stdout]\nInspect: bun scripts/single-post/export-single-post.ts --inspect --blogKey naver --sourceId my-blog --postId 123456789012 [--report ./inspect.json] [--options ./config/single-post.json] [--stdout]",
     )
   })
 
   it("renders a concise summary with markdown path", () => {
     expect(
       renderSinglePostSummary({
-        blogId: "my-blog",
-        logNo: "123456789012",
+        blogKey: "naver",
+        sourceId: "my-blog",
+        postId: "123456789012",
         blockIds: ["paragraph", "code"],
         exporterMarkdownFilePath: testExporterMarkdownFilePath,
         manualReviewMarkdownFilePath: "/tmp/manual-review/post.md",
@@ -105,8 +149,9 @@ describe("single-post cli", () => {
       }),
     ).toBe(
       [
-        "blogId: my-blog",
-        "logNo: 123456789012",
+        "blogKey: naver",
+        "sourceId: my-blog",
+        "postId: 123456789012",
         "blockIds: paragraph, code",
         `exporterMarkdownFilePath: ${testExporterMarkdownFilePath}`,
         "manualReviewMarkdownFilePath: /tmp/manual-review/post.md",
@@ -118,8 +163,9 @@ describe("single-post cli", () => {
   it("renders stdout-only summary when markdown is not written", () => {
     expect(
       renderSinglePostSummary({
-        blogId: "my-blog",
-        logNo: "123456789012",
+        blogKey: "naver",
+        sourceId: "my-blog",
+        postId: "123456789012",
         blockIds: [],
         exporterMarkdownFilePath: testExporterMarkdownFilePath,
         manualReviewMarkdownFilePath: null,
@@ -127,8 +173,9 @@ describe("single-post cli", () => {
       }),
     ).toBe(
       [
-        "blogId: my-blog",
-        "logNo: 123456789012",
+        "blogKey: naver",
+        "sourceId: my-blog",
+        "postId: 123456789012",
         "blockIds: (none)",
         `exporterMarkdownFilePath: ${testExporterMarkdownFilePath}`,
         "manualReviewMarkdownFilePath: (not provided)",
@@ -142,8 +189,9 @@ describe("single-post cli", () => {
       renderSinglePostInspectSummary({
         reportPath: "/tmp/inspect.json",
         diagnostics: {
-          blogId: "my-blog",
-          logNo: "123456789012",
+          blogKey: "naver",
+          sourceId: "my-blog",
+          postId: "123456789012",
           sourceUrl: "https://blog.naver.com/my-blog/123456789012",
           editor: {
             type: "naver-se4",
@@ -169,8 +217,9 @@ describe("single-post cli", () => {
       }),
     ).toBe(
       [
-        "blogId: my-blog",
-        "logNo: 123456789012",
+        "blogKey: naver",
+        "sourceId: my-blog",
+        "postId: 123456789012",
         "editor: naver-se4 (SmartEditor 4)",
         "parse: failed",
         "error: 파싱 가능한 naver-se4 block이 없습니다: div",
@@ -210,8 +259,9 @@ describe("single-post cli", () => {
     const stderrWrite = vi.fn()
     const exportSinglePost = vi.fn(async ({ options }) => ({
       post: {
-        blogId: "my-blog",
-        logNo: "123456789012",
+        blogKey: "naver",
+        sourceId: "my-blog",
+        postId: "123456789012",
         title: "Single post",
         publishedAt: "2024-01-02T03:04:05+09:00",
         categoryId: 11,
@@ -229,9 +279,11 @@ describe("single-post cli", () => {
     try {
       await runSinglePostCli({
         argv: [
-          "--blogId",
+          "--blogKey",
+          "naver",
+          "--sourceId",
           "my-blog",
-          "--logNo",
+          "--postId",
           "123456789012",
           "--outputDir",
           outputDir,
@@ -244,7 +296,7 @@ describe("single-post cli", () => {
           "--options",
           optionsPath,
         ],
-        exportSinglePost: exportSinglePost as RunSinglePostExportFn,
+        getBlogRuntime: createGetBlogRuntime(createMockBlogRuntime({ exportSinglePost })),
         stdoutWrite,
         stderrWrite,
       })
@@ -256,8 +308,9 @@ describe("single-post cli", () => {
       expect(stdoutWrite).not.toHaveBeenCalled()
       expect(stderrWrite).toHaveBeenCalledWith(
         [
-          "blogId: my-blog",
-          "logNo: 123456789012",
+          "blogKey: naver",
+          "sourceId: my-blog",
+          "postId: 123456789012",
           "blockIds: paragraph",
           `exporterMarkdownFilePath: ${markdownFilePath}`,
           `manualReviewMarkdownFilePath: ${manualReviewMarkdownPath}`,
@@ -288,8 +341,9 @@ describe("single-post cli", () => {
     const stderrWrite = vi.fn()
     const exportSinglePost = vi.fn()
     const inspectSinglePost = vi.fn(async () => ({
-      blogId: "my-blog",
-      logNo: "123456789012",
+      blogKey: "naver",
+      sourceId: "my-blog",
+      postId: "123456789012",
       sourceUrl: "https://blog.naver.com/my-blog/123456789012",
       editor: {
         type: "naver-se4",
@@ -315,16 +369,19 @@ describe("single-post cli", () => {
       await runSinglePostCli({
         argv: [
           "--inspect",
-          "--blogId",
+          "--blogKey",
+          "naver",
+          "--sourceId",
           "my-blog",
-          "--logNo",
+          "--postId",
           "123456789012",
           "--report",
           reportPath,
           "--stdout",
         ],
-        exportSinglePost: exportSinglePost as RunSinglePostExportFn,
-        inspectSinglePost: inspectSinglePost as RunSinglePostInspectFn,
+        getBlogRuntime: createGetBlogRuntime(
+          createMockBlogRuntime({ exportSinglePost, inspectSinglePost }),
+        ),
         stdoutWrite,
         stderrWrite,
       })
@@ -333,8 +390,8 @@ describe("single-post cli", () => {
       expect(inspectSinglePost).toHaveBeenCalledTimes(1)
       expect(inspectSinglePost).toHaveBeenCalledWith(
         expect.objectContaining({
-          blogId: "my-blog",
-          logNo: "123456789012",
+          sourceId: "my-blog",
+          postId: "123456789012",
         }),
       )
       expect(stdoutWrite).toHaveBeenCalledWith(expect.stringContaining('"unsupportedNodes"'))
@@ -356,34 +413,38 @@ describe("single-post cli", () => {
 
     const stdoutWrite = vi.fn()
     const stderrWrite = vi.fn()
+    const exportSinglePost = vi.fn(async () => ({
+      post: {
+        blogKey: "naver",
+        sourceId: "my-blog",
+        postId: "123456789012",
+        title: "Single post",
+        publishedAt: "2024-01-02T03:04:05+09:00",
+        categoryId: 11,
+        categoryName: "JavaScript",
+        source: "https://blog.naver.com/my-blog/123456789012",
+        thumbnailUrl: null,
+      },
+      markdown: "# stdout markdown",
+      markdownFilePath: path.join(outputDir, "posts", "single-post.md"),
+      blockIds: ["paragraph"],
+      assetPaths: [],
+    }))
 
     try {
       await runSinglePostCli({
         argv: [
-          "--blogId",
+          "--blogKey",
+          "naver",
+          "--sourceId",
           "my-blog",
-          "--logNo",
+          "--postId",
           "123456789012",
           "--outputDir",
           outputDir,
           "--stdout",
         ],
-        exportSinglePost: vi.fn(async () => ({
-          post: {
-            blogId: "my-blog",
-            logNo: "123456789012",
-            title: "Single post",
-            publishedAt: "2024-01-02T03:04:05+09:00",
-            categoryId: 11,
-            categoryName: "JavaScript",
-            source: "https://blog.naver.com/my-blog/123456789012",
-            thumbnailUrl: null,
-          },
-          markdown: "# stdout markdown",
-          markdownFilePath: path.join(outputDir, "posts", "single-post.md"),
-          blockIds: ["paragraph"],
-          assetPaths: [],
-        })) as RunSinglePostExportFn,
+        getBlogRuntime: createGetBlogRuntime(createMockBlogRuntime({ exportSinglePost })),
         stdoutWrite,
         stderrWrite,
       })
@@ -391,8 +452,9 @@ describe("single-post cli", () => {
       expect(stdoutWrite).toHaveBeenCalledWith("# stdout markdown\n")
       expect(stderrWrite).toHaveBeenCalledWith(
         [
-          "blogId: my-blog",
-          "logNo: 123456789012",
+          "blogKey: naver",
+          "sourceId: my-blog",
+          "postId: 123456789012",
           "blockIds: paragraph",
           `exporterMarkdownFilePath: ${path.join(outputDir, "posts", "single-post.md")}`,
           "manualReviewMarkdownFilePath: (not provided)",
@@ -428,16 +490,18 @@ describe("single-post cli", () => {
       await expect(
         runSinglePostCli({
           argv: [
-            "--blogId",
+            "--blogKey",
+            "naver",
+            "--sourceId",
             "my-blog",
-            "--logNo",
+            "--postId",
             "123456789012",
             "--outputDir",
             outputDir,
             "--options",
             optionsPath,
           ],
-          exportSinglePost: exportSinglePost as RunSinglePostExportFn,
+          getBlogRuntime: createGetBlogRuntime(createMockBlogRuntime({ exportSinglePost })),
           stdoutWrite: vi.fn(),
           stderrWrite: vi.fn(),
         }),
@@ -473,16 +537,18 @@ describe("single-post cli", () => {
       await expect(
         runSinglePostCli({
           argv: [
-            "--blogId",
+            "--blogKey",
+            "naver",
+            "--sourceId",
             "my-blog",
-            "--logNo",
+            "--postId",
             "123456789012",
             "--outputDir",
             outputDir,
             "--options",
             optionsPath,
           ],
-          exportSinglePost: exportSinglePost as RunSinglePostExportFn,
+          getBlogRuntime: createGetBlogRuntime(createMockBlogRuntime({ exportSinglePost })),
           stdoutWrite: vi.fn(),
           stderrWrite: vi.fn(),
         }),
@@ -510,8 +576,9 @@ describe("single-post cli", () => {
 
     const exportSinglePost = vi.fn(async ({ options }) => ({
       post: {
-        blogId: "my-blog",
-        logNo: "123456789012",
+        blogKey: "naver",
+        sourceId: "my-blog",
+        postId: "123456789012",
         title: "Single post",
         publishedAt: "2024-01-02T03:04:05+09:00",
         categoryId: 11,
@@ -529,16 +596,18 @@ describe("single-post cli", () => {
     try {
       await runSinglePostCli({
         argv: [
-          "--blogId",
+          "--blogKey",
+          "naver",
+          "--sourceId",
           "my-blog",
-          "--logNo",
+          "--postId",
           "123456789012",
           "--outputDir",
           outputDir,
           "--options",
           optionsPath,
         ],
-        exportSinglePost: exportSinglePost as RunSinglePostExportFn,
+        getBlogRuntime: createGetBlogRuntime(createMockBlogRuntime({ exportSinglePost })),
         stdoutWrite: vi.fn(),
         stderrWrite: vi.fn(),
       })
@@ -567,16 +636,18 @@ describe("single-post cli", () => {
       await expect(
         runSinglePostCli({
           argv: [
-            "--blogId",
+            "--blogKey",
+            "naver",
+            "--sourceId",
             "my-blog",
-            "--logNo",
+            "--postId",
             "123456789012",
             "--outputDir",
             outputDir,
             "--options",
             optionsPath,
           ],
-          exportSinglePost: exportSinglePost as RunSinglePostExportFn,
+          getBlogRuntime: createGetBlogRuntime(createMockBlogRuntime({ exportSinglePost })),
           stdoutWrite: vi.fn(),
           stderrWrite: vi.fn(),
         }),
@@ -602,16 +673,18 @@ describe("single-post cli", () => {
       await expect(
         runSinglePostCli({
           argv: [
-            "--blogId",
+            "--blogKey",
+            "naver",
+            "--sourceId",
             "my-blog",
-            "--logNo",
+            "--postId",
             "123456789012",
             "--outputDir",
             outputDir,
             "--options",
             optionsPath,
           ],
-          exportSinglePost: exportSinglePost as RunSinglePostExportFn,
+          getBlogRuntime: createGetBlogRuntime(createMockBlogRuntime({ exportSinglePost })),
           stdoutWrite: vi.fn(),
           stderrWrite: vi.fn(),
         }),
@@ -637,16 +710,18 @@ describe("single-post cli", () => {
       await expect(
         runSinglePostCli({
           argv: [
-            "--blogId",
+            "--blogKey",
+            "naver",
+            "--sourceId",
             "my-blog",
-            "--logNo",
+            "--postId",
             "123456789012",
             "--outputDir",
             outputDir,
             "--options",
             optionsPath,
           ],
-          exportSinglePost: exportSinglePost as RunSinglePostExportFn,
+          getBlogRuntime: createGetBlogRuntime(createMockBlogRuntime({ exportSinglePost })),
           stdoutWrite: vi.fn(),
           stderrWrite: vi.fn(),
         }),
@@ -676,16 +751,18 @@ describe("single-post cli", () => {
       await expect(
         runSinglePostCli({
           argv: [
-            "--blogId",
+            "--blogKey",
+            "naver",
+            "--sourceId",
             "my-blog",
-            "--logNo",
+            "--postId",
             "123456789012",
             "--outputDir",
             outputDir,
             "--options",
             optionsPath,
           ],
-          exportSinglePost: exportSinglePost as RunSinglePostExportFn,
+          getBlogRuntime: createGetBlogRuntime(createMockBlogRuntime({ exportSinglePost })),
           stdoutWrite: vi.fn(),
           stderrWrite: vi.fn(),
         }),
@@ -711,16 +788,18 @@ describe("single-post cli", () => {
       await expect(
         runSinglePostCli({
           argv: [
-            "--blogId",
+            "--blogKey",
+            "naver",
+            "--sourceId",
             "my-blog",
-            "--logNo",
+            "--postId",
             "123456789012",
             "--outputDir",
             outputDir,
             "--options",
             optionsPath,
           ],
-          exportSinglePost: exportSinglePost as RunSinglePostExportFn,
+          getBlogRuntime: createGetBlogRuntime(createMockBlogRuntime({ exportSinglePost })),
           stdoutWrite: vi.fn(),
           stderrWrite: vi.fn(),
         }),

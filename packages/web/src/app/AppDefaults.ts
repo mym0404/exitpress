@@ -9,6 +9,8 @@ import type { ExportBootstrapResponse } from "../lib/Api.js"
 
 import { defaultOutputDir } from "../features/scan/ScanStatus.js"
 
+export const defaultBlogKey = "naver"
+
 export const fallbackDefaults: ExportBootstrapResponse = {
   profile: "gfm",
   options: defaultExportOptions(),

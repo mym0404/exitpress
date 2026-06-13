@@ -6,21 +6,21 @@ const allScanStatusTones = ["default", "error"] as const
 export type ScanStatusTone = (typeof allScanStatusTones)[number]
 
 export const BlogInputPanel = ({
-  blogIdOrUrl,
+  sourceInput,
   outputDir,
   scanPending,
   scanStatus,
   scanStatusTone,
-  onBlogIdOrUrlChange,
+  onSourceIdOrUrlChange,
   onOutputDirChange,
   onOutputDirBlur,
 }: {
-  blogIdOrUrl: string
+  sourceInput: string
   outputDir: string
   scanPending: boolean
   scanStatus: string
   scanStatusTone: ScanStatusTone
-  onBlogIdOrUrlChange: (value: string) => void
+  onSourceIdOrUrlChange: (value: string) => void
   onOutputDirChange: (value: string) => void
   onOutputDirBlur: () => void
 }) => (
@@ -34,15 +34,17 @@ export const BlogInputPanel = ({
           alignItems: "start",
         }}
       >
-        <FormControl id="blogIdOrUrl" disabled={scanPending}>
+        <FormControl id="sourceInput" disabled={scanPending}>
           <FormControl.Label>블로그 ID 또는 URL</FormControl.Label>
           <TextInput
             block
+            id="sourceInput"
             placeholder="mym0404 또는 https://blog.naver.com/..."
-            value={blogIdOrUrl}
+            disabled={scanPending}
+            value={sourceInput}
             aria-invalid={scanStatusTone === "error" || undefined}
             validationStatus={scanStatusTone === "error" ? "error" : undefined}
-            onChange={(event) => onBlogIdOrUrlChange(event.target.value)}
+            onChange={(event) => onSourceIdOrUrlChange(event.target.value)}
           />
         </FormControl>
         <FormControl id="outputDir" required>

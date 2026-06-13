@@ -1,4 +1,4 @@
-import { NaverBlogFetcher } from "@exitpress/engine/integrations/naver-blog/NaverBlogFetcher.js"
+import { NaverBlogFetcher } from "@exitpress/blog-naver/integrations/naver-blog/NaverBlogFetcher.js"
 import { createHttpServer } from "@exitpress/server/http/HttpServer.js"
 
 const wait = (ms: number) =>
@@ -7,20 +7,20 @@ const wait = (ms: number) =>
   })
 
 const delayMs = Number(process.env.EXITPRESS_LIVE_FETCH_DELAY_MS ?? "0")
-const delayedLogNos = new Set(
+const delayedPostIds = new Set(
   (process.env.EXITPRESS_LIVE_FETCH_DELAY_LOGNOS ?? "")
     .split(",")
     .map((value) => value.trim())
     .filter(Boolean),
 )
 
-if (delayedLogNos.size > 0 && delayMs > 0) {
+if (delayedPostIds.size > 0 && delayMs > 0) {
   const originalFetchPostHtml = NaverBlogFetcher.prototype.fetchPostHtml
 
-  NaverBlogFetcher.prototype.fetchPostHtml = async function patchedFetchPostHtml(logNo: string) {
-    const html = await originalFetchPostHtml.call(this, logNo)
+  NaverBlogFetcher.prototype.fetchPostHtml = async function patchedFetchPostHtml(postId: string) {
+    const html = await originalFetchPostHtml.call(this, postId)
 
-    if (delayedLogNos.has(logNo)) {
+    if (delayedPostIds.has(postId)) {
       await wait(delayMs)
     }
 

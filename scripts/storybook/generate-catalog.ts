@@ -3,12 +3,12 @@ import { mkdir, readFile, writeFile } from "node:fs/promises"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
 
-import { renderBlockTemplates } from "@exitpress/engine/markdown/util/renderBlockTemplates.js"
-import { parsePostHtml } from "@exitpress/engine/parsing/naver-blog/core/PostParser.js"
+import { parsePostHtml } from "@exitpress/blog-naver/parsing/naver-blog/core/PostParser.js"
 import {
   createNaverBlogDefaultBlockTemplateMap,
   NaverBlog,
-} from "@exitpress/engine/parsing/naver-blog/NaverBlog.js"
+} from "@exitpress/blog-naver/parsing/naver-blog/NaverBlog.js"
+import { renderBlockTemplates } from "@exitpress/engine/markdown/util/renderBlockTemplates.js"
 import { storybookDefinitions } from "@exitpress/web/features/storybook/data/StorybookDefinitions.js"
 
 import type { ParsedBlock } from "@exitpress/domain/parser/schema/ParsedPost.js"

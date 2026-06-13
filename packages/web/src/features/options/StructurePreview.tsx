@@ -23,19 +23,19 @@ export const structurePreviewSample = {
   posts: [
     {
       publishedAt: "2026-04-11T04:00:00.000Z",
-      logNo: "223034929697",
+      postId: "223034929697",
       title: "첫 글",
       categoryPath: ["개발 메모", "React"],
     },
     {
       publishedAt: "2026-04-12T04:00:00.000Z",
-      logNo: "223034929698",
+      postId: "223034929698",
       title: "둘째 글",
       categoryPath: ["개발 메모", "React"],
     },
     {
       publishedAt: "2026-04-14T04:00:00.000Z",
-      logNo: "223034929755",
+      postId: "223034929755",
       title: "세 번째 정리",
       categoryPath: ["개발 메모", "TypeScript"],
     },
@@ -54,8 +54,9 @@ const appendStructurePreviewPost = ({
   const postFolderNamePreview = getTemplatePreview(() =>
     buildPostFolderName({
       post: {
-        blogId: "mym0404",
-        logNo: post.logNo,
+        blogKey: "naver",
+        sourceId: "mym0404",
+        postId: post.postId,
         title: post.title,
         publishedAt: post.publishedAt,
         categoryName: post.categoryPath.at(-1),
@@ -67,7 +68,7 @@ const appendStructurePreviewPost = ({
   )
   const postTree: StructurePreviewTreeNode = {
     kind: "folder",
-    name: postFolderNamePreview.status === "success" ? postFolderNamePreview.text : post.logNo,
+    name: postFolderNamePreview.status === "success" ? postFolderNamePreview.text : post.postId,
     defaultOpen: true,
     items: [
       {

@@ -1,8 +1,9 @@
 ---
 title: 명문 INNO CITY 빌딩 설계 계획도면 (확정안)
 source: https://blog.naver.com/anglekim3708/220612289536
-blogId: anglekim3708
-logNo: 220612289536
+blogKey: naver
+sourceId: anglekim3708
+postId: 220612289536
 publishedAt: 2016-01-29T12:49:39+09:00
 category: 명문이노시티 신축
 categoryPath:

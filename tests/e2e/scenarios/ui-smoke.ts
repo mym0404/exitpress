@@ -1,13 +1,13 @@
 import { mkdir, rm } from "node:fs/promises"
 import path from "node:path"
 
+import { NaverBlog } from "@exitpress/blog-naver/parsing/naver-blog/NaverBlog.js"
 import {
   defaultExportOptions,
   frontmatterFieldMeta,
   frontmatterFieldOrder,
   optionDescriptions,
 } from "@exitpress/domain/export-options/ExportOptions.js"
-import { NaverBlog } from "@exitpress/engine/parsing/naver-blog/NaverBlog.js"
 import { createHttpServer } from "@exitpress/server/http/HttpServer.js"
 
 import type { ExportJobPollingConfig } from "@exitpress/domain/export-job/schema/ExportJobPollingConfig.js"
@@ -180,7 +180,8 @@ const smokeImageBytes = Buffer.from(
 )
 
 const scanResult = {
-  blogId: "mym0404",
+  blogKey: "naver",
+  sourceId: "mym0404",
   totalPostCount: 1,
   categories: [
     {
@@ -196,8 +197,9 @@ const scanResult = {
   ],
   posts: [
     {
-      blogId: "mym0404",
-      logNo: "223034929697",
+      blogKey: "naver",
+      sourceId: "mym0404",
+      postId: "223034929697",
       title: "NestJS 업로드 플로우 점검",
       publishedAt: "2026-04-11T04:00:00.000Z",
       categoryId: 101,
@@ -207,6 +209,16 @@ const scanResult = {
     },
   ],
 }
+
+const createScanResult = (sourceId: string) => ({
+  ...scanResult,
+  sourceId,
+  posts: scanResult.posts.map((post) => ({
+    ...post,
+    sourceId,
+    source: `https://blog.naver.com/${sourceId}/${post.postId}`,
+  })),
+})
 
 const createUploadFlowOptions = () => {
   const options = defaultExportOptions()
@@ -267,22 +279,24 @@ const buildUploadItem = ({
   rewriteStatus: UploadRewriteStatus
   rewrittenAt: string | null
 }) => {
-  const logNo = `223034929${String(700 + index).padStart(3, "0")}`
+  const postId = `223034929${String(700 + index).padStart(3, "0")}`
   const title = `NestJS 업로드 플로우 점검 ${index + 1}`
-  const outputPath = `NestJS/2026-04-11-${logNo}/index.md`
+  const outputPath = `NestJS/2026-04-11-${postId}/index.md`
   const candidates = buildUploadCandidates(index)
   const uploadedUrls =
     rewriteStatus === "completed"
       ? candidates.map((_, assetIndex) => buildRemoteAssetPath(index, assetIndex))
       : []
   const externalPreviewUrl =
-    rewriteStatus === "completed" ? `https://markdownviewer.pages.dev/#share=smoke-${logNo}` : null
+    rewriteStatus === "completed" ? `https://markdownviewer.pages.dev/#share=smoke-${postId}` : null
 
   return {
     id: outputPath,
-    logNo,
+    blogKey: "naver",
+    sourceId: "mym0404",
+    postId,
     title,
-    source: `https://blog.naver.com/mym0404/${logNo}`,
+    source: `https://blog.naver.com/mym0404/${postId}`,
     category: {
       id: 101,
       name: "NestJS",
@@ -310,7 +324,7 @@ const buildUploadItem = ({
 const createBaseJob = () => ({
   id: "job-smoke",
   request: {
-    blogIdOrUrl: "mym0404",
+    sourceInput: "mym0404",
     outputDir: fallbackSmokeOutputDir,
     profile: "gfm",
     options: createUploadFlowOptions(),
@@ -404,7 +418,7 @@ const buildUploadJob = ({
     items,
     manifest: {
       generatedAt: finishedAt ?? logs.at(-1)?.timestamp ?? uploadTimelineTimestamps.startedAt,
-      blogId: "mym0404",
+      sourceId: "mym0404",
       profile: "gfm",
       options: createUploadFlowOptions(),
       selectedCategoryIds: [101],
@@ -994,6 +1008,7 @@ export const runUiSmoke = async ({ browser }: { browser: Browser }) => {
       providerKey: string
       providerFields: Record<string, UploadProviderValue>
     }
+    lastScanSourceInput: string | null
   } = {
     scanRequestCount: 0,
     jobFetchCount: 0,
@@ -1002,6 +1017,7 @@ export const runUiSmoke = async ({ browser }: { browser: Browser }) => {
     exportOptions: null,
     testUploadPayload: null,
     exportUploadProvider: null,
+    lastScanSourceInput: null,
   }
 
   const manualUploadRoutePattern = /\/api\/export\/[^/]+\/upload$/
@@ -1103,8 +1119,12 @@ export const runUiSmoke = async ({ browser }: { browser: Browser }) => {
     }
 
     if (pathname === "/api/scan" && request.method() === "POST") {
+      const body = request.postDataJSON() as {
+        sourceInput?: string
+      }
+      mockState.lastScanSourceInput = body.sourceInput ?? null
       mockState.scanRequestCount += 1
-      await route.fulfill(buildJsonResponse(scanResult))
+      await route.fulfill(buildJsonResponse(createScanResult(body.sourceInput ?? "mym0404")))
       return
     }
 
@@ -1130,6 +1150,8 @@ export const runUiSmoke = async ({ browser }: { browser: Browser }) => {
 
     if (pathname === "/api/export" && request.method() === "POST") {
       const body = request.postDataJSON() as {
+        blogKey?: string
+        sourceInput?: string
         options?: ExportOptions
         uploadProvider?: {
           providerKey?: string
@@ -1137,6 +1159,13 @@ export const runUiSmoke = async ({ browser }: { browser: Browser }) => {
         }
       }
       const templates = body.options?.blockOutputs.templates ?? {}
+
+      if (
+        body.blogKey !== "naver" ||
+        body.sourceInput !== (mockState.lastScanSourceInput ?? "mym0404")
+      ) {
+        throw new Error("export payload did not include the selected blog identity")
+      }
 
       if (typeof templates["naver-se4:image"] !== "string") {
         throw new Error("export payload did not include the saved naver-se4 image template")
@@ -1262,7 +1291,7 @@ export const runUiSmoke = async ({ browser }: { browser: Browser }) => {
       )
     }
 
-    await page.fill("#blogIdOrUrl", "mym0404")
+    await page.fill("#sourceInput", "mym0404")
 
     debugLog("waitForResponse", "scanResponsePromise")
     const scanResponsePromise = page.waitForResponse(
@@ -1339,7 +1368,7 @@ export const runUiSmoke = async ({ browser }: { browser: Browser }) => {
       page,
       step: "blog-input",
     })
-    await page.fill("#blogIdOrUrl", "another-blog")
+    await page.fill("#sourceInput", "another-blog")
 
     debugLog("waitForResponse", "secondScanResponsePromise")
     const secondScanResponsePromise = page.waitForResponse(

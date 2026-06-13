@@ -1,8 +1,9 @@
 ---
 title: "[Review PS Vita Game] 건담 브레이커 3 브레이크 에디션 (Gundam Breaker 3 BREAK EDITION)"
 source: https://blog.naver.com/sekishin/221290869775
-blogId: sekishin
-logNo: 221290869775
+blogKey: naver
+sourceId: sekishin
+postId: 221290869775
 publishedAt: 2018-06-03T23:13:07+09:00
 category: Review PS Vita
 categoryPath:

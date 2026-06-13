@@ -1,9 +1,9 @@
-import { extractBlogId } from "@exitpress/domain/blog/NaverUrl.js"
+import { getScanCacheKey } from "@exitpress/domain/blog/schema/BlogScan.js"
 import { JOB_STATUSES } from "@exitpress/domain/export-job/ExportJobState.js"
 import { recreateDir, resolveRepoPath } from "@exitpress/engine/infra/node/FilePaths.js"
-import { NaverBlogFetcher } from "@exitpress/engine/integrations/naver-blog/NaverBlogFetcher.js"
 import { toErrorMessage } from "@exitpress/engine/shared/error/util/toErrorMessage.js"
 
+import type { BlogScanResult } from "@exitpress/domain/blog/schema/Blog.js"
 import type { ScanResult } from "@exitpress/domain/blog/schema/BlogScan.js"
 import type {
   ExportRequest,
@@ -25,62 +25,106 @@ const uploadProviderModeError =
   "uploadProvider는 download-and-upload 모드에서만 사용할 수 있습니다."
 const uploadProviderValidationError = "업로드 provider 설정을 확인하지 못했습니다."
 
+const toScanResult = (scan: BlogScanResult): ScanResult => ({
+  blogKey: scan.source.blogKey,
+  sourceId: scan.source.sourceId,
+  totalPostCount: scan.totalPostCount,
+  categories: scan.categories.map((category) => ({
+    id: category.id,
+    name: category.name,
+    parentId: category.parentId ?? null,
+    postCount: category.postCount,
+    isDivider: false,
+    isOpen: true,
+    path: category.path,
+    depth: category.depth,
+  })),
+  posts: scan.posts.map((post) => ({
+    blogKey: post.blogKey,
+    sourceId: post.sourceId,
+    postId: post.postId,
+    title: post.title,
+    publishedAt: post.publishedAt,
+    categoryId: post.categoryId,
+    categoryName: post.categoryName,
+    source: post.sourceUrl,
+    thumbnailUrl: post.thumbnailUrl ?? null,
+  })),
+})
+
 export const handleExportRoutes =
   ({
     jobStore,
     state,
+    blogRegistry,
     blockScanJobRunner,
     exportJobRunner,
     uploadProviderSource,
   }: ApiRouteContext) =>
   async ({ request, response, method, url }: ApiRouteRequest) => {
     if (method === "POST" && url.pathname === "/api/scan") {
-      const payload = await parseJsonPayload<{ blogIdOrUrl?: string; forceRefresh?: boolean }>(
-        request,
-      )
+      const payload = await parseJsonPayload<{
+        blogKey?: string
+        sourceInput?: string
+        forceRefresh?: boolean
+      }>(request)
 
-      if (!payload.blogIdOrUrl?.trim()) {
-        sendJson({ response, statusCode: 400, body: { error: "blogIdOrUrl는 필수입니다." } })
+      const blogKey = payload.blogKey?.trim() ?? ""
+
+      if (!blogKey || !payload.sourceInput?.trim()) {
+        sendJson({
+          response,
+          statusCode: 400,
+          body: { error: "blogKey와 sourceInput는 필수입니다." },
+        })
         return true
       }
 
-      const blogId = extractBlogId(payload.blogIdOrUrl)
+      const blog = blogRegistry.require(blogKey)
+      const source = blog.parseSource(payload.sourceInput)
+      const cacheKey = getScanCacheKey(source)
       const cachedScans = await state.ensureScanCache()
 
-      if (!payload.forceRefresh && cachedScans[blogId]) {
-        sendJson({ response, statusCode: 200, body: cachedScans[blogId] })
+      if (!payload.forceRefresh && cachedScans[cacheKey]) {
+        sendJson({ response, statusCode: 200, body: cachedScans[cacheKey] })
         return true
       }
 
-      const scanResult = await new NaverBlogFetcher({ blogId }).scanBlog({ includePosts: true })
-      await state.updateScanCache({ blogId, scanResult })
+      const scanResult = toScanResult(await blog.scan(source))
+      await state.updateScanCache({ scanResult })
       sendJson({ response, statusCode: 200, body: scanResult })
       return true
     }
 
     if (method === "POST" && url.pathname === "/api/scan-blocks/jobs") {
       const payload = await parseJsonPayload<{
-        blogIdOrUrl?: string
+        blogKey?: string
+        sourceInput?: string
         scanResult?: ScanResult
         options?: PartialExportOptions
       }>(request)
 
-      if (!payload.blogIdOrUrl?.trim() || !payload.scanResult?.posts) {
+      const blogKey = payload.blogKey?.trim() ?? ""
+
+      if (!blogKey || !payload.sourceInput?.trim() || !payload.scanResult?.posts) {
         sendJson({
           response,
           statusCode: 400,
-          body: { error: "blogIdOrUrl와 scanResult.posts는 필수입니다." },
+          body: { error: "blogKey, sourceInput, scanResult.posts는 필수입니다." },
         })
         return true
       }
 
-      const blogId = extractBlogId(payload.blogIdOrUrl)
+      const source = blogRegistry.require(blogKey).parseSource(payload.sourceInput)
 
-      if (payload.scanResult.blogId !== blogId) {
+      if (
+        payload.scanResult.blogKey !== blogKey ||
+        payload.scanResult.sourceId !== source.sourceId
+      ) {
         sendJson({
           response,
           statusCode: 400,
-          body: { error: "scanResult.blogId가 요청 블로그와 일치하지 않습니다." },
+          body: { error: "scanResult가 요청 블로그와 일치하지 않습니다." },
         })
         return true
       }
@@ -95,6 +139,7 @@ export const handleExportRoutes =
       }
 
       const job = blockScanJobRunner.startJob({
+        source,
         scanResult: payload.scanResult as ScanResult & {
           posts: NonNullable<ScanResult["posts"]>
         },
@@ -127,7 +172,8 @@ export const handleExportRoutes =
 
     if (method === "POST" && url.pathname === "/api/export") {
       const payload = await parseJsonPayload<{
-        blogIdOrUrl?: string
+        blogKey?: string
+        sourceInput?: string
         outputDir?: string
         options?: PartialExportOptions
         scanResult?: ScanResult
@@ -137,11 +183,27 @@ export const handleExportRoutes =
         }
       }>(request)
 
-      if (!payload.blogIdOrUrl?.trim() || !payload.outputDir?.trim()) {
+      const blogKey = payload.blogKey?.trim() ?? ""
+
+      if (!blogKey || !payload.sourceInput?.trim() || !payload.outputDir?.trim()) {
         sendJson({
           response,
           statusCode: 400,
-          body: { error: "blogIdOrUrl와 outputDir는 필수입니다." },
+          body: { error: "blogKey, sourceInput, outputDir는 필수입니다." },
+        })
+        return true
+      }
+
+      const source = blogRegistry.require(blogKey).parseSource(payload.sourceInput)
+
+      if (
+        payload.scanResult &&
+        (payload.scanResult.blogKey !== blogKey || payload.scanResult.sourceId !== source.sourceId)
+      ) {
+        sendJson({
+          response,
+          statusCode: 400,
+          body: { error: "scanResult가 요청 블로그와 일치하지 않습니다." },
         })
         return true
       }
@@ -194,7 +256,8 @@ export const handleExportRoutes =
       }
 
       const exportRequest: ExportRequest = {
-        blogIdOrUrl: payload.blogIdOrUrl.trim(),
+        blogKey,
+        sourceInput: payload.sourceInput.trim(),
         outputDir: payload.outputDir.trim(),
         profile: "gfm",
         options,

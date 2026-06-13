@@ -3,22 +3,30 @@ import path from "node:path"
 
 import { ensureDir } from "@exitpress/engine/infra/node/FilePaths.js"
 
-import type { NaverBlogFetcherCache } from "@exitpress/engine/integrations/naver-blog/NaverBlogFetcher.js"
+import type { BlogPostContentCache } from "@exitpress/engine/blog/Blog.js"
 
 const getPostHtmlCachePath = ({
   cacheDir,
-  blogId,
-  logNo,
+  blogKey,
+  sourceId,
+  postId,
 }: {
   cacheDir: string
-  blogId: string
-  logNo: string
-}) => path.join(cacheDir, encodeURIComponent(blogId), `${encodeURIComponent(logNo)}.html`)
+  blogKey: string
+  sourceId: string
+  postId: string
+}) =>
+  path.join(
+    cacheDir,
+    encodeURIComponent(blogKey),
+    encodeURIComponent(sourceId),
+    `${encodeURIComponent(postId)}.html`,
+  )
 
-export const createPostHtmlCache = ({ cacheDir }: { cacheDir: string }): NaverBlogFetcherCache => ({
-  getPostHtml: async ({ blogId, logNo }) => {
+export const createPostHtmlCache = ({ cacheDir }: { cacheDir: string }): BlogPostContentCache => ({
+  getPostHtml: async ({ blogKey, sourceId, postId }) => {
     try {
-      return await readFile(getPostHtmlCachePath({ cacheDir, blogId, logNo }), "utf8")
+      return await readFile(getPostHtmlCachePath({ cacheDir, blogKey, sourceId, postId }), "utf8")
     } catch (error) {
       if (error instanceof Error && "code" in error && error.code === "ENOENT") {
         return null
@@ -27,8 +35,8 @@ export const createPostHtmlCache = ({ cacheDir }: { cacheDir: string }): NaverBl
       throw error
     }
   },
-  setPostHtml: async ({ blogId, logNo, html }) => {
-    const cachePath = getPostHtmlCachePath({ cacheDir, blogId, logNo })
+  setPostHtml: async ({ blogKey, sourceId, postId, html }) => {
+    const cachePath = getPostHtmlCachePath({ cacheDir, blogKey, sourceId, postId })
     await ensureDir(path.dirname(cachePath))
     await writeFile(cachePath, html, "utf8")
   },

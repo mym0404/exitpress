@@ -8,14 +8,14 @@ describe("extractDiscoveredSupportUnits", () => {
     expect(
       extractDiscoveredSupportUnits({
         discoveredSupportUnits: [
-          { supportUnitKey: "naver-se4:v2_poll", failureBlockHash: "pollhash", logNos: ["1"] },
+          { supportUnitKey: "naver-se4:v2_poll", failureBlockHash: "pollhash", postIds: ["1"] },
         ],
         allFailureGroups: [
-          { supportUnitKey: "naver-se4:v2_map", failureBlockHash: "maphash", logNos: ["2"] },
+          { supportUnitKey: "naver-se4:v2_map", failureBlockHash: "maphash", postIds: ["2"] },
         ],
       }),
     ).toEqual([
-      { supportUnitKey: "naver-se4:v2_poll", failureBlockHash: "pollhash", logNos: ["1"] },
+      { supportUnitKey: "naver-se4:v2_poll", failureBlockHash: "pollhash", postIds: ["1"] },
     ])
   })
 
@@ -23,12 +23,12 @@ describe("extractDiscoveredSupportUnits", () => {
     expect(
       extractDiscoveredSupportUnits({
         allFailureGroups: [
-          { supportUnitKey: "naver-se4:v2_poll", failureBlockHash: "pollhash", logNos: ["1"] },
-          { supportUnitKey: "naver-se4:v2_poll", logNos: ["1", "2"] },
+          { supportUnitKey: "naver-se4:v2_poll", failureBlockHash: "pollhash", postIds: ["1"] },
+          { supportUnitKey: "naver-se4:v2_poll", postIds: ["1", "2"] },
         ],
       }),
     ).toEqual([
-      { supportUnitKey: "naver-se4:v2_poll", failureBlockHash: "pollhash", logNos: ["1", "2"] },
+      { supportUnitKey: "naver-se4:v2_poll", failureBlockHash: "pollhash", postIds: ["1", "2"] },
     ])
   })
 })
@@ -37,8 +37,8 @@ describe("createSupportUnitPrCheck", () => {
   it("marks support units as claimed by ready open PR body markers", () => {
     const check = createSupportUnitPrCheck({
       supportUnits: [
-        { supportUnitKey: "naver-se4:v2_poll", logNos: ["1"] },
-        { supportUnitKey: "naver-se4:v2_map", logNos: ["2"] },
+        { supportUnitKey: "naver-se4:v2_poll", postIds: ["1"] },
+        { supportUnitKey: "naver-se4:v2_map", postIds: ["2"] },
       ],
       pullRequests: [
         { number: 1, isDraft: false, body: createSupportUnitClaim("naver-se4:v2_poll") },
@@ -55,21 +55,21 @@ describe("createSupportUnitPrCheck", () => {
   it("reports missing support units", () => {
     const check = createSupportUnitPrCheck({
       supportUnits: [
-        { supportUnitKey: "naver-se4:v2_poll", logNos: ["1"] },
-        { supportUnitKey: "naver-se4:v2_map", logNos: ["2"] },
+        { supportUnitKey: "naver-se4:v2_poll", postIds: ["1"] },
+        { supportUnitKey: "naver-se4:v2_map", postIds: ["2"] },
       ],
       pullRequests: [{ number: 1, body: createSupportUnitClaim("naver-se4:v2_poll") }],
     })
 
     expect(check.complete).toBe(false)
     expect(check.missingSupportUnits).toEqual([
-      { supportUnitKey: "naver-se4:v2_map", logNos: ["2"] },
+      { supportUnitKey: "naver-se4:v2_map", postIds: ["2"] },
     ])
   })
 
   it("does not treat draft PR claims as complete", () => {
     const check = createSupportUnitPrCheck({
-      supportUnits: [{ supportUnitKey: "naver-se4:v2_poll", logNos: ["1"] }],
+      supportUnits: [{ supportUnitKey: "naver-se4:v2_poll", postIds: ["1"] }],
       pullRequests: [
         { number: 1, isDraft: true, body: createSupportUnitClaim("naver-se4:v2_poll") },
       ],
@@ -78,7 +78,7 @@ describe("createSupportUnitPrCheck", () => {
     expect(check.complete).toBe(false)
     expect(check.claimedSupportUnitCount).toBe(0)
     expect(check.missingSupportUnits).toEqual([
-      { supportUnitKey: "naver-se4:v2_poll", logNos: ["1"] },
+      { supportUnitKey: "naver-se4:v2_poll", postIds: ["1"] },
     ])
     expect(check.draftOnlyClaims).toEqual([
       {
@@ -94,7 +94,7 @@ describe("createSupportUnitPrCheck", () => {
 
   it("allows multiple ready PR claims for one support unit", () => {
     const check = createSupportUnitPrCheck({
-      supportUnits: [{ supportUnitKey: "naver-se4:v2_poll", logNos: ["1"] }],
+      supportUnits: [{ supportUnitKey: "naver-se4:v2_poll", postIds: ["1"] }],
       pullRequests: [
         { number: 1, isDraft: false, body: createSupportUnitClaim("naver-se4:v2_poll") },
         { number: 2, isDraft: false, body: createSupportUnitClaim("naver-se4:v2_poll") },

@@ -1,8 +1,9 @@
 ---
 title: 새알심 만들기 찹쌀가루 요리
 source: https://blog.naver.com/lafleur7/223719242533
-blogId: lafleur7
-logNo: 223719242533
+blogKey: naver
+sourceId: lafleur7
+postId: 223719242533
 publishedAt: 2025-01-09T00:10:00+09:00
 category: +소스, 팁
 categoryPath:

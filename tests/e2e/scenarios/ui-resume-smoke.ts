@@ -1,13 +1,13 @@
 import { rm } from "node:fs/promises"
 import path from "node:path"
 
+import { NaverBlog } from "@exitpress/blog-naver/parsing/naver-blog/NaverBlog.js"
 import {
   defaultExportOptions,
   frontmatterFieldMeta,
   frontmatterFieldOrder,
   optionDescriptions,
 } from "@exitpress/domain/export-options/ExportOptions.js"
-import { NaverBlog } from "@exitpress/engine/parsing/naver-blog/NaverBlog.js"
 import { mapConcurrent } from "@exitpress/engine/shared/async/util/AsyncTasks.js"
 import { createHttpServer } from "@exitpress/server/http/HttpServer.js"
 
@@ -123,7 +123,8 @@ const uploadProviderCatalog: UploadProviderCatalogResponse = {
 const blockTemplateDefinitions = new NaverBlog().getBlockTemplateDefinitions()
 
 const resumedScanResult: ScanResult = {
-  blogId: "mym0404",
+  blogKey: "naver",
+  sourceId: "mym0404",
   totalPostCount: 5,
   categories: [
     {
@@ -139,8 +140,9 @@ const resumedScanResult: ScanResult = {
   ],
   posts: [
     {
-      blogId: "mym0404",
-      logNo: "223034929700",
+      blogKey: "naver",
+      sourceId: "mym0404",
+      postId: "223034929700",
       title: "NestJS 복구 테스트 1",
       publishedAt: "2026-04-11T04:00:00.000Z",
       categoryId: 101,
@@ -167,50 +169,52 @@ const timestamps = {
   finishedAt: "2026-04-11T04:00:03.000Z",
 } as const
 
-const buildUploadCandidates = (logNo: string) => [
+const buildUploadCandidates = (postId: string) => [
   {
     kind: "thumbnail" as const,
-    sourceUrl: `https://example.com/${logNo}/thumb.png`,
-    localPath: `NestJS/2026-04-11-${logNo}/thumb.png`,
+    sourceUrl: `https://example.com/${postId}/thumb.png`,
+    localPath: `NestJS/2026-04-11-${postId}/thumb.png`,
     markdownReference: "thumb.png",
   },
   {
     kind: "image" as const,
-    sourceUrl: `https://example.com/${logNo}/image.png`,
-    localPath: `NestJS/2026-04-11-${logNo}/image.png`,
+    sourceUrl: `https://example.com/${postId}/image.png`,
+    localPath: `NestJS/2026-04-11-${postId}/image.png`,
     markdownReference: "image.png",
   },
 ]
 
 const buildUploadItem = ({
-  logNo,
+  postId,
   uploadedCount,
   rewriteStatus,
   updatedAt,
 }: {
-  logNo: string
+  postId: string
   uploadedCount: number
   rewriteStatus: UploadRewriteStatus
   updatedAt: string
 }): ExportJobItem => {
-  const candidates = buildUploadCandidates(logNo)
+  const candidates = buildUploadCandidates(postId)
   const uploadedUrls =
     rewriteStatus === "completed"
       ? candidates.map((candidate) => `https://cdn.example.com/${candidate.localPath}`)
       : []
 
   return {
-    id: `NestJS/2026-04-11-${logNo}/index.md`,
-    logNo,
-    title: `NestJS 복구 테스트 ${logNo.slice(-1)}`,
-    source: `https://blog.naver.com/mym0404/${logNo}`,
+    id: `NestJS/2026-04-11-${postId}/index.md`,
+    blogKey: "naver",
+    sourceId: "mym0404",
+    postId,
+    title: `NestJS 복구 테스트 ${postId.slice(-1)}`,
+    source: `https://blog.naver.com/mym0404/${postId}`,
     category: {
       id: 101,
       name: "NestJS",
       path: ["NestJS"],
     },
     status: "success",
-    outputPath: `NestJS/2026-04-11-${logNo}/index.md`,
+    outputPath: `NestJS/2026-04-11-${postId}/index.md`,
     assetPaths:
       rewriteStatus === "completed"
         ? uploadedUrls
@@ -239,7 +243,8 @@ const buildExportRunningJob = ({
 }): ExportJobState => ({
   id: "job-running",
   request: {
-    blogIdOrUrl: "mym0404",
+    blogKey: "naver",
+    sourceInput: "mym0404",
     outputDir,
     profile: "gfm",
     options: buildUploadOptions(),
@@ -275,7 +280,7 @@ const buildExportRunningJob = ({
   items: [
     {
       ...buildUploadItem({
-        logNo: "223034929700",
+        postId: "223034929700",
         uploadedCount: 0,
         rewriteStatus: "pending",
         updatedAt: timestamps.updatedAt,
@@ -318,19 +323,19 @@ const buildUploadJob = ({
 }): ExportJobState => {
   const items = [
     buildUploadItem({
-      logNo: "223034929700",
+      postId: "223034929700",
       uploadedCount: uploadedCounts[0],
       rewriteStatus: rewriteStatuses[0],
       updatedAt: finishedAt ?? timestamps.updatedAt,
     }),
     buildUploadItem({
-      logNo: "223034929701",
+      postId: "223034929701",
       uploadedCount: uploadedCounts[1],
       rewriteStatus: rewriteStatuses[1],
       updatedAt: finishedAt ?? timestamps.updatedAt,
     }),
     buildUploadItem({
-      logNo: "223034929702",
+      postId: "223034929702",
       uploadedCount: uploadedCounts[2],
       rewriteStatus: rewriteStatuses[2],
       updatedAt: finishedAt ?? timestamps.updatedAt,
@@ -342,7 +347,8 @@ const buildUploadJob = ({
   return {
     id: jobId,
     request: {
-      blogIdOrUrl: "mym0404",
+      blogKey: "naver",
+      sourceInput: "mym0404",
       outputDir,
       profile: "gfm",
       options: buildUploadOptions(),
@@ -391,7 +397,8 @@ const buildUploadJob = ({
 const buildCompletedJob = ({ outputDir }: { outputDir: string }): ExportJobState => ({
   id: "job-completed",
   request: {
-    blogIdOrUrl: "mym0404",
+    blogKey: "naver",
+    sourceInput: "mym0404",
     outputDir,
     profile: "gfm",
     options: defaultExportOptions(),
@@ -428,7 +435,8 @@ const buildCompletedJob = ({ outputDir }: { outputDir: string }): ExportJobState
 const buildFailedJob = ({ outputDir }: { outputDir: string }): ExportJobState => ({
   id: "job-failed",
   request: {
-    blogIdOrUrl: "mym0404",
+    blogKey: "naver",
+    sourceInput: "mym0404",
     outputDir,
     profile: "gfm",
     options: defaultExportOptions(),

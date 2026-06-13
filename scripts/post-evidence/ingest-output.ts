@@ -1,7 +1,6 @@
 import { readdir, readFile } from "node:fs/promises"
 import path from "node:path"
 
-import { extractBlogId } from "@exitpress/domain/blog/NaverUrl.js"
 import { resolveRepoPath } from "@exitpress/engine/infra/node/FilePaths.js"
 
 import type {
@@ -34,18 +33,24 @@ const readManifest = async (manifestPath: string): Promise<ExportManifest | null
 }
 
 export const loadReusableIngestOutput = async ({
-  blogId,
+  blogKey,
+  sourceId,
   outputDir,
 }: {
-  blogId: string
+  blogKey: string
+  sourceId: string
   outputDir: string
 }): Promise<ReusableIngestOutput | null> => {
-  const resolvedBlogId = extractBlogId(blogId)
   const resolvedOutputDir = resolveRepoPath(outputDir)
   const manifestPath = path.join(resolvedOutputDir, "manifest.json")
   const manifest = await readManifest(manifestPath)
 
-  if (!manifest || manifest.blogId !== resolvedBlogId || !manifest.finishedAt) {
+  if (
+    !manifest ||
+    manifest.blogKey !== blogKey ||
+    manifest.sourceId !== sourceId ||
+    !manifest.finishedAt
+  ) {
     return null
   }
 
@@ -58,14 +63,15 @@ export const loadReusableIngestOutput = async ({
 }
 
 export const findLatestReusableIngestOutput = async ({
-  blogId,
+  blogKey,
+  sourceId,
   rootDir = path.join("tmp", "harness", "ingest-blog"),
 }: {
-  blogId: string
+  blogKey: string
+  sourceId: string
   rootDir?: string
 }): Promise<ReusableIngestOutput | null> => {
   const resolvedRootDir = resolveRepoPath(rootDir)
-  const safeBlogId = extractBlogId(blogId)
 
   try {
     const entries = await readdir(resolvedRootDir, {
@@ -79,7 +85,8 @@ export const findLatestReusableIngestOutput = async ({
         .map(async (entry) => {
           const outputDir = path.join(resolvedRootDir, entry.name)
           const reusable = await loadReusableIngestOutput({
-            blogId: safeBlogId,
+            blogKey,
+            sourceId,
             outputDir,
           })
 

@@ -128,7 +128,8 @@ describe("http server resume defaults", () => {
         path.join(outputDir, "manifest.json"),
         JSON.stringify(
           {
-            blogId: "mym0404",
+            blogKey: "naver",
+            sourceId: "mym0404",
             profile: "gfm",
             options: defaultExportOptions(),
             selectedCategoryIds: [84],
@@ -151,7 +152,8 @@ describe("http server resume defaults", () => {
               id: "job-resume",
               phase: "export",
               request: {
-                blogIdOrUrl: "mym0404",
+                blogKey: "naver",
+                sourceInput: "mym0404",
                 outputDir,
                 profile: "gfm",
                 options: defaultExportOptions(),
@@ -176,7 +178,8 @@ describe("http server resume defaults", () => {
               },
               error: null,
               scanResult: {
-                blogId: baseScanResult.blogId,
+                blogKey: "naver",
+                sourceId: baseScanResult.sourceId,
                 totalPostCount: baseScanResult.totalPostCount,
               },
               summary: {
@@ -217,7 +220,7 @@ describe("http server resume defaults", () => {
       expect(body.resumedJob?.logs).toEqual([])
       expect(body.resumedJob?.request.outputDir).toBe(outputDir)
       expect(body.resumeSummary?.outputDir).toBe(outputDir)
-      expect(body.resumedScanResult?.blogId).toBe(baseScanResult.blogId)
+      expect(body.resumedScanResult?.sourceId).toBe(baseScanResult.sourceId)
     } finally {
       await rm(rootDir, { recursive: true, force: true })
     }

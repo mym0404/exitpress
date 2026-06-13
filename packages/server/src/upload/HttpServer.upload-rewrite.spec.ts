@@ -1,8 +1,8 @@
 import { readFile } from "node:fs/promises"
 import path from "node:path"
 
+import { NaverBlogFetcher } from "@exitpress/blog-naver/integrations/naver-blog/NaverBlogFetcher.js"
 import { defaultExportOptions } from "@exitpress/domain/export-options/ExportOptions.js"
-import { NaverBlogFetcher } from "@exitpress/engine/integrations/naver-blog/NaverBlogFetcher.js"
 import {
   baseScanResult,
   cleanupTestServerRoots,
@@ -73,7 +73,8 @@ describe("http server upload rewrite", () => {
         "content-type": "application/json",
       },
       body: JSON.stringify({
-        blogIdOrUrl: "https://blog.naver.com/mym0404",
+        blogKey: "naver",
+        sourceInput: "https://blog.naver.com/mym0404",
         outputDir,
         options,
         uploadProvider: createUploadPayload({
@@ -120,12 +121,12 @@ describe("http server upload rewrite", () => {
     }
     const posts = [
       createPost({
-        logNo: "223034929697",
+        postId: "223034929697",
         title: "첫 번째 글",
         thumbnailUrl: "https://example.com/thumb.png",
       }),
       createPost({
-        logNo: "223034929698",
+        postId: "223034929698",
         title: "두 번째 글",
         thumbnailUrl: "https://example.com/thumb.png",
       }),
@@ -224,7 +225,8 @@ describe("http server upload rewrite", () => {
         "content-type": "application/json",
       },
       body: JSON.stringify({
-        blogIdOrUrl: "https://blog.naver.com/mym0404",
+        blogKey: "naver",
+        sourceInput: "https://blog.naver.com/mym0404",
         outputDir: createTestPath("http-server", "batch-rewrite-failure-output"),
         options,
         uploadProvider: createUploadPayload({
@@ -272,7 +274,8 @@ describe("http server upload rewrite", () => {
         "content-type": "application/json",
       },
       body: JSON.stringify({
-        blogIdOrUrl: "https://blog.naver.com/mym0404",
+        blogKey: "naver",
+        sourceInput: "https://blog.naver.com/mym0404",
         outputDir: createTestPath("http-server", "zero-candidates-output"),
         options,
         uploadProvider: createUploadPayload({

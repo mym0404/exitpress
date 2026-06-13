@@ -5,8 +5,13 @@ import type { ExportManifest } from "@exitpress/domain/export-job/schema/ExportM
 
 import type { JobStore } from "../jobs/JobStore.js"
 
-export const getJobItemId = ({ outputPath, logNo }: { outputPath: string | null; logNo: string }) =>
-  outputPath ?? `failed:${logNo}`
+export const getJobItemId = ({
+  outputPath,
+  postId,
+}: {
+  outputPath: string | null
+  postId: string
+}) => outputPath ?? `failed:${postId}`
 
 const countUploadedCandidates = ({
   item,

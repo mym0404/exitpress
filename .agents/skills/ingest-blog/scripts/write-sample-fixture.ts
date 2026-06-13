@@ -7,24 +7,25 @@ import { ensureDir, resolveRepoPath } from "@exitpress/engine/infra/node/FilePat
 
 import type { AssetRecord } from "../../../../packages/domain/src/export-job/schema/UploadState.js"
 
-import { extractBlogId } from "../../../../packages/domain/src/blog/NaverUrl.js"
+import { NaverBlogFetcher } from "../../../../packages/blog-naver/src/integrations/naver-blog/NaverBlogFetcher.js"
+import { extractSourceId } from "../../../../packages/blog-naver/src/NaverUrl.js"
+import { parsePostHtml } from "../../../../packages/blog-naver/src/parsing/naver-blog/core/PostParser.js"
+import { createNaverBlogDefaultBlockTemplateMap } from "../../../../packages/blog-naver/src/parsing/naver-blog/NaverBlog.js"
 import { defaultExportOptions } from "../../../../packages/domain/src/export-options/ExportOptions.js"
 import { getCategoryForPost } from "../../../../packages/engine/src/exporting/paths/ExportPaths.js"
-import { NaverBlogFetcher } from "../../../../packages/engine/src/integrations/naver-blog/NaverBlogFetcher.js"
 import { renderMarkdownPost } from "../../../../packages/engine/src/markdown/util/renderMarkdownPost.js"
-import { parsePostHtml } from "../../../../packages/engine/src/parsing/naver-blog/core/PostParser.js"
-import { createNaverBlogDefaultBlockTemplateMap } from "../../../../packages/engine/src/parsing/naver-blog/NaverBlog.js"
 import { toErrorMessage } from "../../../../packages/engine/src/shared/error/util/toErrorMessage.js"
 
 type FixtureArgs = {
-  blogId: string
-  logNo: string
+  blogKey: string
+  sourceInput: string
+  postId: string
   id: string
   force: boolean
 }
 
 const usage = () => `Usage:
-  bun .agents/skills/ingest-blog/scripts/write-sample-fixture.ts --blogId <blogId> --logNo <logNo> --id <fixtureId> [--force]
+  bun .agents/skills/ingest-blog/scripts/write-sample-fixture.ts --blogKey naver --sourceInput <sourceInput> --postId <postId> --id <fixtureId> [--force]
 
 Creates tests/fixtures/samples/<id>/expected.md with remote asset references and no image downloads.`
 
@@ -39,8 +40,9 @@ const readValue = (args: string[], index: number) => {
 }
 
 const parseArgs = (args: string[]): FixtureArgs | "help" => {
-  let blogId: string | undefined
-  let logNo: string | undefined
+  let blogKey: string | undefined
+  let sourceInput: string | undefined
+  let postId: string | undefined
   let id: string | undefined
   let force = false
 
@@ -51,14 +53,20 @@ const parseArgs = (args: string[]): FixtureArgs | "help" => {
       return "help"
     }
 
-    if (arg === "--blogId") {
-      blogId = readValue(args, index)
+    if (arg === "--blogKey") {
+      blogKey = readValue(args, index)
       index++
       continue
     }
 
-    if (arg === "--logNo") {
-      logNo = readValue(args, index)
+    if (arg === "--sourceInput") {
+      sourceInput = readValue(args, index)
+      index++
+      continue
+    }
+
+    if (arg === "--postId") {
+      postId = readValue(args, index)
       index++
       continue
     }
@@ -77,13 +85,14 @@ const parseArgs = (args: string[]): FixtureArgs | "help" => {
     throw new Error(usage())
   }
 
-  if (!blogId || !logNo || !id) {
+  if (!blogKey || !sourceInput || !postId || !id) {
     throw new Error(usage())
   }
 
   return {
-    blogId,
-    logNo,
+    blogKey,
+    sourceInput,
+    postId,
     id,
     force,
   }
@@ -135,18 +144,22 @@ const run = async () => {
 
   assertFixtureId(args.id)
 
-  const blogId = extractBlogId(args.blogId)
+  if (args.blogKey !== "naver") {
+    throw new Error(`unsupported blogKey: ${args.blogKey}`)
+  }
+
+  const sourceId = extractSourceId(args.sourceInput)
   const fetcher = new NaverBlogFetcher({
-    blogId,
+    sourceId,
   })
   const scan = await fetcher.scanBlog()
   const posts = await fetcher.getAllPosts({
     expectedTotal: scan.totalPostCount,
   })
-  const post = posts.find((entry) => entry.logNo === args.logNo)
+  const post = posts.find((entry) => entry.postId === args.postId)
 
   if (!post) {
-    throw new Error(`public post metadata not found: ${blogId}/${args.logNo}`)
+    throw new Error(`public post metadata not found: ${sourceId}/${args.postId}`)
   }
 
   const categoryMap = new Map(scan.categories.map((category) => [category.id, category]))
@@ -169,7 +182,7 @@ const run = async () => {
     )
   }
 
-  const html = await fetcher.fetchPostHtml(post.logNo)
+  const html = await fetcher.fetchPostHtml(post.postId)
   const parsedPost = parsePostHtml({
     html,
     sourceUrl: post.source,
@@ -207,8 +220,9 @@ const run = async () => {
     [
       `fixtureId: ${args.id}`,
       `expectedMarkdownPath: ${expectedMarkdownPath}`,
-      `blogId: ${blogId}`,
-      `logNo: ${post.logNo}`,
+      `blogKey: ${args.blogKey}`,
+      `sourceId: ${sourceId}`,
+      `postId: ${post.postId}`,
       `blockIds: ${parsedPost.blocks.map((block) => block.blockId).join(", ") || "(none)"}`,
       `assetRecordCount: ${rendered.assetRecords.length}`,
       `downloadedAssetFileCount: 0`,

@@ -1,24 +1,27 @@
-import type { SinglePostInspectDiagnostics } from "@exitpress/engine/exporting/post/SinglePostInspect.js"
-import type { ParserBlockInspection } from "@exitpress/engine/parsing/naver-blog/core/ParserBlockDiagnostics.js"
+import type { SinglePostInspectDiagnostics } from "@exitpress/blog-naver/exporting/SinglePostInspect.js"
+import type { ParserBlockInspection } from "@exitpress/blog-naver/parsing/naver-blog/core/ParserBlockDiagnostics.js"
 
 export const renderSinglePostSummary = ({
-  blogId,
-  logNo,
+  blogKey,
+  sourceId,
+  postId,
   blockIds,
   exporterMarkdownFilePath,
   manualReviewMarkdownFilePath,
   metadataCachePath,
 }: {
-  blogId: string
-  logNo: string
+  blogKey: string
+  sourceId: string
+  postId: string
   blockIds: string[]
   exporterMarkdownFilePath: string
   manualReviewMarkdownFilePath: string | null
   metadataCachePath: string | null
 }) =>
   [
-    `blogId: ${blogId}`,
-    `logNo: ${logNo}`,
+    `blogKey: ${blogKey}`,
+    `sourceId: ${sourceId}`,
+    `postId: ${postId}`,
     `blockIds: ${blockIds.join(", ") || "(none)"}`,
     `exporterMarkdownFilePath: ${exporterMarkdownFilePath}`,
     `manualReviewMarkdownFilePath: ${manualReviewMarkdownFilePath ?? "(not provided)"}`,
@@ -54,8 +57,9 @@ export const renderSinglePostInspectSummary = ({
       : ["parse: failed", `error: ${diagnostics.parse.error}`]
 
   return [
-    `blogId: ${diagnostics.blogId}`,
-    `logNo: ${diagnostics.logNo}`,
+    `blogKey: ${diagnostics.blogKey}`,
+    `sourceId: ${diagnostics.sourceId}`,
+    `postId: ${diagnostics.postId}`,
     `editor: ${diagnostics.editor ? `${diagnostics.editor.type} (${diagnostics.editor.label})` : "(not detected)"}`,
     ...parseLines,
     `unsupportedCount: ${diagnostics.unsupportedNodes.length}`,

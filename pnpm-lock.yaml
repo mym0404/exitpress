@@ -357,6 +357,9 @@ importers:
 
   packages/server:
     dependencies:
+      '@exitpress/blog-naver':
+        specifier: workspace:*
+        version: link:../blog-naver
       '@exitpress/domain':
         specifier: workspace:*
         version: link:../domain

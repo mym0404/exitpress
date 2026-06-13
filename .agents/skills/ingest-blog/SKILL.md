@@ -1,11 +1,11 @@
 ---
 name: ingest-blog
-description: Ingest a public Naver Blog by blogId to improve this repository's parser coverage. Use when Codex needs to export every public post without downloading images, summarize parse failures, implement or extend parser blocks for failed HTML, add representative sample fixtures, and create Korean ready PRs.
+description: Ingest a public blog by blogKey and sourceInput to improve this repository's parser coverage. Use when Codex needs to export every public post without downloading images, summarize parse failures, implement or extend parser blocks for failed HTML, add representative sample fixtures, and create Korean ready PRs.
 ---
 
 # Ingest Blog
 
-Use this skill to raise Naver Blog parser coverage from real public posts. Treat a blog ingest as a coverage-improvement loop that discovers all gaps and creates one focused PR for each parser support unit.
+Use this skill to raise concrete blog parser coverage from real public posts. Treat a blog ingest as a coverage-improvement loop that discovers all gaps and creates one focused PR for each parser support unit.
 
 ## Required Outcome
 
@@ -16,32 +16,33 @@ When parse errors are found, group failures into parser support units and proces
 
 A completed ingest check must publish the `.agents/skills/ingest-blog/checked.txt` update. If parser-support PRs are created for the ingest target, include the `checked.txt` update in the first ready PR only. If no unsupported parser blocks are found, create a ready PR that contains the `checked.txt` update instead of ending with only a local change.
 
-Do not treat an unresolved or deferred support unit as complete. If a failure cannot be safely fixed in the current pass, leave code and fixtures unchanged for that unit, report the blocker with representative `logNo` and inspect evidence, and do not end the turn as complete.
+Do not treat an unresolved or deferred support unit as complete. If a failure cannot be safely fixed in the current pass, leave code and fixtures unchanged for that unit, report the blocker with representative `postId` and inspect evidence, and do not end the turn as complete.
 Other support units from the same blog stay out of the focused PR body, but they are not completion backlog; they must each get their own focused PR before the turn can end.
 
 ## Quick Commands
 
-Use only ingest targets whose `blogId` is not already listed in `.agents/skills/ingest-blog/checked.txt` unless the user explicitly provides and confirms that exact already-checked id.
-Before running an ingest check, read `.agents/skills/ingest-blog/checked.txt`; it stores one `blogId` per line.
-After checking a `blogId`, append that exact id to `checked.txt` on its own line if it is not already present.
+Use only ingest targets whose `blogKey/sourceId` pair is not already listed in `.agents/skills/ingest-blog/checked.txt` unless the user explicitly provides and confirms that exact already-checked target.
+Before running an ingest check, read `.agents/skills/ingest-blog/checked.txt`; it stores one `blogKey/sourceId` pair per line.
+After checking a target, append that exact pair to `checked.txt` on its own line if it is not already present.
 
-Run ingest with remote asset references. If a completed output for the same `blogId` exists, reuse it and rerun only failed posts:
+Run ingest with remote asset references. If a completed output for the same `blogKey/sourceId` exists, reuse it and rerun only failed posts:
 
 ```bash
-bun .agents/skills/ingest-blog/scripts/collect-blog-errors.ts --blogId <blogId>
+bun .agents/skills/ingest-blog/scripts/collect-blog-errors.ts --blogKey naver --sourceInput <sourceInput>
 ```
 
 Force a new full ingest:
 
 ```bash
-bun .agents/skills/ingest-blog/scripts/collect-blog-errors.ts --blogId <blogId> --forceFull
+bun .agents/skills/ingest-blog/scripts/collect-blog-errors.ts --blogKey naver --sourceInput <sourceInput> --forceFull
 ```
 
 Reuse a specific completed output and rerun only failed posts:
 
 ```bash
 bun .agents/skills/ingest-blog/scripts/collect-blog-errors.ts \
-  --blogId <blogId> \
+  --blogKey naver \
+  --sourceInput <sourceInput> \
   --reuseOutputDir <absolute-output-dir> \
   --rerunFailures
 ```
@@ -50,7 +51,8 @@ Rerun and report one parser support unit:
 
 ```bash
 bun .agents/skills/ingest-blog/scripts/collect-blog-errors.ts \
-  --blogId <blogId> \
+  --blogKey naver \
+  --sourceInput <sourceInput> \
   --reuseOutputDir <absolute-output-dir> \
   --rerunFailures \
   --focusSupportUnit <supportUnitKey>
@@ -67,8 +69,9 @@ Create a fixture for one fixed representative post:
 
 ```bash
 bun .agents/skills/ingest-blog/scripts/write-sample-fixture.ts \
-  --blogId <blogId> \
-  --logNo <logNo> \
+  --blogKey naver \
+  --sourceInput <sourceInput> \
+  --postId <postId> \
   --id <fixtureId>
 ```
 
@@ -78,25 +81,26 @@ Create evidence for a source post or inspect path:
 
 ```bash
 bun scripts/post-evidence/capture-post-evidence.ts \
-  --blogId <blogId> \
-  --logNo <logNo> \
+  --blogKey naver \
+  --sourceInput <sourceInput> \
+  --postId <postId> \
   --target inspect-path \
   --inspectPath 0 \
   --metadataCachePath tmp/harness/post-evidence/metadata-cache.json
 ```
 
 `--target post` renders Markdown with frontmatter. `--target inspect-path` renders only the selected block fragment and omits frontmatter.
-Naver screenshots capture the selected HTML node rather than the current viewport; long nodes may produce tall images.
+Source screenshots capture the selected HTML node rather than the current viewport; long nodes may produce tall images.
 Focused parser-support PR evidence must use `inspect-path` whenever an unsupported block path is known, including after the focused rerun succeeds. Use `post` only when no inspect path is available.
-Ingest PR evidence renders as README-style Markdown sections with a Naver capture image and Markdown code fence, without a source-post link.
+Ingest PR evidence renders as README-style Markdown sections with a source capture image and Markdown code fence, without a source-post link.
 Use `--metadataCachePath` when generating multiple rows from one blog so post metadata scan results are reused.
 Use `--assetProfile tmp` for local smoke output, `--assetProfile readme` for README assets, and `--assetProfile figure` for report or PR figures that must be committed.
 
 ## Workflow
 
-1. Confirm `<blogId>` is absent from `.agents/skills/ingest-blog/checked.txt` before using it as the ingest target, unless the user explicitly confirmed rechecking an already listed id.
-2. Run `collect-blog-errors.ts --blogId <blogId>` unless the user explicitly asked for `--forceFull`.
-3. Append `<blogId>` to `.agents/skills/ingest-blog/checked.txt` on its own line if it is not already present.
+1. Confirm `<blogKey>/<sourceId>` is absent from `.agents/skills/ingest-blog/checked.txt` before using it as the ingest target, unless the user explicitly confirmed rechecking an already listed target.
+2. Run `collect-blog-errors.ts --blogKey <blogKey> --sourceInput <sourceInput>` unless the user explicitly asked for `--forceFull`.
+3. Append `<blogKey>/<sourceId>` to `.agents/skills/ingest-blog/checked.txt` on its own line if it is not already present.
 4. Record the absolute `outputDir` printed by the script.
 5. Read `failure-summary.json` and freeze the full `discoveredSupportUnits` list for this ingest turn.
 6. If no unsupported parser blocks were found, create a ready PR containing the `checked.txt` update and no parser code or fixture changes.
@@ -161,7 +165,7 @@ The report must include:
 - evidence generated through `scripts/post-evidence/capture-post-evidence.ts` helpers
 - unresolved focused failures and the reason each one is deferred
 
-Keep evidence metadata as a short human note, such as the parser block behavior being demonstrated. Do not fill it with routine run state like blog id, log number, title, or status unless that value is the useful note for the section.
+Keep evidence metadata as a short human note, such as the parser block behavior being demonstrated. Do not fill it with routine run state like source identity, post id, title, or status unless that value is the useful note for the section.
 
 Use `--changesPath <json>` when rerunning the collector after code changes. The JSON may contain `parserChanges`, `fixtures`, `verification`, and `unresolved` arrays.
 If unresolved focused failures remain, include one deferred reason per representative failure group in `unresolved`.
@@ -210,8 +214,8 @@ For a focused support-unit PR:
 - Include only the summary and fixed three-section body above.
 - Include `.agents/skills/ingest-blog/checked.txt` in the first ready PR created for the ingest target.
 - Include a hidden claim marker after the summary: `<!-- ingest-blog:supportUnitKey=<key> -->`.
-- Do not include visible blog names, blog ids, log numbers, source-post URLs, or source-post link labels in the PR body.
-- Do not include source frontmatter fields such as `source`, `blogId`, `logNo`, `publishedAt`, `category`, `categoryPath`, or `thumbnail` in PR Markdown evidence.
+- Do not include visible blog names, source identities, post ids, source-post URLs, or source-post link labels in the PR body.
+- Do not include source frontmatter fields such as `source`, `blogKey`, `sourceId`, `postId`, `publishedAt`, `category`, `categoryPath`, or `thumbnail` in PR Markdown evidence.
 - Use anonymous committed figure asset filenames so raw-GitHub image URLs do not reveal a source blog or post id.
 - Run the Local PR Gate after the focused report is regenerated and before commit, push, or PR creation.
 - PR evidence images must render on GitHub. Commit `figure` assets first, push the branch, then replace local or repo-relative image paths with `https://raw.githubusercontent.com/<owner>/<repo>/<headCommitSha>/<path>` URLs in the PR body.

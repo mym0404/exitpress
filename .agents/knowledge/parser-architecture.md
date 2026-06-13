@@ -1,18 +1,18 @@
 # Parser Architecture
 
 ## Scope
-- Parser code converts Naver editor HTML into platform-neutral parsed blocks.
+- Parser code in concrete `blog-*` packages converts blog/editor HTML into platform-neutral parsed blocks.
 - Editor-specific logic stays inside the editor family that owns the HTML shape.
 - Renderer and exporter behavior is outside parser ownership.
 
 ## Routing Flow
-- The core parser receives post HTML plus parser options.
+- The blog parser receives post HTML plus parser options.
 - Editor implementations decide whether they can parse a source.
 - The selected editor applies ordered block parsers and returns parsed blocks plus post metadata.
 - Unsupported or diagnostic paths should expose enough context for fixtures and evidence tools without changing normal output.
 
 ## Ownership
-- Core parser code owns editor dispatch, shared parser contracts, diagnostics, and parsed block output helpers.
+- The concrete blog parser owns editor dispatch, diagnostics, and parsed block output helpers.
 - Editor folders own block ordering, editor-local context, and editor-specific block converters.
 - Block utilities stay under the owning block/editor `util/` folder.
 - Shared parser contracts are imported from domain `schema/` files.

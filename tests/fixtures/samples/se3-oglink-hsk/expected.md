@@ -1,8 +1,9 @@
 ---
 title: "[8/18일 IBT] HSK 5급합격 후기 🤗❤️"
 source: https://blog.naver.com/izozi5704/221354460116
-blogId: izozi5704
-logNo: 221354460116
+blogKey: naver
+sourceId: izozi5704
+postId: 221354460116
 publishedAt: 2018-09-07T17:19:19+09:00
 category: ಇ중국어공부ಇ
 categoryPath:

@@ -1,8 +1,9 @@
 ---
 title: "[검색 꿀팁] 그녀는 예뻤다 황정음이 신은 구두 뭐야?!"
 source: https://blog.naver.com/naver_search/220521307281
-blogId: naver_search
-logNo: 220521307281
+blogKey: naver
+sourceId: naver_search
+postId: 220521307281
 publishedAt: 2015-10-27T19:19:53+09:00
 category: 서비스
 categoryPath:

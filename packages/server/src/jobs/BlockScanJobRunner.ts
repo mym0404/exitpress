@@ -1,21 +1,20 @@
 import { filterPostsByScope } from "@exitpress/domain/export-scope/ExportScope.js"
-import {
-  blockDetectionConcurrency,
-  detectPostBlockTemplateKeys,
-} from "@exitpress/engine/exporting/workflow/DetectedBlockTemplateScanner.js"
-import { NaverBlogFetcher } from "@exitpress/engine/integrations/naver-blog/NaverBlogFetcher.js"
 import { mapConcurrent } from "@exitpress/engine/shared/async/util/AsyncTasks.js"
 import { toErrorMessage } from "@exitpress/engine/shared/error/util/toErrorMessage.js"
 
+import type { BlogPostRef, BlogSource } from "@exitpress/domain/blog/schema/Blog.js"
 import type { ScanResult } from "@exitpress/domain/blog/schema/BlogScan.js"
 import type { ExportOptions } from "@exitpress/domain/export-options/schema/ExportOptions.js"
 import type { BlockTemplateDefinition } from "@exitpress/domain/template/schema/BlockTemplateDefinition.js"
-import type { NaverBlogFetcherCache } from "@exitpress/engine/integrations/naver-blog/NaverBlogFetcher.js"
+import type { BlogPostContentCache } from "@exitpress/engine/blog/Blog.js"
+import type { BlogRegistry } from "@exitpress/engine/blog/BlogRegistry.js"
 
 import type { BlockScanJobStore } from "./BlockScanJobStore.js"
 
 // Runtime controller for parser block discovery jobs.
 export type BlockScanJobRunner = ReturnType<typeof createBlockScanJobRunner>
+
+const blockDetectionConcurrency = 3
 
 const sortDetectedKeys = ({
   keys,
@@ -38,17 +37,21 @@ const sortDetectedKeys = ({
 // Scans selected posts to detect which block template options are needed.
 export const createBlockScanJobRunner = ({
   jobStore,
+  blogRegistry,
   blockTemplateDefinitions,
   postHtmlCache,
 }: {
   jobStore: BlockScanJobStore
+  blogRegistry: BlogRegistry
   blockTemplateDefinitions: BlockTemplateDefinition[]
-  postHtmlCache: NaverBlogFetcherCache
+  postHtmlCache: BlogPostContentCache
 }) => {
   const startJob = ({
+    source,
     scanResult,
     options,
   }: {
+    source: BlogSource
     scanResult: ScanResult & { posts: NonNullable<ScanResult["posts"]> }
     options: ExportOptions
   }) => {
@@ -64,22 +67,36 @@ export const createBlockScanJobRunner = ({
     void (async () => {
       jobStore.start(job.id)
 
-      const fetcher = new NaverBlogFetcher({
-        blogId: scanResult.blogId,
-        cache: postHtmlCache,
-      })
+      const blog = blogRegistry.require(scanResult.blogKey)
 
       await mapConcurrent({
         items: posts,
         concurrency: blockDetectionConcurrency,
         mapper: async (post) => {
           try {
-            const html = await fetcher.fetchPostHtml(post.logNo)
-            const keys = detectPostBlockTemplateKeys({
-              html,
+            const blogPost: BlogPostRef = {
+              blogKey: post.blogKey,
+              sourceId: post.sourceId,
+              postId: post.postId,
+              title: post.title,
               sourceUrl: post.source,
+              publishedAt: post.publishedAt,
+              categoryId: post.categoryId,
+              categoryName: post.categoryName,
+              thumbnailUrl: post.thumbnailUrl ?? undefined,
+            }
+            const content = await blog.loadPostContent({
+              source,
+              post: blogPost,
+              cache: postHtmlCache,
+            })
+            const parsed = blog.parseContent({
+              source,
+              post: blogPost,
+              content,
               options,
             })
+            const keys = parsed.blocks.map((block) => block.blockId)
             jobStore.completePost(job.id, keys)
           } catch (error) {
             jobStore.failPost(job.id, toErrorMessage(error))

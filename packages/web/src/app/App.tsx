@@ -42,7 +42,7 @@ import {
 import { fetchJson, postJson, postSameOriginJson } from "../lib/Api.js"
 import { getAppRoute } from "../lib/AppRoutes.js"
 
-import { fallbackDefaults } from "./AppDefaults.js"
+import { defaultBlogKey, fallbackDefaults } from "./AppDefaults.js"
 import { useAppResumeBootstrap } from "./AppResumeBootstrap.js"
 import { AppShell } from "./AppShell.js"
 import { getAppShellState, shouldWarnBeforeLeavingApp } from "./AppShellState.js"
@@ -71,12 +71,13 @@ const createErrorJobState = ({
   request,
 }: {
   error: string
-  request: { blogIdOrUrl: string; outputDir: string; options: ExportOptions }
+  request: { sourceInput: string; outputDir: string; options: ExportOptions }
 }) =>
   ({
     id: "failed-local",
     request: {
-      blogIdOrUrl: request.blogIdOrUrl,
+      blogKey: defaultBlogKey,
+      sourceInput: request.sourceInput,
       outputDir: request.outputDir,
       profile: "gfm",
       options: request.options,
@@ -148,7 +149,7 @@ const ExportApp = () => {
   const [bootstrapping, setBootstrapping] = useState(true)
   const [resettingResume, setResettingResume] = useState(false)
   const [restoringResume, setRestoringResume] = useState(false)
-  const [blogIdOrUrl, setBlogIdOrUrl] = useState("")
+  const [sourceInput, setSourceIdOrUrl] = useState("")
   const [outputDir, setOutputDir] = useState(defaultOutputDir)
   const [resumeDialog, setResumeDialog] = useState<ResumeDialogState | null>(null)
   const [scanCache, setScanCache] = useState<ScanCacheMap>({})
@@ -201,7 +202,7 @@ const ExportApp = () => {
     setDefaults,
     setOptions,
     setOutputDir,
-    setBlogIdOrUrl,
+    setSourceIdOrUrl,
     setCategorySearch,
     setSetupStep,
     setActiveJobFilter,
@@ -215,7 +216,7 @@ const ExportApp = () => {
     lastNotifiedJobKeyRef,
   })
 
-  const currentScanTarget = blogIdOrUrl.trim()
+  const currentScanTarget = sourceInput.trim()
   const activeScanResult = currentScanTarget ? (scanCache[currentScanTarget] ?? null) : null
   const frontmatterValidationErrors = useMemo(
     () => validateFrontmatterAliases(options.frontmatter),
@@ -250,7 +251,7 @@ const ExportApp = () => {
   )
   const shouldWarnBeforeUnload = shouldWarnBeforeLeavingApp({
     bootstrapping,
-    blogIdOrUrl,
+    sourceInput,
     outputDir: normalizeOutputDir(outputDir),
     outputDirBaseline,
     activeScanResult,
@@ -342,7 +343,8 @@ const ExportApp = () => {
 
       try {
         const jobId = await startJob({
-          blogIdOrUrl: currentScanTarget,
+          blogKey: scanResult.blogKey,
+          sourceInput: currentScanTarget,
           outputDir: normalizeOutputDir(outputDir),
           options,
           scanResult,
@@ -363,7 +365,7 @@ const ExportApp = () => {
           createErrorJobState({
             error: message,
             request: {
-              blogIdOrUrl: currentScanTarget,
+              sourceInput: currentScanTarget,
               outputDir: normalizeOutputDir(outputDir),
               options,
             },
@@ -451,7 +453,8 @@ const ExportApp = () => {
 
     try {
       const { jobId } = await postJson<{ jobId: string }>("/api/scan-blocks/jobs", {
-        blogIdOrUrl: currentScanTarget,
+        blogKey: activeScanResult.blogKey,
+        sourceInput: currentScanTarget,
         scanResult: activeScanResult,
         options,
       })
@@ -592,7 +595,7 @@ const ExportApp = () => {
     setActiveJobFilter,
     setResettingResume,
     setRestoringResume,
-    setBlogIdOrUrl,
+    setSourceIdOrUrl,
     setOutputDir,
     setNeutralScanStatus,
     setErrorScanStatus,
@@ -660,7 +663,7 @@ const ExportApp = () => {
           testUploadSubmitting={testUploadSubmitting}
           testUploadResult={testUploadResult}
           testUploadError={testUploadError}
-          blogIdOrUrl={blogIdOrUrl}
+          sourceInput={sourceInput}
           outputDir={outputDir}
           scanPending={scanPending}
           blockScanJob={blockScanJob}

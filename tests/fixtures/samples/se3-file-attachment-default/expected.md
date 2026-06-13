@@ -1,8 +1,9 @@
 ---
 title: 아이디어와 열정만으로 유럽진출을 꿈꾸다! 이탈리아 건축계 착한 공모전, CROSS DESIGN CONTEST 2017
 source: https://blog.naver.com/showeclatkorea/221024168393
-blogId: showeclatkorea
-logNo: 221024168393
+blogKey: naver
+sourceId: showeclatkorea
+postId: 221024168393
 publishedAt: 2017-06-08T07:04:01+09:00
 category: 해외 디자인 사례
 categoryPath:

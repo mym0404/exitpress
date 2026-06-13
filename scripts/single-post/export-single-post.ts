@@ -5,22 +5,20 @@ import path from "node:path"
 import { fileURLToPath } from "node:url"
 
 import { cloneExportOptions } from "@exitpress/domain/export-options/ExportOptions.js"
-import { exportSinglePost } from "@exitpress/engine/exporting/post/SinglePostExport.js"
-import { inspectSinglePost } from "@exitpress/engine/exporting/post/SinglePostInspect.js"
 
 import { createSinglePostMetadataCachingFetcher } from "./MetadataCache.js"
 import { parseSinglePostCliArgs } from "./SinglePostArgs.js"
+import { getSinglePostBlogRuntime } from "./SinglePostBlogRuntime.js"
 import { readSinglePostOptions } from "./SinglePostOptions.js"
 import { renderSinglePostInspectSummary, renderSinglePostSummary } from "./SinglePostSummary.js"
 
 // Injectable dependencies keep the single-post CLI testable without shelling out.
-export type RunSinglePostCliDeps = {
+type RunSinglePostCliDeps = {
   argv?: string[]
   readFile?: typeof readFile
   writeFile?: typeof writeFile
   mkdir?: typeof mkdir
-  exportSinglePost?: typeof exportSinglePost
-  inspectSinglePost?: typeof inspectSinglePost
+  getBlogRuntime?: typeof getSinglePostBlogRuntime
   stdoutWrite?: (text: string) => void
   stderrWrite?: (text: string) => void
 }
@@ -31,8 +29,7 @@ export const runSinglePostCli = async ({
   readFile: readFileImpl = readFile,
   writeFile: writeFileImpl = writeFile,
   mkdir: mkdirImpl = mkdir,
-  exportSinglePost: exportSinglePostImpl = exportSinglePost,
-  inspectSinglePost: inspectSinglePostImpl = inspectSinglePost,
+  getBlogRuntime = getSinglePostBlogRuntime,
   stdoutWrite = (text) => {
     process.stdout.write(text)
   },
@@ -41,8 +38,9 @@ export const runSinglePostCli = async ({
   },
 }: RunSinglePostCliDeps = {}) => {
   const {
-    blogId,
-    logNo,
+    blogKey,
+    sourceId,
+    postId,
     outputDir,
     reportPath,
     manualReviewMarkdownPath,
@@ -51,6 +49,7 @@ export const runSinglePostCli = async ({
     inspect,
     stdout,
   } = parseSinglePostCliArgs(argv)
+  const blogRuntime = getBlogRuntime(blogKey)
   const resolvedManualReviewMarkdownPath = manualReviewMarkdownPath
     ? path.resolve(manualReviewMarkdownPath)
     : null
@@ -61,9 +60,9 @@ export const runSinglePostCli = async ({
   )
 
   if (inspect) {
-    const diagnostics = await inspectSinglePostImpl({
-      blogId,
-      logNo,
+    const diagnostics = await blogRuntime.inspectSinglePost({
+      sourceId,
+      postId,
       options,
     })
     const report = {
@@ -94,18 +93,20 @@ export const runSinglePostCli = async ({
     throw new Error("outputDir is required for export mode.")
   }
 
-  const diagnostics = await exportSinglePostImpl({
-    blogId,
-    logNo,
+  const diagnostics = await blogRuntime.exportSinglePost({
+    sourceId,
+    postId,
     outputDir,
     options,
     createFetcher: resolvedMetadataCachePath
       ? async (input) =>
           createSinglePostMetadataCachingFetcher({
-            blogId: input.blogId,
+            blogKey,
+            sourceId: input.sourceId,
             cachePath: resolvedMetadataCachePath,
             readFile: readFileImpl,
             writeFile: writeFileImpl,
+            createFetcher: blogRuntime.createFetcher,
           })
       : undefined,
   })
@@ -139,8 +140,9 @@ export const runSinglePostCli = async ({
 
   stderrWrite(
     renderSinglePostSummary({
-      blogId: diagnostics.post.blogId,
-      logNo: diagnostics.post.logNo,
+      blogKey,
+      sourceId: diagnostics.post.sourceId,
+      postId: diagnostics.post.postId,
       blockIds: diagnostics.blockIds,
       exporterMarkdownFilePath: diagnostics.markdownFilePath,
       manualReviewMarkdownFilePath: resolvedManualReviewMarkdownPath,

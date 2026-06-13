@@ -3,11 +3,12 @@ const entrypoint = "bun scripts/single-post/export-single-post.ts"
 const usageError = () => new Error(singlePostCliUsage())
 
 export const singlePostCliUsage = () =>
-  `Usage: ${entrypoint} --blogId my-blog --logNo 123456789012 --outputDir ./output [--report ./output/report.json] [--manualReviewMarkdownPath ./output/post.md] [--metadataCachePath ./output/metadata-cache.json] [--options ./config/single-post.json] [--stdout]\nInspect: ${entrypoint} --inspect --blogId my-blog --logNo 123456789012 [--report ./inspect.json] [--options ./config/single-post.json] [--stdout]`
+  `Usage: ${entrypoint} --blogKey naver --sourceId my-blog --postId 123456789012 --outputDir ./output [--report ./output/report.json] [--manualReviewMarkdownPath ./output/post.md] [--metadataCachePath ./output/metadata-cache.json] [--options ./config/single-post.json] [--stdout]\nInspect: ${entrypoint} --inspect --blogKey naver --sourceId my-blog --postId 123456789012 [--report ./inspect.json] [--options ./config/single-post.json] [--stdout]`
 
 export const parseSinglePostCliArgs = (args: string[]) => {
-  let blogId: string | null = null
-  let logNo: string | null = null
+  let blogKey: string | null = null
+  let sourceId: string | null = null
+  let postId: string | null = null
   let outputDir: string | null = null
   let reportPath: string | null = null
   let manualReviewMarkdownPath: string | null = null
@@ -29,14 +30,20 @@ export const parseSinglePostCliArgs = (args: string[]) => {
   for (let index = 0; index < args.length; index++) {
     const arg = args[index]
 
-    if (arg === "--blogId") {
-      blogId = readValue(index)
+    if (arg === "--blogKey") {
+      blogKey = readValue(index)
       index++
       continue
     }
 
-    if (arg === "--logNo") {
-      logNo = readValue(index)
+    if (arg === "--sourceId") {
+      sourceId = readValue(index)
+      index++
+      continue
+    }
+
+    if (arg === "--postId") {
+      postId = readValue(index)
       index++
       continue
     }
@@ -84,13 +91,14 @@ export const parseSinglePostCliArgs = (args: string[]) => {
     throw usageError()
   }
 
-  if (!blogId || !logNo || (!inspect && !outputDir)) {
+  if (!blogKey || !sourceId || !postId || (!inspect && !outputDir)) {
     throw usageError()
   }
 
   return {
-    blogId,
-    logNo,
+    blogKey,
+    sourceId,
+    postId,
     outputDir,
     reportPath,
     manualReviewMarkdownPath,

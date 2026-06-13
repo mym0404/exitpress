@@ -1,8 +1,9 @@
 ---
 title: "[Android] Android Architecture Component(AAC) #5-1 : Navigation - Basic"
 source: https://blog.naver.com/mym0404/221459172607
-blogId: mym0404
-logNo: 221459172607
+blogKey: naver
+sourceId: mym0404
+postId: 221459172607
 publishedAt: 2019-02-06T09:53:27+09:00
 category: Architecture
 categoryPath:

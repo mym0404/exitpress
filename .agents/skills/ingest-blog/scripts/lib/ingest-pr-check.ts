@@ -3,7 +3,7 @@ import { parseSupportUnitClaim } from "./ingest-pr-claims.js"
 type IngestSupportUnit = {
   supportUnitKey: string
   failureBlockHash?: string
-  logNos: string[]
+  postIds: string[]
 }
 
 export type SupportUnitClaimPullRequest = {
@@ -59,8 +59,8 @@ export const extractDiscoveredSupportUnits = (summary: unknown) => {
     }
 
     const current = units.get(supportUnitKey)
-    const logNos = Array.isArray(record.logNos)
-      ? record.logNos.filter((logNo): logNo is string => typeof logNo === "string")
+    const postIds = Array.isArray(record.postIds)
+      ? record.postIds.filter((postId): postId is string => typeof postId === "string")
       : []
     const failureBlockHash =
       typeof record.failureBlockHash === "string" ? record.failureBlockHash : undefined
@@ -68,7 +68,7 @@ export const extractDiscoveredSupportUnits = (summary: unknown) => {
     units.set(supportUnitKey, {
       supportUnitKey,
       failureBlockHash: current?.failureBlockHash ?? failureBlockHash,
-      logNos: [...new Set([...(current?.logNos ?? []), ...logNos])],
+      postIds: [...new Set([...(current?.postIds ?? []), ...postIds])],
     })
   }
 

@@ -119,13 +119,15 @@ export const useExportJob = () => {
 
   const startJob = useCallback(
     async ({
-      blogIdOrUrl,
+      blogKey,
+      sourceInput,
       outputDir,
       options,
       scanResult,
       uploadProvider,
     }: {
-      blogIdOrUrl: string
+      blogKey: string
+      sourceInput: string
       outputDir: string
       options: ExportOptions
       scanResult?: ScanResult | null
@@ -137,7 +139,8 @@ export const useExportJob = () => {
 
       try {
         const response = await postJson<{ jobId: string }>("/api/export", {
-          blogIdOrUrl,
+          blogKey,
+          sourceInput,
           outputDir,
           options,
           scanResult,

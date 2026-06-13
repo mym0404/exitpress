@@ -6,6 +6,7 @@ import type { ExportResumeLookupResponse } from "../../../lib/Api.js"
 
 import type { WizardScanActionsArgs } from "./schema/WizardActions.js"
 
+import { defaultBlogKey } from "../../../app/AppDefaults.js"
 import { toast } from "../../../components/primer/PrimerToast.js"
 import { postJson } from "../../../lib/Api.js"
 import {
@@ -34,7 +35,7 @@ export const useWizardScanActions = ({
   setCategoryStatus,
   setCategorySearch,
   setSetupStep,
-  setBlogIdOrUrl,
+  setSourceIdOrUrl,
   setOutputDir,
   setNeutralScanStatus,
   setErrorScanStatus,
@@ -101,7 +102,7 @@ export const useWizardScanActions = ({
       }
 
       if (activeScanResult && !forceRefresh) {
-        setNeutralScanStatus(`${activeScanResult.blogId} 스캔 결과를 다시 사용합니다.`)
+        setNeutralScanStatus(`${activeScanResult.sourceId} 스캔 결과를 다시 사용합니다.`)
         setCategoryStatus(readyCategoryStatus)
         setCategorySearch("")
         setOptions((current) => ({
@@ -132,7 +133,8 @@ export const useWizardScanActions = ({
 
       try {
         const nextScanResult = await postJson<ScanResult>("/api/scan", {
-          blogIdOrUrl: currentScanTarget,
+          blogKey: defaultBlogKey,
+          sourceInput: currentScanTarget,
           forceRefresh,
         })
 
@@ -140,7 +142,7 @@ export const useWizardScanActions = ({
           ...current,
           [currentScanTarget]: nextScanResult,
         }))
-        setNeutralScanStatus(`${nextScanResult.blogId} 스캔 완료`)
+        setNeutralScanStatus(`${nextScanResult.sourceId} 스캔 완료`)
         setCategoryStatus(
           `카테고리 스캔이 끝났습니다. ${nextScanResult.totalPostCount}개 글과 ${nextScanResult.categories.length}개 카테고리를 불러왔습니다.`,
         )
@@ -184,7 +186,7 @@ export const useWizardScanActions = ({
 
   const handleBlogInputChange = useCallback(
     (value: string) => {
-      setBlogIdOrUrl(value)
+      setSourceIdOrUrl(value)
       setSetupStep("blog-input")
 
       if (value.trim() && scanCache[value.trim()]) {
@@ -208,7 +210,7 @@ export const useWizardScanActions = ({
     },
     [
       scanCache,
-      setBlogIdOrUrl,
+      setSourceIdOrUrl,
       setCategorySearch,
       setCategoryStatus,
       setNeutralScanStatus,

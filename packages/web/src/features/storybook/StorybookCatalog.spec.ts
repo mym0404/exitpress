@@ -1,12 +1,12 @@
+import { parsePostHtml } from "@exitpress/blog-naver/parsing/naver-blog/core/PostParser.js"
+import { NaverBlog } from "@exitpress/blog-naver/parsing/naver-blog/NaverBlog.js"
+import { createNaverBlogDefaultBlockTemplateMap } from "@exitpress/blog-naver/parsing/naver-blog/NaverBlog.js"
 import { resolveParsedBlockAssetsForRender } from "@exitpress/engine/exporting/assets/ParsedBlockAssetResolver.js"
 import { renderBlockTemplates } from "@exitpress/engine/markdown/util/renderBlockTemplates.js"
-import { parsePostHtml } from "@exitpress/engine/parsing/naver-blog/core/PostParser.js"
-import { NaverBlog } from "@exitpress/engine/parsing/naver-blog/NaverBlog.js"
-import { createNaverBlogDefaultBlockTemplateMap } from "@exitpress/engine/parsing/naver-blog/NaverBlog.js"
 import { load } from "cheerio"
 import { describe, expect, it } from "vitest"
 
-import type { ParserBlockInspection } from "@exitpress/engine/parsing/naver-blog/core/ParserBlockDiagnostics.js"
+import type { ParserBlockInspection } from "@exitpress/blog-naver/parsing/naver-blog/core/ParserBlockDiagnostics.js"
 
 import { storybookCaptureAssets } from "./StorybookAssets.js"
 import { storybookCatalog } from "./StorybookCatalog.js"

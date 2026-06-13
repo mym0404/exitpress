@@ -11,21 +11,21 @@ import {
 
 export const shouldWarnBeforeLeavingApp = ({
   bootstrapping,
-  blogIdOrUrl,
+  sourceInput,
   outputDir,
   outputDirBaseline,
   activeScanResult,
   job,
 }: {
   bootstrapping: boolean
-  blogIdOrUrl: string
+  sourceInput: string
   outputDir: string
   outputDirBaseline: string
   activeScanResult: ScanResult | null
   job: ExportJobState | null
 }) =>
   !bootstrapping &&
-  (blogIdOrUrl.trim().length > 0 ||
+  (sourceInput.trim().length > 0 ||
     outputDir !== outputDirBaseline ||
     activeScanResult !== null ||
     Boolean(job))

@@ -1,4 +1,4 @@
-// Converts Naver millisecond timestamps into ISO-like KST datetime text.
+// Converts source millisecond timestamps into ISO-like KST datetime text.
 export const toKstDateTime = (timestamp: number) => {
   const formatter = new Intl.DateTimeFormat("sv-SE", {
     timeZone: "Asia/Seoul",

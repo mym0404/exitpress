@@ -1,11 +1,12 @@
 import { createServer } from "node:http"
 
+import { createNaverBlog } from "@exitpress/blog-naver/NaverBlog.js"
+import { createBlogRegistry } from "@exitpress/engine/blog/BlogRegistry.js"
 import { runImageUploadPhase } from "@exitpress/engine/exporting/upload/ImageUploadPhase.js"
 import {
   rewriteImageUploadPost,
   writeImageUploadManifestSnapshot,
 } from "@exitpress/engine/exporting/upload/ImageUploadRewriter.js"
-import { NaverBlog } from "@exitpress/engine/parsing/naver-blog/NaverBlog.js"
 import { toErrorMessage } from "@exitpress/engine/shared/error/util/toErrorMessage.js"
 
 import type { Server as NodeHttpServer } from "node:http"
@@ -55,7 +56,10 @@ export const createHttpServer = ({
   openLocalPath?: (targetPath: string) => Promise<void> | void
 } = {}) => {
   let httpServer: NodeHttpServer
-  const blockTemplateDefinitions = new NaverBlog().getBlockTemplateDefinitions()
+  const blogRegistry = createBlogRegistry([createNaverBlog()])
+  const blockTemplateDefinitions = blogRegistry
+    .list()
+    .flatMap((blog) => blog.getBlockTemplateDefinitions())
   const state = createHttpServerState({
     jobStore,
     scanCachePath,
@@ -69,11 +73,13 @@ export const createHttpServer = ({
   })
   const blockScanJobRunner = createBlockScanJobRunner({
     jobStore: new BlockScanJobStore(),
+    blogRegistry,
     blockTemplateDefinitions,
     postHtmlCache,
   })
   const exportJobRunner = createHttpExportJobRunner({
     jobStore,
+    blogRegistry,
     jobScanResults: state.jobScanResults,
     postHtmlCache,
     uploadPhaseRunner,
@@ -86,6 +92,7 @@ export const createHttpServer = ({
   const apiRoutes = createApiRoutes({
     jobStore,
     state,
+    blogRegistry,
     blockScanJobRunner,
     exportJobRunner,
     postHtmlCache,

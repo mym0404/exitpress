@@ -46,7 +46,7 @@ export type UseWizardActionsArgs = {
   setActiveJobFilter: (value: JobFilter) => void
   setResettingResume: (value: boolean) => void
   setRestoringResume: (value: boolean) => void
-  setBlogIdOrUrl: (value: string) => void
+  setSourceIdOrUrl: (value: string) => void
   setOutputDir: Dispatch<SetStateAction<string>>
   setNeutralScanStatus: (message: string) => void
   setErrorScanStatus: (message: string) => void
@@ -70,7 +70,7 @@ export type WizardScanActionsArgs = Pick<
   | "setCategoryStatus"
   | "setCategorySearch"
   | "setSetupStep"
-  | "setBlogIdOrUrl"
+  | "setSourceIdOrUrl"
   | "setOutputDir"
   | "setNeutralScanStatus"
   | "setErrorScanStatus"

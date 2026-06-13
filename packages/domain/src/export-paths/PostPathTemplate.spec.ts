@@ -8,8 +8,9 @@ import {
 } from "./PostPathTemplate.js"
 
 const samplePost = {
-  blogId: "mym0404",
-  logNo: "223034929697",
+  blogKey: "sample",
+  sourceId: "mym0404",
+  postId: "223034929697",
   title: "첫 글",
   publishedAt: "2026-04-11T04:00:00.000Z",
   categoryName: "React",
@@ -28,8 +29,9 @@ describe("post-path-template", () => {
       slug: "첫_글",
       category: "react",
       title: "첫-글",
-      logNo: "223034929697",
-      blogId: "mym0404",
+      blogKey: "sample",
+      postId: "223034929697",
+      sourceId: "mym0404",
       date: "2026-04-11",
       year: "2026",
       YYYY: "2026",
@@ -57,7 +59,7 @@ describe("post-path-template", () => {
   it("builds folder names from custom templates", () => {
     const options = defaultExportOptions()
 
-    options.structure.postFolderNameTemplate = "{{ year }}_{{ month }}_{{ logNo }}_{{ slug }}"
+    options.structure.postFolderNameTemplate = "{{ year }}_{{ month }}_{{ postId }}_{{ slug }}"
 
     expect(
       buildPostFolderName({
@@ -84,12 +86,13 @@ describe("post-path-template", () => {
   it("replaces variables in post templates", () => {
     expect(
       applyPostTemplate({
-        template: "{{ category }}/{{ YYYY }}/{{ MM }}/{{ DD }}/{{ YY }}/{{ M }}/{{ D }}/{{ slug }}",
+        template:
+          "{{ blogKey }}/{{ category }}/{{ YYYY }}/{{ MM }}/{{ DD }}/{{ YY }}/{{ M }}/{{ D }}/{{ slug }}",
         values: buildPostTemplateValues({
           post: samplePost,
           options: defaultExportOptions(),
         }),
       }),
-    ).toBe("react/2026/04/11/26/4/11/첫_글")
+    ).toBe("sample/react/2026/04/11/26/4/11/첫_글")
   })
 })

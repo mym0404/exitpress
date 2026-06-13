@@ -14,8 +14,9 @@ export const postTemplateKeys = [
   "slug",
   "category",
   "title",
-  "logNo",
-  "blogId",
+  "blogKey",
+  "postId",
+  "sourceId",
   "date",
   "year",
   "YYYY",
@@ -36,7 +37,7 @@ export const buildPostTemplateValues = ({
   post,
   options,
 }: {
-  post: Pick<PostSummary, "blogId" | "logNo" | "title" | "publishedAt"> & {
+  post: Pick<PostSummary, "blogKey" | "sourceId" | "postId" | "title" | "publishedAt"> & {
     categoryName?: string
   }
   options: Pick<ExportOptions, "structure">
@@ -58,8 +59,9 @@ export const buildPostTemplateValues = ({
       slugWhitespace: options.structure.slugWhitespace,
     }),
     title: sanitizePathSegment(post.title).replace(/\s+/g, "-"),
-    logNo: post.logNo,
-    blogId: post.blogId,
+    blogKey: post.blogKey,
+    postId: post.postId,
+    sourceId: post.sourceId,
     date,
     year,
     YYYY: year,
@@ -85,7 +87,7 @@ export const buildPostFolderName = ({
   post,
   options,
 }: {
-  post: Pick<PostSummary, "blogId" | "logNo" | "title" | "publishedAt"> & {
+  post: Pick<PostSummary, "blogKey" | "sourceId" | "postId" | "title" | "publishedAt"> & {
     categoryName?: string
   }
   options: Pick<ExportOptions, "structure">
@@ -93,7 +95,7 @@ export const buildPostFolderName = ({
   const template = options.structure.postFolderNameTemplate.trim()
 
   if (!template) {
-    return post.logNo
+    return post.postId
   }
 
   return (
@@ -105,6 +107,6 @@ export const buildPostFolderName = ({
           options,
         }),
       }),
-    ) || post.logNo
+    ) || post.postId
   )
 }

@@ -69,7 +69,7 @@ const allowedKnipFileEntries: Record<string, string> = {
 }
 const allowedKnipExports: Record<string, string> = {
   "scripts/single-post/export-single-post.ts:runSinglePostExportCli": "script entrypoint alias",
-  "packages/engine/src/parsing/naver-blog/core/PostParser.ts:parsePostHtmlWithBlockEvidence":
+  "packages/blog-naver/src/parsing/naver-blog/core/PostParser.ts:parsePostHtmlWithBlockEvidence":
     "manual evidence capture CLI dependency",
   "scripts/post-evidence/cases.ts:capturePostEvidenceUsage":
     "manual evidence capture CLI dependency",

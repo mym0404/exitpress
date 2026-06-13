@@ -1,8 +1,9 @@
 ---
 title: "[스크랩] 스마트폰이 차량 진단용 ‘트립컴퓨터’로"
 source: https://blog.naver.com/anglekim3708/70162407011
-blogId: anglekim3708
-logNo: 70162407011
+blogKey: naver
+sourceId: anglekim3708
+postId: 70162407011
 publishedAt: 2013-03-15T08:40:00+09:00
 category: 자동차 정비
 categoryPath:
