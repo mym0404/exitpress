@@ -448,7 +448,13 @@ const CodePanel = ({
   </Box>
 )
 
-const StoryTemplateCard = ({ story }: { story: StorybookStory }) => {
+const StoryTemplateCard = ({
+  story,
+  themePreference,
+}: {
+  story: StorybookStory
+  themePreference: ThemePreference
+}) => {
   const [template, setTemplate] = useState("")
 
   useEffect(() => {
@@ -463,13 +469,20 @@ const StoryTemplateCard = ({ story }: { story: StorybookStory }) => {
         definition: story.templateDefinition,
         template,
       })}
+      themePreference={themePreference}
       readOnly
       onTemplateChange={setTemplate}
     />
   )
 }
 
-const StoryPreview = ({ story }: { story: StorybookStory }) => {
+const StoryPreview = ({
+  story,
+  themePreference,
+}: {
+  story: StorybookStory
+  themePreference: ThemePreference
+}) => {
   return (
     <Box as="section" data-active-storybook-story={story.storyKey} sx={{ display: "grid", gap: 3 }}>
       <Box
@@ -485,7 +498,7 @@ const StoryPreview = ({ story }: { story: StorybookStory }) => {
         </Label>
       </Box>
 
-      <StoryTemplateCard story={story} />
+      <StoryTemplateCard story={story} themePreference={themePreference} />
 
       <Box
         sx={{
@@ -618,7 +631,7 @@ export const StorybookPage = () => {
             }}
           >
             <StoryTree activeStoryKey={activeStory.storyKey} onSelect={selectStory} />
-            <StoryPreview story={activeStory} />
+            <StoryPreview story={activeStory} themePreference={themePreference} />
           </Box>
         </Box>
       </Box>

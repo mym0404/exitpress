@@ -192,10 +192,8 @@ export const UploadProviderSettingsForm = ({
           <FormControl.Label>Provider</FormControl.Label>
           <Select
             block
-            id="upload-providerKey"
             value={providerKey}
             data-value={providerKey}
-            aria-describedby="upload-providerKey-description"
             onChange={(event) => {
               const nextProviderKey = event.target.value
               const nextProvider =
@@ -219,9 +217,7 @@ export const UploadProviderSettingsForm = ({
               </Select.Option>
             ))}
           </Select>
-          <FormControl.Caption id="upload-providerKey-description">
-            {activeProviderDefinition.description}
-          </FormControl.Caption>
+          <FormControl.Caption>{activeProviderDefinition.description}</FormControl.Caption>
         </FormControl>
 
         <Box sx={{ display: "grid", gap: 3, gridTemplateColumns: ["1fr", null, "1fr 1fr"] }}>
@@ -266,17 +262,12 @@ export const UploadProviderSettingsForm = ({
 
           {activeProviderDefinition.fields.map((field) => {
             const fieldInputId = `upload-providerField-${field.key}`
-            const fieldDescriptionId = `${fieldInputId}-description`
-            const fieldDisabledReasonId = `${fieldInputId}-disabled-reason`
             const rule = getUploadProviderFieldRule({
               providerKey,
               field,
               providerFields: activeProviderFields,
               providerUiState: activeProviderUiState,
             })
-            const fieldDescribedBy = rule.disabledReason
-              ? `${fieldDescriptionId} ${fieldDisabledReasonId}`
-              : fieldDescriptionId
 
             if (field.inputType === "checkbox") {
               return (
@@ -294,7 +285,6 @@ export const UploadProviderSettingsForm = ({
                 >
                   <Checkbox
                     checked={activeProviderFields[field.key] === true}
-                    aria-describedby={fieldDescribedBy}
                     onChange={(event) => {
                       const nextValue = event.target.checked
                       const nextProviderFields = {
@@ -306,24 +296,19 @@ export const UploadProviderSettingsForm = ({
                       onChange(buildValue({ nextProviderFields }))
                     }}
                   />
-                  <Box sx={{ display: "grid", gap: 1, minWidth: 0 }}>
-                    <FormControl.Label>{field.label}</FormControl.Label>
-                    <FormControl.Caption id={fieldDescriptionId}>
-                      {rule.description}
-                    </FormControl.Caption>
+                  <FormControl.Label>{field.label}</FormControl.Label>
+                  <FormControl.Caption>
+                    {rule.description}
                     {rule.disabledReason ? (
-                      <Text
-                        id={fieldDisabledReasonId}
-                        sx={{ color: "attention.fg", fontSize: 1, lineHeight: "24px" }}
-                      >
+                      <Box as="span" sx={{ color: "attention.fg", display: "block", mt: 1 }}>
                         {rule.disabledReason}
-                      </Text>
+                      </Box>
                     ) : field.placeholder ? (
-                      <Text sx={{ color: "fg.muted", fontSize: 1, lineHeight: "24px" }}>
+                      <Box as="span" sx={{ color: "fg.muted", display: "block", mt: 1 }}>
                         {field.placeholder}
-                      </Text>
+                      </Box>
                     ) : null}
-                  </Box>
+                  </FormControl.Caption>
                 </FormControl>
               )
             }
@@ -339,18 +324,21 @@ export const UploadProviderSettingsForm = ({
                   sx={fieldGridSx}
                 >
                   <FormControl.Label>{field.label}</FormControl.Label>
-                  <FormControl.Caption id={fieldDescriptionId}>
+                  <FormControl.Caption>
                     {rule.description}
+                    {rule.disabledReason ? (
+                      <Box as="span" sx={{ color: "attention.fg", display: "block", mt: 1 }}>
+                        {rule.disabledReason}
+                      </Box>
+                    ) : null}
                   </FormControl.Caption>
                   <Select
                     block
-                    id={fieldInputId}
                     value={
                       !field.required && currentValue === "" ? EMPTY_SELECT_VALUE : currentValue
                     }
                     disabled={rule.disabled}
                     data-value={currentValue}
-                    aria-describedby={fieldDescribedBy}
                     onChange={(event) => {
                       const fieldValue =
                         event.target.value === EMPTY_SELECT_VALUE ? "" : event.target.value
@@ -375,14 +363,6 @@ export const UploadProviderSettingsForm = ({
                       </Select.Option>
                     ))}
                   </Select>
-                  {rule.disabledReason ? (
-                    <Text
-                      id={fieldDisabledReasonId}
-                      sx={{ color: "attention.fg", fontSize: 1, lineHeight: "24px" }}
-                    >
-                      {rule.disabledReason}
-                    </Text>
-                  ) : null}
                 </FormControl>
               )
             }
@@ -395,16 +375,19 @@ export const UploadProviderSettingsForm = ({
                 sx={fieldGridSx}
               >
                 <FormControl.Label>{field.label}</FormControl.Label>
-                <FormControl.Caption id={fieldDescriptionId}>
+                <FormControl.Caption>
                   {rule.description}
+                  {rule.disabledReason ? (
+                    <Box as="span" sx={{ color: "attention.fg", display: "block", mt: 1 }}>
+                      {rule.disabledReason}
+                    </Box>
+                  ) : null}
                 </FormControl.Caption>
                 <TextInput
                   block
-                  id={fieldInputId}
                   type={field.inputType}
                   value={String(activeProviderFields[field.key] ?? "")}
                   disabled={rule.disabled}
-                  aria-describedby={fieldDescribedBy}
                   placeholder={field.placeholder}
                   onChange={(event) => {
                     const nextProviderFields = {
@@ -416,14 +399,6 @@ export const UploadProviderSettingsForm = ({
                     onChange(buildValue({ nextProviderFields }))
                   }}
                 />
-                {rule.disabledReason ? (
-                  <Text
-                    id={fieldDisabledReasonId}
-                    sx={{ color: "attention.fg", fontSize: 1, lineHeight: "24px" }}
-                  >
-                    {rule.disabledReason}
-                  </Text>
-                ) : null}
               </FormControl>
             )
           })}

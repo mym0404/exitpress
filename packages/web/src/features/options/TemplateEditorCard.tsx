@@ -3,10 +3,11 @@ import { javascript } from "@codemirror/lang-javascript"
 import { defaultHighlightStyle, syntaxHighlighting } from "@codemirror/language"
 import { EditorView } from "@codemirror/view"
 import { ActionList, ActionMenu, Box, Button, Dialog, Label, Text } from "@primer/react"
-import { githubDark } from "@uiw/codemirror-theme-github"
+import { githubDark, githubLight } from "@uiw/codemirror-theme-github"
 import CodeMirror from "@uiw/react-codemirror"
 import { useMemo, useState } from "react"
 
+import type { ThemePreference } from "@exitpress/domain/preferences/schema/ThemePreference.js"
 import type {
   BlockTemplatePreset,
   TemplatePropDefinition,
@@ -29,8 +30,8 @@ const restoreTemplateEditorScroll = () => {
     window.scrollTo(scroll.x, scroll.y)
   }
 }
-const templateEditorBaseExtensions = [
-  githubDark,
+const createTemplateEditorBaseExtensions = (themePreference: ThemePreference) => [
+  themePreference === "light" ? githubLight : githubDark,
   EditorView.lineWrapping,
   javascript({ typescript: true }),
   syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
@@ -39,11 +40,11 @@ const templateEditorBaseExtensions = [
       ".cm-tooltip.cm-tooltip-autocomplete": {
         overflow: "hidden",
         padding: "0.25rem",
-        border: "1px solid #30363d",
+        border: "1px solid var(--borderColor-default)",
         borderRadius: "0.375rem",
-        backgroundColor: "#161b22",
-        boxShadow: "0 18px 48px rgba(0, 0, 0, 0.44), 0 0 0 1px rgba(255, 255, 255, 0.04)",
-        color: "#c9d1d9",
+        backgroundColor: "var(--overlay-bgColor, var(--bgColor-default))",
+        boxShadow: "var(--shadow-floating-small, 0 8px 24px rgba(140, 149, 159, 0.2))",
+        color: "var(--fgColor-default)",
         fontFamily: "var(--fontStack-monospace)",
       },
       ".cm-tooltip.cm-tooltip-autocomplete > ul": {
@@ -59,12 +60,12 @@ const templateEditorBaseExtensions = [
         minHeight: "2rem",
         padding: "0.375rem 0.625rem",
         borderRadius: "0.375rem",
-        color: "#c9d1d9",
+        color: "var(--fgColor-default)",
         lineHeight: "1.35",
       },
       ".cm-tooltip.cm-tooltip-autocomplete > ul > li[aria-selected]": {
-        backgroundColor: "#263041",
-        color: "#f0f6fc",
+        backgroundColor: "var(--control-transparent-bgColor-hover, var(--bgColor-accent-muted))",
+        color: "var(--fgColor-default)",
       },
       ".cm-tooltip.cm-tooltip-autocomplete .cm-completionIcon": {
         display: "none",
@@ -75,22 +76,22 @@ const templateEditorBaseExtensions = [
         fontWeight: "650",
       },
       ".cm-tooltip.cm-tooltip-autocomplete .cm-completionMatchedText": {
-        color: "#ff7bca",
+        color: "var(--fgColor-accent)",
         fontWeight: "800",
         textDecoration: "none",
       },
       ".cm-tooltip.cm-tooltip-autocomplete .cm-completionDetail": {
         marginLeft: "auto",
-        color: "#8b949e",
+        color: "var(--fgColor-muted)",
         fontFamily: "var(--fontStack-sansSerif)",
         fontSize: "0.75rem",
         fontStyle: "normal",
       },
       ".cm-tooltip.cm-tooltip-autocomplete > ul > li[aria-selected] .cm-completionDetail": {
-        color: "#c9d1d9",
+        color: "var(--fgColor-muted)",
       },
     },
-    { dark: true },
+    { dark: themePreference !== "light" },
   ),
   EditorView.domEventHandlers({
     click: (event, view) => {
@@ -169,6 +170,7 @@ export const TemplateEditorCard = ({
   presets = [],
   props,
   value,
+  themePreference,
   readOnly = false,
   minHeight = "9rem",
   surface = "card",
@@ -183,6 +185,7 @@ export const TemplateEditorCard = ({
   presets?: BlockTemplatePreset[]
   props: Record<string, TemplatePropDefinition>
   value: string
+  themePreference: ThemePreference
   readOnly?: boolean
   minHeight?: string
   surface?: TemplateEditorSurface
@@ -191,6 +194,10 @@ export const TemplateEditorCard = ({
 }) => {
   const [syntaxDialogOpen, setSyntaxDialogOpen] = useState(false)
   const propEntries = Object.entries(props)
+  const templateEditorBaseExtensions = useMemo(
+    () => createTemplateEditorBaseExtensions(themePreference),
+    [themePreference],
+  )
   const completionExtension = useMemo(
     () => autocompletion({ override: [createTemplatePropCompletionSource(props)] }),
     [props],
@@ -206,7 +213,7 @@ export const TemplateEditorCard = ({
   )
   const editorExtensions = useMemo(
     () => [...templateEditorBaseExtensions, completionExtension, layoutExtension],
-    [completionExtension, layoutExtension],
+    [completionExtension, layoutExtension, templateEditorBaseExtensions],
   )
 
   return (

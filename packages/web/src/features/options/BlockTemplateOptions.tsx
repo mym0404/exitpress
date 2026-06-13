@@ -1,6 +1,7 @@
 import { Box } from "@primer/react"
 
 import type { ExportOptions } from "@exitpress/domain/export-options/schema/ExportOptions.js"
+import type { ThemePreference } from "@exitpress/domain/preferences/schema/ThemePreference.js"
 import type { BlockTemplateDefinition } from "@exitpress/domain/template/schema/BlockTemplateDefinition.js"
 
 import { BlockTemplateCard } from "./BlockTemplateCard.js"
@@ -42,10 +43,12 @@ const groupBlockTemplateDefinitionsByEditor = (definitions: BlockTemplateDefinit
 const EditableBlockTemplateCard = ({
   options,
   definition,
+  themePreference,
   onOptionsChange,
 }: {
   options: ExportOptions
   definition: BlockTemplateDefinition
+  themePreference: ThemePreference
   onOptionsChange: (updater: (current: ExportOptions) => ExportOptions) => void
 }) => {
   const selectedTemplate = Object.hasOwn(options.blockOutputs.templates, definition.key)
@@ -71,6 +74,7 @@ const EditableBlockTemplateCard = ({
       <BlockTemplateCard
         definition={definition}
         template={selectedTemplate}
+        themePreference={themePreference}
         onTemplateChange={updateTemplate}
       />
     </div>
@@ -80,10 +84,12 @@ const EditableBlockTemplateCard = ({
 export const MarkdownOptionsStep = ({
   options,
   blockTemplateDefinitions,
+  themePreference,
   onOptionsChange,
 }: {
   options: ExportOptions
   blockTemplateDefinitions: BlockTemplateDefinition[]
+  themePreference: ThemePreference
   onOptionsChange: (updater: (current: ExportOptions) => ExportOptions) => void
 }) => {
   const blockTemplateGroups = groupBlockTemplateDefinitionsByEditor(blockTemplateDefinitions)
@@ -115,6 +121,7 @@ export const MarkdownOptionsStep = ({
                 key={definition.key}
                 options={options}
                 definition={definition}
+                themePreference={themePreference}
                 onOptionsChange={onOptionsChange}
               />
             ))}

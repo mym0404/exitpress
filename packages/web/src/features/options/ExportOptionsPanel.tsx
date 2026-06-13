@@ -6,6 +6,7 @@ import type {
   FrontmatterFieldMeta,
   FrontmatterFieldName,
 } from "@exitpress/domain/export-options/schema/ExportOptions.js"
+import type { ThemePreference } from "@exitpress/domain/preferences/schema/ThemePreference.js"
 import type { BlockTemplateDefinition } from "@exitpress/domain/template/schema/BlockTemplateDefinition.js"
 import type { ReactNode } from "react"
 
@@ -24,6 +25,7 @@ export const ExportOptionsPanel = ({
   step,
   outputDir,
   options,
+  themePreference,
   optionDescriptions,
   blockTemplateDefinitions = [],
   frontmatterFieldOrder,
@@ -35,6 +37,7 @@ export const ExportOptionsPanel = ({
   step: ExportOptionsStep
   outputDir: string
   options: ExportOptions
+  themePreference: ThemePreference
   optionDescriptions: Record<string, string>
   blockTemplateDefinitions?: BlockTemplateDefinition[]
   frontmatterFieldOrder: FrontmatterFieldName[]
@@ -53,6 +56,7 @@ export const ExportOptionsPanel = ({
         outputDir={outputDir}
         options={options}
         description={description}
+        themePreference={themePreference}
         onOptionsChange={onOptionsChange}
       />
     ),
@@ -70,6 +74,7 @@ export const ExportOptionsPanel = ({
       <MarkdownOptionsStep
         options={options}
         blockTemplateDefinitions={blockTemplateDefinitions}
+        themePreference={themePreference}
         onOptionsChange={onOptionsChange}
       />
     ),
@@ -85,6 +90,7 @@ export const ExportOptionsPanel = ({
         options={options}
         description={description}
         linkTemplatePreviewPost={linkTemplatePreviewPost}
+        themePreference={themePreference}
         onOptionsChange={onOptionsChange}
       />
     ),

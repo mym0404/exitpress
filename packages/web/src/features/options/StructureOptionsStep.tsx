@@ -3,6 +3,7 @@ import { buildPostFolderName } from "@exitpress/domain/export-paths/PostPathTemp
 import { Box, Text } from "@primer/react"
 
 import type { ExportOptions } from "@exitpress/domain/export-options/schema/ExportOptions.js"
+import type { ThemePreference } from "@exitpress/domain/preferences/schema/ThemePreference.js"
 
 import {
   CheckField,
@@ -25,11 +26,13 @@ export const StructureOptionsStep = ({
   outputDir,
   options,
   description,
+  themePreference,
   onOptionsChange,
 }: {
   outputDir: string
   options: ExportOptions
   description: (key: string) => string | undefined
+  themePreference: ThemePreference
   onOptionsChange: (updater: (current: ExportOptions) => ExportOptions) => void
 }) => {
   const structureTemplatePreviewPost = {
@@ -135,6 +138,7 @@ export const StructureOptionsStep = ({
             editorId="structure-postFolderNameTemplate"
             props={postTemplatePropDefinitions}
             value={options.structure.postFolderNameTemplate}
+            themePreference={themePreference}
             minHeight="6.5rem"
             surface="embedded"
             onTemplateChange={(postFolderNameTemplate) =>

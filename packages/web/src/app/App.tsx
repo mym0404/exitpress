@@ -676,6 +676,7 @@ const ExportApp = () => {
           categoryStatus={categoryStatus}
           scopedPostCount={scopedPostCount}
           options={options}
+          themePreference={themePreference}
           selectedCount={selectedCount}
           defaults={defaults}
           frontmatterValidationErrors={frontmatterValidationErrors}

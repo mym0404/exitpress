@@ -6,6 +6,7 @@ import { Box, Text } from "@primer/react"
 
 import type { PostSummary } from "@exitpress/domain/blog/schema/BlogScan.js"
 import type { ExportOptions } from "@exitpress/domain/export-options/schema/ExportOptions.js"
+import type { ThemePreference } from "@exitpress/domain/preferences/schema/ThemePreference.js"
 
 import { EmbeddedOptionPanel, OptionSection, OptionWideBox, RadioField } from "./OptionControls.js"
 import { postTemplatePropDefinitions } from "./PostTemplateProps.js"
@@ -16,6 +17,7 @@ export const LinksOptionsStep = ({
   options,
   description,
   linkTemplatePreviewPost,
+  themePreference,
   onOptionsChange,
 }: {
   options: ExportOptions
@@ -24,6 +26,7 @@ export const LinksOptionsStep = ({
     PostSummary,
     "blogKey" | "sourceId" | "postId" | "title" | "publishedAt" | "categoryName"
   > | null
+  themePreference: ThemePreference
   onOptionsChange: (updater: (current: ExportOptions) => ExportOptions) => void
 }) => {
   const linkTemplatePreviewValues = linkTemplatePreviewPost
@@ -89,6 +92,7 @@ export const LinksOptionsStep = ({
                   editorId="links-sameBlogPostCustomUrlTemplate"
                   props={postTemplatePropDefinitions}
                   value={options.links.sameBlogPostCustomUrlTemplate}
+                  themePreference={themePreference}
                   minHeight="6.5rem"
                   surface="embedded"
                   onTemplateChange={(sameBlogPostCustomUrlTemplate) =>

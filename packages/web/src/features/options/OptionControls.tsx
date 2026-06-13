@@ -1,4 +1,5 @@
 import { Box, Checkbox, FormControl, Select, Text } from "@primer/react"
+import { cloneElement, isValidElement } from "react"
 
 import type { ReactNode } from "react"
 
@@ -40,14 +41,26 @@ export const OptionField = ({
   children: ReactNode
   disabled?: boolean
   surface?: "card" | "plain"
-}) => (
-  <FormControl id={labelFor} disabled={disabled} sx={optionSurfaceSx}>
-    <FormControl.Label>{label}</FormControl.Label>
-    {children}
-    {description ? <FormControl.Caption>{description}</FormControl.Caption> : null}
-    <Box data-option-key={optionKey} sx={{ display: "none" }} />
-  </FormControl>
-)
+}) => {
+  const descriptionId = description && labelFor ? `${labelFor}-description` : undefined
+  const wiredChildren =
+    descriptionId && isValidElement<{ describedBy?: string }>(children)
+      ? cloneElement(children, {
+          describedBy: descriptionId,
+        })
+      : children
+
+  return (
+    <FormControl id={labelFor} disabled={disabled} sx={optionSurfaceSx}>
+      <FormControl.Label htmlFor={labelFor}>{label}</FormControl.Label>
+      {wiredChildren}
+      {description ? (
+        <FormControl.Caption id={descriptionId}>{description}</FormControl.Caption>
+      ) : null}
+      <Box data-option-key={optionKey} sx={{ display: "none" }} />
+    </FormControl>
+  )
+}
 
 export const OptionSelectField = <T extends string>({
   inputId,
@@ -73,8 +86,8 @@ export const OptionSelectField = <T extends string>({
     value={value}
     data-value={value}
     disabled={disabled}
-    aria-describedby={describedBy}
     aria-invalid={ariaInvalid || undefined}
+    {...(describedBy ? { "aria-describedby": describedBy } : {})}
     onChange={(event) => onValueChange(event.target.value as T)}
   >
     {options.map((option) => (
@@ -120,10 +133,8 @@ export const CheckField = ({
     }}
   >
     <Checkbox checked={checked} onChange={(event) => onChange(event.target.checked)} />
-    <Box sx={{ display: "grid", gap: 1, minWidth: 0 }}>
-      <FormControl.Label>{label}</FormControl.Label>
-      {description ? <FormControl.Caption>{description}</FormControl.Caption> : null}
-    </Box>
+    <FormControl.Label>{label}</FormControl.Label>
+    {description ? <FormControl.Caption>{description}</FormControl.Caption> : null}
   </FormControl>
 )
 

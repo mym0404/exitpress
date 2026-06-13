@@ -1,6 +1,25 @@
 import { Box, Button, Dialog, Flash, Text } from "@primer/react"
 
+import type { ComponentProps } from "react"
+
 import type { ResumeDialogState } from "./ResumeState.js"
+
+const ResumeDialogHeader = ({
+  dialogDescriptionId,
+  dialogLabelId,
+  subtitle,
+  title,
+}: ComponentProps<typeof Dialog> & {
+  dialogDescriptionId?: string
+  dialogLabelId?: string
+}) => (
+  <Dialog.Header>
+    <Box sx={{ display: "grid", gap: 1, px: 2, py: "6px" }}>
+      <Dialog.Title id={dialogLabelId}>{title}</Dialog.Title>
+      {subtitle ? <Dialog.Subtitle id={dialogDescriptionId}>{subtitle}</Dialog.Subtitle> : null}
+    </Box>
+  </Dialog.Header>
+)
 
 export const ResumeDialogPanel = ({
   resumeDialog,
@@ -29,6 +48,7 @@ export const ResumeDialogPanel = ({
       }
       role="alertdialog"
       width="large"
+      renderHeader={ResumeDialogHeader}
       onClose={() => null}
     >
       <Box sx={{ display: "grid", gap: 3 }}>
