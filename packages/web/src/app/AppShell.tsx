@@ -1,14 +1,13 @@
-import { CheckIcon } from "@primer/octicons-react"
-import { Box, Button, NavList, PageLayout, Text } from "@primer/react"
+import { Box, Button, PageLayout, ProgressBar, Text } from "@primer/react"
 
 import type { ThemePreference } from "@exitpress/domain/preferences/schema/ThemePreference.js"
-import type { ReactElement, ReactNode, RefObject } from "react"
+import type { ReactNode, RefObject } from "react"
 
 import type { SetupStep, WizardStep } from "../features/common/shell/WizardFlow.js"
 import type { ResumeDialogState } from "../features/resume/ResumeState.js"
 
 import { PrimerToastViewport } from "../components/primer/PrimerToast.js"
-import { NextActionIcon, setupSteps, stepMeta } from "../features/common/shell/WizardFlow.js"
+import { stepMeta } from "../features/common/shell/WizardFlow.js"
 import { WizardHeader } from "../features/common/shell/WizardHeader.js"
 import { ResumeDialogPanel } from "../features/resume/ResumeDialogPanel.js"
 
@@ -40,113 +39,43 @@ type AppShellProps = {
   onThemeChange: (value: ThemePreference) => void
   onResetResume: () => void
   onRestoreResume: () => void
-  onSetupStepSelect: (step: SetupStep) => void
   onPrevious: () => void
   onForceScan: () => void
   onNext: () => void
 }
 
-const WizardStepNav = ({
+const WizardProgressSummary = ({
   currentStep,
   isSetupStep,
   setupStep,
   visibleSetupSteps,
-  onSetupStepSelect,
 }: {
   currentStep: WizardStep
   isSetupStep: boolean
   setupStep: SetupStep
   visibleSetupSteps: SetupStep[]
-  onSetupStepSelect: (step: SetupStep) => void
 }) => {
-  const activeVisibleIndex = visibleSetupSteps.indexOf(setupStep)
+  const setupIndex = Math.max(visibleSetupSteps.indexOf(setupStep), 0)
+  const setupStepCount = visibleSetupSteps.length
+  const progressValue = isSetupStep ? ((setupIndex + 1) / setupStepCount) * 100 : 100
+  const label = isSetupStep ? `설정 ${setupIndex + 1}/${setupStepCount}` : "실행"
+  const title = isSetupStep ? stepMeta[setupStep].title : stepMeta[currentStep].title
 
   return (
     <Box
-      as="nav"
-      data-workflow-nav
-      aria-label="내보내기 단계"
+      data-workflow-progress
+      aria-label="내보내기 진행"
       sx={{
         display: "grid",
         gap: 2,
+        maxWidth: "260px",
       }}
     >
-      <Text sx={{ color: "fg.muted", fontSize: 0, fontWeight: 600, px: 2 }}>설정</Text>
-      <NavList>
-        {visibleSetupSteps.map((step, index) => {
-          const active = isSetupStep && step === setupStep
-          const complete = isSetupStep && index < activeVisibleIndex
-          const canSelect = isSetupStep && index <= activeVisibleIndex
-
-          return (
-            <NavList.Item
-              key={step}
-              href="#step-view"
-              aria-current={active ? "step" : undefined}
-              aria-disabled={canSelect ? undefined : true}
-              tabIndex={canSelect ? undefined : -1}
-              sx={{
-                color: canSelect ? "fg.default" : "fg.muted",
-                opacity: canSelect ? 1 : 0.64,
-              }}
-              onClick={(event) => {
-                event.preventDefault()
-
-                if (canSelect) {
-                  onSetupStepSelect(step)
-                }
-              }}
-            >
-              {complete ? (
-                <NavList.LeadingVisual>
-                  <CheckIcon />
-                </NavList.LeadingVisual>
-              ) : null}
-              {stepMeta[step].title}
-            </NavList.Item>
-          )
-        })}
-      </NavList>
-
-      {!isSetupStep ? (
-        <>
-          <Text sx={{ color: "fg.muted", fontSize: 0, fontWeight: 600, mt: 3, px: 2 }}>실행</Text>
-          <NavList>
-            {setupSteps
-              .filter((step) => !visibleSetupSteps.includes(step))
-              .map((step) => (
-                <NavList.Item
-                  key={step}
-                  href="#step-view"
-                  aria-disabled
-                  tabIndex={-1}
-                  sx={{ color: "fg.muted" }}
-                >
-                  {stepMeta[step].title}
-                </NavList.Item>
-              ))}
-            {(["block-scan", "markdown-review", "running", "upload", "result"] as const).map(
-              (step) => {
-                const active = currentStep === step
-
-                return (
-                  <NavList.Item
-                    key={step}
-                    href="#step-view"
-                    aria-current={active ? "step" : undefined}
-                    aria-disabled={active ? undefined : true}
-                    tabIndex={active ? undefined : -1}
-                    sx={{ color: active ? "fg.default" : "fg.muted" }}
-                    onClick={(event) => event.preventDefault()}
-                  >
-                    {stepMeta[step].title}
-                  </NavList.Item>
-                )
-              },
-            )}
-          </NavList>
-        </>
-      ) : null}
+      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2, fontSize: 0 }}>
+        <Text sx={{ color: "fg.muted", fontWeight: 600 }}>{label}</Text>
+        <Text sx={{ color: "fg.muted", minWidth: 0, overflowWrap: "anywhere" }}>{title}</Text>
+      </Box>
+      <ProgressBar progress={progressValue} />
     </Box>
   )
 }
@@ -161,7 +90,6 @@ const WizardStepActions = ({
   nextDisabled,
   submitting,
   nextButtonLabel,
-  nextActionIcon,
   onPrevious,
   onForceScan,
   onNext,
@@ -175,7 +103,6 @@ const WizardStepActions = ({
   nextDisabled: boolean
   submitting: boolean
   nextButtonLabel: string
-  nextActionIcon: ReactElement
   onPrevious: () => void
   onForceScan: () => void
   onNext: () => void
@@ -189,7 +116,7 @@ const WizardStepActions = ({
       data-step-actions
       sx={{
         display: "flex",
-        flexDirection: ["column-reverse", "row"],
+        flexDirection: ["column", "row"],
         flexWrap: "wrap",
         alignItems: ["stretch", "center"],
         justifyContent: "flex-end",
@@ -234,7 +161,6 @@ const WizardStepActions = ({
         }
         onClick={onNext}
         variant="primary"
-        leadingVisual={nextActionIcon}
       >
         {nextButtonLabel}
       </Button>
@@ -266,7 +192,6 @@ export const AppShell = ({
   onThemeChange,
   onResetResume,
   onRestoreResume,
-  onSetupStepSelect,
   onPrevious,
   onForceScan,
   onNext,
@@ -307,28 +232,17 @@ export const AppShell = ({
           themePreference={themePreference}
           headerStatus={headerStatus}
           summaryCards={summaryCards}
+          progress={
+            <WizardProgressSummary
+              currentStep={currentStep}
+              isSetupStep={isSetupStep}
+              setupStep={setupStep}
+              visibleSetupSteps={visibleSetupSteps}
+            />
+          }
           onThemeChange={onThemeChange}
         />
       </PageLayout.Header>
-
-      <PageLayout.Pane
-        position="start"
-        width="small"
-        divider="line"
-        padding="none"
-        aria-label="내보내기 단계"
-        sx={{
-          display: ["none", null, "block"],
-        }}
-      >
-        <WizardStepNav
-          currentStep={currentStep}
-          isSetupStep={isSetupStep}
-          setupStep={setupStep}
-          visibleSetupSteps={visibleSetupSteps}
-          onSetupStepSelect={onSetupStepSelect}
-        />
-      </PageLayout.Pane>
 
       <PageLayout.Content as="main" width="full" padding="none">
         <Box
@@ -365,13 +279,6 @@ export const AppShell = ({
             nextDisabled={nextDisabled}
             submitting={submitting}
             nextButtonLabel={nextButtonLabel}
-            nextActionIcon={
-              <NextActionIcon
-                setupStep={setupStep}
-                scanPending={scanPending}
-                submitting={submitting}
-              />
-            }
             onPrevious={onPrevious}
             onForceScan={onForceScan}
             onNext={onNext}

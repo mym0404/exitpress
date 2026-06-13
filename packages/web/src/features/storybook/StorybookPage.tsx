@@ -1,5 +1,5 @@
 import { ChevronDownIcon } from "@primer/octicons-react"
-import { Box, Label, Text } from "@primer/react"
+import { Box, FormControl, Label, Select, Text } from "@primer/react"
 import { useEffect, useMemo, useState } from "react"
 
 import type { ThemePreference } from "@exitpress/domain/preferences/schema/ThemePreference.js"
@@ -234,7 +234,9 @@ const codeBlockSx = ({
   m: 0,
   minWidth: 0,
   maxHeight: "520px",
-  overflow: "auto",
+  overflowX: "auto",
+  overflowY: "auto",
+  overscrollBehaviorX: "contain",
   p: 3,
   color: "fg.default",
   fontFamily: "mono",
@@ -437,7 +439,9 @@ const CodePanel = ({
     </Box>
     <Box
       as="pre"
+      aria-label={`${title} 코드`}
       data-storybook-code={codeType}
+      tabIndex={0}
       sx={codeBlockSx({
         codeType,
         compact,
@@ -539,7 +543,13 @@ const StoryPreview = ({
         <Box sx={{ borderBottom: "1px solid", borderColor: "border.default", p: 3 }}>
           <Text sx={{ color: "fg.default", fontSize: 2, fontWeight: 600 }}>Markdown</Text>
         </Box>
-        <Box as="pre" data-storybook-markdown sx={codeBlockSx({ codeType: "markdown" })}>
+        <Box
+          as="pre"
+          aria-label="Markdown 코드"
+          data-storybook-markdown
+          tabIndex={0}
+          sx={codeBlockSx({ codeType: "markdown" })}
+        >
           {highlightMarkdown(story.markdown)}
         </Box>
       </Box>
@@ -620,6 +630,26 @@ export const StorybookPage = () => {
             backLink={backLink}
             onThemeChange={setThemePreference}
           />
+          <Box sx={{ display: ["block", null, "none"] }}>
+            <FormControl id="storybook-block-select">
+              <FormControl.Label>블록 선택</FormControl.Label>
+              <Select
+                block
+                value={activeStory.storyKey}
+                onChange={(event) => selectStory(event.target.value)}
+              >
+                {storybookCatalog.map((group) => (
+                  <optgroup key={group.editorType} label={group.editorLabel}>
+                    {group.stories.map((story) => (
+                      <Select.Option key={story.storyKey} value={story.storyKey}>
+                        {story.blockIndex + 1}. {story.blockLabel}
+                      </Select.Option>
+                    ))}
+                  </optgroup>
+                ))}
+              </Select>
+            </FormControl>
+          </Box>
           <Box
             data-storybook-layout
             sx={{
@@ -630,7 +660,7 @@ export const StorybookPage = () => {
               },
             }}
           >
-            <Box sx={{ order: [2, null, 1] }}>
+            <Box sx={{ display: ["none", null, "block"], order: [2, null, 1] }}>
               <StoryTree activeStoryKey={activeStory.storyKey} onSelect={selectStory} />
             </Box>
             <Box sx={{ order: [1, null, 2], minWidth: 0 }}>

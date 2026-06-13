@@ -1,6 +1,6 @@
 import "@primer/primitives/dist/css/functional/themes/dark.css"
 import "@primer/primitives/dist/css/functional/themes/light.css"
-import { BaseStyles, ThemeProvider } from "@primer/react"
+import { BaseStyles, Box, ThemeProvider } from "@primer/react"
 
 import type { ThemePreference } from "@exitpress/domain/preferences/schema/ThemePreference.js"
 import type { ReactNode } from "react"
@@ -15,6 +15,10 @@ export const PrimerAppProvider = ({
   themePreference: ThemePreference
 }) => (
   <ThemeProvider colorMode={getPrimerColorMode(themePreference)}>
-    <BaseStyles>{children}</BaseStyles>
+    <BaseStyles>
+      <Box data-app-surface sx={{ minHeight: "100dvh", bg: "canvas.default", color: "fg.default" }}>
+        {children}
+      </Box>
+    </BaseStyles>
   </ThemeProvider>
 )

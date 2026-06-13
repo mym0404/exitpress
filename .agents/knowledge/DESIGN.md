@@ -3,7 +3,9 @@
 ## Source Of Truth
 - UI primitives come from Primer React and Octicons.
 - Screen styling should use Primer component props and `sx`.
-- Global CSS is reserved for fonts, root sizing, scrollbar styling, and small semantic app hooks that cannot reasonably live in `sx`.
+- Global CSS is reserved for reset/base document concerns: box sizing, root sizing, font inheritance, base text resets, and scrollbar styling.
+- Do not put component styling, theme color overrides, dropdown/select restyling, button restyling, layout surfaces, or Primer lookalike rules in global CSS.
+- If a visual detail exists in Primer, use the Primer React component, its props, or `sx` with Primer tokens instead of recreating the style globally.
 - Reusable local UI helpers live under `packages/web/src/components/primer/`.
 
 ## Visual Direction

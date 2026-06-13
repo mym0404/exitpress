@@ -207,6 +207,9 @@ export const TemplateEditorCard = ({
       EditorView.theme({
         "&": { minHeight },
         ".cm-scroller": { minHeight },
+        ".cm-editor, .cm-content": {
+          fontFamily: '"Geist Mono", "SFMono-Regular", "Roboto Mono", monospace',
+        },
         ".cm-content": { flexGrow: "1", minHeight },
       }),
     [minHeight],

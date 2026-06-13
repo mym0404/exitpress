@@ -1,7 +1,5 @@
 import { JOB_STATUSES } from "@exitpress/domain/export-job/ExportJobState.js"
 import { sanitizePersistedExportOptions } from "@exitpress/domain/export-options/ExportOptions.js"
-import { ArrowRightIcon, DownloadIcon, IssueOpenedIcon } from "@primer/octicons-react"
-import { Spinner } from "@primer/react"
 
 import type { ScanResult } from "@exitpress/domain/blog/schema/BlogScan.js"
 import type { ExportJobState } from "@exitpress/domain/export-job/schema/ExportJobState.js"
@@ -38,34 +36,6 @@ export type WizardStep = (typeof allWizardSteps)[number]
 type SummaryCard = {
   label: string
   value: string
-}
-
-export const NextActionIcon = ({
-  setupStep,
-  scanPending,
-  submitting,
-}: {
-  setupStep: SetupStep
-  scanPending: boolean
-  submitting: boolean
-}) => {
-  if (setupStep === "blog-input") {
-    return scanPending ? (
-      <Spinner size="small" srText={null} />
-    ) : (
-      <IssueOpenedIcon size={16} aria-hidden="true" />
-    )
-  }
-
-  if (setupStep === "diagnostics-options") {
-    return submitting ? (
-      <Spinner size="small" srText={null} />
-    ) : (
-      <DownloadIcon size={16} aria-hidden="true" />
-    )
-  }
-
-  return <ArrowRightIcon size={16} aria-hidden="true" />
 }
 
 export const stepMeta: Record<WizardStep, { title: string; description: string }> = {

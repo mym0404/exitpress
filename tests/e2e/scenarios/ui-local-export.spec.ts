@@ -591,37 +591,41 @@ const captureReviewScreens = async ({
 
 const assertPrimerWorkflowShell = async (page: import("playwright").Page) => {
   const shell = page.locator("[data-workflow-shell]")
-  const navigation = page.locator("[data-workflow-nav]")
+  const progress = page.locator("[data-workflow-progress]")
   const actions = page.locator("[data-step-actions]")
 
   await shell.waitFor({ timeout: 5000 })
-  await navigation.waitFor({ timeout: 5000 })
+  await progress.waitFor({ timeout: 5000 })
   await actions.waitFor({ timeout: 5000 })
 
-  const disabledStepLinks = navigation.locator('a[aria-disabled="true"]')
-  const disabledStepLinkCount = await disabledStepLinks.count()
+  const navigationCount = await page.locator("[data-workflow-nav]").count()
 
-  if (disabledStepLinkCount === 0) {
-    throw new Error("inactive workflow steps should be marked as disabled navigation items")
+  if (navigationCount !== 0) {
+    throw new Error("workflow steps should not render as a decorative sidebar navigation")
   }
 
-  const disabledTabIndex = await disabledStepLinks.first().evaluate((element) => element.tabIndex)
+  const progressText = await progress.textContent()
 
-  if (disabledTabIndex !== -1) {
-    throw new Error(
-      `inactive workflow steps should be removed from tab order, got ${disabledTabIndex}`,
-    )
+  if (!progressText?.startsWith("설정 1/")) {
+    throw new Error(`workflow progress should be a compact step summary, got ${progressText}`)
   }
 
   const actionLayout = await actions.evaluate((element) => {
     const style = getComputedStyle(element)
     const rect = element.getBoundingClientRect()
+    const appSurface = document.querySelector("[data-app-surface]")
+    const appSurfaceStyle = appSurface ? getComputedStyle(appSurface) : undefined
+    const htmlStyle = getComputedStyle(document.documentElement)
+    const bodyStyle = getComputedStyle(document.body)
 
     return {
       position: style.position,
       bottom: style.bottom,
       width: Math.round(rect.width),
       viewportWidth: window.innerWidth,
+      appSurfaceBackground: appSurfaceStyle?.backgroundColor,
+      htmlBackground: htmlStyle.backgroundColor,
+      bodyBackground: bodyStyle.backgroundColor,
     }
   })
 
@@ -635,6 +639,22 @@ const assertPrimerWorkflowShell = async (page: import("playwright").Page) => {
 
   if (actionLayout.width >= actionLayout.viewportWidth - 16) {
     throw new Error("setup actions should not render as a floating full-width dock")
+  }
+
+  if (
+    !actionLayout.appSurfaceBackground ||
+    actionLayout.appSurfaceBackground === "rgba(0, 0, 0, 0)"
+  ) {
+    throw new Error("app surface should use the active Primer canvas background")
+  }
+
+  if (
+    actionLayout.htmlBackground !== actionLayout.appSurfaceBackground ||
+    actionLayout.bodyBackground !== actionLayout.appSurfaceBackground
+  ) {
+    throw new Error(
+      `root backgrounds should match app surface, got html=${actionLayout.htmlBackground}, body=${actionLayout.bodyBackground}, app=${actionLayout.appSurfaceBackground}`,
+    )
   }
 }
 

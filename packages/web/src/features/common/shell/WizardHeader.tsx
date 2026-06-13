@@ -9,6 +9,7 @@ import {
 import { Box, Heading, IconButton, Link, SegmentedControl, Text } from "@primer/react"
 
 import type { ThemePreference } from "@exitpress/domain/preferences/schema/ThemePreference.js"
+import type { ReactNode } from "react"
 
 import { PrimerStatusLabel } from "../../../components/primer/PrimerStatusLabel.js"
 import { createAppHref } from "../../../lib/AppRoutes.js"
@@ -43,6 +44,7 @@ export const WizardHeader = ({
   headerStatus,
   summaryCards,
   backLink,
+  progress,
   onThemeChange,
 }: {
   title: string
@@ -54,6 +56,7 @@ export const WizardHeader = ({
     href: string
     label: string
   }
+  progress?: ReactNode
   onThemeChange: (value: ThemePreference) => void
 }) => (
   <Box
@@ -212,5 +215,6 @@ export const WizardHeader = ({
         </Box>
       ))}
     </Box>
+    {progress ? <Box>{progress}</Box> : null}
   </Box>
 )

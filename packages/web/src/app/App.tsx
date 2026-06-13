@@ -655,7 +655,6 @@ const ExportApp = () => {
         onThemeChange={setThemePreference}
         onResetResume={() => void handleResetResume()}
         onRestoreResume={() => void handleRestoreResume()}
-        onSetupStepSelect={setSetupStep}
         onPrevious={goToPreviousStep}
         onForceScan={() => {
           void ensureScanResult({ forceRefresh: true })

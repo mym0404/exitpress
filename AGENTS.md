@@ -43,6 +43,7 @@
 
 - UI rules live in `.agents/knowledge/DESIGN.md`.
 - UI changes use Primer React components, Octicons, Primer `sx` styling, and dark/light wizard patterns.
+- Keep global CSS limited to reset/base document concerns; do not add component styling, theme overrides, or Primer lookalike rules there.
 - Do not add shadcn, Radix UI wrappers, Remix icons, Tailwind utilities, or compatibility shims.
 
 ## Operating Rules

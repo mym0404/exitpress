@@ -31,9 +31,7 @@ body {
 
 code,
 pre,
-.font-mono,
-.cm-editor,
-.cm-content {
+.font-mono {
   font-family: "Geist Mono", "SFMono-Regular", "Roboto Mono", monospace;
 }
 
