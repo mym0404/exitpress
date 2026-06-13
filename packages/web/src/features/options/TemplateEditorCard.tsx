@@ -290,7 +290,7 @@ export const TemplateEditorCard = ({
             </Box>
             <Box
               data-template-prop-grid
-              sx={{ display: "grid", gap: 0, gridTemplateColumns: ["1fr", "1fr 1fr"] }}
+              sx={{ display: "grid", gap: 0, gridTemplateColumns: ["1fr", "1fr 1fr"], fontSize: 0 }}
             >
               {propEntries.map(([key, prop]) => (
                 <Box
@@ -305,16 +305,33 @@ export const TemplateEditorCard = ({
                     gridTemplateColumns: "max-content minmax(0,1fr) max-content",
                     minWidth: 0,
                     px: 3,
-                    py: 2,
+                    py: 1,
                   }}
                 >
-                  <Text sx={{ color: "success.fg", fontFamily: "mono", fontWeight: "semibold" }}>
+                  <Text
+                    sx={{
+                      color: "success.fg",
+                      fontFamily: "mono",
+                      fontSize: 0,
+                      fontWeight: "semibold",
+                    }}
+                  >
                     {key}
                   </Text>
-                  <Text sx={{ minWidth: 0, overflow: "hidden", textOverflow: "ellipsis" }}>
+                  <Text
+                    sx={{
+                      color: "fg.muted",
+                      fontSize: "12px",
+                      minWidth: 0,
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                    }}
+                  >
                     {prop.label}
                   </Text>
-                  <Label sx={{ fontFamily: "mono", flexShrink: 0 }}>{prop.type}</Label>
+                  <Label size="small" sx={{ fontFamily: "mono", flexShrink: 0 }}>
+                    {prop.type}
+                  </Label>
                 </Box>
               ))}
             </Box>
@@ -424,15 +441,8 @@ export const TemplateEditorCard = ({
               <Box sx={{ display: "grid", gap: 2 }}>
                 <Text sx={{ fontWeight: "semibold" }}>자동완성</Text>
                 <Text sx={{ color: "fg.muted" }}>
-                  {"{{ "} 뒤에 변수 이름을 입력하면 사용할 수 있는 prop을 제안합니다.
+                  {"{{ "} 뒤에 변수 이름을 입력하면 사용할 수 있는 prop을 자동완성합니다.
                 </Text>
-                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2 }}>
-                  {propEntries.map(([key, prop]) => (
-                    <Label key={key} sx={{ fontFamily: "mono" }}>
-                      {key}: {prop.type}
-                    </Label>
-                  ))}
-                </Box>
               </Box>
             ) : null}
           </Box>

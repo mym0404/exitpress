@@ -34,6 +34,19 @@ const uploadProviders: UploadProviderCatalogResponse = {
 describe("UploadProviderSettingsForm", () => {
   beforeEach(() => {
     vi.stubGlobal(
+      "matchMedia",
+      vi.fn().mockImplementation((query: string) => ({
+        matches: false,
+        media: query,
+        onchange: null,
+        addListener: vi.fn(),
+        removeListener: vi.fn(),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+        dispatchEvent: vi.fn(),
+      })),
+    )
+    vi.stubGlobal(
       "ResizeObserver",
       class {
         observe() {}
@@ -82,6 +95,27 @@ describe("UploadProviderSettingsForm", () => {
       providerKey: "github",
       providerFields: { repo: "owner/repo" },
     })
+  })
+
+  it("keeps provider field help text below the input", () => {
+    render(
+      <UploadProviderSettingsForm
+        resetKey="job-1"
+        uploadProviders={uploadProviders}
+        testUploadSubmitting={false}
+        testUploadResult={null}
+        testUploadError={null}
+        onChange={vi.fn()}
+        onTestUpload={vi.fn()}
+      />,
+    )
+
+    const label = screen.getByText("Repo")
+    const input = screen.getByLabelText("Repo")
+    const caption = screen.getByText("Repository")
+
+    expect(label.compareDocumentPosition(input) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    expect(input.compareDocumentPosition(caption) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
   })
 
   it("reports readiness from required provider fields and reset state", async () => {

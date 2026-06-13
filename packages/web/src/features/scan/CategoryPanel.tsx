@@ -1,8 +1,10 @@
 import { allCategoryModes } from "@exitpress/domain/export-options/schema/ExportOptions.js"
-import { Box, Checkbox, FormControl, Label, Select, Text, TextInput } from "@primer/react"
+import { Box, Checkbox, FormControl, Label, Text, TextInput } from "@primer/react"
 
 import type { ScanResult } from "@exitpress/domain/blog/schema/BlogScan.js"
 import type { CategoryMode } from "@exitpress/domain/export-options/schema/ExportOptions.js"
+
+import { PrimerSelectActionMenu } from "../../components/primer/PrimerSelectActionMenu.js"
 
 import { getCategoryCheckboxState, orderCategoriesHierarchically } from "./CategorySelection.js"
 
@@ -80,23 +82,26 @@ export const CategoryPanel = ({
       >
         <FormControl id="scope-categoryMode" disabled={!scanResult}>
           <FormControl.Label>카테고리 포함 범위</FormControl.Label>
-          <Select
-            block
+          <PrimerSelectActionMenu
+            id="scope-categoryMode"
             value={categoryMode}
-            data-value={categoryMode}
-            onChange={(event) => {
-              const value = event.target.value
-
+            disabled={!scanResult}
+            options={[
+              {
+                value: "selected-and-descendants",
+                label: "선택 카테고리 + 하위 카테고리",
+              },
+              {
+                value: "exact-selected",
+                label: "선택 카테고리만",
+              },
+            ]}
+            onValueChange={(value) => {
               if (isCategoryMode(value)) {
                 onCategoryModeChange(value)
               }
             }}
-          >
-            <Select.Option value="selected-and-descendants">
-              선택 카테고리 + 하위 카테고리
-            </Select.Option>
-            <Select.Option value="exact-selected">선택 카테고리만</Select.Option>
-          </Select>
+          />
         </FormControl>
 
         <FormControl id="scope-dateFrom" disabled={!scanResult}>

@@ -1,7 +1,9 @@
-import { Box, Checkbox, FormControl, Select, Text } from "@primer/react"
+import { Box, Checkbox, FormControl, Text } from "@primer/react"
 import { cloneElement, isValidElement } from "react"
 
 import type { ReactNode } from "react"
+
+import { PrimerSelectActionMenu } from "../../components/primer/PrimerSelectActionMenu.js"
 
 const panelSx = {
   display: "grid",
@@ -13,8 +15,8 @@ const panelSx = {
   p: 3,
 } as const
 
-type SelectOption = {
-  value: string
+type SelectOption<T extends string = string> = {
+  value: T
   label: string
   description?: string
 }
@@ -23,6 +25,7 @@ const optionSurfaceSx = {
   display: "grid",
   gap: 1,
   minWidth: 0,
+  maxWidth: "48rem",
   alignContent: "start",
 } as const
 
@@ -73,29 +76,22 @@ export const OptionSelectField = <T extends string>({
 }: {
   inputId: string
   value: T
-  options: SelectOption[]
+  options: SelectOption<T>[]
   disabled?: boolean
   placeholder?: string
   describedBy?: string
   ariaInvalid?: boolean
   onValueChange: (value: T) => void
 }) => (
-  <Select
-    block
+  <PrimerSelectActionMenu
     id={inputId}
     value={value}
-    data-value={value}
+    options={options}
     disabled={disabled}
-    aria-invalid={ariaInvalid || undefined}
-    {...(describedBy ? { "aria-describedby": describedBy } : {})}
-    onChange={(event) => onValueChange(event.target.value as T)}
-  >
-    {options.map((option) => (
-      <Select.Option key={`${inputId}:${option.value}`} value={option.value}>
-        {option.description ? `${option.label} ${option.description}` : option.label}
-      </Select.Option>
-    ))}
-  </Select>
+    ariaInvalid={ariaInvalid}
+    ariaDescribedBy={describedBy}
+    onValueChange={onValueChange}
+  />
 )
 
 export const CheckField = ({
@@ -220,9 +216,7 @@ export const OptionSection = ({
         <Text sx={{ color: "fg.muted", fontSize: 0, lineHeight: "20px" }}>{note}</Text>
       </Box>
     </Box>
-    <Box sx={{ display: "grid", gap: 3, gridTemplateColumns: ["1fr", null, null, "1fr 1fr"] }}>
-      {children}
-    </Box>
+    <Box sx={{ display: "grid", gap: 2 }}>{children}</Box>
   </Box>
 )
 
@@ -231,7 +225,5 @@ export const EmbeddedOptionPanel = ({ children }: { children: ReactNode }) => (
 )
 
 export const OptionWideBox = ({ id, children }: { id?: string; children: ReactNode }) => (
-  <Box id={id} sx={{ gridColumn: ["auto", null, null, "1 / -1"] }}>
-    {children}
-  </Box>
+  <Box id={id}>{children}</Box>
 )

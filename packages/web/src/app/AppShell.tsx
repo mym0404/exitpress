@@ -1,4 +1,4 @@
-import { Box, Button, PageLayout, ProgressBar, Text } from "@primer/react"
+import { Box, Button, PageLayout } from "@primer/react"
 
 import type { ThemePreference } from "@exitpress/domain/preferences/schema/ThemePreference.js"
 import type { ReactNode, RefObject } from "react"
@@ -23,7 +23,6 @@ type AppShellProps = {
   isSetupStep: boolean
   setupStep: SetupStep
   setupStepIndex: number
-  visibleSetupSteps: SetupStep[]
   stepViewRef: RefObject<HTMLElement | null>
   headerStatus: ReturnType<typeof import("../features/common/shell/WizardFlow.js").getHeaderStatus>
   summaryCards: ReturnType<
@@ -42,42 +41,6 @@ type AppShellProps = {
   onPrevious: () => void
   onForceScan: () => void
   onNext: () => void
-}
-
-const WizardProgressSummary = ({
-  currentStep,
-  isSetupStep,
-  setupStep,
-  visibleSetupSteps,
-}: {
-  currentStep: WizardStep
-  isSetupStep: boolean
-  setupStep: SetupStep
-  visibleSetupSteps: SetupStep[]
-}) => {
-  const setupIndex = Math.max(visibleSetupSteps.indexOf(setupStep), 0)
-  const setupStepCount = visibleSetupSteps.length
-  const progressValue = isSetupStep ? ((setupIndex + 1) / setupStepCount) * 100 : 100
-  const label = isSetupStep ? `설정 ${setupIndex + 1}/${setupStepCount}` : "실행"
-  const title = isSetupStep ? stepMeta[setupStep].title : stepMeta[currentStep].title
-
-  return (
-    <Box
-      data-workflow-progress
-      aria-label="내보내기 진행"
-      sx={{
-        display: "grid",
-        gap: 2,
-        maxWidth: "260px",
-      }}
-    >
-      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2, fontSize: 0 }}>
-        <Text sx={{ color: "fg.muted", fontWeight: 600 }}>{label}</Text>
-        <Text sx={{ color: "fg.muted", minWidth: 0, overflowWrap: "anywhere" }}>{title}</Text>
-      </Box>
-      <ProgressBar progress={progressValue} />
-    </Box>
-  )
 }
 
 const WizardStepActions = ({
@@ -178,7 +141,6 @@ export const AppShell = ({
   isSetupStep,
   setupStep,
   setupStepIndex,
-  visibleSetupSteps,
   stepViewRef,
   headerStatus,
   summaryCards,
@@ -218,6 +180,31 @@ export const AppShell = ({
 
     {bootstrapping ? <BootstrapLoadingOverlay /> : null}
 
+    <Box
+      sx={{
+        bg: "canvas.subtle",
+        borderBottom: "1px solid",
+        borderColor: "border.default",
+        width: "100%",
+      }}
+    >
+      <Box
+        sx={{
+          maxWidth: "1280px",
+          mx: "auto",
+          px: [3, 4],
+        }}
+      >
+        <WizardHeader
+          title={stepMeta[currentStep].title}
+          themePreference={themePreference}
+          headerStatus={headerStatus}
+          summaryCards={summaryCards}
+          onThemeChange={onThemeChange}
+        />
+      </Box>
+    </Box>
+
     <PageLayout
       containerWidth="xlarge"
       padding="normal"
@@ -225,25 +212,6 @@ export const AppShell = ({
       columnGap="normal"
       sx={{ width: "100%", flex: "1 0 auto", py: [3, 4] }}
     >
-      <PageLayout.Header divider="line" padding="none">
-        <WizardHeader
-          title={stepMeta[currentStep].title}
-          description={stepMeta[currentStep].description}
-          themePreference={themePreference}
-          headerStatus={headerStatus}
-          summaryCards={summaryCards}
-          progress={
-            <WizardProgressSummary
-              currentStep={currentStep}
-              isSetupStep={isSetupStep}
-              setupStep={setupStep}
-              visibleSetupSteps={visibleSetupSteps}
-            />
-          }
-          onThemeChange={onThemeChange}
-        />
-      </PageLayout.Header>
-
       <PageLayout.Content as="main" width="full" padding="none">
         <Box
           data-workflow-shell

@@ -1,3 +1,4 @@
+import { getFrontmatterExportKey } from "@exitpress/domain/export-options/ExportOptions.js"
 import { Box, Checkbox, Flash, FormControl, Label, Text, TextInput } from "@primer/react"
 
 import type {
@@ -7,6 +8,21 @@ import type {
 } from "@exitpress/domain/export-options/schema/ExportOptions.js"
 
 import { CheckField, OptionSection, OptionWideBox } from "./OptionControls.js"
+
+const frontmatterExampleValues: Record<FrontmatterFieldName, string> = {
+  title: "첫 글",
+  source: "https://blog.naver.com/mym0404/223034929697",
+  blogKey: "naver",
+  sourceId: "mym0404",
+  postId: "223034929697",
+  publishedAt: "2026-04-11T04:00:00.000Z",
+  category: "React",
+  categoryPath: '["개발", "React"]',
+  tags: '["markdown", "blog"]',
+  thumbnail: "./assets/thumbnail.jpg",
+  exportedAt: "2026-06-13T12:00:00.000Z",
+  assetPaths: '["./assets/image-1.jpg"]',
+}
 
 export const FrontmatterOptionsStep = ({
   options,
@@ -29,7 +45,6 @@ export const FrontmatterOptionsStep = ({
         sx={{
           display: "grid",
           gap: 3,
-          gridTemplateColumns: ["1fr", null, "minmax(0,0.85fr) minmax(0,1.15fr)"],
           alignItems: "start",
         }}
       >
@@ -101,7 +116,6 @@ export const FrontmatterOptionsStep = ({
         sx={{
           display: "grid",
           gap: 3,
-          gridTemplateColumns: ["1fr", null, "1fr 1fr", "1fr 1fr 1fr"],
           alignItems: "start",
         }}
       >
@@ -109,6 +123,11 @@ export const FrontmatterOptionsStep = ({
           const fieldMeta = frontmatterFieldMeta[fieldName]
           const fieldEnabled = options.frontmatter.fields[fieldName]
           const hasError = frontmatterValidationErrors.some((error) => error.includes(fieldName))
+          const alias = options.frontmatter.aliases[fieldName] ?? ""
+          const exportKey = getFrontmatterExportKey({
+            fieldName,
+            alias,
+          })
 
           return (
             <Box
@@ -152,35 +171,69 @@ export const FrontmatterOptionsStep = ({
                 </FormControl.Caption>
               </FormControl>
 
-              <FormControl
-                id={`frontmatter-alias-${fieldName}`}
-                disabled={!options.frontmatter.enabled || !fieldEnabled}
+              <Box
+                sx={{
+                  display: "grid",
+                  gap: 2,
+                }}
               >
-                <FormControl.Label>내보낼 key 별칭</FormControl.Label>
-                <TextInput
-                  block
-                  id={`frontmatter-alias-${fieldName}`}
-                  data-alias-input="true"
-                  data-field-name={fieldName}
-                  value={options.frontmatter.aliases[fieldName] ?? ""}
-                  placeholder={fieldMeta.defaultAlias}
-                  aria-invalid={hasError || undefined}
-                  validationStatus={hasError ? "error" : undefined}
-                  disabled={!options.frontmatter.enabled || !fieldEnabled}
-                  onChange={(event) =>
-                    onOptionsChange((current) => ({
-                      ...current,
-                      frontmatter: {
-                        ...current.frontmatter,
-                        aliases: {
-                          ...current.frontmatter.aliases,
-                          [fieldName]: event.target.value,
+                <Box
+                  data-frontmatter-alias-row="true"
+                  sx={{
+                    alignItems: "center",
+                    display: "grid",
+                    gap: 2,
+                    gridTemplateColumns: ["1fr", "7rem minmax(0, 1fr)"],
+                  }}
+                >
+                  <Box
+                    as="label"
+                    htmlFor={`frontmatter-alias-${fieldName}`}
+                    sx={{
+                      color:
+                        options.frontmatter.enabled && fieldEnabled ? "fg.default" : "fg.muted",
+                      fontSize: 1,
+                      fontWeight: "semibold",
+                    }}
+                  >
+                    내보낼 이름
+                  </Box>
+                  <TextInput
+                    block
+                    id={`frontmatter-alias-${fieldName}`}
+                    data-alias-input="true"
+                    data-field-name={fieldName}
+                    value={alias}
+                    placeholder={fieldMeta.defaultAlias}
+                    aria-invalid={hasError || undefined}
+                    validationStatus={hasError ? "error" : undefined}
+                    disabled={!options.frontmatter.enabled || !fieldEnabled}
+                    onChange={(event) =>
+                      onOptionsChange((current) => ({
+                        ...current,
+                        frontmatter: {
+                          ...current.frontmatter,
+                          aliases: {
+                            ...current.frontmatter.aliases,
+                            [fieldName]: event.target.value,
+                          },
                         },
-                      },
-                    }))
-                  }
-                />
-              </FormControl>
+                      }))
+                    }
+                  />
+                </Box>
+                <Text
+                  data-frontmatter-example="true"
+                  sx={{
+                    color: options.frontmatter.enabled && fieldEnabled ? "fg.muted" : "fg.subtle",
+                    fontSize: 0,
+                    lineHeight: "18px",
+                    overflowWrap: "anywhere",
+                  }}
+                >
+                  예: {exportKey}: {frontmatterExampleValues[fieldName]}
+                </Text>
+              </Box>
             </Box>
           )
         })}

@@ -6,7 +6,6 @@ import {
   Flash,
   FormControl,
   SegmentedControl,
-  Select,
   Text,
   TextInput,
 } from "@primer/react"
@@ -19,7 +18,9 @@ import type {
 
 import type { AlistAuthMode } from "./UploadProviderFormRules.js"
 
-import { UploadGithubOptions } from "./UploadGithubOptions.js"
+import { PrimerSelectActionMenu } from "../../components/primer/PrimerSelectActionMenu.js"
+
+import { UploadGithubOptions, uploadFormRowSx } from "./UploadGithubOptions.js"
 import {
   allAlistAuthModes,
   buildInitialProviderUiState,
@@ -56,20 +57,14 @@ const resultToText = (value: unknown) => {
 }
 
 const fieldGridSx = {
-  display: "grid",
-  gap: 2,
-  alignContent: "start",
+  ...uploadFormRowSx,
   alignSelf: "start",
 } as const
 
 const fieldPanelSx = {
-  bg: "canvas.subtle",
-  border: "1px solid",
-  borderColor: "border.default",
-  borderRadius: 2,
+  ...uploadFormRowSx,
   display: "grid",
   gap: 2,
-  p: 3,
 } as const
 
 export const UploadProviderSettingsForm = ({
@@ -168,12 +163,8 @@ export const UploadProviderSettingsForm = ({
       as="form"
       sx={{
         bg: "canvas.default",
-        border: "1px solid",
-        borderColor: "border.default",
-        borderRadius: 2,
         display: "grid",
-        gap: 3,
-        p: 3,
+        gap: 0,
       }}
       onSubmit={(event) => {
         event.preventDefault()
@@ -183,19 +174,20 @@ export const UploadProviderSettingsForm = ({
       <Box
         sx={{
           display: "grid",
-          gap: 3,
-          gridTemplateColumns: ["1fr", null, null, "minmax(16rem,0.8fr) minmax(0,1.2fr)"],
-          alignItems: "start",
+          gap: 0,
         }}
       >
-        <FormControl id="upload-providerKey">
+        <FormControl id="upload-providerKey" sx={uploadFormRowSx}>
           <FormControl.Label>Provider</FormControl.Label>
-          <Select
-            block
+          <PrimerSelectActionMenu
+            id="upload-providerKey"
             value={providerKey}
-            data-value={providerKey}
-            onChange={(event) => {
-              const nextProviderKey = event.target.value
+            maxWidth="24rem"
+            options={uploadProviders.providers.map((provider) => ({
+              value: provider.key,
+              label: provider.label,
+            }))}
+            onValueChange={(nextProviderKey) => {
               const nextProvider =
                 uploadProviders.providers.find((provider) => provider.key === nextProviderKey) ??
                 null
@@ -210,19 +202,13 @@ export const UploadProviderSettingsForm = ({
                 }),
               )
             }}
-          >
-            {uploadProviders.providers.map((provider) => (
-              <Select.Option key={provider.key} value={provider.key}>
-                {provider.label}
-              </Select.Option>
-            ))}
-          </Select>
+          />
           <FormControl.Caption>{activeProviderDefinition.description}</FormControl.Caption>
         </FormControl>
 
-        <Box sx={{ display: "grid", gap: 3, gridTemplateColumns: ["1fr", null, "1fr 1fr"] }}>
+        <Box sx={{ display: "grid", gap: 0 }}>
           {providerKey === UPLOAD_PROVIDER_KEYS.ALIST ? (
-            <Box sx={{ ...fieldPanelSx, gridColumn: ["auto", null, "1 / -1"] }}>
+            <Box sx={fieldPanelSx}>
               <Text sx={{ fontSize: 1, fontWeight: "semibold" }}>인증 방식</Text>
               <Text sx={{ color: "fg.muted", fontSize: 1, lineHeight: "24px" }}>
                 AList는 Token 인증과 계정 인증 중 하나만 사용합니다.
@@ -279,8 +265,8 @@ export const UploadProviderSettingsForm = ({
                   sx={{
                     ...fieldPanelSx,
                     alignItems: "flex-start",
-                    gridColumn: ["auto", null, "1 / -1"],
                     opacity: rule.disabled ? 0.7 : 1,
+                    "&:hover": rule.disabled ? undefined : { bg: "neutral.subtle" },
                   }}
                 >
                   <Checkbox
@@ -324,24 +310,29 @@ export const UploadProviderSettingsForm = ({
                   sx={fieldGridSx}
                 >
                   <FormControl.Label>{field.label}</FormControl.Label>
-                  <FormControl.Caption>
-                    {rule.description}
-                    {rule.disabledReason ? (
-                      <Box as="span" sx={{ color: "attention.fg", display: "block", mt: 1 }}>
-                        {rule.disabledReason}
-                      </Box>
-                    ) : null}
-                  </FormControl.Caption>
-                  <Select
-                    block
+                  <PrimerSelectActionMenu
+                    id={fieldInputId}
                     value={
                       !field.required && currentValue === "" ? EMPTY_SELECT_VALUE : currentValue
                     }
                     disabled={rule.disabled}
-                    data-value={currentValue}
-                    onChange={(event) => {
-                      const fieldValue =
-                        event.target.value === EMPTY_SELECT_VALUE ? "" : event.target.value
+                    maxWidth="42rem"
+                    options={[
+                      ...(!field.required
+                        ? [
+                            {
+                              value: EMPTY_SELECT_VALUE,
+                              label: "선택 안 함",
+                            },
+                          ]
+                        : []),
+                      ...(field.options ?? []).map((option) => ({
+                        value: String(option.value),
+                        label: option.label,
+                      })),
+                    ]}
+                    onValueChange={(nextValue) => {
+                      const fieldValue = nextValue === EMPTY_SELECT_VALUE ? "" : nextValue
                       const nextProviderFields = {
                         ...activeProviderFields,
                         [field.key]: fieldValue,
@@ -350,19 +341,15 @@ export const UploadProviderSettingsForm = ({
                       updateProviderField(field.key, fieldValue)
                       onChange(buildValue({ nextProviderFields }))
                     }}
-                  >
-                    {!field.required ? (
-                      <Select.Option value={EMPTY_SELECT_VALUE}>선택 안 함</Select.Option>
+                  />
+                  <FormControl.Caption>
+                    {rule.description}
+                    {rule.disabledReason ? (
+                      <Box as="span" sx={{ color: "attention.fg", display: "block", mt: 1 }}>
+                        {rule.disabledReason}
+                      </Box>
                     ) : null}
-                    {(field.options ?? []).map((option) => (
-                      <Select.Option
-                        key={`${field.key}:${option.value}`}
-                        value={String(option.value)}
-                      >
-                        {option.label}
-                      </Select.Option>
-                    ))}
-                  </Select>
+                  </FormControl.Caption>
                 </FormControl>
               )
             }
@@ -375,16 +362,9 @@ export const UploadProviderSettingsForm = ({
                 sx={fieldGridSx}
               >
                 <FormControl.Label>{field.label}</FormControl.Label>
-                <FormControl.Caption>
-                  {rule.description}
-                  {rule.disabledReason ? (
-                    <Box as="span" sx={{ color: "attention.fg", display: "block", mt: 1 }}>
-                      {rule.disabledReason}
-                    </Box>
-                  ) : null}
-                </FormControl.Caption>
                 <TextInput
                   block
+                  sx={{ maxWidth: "42rem" }}
                   type={field.inputType}
                   value={String(activeProviderFields[field.key] ?? "")}
                   disabled={rule.disabled}
@@ -399,6 +379,14 @@ export const UploadProviderSettingsForm = ({
                     onChange(buildValue({ nextProviderFields }))
                   }}
                 />
+                <FormControl.Caption>
+                  {rule.description}
+                  {rule.disabledReason ? (
+                    <Box as="span" sx={{ color: "attention.fg", display: "block", mt: 1 }}>
+                      {rule.disabledReason}
+                    </Box>
+                  ) : null}
+                </FormControl.Caption>
               </FormControl>
             )
           })}
@@ -420,9 +408,17 @@ export const UploadProviderSettingsForm = ({
         }}
       />
 
-      {testUploadResult ? <Flash>{resultToText(testUploadResult)}</Flash> : null}
-      {testUploadError ? <Flash variant="danger">{testUploadError}</Flash> : null}
-      <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+      {testUploadResult ? (
+        <Box sx={uploadFormRowSx}>
+          <Flash>{resultToText(testUploadResult)}</Flash>
+        </Box>
+      ) : null}
+      {testUploadError ? (
+        <Box sx={uploadFormRowSx}>
+          <Flash variant="danger">{testUploadError}</Flash>
+        </Box>
+      ) : null}
+      <Box sx={{ display: "flex", justifyContent: "flex-end", py: 2 }}>
         <Button
           type="submit"
           variant="primary"
