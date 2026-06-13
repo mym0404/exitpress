@@ -4,7 +4,7 @@
 
 - This repository is a local export tool for public blog posts, with concrete blog packages for supported blog platforms.
 - It scans posts, parses blog/editor-specific content into blocks, renders Markdown, writes assets, and keeps resumable export state.
-- The repo maintains a React web UI, server API, export engine, fixture regression tests, browser smoke coverage, and live network e2e coverage.
+- The repo maintains a React web UI, server API, export engine, fixture regression tests, local browser e2e coverage, and live network e2e coverage.
 
 ## Tech Stack
 
@@ -51,13 +51,14 @@
 - Do not create branches, commits, pushes, PRs, or worktrees unless the user explicitly asks.
 - Keep temporary harness/config output under repo-local `tmp/` or `.cache/` as documented.
 - Do not preserve legacy compatibility shims unless the user explicitly asks for backward compatibility.
-- Prefer Vitest for unit/integration/blog checks and Playwright Test for browser smoke/e2e; do not add new custom test runners or validation scripts when a standard runner can express the check.
+- Prefer Vitest for unit/integration/blog checks and Playwright Test for local/live browser e2e; do not add new custom test runners or validation scripts when a standard runner can express the check.
+- Test design and browser e2e management rules live in `.agents/knowledge/test-management.md`.
 
 ## Validation Routes
 
 - `mise exec -- pnpm check:test`: Vitest unit, integration, fixture, and blog checks.
 - `mise exec -- pnpm check:coverage`: Vitest unit, integration, fixture, and blog checks with coverage thresholds.
-- `mise exec -- pnpm build:ui && mise exec -- pnpm check:playwright`: Playwright browser smoke and live e2e checks against the built web UI.
+- `mise exec -- pnpm build:ui && mise exec -- pnpm check:playwright`: Playwright local and live e2e checks against the built web UI.
 - `mise exec -- pnpm check:unused`: dead-code and unused export baseline; run after deleting, moving, or renaming code.
 - `mise exec -- pnpm check:fmt`, `check:lint`, `check:type`, `check:storybook`, `build:server`, and `build:ui`: focused static/build/catalog checks.
 - Full validation details and blind spots live in `.agents/knowledge/verification.md`.
@@ -70,6 +71,7 @@
 - `.agents/knowledge/parser-architecture.md`
 - `.agents/knowledge/parser-blocks.md`
 - `.agents/knowledge/upload.md`
+- `.agents/knowledge/test-management.md`
 - `.agents/knowledge/verification.md`
 - `.agents/knowledge/DESIGN.md`
 - `.agents/knowledge/browser-verification.md`

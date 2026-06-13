@@ -20,7 +20,8 @@
     "check:storybook": "bun scripts/storybook/generate-catalog.ts --check",
     "check:test": "vitest run --configLoader runner --silent",
     "check:coverage": "vitest run --configLoader runner --silent --coverage",
-    "check:playwright": "playwright test"
+    "check:playwright": "playwright test",
+    "check:playwright:ui": "playwright test --ui"
   },
   "devDependencies": {
     "@exitpress/domain": "workspace:*",

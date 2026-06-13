@@ -31,6 +31,6 @@
 
 ## Verification
 - UI logic can use focused pure or hook tests.
-- Browser workflow coverage belongs in Playwright smoke/e2e tests.
+- Browser workflow coverage belongs in Playwright local/live e2e tests.
 - Meaningful UI changes require browser validation when practical.
 - Browser validation should check desktop and mobile width, light and dark theme where relevant, horizontal overflow, console errors, and visible consistency with Primer UI.

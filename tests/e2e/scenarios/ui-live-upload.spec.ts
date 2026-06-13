@@ -1,6 +1,7 @@
 import { mkdir, readFile, rm, writeFile } from "node:fs/promises"
 import path from "node:path"
 
+import { getScanCacheKey } from "@exitpress/domain/blog/schema/BlogScan.js"
 import { createHttpServer } from "@exitpress/server/http/HttpServer.js"
 import { test } from "@playwright/test"
 import { config as loadDotEnv } from "dotenv"
@@ -14,6 +15,8 @@ import { createTestTempDir } from "../../support/test-paths.js"
 
 const sourceId = "mym0404"
 const targetPostId = "222990202785"
+const targetCategoryId = 85
+const targetPublishedAt = "2023-01-21T02:38:27+09:00"
 const uploadRepo = "mym0404/ia2"
 const uploadBranch = "main"
 const uploadPath = `exitpress-live/${Date.now()}`
@@ -46,6 +49,54 @@ type TreeResponse = {
     path?: string
     type?: string
   }>
+}
+
+const liveUploadScanResult: ScanResult = {
+  blogKey: "naver",
+  sourceId,
+  totalPostCount: 1,
+  categories: [
+    {
+      id: targetCategoryId,
+      name: "NestJS",
+      parentId: null,
+      postCount: 1,
+      isDivider: false,
+      isOpen: true,
+      path: ["NestJS"],
+      depth: 0,
+    },
+  ],
+  posts: [
+    {
+      blogKey: "naver",
+      sourceId,
+      postId: targetPostId,
+      title: "[Nest JS] 공부 시작",
+      publishedAt: targetPublishedAt,
+      categoryId: targetCategoryId,
+      categoryName: "NestJS",
+      source: `https://blog.naver.com/${sourceId}/${targetPostId}`,
+      thumbnailUrl:
+        "https://mblogthumb-phinf.pstatic.net/MjAyMzAxMjFfMTcw/MDAxNjc0MjM1Nzk4NzM3.j9xBOnc9ZEYJEjD181utsKj5wRIponNfcL93vCNx204g.c1mi5mJ6YAtuirjyqmyMnDXvwFCcc9IDVIx4MEuEkT0g.JPEG.mym0404/nestjs.jpeg?type=w",
+    },
+  ],
+}
+
+const writeLiveUploadScanCache = async (scanCachePath: string) => {
+  await writeFile(
+    scanCachePath,
+    `${JSON.stringify(
+      {
+        scans: {
+          [getScanCacheKey(liveUploadScanResult)]: liveUploadScanResult,
+        },
+      },
+      null,
+      2,
+    )}\n`,
+    "utf8",
+  )
 }
 
 const resolveLiveUploadConfig = (): LiveUploadConfig => {
@@ -347,15 +398,6 @@ const saveJsonCapture = async ({
   return filePath
 }
 
-const logLiveUpload = (message: string, payload?: unknown) => {
-  if (payload === undefined) {
-    console.log(`live upload: ${message}`)
-    return
-  }
-
-  console.log(`live upload: ${message} ${JSON.stringify(payload)}`)
-}
-
 const readUiUploadState = async ({ page }: { page: import("playwright").Page }) =>
   page.evaluate(() => {
     const progressValue = Number(
@@ -416,13 +458,6 @@ const waitForObservedUploadState = async ({
     }
 
     if (await accept({ job, ui })) {
-      logLiveUpload(`${label} observed`, {
-        jobStatus: job.status,
-        uploadStatus: job.upload.status,
-        uploadedCount: job.upload.uploadedCount,
-        candidateCount: job.upload.candidateCount,
-        ui,
-      })
       return { job, ui }
     }
 
@@ -437,10 +472,15 @@ const waitForObservedUploadState = async ({
 const runUiLiveUpload = async ({ browser }: { browser: Browser }) => {
   const config = resolveLiveUploadConfig()
   const tempRoot = await createTestTempDir("exitpress-live-upload-harness-")
+  const settingsPath = path.join(tempRoot, "export-ui-settings.json")
+  const scanCachePath = path.join(tempRoot, "scan-cache.json")
+  const postHtmlCacheDir = path.join(tempRoot, "post-html")
+  await writeLiveUploadScanCache(scanCachePath)
+
   const server = createHttpServer({
-    settingsPath: path.join(tempRoot, "export-ui-settings.json"),
-    scanCachePath: path.join(tempRoot, "scan-cache.json"),
-    postHtmlCacheDir: path.join(tempRoot, "post-html"),
+    settingsPath,
+    scanCachePath,
+    postHtmlCacheDir,
   })
   const context = await browser.newContext({
     viewport: {
@@ -483,7 +523,6 @@ const runUiLiveUpload = async ({ browser }: { browser: Browser }) => {
 
   try {
     baseUrl = await startServer(server)
-    logLiveUpload("server ready")
     await page.goto(baseUrl)
     await waitForStepView({
       page,
@@ -506,9 +545,6 @@ const runUiLiveUpload = async ({ browser }: { browser: Browser }) => {
     const scanResponse = await scanResponsePromise
     const scanResult = (await scanResponse.json()) as ScanResult
     const scanPosts = scanResult.posts ?? []
-    logLiveUpload("scan completed", {
-      postCount: scanPosts.length,
-    })
 
     await waitForStepView({
       page,
@@ -641,14 +677,9 @@ const runUiLiveUpload = async ({ browser }: { browser: Browser }) => {
     }
 
     await page.waitForSelector(`text=${testUploadBody.uploadedUrl}`)
-    logLiveUpload("test upload completed")
 
     const branchHeadBeforeUpload = await getBranchHeadSha(config)
     liveEvidence.beforeSha = branchHeadBeforeUpload
-    logLiveUpload("branch head captured", {
-      branch: config.branch,
-      beforeSha: branchHeadBeforeUpload,
-    })
 
     await clickWizardButton({
       page,
@@ -754,9 +785,6 @@ const runUiLiveUpload = async ({ browser }: { browser: Browser }) => {
     if (!jobId) {
       throw new Error("export response did not return a jobId")
     }
-    logLiveUpload("export accepted", {
-      jobId,
-    })
 
     await page.waitForFunction(
       () => {
@@ -879,7 +907,6 @@ const runUiLiveUpload = async ({ browser }: { browser: Browser }) => {
       page,
       status: "upload-completed",
     })
-    logLiveUpload("upload completed")
 
     const completedJob = await fetchJson<ExportJobState>(`${baseUrl}/api/export/${jobId}`)
     const manifest = await fetchJson<{
@@ -1032,8 +1059,6 @@ const runUiLiveUpload = async ({ browser }: { browser: Browser }) => {
     if (pageErrors.length > 0) {
       throw new Error(`browser page error: ${pageErrors[0]}`)
     }
-
-    console.log(JSON.stringify(liveEvidence, null, 2))
   } finally {
     await context.close()
     await rm(outputDir, {
@@ -1057,6 +1082,8 @@ const runUiLiveUpload = async ({ browser }: { browser: Browser }) => {
   }
 }
 
-test("live upload rewrites exported image URLs", async ({ browser }) => {
-  await runUiLiveUpload({ browser })
+test.describe("live", () => {
+  test("upload rewrites exported image URLs", async ({ browser }) => {
+    await runUiLiveUpload({ browser })
+  })
 })

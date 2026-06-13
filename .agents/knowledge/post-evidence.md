@@ -47,7 +47,7 @@ bun scripts/post-evidence/capture-post-evidence.ts \
 ## Output
 - The CLI writes `evidence.md`, `report.json`, and screenshot assets.
 - The default output root is `tmp/harness/post-evidence/<blogKey>-<sourceId>-<postId>-<timestamp>`.
-- `--assetProfile tmp` writes assets under the output directory and is for local smoke output.
+- `--assetProfile tmp` writes assets under the output directory and is for local evidence output.
 - `--assetProfile readme` writes assets under `.agents/knowledge/reference/assets/readme` so README fragments can reference stable repo-local assets.
 - `--assetProfile figure` writes assets under `.agents/knowledge/reference/assets/figure` so PR/report figures can be committed separately from README assets.
 - Persistent asset profiles write image links as repo-root-relative `.agents/...` paths rather than `tmp`-relative paths.
@@ -89,6 +89,6 @@ bun scripts/post-evidence/capture-post-evidence.ts \
 
 ## Verification
 - Run `bun scripts/post-evidence/capture-post-evidence.ts --help` after changing the CLI surface.
-- Run at least one full-post smoke and one inspect-path smoke after changing capture behavior.
+- Run at least one full-post local check and one inspect-path local check after changing capture behavior.
 - Check `report.json.errorCount` before using generated evidence.
 - Use `identify <asset>.png` or a visual image check when screenshot framing or target node capture behavior changes.

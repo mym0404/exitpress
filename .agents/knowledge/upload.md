@@ -25,5 +25,5 @@
 
 ## Verification
 - Upload or resume contract changes require server/job tests, web hook tests, and `build:ui` followed by `check:playwright`.
-- Mock smoke proves provider setup, test upload, export payload shape, automatic upload progress, result-screen uploaded links, manifest URL replacement, and absence of manual upload POSTs.
+- Local e2e proves provider setup, test upload, export payload shape, automatic upload progress, result-screen uploaded links, manifest URL replacement, and absence of manual upload POSTs.
 - Live upload Playwright e2e is the bundled proof for external upload state, Markdown rewrite, provider metadata use, and credential non-leakage.

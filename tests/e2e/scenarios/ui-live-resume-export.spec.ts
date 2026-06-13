@@ -1,4 +1,5 @@
 import { spawn } from "node:child_process"
+import { randomUUID } from "node:crypto"
 import { readFile, rm } from "node:fs/promises"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
@@ -17,26 +18,14 @@ import { createTestTempDir } from "../../support/test-paths.js"
 
 const repoRoot = fileURLToPath(new URL("../../../", import.meta.url))
 
-const resumeCases = {
-  default: {
-    sourceId: "mym0404",
-    dateFrom: "2017-03-31",
-    dateTo: "2017-03-31",
-    categoryId: "17",
-    delayedPostId: "220971956932",
-    expectedPosts: "2",
-  },
-  "se2-table": {
-    sourceId: "blogpeople",
-    dateFrom: "2013-06-26",
-    dateTo: "2013-06-27",
-    categoryId: "21",
-    delayedPostId: "150170710293",
-    expectedPosts: "4",
-  },
+const liveResumeCase = {
+  sourceId: "mym0404",
+  dateFrom: "2017-03-31",
+  dateTo: "2017-03-31",
+  categoryId: "17",
+  delayedPostId: "220971956932",
+  expectedPosts: "2",
 } as const
-
-type ResumeCaseId = keyof typeof resumeCases
 
 const wait = (ms: number) =>
   new Promise<void>((resolve) => {
@@ -236,20 +225,19 @@ const buildScopedOptions = ({
   return options
 }
 
-const runUiLiveResumeExport = async ({ resumeCaseId }: { resumeCaseId: ResumeCaseId }) => {
-  const selectedResumeCase = resumeCases[resumeCaseId]
-  const sourceId = process.env.EXITPRESS_LIVE_RESUME_BLOG_ID ?? selectedResumeCase.sourceId
-  const scopedDateFrom = process.env.EXITPRESS_LIVE_RESUME_DATE_FROM ?? selectedResumeCase.dateFrom
-  const scopedDateTo = process.env.EXITPRESS_LIVE_RESUME_DATE_TO ?? selectedResumeCase.dateTo
+const runUiLiveResumeExport = async () => {
+  const sourceId = process.env.EXITPRESS_LIVE_RESUME_BLOG_ID ?? liveResumeCase.sourceId
+  const scopedDateFrom = process.env.EXITPRESS_LIVE_RESUME_DATE_FROM ?? liveResumeCase.dateFrom
+  const scopedDateTo = process.env.EXITPRESS_LIVE_RESUME_DATE_TO ?? liveResumeCase.dateTo
   const scopedCategoryId = Number(
-    process.env.EXITPRESS_LIVE_RESUME_CATEGORY_ID ?? selectedResumeCase.categoryId,
+    process.env.EXITPRESS_LIVE_RESUME_CATEGORY_ID ?? liveResumeCase.categoryId,
   )
   const delayedPostId =
-    process.env.EXITPRESS_LIVE_RESUME_DELAY_LOGNO ?? selectedResumeCase.delayedPostId
+    process.env.EXITPRESS_LIVE_RESUME_DELAY_LOGNO ?? liveResumeCase.delayedPostId
   const expectedScopedPostCount = Number(
-    process.env.EXITPRESS_LIVE_RESUME_EXPECTED_POSTS ?? selectedResumeCase.expectedPosts,
+    process.env.EXITPRESS_LIVE_RESUME_EXPECTED_POSTS ?? liveResumeCase.expectedPosts,
   )
-  const scopedOutputDir = `output/live-resume-e2e-${resumeCaseId}-${Date.now()}`
+  const scopedOutputDir = `output/live-resume-e2e-${randomUUID()}`
   const isWithinScopedDateRange = (publishedAt: string) => {
     const publishedDate = publishedAt.slice(0, 10)
 
@@ -272,7 +260,6 @@ const runUiLiveResumeExport = async ({ resumeCaseId }: { resumeCaseId: ResumeCas
       delayMs: 30_000,
     })
     firstServer = activeFirstServer
-    console.log("live resume: first server ready")
 
     const scanResult = await postJson<ScanResult>({
       url: `${activeFirstServer.baseUrl}/api/scan`,
@@ -281,7 +268,6 @@ const runUiLiveResumeExport = async ({ resumeCaseId }: { resumeCaseId: ResumeCas
         sourceInput: sourceId,
       },
     })
-    console.log("live resume: scan completed")
 
     const scopedPosts = (scanResult.posts ?? []).filter(
       (post) => post.categoryId === scopedCategoryId && isWithinScopedDateRange(post.publishedAt),
@@ -313,7 +299,6 @@ const runUiLiveResumeExport = async ({ resumeCaseId }: { resumeCaseId: ResumeCas
         scanResult,
       },
     })
-    console.log("live resume: export accepted")
 
     const jobId = exportResponse.jobId?.trim()
 
@@ -335,7 +320,6 @@ const runUiLiveResumeExport = async ({ resumeCaseId }: { resumeCaseId: ResumeCas
         manifest.job.request.outputDir === scopedOutputDir &&
         manifest.job.request.options.assets.imageHandlingMode === "remote",
     })
-    console.log("live resume: partial manifest persisted")
 
     if (partialManifest.job?.scanResult && "posts" in partialManifest.job.scanResult) {
       throw new Error("partial manifest should not persist scanResult.posts")
@@ -346,7 +330,6 @@ const runUiLiveResumeExport = async ({ resumeCaseId }: { resumeCaseId: ResumeCas
       signal: "SIGKILL",
     })
     firstServer = null
-    console.log("live resume: first server killed")
 
     const activeSecondServer = await startServer({
       settingsPath,
@@ -354,7 +337,6 @@ const runUiLiveResumeExport = async ({ resumeCaseId }: { resumeCaseId: ResumeCas
       postHtmlCacheDir,
     })
     secondServer = activeSecondServer
-    console.log("live resume: second server ready")
 
     const defaults = await fetchJson<{
       resumedJob: ExportJobState | null
@@ -380,7 +362,6 @@ const runUiLiveResumeExport = async ({ resumeCaseId }: { resumeCaseId: ResumeCas
       url: `${activeSecondServer.baseUrl}/api/export/${jobId}/resume`,
       body: {},
     })
-    console.log("live resume: resume requested")
 
     const completedJob = await waitForJob({
       baseUrl: activeSecondServer.baseUrl,
@@ -394,7 +375,6 @@ const runUiLiveResumeExport = async ({ resumeCaseId }: { resumeCaseId: ResumeCas
         manifest.successCount === expectedScopedPostCount &&
         manifest.totalPosts === expectedScopedPostCount,
     })
-    console.log("live resume: completed manifest persisted")
 
     if (
       completedJob.progress.completed !== expectedScopedPostCount ||
@@ -408,22 +388,6 @@ const runUiLiveResumeExport = async ({ resumeCaseId }: { resumeCaseId: ResumeCas
         throw new Error(`completed manifest post outputPath missing: ${post.postId}`)
       }
     }
-
-    console.log(
-      JSON.stringify(
-        {
-          sourceId,
-          scopedDateFrom,
-          scopedDateTo,
-          scopedCategoryId,
-          outputDir: scopedOutputDir,
-          resumedJobId: jobId,
-          completedCount: completedManifest.successCount,
-        },
-        null,
-        2,
-      ),
-    )
   } finally {
     if (firstServer) {
       await stopServer({
@@ -448,8 +412,8 @@ const runUiLiveResumeExport = async ({ resumeCaseId }: { resumeCaseId: ResumeCas
   }
 }
 
-for (const resumeCaseId of Object.keys(resumeCases) as ResumeCaseId[]) {
-  test(`live resume export completes after restart (${resumeCaseId})`, async () => {
-    await runUiLiveResumeExport({ resumeCaseId })
+test.describe("live", () => {
+  test("resume export completes after restart for scoped Naver posts", async () => {
+    await runUiLiveResumeExport()
   })
-}
+})

@@ -57,8 +57,8 @@
 - `packages/web/src/features/storybook/StorybookPage.tsx`: Primer Storybook route.
 - `.agents/knowledge/DESIGN.md`: Primer source of truth.
 - `AGENTS.md`: update design system summary if still says shadcn/Radix.
-- `tests/e2e/scenarios/ui-smoke.spec.ts`: extend screenshot/navigation coverage where practical.
-- `tests/e2e/scenarios/ui-resume-smoke.spec.ts`: keep resume dialog coverage aligned.
+- `tests/e2e/scenarios/ui-local-export.spec.ts`: extend screenshot/navigation coverage where practical.
+- `tests/e2e/scenarios/ui-local-resume.spec.ts`: keep resume dialog coverage aligned.
 
 ### Delete Or Empty After Migration
 
@@ -988,7 +988,7 @@ mise exec -- pnpm build:ui
 
 Browser checks:
 - `/storybook` desktop/mobile light/dark
-- resume dialog open/restore/reset paths using existing smoke setup
+- resume dialog open/restore/reset paths using existing local e2e setup
 - loading overlay screenshot
 
 Expected:
@@ -1140,12 +1140,12 @@ For each `수정 필요` result:
 ## Task 12: Major Screen Browser Verification
 
 **Files:**
-- Modify: `tests/e2e/scenarios/ui-smoke.spec.ts`
-- Modify: `tests/e2e/scenarios/ui-resume-smoke.spec.ts`
+- Modify: `tests/e2e/scenarios/ui-local-export.spec.ts`
+- Modify: `tests/e2e/scenarios/ui-local-resume.spec.ts`
 - Create: `tests/e2e/scenarios/ui-primer-visual.spec.ts`
 - Modify: `packages/web/src/components/primer/PrimerVerificationMatrix.md`
 
-- [ ] **Step 1: Add visual smoke test file**
+- [ ] **Step 1: Add visual local e2e test file**
 
 Create `tests/e2e/scenarios/ui-primer-visual.spec.ts` with Playwright routes using the existing e2e test server helpers from nearby tests. The test should visit:
 - export first screen
@@ -1169,7 +1169,7 @@ mise exec -- pnpm check:playwright
 ```
 
 Expected:
-- Browser smoke passes.
+- Browser local e2e passes.
 - Screenshots exist for all major screens listed in the design spec.
 
 - [ ] **Step 4: Manual Browser plugin inspection**

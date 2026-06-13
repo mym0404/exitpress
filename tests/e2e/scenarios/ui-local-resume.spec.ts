@@ -8,7 +8,6 @@ import {
   frontmatterFieldOrder,
   optionDescriptions,
 } from "@exitpress/domain/export-options/ExportOptions.js"
-import { mapConcurrent } from "@exitpress/engine/shared/async/util/AsyncTasks.js"
 import { createHttpServer } from "@exitpress/server/http/HttpServer.js"
 import { test } from "@playwright/test"
 
@@ -37,13 +36,9 @@ const desktopViewport = {
 } as const
 
 const responseTimeoutMs = 30_000
-const smokeFast = process.env.EXITPRESS_SMOKE_FAST !== "0"
-const resumeScenarioConcurrency = Math.max(
-  1,
-  Number.parseInt(process.env.EXITPRESS_RESUME_SMOKE_CONCURRENCY ?? "3", 10) || 3,
-)
-const resumeDialogSettledWaitMs = smokeFast ? 75 : 300
-const smokeJobPolling: ExportJobPollingConfig | undefined = smokeFast
+const localFast = process.env.EXITPRESS_LOCAL_FAST !== "0"
+const resumeDialogSettledWaitMs = localFast ? 75 : 300
+const localJobPolling: ExportJobPollingConfig | undefined = localFast
   ? {
       defaultPollMs: 100,
       fastPollMs: 50,
@@ -65,7 +60,6 @@ const allResumeScenarioSteps = [
   "result",
 ] as const satisfies readonly WizardStep[]
 type ResumeScenarioStep = (typeof allResumeScenarioSteps)[number]
-
 const buildJsonResponse = (body: unknown, status = 200) => ({
   status,
   contentType: "application/json",
@@ -608,7 +602,7 @@ const createBootstrap = ({
   options: defaultExportOptions(),
   lastOutputDir,
   themePreference: "dark" as const,
-  jobPolling: smokeJobPolling,
+  jobPolling: localJobPolling,
   resumedJob,
   resumeSummary: resumedJob ? buildResumeSummary(resumedJob) : null,
   resumedScanResult: resumedJob ? resumedScanResult : null,
@@ -696,7 +690,7 @@ const runScenario = async ({
     await route.fulfill(
       buildJsonResponse(
         {
-          error: `Unhandled resume smoke route: ${scenario.id} ${method} ${pathname}`,
+          error: `Unhandled local resume route: ${scenario.id} ${method} ${pathname}`,
         },
         404,
       ),
@@ -704,7 +698,6 @@ const runScenario = async ({
   })
 
   try {
-    console.log(`resume smoke start: ${scenario.id}`)
     await page.goto(baseUrl)
     await waitForStepView({
       page,
@@ -714,14 +707,13 @@ const runScenario = async ({
       page,
       state,
     })
-    console.log(`resume smoke passed: ${scenario.id}`)
   } finally {
     await context.close()
   }
 }
 
-const runUiResumeSmoke = async ({ browser }: { browser: Browser }) => {
-  const tempRoot = await createTestTempDir("exitpress-resume-smoke-")
+const createLocalResumeHarness = async () => {
+  const tempRoot = await createTestTempDir("exitpress-local-resume-")
   const server = createHttpServer({
     settingsPath: path.join(tempRoot, "export-ui-settings.json"),
     scanCachePath: path.join(tempRoot, "scan-cache.json"),
@@ -1163,27 +1155,37 @@ const runUiResumeSmoke = async ({ browser }: { browser: Browser }) => {
     },
   ]
 
-  try {
-    await mapConcurrent({
-      items: scenarios,
-      concurrency: resumeScenarioConcurrency,
-      mapper: async (scenario) => {
-        try {
-          await runScenario({
-            browser,
-            baseUrl,
-            scenario,
-          })
-        } catch (error) {
-          throw new Error(
-            `resume smoke failed: ${scenario.id}: ${error instanceof Error ? error.message : String(error)}`,
-          )
-        }
-      },
-    })
+  return {
+    baseUrl,
+    scenarios,
+    server,
+    tempRoot,
+  }
+}
 
-    console.log(
-      `resume smoke passed (${scenarios.length} scenarios, concurrency=${resumeScenarioConcurrency})`,
+const runUiLocalResumeScenario = async ({
+  browser,
+  scenarioId,
+}: {
+  browser: Browser
+  scenarioId: string
+}) => {
+  const { baseUrl, scenarios, server, tempRoot } = await createLocalResumeHarness()
+  const scenario = scenarios.find((candidate) => candidate.id === scenarioId)
+
+  if (!scenario) {
+    throw new Error(`local resume scenario not found: ${scenarioId}`)
+  }
+
+  try {
+    await runScenario({
+      browser,
+      baseUrl,
+      scenario,
+    })
+  } catch (error) {
+    throw new Error(
+      `local resume failed: ${scenario.id}: ${error instanceof Error ? error.message : String(error)}`,
     )
   } finally {
     server.close()
@@ -1194,6 +1196,60 @@ const runUiResumeSmoke = async ({ browser }: { browser: Browser }) => {
   }
 }
 
-test("mock resume states smoke flow", async ({ browser }) => {
-  await runUiResumeSmoke({ browser })
+test.describe("local", () => {
+  test("starts from blog input when output has no resumable job", async ({ browser }) => {
+    await runUiLocalResumeScenario({
+      browser,
+      scenarioId: "empty-output-starts-from-blog-input",
+    })
+  })
+
+  test("continues a running resumable export only after manual action", async ({ browser }) => {
+    await runUiLocalResumeScenario({
+      browser,
+      scenarioId: "running-resume-manual-continue-refreshes-progress-without-reload",
+    })
+  })
+
+  test("restores upload-ready progress without starting upload", async ({ browser }) => {
+    await runUiLocalResumeScenario({
+      browser,
+      scenarioId: "upload-ready-restores-upload-step-without-manual-start",
+    })
+  })
+
+  test("restores uploading progress without continuing automatically", async ({ browser }) => {
+    await runUiLocalResumeScenario({
+      browser,
+      scenarioId: "uploading-resume-restores-progress-without-manual-continue",
+    })
+  })
+
+  test("restores upload failure rows without retrying upload", async ({ browser }) => {
+    await runUiLocalResumeScenario({
+      browser,
+      scenarioId: "upload-failed-restores-upload-step-with-preserved-rows",
+    })
+  })
+
+  test("restores completed export results", async ({ browser }) => {
+    await runUiLocalResumeScenario({
+      browser,
+      scenarioId: "completed-restores-result-step",
+    })
+  })
+
+  test("restores completed upload results", async ({ browser }) => {
+    await runUiLocalResumeScenario({
+      browser,
+      scenarioId: "upload-completed-restores-result-step",
+    })
+  })
+
+  test("restores failed export results with the error message", async ({ browser }) => {
+    await runUiLocalResumeScenario({
+      browser,
+      scenarioId: "failed-restores-result-step-with-error",
+    })
+  })
 })

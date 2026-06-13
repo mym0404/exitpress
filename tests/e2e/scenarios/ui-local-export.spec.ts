@@ -30,16 +30,8 @@ import { createTestPath, createTestTempDir } from "../../support/test-paths.js"
 
 const responseTimeoutMs = 90_000
 const blockTemplateDefinitions = new NaverBlog().getBlockTemplateDefinitions()
-const smokeFast = process.env.EXITPRESS_SMOKE_FAST !== "0"
-const smokeDebug = process.env.EXITPRESS_SMOKE_DEBUG === "1"
-const debugLog = (...args: unknown[]) => {
-  if (!smokeDebug) {
-    return
-  }
-
-  console.log("[run-ui-smoke]", ...args)
-}
-const smokeJobPolling: ExportJobPollingConfig | undefined = smokeFast
+const localFast = process.env.EXITPRESS_LOCAL_FAST !== "0"
+const localJobPolling: ExportJobPollingConfig | undefined = localFast
   ? {
       defaultPollMs: 100,
       fastPollMs: 50,
@@ -47,8 +39,8 @@ const smokeJobPolling: ExportJobPollingConfig | undefined = smokeFast
       uploadBurstAttempts: 8,
     }
   : undefined
-const smokeStatusPollMs = smokeFast ? 100 : 1000
-const smokeJobFetchLimits = smokeFast
+const localStatusPollMs = localFast ? 100 : 1000
+const localJobFetchLimits = localFast
   ? {
       exportRunningMax: 2,
       uploadPartialMax: 3,
@@ -67,7 +59,7 @@ const mobileViewport = {
   width: 375,
   height: 812,
 } as const
-const fallbackSmokeOutputDir = createTestPath("ui-smoke-fixture", "output")
+const fallbackLocalOutputDir = createTestPath("ui-local-export-fixture", "output")
 
 const getCaptureDir = () => {
   return process.env.EXITPRESS_CAPTURE_DIR ?? null
@@ -175,7 +167,7 @@ const uploadProviderCatalog: UploadProviderCatalogResponse = {
   ],
 }
 
-const smokeImageBytes = Buffer.from(
+const localImageBytes = Buffer.from(
   "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO9Wn6kAAAAASUVORK5CYII=",
   "base64",
 )
@@ -289,7 +281,7 @@ const buildUploadItem = ({
       ? candidates.map((_, assetIndex) => buildRemoteAssetPath(index, assetIndex))
       : []
   const externalPreviewUrl =
-    rewriteStatus === "completed" ? `https://markdownviewer.pages.dev/#share=smoke-${postId}` : null
+    rewriteStatus === "completed" ? `https://markdownviewer.pages.dev/#share=local-${postId}` : null
 
   return {
     id: outputPath,
@@ -323,10 +315,10 @@ const buildUploadItem = ({
 }
 
 const createBaseJob = () => ({
-  id: "job-smoke",
+  id: "job-local",
   request: {
     sourceInput: "mym0404",
-    outputDir: fallbackSmokeOutputDir,
+    outputDir: fallbackLocalOutputDir,
     profile: "gfm",
     options: createUploadFlowOptions(),
   },
@@ -425,7 +417,7 @@ const buildUploadJob = ({
       selectedCategoryIds: [101],
       startedAt: uploadTimelineTimestamps.startedAt,
       finishedAt,
-      outputDir: fallbackSmokeOutputDir,
+      outputDir: fallbackLocalOutputDir,
       totalPosts: uploadTargetCount,
       successCount: uploadTargetCount,
       failureCount: 0,
@@ -624,7 +616,7 @@ const waitForJobStatus = async ({
       throw new Error(`${timeoutLabel} failed with status ${status}`)
     }
 
-    await page.waitForTimeout(smokeStatusPollMs)
+    await page.waitForTimeout(localStatusPollMs)
   }
 
   throw new Error(`${timeoutLabel} timed out`)
@@ -989,8 +981,8 @@ const fillFrontmatterAlias = async ({
   }, value)
 }
 
-const runUiSmoke = async ({ browser }: { browser: Browser }) => {
-  const tempRoot = await createTestTempDir("exitpress-smoke-")
+const runUiLocalExport = async ({ browser }: { browser: Browser }) => {
+  const tempRoot = await createTestTempDir("exitpress-local-export-")
   const outputDir = path.join(tempRoot, "output")
   const server = createHttpServer({
     settingsPath: path.join(tempRoot, "export-ui-settings.json"),
@@ -1022,19 +1014,6 @@ const runUiSmoke = async ({ browser }: { browser: Browser }) => {
   page.on("pageerror", (error) => {
     console.error(`page error: ${error.message}`)
   })
-  if (smokeDebug) {
-    page.on("request", (request) => {
-      if (request.url().includes("/api/")) {
-        debugLog("request", request.method(), request.url())
-      }
-    })
-    page.on("response", (response) => {
-      if (response.url().includes("/api/")) {
-        debugLog("response", response.status(), response.request().method(), response.url())
-      }
-    })
-  }
-
   const mockState: {
     scanRequestCount: number
     jobFetchCount: number
@@ -1083,7 +1062,7 @@ const runUiSmoke = async ({ browser }: { browser: Browser }) => {
           options: defaultExportOptions(),
           lastOutputDir: outputDir,
           themePreference: mockState.themePreference,
-          jobPolling: smokeJobPolling,
+          jobPolling: localJobPolling,
           resumedJob: null,
           resumeSummary: null,
           resumedScanResult: null,
@@ -1170,14 +1149,14 @@ const runUiSmoke = async ({ browser }: { browser: Browser }) => {
     }
 
     if (pathname === "/api/scan-blocks/jobs" && request.method() === "POST") {
-      await route.fulfill(buildJsonResponse({ jobId: "block-scan-smoke" }, 202))
+      await route.fulfill(buildJsonResponse({ jobId: "block-scan-local" }, 202))
       return
     }
 
-    if (pathname === "/api/scan-blocks/jobs/block-scan-smoke" && request.method() === "GET") {
+    if (pathname === "/api/scan-blocks/jobs/block-scan-local" && request.method() === "GET") {
       await route.fulfill(
         buildJsonResponse({
-          id: "block-scan-smoke",
+          id: "block-scan-local",
           status: "completed",
           total: 5,
           completed: 5,
@@ -1238,7 +1217,7 @@ const runUiSmoke = async ({ browser }: { browser: Browser }) => {
       await route.fulfill(
         buildJsonResponse(
           {
-            jobId: "job-smoke",
+            jobId: "job-local",
           },
           202,
         ),
@@ -1246,12 +1225,12 @@ const runUiSmoke = async ({ browser }: { browser: Browser }) => {
       return
     }
 
-    if (pathname === "/api/export/job-smoke" && request.method() === "GET") {
+    if (pathname === "/api/export/job-local" && request.method() === "GET") {
       mockState.jobFetchCount += 1
 
-      const uploadingStartFetch = smokeJobFetchLimits.exportRunningMax
-      const rewriteStartFetch = uploadingStartFetch + smokeJobFetchLimits.uploadPartialMax
-      const completedStartFetch = rewriteStartFetch + smokeJobFetchLimits.rewritePendingMax
+      const uploadingStartFetch = localJobFetchLimits.exportRunningMax
+      const rewriteStartFetch = uploadingStartFetch + localJobFetchLimits.uploadPartialMax
+      const completedStartFetch = rewriteStartFetch + localJobFetchLimits.rewritePendingMax
       const nextJob =
         mockState.jobFetchCount <= uploadingStartFetch
           ? createRunningJob()
@@ -1272,7 +1251,7 @@ const runUiSmoke = async ({ browser }: { browser: Browser }) => {
       return
     }
 
-    if (pathname === "/api/export/job-smoke/manifest" && request.method() === "GET") {
+    if (pathname === "/api/export/job-local/manifest" && request.method() === "GET") {
       const manifest = applyCurrentExportOptions(
         applyCurrentOutputDir(createUploadCompletedJob(), outputDir),
         mockState.exportOptions,
@@ -1285,7 +1264,7 @@ const runUiSmoke = async ({ browser }: { browser: Browser }) => {
     await route.fulfill(
       buildJsonResponse(
         {
-          error: `Unhandled smoke route: ${pathname}`,
+          error: `Unhandled local route: ${pathname}`,
         },
         404,
       ),
@@ -1296,7 +1275,7 @@ const runUiSmoke = async ({ browser }: { browser: Browser }) => {
     await route.fulfill({
       status: 200,
       contentType: "image/png",
-      body: smokeImageBytes,
+      body: localImageBytes,
     })
   })
 
@@ -1310,7 +1289,6 @@ const runUiSmoke = async ({ browser }: { browser: Browser }) => {
 
     await waitForHtmlThemeClass({ page, theme: "dark" })
 
-    debugLog("waitForRequest", "themePersistPromise", "light")
     const themePersistPromise = waitForExportSettingsSave({
       page,
       baseUrl,
@@ -1329,7 +1307,6 @@ const runUiSmoke = async ({ browser }: { browser: Browser }) => {
 
     await page.fill("#sourceInput", "mym0404")
 
-    debugLog("waitForResponse", "scanResponsePromise")
     const scanResponsePromise = page.waitForResponse(
       (response) =>
         response.url() === `${baseUrl}/api/scan` && response.request().method() === "POST",
@@ -1379,7 +1356,6 @@ const runUiSmoke = async ({ browser }: { browser: Browser }) => {
       )
     }
 
-    debugLog("waitForResponse", "forcedScanResponsePromise")
     const forcedScanResponsePromise = page.waitForResponse(
       (response) =>
         response.url() === `${baseUrl}/api/scan` && response.request().method() === "POST",
@@ -1406,7 +1382,6 @@ const runUiSmoke = async ({ browser }: { browser: Browser }) => {
     })
     await page.fill("#sourceInput", "another-blog")
 
-    debugLog("waitForResponse", "secondScanResponsePromise")
     const secondScanResponsePromise = page.waitForResponse(
       (response) =>
         response.url() === `${baseUrl}/api/scan` && response.request().method() === "POST",
@@ -1521,7 +1496,6 @@ const runUiSmoke = async ({ browser }: { browser: Browser }) => {
       throw new Error("frontmatter alias collision was not shown")
     }
 
-    debugLog("waitForRequest", "darkThemePersistPromise", "dark")
     const darkThemePersistPromise = waitForExportSettingsSave({
       page,
       baseUrl,
@@ -1531,7 +1505,6 @@ const runUiSmoke = async ({ browser }: { browser: Browser }) => {
     await page.getByRole("button", { name: "다크" }).click()
     await darkThemePersistPromise
 
-    debugLog("waitForRequest", "restoreLightThemePromise", "light")
     const restoreLightThemePromise = waitForExportSettingsSave({
       page,
       baseUrl,
@@ -1911,7 +1884,6 @@ const runUiSmoke = async ({ browser }: { browser: Browser }) => {
     })
     await blockTemplateSettingsSavePromise
 
-    debugLog("waitForResponse", "exportResponsePromise")
     const exportResponsePromise = page.waitForResponse(
       (response) =>
         response.url() === `${baseUrl}/api/export` && response.request().method() === "POST",
@@ -1919,10 +1891,7 @@ const runUiSmoke = async ({ browser }: { browser: Browser }) => {
     )
     await page.click('button:has-text("변환 시작")')
 
-    const exportResponse = await exportResponsePromise
-    const { jobId } = (await exportResponse.json()) as {
-      jobId: string
-    }
+    await exportResponsePromise
 
     await waitForStepView({
       page,
@@ -2036,7 +2005,7 @@ const runUiSmoke = async ({ browser }: { browser: Browser }) => {
     })
 
     const manifest = (await page.evaluate(async () => {
-      const response = await fetch("/api/export/job-smoke/manifest")
+      const response = await fetch("/api/export/job-local/manifest")
 
       if (!response.ok) {
         throw new Error(`manifest request failed: ${response.status}`)
@@ -2139,8 +2108,6 @@ const runUiSmoke = async ({ browser }: { browser: Browser }) => {
     if (firstOutputPath !== "NestJS/2026-04-11-223034929700/index.md") {
       throw new Error("per-post index.md output path regressed")
     }
-
-    console.log(`ui smoke passed (${jobId})`)
   } finally {
     await context.close()
     server.close()
@@ -2151,6 +2118,8 @@ const runUiSmoke = async ({ browser }: { browser: Browser }) => {
   }
 }
 
-test("mock export wizard smoke flow", async ({ browser }) => {
-  await runUiSmoke({ browser })
+test.describe("local", () => {
+  test("export wizard flow", async ({ browser }) => {
+    await runUiLocalExport({ browser })
+  })
 })

@@ -10,11 +10,12 @@
 ## Runner Policy
 
 - Unit, integration, parser, exporter, server, blog, and other non-browser checks belong in Vitest specs.
-- Browser smoke and end-to-end checks belong in Playwright Test specs.
-- Use Vitest/Playwright config, projects, fixtures, lifecycle hooks, reporters, filtering, and coverage before adding repo-specific runners.
+- Local and live browser end-to-end checks belong in Playwright Test specs.
+- Use Vitest/Playwright config, fixtures, lifecycle hooks, reporters, filtering, and coverage before adding repo-specific runners.
 - Standalone Bun scripts are acceptable for product CLIs, one-off maintenance commands, and manual evidence capture, not for checks that can be expressed as Vitest or Playwright tests.
 - Verification commands must do real work directly; do not add alias-only verification scripts that merely redirect to another script.
 - Use `check:*` for checks whose name would otherwise be ambiguous, and keep clear lifecycle commands such as `build:*` under their existing purpose-specific names.
+- Test case shape, local/live e2e boundaries, parallel safety, and runtime-cost rules live in `.agents/knowledge/test-management.md`.
 
 ## Primary Commands
 
@@ -26,7 +27,8 @@
 - `mise exec -- pnpm check:storybook`: generated Storybook catalog freshness check.
 - `mise exec -- pnpm check:test`: full Vitest suite, including fixtures and blog integration checks.
 - `mise exec -- pnpm check:coverage`: full Vitest suite with V8 coverage thresholds.
-- `mise exec -- pnpm check:playwright`: Playwright smoke and live browser/network e2e suite against the current built web UI.
+- `mise exec -- pnpm check:playwright`: Playwright local and live browser/network e2e suite against the current built web UI.
+- `mise exec -- pnpm check:playwright:ui`: Playwright UI mode for the same local and live e2e suite.
 - `mise exec -- pnpm check:unused`: unused source/test/script diagnostics.
 
 ## Focused Commands
@@ -46,15 +48,15 @@
 
 - Network upload creates remote state and depends on credentials.
 - CI network e2e depends on upload secrets and live external services.
-- Coverage does not replace behavior-specific parser/export/server/smoke checks.
+- Coverage does not replace behavior-specific parser, export, server, or browser e2e checks.
 
 ## Task Loops
 
 - Use focused commands while iterating only when the same class of check would otherwise be repeated frequently; run the affected verification commands before finishing.
 - Do not run duplicated checks in sequence when a later command already includes the earlier one, such as `check:test` immediately before `check:coverage`.
-- Documentation-only knowledge edits do not need browser smoke; verify routed paths, command existence, and changed Markdown content.
+- Documentation-only knowledge edits do not need browser e2e; verify routed paths, command existence, and changed Markdown content.
 - Moving or deleting files requires `check:type` and `check:unused`.
 - Parser changes require `check:test`.
 - Export, manifest, upload, resume, UI state, server API, routing, static asset serving, or job-state changes require `build:ui` followed by `check:playwright`.
-- Upload e2e changes must keep both mock smoke and live upload checks aligned with the current export-triggered upload flow.
+- Upload e2e changes must keep both local and live upload checks aligned with the current export-triggered upload flow.
 - Live fetch/upload changes require `build:ui` followed by `check:playwright`.
