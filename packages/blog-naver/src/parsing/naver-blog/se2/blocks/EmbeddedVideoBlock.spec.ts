@@ -2,6 +2,76 @@ import { expectBlockTemplateDefinition, parseSe2Blocks } from "@tests/support/pa
 import { describe, expect, it } from "vitest"
 
 describe("NaverSe2EmbeddedVideoBlock", () => {
+  it("preserves mobile Prism thumbnails and excludes ephemeral keys", () => {
+    const parsed =
+      parseSe2Blocks(`<p><pzp-mobile-layout class="_naverVideo pzp-mobile--embedded" vid="video-id"
+      key="temporary-key" domain-or-blogId="mym0404" logno="221355426801" vthumb="/blog_2018_09_09_1619/thumbnail.jpg">
+      <pzp-content-title>Project video</pzp-content-title><span>재생</span>
+    </pzp-mobile-layout></p>`)
+    expect(parsed.blocks[0]).toMatchObject({
+      blockId: "naver-se2:video",
+      props: {
+        title: "Project video",
+        url: "https://blog.naver.com/mym0404/221355426801",
+        thumbnailUrl: "https://phinf.pstatic.net/image.nmv/blog_2018_09_09_1619/thumbnail.jpg",
+        vid: "video-id",
+      },
+      assets: { thumbnailUrl: { role: "thumbnail", required: false } },
+    })
+    expect(JSON.stringify(parsed)).not.toContain("temporary-key")
+  })
+
+  it("preserves native Prism video metadata without persisting playback keys", () => {
+    const parsed = parseSe2Blocks(`
+      <p><pzp-pc-layout class="_naverVideo _vnl" vid="D1E6083351FF4DD86540343B1734C0A7D68A"
+        key="temporary-playback-key" logNo="221312876679" domain-or-blogId="mym0404"
+        style="width:720px; height:438px;">
+        <pzp-pc-content-title>Demo video</pzp-pc-content-title><button>재생</button>
+      </pzp-pc-layout>&nbsp;</p>
+    `)
+
+    expect(parsed.blocks).toEqual([
+      {
+        blockId: "naver-se2:video",
+        props: {
+          title: "Demo video",
+          thumbnailUrl: null,
+          url: "https://blog.naver.com/mym0404/221312876679",
+          vid: "D1E6083351FF4DD86540343B1734C0A7D68A",
+          width: 720,
+          height: 438,
+        },
+      },
+    ])
+    expect(JSON.stringify(parsed)).not.toContain("temporary-playback-key")
+  })
+
+  it("registers a native video poster for the existing thumbnail asset policy", () => {
+    const parsed = parseSe2Blocks(`<pzp-pc-layout class="_naverVideo" vid="video-id"
+      logNo="221219476787" domain-or-blogId="mym0404">
+      <video poster="https://example.com/poster.jpg"></video>
+    </pzp-pc-layout>`)
+
+    expect(parsed.blocks[0]).toEqual({
+      blockId: "naver-se2:video",
+      props: {
+        title: "Video",
+        thumbnailUrl: "https://example.com/poster.jpg",
+        url: "https://blog.naver.com/mym0404/221219476787",
+        vid: "video-id",
+        width: null,
+        height: null,
+      },
+      assets: {
+        thumbnailUrl: {
+          role: "thumbnail",
+          sourceUrl: "https://example.com/poster.jpg",
+          required: false,
+        },
+      },
+    })
+  })
+
   it("parses standalone outer video iframes into video blocks", () => {
     const parsed = parseSe2Blocks(`
       <p style="text-align: center;" align="center">

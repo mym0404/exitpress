@@ -53,6 +53,9 @@
 - Array props define `items`; object props define `properties`; nested arrays and objects continue recursively to scalar fields.
 - Optional schema markers match values the parser can return as absent, `null`, or `undefined`.
 - Labels stay short. Add a description only when the value's format or purpose is not clear from the label and type.
+- Images inside paragraph, quote, heading, and table text also declare asset dependencies. `textReplacement` identifies the target prop and source-derived image placeholder/template so the shared asset resolver can replace only that image without rewriting ordinary text or code.
+- Resolve inline image dependencies before rendering templates, including Storybook previews. Omitting an optional inline image preserves the surrounding content.
+- Escape literal source text before introducing Markdown syntax. Preserve code whitespace, paragraph boundaries, and every source formula in order; do not compact completed Markdown as plain text.
 
 ## Utilities
 - Editor-local helpers stay in that editor's `util/` folder.

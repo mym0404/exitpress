@@ -119,7 +119,7 @@ thumbnail: https://blogthumb.pstatic.net/20151006_38/blogpeople_1444132521014Wyo
 
 \-----------
 
-**< Tip >**
+**\< Tip >**
 
 후보 번호 기억하며
 
@@ -145,11 +145,7 @@ thumbnail: https://blogthumb.pstatic.net/20151006_38/blogpeople_1444132521014Wyo
 
 ![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fblogthumb.pstatic.net%2F20151003_152%2Fisyoon71_14438789177174S3XC_JPEG%2F%25C2%25F7%25B7%25CA.jpg%3Ftype%3Dw2%22&type=f560_336)
 
-[
-\[추석에피소드\] 종가집 맏며느리의 18년만의 첫 반란~
-종가집 맏며느리의 18년만의 첫 반란 손을 꼽아보니 벌써 제가 결혼한 지도 스무해가 다 되고 있습니다. 평생을 시어머님을 모시고 사셨던 울어머니는 너희들 만큼...
-blog.naver.com
-](https://blog.naver.com/isyoon71/220498645197)
+[\[추석에피소드\] 종가집 맏며느리의 18년만의 첫 반란~ 종가집 맏며느리의 18년만의 첫 반란 손을 꼽아보니 벌써 제가 결혼한 지도 스무해가 다 되고 있습니다. 평생을 시어머님을 모시고 사셨던 울어머니는 너희들 만큼... blog.naver.com](https://blog.naver.com/isyoon71/220498645197)
 
 ![](https://storep-phinf.pstatic.net/nahumkim_01/original_1.png?type=p100_100)
 
@@ -173,11 +169,7 @@ blog.naver.com
 
 ![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fblogthumb.pstatic.net%2F20150928_299%2Fsarmter_1443421372259320I7_JPEG%2F%25BE%25C6%25BA%25CE%25C1%25F6.jpg%3Ftype%3Dw2%22&type=f560_336)
 
-[
-제페니즈 스피츠 보보~ 꼭 사랑 챙취하거라~! 그리고 강쥐의 굴욕~ㅠㅠ
-즐건 추석~^^부모님 뵈러 시골집에 갔을때 알게된 슬픈 이야기...음~~! 꼭 슬프다고는 할 수 없을 거 같기도 하궁~ ㅋ하이튼, 좀 그렇고 그런... 이야기에용~!토끼같은 며느리...
-blog.naver.com
-](https://blog.naver.com/sarmter/220493806727)
+[제페니즈 스피츠 보보~ 꼭 사랑 챙취하거라~! 그리고 강쥐의 굴욕~ㅠㅠ 즐건 추석~^^부모님 뵈러 시골집에 갔을때 알게된 슬픈 이야기...음~~! 꼭 슬프다고는 할 수 없을 거 같기도 하궁~ ㅋ하이튼, 좀 그렇고 그런... 이야기에용~!토끼같은 며느리... blog.naver.com](https://blog.naver.com/sarmter/220493806727)
 
 ![](https://storep-phinf.pstatic.net/nahumkim_01/original_13.png?type=p100_100)
 
@@ -199,11 +191,7 @@ blog.naver.com
 
 ![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fblogthumb.pstatic.net%2F20150928_129%2Ffreshgang_1443383036894mA293_JPEG%2F15-09-28-02-40-11-181_deco.jpg%3Ftype%3Dw2%22&type=f560_336)
 
-[
-\[20150926 호주워킹홀리데이 카라타\] 드디어 풀문페스티벌 남의 집 초대받다
-From. 블로그씨 나도 답하기▶ 추석 2행시 또는 추석에피소드를 적어주세요. (글을 쓰고 #추석2행시 또는 #추석에피소드 태그를 붙여요~) 안그래도 추석 에피...
-blog.naver.com
-](https://blog.naver.com/freshgang/220493456994)
+[\[20150926 호주워킹홀리데이 카라타\] 드디어 풀문페스티벌 남의 집 초대받다 From. 블로그씨 나도 답하기▶ 추석 2행시 또는 추석에피소드를 적어주세요. (글을 쓰고 #추석2행시 또는 #추석에피소드 태그를 붙여요~) 안그래도 추석 에피... blog.naver.com](https://blog.naver.com/freshgang/220493456994)
 
 ![](https://storep-phinf.pstatic.net/nahumkim_01/original_18.png?type=p100_100)
 
@@ -225,11 +213,7 @@ blog.naver.com
 
 ![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fblogthumb.pstatic.net%2F20151001_291%2Fryu0974_1443685397777qh51I_JPEG%2F20150719_160525.jpg%3Ftype%3Dw2%22&type=f220)
 
-[
-\[블로그씨\] 추석 에피소드 -건강과 효-
-From. 블로그씨 나도 답하기▶ 여보게, 추석 에피소드 좀 읊어 보시겠나~글쓰고 #추석에피소드 태그도 좀 붙여주시게~ 에피소드1 부모님께서는 이번 추석때 태국...
-blog.naver.com
-](https://blog.naver.com/ryu0974/220497715679)
+[\[블로그씨\] 추석 에피소드 -건강과 효- From. 블로그씨 나도 답하기▶ 여보게, 추석 에피소드 좀 읊어 보시겠나~글쓰고 #추석에피소드 태그도 좀 붙여주시게~ 에피소드1 부모님께서는 이번 추석때 태국... blog.naver.com](https://blog.naver.com/ryu0974/220497715679)
 
 ![](https://storep-phinf.pstatic.net/nahumkim_01/original_40.png?type=p100_100)
 
@@ -251,11 +235,7 @@ blog.naver.com
 
 [더보기>](http://blog.naver.com/sting762/220495027125)
 
-[
-내가 고향으로 가지 않은 이유
-어린 시절 추석에 제사지내는 것이 싫었다. 평소에는 다정다감했던 아빠가 유독 그날만은 나에게 엄해지셨기 때문이다. 나이가 들어서 알았다. 딱히 제대로 된 효도 한 번 못하고 부모를...
-blog.naver.com
-](https://blog.naver.com/sting762/220495027125)
+[내가 고향으로 가지 않은 이유 어린 시절 추석에 제사지내는 것이 싫었다. 평소에는 다정다감했던 아빠가 유독 그날만은 나에게 엄해지셨기 때문이다. 나이가 들어서 알았다. 딱히 제대로 된 효도 한 번 못하고 부모를... blog.naver.com](https://blog.naver.com/sting762/220495027125)
 
 ![](https://storep-phinf.pstatic.net/nahumkim_01/original_28.png?type=p100_100)
 
@@ -279,11 +259,7 @@ blog.naver.com
 
 ![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fblogthumb.pstatic.net%2F20150930_93%2Faronia8888_1443580438753PaJyK_JPEG%2F20150927_101351.jpg%3Ftype%3Dw2%22&type=f560_336)
 
-[
-\[추석에피소드\]추석 차례지내는 순서와 방법 추석날 있었던 모든 이야기
-추석 명절 즐겁게 보내셨나요~?온 가족과 친척이 한자리에 모이는 추석날 즐거웠던 시간을글로 남겨 보려고 해요~추석 날 아침 주변을 정리하고 차례 지낼 준비를 했어요.저희 집의 족...
-blog.naver.com
-](https://blog.naver.com/aronia8888/220495134354)
+[\[추석에피소드\]추석 차례지내는 순서와 방법 추석날 있었던 모든 이야기 추석 명절 즐겁게 보내셨나요~?온 가족과 친척이 한자리에 모이는 추석날 즐거웠던 시간을글로 남겨 보려고 해요~추석 날 아침 주변을 정리하고 차례 지낼 준비를 했어요.저희 집의 족... blog.naver.com](https://blog.naver.com/aronia8888/220495134354)
 
 ![](https://storep-phinf.pstatic.net/nahumkim_01/original_15.png?type=p100_100)
 
@@ -307,11 +283,7 @@ blog.naver.com
 
 ![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fblogthumb.pstatic.net%2F20150927_172%2Fjuhui8576_1443293795028Xkm7v_JPEG%2FIMG_8780.jpg%3Ftype%3Dw2%22&type=f560_336)
 
-[
-<추억>캐나다 시댁식구들과 한국 친정식구 모두가 함께한 추석
-한국은 오늘이 추석이잖아요,비록 지금은 캐나다에 있는 몸이지만;;한국방문 기간 중에 저에게 가장 특별했던 순간이자 행복했던 추석을 네이버 블로그에도 기억해두고 싶어서 지난 이야기를...
-blog.naver.com
-](https://blog.naver.com/juhui8576/220492948296)
+[\<추억>캐나다 시댁식구들과 한국 친정식구 모두가 함께한 추석 한국은 오늘이 추석이잖아요,비록 지금은 캐나다에 있는 몸이지만;;한국방문 기간 중에 저에게 가장 특별했던 순간이자 행복했던 추석을 네이버 블로그에도 기억해두고 싶어서 지난 이야기를... blog.naver.com](https://blog.naver.com/juhui8576/220492948296)
 
 ![](https://storep-phinf.pstatic.net/nahumkim_01/original_16.png?type=p100_100)
 
@@ -335,11 +307,7 @@ blog.naver.com
 
 ![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fblogthumb.pstatic.net%2F20150927_180%2Fyjay2_1443335074375fgm4R_JPEG%2F20140909_113826.jpg%3Ftype%3Dw2%22&type=f560_336)
 
-[
-이제는 말할 수 있다-작년 오늘...
-정확히 1년전 오늘이었다 한 가정으로 입양되었다가 파양된 희망이를 그때 내가 임보중이었는데 생후 5개월된 희망이의 이 표정은 당시 우리 비글 패밀리에게는 공포의 대상이었다. ...
-blog.naver.com
-](https://blog.naver.com/yjay2/220493128545)
+[이제는 말할 수 있다-작년 오늘... 정확히 1년전 오늘이었다 한 가정으로 입양되었다가 파양된 희망이를 그때 내가 임보중이었는데 생후 5개월된 희망이의 이 표정은 당시 우리 비글 패밀리에게는 공포의 대상이었다. ... blog.naver.com](https://blog.naver.com/yjay2/220493128545)
 
 ![](https://storep-phinf.pstatic.net/nahumkim_01/original_25.png?type=p100_100)
 
@@ -349,7 +317,7 @@ blog.naver.com
 
 **응답하라! 추석1988**
 
--
+\-
 
 21세기와는 달라서 그리운,
 
@@ -363,11 +331,7 @@ blog.naver.com
 
 ![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fblogthumb.pstatic.net%2F20150927_114%2Fews1016_1443351762308Hr7WP_JPEG%2F%25B7%25E7%25B3%25AA%25C1%25B6%25B8%25ED.jpg%3Ftype%3Dw2%22&type=f560_336)
 
-[
-80년대생의 아날로그 추석 에피소드 응답하라 1988
-From. 블로그씨 나도 답하기▶ 여보게, 추석 에피소드 좀 읊어 보시겠나~글쓰고 #추석에피소드 태그도 좀 붙여주시게~ 80년대, 90년대 우리집은 조부님과 ...
-blog.naver.com
-](https://blog.naver.com/ews1016/220493264170)
+[80년대생의 아날로그 추석 에피소드 응답하라 1988 From. 블로그씨 나도 답하기▶ 여보게, 추석 에피소드 좀 읊어 보시겠나~글쓰고 #추석에피소드 태그도 좀 붙여주시게~ 80년대, 90년대 우리집은 조부님과 ... blog.naver.com](https://blog.naver.com/ews1016/220493264170)
 
 ![](https://storep-phinf.pstatic.net/nahumkim_01/original_35.png?type=p100_100)
 
@@ -389,11 +353,7 @@ blog.naver.com
 
 ![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fblogthumb.pstatic.net%2F20150929_240%2Fitinerary92_1443497374707ArPzI_JPEG%2FSAM_9490.jpg%3Ftype%3Dw2%22&type=f560_336)
 
-[
-젠장 명절전종류에 대한 고찰 w.시골풍경
-젠장 명절전종류에 대한 고찰 w.시골풍경 평소같았음 즐거운 토욜의 향기에 코를 킁킁거리며 오늘 밤은 어딜나가 무얼하고 놀까..를 계획하고 있을 저이건만, 아침부터 전 ...
-blog.naver.com
-](https://blog.naver.com/itinerary92/220494396297)
+[젠장 명절전종류에 대한 고찰 w.시골풍경 젠장 명절전종류에 대한 고찰 w.시골풍경﻿평소같았음 즐거운 토욜의 향기에 코를 킁킁거리며 오늘 밤은 어딜나가 무얼하고 놀까..를 계획하고 있을 저이건만, 아침부터 전 ... blog.naver.com](https://blog.naver.com/itinerary92/220494396297)
 
 ![](https://storep-phinf.pstatic.net/nahumkim_01/original_37.png?type=p100_100)
 
@@ -449,8 +409,4 @@ blog.naver.com
 
 ![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fblogthumb.pstatic.net%2F20151005_295%2Fblogpeople_1444050574936YSL6W_PNG%2F%25BA%25ED%25B7%25CE%25B1%25D7_%25C3%25DF%25BC%25AE_%25B9%25E9%25C0%25CF%25C0%25E5_%25BB%25F3%25B4%25DC.png%3Ftype%3Dw2%22&type=f560_336)
 
-[
-\[투표 1탄\] 조선팔도 최고의 시인을 뽑아주세요.
-조선팔도 시인여러분,잘 만나 보았습니다. 추석백일장! 조선팔도 &...
-blog.naver.com
-](https://blog.naver.com/blogpeople/220500418917)
+[\[투표 1탄\] 조선팔도 최고의 시인을 뽑아주세요. 조선팔도 시인여러분,잘 만나 보았습니다. 추석백일장! 조선팔도 &... blog.naver.com](https://blog.naver.com/blogpeople/220500418917)

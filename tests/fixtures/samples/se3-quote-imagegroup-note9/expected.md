@@ -14,14 +14,15 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/MjAxODExMDZfNDUg/MDAxNTQxNDMyNDQ
 
 ![](https://mblogthumb-phinf.pstatic.net/MjAxODExMTNfMjQ0/MDAxNTQyMTAxOTQ2NDU4.g4gOba-yPLizbEVaZ4lwVLYSaRA0xW_FwirnuV1_Wokg.nNmlyAUX5BjANoPvpxRaVN5-OksYVi1KmzCM-TzwwQYg.JPEG.is02019/image_7512079291542101872143.jpg?type=w)
 
-어머니께서 **갤럭시 S4**를 5년 동안 사용하시다가 최근에 **삼성**의 최신 스마트폰 **갤럭시** **노트9**으로 교체하셔서 포스팅해봅니다. 크게 할 마음은 없었지만 어머니가 해보라고 말씀하시더군요. 감사합니다. 어머니. 박스는 깔끔하게 노트 시리즈의 상징 **S펜**이 눈에 보이는 것이 인상적입니다. 보기에 따라서 이게 무너 박스냐 싶기도 하지만 삼성 제품과 노트 시리즈를 좋아한다면 한눈에 알아볼 수 있는 박스 디자인이죠.
+어머니께서 **갤럭시 S4**를 5년 동안 사용하시다가 최근에 **삼성**의 최신 스마트폰 **갤럭시 노트9**으로 교체하셔서 포스팅해봅니다. 크게 할 마음은 없었지만 어머니가 해보라고 말씀하시더군요. 감사합니다. 어머니.  
+박스는 깔끔하게 노트 시리즈의 상징 **S펜**이 눈에 보이는 것이 인상적입니다. 보기에 따라서 이게 무너 박스냐 싶기도 하지만 삼성 제품과 노트 시리즈를 좋아한다면 한눈에 알아볼 수 있는 박스 디자인이죠.
 
 ![](https://mblogthumb-phinf.pstatic.net/MjAxODExMDZfNiAg/MDAxNTQxNDMyMTk0NTI4.q86sOVlRfP4MZ-lkWfE5H7WtLuXyO3KrPjs3hiDACTcg.zMjPdEl3iTv_df6dXlX91V_2QdHCHAzEQedDl4GMJWQg.JPEG.is02019/image_7246403931541431971755.jpg?type=w)
 
 제품 구성은 이렇습니다.  
 **유심슬롯핀**과 **간단 사용 설명서, 갤럭시 노트9, 타입C 변환 젠더, 펜심, 펜심핀, 이어캡, AKG이어폰, 퀵차지 충전기, USB 타입C 케이블, 젤리케이스** 등 있습니다. 없는 것 빼고 기본 있어야 하는 것들이 다 있습니다. 이런 점은 애플보다 낫다고 생각합니다. 세상이 참 우습군요. 당연히 해주어야 하는 것을 칭찬하는 시대가 열리고 있으니...
 
-> The new super powerful Note
+> The new super powerful Note
 
 ![](https://mblogthumb-phinf.pstatic.net/MjAxODExMDZfMjYw/MDAxNTQxNDMyMjAyNDg2.1eGqpA3SHO_KeUh48IqDryCUT95pLUNBzcFfxpLLyIAg.fml6mgY-15z-tvpi2Fww2Eq64nO-q5PasJWoHzlF7EMg.JPEG.is02019/image_7454454911541431971756.jpg?type=w)
 
@@ -44,8 +45,9 @@ OS: 안드로이드 8.1 (Oreo)(Samsung Experience 9.5)
 
 ![](https://mblogthumb-phinf.pstatic.net/MjAxODExMDZfNTgg/MDAxNTQxNDMyNDI0NzYy.mtcfEcZqVQWYzY2H1vL_YE5aqXK5LtPJ_bvsVOmaxIgg.UwyJB70-gQL-ksdFkaw-oH_F0qSYFCUKVdDwEV7v8E4g.JPEG.is02019/image_5391002611541431971760.jpg?type=w)
 
-먼저 성능에 대해서 이야기해보도록 해보죠. 오늘 소개해드리는 갤럭시 노트9은 **128GB모델**입니다. 그래서 512GB모델과 다르게 램 8GB가 아니고 램 6GB입니다. 그래서 벤치마크 스코어가 512GB와 다를 수 있는 점 먼저 말씀드립니다. **AP** **삼성 엑시노스 9 Series 9810**은 현존 삼성 제품 중에 탑재된 AP 중에 가장 강한 AP입니다. 옆 동네 제품들과 비교해도 AP 성능이 크게 아쉽지 않은 물건이죠. CPU 성능은 멀티코어 성능이 빠르다 보니 당연하게도 느림 현상은 전혀 눈으로 찾아볼 수 없었습니다. 아쉬운 것은 타사 대비 부족한 GPU 성능에 있죠. GPU 때문에 전 세계 출시한 현존 최강의 폰이 못되었습니다. 삼성이 반성해야 되겠군요. 비싼 돈 주고 지름을 했는데 최고가 아니라는 것은 가슴 아프죠.  
-그래도 전작 노트8과 비교해서 **55% 빨리진 CPU**와 **23%향상된** **GPU**면 더 이상 성능에 대해 말할 필요성은 없다고 볼 수 있죠.
+먼저 성능에 대해서 이야기해보도록 해보죠. 오늘 소개해드리는 갤럭시 노트9은 **128GB모델**입니다. 그래서 512GB모델과 다르게 램 8GB가 아니고 램 6GB입니다. 그래서 벤치마크 스코어가 512GB와 다를 수 있는 점 먼저 말씀드립니다.  
+**AP** **삼성 엑시노스 9 Series 9810**은 현존 삼성 제품 중에 탑재된 AP 중에 가장 강한 AP입니다. 옆 동네 제품들과 비교해도 AP 성능이 크게 아쉽지 않은 물건이죠. CPU 성능은 멀티코어 성능이 빠르다 보니 당연하게도 느림 현상은 전혀 눈으로 찾아볼 수 없었습니다. 아쉬운 것은 타사 대비 부족한 GPU 성능에 있죠. GPU 때문에 전 세계 출시한 현존 최강의 폰이 못되었습니다. 삼성이 반성해야 되겠군요. 비싼 돈 주고 지름을 했는데 최고가 아니라는 것은 가슴 아프죠.  
+그래도 전작 노트8과 비교해서 **55% 빨리진 CPU**와 **23%향상된 GPU**면 더 이상 성능에 대해 말할 필요성은 없다고 볼 수 있죠.
 
 ![](https://mblogthumb-phinf.pstatic.net/MjAxODExMDZfMTI3/MDAxNTQxNDMyNDc3MDY4.QFWXx_OD4hxackxSqnYtIJR4Iju-8QAeRPlIoLbndesg.N7oAdzVMh9EONhI386QYuByqM9mG_59SzIW8SRGE2LUg.JPEG.is02019/image_6305861201541431971761.jpg?type=w)
 
@@ -55,7 +57,7 @@ OS: 안드로이드 8.1 (Oreo)(Samsung Experience 9.5)
 
 ![](https://mblogthumb-phinf.pstatic.net/MjAxODExMDZfMTk5/MDAxNTQxNDMyNTU5NzI5.cUY6Kuc-S6D76MehWQtGRCj_ohZMAeXuHEBQx7WEkn0g.uZ6nhVI6GJtak_gV5MjLqFV3I-QgsT3G9MfDQmQpJ4wg.JPEG.is02019/image_7813465021541431971762.jpg?type=w)
 
-**배틀그라운드 모바일**을 실행해보았습니다. 기본 세팅으로 **고화질/HD/프레임높음** 이며 여기서 **HDR고화질**에 **프레임** **울트라**로 설정을 올려서 실행해보니 프레임드랍 없이 잘 동작하는 모습을 보여주었습니다. 게임 잘하시는 분들은 끊김이 없다 보니 저랑 다르게 치킨을 드실 수 있을 것이라 생각합니다.
+**배틀그라운드 모바일**을 실행해보았습니다. 기본 세팅으로 **고화질/HD/프레임높음** 이며 여기서 **HDR고화질**에 **프레임 울트라**로 설정을 올려서 실행해보니 프레임드랍 없이 잘 동작하는 모습을 보여주었습니다. 게임 잘하시는 분들은 끊김이 없다 보니 저랑 다르게 치킨을 드실 수 있을 것이라 생각합니다.
 
 ![](https://mblogthumb-phinf.pstatic.net/MjAxODExMjRfMjIy/MDAxNTQzMDI5Njk0MjIz._JgfIWy_nTDuZpQ5hPfg7zNQsn43bnx_XvOLkxiiSC4g.78ZciAlaCE0ev17Y5nCCLDVFrOtN-3714vxCU_Llx2kg.JPEG.is02019/image_5034891451543029660952.jpg?type=w)
 
@@ -69,7 +71,8 @@ OS: 안드로이드 8.1 (Oreo)(Samsung Experience 9.5)
 
 ![](https://mblogthumb-phinf.pstatic.net/MjAxODExMDZfMjYz/MDAxNTQxNDMyMjA2MjQy.gXbt0TRhUORBrJYarLrF-SyXSggzoXbfWqXeAWJbfNQg.O8OYyuAwEaA97AMQENUd1KYZsENzg_N-VIA9zSJA3Wcg.JPEG.is02019/image_9997109481541431971757.jpg?type=w)
 
-카메라에 대해서 이야기하자면 정말 좋아요. 전면은 깜빡 잊어버리고 안 찍었는데 후면 카메라만 말씀드리자면 제가 현재 사용 중인 갤럭시 S7보다 색감이나 초점 등 잘 맞추는 거 물론이고 듀얼 조리개로 상황에 맞는 촬영을 할 수 있는 되다가 피사체와 배경을 보고 스스로 판단해 컬러 설정, 대비, 화이트 밸런스, 노출까지 알아서 조절하는 **인텔리전트 카메라** 덕분에 자동모드로 촬영해도 충분히 좋은 품질이 나와야 프로모드를 잘 활용한다면 좋은 사진과 추억이 생기는 것이죠.
+카메라에 대해서 이야기하자면 정말 좋아요. 전면은 깜빡 잊어버리고 안 찍었는데 후면 카메라만 말씀드리자면 제가 현재 사용 중인 갤럭시 S7보다 색감이나 초점 등 잘 맞추는 거 물론이고  
+듀얼 조리개로 상황에 맞는 촬영을 할 수 있는 되다가 피사체와 배경을 보고 스스로 판단해 컬러 설정, 대비, 화이트 밸런스, 노출까지 알아서 조절하는 **인텔리전트 카메라** 덕분에 자동모드로 촬영해도 충분히 좋은 품질이 나와야 프로모드를 잘 활용한다면 좋은 사진과 추억이 생기는 것이죠.
 
 ![](https://mblogthumb-phinf.pstatic.net/MjAxODExMTRfMjI3/MDAxNTQyMTY1NjAxOTYx.X4ys-pzcEWVfIxSlXBcwKT478Hi1t7l1D5jftb4CuNcg.hZVVCvEuYII4uzCMV0Lnk868fOrXxTs9D9AtKvC44l8g.JPEG.is02019/image_3399072561542165484915.jpg?type=w)
 
@@ -82,7 +85,8 @@ OS: 안드로이드 8.1 (Oreo)(Samsung Experience 9.5)
 ![](https://mblogthumb-phinf.pstatic.net/MjAxODExMDZfMTYy/MDAxNTQxNDMyMjU4NjAy.F0i4it4JdScJ967ICj5AW5VZyFKrbBM4iDEBaSWnXgIg.2hm-_GbFU7PYBgTdtcgtAXczkkw2HCKBxWLt46xQOu8g.JPEG.is02019/image_1228705971541431971759.jpg?type=w)
 
 이제 음질에 대해서 설명하자면...  
-말할게 없이 좋아요. **돌비** **애트모스**로 듣는 음악들 더 느낌 있고 울리는 느낌이 좋았어요.전문가들 평으로는 저음이 가격 값 못한다는 말을 하는데 비전문가인 제 귀에는 일단 알아듣기도 힘든 것은 물론 전문 장비가 있는 것이 아니니 그렇다 치고 저나 여러분이 쉽게 할 수 있는 딱 하나 있죠.
+말할게 없이 좋아요. **돌비 애트모스**로 듣는 음악들 더 느낌 있고 울리는 느낌이 좋았어요.  
+전문가들 평으로는 저음이 가격 값 못한다는 말을 하는데 비전문가인 제 귀에는 일단 알아듣기도 힘든 것은 물론 전문 장비가 있는 것이 아니니 그렇다 치고 저나 여러분이 쉽게 할 수 있는 딱 하나 있죠.
 
 ![](https://mblogthumb-phinf.pstatic.net/MjAxODExMDZfMTQ3/MDAxNTQxNDMyMTk4MjA2.j6BUPKMOO7xsRbA5Ulg7QORsXYMPtFCLHwMsladK2W8g.Svb9Yi36N0rm4xbkH2OwhL9toRibbZzB-ZK9KQCOcPEg.JPEG.is02019/image_4689817121541431971755.jpg?type=w)
 
@@ -107,7 +111,8 @@ OS: 안드로이드 8.1 (Oreo)(Samsung Experience 9.5)
 ![](https://mblogthumb-phinf.pstatic.net/MjAxODExMjRfMjIx/MDAxNTQzMDM0OTU0NDM3.ZoUS3LsU6qxoXNvX6nhDA4kEKi9wbO4Aku781yAORX8g.siuJ7HhJPMZ3MK0SkPU4JY7bUDD9ki8uj5aoVQHtcbsg.JPEG.is02019/image_5019329311543029205262.jpg?type=w)
 
 취미1이 게임이고 취미2가 그림그리기인 제가 끄적끄적 해보았습니다.  
-갤럭시 노트 시리즈로 그림 그리는거 처음이나 다름없어서 적응 안 되었지만 좋은 것 같네요. 기본 노트 어플로 그렸는데 **오토데스크 스케치북**이나 **메디방** 같은 어플로 그린다면 확실히 좋은 그림을 그릴 수 있을 것 같아요. 그림 그리시는거 좋아한다면 노트시리즈 추천합니다.하나 아쉬운 점이 고작 저 정도 그리는데 50% 사용했더라고요.  
+갤럭시 노트 시리즈로 그림 그리는거 처음이나 다름없어서 적응 안 되었지만 좋은 것 같네요. 기본 노트 어플로 그렸는데 **오토데스크 스케치북**이나 **메디방** 같은 어플로 그린다면 확실히 좋은 그림을 그릴 수 있을 것 같아요. 그림 그리시는거 좋아한다면 노트시리즈 추천합니다.  
+하나 아쉬운 점이 고작 저 정도 그리는데 50% 사용했더라고요.  
 "흠... 그림 그리다가 손목 건강을 위해서 쉬는 타임을 가지라는 뜻인가?" 라고 잠깐 생각만 해보아도 S펜 배터리 타임이 조금 아쉽습니다.
 
 ![](https://mblogthumb-phinf.pstatic.net/MjAxODExMDZfMjAg/MDAxNTQxNDMyNTg3MTMy.beOuqf1lareh2ldgO6qGYiNN9kGp2Nny6_5fTGiks8Ig.CO1viZLNWRMMRFclCHnSKZ_9sTTfASGuCFdAwehrdlgg.JPEG.is02019/image_2538858461541431971762.jpg?type=w)

@@ -9,21 +9,23 @@ category: 음반 추천 및 소개
 categoryPath:
   - 음악 과 오디오
   - 음반 추천 및 소개
+thumbnail: https://image.music.naver.com/album/95/000/081/81020.jpg
 ---
 
 |   |   |
 | --- | --- |
-| [![오정선골든독집](https://image.music.naver.com/album/95/000/081/81020.jpg)](http://music.naver.com/album/index.nhn?albumId=81020) | [오정선골든독집](http://music.naver.com/album/index.nhn?albumId=81020) 아티스트 오정선 발매 1979.03.01, 한국음원제작자협회 장르 발라드(국내) [리뷰보기](http://music.naver.com/albumreview/index.nhn?albumId=81020&loc=album) |
+| [![오정선골든독집](https://image.music.naver.com/album/95/000/081/81020.jpg)](http://music.naver.com/album/index.nhn?albumId=81020) | [오정선골든독집](http://music.naver.com/album/index.nhn?albumId=81020)<br>아티스트<br>오정선<br>발매<br>1979.03.01, 한국음원제작자협회<br>장르<br>발라드(국내)<br>[리뷰보기](http://music.naver.com/albumreview/index.nhn?albumId=81020&loc=album) |
 
 |   |   |
 | --- | --- |
-| [![오토 베스트 10 Vol. 1](https://image.music.naver.com/album/95/000/329/329305.jpg)](http://music.naver.com/album/index.nhn?albumId=329305) | [오토 베스트 10 Vol. 1](http://music.naver.com/album/index.nhn?albumId=329305) 아티스트 Various Artists 발매 1979.06.15, 한국음원제작자협회 장르 록/포크(국내) [리뷰보기](http://music.naver.com/albumreview/index.nhn?albumId=329305&loc=album) |
+| [![오토 베스트 10 Vol. 1](https://image.music.naver.com/album/95/000/329/329305.jpg)](http://music.naver.com/album/index.nhn?albumId=329305) | [오토 베스트 10 Vol. 1](http://music.naver.com/album/index.nhn?albumId=329305)<br>아티스트<br>Various Artists<br>발매<br>1979.06.15, 한국음원제작자협회<br>장르<br>록/포크(국내)<br>[리뷰보기](http://music.naver.com/albumreview/index.nhn?albumId=329305&loc=album) |
 
 [The Beau Brummels](https://www.youtube.com/watch?v=_Q6kkvFoN4g) - Just A Little (1965)
 
 **마음 / 오정선 (번안곡)**
 
 1978\. 02. 02  
+  
 하늘엔 별들이 흩어져 내리고  
 언덕엔 꽃들이 바람에 날릴때  
 나는 어여쁜 소년의 손에 의해  

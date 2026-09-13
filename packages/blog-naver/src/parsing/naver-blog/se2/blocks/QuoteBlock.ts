@@ -1,4 +1,4 @@
-import { convertHtmlToMarkdown } from "@exitpress/engine/markdown/util/convertHtmlToMarkdown.js"
+import { convertHtmlWithImageAssets } from "@exitpress/engine/exporting/assets/convertHtmlWithImageAssets.js"
 
 import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/ParserBlock.js"
 
@@ -27,16 +27,23 @@ export class NaverSe2QuoteBlock extends LeafParserBlock {
   }
 
   override convert({ $node, options, blockId }: Parameters<LeafParserBlock["convert"]>[0]) {
-    const markdown = convertHtmlToMarkdown({
+    const converted = convertHtmlWithImageAssets({
       /* v8 ignore next */
       html: $node.html() ?? "",
       resolveLinkUrl: options.resolveLinkUrl,
     })
 
+    const markdown = converted.text
+
     if (!markdown) {
       throw new Error("SE2 quote block parsing failed.")
     }
 
-    return [createQuoteBlock({ blockId, text: markdown })]
+    return [
+      {
+        ...createQuoteBlock({ blockId, text: markdown }),
+        ...(Object.keys(converted.assets).length ? { assets: converted.assets } : {}),
+      },
+    ]
   }
 }

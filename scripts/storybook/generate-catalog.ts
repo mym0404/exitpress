@@ -9,10 +9,10 @@ import {
   getTistoryBlockTemplateDefinitions,
   parseTistoryPostHtml,
 } from "@exitpress/blog-tistory/parsing/TistoryPostParser.js"
+import { resolveParsedBlockAssetsForRender } from "@exitpress/engine/exporting/assets/ParsedBlockAssetResolver.js"
 import { renderBlockTemplates } from "@exitpress/engine/markdown/util/renderBlockTemplates.js"
 import { storybookDefinitions } from "@exitpress/web/features/storybook/data/StorybookDefinitions.js"
 
-import type { ParsedBlock } from "@exitpress/domain/parser/schema/ParsedPost.js"
 import type { StorybookEditorGroup } from "@exitpress/web/features/storybook/schema/Storybook.js"
 import type { StorybookDefinition } from "@exitpress/web/features/storybook/schema/StorybookDefinition.js"
 
@@ -34,17 +34,7 @@ const blockTemplateDefinitionByKey = Object.fromEntries(
   blockTemplateDefinitions.map((definition) => [definition.key, definition]),
 )
 
-const resolveStoryBlockProps = (block: ParsedBlock) => {
-  const props = { ...block.props }
-
-  Object.entries(block.assets ?? {}).forEach(([propName, asset]) => {
-    props[propName] = asset.sourceUrl
-  })
-
-  return props
-}
-
-const renderStoryMarkdown = (definition: StorybookDefinition) => {
+const renderStoryMarkdown = async (definition: StorybookDefinition) => {
   const parsedPost =
     definition.editorType === "tistory"
       ? parseTistoryPostHtml({ html: definition.inputHtml, options: storybookOptions })
@@ -53,8 +43,22 @@ const renderStoryMarkdown = (definition: StorybookDefinition) => {
           sourceUrl: definition.sourceUrl,
           options: storybookOptions,
         })
+  const resolved = await resolveParsedBlockAssetsForRender({
+    blocks: parsedPost.blocks,
+    resolveAsset: async ({ role, sourceUrl }) => ({
+      reference: sourceUrl,
+      record: {
+        kind: role,
+        sourceUrl,
+        reference: sourceUrl,
+        relativePath: null,
+        storageMode: "remote",
+        uploadCandidate: null,
+      },
+    }),
+  })
   const markdown = renderBlockTemplates(
-    parsedPost.blocks.map((block) => {
+    resolved.blocks.map((block) => {
       const template = defaultBlockTemplates[block.blockId]
 
       if (!template) {
@@ -63,7 +67,7 @@ const renderStoryMarkdown = (definition: StorybookDefinition) => {
 
       return {
         template,
-        props: resolveStoryBlockProps(block),
+        props: block.props,
       }
     }),
   )
@@ -71,10 +75,10 @@ const renderStoryMarkdown = (definition: StorybookDefinition) => {
   return markdown || emptyOutputMarkdown
 }
 
-const buildStorybookCatalog = (): StorybookEditorGroup[] => {
+const buildStorybookCatalog = async (): Promise<StorybookEditorGroup[]> => {
   const groups: StorybookEditorGroup[] = []
 
-  storybookDefinitions.forEach((definition) => {
+  for (const definition of storybookDefinitions) {
     const templateDefinition =
       blockTemplateDefinitionByKey[`${definition.editorType}:${definition.blockId}`]
 
@@ -86,14 +90,14 @@ const buildStorybookCatalog = (): StorybookEditorGroup[] => {
 
     const story = {
       ...definition,
-      markdown: renderStoryMarkdown(definition),
+      markdown: await renderStoryMarkdown(definition),
       templateDefinition,
     }
     const existingGroup = groups.find((group) => group.editorType === definition.editorType)
 
     if (existingGroup) {
       existingGroup.stories.push(story)
-      return
+      continue
     }
 
     groups.push({
@@ -101,7 +105,7 @@ const buildStorybookCatalog = (): StorybookEditorGroup[] => {
       editorLabel: definition.editorLabel,
       stories: [story],
     })
-  })
+  }
 
   return groups
 }
@@ -119,7 +123,7 @@ const formatCatalog = (source: string) =>
   })
 
 const run = async () => {
-  const expected = formatCatalog(serializeCatalog(buildStorybookCatalog()))
+  const expected = formatCatalog(serializeCatalog(await buildStorybookCatalog()))
 
   if (process.argv.includes("--check")) {
     const current = await readFile(outputPath, "utf8")

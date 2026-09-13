@@ -19,20 +19,33 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/MjAxNzA2MDdfNjkg/MDAxNDk2ODIxMjQ
 ![스티커 이미지](https://storep-phinf.pstatic.net/brown_and_cony/original_18.png?type=p100_100)
 
 안녕하세요, 라이프스타일 큐레이터 **클라**입니다.  
-오늘은 건축가, 공간디자이너 분들께 **착한 공모전** 소식을 하나 들고왔는데요.**참가비 없이 유럽진출의 기회**가 주어질 콘테스트랍니다.  
+  
+오늘은 건축가, 공간디자이너 분들께 **착한 공모전** 소식을 하나 들고왔는데요.  
+**참가비 없이 유럽진출의 기회**가 주어질 콘테스트랍니다.  
+  
+  
 .  
 .  
 .  
-이탈리아 타일 디자인의 거장 **'**CAESAR'**에서 개최하는  
+  
+  
+  
+이탈리아 타일 디자인의 거장 **'CAESAR'**에서 개최하는  
 **" CROSS DESIGN CONTEST 2017 "**
 
 수년간 **건축가, 디렉터들과의 협업**을 통해 탄탄한 관계를 맺고 있는데요.  
 다양한 협업을 통해 **'시저(CAESAR)'만의**  
 타일디자인과 퀄리티에 많은 영향을 미치고 있다고 합니다.  
+  
+  
+  
 .  
 .  
 .  
-**ARCHITECTS /** **DESIGNERS**  
+  
+  
+  
+**ARCHITECTS / DESIGNERS**  
 (건축가 / 디자이너)  
 **INTERIOR DESIGNERS**  
 (인테리어 디자이너)  
@@ -70,9 +83,15 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/MjAxNzA2MDdfNjkg/MDAxNDk2ODIxMjQ
 .  
 .  
 .  
+  
+  
+  
 위 **3가지 트렌드 테마**와  
 **시저(CAESAR)만의 디자인제품**을 접목하여  
 여러분들의 개성있는 작품을 완성시켜보세요.  
+  
+  
+  
 \[ ▼ CAESAR(시저) 타일디자인 \]
 
 ![Textures](https://dthumb-phinf.pstatic.net/?src=%22http%3A%2F%2Fcontest.caesar.it%2Fwp-content%2Fuploads%2F2017%2F03%2FCDC_Mini.png%22&type=ff120)
@@ -82,6 +101,10 @@ DISCOVER MORE DISCOVER MORE DISCOVER MORE DISCOVER MORE DISCOVER MORE DISCOVER M
 .  
 .  
 .  
+  
+  
+  
+  
 아주 간단한 공모전 참가방법을 알아볼까요?
 
 ![](https://mblogthumb-phinf.pstatic.net/MjAxNzA2MDdfMjkx/MDAxNDk2ODI0MzQ0NTc2.3DAG73Em9uCSuW1UZZU-nyftJ2Jh1RTuORIfTsYx4EAg.24D4TjRtRl9-xI4aADlnvaV7B94QidkI4Ry_EWYJwCMg.JPEG.showeclatkorea/Point1.jpg?type=w)
@@ -98,13 +121,16 @@ CAESAR(시저)만의 마감재 선택
 
 컨셉에 대한 설명, 세부계획안, 간단한 드로잉, 비주얼적 공간표현(3D View) 등  
 **여러분의 디자인을 가장 잘 표현하여 제출하면 끝!**  
+  
+  
+  
 .  
 .  
 .
 
 ![](https://mblogthumb-phinf.pstatic.net/MjAxNzA2MDdfMjg3/MDAxNDk2ODMxMjYzNjQ0.aqVEUhDydgXP9Sy70EaHo2LkvGZV1qoCNE3x5QEfrP4g.bJi3n23rs3u1IaZgNZso88tILYoj7WGBx-bNZyjBKqMg.PNG.showeclatkorea/Simbolo-Web-Award.png?type=w)
 
-**공모전의 하이라이트!** **시상혜택**을 알아봐야겠죠?  
+**공모전의 하이라이트! 시상혜택**을 알아봐야겠죠?  
 참가비 없는 공모전이지만, 시상혜택이 어마어마하다는 점!
 
 ![](https://mblogthumb-phinf.pstatic.net/MjAxNzA2MDdfMjE1/MDAxNDk2ODMwNzA4Mzg5.XgN51F1JMiZm_9dw0PcsssOmyPWI455Wm6YUx6pr0GQg.9w_pxk40A6UOmZh9Sr-PGsAdld1lGdP8Eq7sRHUDVVQg.PNG.showeclatkorea/1icon-1.png?type=w)
@@ -118,14 +144,14 @@ CAESAR(시저)만의 마감재 선택
 ![](https://mblogthumb-phinf.pstatic.net/MjAxNzA2MDdfNTAg/MDAxNDk2ODMwNzA4Mzky.KJW8PTBQmR-6xZWJE5pL2V2U7z2OSQDszqYrVnlI-TMg.zyHuGjUkgdknZp99TFmDMqOPC6M16wHnlHdIBnXkVZog.PNG.showeclatkorea/2icon.png?type=w)
 
 **2등**에게 주어지는 혜택!  
-**상금 3,000유로 +** **CAESAR 갤러리 오프닝기간 작품 전시**  
-****시상식 및 이탈리아 CERSIRE 국제페어 방문(여행비, 식사비, 숙박비 제공)****
+**상금 3,000유로 + CAESAR 갤러리 오프닝기간 작품 전시**  
+**시상식 및 이탈리아 CERSIRE 국제페어 방문(여행비, 식사비, 숙박비 제공)**
 
 ![](https://mblogthumb-phinf.pstatic.net/MjAxNzA2MDdfMjU1/MDAxNDk2ODMwNzA4Mzkx.b-gZZ4SPxJUIQ1_giVyAuox_isU1oXM6Uj01VALcbRUg.rVmxChO0hl_eKmlvnogt1vethTdxouJ3_4J8ORBpr4og.PNG.showeclatkorea/3icon-1.png?type=w)
 
-****3등**에게 주어지는 혜택!  
-**상금 2,000유로 +** **CAESAR 갤러리 오프닝기간 작품 전시**  
-******시상식 및 이탈리아 CERSIRE 국제페어 방문(여행비, 식사비, 숙박비 제공)******
+**3등**에게 주어지는 혜택!  
+**상금 2,000유로 + CAESAR 갤러리 오프닝기간 작품 전시**  
+**시상식 및 이탈리아 CERSIRE 국제페어 방문(여행비, 식사비, 숙박비 제공)**
 
 ![](https://mblogthumb-phinf.pstatic.net/MjAxNzA2MDdfMjI1/MDAxNDk2ODMxMjU4MzE1.8ZWMpsOoDBUwvhxR7MxjNuXgO7I8wdE8QMZFb3dV0iIg.6GFCa7poOCBZoNo61Vsh7CidC8N2jmd3EgZdYwpgztYg.PNG.showeclatkorea/Pianta-1.png?type=w)
 

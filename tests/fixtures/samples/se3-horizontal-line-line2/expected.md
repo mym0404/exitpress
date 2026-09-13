@@ -20,7 +20,9 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/MjAxNzEwMTNfNjIg/MDAxNTA3ODc4MTk
 앞서 소개해드린 메종 앤 오브제 1,2탄 재미있게 보셨나요?  
 다양한 볼거리가 가득했던 이번 메종 앤 오브제.  
 그렇다면 마지막 3탄은  
-메종 앤 오브제가 말하고자 하는 **2018년 인테리어 트렌드** 는 무엇일지!**클라**와 함께 알아보아요.
+메종 앤 오브제가 말하고자 하는  
+**2018년 인테리어 트렌드** 는 무엇일지!  
+**클라**와 함께 알아보아요.
 
 ![](https://mblogthumb-phinf.pstatic.net/MjAxNzEwMTNfMTky/MDAxNTA3ODU4NTU5MjIz.2JVMcJacHJV9XDH21g7eE6R3s0oO8CYs-pu4wIMM6zsg.gEPsJXXW-cP9sUxtH9pb6C0QkZanA--akFpkDNXgizUg.JPEG.showeclatkorea/%EB%89%B4%EC%9A%95%EC%BB%AC%EB%9F%AC.jpg?type=w)
 
@@ -30,9 +32,11 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/MjAxNzEwMTNfNjIg/MDAxNTA3ODc4MTk
 
 **2018 S/S CLASSIC Color 4**
 
-펜톤에서 이번 2018 S/S TOP Color 12 및 CLASSIC Color4를 발표했는데요, 전문가들은 지난해의 파스텔톤의 인기가 절정을 찍었다면  
+펜톤에서 이번 2018 S/S TOP Color 12 및 CLASSIC Color4를  
+발표했는데요, 전문가들은  
+지난해의 파스텔톤의 인기가 절정을 찍었다면  
 2018년 트렌드 컬러는 **밝고, 선명하고, 강한 색상**이라고 말하고 있어요.  
-더불어 **메탈릭**하고 **이리디센트** **(**iridescent**\-**보는 각도에 따라 색이 변하는**)**와 같은 소재들이  
+더불어 **메탈릭**하고 **이리디센트 (iridescent-보는 각도에 따라 색이 변하는)**와 같은 소재들이  
 많이 등장할 것이라고 말합니다.
 
 ![스티커 이미지](https://storep-phinf.pstatic.net/line_choco/original_14.png?type=p100_100)
@@ -52,7 +56,7 @@ COLOR
 
 #### COLOR
 
-****Red Furnishings**** 열정적인 화려한 레드와인 색상**Burnt Yellow**** 톤다운된 노랑**Velvet Green**** 벨벳 그린**Retro Blue**** 복고풍 청록색
+**Red Furnishings** 열정적인 화려한 레드와인 색상**Burnt Yellow** 톤다운된 노랑**Velvet Green** 벨벳 그린**Retro Blue** 복고풍 청록색
 
 ---
 
@@ -60,7 +64,7 @@ MATERIAL
 
 #### MATERIAL
 
-**Concrete** **Accents** 콘크리트 액세서리
+**Concrete Accents** 콘크리트 액세서리
 
 ---
 
@@ -68,7 +72,7 @@ FINISHING
 
 #### FINISHING
 
-****Metallic**** 금속 소재
+**Metallic** 금속 소재
 
 ---
 
@@ -100,7 +104,8 @@ COLOR
 
 ![](https://mblogthumb-phinf.pstatic.net/MjAxNzEwMTNfMjUy/MDAxNTA3ODYwNTgwMzA1.JbqfuE4YRTySXKqOeI7SA3cCJexmh6i0QXmgY4ScLdwg.ngaHA8J4wPGZSPvGU2HzDr_e60IcppznJsSIyo0WGJ4g.JPEG.showeclatkorea/2018-Color-Trends-At-Maison-Objet-Paris-05.jpg?type=w)
 
-이번 펜톤이 선정한 클래식 4color 중 하나인 **베이지 톤** 으로도곳곳에 포인트를 준 모습을 보실 수 있습니다.
+이번 펜톤이 선정한 클래식 4color 중 하나인 **베이지 톤** 으로도  
+곳곳에 포인트를 준 모습을 보실 수 있습니다.
 
 ![](https://mblogthumb-phinf.pstatic.net/MjAxNzEwMTNfMjkx/MDAxNTA3ODc5ODk5NTU4.u52iQm9V_FoaZGzRvm9hlVTbikIa1nd_3Llp_VMJT9Ag.V2gNtV-H8UHHJZzMMIdKtGs9qm4hK0dACf1MzPllfZ8g.JPEG.showeclatkorea/image_3507777501507873317169.jpg?type=w)
 
@@ -112,7 +117,9 @@ COLOR
 
 가을하면 떠오르는 레드 와인 색상 ,  
 이번해에도 어김없이 트렌드 서열에 빠지지 않는군요.  
-2018 인테리어 트렌드는 지난해 보다도열정을 더한 화려한 **'**레드와인'** 색상이라는 점잊지 마세요!
+2018 인테리어 트렌드는 지난해 보다도  
+열정을 더한 화려한 **'레드와인'** 색상이라는 점  
+잊지 마세요!
 
 ![](https://mblogthumb-phinf.pstatic.net/MjAxNzEwMTNfMTY0/MDAxNTA3ODY3NzAwNTU3.kzxKHgrwEagAwaTo5ubp2l6nEClnMp4J88V1Vypi4Jcg.L4DCw9OfcpY5p0677_Za9Aw7tFKl1brEsI9y6p4ayDog.JPEG.showeclatkorea/maison-objet-top-five-french-brands-design-interiors_dezeen_2364_col_4.jpg?type=w)
 
@@ -128,14 +135,14 @@ COLOR
 
 어느 전문가는 이렇게 재치있게 말했어요.  
 "커리가 떠오르는 색상".  
-봄에 어울리는 진한 **'**노란색'**을 사용한 포인트로  
+봄에 어울리는 진한 **'노란색'**을 사용한 포인트로  
 공간에 활력을 불어넣어보세요.
 
 ![](https://mblogthumb-phinf.pstatic.net/MjAxNzEwMTNfMjM0/MDAxNTA3ODYwNTgwMzkw.QPo3nEM4c811pw-8ZHg2CKokX5aqDZ_kd-jgWcnHFL8g.BD9YAA-2vD3cb2BB6ww2Dcyx1_LWamJiepUMYbPWPTwg.JPEG.showeclatkorea/2018-Color-Trends-At-Maison-Objet-Paris-03.jpg?type=w)
 
 ![](https://mblogthumb-phinf.pstatic.net/MjAxNzEwMTNfMTgz/MDAxNTA3ODgwMTA2MTQz.CAp4ZJ4E8QRZX8V2Zv2-FmUcDbOglPOBnBoVGduTgRIg.XbAFopHFNgcf1EPik9_OI2RqqG__9GOAUjWpUb5WIYIg.JPEG.showeclatkorea/MO_J17_ETAGERE_TRANSFORMABLE_EN_TABLE_OBJET_DE_CURIOSITE%C2%A9NicolasDartiailh20162.jpg?type=w)
 
-쉽게 선택하기 어려운 소재인 벨벳과 **'**그린'**의 놀라운 조화,  
+쉽게 선택하기 어려운 소재인 벨벳과 **'그린'**의 놀라운 조화,  
 놓고보니 정말 조화롭죠? 녹색의 싱그러움이 더욱 극대화되는 것 같아요.  
 이번 컬러에서 가장 주목받는 네가지 컬러를 통한  
 멋진 인테리어네요.
@@ -162,7 +169,7 @@ MATERIAL
 
 ![](https://mblogthumb-phinf.pstatic.net/MjAxNzEwMTNfMTU2/MDAxNTA3ODU3Mjk1ODQw.3NxC48LmiMV9jOQc-oSpIABQtDNFrO8rM9Mb-ViME1og.joXtLnmfN5Pyw_v1u6bxA4flrcYcMEIt115p4rqvitYg.JPEG.showeclatkorea/design-trends-maison-et-objet-concrete-1506021086.jpg?type=w)
 
-**Concrete** **Accents** (콘크리트 액세서리)
+**Concrete Accents** (콘크리트 액세서리)
 
 마감재로써의 콘크리트가 아닌  
 소품의 재료로 사용된 **콘크리트**!  
@@ -237,15 +244,16 @@ OBJECT
 ![](https://mblogthumb-phinf.pstatic.net/MjAxNzEwMTNfMjA4/MDAxNTA3ODYzNTY4MTQ5.4LNLhU792Tym-2ZjnNW3IvSAm9hc444Cr391P6uJqQYg.EbcwcnHLtfL9OpOrEw6frrkU1T73Xi3yDcWcJMcB52Eg.JPEG.showeclatkorea/123.JPG?type=w)
 
 이번 메종 앤 오브제에서는  
-무엇보다도 **'**조명'**에 집중을 했다고 합니다.  
+무엇보다도 **'조명'**에 집중을 했다고 합니다.  
 조명을 어떻게 연출하냐에 따라 그 공간의 분위기를  
 바꾸는 힘을 가지고 있는 조명.
 
 ![](https://mblogthumb-phinf.pstatic.net/MjAxNzEwMTNfOTIg/MDAxNTA3ODc5MjM1MTcz.IVCdUJKiuS5gpS1eeGDG-VtoACWQHAo2U5g3H1caZ74g.mrFBi7yjtg49GJfZdf3pAFAsasRGSqbB4T3EjPnuc8kg.JPEG.showeclatkorea/image_4452196861507873316915.jpg?type=w)
 
-**Optical Lighting Illusions** **(광 라이팅 일루셔널리즘)**과 같은  
+**Optical Lighting Illusions (광 라이팅 일루셔널리즘)**과 같은  
 **신소재**의 등장과  
-**도자기, 패브릭, 크리스탈** **및 친환경적이 소재** 를접목시킨 조명까지!
+**도자기, 패브릭, 크리스탈 및 친환경적이 소재** 를  
+접목시킨 조명까지!
 
 ![](https://mblogthumb-phinf.pstatic.net/MjAxNzEwMTNfMTYg/MDAxNTA3ODYzNTY4MTQ5.TZiUfoLcrVq1fXJqDAfkufVuIUlostLbOrMw3L12BKAg.xe9VersbXKD11qRx3utixD9d3KjWdmR08arZq5tH0Jsg.JPEG.showeclatkorea/124.JPG?type=w)
 
@@ -281,7 +289,7 @@ PATTERN
 ![](https://mblogthumb-phinf.pstatic.net/MjAxNzEwMTNfMjAy/MDAxNTA3ODU3MzMxNTcx.4gibGug1dWwvicjnq2i79HQIdjkkGIRABly6aTy6F1kg.u2fYsvyh0nN_yBfVzkDe38luC-H2z66ynqvqK0QvvKYg.JPEG.showeclatkorea/design-trends-maison-et-objet-florals-1506021944.jpg?type=w)
 
 메종 앤 오브제가 선택한  
-이번 트렌드 패턴 **'**오버사이즈** **블룸'**을 주목해 주세요.  
+이번 트렌드 패턴 **'오버사이즈 블룸'**을 주목해 주세요.  
 크고 화려한 꽃무늬를 사용하여 한정된 공간안에  
 다양한 색깔을 내는 드라마틱한 역할을 한답니다.  
 집이 정원이 되는 순간!
@@ -298,13 +306,15 @@ PATTERN
 
 또한  
 2017년에도 꾸준하게 사랑받은 인테리어가 있죠.  
-바로 **'플랜테리어'** 입니다.이번 메종 앤 오브제에서 모든 브랜드에서 시도하고  
+바로 **'플랜테리어'** 입니다.  
+이번 메종 앤 오브제에서 모든 브랜드에서 시도하고  
 가장 많이 선보인 인테리어 트렌드는 플렌태리어라고 할 수 있죠.
 
 ![스티커 이미지](https://storep-phinf.pstatic.net/line_choco/original_3.png?type=p100_100)
 
 집안에서 자연의 싱그러움을 느끼며  
-일상속 여유를 찾는 사람들이 늘고 있는 추세이기 때문에자연을 실내로 들여온 것 같은 **'**플랜테리어'**의 인기는 꾸준히 이어질 전망이라고 해요.
+일상속 여유를 찾는 사람들이 늘고 있는 추세이기 때문에  
+자연을 실내로 들여온 것 같은 **'플랜테리어'**의 인기는 꾸준히 이어질 전망이라고 해요.
 
 ![](https://mblogthumb-phinf.pstatic.net/MjAxNzEwMTNfMjM0/MDAxNTA3ODc4ODYyOTcx.T__nF6ge4nsZFkU-QB-x3ss6wdfWqbdlC4HWmpBvvEog.db_q5yhMQJK6FjOWhMSLvh1xLbfPxmcotFZQ_npyBPAg.JPEG.showeclatkorea/%EC%BA%A1%EC%B2%9823532523.JPG?type=w)
 
@@ -313,7 +323,7 @@ PATTERN
 ![](https://mblogthumb-phinf.pstatic.net/MjAxNzEwMTNfMjA3/MDAxNTA3ODYyMzUzMjA1.kjduVLw4LUnqEGCV7LKzyXQpOcXTXI0OO1MCQw6Pj9sg.0VBmKe-hsbegUw3y6gQDaZBkxvWJByNg4sksqhESnW4g.JPEG.showeclatkorea/xcxc.JPG?type=w)
 
 식물을 키우지 않더라도 꽃무늬, 잎사귀, 나무 등 식물에서 영감을 얻은  
-**'**보태니컬**'**문양의 소품을 찾는 사람들도 늘고 있답니다.
+**'보태니컬'**문양의 소품을 찾는 사람들도 늘고 있답니다.
 
 ![](https://mblogthumb-phinf.pstatic.net/MjAxNzEwMTNfNjIg/MDAxNTA3ODc4MTkxMjQx.cIRE8pmFsslt4H41HG-fjk28Jhw_YkG1pe6P2c8YEEUg.b5FbVwabBItj2OWksqilKryLJe_Hk9RR9QxdN-KTnr8g.JPEG.showeclatkorea/584ec98adee4aimage2_725x514_ANEMONES_DREAM_1.jpg?type=w)
 
@@ -353,7 +363,7 @@ PATTERN
 
 ![](https://mblogthumb-phinf.pstatic.net/MjAxNzEwMTNfMTEz/MDAxNTA3ODc4MTkxMjI1.lyYMxegJc6K-mVU3zAr45HFa1wKvo5jigdUfIOz6wJYg.9tF9rLHEpOfvaItJWD-p3CtNLlkN23pb1YsH19NTbcwg.JPEG.showeclatkorea/dezeen-promotions-june-maison-objet_dezeen_2364_col_1-852x569.jpg?type=w)
 
-**예술**,** **디자인**,** **패션**,** **인테리어**,** **공예**,** **음식**에 초점을 맞춘만큼  
+**예술, 디자인, 패션, 인테리어, 공예, 음식**에 초점을 맞춘만큼  
 어느때보다도 풍성한 볼거리가 가득했었는데요.
 
 ![](https://mblogthumb-phinf.pstatic.net/MjAxNzEwMTNfNDMg/MDAxNTA3ODc5NzY0NDcx.9FNOpB8tcAFkVGZTN7cZ8Zg0uPJvUMSVQH1wNH_mtwMg.UxiwfKYc6QuvJVYldJxGyyEVW8Sm0ZafFzpirxS0Ldcg.JPEG.showeclatkorea/image_1994230641507878178441.jpg?type=w)

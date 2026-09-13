@@ -2,6 +2,15 @@ import { parseSe3Blocks } from "@tests/support/parser-test-utils.js"
 import { describe, expect, it } from "vitest"
 
 describe("NaverSe3TextBlock", () => {
+  it("preserves code whitespace through text parsing and paragraph creation", () => {
+    const parsed = parseSe3Blocks(
+      '<div class="se_component se_text"><div class="se_textarea"><pre><code>first\n    second\n\n\nlast</code></pre></div></div>',
+    )
+    expect(parsed.blocks).toEqual([
+      { blockId: "naver-se3:paragraph", props: { text: "```\nfirst\n    second\n\n\nlast\n```" } },
+    ])
+  })
+
   it("parses text components into paragraph blocks", () => {
     const parsed = parseSe3Blocks(`
       <div class="se_component se_text">

@@ -2,6 +2,24 @@ import { parseSe4Blocks } from "@tests/support/parser-test-utils.js"
 import { describe, expect, it } from "vitest"
 
 describe("NaverSe4LinkCardBlock", () => {
+  it("preserves literal preview punctuation and TeX without creating Markdown markup", () => {
+    const parsed = parseSe4Blocks(String.raw`
+      <div class="se-component se-oglink">
+        <a class="se-oglink-info" href="https://example.com/math"></a>
+        <strong class="se-oglink-title">[C++] &lt;vector&gt; $5</strong>
+        <p class="se-oglink-summary">value | \(n\) and $x$ and \(unfinished</p>
+      </div>
+    `)
+
+    expect(parsed.blocks[0]?.props).toMatchObject({
+      title: String.raw`\[C++\] \<vector> \$5`,
+      description: String.raw`value \| \\(n\\) and \$x\$ and \\(unfinished`,
+      url: "https://example.com/math",
+      thumbnailUrl: null,
+    })
+    expect(parsed.blocks[0]?.assets).toBeUndefined()
+  })
+
   it("parses oglink components into link card blocks", () => {
     const parsed = parseSe4Blocks(`
       <div class="se-component se-oglink">

@@ -2,18 +2,15 @@ import { load } from "cheerio"
 import TurndownService, { type Node as TurndownNode } from "turndown"
 import { gfm } from "turndown-plugin-gfm"
 
+import { escapeLinkDestination } from "./escapeLinkDestination.js"
+import { escapeMarkdownText } from "./escapeMarkdownText.js"
+
 type AttributeNode = TurndownNode & {
   getAttribute: (name: string) => string | null
 }
 
 const cleanLinkAttribute = (attribute: string | null) =>
   attribute ? attribute.replace(/(\n+\s*)+/g, "\n") : ""
-
-const escapeLinkDestination = (destination: string) => {
-  const escaped = destination.replace(/([<>()])/g, "\\$1")
-
-  return escaped.includes(" ") ? `<${escaped}>` : escaped
-}
 
 const escapeLinkTitle = (title: string) => title.replace(/"/g, '\\"')
 
@@ -51,6 +48,36 @@ const replaceColorScripterTables = (html: string) => {
     }
   })
 
+  $.root()
+    .find("*")
+    .addBack()
+    .contents()
+    .each((_, node) => {
+      if (node.type === "text" && $(node).parents("pre, code").length === 0) {
+        node.data = node.data.replaceAll("\u200b", "").replaceAll("\u00a0", " ")
+      }
+    })
+
+  $("span, font").each((_, node) => {
+    if ($(node).parents("pre, code, table").length === 0) {
+      $(node).replaceWith($(node).contents())
+    }
+  })
+
+  $("strong, b").each((_, node) => {
+    if ($(node).parents("strong, b").length > 0) {
+      $(node).replaceWith($(node).contents())
+    }
+  })
+
+  $("strong, b").each((_, node) => {
+    const previous = node.previousSibling
+    if (previous?.type === "tag" && ["strong", "b"].includes(previous.name)) {
+      $(previous).append($(node).contents())
+      $(node).remove()
+    }
+  })
+
   return { html: $.root().html() ?? html, codeBlocks }
 }
 
@@ -61,19 +88,20 @@ const restoreCodeBlockPlaceholders = ({
   markdown: string
   codeBlocks: string[]
 }) =>
-  codeBlocks.reduce(
-    (currentMarkdown, code, index) =>
-      currentMarkdown.replace(
-        new RegExp(`[ \\t]*${codeBlockPlaceholderPrefix}${index}[ \\t]*`, "g"),
-        `\n\n\`\`\`\n${code}\n\`\`\`\n\n`,
-      ),
-    markdown,
-  )
-
-const escapeMarkdownHtmlLikeText = (markdown: string) =>
   markdown.replace(
-    /(^|[^\\])<([A-Za-z][A-Za-z0-9-]*(?:[,\s:/][^<>\n]*)?\s*\/?)(?<!\\)>/g,
-    "$1\\<$2\\>",
+    new RegExp(`${codeBlockPlaceholderPrefix}(\\d+)`, "g"),
+    (placeholder, index: string) => {
+      const code = codeBlocks[Number(index)]
+
+      if (code === undefined) {
+        return placeholder
+      }
+
+      const fence = "`".repeat(
+        Math.max(3, ...Array.from(code.matchAll(/`+/g), ([run]) => run.length + 1)),
+      )
+      return `\n\n${fence}\n${code}\n${fence}\n\n`
+    },
   )
 
 const createTurndownService = (resolveLinkUrl?: (url: string) => string) => {
@@ -86,8 +114,24 @@ const createTurndownService = (resolveLinkUrl?: (url: string) => string) => {
     linkStyle: "inlined",
   })
 
+  service.escape = escapeMarkdownText
   service.use(gfm)
   service.remove(["script", "style", "noscript"])
+  service.addRule("strongParagraphs", {
+    filter: ["strong", "b"],
+    replacement: (content, node) => {
+      if (node.querySelector("pre, table")) {
+        return content
+      }
+
+      return content
+        .trim()
+        .split(/\n{2,}/)
+        .filter(Boolean)
+        .map((paragraph) => `**${paragraph}**`)
+        .join("\n\n")
+    },
+  })
   service.addRule("hardBreak", {
     filter: "br",
     replacement: () => "  \n",
@@ -97,28 +141,38 @@ const createTurndownService = (resolveLinkUrl?: (url: string) => string) => {
     replacement: () => "",
   })
 
-  if (resolveLinkUrl) {
-    service.addRule("resolvedInlineLink", {
-      filter: (node: TurndownNode) =>
-        node.nodeName === "A" && isAttributeNode(node) && !!node.getAttribute("href"),
-      replacement: (content, node: TurndownNode) => {
-        if (!isAttributeNode(node)) {
-          return content
-        }
+  service.addRule("image", {
+    filter: "img",
+    replacement: (_, node: TurndownNode) => {
+      if (!isAttributeNode(node)) return ""
+      const src = cleanLinkAttribute(node.getAttribute("src")).trim()
+      if (!src) return ""
+      const alt = escapeMarkdownText(cleanLinkAttribute(node.getAttribute("alt")))
+      const title = escapeLinkTitle(cleanLinkAttribute(node.getAttribute("title")))
+      return `![${alt}](${escapeLinkDestination(src)}${title ? ` "${title}"` : ""})`
+    },
+  })
 
-        const href = cleanLinkAttribute(node.getAttribute("href")).trim()
+  service.addRule("inlineLink", {
+    filter: (node: TurndownNode) =>
+      node.nodeName === "A" && isAttributeNode(node) && !!node.getAttribute("href"),
+    replacement: (content, node: TurndownNode) => {
+      if (!isAttributeNode(node)) {
+        return content
+      }
 
-        if (!href) {
-          return content
-        }
+      const href = cleanLinkAttribute(node.getAttribute("href")).trim()
 
-        const title = escapeLinkTitle(cleanLinkAttribute(node.getAttribute("title")))
-        const titlePart = title ? ` "${title}"` : ""
+      if (!href) {
+        return content
+      }
 
-        return `[${content}](${escapeLinkDestination(resolveLinkUrl(href))}${titlePart})`
-      },
-    })
-  }
+      const title = escapeLinkTitle(cleanLinkAttribute(node.getAttribute("title")))
+      const titlePart = title ? ` "${title}"` : ""
+
+      return `[${content.replace(/\s*\n\s*/g, " ").trim()}](${escapeLinkDestination(resolveLinkUrl ? resolveLinkUrl(href) : href)}${titlePart})`
+    },
+  })
 
   return service
 }
@@ -138,5 +192,5 @@ export const convertHtmlToMarkdown = ({
     codeBlocks: preprocessed.codeBlocks,
   })
 
-  return escapeMarkdownHtmlLikeText(markdown.trim()).replace(/\n{3,}/g, "\n\n")
+  return markdown.trim()
 }

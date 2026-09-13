@@ -31,4 +31,10 @@ export type ParsedBlockAsset = {
   role: ParsedBlockAssetRole
   sourceUrl: string
   required: boolean
+  textReplacement?: {
+    propPath: string
+    placeholder: string
+    template: string
+    format: "markdown" | "html"
+  }
 }

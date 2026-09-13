@@ -14,7 +14,7 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/MjAyMTA2MTRfMjI0/MDAxNjIzNjMxNzY
 
 **“이제 다크모드로 네이버 모바일을**
 
-**더욱** **편안하게 이용해보세요**!”**
+**더욱 편안하게 이용해보세요!”**
 
 안녕하세요. 네이버앱 담당자입니다.
 
@@ -25,7 +25,8 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/MjAyMTA2MTRfMjI0/MDAxNjIzNjMxNzY
 
 ![](https://mblogthumb-phinf.pstatic.net/MjAyMTA2MTRfMjI0/MDAxNjIzNjMxNzY5MTg3.B5dBKxwbDklAaOkeWhgTG7LWRL0V7IwEFuKmlNxQkXEg.FLvRVcabpsoXcm8d3dg1GBeP_cqbuDFQTan5-c0lgBwg.GIF.naver_diary/1_%EB%8B%A4%ED%81%AC%EB%AA%A8%EB%93%9C_1.gif?type=w)
 
-네이버 다크모드는 검색, 뉴스, 연예 등 주요 서비스를 중심으로 적용 되었고 단계적으로 계속 늘려갈 계획이에요. 스포츠 다크모드는 7월 말 적용될 예정인데, 사용자가 콘텐츠를 직접 제작한 블로그, 카페, 쇼핑 등은 일괄 적용하기에는 사용자 편집 의도와 달라질 수 있어서 조금 더 면밀하게 검토한 후에 적용할 예정이에요. (조금 더 기다려주세요!)
+네이버 다크모드는 검색, 뉴스, 연예 등 주요 서비스를 중심으로 적용 되었고 단계적으로 계속 늘려갈 계획이에요.  
+스포츠 다크모드는 7월 말 적용될 예정인데, 사용자가 콘텐츠를 직접 제작한 블로그, 카페, 쇼핑 등은 일괄 적용하기에는 사용자 편집 의도와 달라질 수 있어서 조금 더 면밀하게 검토한 후에 적용할 예정이에요. (조금 더 기다려주세요!)
 
 **ㅣ네이버앱과 모바일웹 모두 이용하실 수 있어요**
 
@@ -59,7 +60,7 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/MjAyMTA2MTRfMjI0/MDAxNjIzNjMxNzY
 
 ![](https://mblogthumb-phinf.pstatic.net/MjAyMTA2MDdfNTYg/MDAxNjIzMDMxMDY5NTQz.BcE5FH-0U8pQy0CeJk1DxsVLnwIAuyW8vfWTNZ-bXxkg.JxvKhiW-eQhMvvvXb__xHjnbT1BOFvA5jFI0LAJcvUcg.GIF.naver_diary/5_%EB%8B%A4%ED%81%AC%EB%AA%A8%EB%93%9C.gif?type=w)
 
-**ㅣ**최적의** **다크모드** **컬러를** **찾는** **연구를** **계속하고** **있어요**🧐
+**ㅣ최적의 다크모드 컬러를 찾는 연구를 계속하고 있어요**🧐
 
 눈이
 
@@ -173,11 +174,12 @@ Android/iOS
 
 .
 
-**“**다양해진 위젯으로**
+**“다양해진 위젯으로**
 
-**네이버앱을 간편하게 이용하세요!**”**
+**네이버앱을 간편하게 이용하세요!”**
 
 자주 쓰이는 네이버앱 기능들을 위젯으로 만들었어요. 다양한 위젯으로 네이버앱을 더 간편하게 이용해 보세요!  
+
 QR체크인 위젯에서는 브라운 뿐 아니라, 인기 웹툰 ‘유미의 세포들’ 캐릭터를 만나볼 수 있어요.
 
 오늘 날씨와 미세먼지 수치를 한 눈에 확인할 수 있는 날씨 위젯, 결제부터 적립까지 다양한 페이기능이 담긴 Na.위젯도 추가되었습니다.

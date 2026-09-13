@@ -89,7 +89,7 @@ describe("NaverSe2TextElementBlock", () => {
     expect(parsed.blocks).toEqual([
       {
         blockId: "naver-se2:paragraph",
-        props: { text: "vector\\<int\\>와 \\<br /\\> 예시" },
+        props: { text: "vector\\<int>와 \\<br /> 예시" },
       },
     ])
   })

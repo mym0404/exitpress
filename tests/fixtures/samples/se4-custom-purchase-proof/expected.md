@@ -86,17 +86,11 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/MjAyNTAxMDhfMjgx/MDAxNzM2MzQxMDE
 
 > 재료 :
 > 
-> ​
-> 
 > 찹쌀가루 200ml,
 > 
 > 뜨거운 물 100ml,
 > 
 > 고운 소금 1/2 티스푼.
-> 
-> ​
-> 
-> ​
 > 
 > \*20개 정도 나오는 레시피예요.
 > 

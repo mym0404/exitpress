@@ -77,12 +77,15 @@ export class NaverSe2TableBlock extends LeafParserBlock {
     }
 
     return [
-      createTableBlock({
-        blockId,
-        rows: parsedTable.rows,
-        html: parsedTable.html,
-        complex: parsedTable.complex,
-      }),
+      {
+        ...createTableBlock({
+          blockId,
+          rows: parsedTable.rows,
+          html: parsedTable.html,
+          complex: parsedTable.complex,
+        }),
+        ...(parsedTable.assets ? { assets: parsedTable.assets } : {}),
+      },
     ]
   }
 }

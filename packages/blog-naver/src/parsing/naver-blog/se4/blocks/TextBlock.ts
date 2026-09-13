@@ -1,4 +1,5 @@
 import { convertHtmlToMarkdown } from "@exitpress/engine/markdown/util/convertHtmlToMarkdown.js"
+import { escapeMarkdownText } from "@exitpress/engine/markdown/util/escapeMarkdownText.js"
 import { compactMarkdownText } from "@exitpress/engine/shared/text/util/TextCompaction.js"
 
 import type { AnyNode, Element } from "domhandler"
@@ -90,13 +91,11 @@ export const parseTextBlocks = ({
   options: ParserBlockContext["options"]
 }) => {
   const convertParagraph = (paragraph: Element) =>
-    compactMarkdownText(
-      convertHtmlToMarkdown({
-        /* v8 ignore next */
-        html: $node.find(paragraph).html() ?? "",
-        resolveLinkUrl: options.resolveLinkUrl,
-      }),
-    )
+    convertHtmlToMarkdown({
+      /* v8 ignore next */
+      html: $node.find(paragraph).html() ?? "",
+      resolveLinkUrl: options.resolveLinkUrl,
+    })
   const toParagraphBlock = (text: string) =>
     /* v8 ignore next */
     text ? [createParagraphBlock({ blockId, text })] : []
@@ -125,7 +124,9 @@ export const parseTextBlocks = ({
   }
   const parseLooseNode = (node: AnyNode) => {
     if (!isElementNode(node)) {
-      return node.type === "text" ? toParagraphBlock(compactMarkdownText(node.data)) : []
+      return node.type === "text"
+        ? toParagraphBlock(escapeMarkdownText(compactMarkdownText(node.data)))
+        : []
     }
 
     if (node.type === "script" || node.type === "style") {
@@ -133,12 +134,10 @@ export const parseTextBlocks = ({
     }
 
     return toParagraphBlock(
-      compactMarkdownText(
-        convertHtmlToMarkdown({
-          html: $.html(node) ?? $node.find(node).text(),
-          resolveLinkUrl: options.resolveLinkUrl,
-        }),
-      ),
+      convertHtmlToMarkdown({
+        html: $.html(node) ?? $node.find(node).text(),
+        resolveLinkUrl: options.resolveLinkUrl,
+      }),
     )
   }
   const parseContainer = (container: Element) =>

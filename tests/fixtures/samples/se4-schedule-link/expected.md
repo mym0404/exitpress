@@ -14,7 +14,7 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/MjAyNDA4MTBfMjI2/MDAxNzIzMjQ3OTE
 
 ![](https://mblogthumb-phinf.pstatic.net/MjAyNDA4MTBfMjI2/MDAxNzIzMjQ3OTEzMTk1.kxUOoSUOIHLMszqATxxNTVCjWVERqOGU5eSeRkh4aocg.dkeMZ6EbjozsQShYCxZPo7EILVghK-PGKLn440ronqQg.PNG/%ED%83%80%EC%9D%B4%ED%8B%803.png?type=w)
 
-"**매일 아침,** **파리의 소식은** **여기에서**!"
+"**매일 아침, 파리의 소식은 여기에서**!"
 
 **PARIS DAILY!**
 
@@ -54,7 +54,7 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/MjAyNDA4MTBfMjI2/MDAxNzIzMjQ3OTE
 
 ![](https://mblogthumb-phinf.pstatic.net/MjAyNDA4MTBfMjE2/MDAxNzIzMjQ1NjM0MzYz.thtcNc8GEgdh0_NuDjSrhHIqnlNGPoZD2tgwN2aFd50g.i1Z4Wiz8nA0kGKiuhkz-4r_GoFBoqrWz3n7J8DqQRqcg.PNG/image_2163.png?type=w)
 
-**📌**근대5종 메달이 결정되는 결승 마지막 경기 일정이 궁금하다면?**
+**📌근대5종 메달이 결정되는 결승 마지막 경기 일정이 궁금하다면?**
 
 [근대5종 남자 개인 결승 - 레이저런](https://m.sports.naver.com/game/2024MPNMINDIVIDFNL0001LR/video)
 2024-08-11T02:10:15+09:00
