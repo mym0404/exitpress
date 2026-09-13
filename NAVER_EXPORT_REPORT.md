@@ -65,7 +65,7 @@
 - `mise exec -- pnpm check:coverage`: 131개 파일의 638개 테스트를 통과했어요. 문장·라인 92.29%, 분기 85.40%, 함수 95.83%로 저장소 기준을 충족했어요.
 - `check:fmt`, `check:lint`, `check:storybook`, `check:unused`, `build:server`, `build:ui`, `pnpm --filter @exitpress/web build:pages`를 통과했어요.
 - 실제 Naver 글 4개의 회귀 자료를 추가하고, 기존 자료 32개를 원문·새 출력과 대조해 갱신했어요. 추가 자료는 캐시를 우회한 현재 원본 HTML로 다시 확인했어요.
-- 로컬 `check:playwright`에서 21개를 통과했어요. 실제 업로드 1개는 로컬에 `EXITPRESS_UPLOAD_E2E_GITHUB_TOKEN`이 없어 실행하지 못했어요. [PR CI 실행](https://github.com/mym0404/exitpress/actions/runs/34755135727)에서도 21개가 통과했고, 업로드 1개는 등록된 토큰이 GitHub API에서 `401 Bad credentials`를 반환해 최초 실행과 재시도 모두 실패했어요. 전용 토큰 갱신 후 재검증이 필요해요. CI의 단위 테스트·정적 검사·빌드는 통과했어요.
+- 로컬 `check:playwright`에서 21개를 통과했어요. 실제 업로드 1개는 로컬에 `EXITPRESS_UPLOAD_E2E_GITHUB_TOKEN`이 없어 실행하지 못했어요. [PR CI 실행](https://github.com/mym0404/exitpress/actions/runs/34755135727)에서도 21개가 통과했고, 업로드 1개는 등록된 토큰이 GitHub API에서 `401 Bad credentials`를 반환해 최초 실행과 재시도 모두 실패했어요. 이후 전용 토큰을 갱신했어요. 최신 재검증 결과는 [PR #65의 required-checks](https://github.com/mym0404/exitpress/pull/65/checks)에서 확인해요. CI의 단위 테스트·정적 검사·빌드는 통과했어요.
 
 - 수정 후 원본 카테고리 71개의 표본 191개와 수식 글 2개를 더해 총 193개를 데스크톱·모바일에서 확인했어요. 386개 화면에서 원문과 코드·수식 개수를 대조하고 이미지·문서 가로 넘침을 확인했어요.
 - SQL 코드 6개는 양쪽 화면에서 원문·DOM·복사용 데이터가 일치했어요. 모바일 문서 폭 390px을 유지하며 코드 내부 가로 스크롤과 Wrap 버튼을 확인했어요. ps-blog에서는 이 6개만 초기 줄바꿈을 끄고 기존 코드의 기본 설정은 유지해요.
