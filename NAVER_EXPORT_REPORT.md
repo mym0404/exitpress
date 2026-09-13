@@ -65,9 +65,10 @@
 - `mise exec -- pnpm check:coverage`: 131개 파일의 638개 테스트를 통과했어요. 문장·라인 92.29%, 분기 85.40%, 함수 95.83%로 저장소 기준을 충족했어요.
 - `check:fmt`, `check:lint`, `check:storybook`, `check:unused`, `build:server`, `build:ui`, `pnpm --filter @exitpress/web build:pages`를 통과했어요.
 - 실제 Naver 글 4개의 회귀 자료를 추가하고, 기존 자료 32개를 원문·새 출력과 대조해 갱신했어요. 추가 자료는 캐시를 우회한 현재 원본 HTML로 다시 확인했어요.
-- 로컬 `check:playwright`에서 21개를 통과했어요. 실제 업로드 1개는 로컬에 `EXITPRESS_UPLOAD_E2E_GITHUB_TOKEN`이 없어 실행하지 못했고, 해당 비밀값이 등록된 저장소 CI에서 확인해요.
+- 로컬 `check:playwright`에서 21개를 통과했어요. 실제 업로드 1개는 로컬에 `EXITPRESS_UPLOAD_E2E_GITHUB_TOKEN`이 없어 실행하지 못했어요. [PR CI 실행](https://github.com/mym0404/exitpress/actions/runs/34755135727)에서도 21개가 통과했고, 업로드 1개는 등록된 토큰이 GitHub API에서 `401 Bad credentials`를 반환해 최초 실행과 재시도 모두 실패했어요. 전용 토큰 갱신 후 재검증이 필요해요. CI의 단위 테스트·정적 검사·빌드는 통과했어요.
 
 - 수정 후 원본 카테고리 71개의 표본 191개와 수식 글 2개를 더해 총 193개를 데스크톱·모바일에서 확인했어요. 386개 화면에서 원문과 코드·수식 개수를 대조하고 이미지·문서 가로 넘침을 확인했어요.
 - SQL 코드 6개는 양쪽 화면에서 원문·DOM·복사용 데이터가 일치했어요. 모바일 문서 폭 390px을 유지하며 코드 내부 가로 스크롤과 Wrap 버튼을 확인했어요. ps-blog에서는 이 6개만 초기 줄바꿈을 끄고 기존 코드의 기본 설정은 유지해요.
 - ps-blog의 `node --test tests/processors/shiki-wrap.test.mjs`는 기본 줄바꿈, 명시한 예외, 두 번 처리 후 상태와 원문 보존을 확인해요.
 - ps-blog 전체 production build는 기본 Node 힙 한도 약 4GB에서 Shiki 처리 중 메모리 부족으로 중단됐어요. 기존 처리기가 전체 HTML의 DOM과 코드 문자열을 동시에 보유하는 구조를 확인했어요. `NODE_OPTIONS=--max-old-space-size=16384 mise exec -- pnpm build`로 재실행해 코드 5,508개 처리와 Pagefind 검색 색인까지 통과했어요. 이 설정값이 최소 필요 메모리라는 뜻은 아니에요.
+- 최종 production 생성물에서 이관 글 1,830개의 경로·발행일 일치, 코드 4,090개와 KaTeX 오류 0개를 확인했어요. 실제 `/render-sample/` 양쪽 화면에서도 수식 14개, 코드 4개와 기본 줄바꿈·토글 동작을 확인했어요.
