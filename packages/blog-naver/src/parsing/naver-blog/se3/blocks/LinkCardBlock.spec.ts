@@ -2,6 +2,24 @@ import { parseSe3Blocks } from "@tests/support/parser-test-utils.js"
 import { describe, expect, it } from "vitest"
 
 describe("NaverSe3LinkCardBlock", () => {
+  it("preserves literal preview punctuation and TeX without creating Markdown markup", () => {
+    const parsed = parseSe3Blocks(String.raw`
+      <div class="se_component se_oglink">
+        <a class="se_og_box" href="https://example.com/math"></a>
+        <strong class="se_og_tit">[C++] &lt;vector&gt; $5</strong>
+        <p class="se_og_desc">value | \(n\) and $x$ and \(unfinished</p>
+      </div>
+    `)
+
+    expect(parsed.blocks[0]?.props).toMatchObject({
+      title: String.raw`\[C++\] \<vector> \$5`,
+      description: String.raw`value \| \\(n\\) and \$x\$ and \\(unfinished`,
+      url: "https://example.com/math",
+      thumbnailUrl: null,
+    })
+    expect(parsed.blocks[0]?.assets).toBeUndefined()
+  })
+
   it("parses oglink components into link card blocks", () => {
     const parsed = parseSe3Blocks(`
       <div class="se_component se_oglink default ">
@@ -24,7 +42,7 @@ describe("NaverSe3LinkCardBlock", () => {
         blockId: "naver-se3:linkCard",
         props: {
           title: "首页--汉语考试服务网",
-          description: "简体中文 | English | 한국어",
+          description: "简体中文 \\| English \\| 한국어",
           url: "http://www.chinesetest.cn/index.do",
           thumbnailUrl: null,
         },

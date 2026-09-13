@@ -11,6 +11,14 @@ describe("NaverSe2TextNodeBlock", () => {
     expect(parsed.tags).toEqual(["classic", "archive"])
   })
 
+  it("escapes syntax in direct source text", () => {
+    const parsed = parseSe2Blocks("&lt;자료구조&gt; $prompt | operator")
+
+    expect(parsed.blocks).toEqual([
+      { blockId: "naver-se2:paragraph", props: { text: "\\<자료구조> \\$prompt \\| operator" } },
+    ])
+  })
+
   it("skips blank text nodes", () => {
     const parsed = parseSe2Blocks("   ")
 

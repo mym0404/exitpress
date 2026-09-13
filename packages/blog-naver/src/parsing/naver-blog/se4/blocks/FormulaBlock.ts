@@ -8,6 +8,40 @@ import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../co
 import { createFormulaBlock } from "../../core/ParsedBlockOutput.js"
 import { LeafParserBlock } from "../../core/ParserBlock.js"
 
+const normalizeGrid = (formula: string) =>
+  formula.replace(/\\begin\{grid\}([\s\S]*?)\\end\{grid\}/g, (source, body: string) => {
+    const rows = body.split(/\\\\(?=\\cell\{)/).map((row) => row.split(/&(?=\\cell\{)/))
+    const width = rows[0]?.length ?? 0
+
+    if (!width || rows.some((row) => row.length !== width)) {
+      return source
+    }
+
+    const cells = rows.map((row) => row.map((cell) => /^\\cell\{([01]{4})\}([\s\S]*)$/.exec(cell)))
+
+    if (cells.some((row) => row.some((cell) => !cell))) {
+      return source
+    }
+
+    const renderedRows = cells.map((row) =>
+      row
+        .map((cell) => {
+          const [, borders, value] = cell!
+          let rendered = value!
+
+          if (borders![0] === "1") rendered = `\\overline{${rendered}}`
+          if (borders![2] === "1") rendered = `\\underline{${rendered}}`
+          if (borders![3] === "1") rendered = `\\vert ${rendered}`
+          if (borders![1] === "1") rendered = `${rendered}\\vert`
+
+          return rendered
+        })
+        .join("&"),
+    )
+
+    return `\\begin{array}{${"c".repeat(width)}}${renderedRows.join("\\\\")}\\end{array}`
+  })
+
 export class NaverSe4FormulaBlock extends LeafParserBlock {
   override readonly id = "formula"
   override readonly label = "수식"
@@ -60,44 +94,38 @@ export class NaverSe4FormulaBlock extends LeafParserBlock {
       inline?: boolean
       isInline?: boolean
     }
-    const candidates: string[] = []
-
-    if (data.html) {
-      const formulaDocument = load(data.html)
-
-      candidates.push(
-        ...formulaDocument(".mq-selectable")
+    const formulaDocument = load(data.html ?? "")
+    const htmlFormulas = data.html
+      ? formulaDocument(".mq-selectable")
           .toArray()
           .map((node) => compactText(formulaDocument(node).text()))
-          .filter(Boolean),
-      )
-    }
-
-    if (typeof data.latex === "string") {
-      candidates.push(compactText(data.latex))
-    }
-
-    if (typeof data.text === "string") {
-      candidates.push(compactText(data.text))
-    }
-
-    candidates.push(compactText($node.text()))
-
-    const formula = candidates
+      : []
+    const candidates = htmlFormulas.length
+      ? htmlFormulas
+      : [data.latex ?? data.text ?? $node.text()]
+    const formulas = candidates
+      .map(normalizeGrid)
       .map((candidate) =>
-        candidate
+        compactText(candidate)
           .replace(/^\${1,2}/, "")
           .replace(/\${1,2}$/, "")
-          .trim(),
+          .replace(/\\combi(?=\s*\{)/g, "")
+          .replace(/\\overrightharpoonup\b/g, "\\overrightharpoon")
+          .replace(/\\nequiv\b/g, "\\not\\equiv")
+          .replace(/\\lcup\b/g, "\\cup")
+          .replace(/\\nin\b/g, "\\notin")
+          .replace(/\\normal\{1\}(?=\s*\{)/g, "\\mathrm")
+          .replaceAll("\u0008", "")
+          .trim()
+          .replace(/(\\+)$/, (slashes) => (slashes.length % 2 === 1 ? `${slashes} ` : slashes)),
       )
       .filter(Boolean)
-      .sort((left, right) => right.length - left.length)[0]
 
-    if (!formula) {
+    if (formulas.length === 0) {
       throw new Error("SE4 formula block parsing failed.")
     }
 
-    return [
+    return formulas.map((formula) =>
       createFormulaBlock({
         blockId,
         formula,
@@ -108,6 +136,6 @@ export class NaverSe4FormulaBlock extends LeafParserBlock {
           !$node.hasClass("se-inline-math") &&
           !$node.hasClass("se-math-inline"),
       }),
-    ]
+    )
   }
 }

@@ -1,4 +1,4 @@
-import { convertHtmlToMarkdown } from "@exitpress/engine/markdown/util/convertHtmlToMarkdown.js"
+import { convertHtmlWithImageAssets } from "@exitpress/engine/exporting/assets/convertHtmlWithImageAssets.js"
 import { compactText } from "@exitpress/engine/shared/text/util/TextCompaction.js"
 
 import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/ParserBlock.js"
@@ -43,13 +43,20 @@ export class NaverSe2TextElementBlock extends LeafParserBlock {
 
     /* v8 ignore next */
     const html = $.html($node) ?? ""
-    const markdown = convertHtmlToMarkdown({
+    const converted = convertHtmlWithImageAssets({
       html,
       resolveLinkUrl: options.resolveLinkUrl,
     })
 
+    const markdown = converted.text
+
     if (markdown) {
-      return [createParagraphBlock({ blockId, text: markdown })]
+      return [
+        {
+          ...createParagraphBlock({ blockId, text: markdown }),
+          ...(Object.keys(converted.assets).length ? { assets: converted.assets } : {}),
+        },
+      ]
     }
 
     const text = compactText($node.text())

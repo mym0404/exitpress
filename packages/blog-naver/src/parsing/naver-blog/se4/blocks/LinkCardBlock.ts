@@ -1,3 +1,4 @@
+import { escapeMarkdownText } from "@exitpress/engine/markdown/util/escapeMarkdownText.js"
 import { compactText } from "@exitpress/engine/shared/text/util/TextCompaction.js"
 
 import type { ParsedBlockAsset } from "@exitpress/domain/parser/schema/Media.js"
@@ -67,11 +68,13 @@ export class NaverSe4LinkCardBlock extends LeafParserBlock {
       {
         blockId,
         props: {
-          title: compactText($node.find(".se-oglink-title").text()) || url,
-          description: normalizeDescription({
-            description: $node.find(".se-oglink-summary").text(),
-            url,
-          }),
+          title: escapeMarkdownText(compactText($node.find(".se-oglink-title").text()) || url),
+          description: escapeMarkdownText(
+            normalizeDescription({
+              description: $node.find(".se-oglink-summary").text(),
+              url,
+            }),
+          ),
           url: options.resolveLinkUrl ? options.resolveLinkUrl(url) : url,
           thumbnailUrl,
         },

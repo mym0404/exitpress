@@ -1,6 +1,6 @@
-import { convertHtmlToMarkdown } from "@exitpress/engine/markdown/util/convertHtmlToMarkdown.js"
-import { compactText } from "@exitpress/engine/shared/text/util/TextCompaction.js"
+import { convertHtmlWithImageAssets } from "@exitpress/engine/exporting/assets/convertHtmlWithImageAssets.js"
 
+import type { ParsedBlockAsset } from "@exitpress/domain/parser/schema/Media.js"
 import type { TableRow } from "@exitpress/domain/parser/schema/TableRow.js"
 import type { CheerioAPI } from "cheerio"
 
@@ -26,22 +26,25 @@ export const parseHtmlTable = ({
     })
   }
 
+  const assets: Record<string, ParsedBlockAsset> = {}
   const rows = normalizedTable
-    .find("tr")
+    .children("thead, tbody, tfoot, tr")
     .toArray()
-    .map((row) =>
+    .flatMap((node) => ($(node).is("tr") ? [node] : $(node).children("tr").toArray()))
+    .map((row, rowIndex) =>
       $(row)
         .children("th, td")
         .toArray()
-        .map((cell) => {
+        .map((cell, cellIndex) => {
           const cellNode = $(cell)
+          const content = convertHtmlWithImageAssets({
+            html: cellNode.html() ?? "",
+            propPath: `rows.${rowIndex}.${cellIndex}.text`,
+          })
+          Object.assign(assets, content.assets)
 
           return {
-            text: compactText(
-              convertHtmlToMarkdown({
-                html: cellNode.html() ?? "",
-              }),
-            ),
+            text: content.text.trim(),
             /* v8 ignore next -- Cheerio types allow null for empty selections, but cells come from an existing table child. */
             html: (cellNode.html() ?? "").trim(),
             colspan: Number(cellNode.attr("colspan") ?? "1"),
@@ -58,9 +61,20 @@ export const parseHtmlTable = ({
   )
   const widthMismatch = widths.some((width) => width !== widths[0])
 
+  const htmlContent = convertHtmlWithImageAssets({
+    html: $.html(normalizedTable).trim(),
+    propPath: "html",
+    format: "html",
+  })
+  Object.assign(assets, htmlContent.assets)
+
   return {
     rows,
-    html: $.html(normalizedTable).trim(),
-    complex: hasMergedCells || widthMismatch,
+    html: htmlContent.text,
+    ...(Object.keys(assets).length > 0 ? { assets } : {}),
+    complex:
+      hasMergedCells ||
+      widthMismatch ||
+      normalizedTable.find("table, pre, ul, ol, blockquote").length > 0,
   }
 }

@@ -1,12 +1,29 @@
 import { createSe4ModuleScript, parseSe4Blocks } from "@tests/support/parser-test-utils.js"
 import { describe, expect, it } from "vitest"
 
+import { createParagraphBlock } from "../../core/ParsedBlockOutput.js"
+
 const paragraphBlock = (text: string) => ({
   blockId: "naver-se4:paragraph",
   props: { text },
 })
 
 describe("NaverSe4TextBlock", () => {
+  it("preserves already generated paragraph Markdown without whitespace rewriting", () => {
+    const text =
+      "    first  value\n\n\tsecond  value\n\n***\n\n$$\nf(x) = x^2\n$$\n\n`a  b`  \nlast"
+    expect(createParagraphBlock({ blockId: "paragraph", text }).props.text).toBe(text)
+  })
+
+  it("preserves code whitespace through text parsing and paragraph creation", () => {
+    const parsed = parseSe4Blocks(
+      '<div class="se-component se-text"><div class="se-module-text"><pre><code>first\n    second\n\n\nlast</code></pre></div></div>',
+    )
+    expect(parsed.blocks).toEqual([
+      { blockId: "naver-se4:paragraph", props: { text: "```\nfirst\n    second\n\n\nlast\n```" } },
+    ])
+  })
+
   it("parses text components into paragraph blocks", () => {
     const parsed = parseSe4Blocks(`
       <div class="se-component se-text">
@@ -21,6 +38,17 @@ describe("NaverSe4TextBlock", () => {
       paragraphBlock("Second [link](https://example.com)"),
     ])
     expect(parsed.tags).toEqual(["algo", "math"])
+  })
+
+  it("escapes syntax in loose source text nodes", () => {
+    const parsed = parseSe4Blocks(`
+      <div class="se-component se-text">
+        ${createSe4ModuleScript({ type: "v2_text" })}
+        <div class="se-module-text">&lt;자료구조&gt; $prompt | operator</div>
+      </div>
+    `)
+
+    expect(parsed.blocks).toEqual([paragraphBlock("\\<자료구조> \\$prompt \\| operator")])
   })
 
   it("preserves hard breaks inside text paragraphs", () => {

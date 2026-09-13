@@ -1,3 +1,4 @@
+import { escapeMarkdownText } from "@exitpress/engine/markdown/util/escapeMarkdownText.js"
 import { compactText } from "@exitpress/engine/shared/text/util/TextCompaction.js"
 
 import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/ParserBlock.js"
@@ -22,7 +23,7 @@ export class NaverSe2TextNodeBlock extends LeafParserBlock {
 
   override convert({ node, blockId }: Parameters<LeafParserBlock["convert"]>[0]) {
     /* v8 ignore next */
-    const text = node.type === "text" ? compactText(node.data ?? "") : ""
+    const text = node.type === "text" ? escapeMarkdownText(compactText(node.data ?? "")) : ""
 
     return text ? [createParagraphBlock({ blockId, text })] : []
   }

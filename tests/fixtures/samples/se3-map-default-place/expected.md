@@ -20,8 +20,8 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/MjAxODEwMDRfMTM2/MDAxNTM4NjUyNzU
 
 ---
 
-****지리산 청정 자연을 담은 수제 약초차**  
-**\- 청강원****
+**지리산 청정 자연을 담은 수제 약초차  
+\- 청강원**
 
 ---
 
@@ -41,6 +41,7 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/MjAxODEwMDRfMTM2/MDAxNTM4NjUyNzU
 **건강을 되찾아준 지리산 약초차**
 
 청강원의 윤경순 대표는 30대 초반에 정확한 원인을 알 수 없는 병을 앓고 있었다. 머리가 다 빠질 정도로 몸 상태가 악화됐던 윤 대표는 건강을 되찾기 위해 산으로 향했다. 지리산에서 약초차를 접하면서 건강이 점차 좋아지자 차의 효능에 대한 확신을 갖게 되었고, 이를 다른 사람과 나누고 싶다는 생각을 하게 되었다.  
+  
 건강을 회복한 윤 대표는 중국에서 중의학과 침구학을 공부했고, 이후 남편의 직장을 따라 네덜란드에서 생활하며 본격적으로 약초차를 공부하기 시작했다.
 
 ![](https://mblogthumb-phinf.pstatic.net/MjAxODEwMDRfMTcz/MDAxNTM4NjUyNzk3ODAx.TKWEYRGjgHe1a70VOcSG8YNCn4vsgbx3UElXAlWvSVcg.-qOcYLm-gvYXn-6IlLO_PawjpWq5hrHz18h6XUjDSgQg.JPEG.naver_diary/DSC_9362.jpg?type=w)
@@ -75,6 +76,7 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/MjAxODEwMDRfMTM2/MDAxNTM4NjUyNzU
 **정성으로 만드는 약초차**
 
 청강원은 수제 약초 차의 핵심 재료인 약초는 지리산 일대에서 재배하는 약초만 사용하는 걸 고집한다. 지리산의 좋은 자연을 차에 고스란히 담아내기 위함이다. 이를 위해 청강원에서는 지역 농가 10곳과의 협력 아래 유황으로 발효된 퇴비를 사용해 약초를 재배하는 수고로운 노력도 마다하지 않는다.  
+  
 특히 청강원에서는 원료를 아홉 번씩 찌고 말린 뒤 발효시켜 약초 차를 만드는데, 맛은 진하게 우러나면서도 목 넘김은 맑고 깔끔하다. 모든 과정을 손수 직접 해내기 때문에 4개월이란 긴 시간이 걸리지만, 그만큼 품질이 훌륭하다.
 
 ![](https://mblogthumb-phinf.pstatic.net/MjAxODEwMDRfMTE5/MDAxNTM4NjU0Mjk1MjU4.6RtuNkdgAlFqfLF9ZgHwPNcnibMl3mG0TGy3Q5jk_D0g.zzIF8QYbLyLvd5BY-i68FxtlPwvKoHk3jRtU7bIAN6Ig.JPEG.naver_diary/6.%ED%95%9C%EB%B0%A9_%ED%8B%B0%ED%85%8C%EB%9D%BC%ED%94%BC_%2826%29.jpg?type=w)
@@ -98,6 +100,7 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/MjAxODEwMDRfMTM2/MDAxNTM4NjUyNzU
 **약초차의 세계화를 꿈꾸다**
 
 윤 대표는 여기서 한 발 더 나아가 전통차의 세계화를 꿈꾼다. 그녀는 중국 보이차나 일본의 말차가 전 세계적으로 명성을 얻는 것처럼 우리 차도 세계인의 입맛을 사로잡을 수 있다고 믿는다. 이러한 믿음을 바탕으로 윤 대표는 진시황 설화에서 영감을 받아 3대 약초로 불리는 구기자, 인삼, 하수오를 재료로 한 불로초 차를 개발하기도 했다.  
+  
 사람들이 건강하게 마실 수 있는 약초 차를 만들어 세계인에게 우리 차의 맛과 우수성을 알리고 싶다는 청강원의 마음은 뚜렷하다. 그리고 그러한 진심이 담긴 청강원의 약초차는 오늘도 차근차근 세계로 뻗어가고 있다.
 
 ---
@@ -114,14 +117,12 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/MjAxODEwMDRfMTM2/MDAxNTM4NjUyNzU
 [지리산 청강원](https://map.naver.com/p/search/%EC%A7%80%EB%A6%AC%EC%82%B0%20%EC%B2%AD%EA%B0%95%EC%9B%90)
 경상남도 산청군 시천면 지리산대로 578-54
 
-****| 운영시간**  
-** 상시 운영(예약 필수)**  
-**| 청강원 자세히 보기**  
-** [https://blog.naver.com/chungangwon](https://blog.naver.com/chungangwon)**[](https://blog.naver.com/chungangwon)  
-**| 청강원 프로그램 예약하기**** 약초차 명인과 티테라피
+**\| 운영시간**상시 운영(예약 필수)**\| 청강원 자세히 보기**[https://blog.naver.com/chungangwon](https://blog.naver.com/chungangwon)**[](https://blog.naver.com/chungangwon)  
+  
+\| 청강원 프로그램 예약하기**약초차 명인과 티테라피
 
-![[네이버 예약] 지리산 청강원](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fldb-phinf.pstatic.net%2F20181002_63%2F15384470252828F1oR_JPEG%2F%25BE%25F7%25C3%25BC%25BB%25E7%25C1%25F83.jpg%3Ftype%3Df804_408%22&type=ff500_300)
-[[네이버 예약] 지리산 청강원](https://booking.naver.com/booking/6/bizes/186432)
+![\[네이버 예약\] 지리산 청강원](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fldb-phinf.pstatic.net%2F20181002_63%2F15384470252828F1oR_JPEG%2F%25BE%25F7%25C3%25BC%25BB%25E7%25C1%25F83.jpg%3Ftype%3Df804_408%22&type=ff500_300)
+[\[네이버 예약\] 지리산 청강원](https://booking.naver.com/booking/6/bizes/186432)
 마고할미가 사는 지리산 천왕봉, 그 아래 약초차 명인의 손길로 다져진 터 안에서 약초차를 마셔보세요. 나에게 맞는 약초차는 무엇일까? 나는 어떤 건강습관을 길러야 할까? 건강할 때 건강을 지켰으면 하는 어머니의 마음으로 차를 만들고 약초차 티테라피를 진행합니다.
 
 ---

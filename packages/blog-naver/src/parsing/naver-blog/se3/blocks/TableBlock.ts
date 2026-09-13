@@ -58,12 +58,15 @@ export class NaverSe3TableBlock extends LeafParserBlock {
     const parsedTable = parseHtmlTable({ $, table, resolveLinkUrl: options.resolveLinkUrl })
 
     return [
-      createTableBlock({
-        blockId,
-        rows: parsedTable.rows,
-        html: parsedTable.html,
-        complex: parsedTable.complex,
-      }),
+      {
+        ...createTableBlock({
+          blockId,
+          rows: parsedTable.rows,
+          html: parsedTable.html,
+          complex: parsedTable.complex,
+        }),
+        ...(parsedTable.assets ? { assets: parsedTable.assets } : {}),
+      },
     ]
   }
 }

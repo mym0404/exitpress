@@ -1,4 +1,4 @@
-import { convertHtmlToMarkdown } from "@exitpress/engine/markdown/util/convertHtmlToMarkdown.js"
+import { convertHtmlWithImageAssets } from "@exitpress/engine/exporting/assets/convertHtmlWithImageAssets.js"
 import { compactText } from "@exitpress/engine/shared/text/util/TextCompaction.js"
 
 import type { ParserBlockContext, ParserBlockTemplateDefinition } from "../../core/ParserBlock.js"
@@ -35,18 +35,22 @@ export class NaverSe2HeadingBlock extends LeafParserBlock {
     }
 
     const level = Number(node.tagName[1])
-    const text = compactText(
-      convertHtmlToMarkdown({
-        /* v8 ignore next */
-        html: $node.html() ?? "",
-        resolveLinkUrl: options.resolveLinkUrl,
-      }),
-    )
+    const converted = convertHtmlWithImageAssets({
+      /* v8 ignore next */
+      html: $node.html() ?? "",
+      resolveLinkUrl: options.resolveLinkUrl,
+    })
+    const text = compactText(converted.text)
 
     if (!text) {
       throw new Error(`SE2 heading block parsing failed: <${node.tagName.toLowerCase()}>`)
     }
 
-    return [createHeadingBlock({ blockId, level, text })]
+    return [
+      {
+        ...createHeadingBlock({ blockId, level, text }),
+        ...(Object.keys(converted.assets).length ? { assets: converted.assets } : {}),
+      },
+    ]
   }
 }

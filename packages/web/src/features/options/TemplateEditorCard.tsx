@@ -28,7 +28,7 @@ const restoreTemplateEditorScroll = () => {
   }
 
   if (window.scrollX !== scroll.x || window.scrollY !== scroll.y) {
-    window.scrollTo(scroll.x, scroll.y)
+    window.scrollTo({ left: scroll.x, top: scroll.y, behavior: "instant" })
   }
 }
 const createTemplateEditorBaseExtensions = (themePreference: ThemePreference) => [

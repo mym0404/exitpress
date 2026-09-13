@@ -14,11 +14,7 @@ thumbnail: https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fcdn-images-1.m
 
 ![](https://dthumb-phinf.pstatic.net/?src=%22https%3A%2F%2Fcdn-images-1.medium.com%2Fmax%2F1200%2F0*WZM2cHocLncEgg1F.png%22&type=f560_336)
 
-[
-Auto Layout with different screen sizes in iOS
-Auto Layout is awesome. Just declare the constraints and the views are resized accordingly to their parent ‘s bounds changes.
-medium.com
-](https://medium.com/fantageek/auto-layout-with-different-screen-sizes-in-ios-954c780b2884)
+[Auto Layout with different screen sizes in iOS Auto Layout is awesome. Just declare the constraints and the views are resized accordingly to their parent ‘s bounds changes. medium.com](https://medium.com/fantageek/auto-layout-with-different-screen-sizes-in-ios-954c780b2884)
 
 \----------------------
 

@@ -1,7 +1,11 @@
+import { load } from "cheerio"
+
 import type { AssetRecord } from "@exitpress/domain/export-job/schema/UploadState.js"
 import type { ParsedBlockAsset } from "@exitpress/domain/parser/schema/Media.js"
 import type { ParsedBlock } from "@exitpress/domain/parser/schema/ParsedPost.js"
 import type { TemplateValue } from "@exitpress/domain/template/schema/TemplateValue.js"
+
+import { escapeLinkDestination } from "../../markdown/util/escapeLinkDestination.js"
 
 type ResolveAsset = (input: { role: ParsedBlockAsset["role"]; sourceUrl: string }) => Promise<{
   reference: string
@@ -97,6 +101,36 @@ export const resolveParsedBlockAssetsForRender = async ({
         role: asset.role,
         sourceUrl: asset.sourceUrl,
       })
+
+      if (asset.textReplacement) {
+        const { propPath, placeholder, template, format } = asset.textReplacement
+        const value = propPath.split(".").reduce<TemplateValue>((current, segment) => {
+          if (Array.isArray(current)) return current[Number(segment)]
+          return current && typeof current === "object" ? current[segment] : undefined
+        }, props)
+
+        if (typeof value === "string") {
+          let replacement = ""
+          if (resolved.reference) {
+            if (format === "html") {
+              const $ = load(template, undefined, false)
+              $("img").attr("src", resolved.reference)
+              replacement = $.root().html() ?? ""
+            } else {
+              replacement = template.replaceAll(placeholder, () =>
+                escapeLinkDestination(resolved.reference),
+              )
+            }
+          }
+          setTemplateValueAtPath({
+            props,
+            path: propPath,
+            value: value.replaceAll(placeholder, () => replacement),
+          })
+          assetRecords.push(resolved.record)
+        }
+        continue
+      }
 
       if (!resolved.reference && asset.required) {
         omitBlock = true

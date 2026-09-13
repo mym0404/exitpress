@@ -265,3 +265,20 @@ describe("NaverSe2TableBlock", () => {
     })
   })
 })
+
+it("keeps image assets when a single-column layout table becomes a paragraph", () => {
+  const parsed = parseSe2Blocks(
+    '<table><tr><td><p>diagram</p><img src="https://example.com/diagram.png"></td></tr></table>',
+  )
+
+  expect(parsed.blocks[0]).toMatchObject({
+    blockId: "naver-se2:paragraph",
+    props: { text: "diagram\n\nEXITPRESSINLINEIMAGE0END" },
+    assets: {
+      "text:image:0": {
+        sourceUrl: "https://example.com/diagram.png",
+        textReplacement: { propPath: "text" },
+      },
+    },
+  })
+})

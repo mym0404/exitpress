@@ -73,7 +73,7 @@
 
 - Runtime ownership, domain concepts, dependency boundaries: `.agents/knowledge/architecture.md`
 - TypeScript, utilities, comments, tests, documentation: `.agents/knowledge/code-style.md`
-- Parser routing, block contracts, props, presets, quality criteria: `.agents/knowledge/parser-blocks.md`
+- Parser routing, block contracts, inline image dependencies, props, presets, content preservation: `.agents/knowledge/parser-blocks.md`
 - Upload, resume, manifest, and URL rewrite behavior: `.agents/knowledge/upload.md`
 - Test case shape, local/live e2e boundaries, runtime cost: `.agents/knowledge/test-management.md`
 - Commands, CI, verification layers, manual browser checks: `.agents/knowledge/verification.md`

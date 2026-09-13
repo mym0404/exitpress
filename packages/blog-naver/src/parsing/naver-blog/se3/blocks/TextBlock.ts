@@ -1,5 +1,4 @@
 import { convertHtmlToMarkdown } from "@exitpress/engine/markdown/util/convertHtmlToMarkdown.js"
-import { compactMarkdownText } from "@exitpress/engine/shared/text/util/TextCompaction.js"
 
 import type { CheerioAPI } from "cheerio"
 
@@ -32,7 +31,6 @@ const parseTextNodes = ({
         resolveLinkUrl: options.resolveLinkUrl,
       }),
     )
-    .map((text) => compactMarkdownText(text))
     .filter(Boolean)
 
 const parseTextBlocks = ({

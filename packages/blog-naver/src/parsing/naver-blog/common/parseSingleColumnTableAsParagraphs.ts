@@ -1,4 +1,4 @@
-import { convertHtmlToMarkdown } from "@exitpress/engine/markdown/util/convertHtmlToMarkdown.js"
+import { convertHtmlWithImageAssets } from "@exitpress/engine/exporting/assets/convertHtmlWithImageAssets.js"
 
 import type { parseHtmlTable } from "./parseHtmlTable.js"
 
@@ -30,15 +30,17 @@ export const parseSingleColumnTableAsParagraphs = ({
 
   const paragraphs = parsedTable.rows
     .map((row) =>
-      convertHtmlToMarkdown({
+      convertHtmlWithImageAssets({
         /* v8 ignore next */
         html: row[0]?.html ?? "",
         resolveLinkUrl: options.resolveLinkUrl,
       }),
     )
-    .map((text) => text.trim())
-    .filter(Boolean)
-    .map((text) => createParagraphBlock({ blockId: paragraphBlockId, text }))
+    .filter(({ text }) => text.trim())
+    .map(({ text, assets }) => ({
+      ...createParagraphBlock({ blockId: paragraphBlockId, text: text.trim() }),
+      ...(Object.keys(assets).length > 0 ? { assets } : {}),
+    }))
 
   return paragraphs.length > 0 ? paragraphs : null
 }

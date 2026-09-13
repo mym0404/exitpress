@@ -24,6 +24,13 @@ describe("NaverSe4VideoBlock", () => {
     expect(parsed.blocks).toEqual([
       {
         blockId: "naver-se4:video",
+        assets: {
+          thumbnailUrl: {
+            role: "thumbnail",
+            sourceUrl: "https://example.com/video-thumb.png",
+            required: false,
+          },
+        },
         props: {
           title: "Demo video",
           thumbnailUrl: "https://example.com/video-thumb.png",

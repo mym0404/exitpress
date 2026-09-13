@@ -18,7 +18,7 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/20130627_197/anglekim3708_137231
 
 ![](https://mblogthumb-phinf.pstatic.net/20130627_268/anglekim3708_1372317442683AqBXo_JPEG/%C8%D6%BC%BA%B8%BE_-%BF%F8%BA%BB.jpg?type=w)
 
-재생
+[Video](https://blog.naver.com/anglekim3708/70170491705)
 
 오늘은 제주떡 이웃 블로거 「휘성맘」님의 블로그 위젯을 만들어 보았다
 
@@ -32,7 +32,7 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/20130627_197/anglekim3708_137231
 
 픽픽(picpick / 오픈캡쳐 유료화 이후 사용시 주의를 요함)
 
-또는 포토스케이프 프로그램을 이용 비툴어진 그림을
+또는 포토스케이프﻿ 프로그램을 이용 비툴어진 그림을
 
 먼저 바르게 정리 한다.
 

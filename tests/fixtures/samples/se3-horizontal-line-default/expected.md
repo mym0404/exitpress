@@ -15,6 +15,7 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/MjAxODExMTNfMjI3/MDAxNTQyMDcxNzE
 2019 **타일트렌드**?  
 **디자인타일**에 패션소재와 세라믹의 conversions를 시도해  
 **타일디자인**의 새로운 영역을 보여주는 **패턴타일**을 소개하고자 합니다.  
+  
 안녕하세요?  
 라이프스타일 큐레이터 **클라** 입니다.
 
@@ -23,6 +24,7 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/MjAxODExMTNfMjI3/MDAxNTQyMDcxNzE
 공간디자인의 주요한 영역인 **마감재**,  
 그 중에서도 보다 폭넓어진 디자인력으로 다채로운 소재를 모사하고 있는 **이탈리아포세린타일**!  
 **타일인테리어**만으로도 공간의 아이덴티티를 보여줄 수 있는 노하우를 함께 공유해보아요~  
+  
 천연석,목재,콘크리트,아트,벽돌 등 **마감재**의 영역은 매우 폭넓지만,  
 이같은 폭넓은 디자인을 표현해낼 수 있는 소재가 바로 타일,  
 그리고 패셔너블한 컨텐츠를 담아낼 수 있는 타일의 영역이라면  
@@ -30,7 +32,7 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/MjAxODExMTNfMjI3/MDAxNTQyMDcxNzE
 
 ---
 
-'코르코'와 '패션'의 영감을 얻어 디자인된 **세라믹타일** **Miseria** **Nobilta** **컬렉션**
+'코르코'와 '패션'의 영감을 얻어 디자인된 **세라믹타일 Miseria Nobilta 컬렉션**
 
 ![](https://mblogthumb-phinf.pstatic.net/MjAxODExMTNfMTI2/MDAxNTQyMDcxNzE4NDE2.X1-gh9bWCyoHXGt3i6-v22c254LMWkjkKjCNPwLHJfEg.en92GD9lmAA0OdmJpm89X-owEEOe0INlWDSb2Bl1Sewg.PNG.showeclatkorea/01.png?type=w)
 
@@ -87,15 +89,16 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/MjAxODExMTNfMjI3/MDAxNTQyMDcxNzE
 ![](https://mblogthumb-phinf.pstatic.net/MjAxODExMTNfNDUg/MDAxNTQyMDcxNzIwNTQw.voWhKTPNTxAomKmJVWn3zU7y92mWFZvZsa3PgDyvtzwg.Cx9Tc3XU8CRuDsdij4zH79eZCwrsdgmdTmeaMGR0MnEg.PNG.showeclatkorea/15.png?type=w)
 
 가장 기본적인 모노톤의 두 가지 컬러로  
-공간을 장식하는 베스트 셀링 아이템인 **Miseria** **Nobilta** 컬렉션  
+공간을 장식하는 베스트 셀링 아이템인 **Miseria Nobilta** 컬렉션  
 이.지.만  
-더욱 더 **2019인테리어**트렌드**에 부합하는! 새로운 **이탈리아포세린타일로** 변신하여  
+더욱 더 **2019인테리어트렌드**에 부합하는! 새로운 **이탈리아포세린타일로** 변신하여  
 업그레이드된 **패턴타일** 디자인 라인업을 보실까요?
 
 ![](https://mblogthumb-phinf.pstatic.net/MjAxODExMTNfMTMy/MDAxNTQyMDc1MTc5Nzk4.795MBsSbpwntXO66n-xdRo5Q2C0g2oGJw6_Ike3WxVMg.nGqg3eSw_YXy1OMltTN8Rftn_Ak4dVXFhzUOsQWPCs0g.JPEG.showeclatkorea/%EC%BA%A1%EC%B2%98_%2B.jpg?type=w)
 
 파스텔 계열의 컬러와 기하학 패턴이 만나다?!  
-타일분야에서 또한, 트렌드세터 플레이어들은 **인테리어**트****렌드**를 창조하는 변신을 꾀하고 있다죠!?  
+  
+타일분야에서 또한, 트렌드세터 플레이어들은 **인테리어트렌드**를 창조하는 변신을 꾀하고 있다죠!?  
 기존 베이지와 그레이 두 가지 모노톤으로 많은 사랑을 받았지만,  
 다채로운 컬러를 입혀 **디자인**의 한 발자국 더 다가가 업그레이드 된 컬렉션!
 
@@ -123,7 +126,7 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/MjAxODExMTNfMjI3/MDAxNTQyMDcxNzE
 
 채도는 낮지만 컬러가 밝은 페일톤(Pale-Tone)의,  
 다분히 유럽스타일의 파스텔 컬러 표현법이 적용된 **공간디자인**.  
-**2019** **타일트렌드**를 통해  
+**2019 타일트렌드**를 통해  
 **마감재**에 옷을 입듯 컬러감을 더해 글로벌 인테리어디자인으로,  
 타일의 영역이 더욱 다양하게 넓혀지지 않을까요?  
 .  
@@ -135,8 +138,11 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/MjAxODExMTNfMjI3/MDAxNTQyMDcxNzE
 지금 클라네 창고에는 600\*600 사이즈가 준비되어 있어  
 바로 만나보실 수 있답니다! 참고하시고 문의주세요. ღゝ◡╹)ノ♥  
 (나머지 사이즈·컬러·패턴 도 요청 시 준비 가능합니다.)  
+  
 아낌없는 표현력을 담고있는 **패턴타일**, 시각적 촉각적 온도차를 구현해낸 새로운 접근법의 **타일디자인**으로,  
 **2019타일트렌드**와 **2019인테리어트렌드**를 선도해보시는 건 어떨까요?  
+  
+  
 더많은 클라의 **디자인타일**과 만나고자 하신다면?
 
 ![](https://mblogthumb-phinf.pstatic.net/MjAxODExMTNfMjE1/MDAxNTQyMDkxMzIzMjk5.JQEB6jTmOHpeejhqOcG_NPGb9PFT2Aqe_TY0mC52Ldgg.lU68PhQgh2Ap_BNtW-k6hJZeShTk_DTS44JkNGwHIYIg.JPEG.showeclatkorea/%EB%AC%B4%EC%A0%9C-1.jpg?type=w)

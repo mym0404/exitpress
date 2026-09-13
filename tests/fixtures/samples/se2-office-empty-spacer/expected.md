@@ -108,7 +108,7 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/20111013_298/naver_map_131849116
 
 금주의 주요 반영 건들에 대해 소개해 드리겠습니다.
 
-**\[**광주 서구 동천동 신설 (2011년10월1일)\]**
+**\[광주 서구 동천동 신설 (2011년10월1일)\]**
 
 광주 서구에 동천동이 신설되었습니다.
 
@@ -116,7 +116,7 @@ thumbnail: https://mblogthumb-phinf.pstatic.net/20111013_298/naver_map_131849116
 
 ![](https://mblogthumb-phinf.pstatic.net/20111013_298/naver_map_1318491167734isq4g_PNG/A.png?type=w)
 
-**\[**씨네시티**u****CGV**청담씨네시티(2011년10월9일 개관)\]**
+**\[씨네시티uCGV청담씨네시티(2011년10월9일 개관)\]**
 
 서울 강남구 신사동에 위치한 씨네시티가 CGV청담씨네시티로 명칭을 변경하였습니다.  
 [](http://map.naver.com/?dlevel=13&lat=37.5226849&lng=127.0370728&query=Q0dW7LKt64u07JSo64Sk7Iuc7Yuw&menu=location&stab=SITE_1%3B1&siteOrder=0&queryRank=1&mapMode=0&enc=b64)

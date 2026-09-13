@@ -1,5 +1,3 @@
-import { renderParagraph } from "@exitpress/engine/markdown/util/renderParagraph.js"
-
 import type {
   ImageData,
   ParsedBlockAsset,
@@ -11,7 +9,12 @@ import type { TableRow } from "@exitpress/domain/parser/schema/TableRow.js"
 import type { TemplateValue } from "@exitpress/domain/template/schema/TemplateValue.js"
 
 const escapeTableCell = (value: string) =>
-  value.replace(/\|/g, "\\|").replace(/\n+/g, "<br>").trim() || " "
+  value
+    .replace(/(\\*)\|/g, (match, slashes: string) =>
+      slashes.length % 2 === 0 ? `${slashes}\\|` : match,
+    )
+    .replace(/\n+/g, "<br>")
+    .trim() || " "
 
 const normalizeTableRows = (rows: TableRow[]) => {
   const [headerRow] = rows
@@ -57,7 +60,7 @@ export const createParagraphBlock = ({ blockId, text }: { blockId: string; text:
   createParsedBlock({
     blockId,
     props: {
-      text: renderParagraph(text),
+      text,
     },
   })
 
@@ -207,4 +210,11 @@ export const createVideoBlock = ({ blockId, video }: { blockId: string; video: V
       height: video.height,
       vid: video.vid,
     },
+    ...(video.thumbnailUrl
+      ? {
+          assets: {
+            thumbnailUrl: { role: "thumbnail", sourceUrl: video.thumbnailUrl, required: false },
+          },
+        }
+      : {}),
   })

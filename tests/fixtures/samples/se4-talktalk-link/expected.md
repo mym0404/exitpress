@@ -46,7 +46,7 @@ data 관리의 중요성이 더 커지고 있는 지금, Notion은 제대로만 
 
 제대로 활용하면 내 일의 효율이 완전히 달라집니다. 이번 강의도 놓치지 마세요!
 
-<활용사례>
+\<활용사례>
 
 ![](https://mblogthumb-phinf.pstatic.net/MjAyNTAzMTBfMTkw/MDAxNzQxNTc2NzAyNjUw.Y7xsPBXsFhx-CXm5asLYiXkSZZ3FxkaomVPNmkVfpGgg.3cNlX5gVzrQ-v3VnI-NnztHTO5V55XMVzWHmBH2ERs0g.PNG/%EA%B7%B8%EB%A6%BC3.png?type=w)
 
@@ -62,7 +62,7 @@ data 관리의 중요성이 더 커지고 있는 지금, Notion은 제대로만 
 
 ![](https://mblogthumb-phinf.pstatic.net/MjAyNTAzMDdfMjI0/MDAxNzQxMzM1OTEzNjIz.bHCtgsZQJvNd_G4VVVNm93OApxHz6SS7z3EvxR9URjEg.DxHycUq_5jdcAWRTxLrmI9MVcuxX65u6VVDOQmPhhUMg.PNG/%EB%A3%A8%EC%95%99%EB%8D%B0%EC%9D%B4.png?type=w)
 
-**<무료 강의 일정>**
+**\<무료 강의 일정>**
 
 **N잡러 소규모 사업자를 위한 노션 활용법**
 
@@ -100,7 +100,7 @@ data 관리의 중요성이 더 커지고 있는 지금, Notion은 제대로만 
 
 **📢 공지사항 추가 (3월 11일 기준)**
 
-**기존에 오픈톡방주소를 안내드렸으나, 현재 제가 오픈채팅방 이용 제한에 걸려 인해 레벨업 오픈톡방 접속이 원활하지 않은 상황입니다. 이에 따라, 기존에** **노션 신청폼을 작성해 주신 분들께 Zoom 강의 접속 링크를 개별 안내드릴 예정**입니다.**
+**기존에 오픈톡방주소를 안내드렸으나, 현재 제가 오픈채팅방 이용 제한에 걸려 인해 레벨업 오픈톡방 접속이 원활하지 않은 상황입니다. 이에 따라, 기존에 노션 신청폼을 작성해 주신 분들께 Zoom 강의 접속 링크를 개별 안내드릴 예정입니다.**
 
 **강의관련 문의는** 댓글 또는 1:1 톡톡 보내주세요.
 

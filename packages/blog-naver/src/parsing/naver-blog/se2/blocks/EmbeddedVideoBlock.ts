@@ -42,7 +42,56 @@ const createEmbeddedVideo = ({ iframe }: { iframe: ReturnType<CheerioAPI> }) => 
   }
 }
 
-const getEmbeddedVideos = ({ $, $node }: { $: CheerioAPI; $node: ReturnType<CheerioAPI> }) => {
+const nativePlayerSelector = "pzp-pc-layout._naverVideo[vid], pzp-mobile-layout._naverVideo[vid]"
+
+const getEmbeddedVideos = ({
+  $,
+  $node,
+  sourceUrl = "",
+}: {
+  $: CheerioAPI
+  $node: ReturnType<CheerioAPI>
+  sourceUrl?: string
+}) => {
+  const players = $node.is(nativePlayerSelector) ? $node : $node.find(nativePlayerSelector)
+
+  if (
+    players.length > 0 &&
+    ($node.is(nativePlayerSelector) ||
+      hasOnlyTargetContent({
+        element: $node,
+        targetSelector: nativePlayerSelector,
+      }))
+  ) {
+    return players.toArray().map((node) => {
+      const player = $(node)
+      const blogId = player.attr("domain-or-blogid")
+      const postId = player.attr("logno")
+      const style = player.attr("style") ?? ""
+      const thumbnailPath = player.attr("vthumb")
+      const poster =
+        player.attr("poster") ??
+        player.find("video[poster]").attr("poster") ??
+        (thumbnailPath?.startsWith("/") && !thumbnailPath.startsWith("//")
+          ? `https://phinf.pstatic.net/image.nmv${thumbnailPath}`
+          : undefined)
+
+      return {
+        title:
+          compactText(player.find("pzp-pc-content-title, pzp-content-title").text()) || "Video",
+        thumbnailUrl: poster ? normalizeAssetUrl(poster) : null,
+        sourceUrl:
+          blogId && postId
+            ? `https://blog.naver.com/${encodeURIComponent(blogId)}/${encodeURIComponent(postId)}`
+            : sourceUrl,
+        vid: player.attr("vid") ?? null,
+        inkey: null,
+        width: parseDimension(style.match(/(?:^|;)\s*width\s*:\s*(\d+(?:\.\d+)?)px/i)?.[1]),
+        height: parseDimension(style.match(/(?:^|;)\s*height\s*:\s*(\d+(?:\.\d+)?)px/i)?.[1]),
+      }
+    })
+  }
+
   if ($node.is("iframe[src]")) {
     if ($node.hasClass("poll_iframe")) {
       return null
@@ -143,8 +192,8 @@ export class NaverSe2EmbeddedVideoBlock extends LeafParserBlock {
     return node.type === "tag" && getEmbeddedVideos({ $, $node }) !== null
   }
 
-  override convert({ $, $node, blockId }: Parameters<LeafParserBlock["convert"]>[0]) {
-    const videos = getEmbeddedVideos({ $, $node })
+  override convert({ $, $node, sourceUrl, blockId }: Parameters<LeafParserBlock["convert"]>[0]) {
+    const videos = getEmbeddedVideos({ $, $node, sourceUrl })
 
     if (!videos) {
       throw new Error("SE2 embedded video block parsing failed.")
