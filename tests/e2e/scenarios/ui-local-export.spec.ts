@@ -40,17 +40,6 @@ const localJobPolling: ExportJobPollingConfig | undefined = localFast
     }
   : undefined
 const localStatusPollMs = localFast ? 100 : 1000
-const localJobFetchLimits = localFast
-  ? {
-      exportRunningMax: 2,
-      uploadPartialMax: 3,
-      rewritePendingMax: 4,
-    }
-  : {
-      exportRunningMax: 8,
-      uploadPartialMax: 12,
-      rewritePendingMax: 20,
-    }
 const desktopViewport = {
   width: 1440,
   height: 1200,
@@ -831,17 +820,24 @@ const assertTemplateEditorRuntime = async ({
   }
 
   const clickTarget = await page.evaluate((editor) => {
-    const content = document.querySelector(`${editor} .cm-content`)
+    const content = document.querySelector<HTMLElement>(`${editor} .cm-content`)
 
     if (!content) {
       return null
     }
 
+    content.addEventListener(
+      "mousedown",
+      () => {
+        content.dataset.scrollBeforeClick = String(window.scrollY)
+      },
+      { capture: true, once: true },
+    )
     const rect = content.getBoundingClientRect()
 
     return {
-      x: rect.left + Math.min(rect.width / 2, 80),
-      y: rect.top + Math.min(rect.height - 4, 48),
+      x: Math.min(rect.width / 2, 80),
+      y: Math.min(rect.height - 4, 48),
     }
   }, editor)
 
@@ -849,8 +845,7 @@ const assertTemplateEditorRuntime = async ({
     throw new Error("template code editor content did not render")
   }
 
-  const scrollBeforeClick = await page.evaluate(() => window.scrollY)
-  await page.mouse.click(clickTarget.x, clickTarget.y)
+  await page.locator(`${editor} .cm-content`).click({ position: clickTarget })
   await page.waitForFunction(
     (editor) => {
       const content = document.querySelector(`${editor} .cm-content`)
@@ -867,7 +862,7 @@ const assertTemplateEditorRuntime = async ({
   )
   await page.waitForTimeout(250)
   const clickState = await page.evaluate((editor) => {
-    const content = document.querySelector(`${editor} .cm-content`)
+    const content = document.querySelector<HTMLElement>(`${editor} .cm-content`)
     const cmEditor = document.querySelector(`${editor} .cm-editor`)
 
     return {
@@ -876,6 +871,7 @@ const assertTemplateEditorRuntime = async ({
         cmEditor?.contains(document.activeElement) === true ||
         cmEditor?.classList.contains("cm-focused") === true,
       hasActiveLine: document.querySelector(`${editor} .cm-activeLine`) !== null,
+      scrollBeforeClick: content?.dataset.scrollBeforeClick,
       scrollY: window.scrollY,
     }
   }, editor)
@@ -888,7 +884,9 @@ const assertTemplateEditorRuntime = async ({
     throw new Error("template code editor should not highlight the active line")
   }
 
-  if (Math.abs(clickState.scrollY - scrollBeforeClick) > 5) {
+  const scrollBeforeClick = Number(clickState.scrollBeforeClick ?? NaN)
+
+  if (!Number.isFinite(scrollBeforeClick) || Math.abs(clickState.scrollY - scrollBeforeClick) > 5) {
     throw new Error(
       `template code editor click changed page scroll: before=${scrollBeforeClick}, after=${clickState.scrollY}`,
     )
@@ -1115,7 +1113,6 @@ const runUiLocalExport = async ({ browser }: { browser: Browser }) => {
   })
   const mockState: {
     scanRequestCount: number
-    jobFetchCount: number
     manualUploadRequestCount: number
     themePreference: ThemePreference
     exportOptions: ExportOptions | null
@@ -1130,7 +1127,6 @@ const runUiLocalExport = async ({ browser }: { browser: Browser }) => {
     lastScanSourceInput: string | null
   } = {
     scanRequestCount: 0,
-    jobFetchCount: 0,
     manualUploadRequestCount: 0,
     themePreference: "dark",
     exportOptions: null,
@@ -1139,6 +1135,7 @@ const runUiLocalExport = async ({ browser }: { browser: Browser }) => {
     lastScanSourceInput: null,
   }
 
+  let currentJob = createRunningJob()
   const manualUploadRoutePattern = /\/api\/export\/[^/]+\/upload$/
 
   page.on("request", (request) => {
@@ -1308,7 +1305,7 @@ const runUiLocalExport = async ({ browser }: { browser: Browser }) => {
         throw new Error("export request did not submit the structured upload provider payload")
       }
 
-      mockState.jobFetchCount = 0
+      currentJob = createRunningJob()
       mockState.exportOptions = body.options ?? null
       mockState.exportUploadProvider = {
         providerKey: uploadProvider.providerKey,
@@ -1326,24 +1323,10 @@ const runUiLocalExport = async ({ browser }: { browser: Browser }) => {
     }
 
     if (pathname === "/api/export/job-local" && request.method() === "GET") {
-      mockState.jobFetchCount += 1
-
-      const uploadingStartFetch = localJobFetchLimits.exportRunningMax
-      const rewriteStartFetch = uploadingStartFetch + localJobFetchLimits.uploadPartialMax
-      const completedStartFetch = rewriteStartFetch + localJobFetchLimits.rewritePendingMax
-      const nextJob =
-        mockState.jobFetchCount <= uploadingStartFetch
-          ? createRunningJob()
-          : mockState.jobFetchCount <= rewriteStartFetch
-            ? createPartialUploadingJob()
-            : mockState.jobFetchCount <= completedStartFetch
-              ? createRewritePendingJob()
-              : createUploadCompletedJob()
-
       await route.fulfill(
         buildJsonResponse(
           applyCurrentExportOptions(
-            applyCurrentOutputDir(nextJob, outputDir),
+            applyCurrentOutputDir(currentJob, outputDir),
             mockState.exportOptions,
           ),
         ),
@@ -2164,6 +2147,7 @@ const runUiLocalExport = async ({ browser }: { browser: Browser }) => {
       throw new Error("running progress text did not reflect completed/total posts")
     }
 
+    currentJob = createPartialUploadingJob()
     await waitForStepView({
       page,
       step: "upload",
@@ -2223,6 +2207,7 @@ const runUiLocalExport = async ({ browser }: { browser: Browser }) => {
     await page.setViewportSize(desktopViewport)
     await page.waitForTimeout(150)
 
+    currentJob = createRewritePendingJob()
     await page.waitForFunction(
       () => document.querySelector("#status-text")?.getAttribute("data-status") === "uploading",
       undefined,
@@ -2246,6 +2231,7 @@ const runUiLocalExport = async ({ browser }: { browser: Browser }) => {
       throw new Error("rewrite-pending state did not keep full upload progress text")
     }
 
+    currentJob = createUploadCompletedJob()
     await waitForJobStatus({
       page,
       timeoutMs: 90_000,
