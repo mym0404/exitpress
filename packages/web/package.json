@@ -12,7 +12,8 @@
   },
   "scripts": {
     "build": "vite build --config vite.config.ts",
-    "build:pages": "vite build --config vite.pages.config.ts"
+    "build:website": "vite build --config vite.website.config.ts",
+    "build:pages": "pnpm build:website && vite build --config vite.pages.config.ts"
   },
   "dependencies": {
     "@codemirror/autocomplete": "catalog:",

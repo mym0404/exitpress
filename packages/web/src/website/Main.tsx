@@ -1,0 +1,17 @@
+import { StrictMode } from "react"
+import { createRoot } from "react-dom/client"
+
+import { Website } from "./Website.js"
+import "../styles/global.css"
+
+const container = document.querySelector("#root")
+
+if (!container) {
+  throw new Error("root container not found")
+}
+
+createRoot(container).render(
+  <StrictMode>
+    <Website />
+  </StrictMode>,
+)

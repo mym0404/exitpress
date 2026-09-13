@@ -4,7 +4,7 @@
 
 - This repository is a local export tool for public blog posts, with concrete blog packages for supported blog platforms.
 - It scans posts, parses blog/editor-specific content into blocks, renders profile-specific Markdown or MDX bundles, writes assets and adapter support files, and keeps resumable export state.
-- The repo maintains a React web UI, server API, export engine, fixture regression tests, local browser e2e coverage, and live network e2e coverage.
+- The repo maintains a React export UI, a public website, server API, export engine, fixture regression tests, local browser e2e coverage, and live network e2e coverage.
 
 ## Tech Stack
 
@@ -23,7 +23,7 @@
 |-- packages/blog-naver/      # concrete Naver blog adapter
 |-- packages/blog-tistory/    # concrete Tistory blog adapter
 |-- packages/server/          # local HTTP API, jobs, state, upload catalog, static serving
-|-- packages/web/             # React export wizard, Storybook view, UI primitives
+|-- packages/web/             # React export wizard, public website, Storybook, UI primitives
 |-- scripts/                  # single-post, evidence, Storybook, maintenance CLIs
 |-- tests/                    # Vitest/Playwright tests, fixtures, shared test support
 |-- package.json              # repo-native commands
@@ -34,6 +34,7 @@
 ## Architecture
 
 - Main runtime starts in the server package and serves the web UI plus HTTP APIs.
+- The public website has a separate Vite entry and no server API dependency; GitHub Pages serves it at `/exitpress/` with Storybook at `/exitpress/storybook/`.
 - Core identity is `blogKey`, `sourceId`, `postId`, and `sourceInput`; concrete platform details stay in the owning `blog-*` package.
 - Shared cross-package contracts live in owning folders under `schema/`.
 - Shared utilities live in owning folders under `util/`; a single exported utility uses the function name as the file name.
@@ -43,7 +44,7 @@
 ## Design System
 
 - UI rules live in `.agents/knowledge/DESIGN.md`.
-- UI changes use Primer React components, Octicons, Primer `sx` styling, and dark/light wizard patterns.
+- UI changes use Primer React components, Octicons, and Primer `sx` styling. The local wizard uses dark/light operational layouts; the public website uses the separate marketing layout in the design guide.
 - Page layout decisions follow `.agents/knowledge/DESIGN.md` and Primer Layout foundations before custom structures.
 - Keep global CSS limited to reset/base document concerns; do not add component styling, theme overrides, or Primer lookalike rules there.
 - Do not add shadcn, Radix UI wrappers, Remix icons, Tailwind utilities, or compatibility shims.
@@ -61,7 +62,8 @@
 
 - `mise exec -- pnpm check:test`: Vitest unit, integration, fixture, and blog checks.
 - `mise exec -- pnpm check:coverage`: Vitest unit, integration, fixture, and blog checks with coverage thresholds.
-- `mise exec -- pnpm build:ui && mise exec -- pnpm check:playwright`: Playwright local and live e2e checks against the built web UI.
+- `mise exec -- pnpm --filter @exitpress/web build:pages`: build the public website and Storybook into one Pages artifact.
+- `mise exec -- pnpm build:ui && mise exec -- pnpm --filter @exitpress/web build:pages && mise exec -- pnpm check:playwright`: Playwright local and live e2e checks against the built app and public website.
 - `check:playwright` uses live services and its upload scenario creates remote state when credentials are available.
 - `mise exec -- pnpm check:unused`: dead-code and unused export baseline; run after deleting, moving, or renaming code.
 - `mise exec -- pnpm check:fmt`, `check:lint`, `check:type`, `check:storybook`, `build:server`, and `build:ui`: focused static/build/catalog checks.

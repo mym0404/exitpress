@@ -15,6 +15,8 @@
 
 ## Visual Direction
 
+The following operational layout rules apply to the local wizard and Storybook. The public website follows its own section below.
+
 - The app is a GitHub-style operational wizard with light and dark themes.
 - Prioritize dense, readable, task-focused layouts over marketing-style sections.
 - Screens should feel like GitHub repository/settings/productivity pages, not landing pages.
@@ -133,3 +135,11 @@
 - Meaningful UI changes require browser validation when practical.
 - Browser validation should check desktop and mobile width, light and dark theme where relevant, horizontal overflow, console errors, and visible consistency with Primer UI.
 - Before opening a PR, run the repo-native static checks, Storybook check, UI build, and Playwright e2e requested by the task.
+
+## Public Website
+
+- The public website is an English marketing page with a small existing brand mark, hero, real product screenshots, product description, setup instructions, and footer.
+- Use the existing Primer components, Octicons, and Geist fonts. Keep website styling in local `sx` props rather than changing the wizard theme or global component styles.
+- Use a charcoal background, light headings, muted body text, generous section spacing, and a wide centered container. Stack columns on narrow screens.
+- Keep the existing Korean text inside genuine product screenshots. Do not replace captures with generated interfaces or enlarge the logo into hero artwork.
+- Setup links scroll to the installation commands; the parser demo opens the existing Storybook. Clipboard success and failure must be visible and announced.

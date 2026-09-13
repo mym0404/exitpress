@@ -24,10 +24,11 @@
 - `mise exec -- pnpm check:type`: fast TypeScript contract check without emitting build output.
 - `mise exec -- pnpm build:server`: server TypeScript build check.
 - `mise exec -- pnpm build:ui`: web production build check.
+- `mise exec -- pnpm --filter @exitpress/web build:pages`: build the public website and Storybook; required before the website Playwright scenarios.
 - `mise exec -- pnpm check:storybook`: generated Storybook catalog freshness check.
 - `mise exec -- pnpm check:test`: full Vitest suite, including fixtures and blog integration checks.
 - `mise exec -- pnpm check:coverage`: full Vitest suite with V8 coverage thresholds.
-- `mise exec -- pnpm check:playwright`: Playwright local and live browser/network e2e suite against the current built web UI.
+- `mise exec -- pnpm check:playwright`: Playwright local and live browser/network e2e suite against the current UI and Pages builds.
 - `mise exec -- pnpm check:playwright:ui`: Playwright UI mode for the same local and live e2e suite.
 - `mise exec -- pnpm exec playwright test tests/e2e/scenarios/output-adapters.spec.ts`: deterministic full export workflow e2e for every output adapter.
 - Fumadocs adapter integration: create the current official app under repo-local `tmp/`, copy exported `content/docs` and `public`, build and start production mode, then open a generated `/docs/...` route.
@@ -65,6 +66,7 @@
 - Check desktop and mobile viewports for overflow, clipping, and readable contrast.
 - For upload flows, verify provider setup appears before export, upload progress appears after export starts, and restored state does not resubmit credentials.
 - For Storybook, confirm `Input HTML`, `Source Capture`, and `Markdown` describe the same block and bundled capture assets resolve.
+- For the public website, check `/exitpress/` and `/exitpress/storybook/` from the same Pages build, setup navigation, clipboard success/failure, desktop/mobile layout, and image loading. After deployment, confirm the workflow commit and both public URLs.
 - Record the URL, viewport, inputs, final job status, and visible failure details when a manual result is used as evidence.
 
 ## Task Loops

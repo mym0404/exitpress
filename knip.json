@@ -1,0 +1,7 @@
+{
+  "workspaces": {
+    "packages/web": {
+      "entry": ["src/Main.tsx", "src/website/Main.tsx", "vite.website.config.ts"]
+    }
+  }
+}

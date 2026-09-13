@@ -50,6 +50,9 @@ jobs:
       - name: Run web build
         run: pnpm build:ui
 
+      - name: Build website and Storybook
+        run: pnpm --filter @exitpress/web build:pages
+
       - name: Run unused check
         run: pnpm check:unused
 

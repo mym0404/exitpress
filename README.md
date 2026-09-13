@@ -6,7 +6,7 @@ Every post deserves an exit.
 
 Exitpress는 공개 블로그 글을 스캔해 Markdown/MDX, frontmatter, 로컬 자산, 복구 가능한 `manifest.json`으로 export하는 도구입니다. Naver Blog와 Tistory 공개 글 수집을 지원합니다.
 
-[Demo](https://mym0404.github.io/exitpress/storybook/)
+[Website](https://mym0404.github.io/exitpress/) · [Parser Demo](https://mym0404.github.io/exitpress/storybook/)
 
 ![Exitpress Open Graph image](packages/web/public/brand/og-image.jpg)
 
@@ -84,6 +84,17 @@ pnpm start
 4. 카테고리/날짜 범위 선택
 5. export 실행
 6. `output/` 아래 결과 확인
+
+## 소개 웹사이트
+
+영어 소개 페이지와 Parser Storybook은 GitHub Pages에서 볼 수 있습니다. 블로그 내보내기는 로컬에서 실행합니다.
+
+```bash
+mise exec -- pnpm --filter @exitpress/web build:pages
+mise exec -- pnpm --filter @exitpress/web exec vite preview --config vite.website.config.ts
+```
+
+소개 페이지는 `dist/pages/`, Storybook은 `dist/pages/storybook/`에 빌드됩니다. `main`에 push하면 `pages` GitHub Actions가 두 페이지를 함께 배포합니다.
 
 ## 출력 형식
 

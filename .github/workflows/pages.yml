@@ -28,28 +28,11 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build Storybook page
+      - name: Build website and Storybook
         run: pnpm --filter @exitpress/web build:pages
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
-
-      - name: Create Pages root redirect
-        run: |
-          cat > dist/pages/index.html <<'HTML'
-          <!doctype html>
-          <html lang="en">
-            <head>
-              <meta charset="utf-8" />
-              <meta http-equiv="refresh" content="0; url=./storybook/" />
-              <link rel="canonical" href="./storybook/" />
-              <title>Parser Storybook</title>
-            </head>
-            <body>
-              <a href="./storybook/">Parser Storybook</a>
-            </body>
-          </html>
-          HTML
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v4

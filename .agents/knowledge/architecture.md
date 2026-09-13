@@ -5,7 +5,7 @@
 - The local server owns process startup, HTTP APIs, static serving, job state, local settings, and upload provider runtime metadata.
 - The engine owns blog runtime interfaces, blog-neutral export units, output-profile adapters, document rendering, asset persistence, upload candidate handling, link rewrite, support-file generation, and export manifest writing.
 - Concrete `blog-*` packages own blog-specific source parsing, fetching adapters, parser adapters, URL identity resolution, and blog workflows.
-- The web package owns the browser wizard, Storybook surface, API client, and UI state.
+- The web package owns the browser wizard, public website, Storybook surface, API client, and UI state.
 - The domain package owns shared contracts and pure deterministic logic used across packages.
 - Architecture work uses an abstract-first rule: shared contracts and engine flow start from `blogKey`, `sourceId`, `postId`, and `sourceInput`; concrete platform names belong only in the owning `blog-*` package, package-specific tests, fixtures, or user-facing platform selection UI.
 
@@ -55,6 +55,13 @@
 - Storybook source data is committed in the web package.
 - A script renders the generated Storybook catalog through blog parser and engine renderer code.
 - The web Storybook route reads the committed generated catalog and does not import engine at runtime.
+
+## Public Website
+
+- `packages/web/website/index.html` and `src/website/Main.tsx` form a separate entry from the local export app.
+- The website uses local brand assets and actual export/Storybook screenshots; its content and navigation require no server API.
+- `build:pages` first builds the website into `dist/pages`, then builds Storybook into `dist/pages/storybook` with its existing base path.
+- The `pages` GitHub Actions workflow deploys both surfaces at the repository's GitHub Pages address on `main` pushes and manual dispatch.
 
 ## Change Signals
 
