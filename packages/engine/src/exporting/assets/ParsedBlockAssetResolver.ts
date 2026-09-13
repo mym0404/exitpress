@@ -117,8 +117,7 @@ export const resolveParsedBlockAssetsForRender = async ({
               $("img").attr("src", resolved.reference)
               replacement = $.root().html() ?? ""
             } else {
-              replacement = template.replaceAll(
-                placeholder,
+              replacement = template.replaceAll(placeholder, () =>
                 escapeLinkDestination(resolved.reference),
               )
             }
@@ -126,7 +125,7 @@ export const resolveParsedBlockAssetsForRender = async ({
           setTemplateValueAtPath({
             props,
             path: propPath,
-            value: value.replaceAll(placeholder, replacement),
+            value: value.replaceAll(placeholder, () => replacement),
           })
           assetRecords.push(resolved.record)
         }

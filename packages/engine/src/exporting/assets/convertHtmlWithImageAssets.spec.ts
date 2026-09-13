@@ -83,22 +83,22 @@ describe("inline image assets", () => {
 
   it("escapes a resolved Markdown destination with spaces and parentheses", async () => {
     const result = await resolveHtml(
-      '<p>Caption<img src="https://example.com/img.png" alt="[diagram]"></p>',
-      "local/a (1).png",
+      '<p>Caption<img src="https://example.com/img.png" alt="[diagram] $&"></p>',
+      "local/a (1) $&.png",
     )
     expect(result.blocks[0]?.props.text).toBe(
-      String.raw`Caption![\[diagram\]](<local/a \(1\).png>)`,
+      String.raw`Caption![\[diagram\] \$&](<local/a \(1\) $&.png>)`,
     )
   })
 
   it("serializes resolved raw HTML image attributes without breaking a table", async () => {
     const result = await resolveHtml(
       '<table><tr><td><img src="https://example.com/img.png" alt="diagram"></td><td>text</td></tr></table>',
-      'https://example.com/a?x="&y=<b>',
+      'https://example.com/a?x="&y=<b>&z=$&',
       "html",
     )
     expect(result.blocks[0]?.props.text).toBe(
-      '<table><tbody><tr><td><img src="https://example.com/a?x=&quot;&amp;y=<b>" alt="diagram"></td><td>text</td></tr></tbody></table>',
+      '<table><tbody><tr><td><img src="https://example.com/a?x=&quot;&amp;y=<b>&amp;z=$&amp;" alt="diagram"></td><td>text</td></tr></tbody></table>',
     )
   })
 
